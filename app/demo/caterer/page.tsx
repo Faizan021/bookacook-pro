@@ -31,31 +31,25 @@ const recentBookings = [
 
 export default function DemoCatererPage() {
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
-      <div className="mx-auto max-w-6xl space-y-6">
-        <div className="rounded-2xl border bg-white p-6 shadow-sm">
-          <h1 className="text-3xl font-bold text-gray-900">Caterer Dashboard Demo</h1>
-          <p className="mt-2 text-gray-600">Preview for caterer business dashboard</p>
-          <p className="mt-1 text-sm text-gray-500">Demo Mode</p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <MetricCard title="Total Sales" value="€12,400" subtitle="Sales through Bookacook" />
-          <MetricCard title="Total Orders" value={18} subtitle="All booking requests" />
-          <MetricCard title="Pending Requests" value={4} subtitle="Waiting for response" />
-          <MetricCard title="Packages Live" value={6} subtitle="Visible to customers" />
-        </div>
-
-        <div className="grid gap-6 xl:grid-cols-3">
-          <div className="xl:col-span-2">
-            <SalesChart title="Monthly Sales" data={salesData} />
-          </div>
-
-          <div>
-            <RecentActivity title="Recent Bookings" items={recentBookings} />
-          </div>
-        </div>
+    <div className="space-y-6">
+      <div className="rounded-2xl border bg-white p-6 shadow-sm">
+        <h1 className="text-2xl font-bold text-gray-900">Caterer Overview</h1>
+        <p className="mt-1 text-gray-500">Your business performance at a glance</p>
       </div>
-    </main>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <MetricCard title="Total Sales" value="€12,400" subtitle="Sales through Bookacook" />
+        <MetricCard title="Total Orders" value={18} subtitle="All booking requests" />
+        <MetricCard title="Pending Requests" value={4} subtitle="Waiting for response" />
+        <MetricCard title="Packages Live" value={6} subtitle="Visible to customers" />
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="xl:col-span-2">
+          <SalesChart title="Monthly Sales" data={salesData} />
+        </div>
+        <RecentActivity title="Recent Bookings" items={recentBookings} />
+      </div>
+    </div>
   );
 }
