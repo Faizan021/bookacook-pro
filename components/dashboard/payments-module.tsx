@@ -1,3 +1,7 @@
+"use client";
+
+import { useT } from "@/lib/i18n/context";
+
 type PaymentsModuleProps = {
   role: "admin" | "caterer" | "customer";
 };
@@ -40,76 +44,56 @@ const statusStyles = {
 };
 
 const summaryByRole = {
-  admin: {
-    total: "€38,500",
-    commission: "€3,850",
-    pending: "€4,800",
-    label: "Platform GMV",
-    secondLabel: "Commission (10%)",
-    thirdLabel: "Pending Payout",
-  },
-  caterer: {
-    total: "€12,400",
-    commission: "€1,240",
-    pending: "€975",
-    label: "Total Earned",
-    secondLabel: "Platform Fee (10%)",
-    thirdLabel: "Pending",
-  },
-  customer: {
-    total: "€3,395",
-    commission: "€2,770",
-    pending: "€1,200",
-    label: "Total Spent",
-    secondLabel: "Completed",
-    thirdLabel: "Pending",
-  },
+  admin:    { total: "€38,500", commission: "€3,850", pending: "€4,800" },
+  caterer:  { total: "€12,400", commission: "€1,240", pending: "€975" },
+  customer: { total: "€3,395",  commission: "€2,770", pending: "€1,200" },
 };
 
 export function PaymentsModule({ role }: PaymentsModuleProps) {
+  const t = useT();
   const payments = role === "admin" ? adminPayments : role === "caterer" ? catererPayments : customerPayments;
   const summary = summaryByRole[role];
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">Payments & Revenue</h2>
+        <h2 className="text-lg font-semibold text-gray-900">{t("payments.title")}</h2>
         <p className="text-sm text-gray-500">
-          {role === "admin" ? "Platform-wide payment overview" : role === "caterer" ? "Your earnings and payouts" : "Your payment history"}
+          {role === "admin" ? t("payments.adminSubtitle") : role === "caterer" ? t("payments.catererSubtitle") : t("payments.customerSubtitle")}
         </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <p className="text-sm text-gray-500">{summary.label}</p>
+          <p className="text-sm text-gray-500">{t(`payments.totalLabel.${role}`)}</p>
           <p className="mt-2 text-3xl font-bold text-gray-900">{summary.total}</p>
-          <p className="mt-1 text-xs text-gray-400">All time</p>
+          <p className="mt-1 text-xs text-gray-400">{t("payments.allTime")}</p>
         </div>
         <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-          <p className="text-sm text-gray-500">{summary.secondLabel}</p>
+          <p className="text-sm text-gray-500">{t(`payments.secondLabel.${role}`)}</p>
           <p className="mt-2 text-3xl font-bold text-gray-900">{summary.commission}</p>
-          <p className="mt-1 text-xs text-gray-400">All time</p>
+          <p className="mt-1 text-xs text-gray-400">{t("payments.allTime")}</p>
         </div>
-        <div className="rounded-2xl border border-gray-200 bg-amber-50 p-5 shadow-sm border-amber-100">
-          <p className="text-sm text-amber-700">{summary.thirdLabel}</p>
+        <div className="rounded-2xl border border-amber-100 bg-amber-50 p-5 shadow-sm">
+          <p className="text-sm text-amber-700">{t(`payments.thirdLabel.${role}`)}</p>
           <p className="mt-2 text-3xl font-bold text-amber-800">{summary.pending}</p>
-          <p className="mt-1 text-xs text-amber-500">Awaiting confirmation</p>
+          <p className="mt-1 text-xs text-amber-500">{t("payments.awaitingConfirmation")}</p>
         </div>
       </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="border-b border-gray-100 px-6 py-4">
-          <h3 className="text-base font-semibold text-gray-900">Recent Transactions</h3>
+          <h3 className="text-base font-semibold text-gray-900">{t("payments.recentTransactions")}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Description</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Status</th>
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.id")}</th>
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.description")}</th>
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.date")}</th>
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.amount")}</th>
+                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.status")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -120,8 +104,8 @@ export function PaymentsModule({ role }: PaymentsModuleProps) {
                   <td className="px-6 py-4 text-gray-600">{p.date}</td>
                   <td className="px-6 py-4 font-semibold text-gray-900">{p.amount}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${statusStyles[p.status]}`}>
-                      {p.status}
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyles[p.status]}`}>
+                      {t(`status.${p.status}`)}
                     </span>
                   </td>
                 </tr>

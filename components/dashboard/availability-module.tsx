@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useT } from "@/lib/i18n/context";
 
 type DayStatus = "available" | "booked" | "blocked" | "empty";
 
-const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+const DAY_KEYS = ["days.sun", "days.mon", "days.tue", "days.wed", "days.thu", "days.fri", "days.sat"];
+const MONTH_KEYS = [
+  "months.0", "months.1", "months.2", "months.3", "months.4", "months.5",
+  "months.6", "months.7", "months.8", "months.9", "months.10", "months.11",
 ];
 
 const bookedDays = new Set([5, 6, 12, 15, 20, 22, 26, 27]);
@@ -40,6 +40,7 @@ function buildMonthGrid(year: number, month: number) {
 }
 
 export function AvailabilityModule() {
+  const t = useT();
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -64,58 +65,58 @@ export function AvailabilityModule() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">Availability</h2>
-        <p className="text-sm text-gray-500">Manage your available dates and block time off</p>
+        <h2 className="text-lg font-semibold text-gray-900">{t("availability.title")}</h2>
+        <p className="text-sm text-gray-500">{t("availability.subtitle")}</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 rtl:flex-row-reverse">
             <div className="h-3 w-3 rounded-full bg-green-400" />
-            <p className="text-sm font-medium text-gray-700">Available</p>
+            <p className="text-sm font-medium text-gray-700">{t("availability.available")}</p>
           </div>
           <p className="mt-2 text-3xl font-bold text-gray-900">{available}</p>
-          <p className="text-xs text-gray-400">days this month</p>
+          <p className="text-xs text-gray-400">{t("availability.daysThisMonth")}</p>
         </div>
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 rtl:flex-row-reverse">
             <div className="h-3 w-3 rounded-full bg-orange-400" />
-            <p className="text-sm font-medium text-gray-700">Booked</p>
+            <p className="text-sm font-medium text-gray-700">{t("availability.booked")}</p>
           </div>
           <p className="mt-2 text-3xl font-bold text-gray-900">{booked}</p>
-          <p className="text-xs text-gray-400">confirmed events</p>
+          <p className="text-xs text-gray-400">{t("availability.confirmedEvents")}</p>
         </div>
         <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 rtl:flex-row-reverse">
             <div className="h-3 w-3 rounded-full bg-gray-400" />
-            <p className="text-sm font-medium text-gray-700">Blocked</p>
+            <p className="text-sm font-medium text-gray-700">{t("availability.blocked")}</p>
           </div>
           <p className="mt-2 text-3xl font-bold text-gray-900">{blocked}</p>
-          <p className="text-xs text-gray-400">days off</p>
+          <p className="text-xs text-gray-400">{t("availability.daysOff")}</p>
         </div>
       </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-        <div className="mb-5 flex items-center justify-between">
+        <div className="mb-5 flex items-center justify-between rtl:flex-row-reverse">
           <h3 className="text-base font-semibold text-gray-900">
-            {MONTHS[month]} {year}
+            {t(MONTH_KEYS[month])} {year}
           </h3>
           <div className="flex gap-1">
-            <button onClick={prevMonth} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+            <button onClick={prevMonth} className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5 rtl:rotate-180">
                 <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
             </button>
-            <button onClick={nextMonth} className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
+            <button onClick={nextMonth} className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5 rtl:rotate-180">
                 <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
               </svg>
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
-          {DAYS_OF_WEEK.map((d) => <div key={d}>{d}</div>)}
+        <div className="mb-2 grid grid-cols-7 gap-1 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
+          {DAY_KEYS.map((key) => <div key={key}>{t(key)}</div>)}
         </div>
 
         <div className="grid grid-cols-7 gap-1">
@@ -136,17 +137,17 @@ export function AvailabilityModule() {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-4 border-t border-gray-100 pt-4">
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-white border border-gray-200" />
-            <span className="text-xs text-gray-500">Available</span>
+          <div className="flex items-center gap-2 rtl:flex-row-reverse">
+            <div className="h-3 w-3 rounded border border-gray-200 bg-white" />
+            <span className="text-xs text-gray-500">{t("availability.available")}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-orange-100 border border-orange-200" />
-            <span className="text-xs text-gray-500">Booked</span>
+          <div className="flex items-center gap-2 rtl:flex-row-reverse">
+            <div className="h-3 w-3 rounded border border-orange-200 bg-orange-100" />
+            <span className="text-xs text-gray-500">{t("availability.booked")}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-gray-100 border border-gray-200" />
-            <span className="text-xs text-gray-500">Blocked</span>
+          <div className="flex items-center gap-2 rtl:flex-row-reverse">
+            <div className="h-3 w-3 rounded border border-gray-200 bg-gray-100" />
+            <span className="text-xs text-gray-500">{t("availability.blocked")}</span>
           </div>
         </div>
       </div>

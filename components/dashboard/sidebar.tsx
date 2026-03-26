@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useT } from "@/lib/i18n/context";
 
 type NavItem = {
-  label: string;
+  labelKey: string;
   href: string;
   icon: React.ReactNode;
 };
@@ -65,22 +66,22 @@ function ClockIcon() {
 
 function ArrowLeftIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 rtl:rotate-180">
       <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
     </svg>
   );
 }
 
 function getNavItems(role: string, basePath: string): NavItem[] {
-  const overview = { label: "Overview", href: basePath, icon: <HomeIcon /> };
-  const bookings = { label: "Bookings", href: `${basePath}/bookings`, icon: <CalendarIcon /> };
-  const payments = { label: "Payments", href: `${basePath}/payments`, icon: <CurrencyIcon /> };
+  const overview = { labelKey: "nav.overview", href: basePath, icon: <HomeIcon /> };
+  const bookings = { labelKey: "nav.bookings", href: `${basePath}/bookings`, icon: <CalendarIcon /> };
+  const payments = { labelKey: "nav.payments", href: `${basePath}/payments`, icon: <CurrencyIcon /> };
 
   if (role === "admin") {
     return [
       overview,
       bookings,
-      { label: "Caterers", href: `${basePath}/caterers`, icon: <UsersIcon /> },
+      { labelKey: "nav.caterers", href: `${basePath}/caterers`, icon: <UsersIcon /> },
       payments,
     ];
   }
@@ -88,25 +89,27 @@ function getNavItems(role: string, basePath: string): NavItem[] {
     return [
       overview,
       bookings,
-      { label: "Packages", href: `${basePath}/packages`, icon: <BoxIcon /> },
-      { label: "Availability", href: `${basePath}/availability`, icon: <ClockIcon /> },
+      { labelKey: "nav.packages", href: `${basePath}/packages`, icon: <BoxIcon /> },
+      { labelKey: "nav.availability", href: `${basePath}/availability`, icon: <ClockIcon /> },
       payments,
     ];
   }
   return [
     overview,
-    { label: "My Bookings", href: `${basePath}/bookings`, icon: <CalendarIcon /> },
+    { labelKey: "nav.myBookings", href: `${basePath}/bookings`, icon: <CalendarIcon /> },
   ];
 }
 
 export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
   const pathname = usePathname();
+  const t = useT();
   const navItems = getNavItems(role, basePath);
-  const roleLabel =
-    role === "admin" ? "Admin" : role === "caterer" ? "Caterer" : "Customer";
+
+  const portalKey =
+    role === "admin" ? "portal.admin" : role === "caterer" ? "portal.caterer" : "portal.customer";
 
   return (
-    <aside className="flex h-full w-60 flex-shrink-0 flex-col border-r border-gray-100 bg-white">
+    <aside className="flex h-full w-60 flex-shrink-0 flex-col border-e border-gray-100 bg-white">
       <div className="flex h-14 flex-shrink-0 items-center gap-2.5 px-5">
         <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-orange-500 text-sm shadow-sm shadow-orange-200">
           🍽
@@ -116,7 +119,7 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
 
       <div className="px-4 pb-1 pt-4">
         <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-gray-400">
-          {roleLabel} Portal
+          {t(portalKey)}
         </p>
       </div>
 
@@ -127,7 +130,7 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+              className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all rtl:flex-row-reverse ${
                 isActive
                   ? "bg-orange-500 text-white shadow-sm shadow-orange-200"
                   : "text-gray-500 hover:bg-gray-50 hover:text-gray-800"
@@ -136,7 +139,7 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
               <span className={`flex-shrink-0 ${isActive ? "text-white/90" : "text-gray-400"}`}>
                 {item.icon}
               </span>
-              {item.label}
+              {t(item.labelKey)}
             </Link>
           );
         })}
@@ -145,15 +148,15 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
       <div className="border-t border-gray-100 p-3 space-y-1">
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600"
+          className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600 rtl:flex-row-reverse"
         >
           <ArrowLeftIcon />
-          Back to Home
+          {t("nav.backToHome")}
         </Link>
         {isDemo && (
           <div className="rounded-lg border border-orange-100 bg-orange-50 px-3 py-2">
-            <p className="text-xs font-semibold text-orange-600">Demo Mode</p>
-            <p className="text-[11px] text-orange-400">Sample data only</p>
+            <p className="text-xs font-semibold text-orange-600">{t("demo.mode")}</p>
+            <p className="text-[11px] text-orange-400">{t("demo.sampleData")}</p>
           </div>
         )}
       </div>

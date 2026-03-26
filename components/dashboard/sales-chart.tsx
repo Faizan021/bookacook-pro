@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useT } from "@/lib/i18n/context";
 
 type SalesChartProps = {
   title: string;
@@ -41,17 +42,19 @@ function CustomTooltip({
 }
 
 export function SalesChart({ title, data, subtitle }: SalesChartProps) {
+  const t = useT();
+
   return (
     <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex items-start justify-between rtl:flex-row-reverse">
         <div>
           <h3 className="text-base font-semibold text-gray-900">{title}</h3>
           <p className="mt-0.5 text-xs text-gray-400">
-            {subtitle ?? "Performance overview for the selected period"}
+            {subtitle ?? t("chart.performance")}
           </p>
         </div>
         <span className="rounded-full bg-green-50 px-2.5 py-0.5 text-[11px] font-semibold text-green-600">
-          Live
+          {t("chart.live")}
         </span>
       </div>
 
@@ -64,11 +67,7 @@ export function SalesChart({ title, data, subtitle }: SalesChartProps) {
                 <stop offset="100%" stopColor="#f97316" stopOpacity={0.01} />
               </linearGradient>
             </defs>
-            <CartesianGrid
-              strokeDasharray="0"
-              stroke="#f3f4f6"
-              vertical={false}
-            />
+            <CartesianGrid strokeDasharray="0" stroke="#f3f4f6" vertical={false} />
             <XAxis
               dataKey="name"
               axisLine={false}

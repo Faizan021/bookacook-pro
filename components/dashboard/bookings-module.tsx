@@ -1,3 +1,7 @@
+"use client";
+
+import { useT } from "@/lib/i18n/context";
+
 type BookingStatus = "confirmed" | "pending" | "completed" | "cancelled";
 
 type Booking = {
@@ -48,41 +52,47 @@ const customerBookings: Booking[] = [
 ];
 
 function StatusBadge({ status }: { status: BookingStatus }) {
+  const t = useT();
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${statusStyles[status]}`}>
-      {status}
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyles[status]}`}>
+      {t(`status.${status}`)}
     </span>
   );
 }
 
 export function BookingsModule({ role, bookings }: BookingsModuleProps) {
+  const t = useT();
   const data =
     bookings ??
     (role === "admin" ? adminBookings : role === "caterer" ? catererBookings : customerBookings);
 
+  const title = role === "customer" ? t("bookings.myTitle") : t("bookings.title");
+  const subtitle =
+    role === "admin"
+      ? t("bookings.adminSubtitle")
+      : role === "caterer"
+      ? t("bookings.catererSubtitle")
+      : t("bookings.customerSubtitle");
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
       <div className="border-b border-gray-100 px-6 py-4">
-        <h2 className="text-lg font-semibold text-gray-900">
-          {role === "customer" ? "My Bookings" : "Bookings"}
-        </h2>
-        <p className="mt-0.5 text-sm text-gray-500">
-          {role === "admin" ? "All platform bookings" : role === "caterer" ? "Booking requests for your services" : "Your catering orders"}
-        </p>
+        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <p className="mt-0.5 text-sm text-gray-500">{subtitle}</p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50">
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">ID</th>
-              {role === "admin" && <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Customer</th>}
-              {role !== "customer" && <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">{role === "admin" ? "Caterer" : "Customer"}</th>}
-              {role === "customer" && <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Caterer</th>}
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Event</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Guests</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Amount</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Status</th>
+              <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.id")}</th>
+              {role === "admin" && <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.customer")}</th>}
+              {role !== "customer" && <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{role === "admin" ? t("table.caterer") : t("table.customer")}</th>}
+              {role === "customer" && <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.caterer")}</th>}
+              <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.event")}</th>
+              <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.date")}</th>
+              <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.guests")}</th>
+              <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.amount")}</th>
+              <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.status")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
