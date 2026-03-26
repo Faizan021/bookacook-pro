@@ -4,6 +4,8 @@ import { useT } from "@/lib/i18n/context";
 
 type PaymentsModuleProps = {
   role: "admin" | "caterer" | "customer";
+  payments?: Payment[];
+  totalsOverride?: { total: string; commission: string; pending: string };
 };
 
 type Payment = {
@@ -49,10 +51,13 @@ const summaryByRole = {
   customer: { total: "€3,395",  commission: "€2,770", pending: "€1,200" },
 };
 
-export function PaymentsModule({ role }: PaymentsModuleProps) {
+export function PaymentsModule({ role, payments: paymentsProp, totalsOverride }: PaymentsModuleProps) {
   const t = useT();
-  const payments = role === "admin" ? adminPayments : role === "caterer" ? catererPayments : customerPayments;
-  const summary = summaryByRole[role];
+
+  const basePayments = role === "admin" ? adminPayments : role === "caterer" ? catererPayments : customerPayments;
+  const payments = paymentsProp ?? basePayments;
+  const summary = totalsOverride ?? summaryByRole[role];
+  const isEmpty = paymentsProp !== undefined && payments.length === 0;
 
   return (
     <div className="space-y-6">
@@ -85,34 +90,45 @@ export function PaymentsModule({ role }: PaymentsModuleProps) {
         <div className="border-b border-gray-100 px-6 py-4">
           <h3 className="text-base font-semibold text-gray-900">{t("payments.recentTransactions")}</h3>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.id")}</th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.description")}</th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.date")}</th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.amount")}</th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.status")}</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {payments.map((p) => (
-                <tr key={p.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-mono text-xs text-gray-500">{p.id}</td>
-                  <td className="px-6 py-4 text-gray-900">{p.description}</td>
-                  <td className="px-6 py-4 text-gray-600">{p.date}</td>
-                  <td className="px-6 py-4 font-semibold text-gray-900">{p.amount}</td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyles[p.status]}`}>
-                      {t(`status.${p.status}`)}
-                    </span>
-                  </td>
+
+        {isEmpty ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+            <p className="mt-4 text-base font-semibold text-gray-600">{t("empty.payments")}</p>
+            <p className="mt-1 text-sm text-gray-400">{t("empty.paymentsDesc")}</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-gray-50">
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.id")}</th>
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.description")}</th>
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.date")}</th>
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.amount")}</th>
+                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">{t("table.status")}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {payments.map((p) => (
+                  <tr key={p.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 font-mono text-xs text-gray-500">{p.id}</td>
+                    <td className="px-6 py-4 text-gray-900">{p.description}</td>
+                    <td className="px-6 py-4 text-gray-600">{p.date}</td>
+                    <td className="px-6 py-4 font-semibold text-gray-900">{p.amount}</td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyles[p.status]}`}>
+                        {t(`status.${p.status}`)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

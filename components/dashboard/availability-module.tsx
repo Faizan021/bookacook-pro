@@ -11,13 +11,22 @@ const MONTH_KEYS = [
   "months.6", "months.7", "months.8", "months.9", "months.10", "months.11",
 ];
 
-const bookedDays = new Set([5, 6, 12, 15, 20, 22, 26, 27]);
-const blockedDays = new Set([8, 9, 29, 30, 31]);
+const demoBookedDays = new Set([5, 6, 12, 15, 20, 22, 26, 27]);
+const demoBlockedDays = new Set([8, 9, 29, 30, 31]);
 
-function getDayStatus(day: number): DayStatus {
-  if (bookedDays.has(day)) return "booked";
-  if (blockedDays.has(day)) return "blocked";
-  return "available";
+function getBookedSetFromDates(dates: string[], year: number, month: number): Set<number> {
+  const result = new Set<number>();
+  for (const d of dates) {
+    try {
+      const date = new Date(d);
+      if (!isNaN(date.getTime()) && date.getFullYear() === year && date.getMonth() === month) {
+        result.add(date.getDate());
+      }
+    } catch {
+      // skip invalid dates
+    }
+  }
+  return result;
 }
 
 const dayStyles: Record<DayStatus | "empty", string> = {
@@ -39,13 +48,29 @@ function buildMonthGrid(year: number, month: number) {
   return cells;
 }
 
-export function AvailabilityModule() {
+type AvailabilityModuleProps = {
+  bookedDates?: string[];
+};
+
+export function AvailabilityModule({ bookedDates }: AvailabilityModuleProps) {
   const t = useT();
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
 
   const cells = buildMonthGrid(year, month);
+
+  const isRealData = bookedDates !== undefined;
+  const currentBookedDays = isRealData
+    ? getBookedSetFromDates(bookedDates, year, month)
+    : demoBookedDays;
+  const currentBlockedDays = isRealData ? new Set<number>() : demoBlockedDays;
+
+  function getDayStatus(day: number): DayStatus {
+    if (currentBookedDays.has(day)) return "booked";
+    if (currentBlockedDays.has(day)) return "blocked";
+    return "available";
+  }
 
   function prevMonth() {
     if (month === 0) { setMonth(11); setYear((y) => y - 1); }
@@ -57,8 +82,8 @@ export function AvailabilityModule() {
     else setMonth((m) => m + 1);
   }
 
-  const booked = cells.filter((c) => c.day && bookedDays.has(c.day)).length;
-  const blocked = cells.filter((c) => c.day && blockedDays.has(c.day)).length;
+  const booked = cells.filter((c) => c.day && currentBookedDays.has(c.day)).length;
+  const blocked = cells.filter((c) => c.day && currentBlockedDays.has(c.day)).length;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const available = daysInMonth - booked - blocked;
 
@@ -145,10 +170,12 @@ export function AvailabilityModule() {
             <div className="h-3 w-3 rounded border border-orange-200 bg-orange-100" />
             <span className="text-xs text-gray-500">{t("availability.booked")}</span>
           </div>
-          <div className="flex items-center gap-2 rtl:flex-row-reverse">
-            <div className="h-3 w-3 rounded border border-gray-200 bg-gray-100" />
-            <span className="text-xs text-gray-500">{t("availability.blocked")}</span>
-          </div>
+          {!isRealData && (
+            <div className="flex items-center gap-2 rtl:flex-row-reverse">
+              <div className="h-3 w-3 rounded border border-gray-200 bg-gray-100" />
+              <span className="text-xs text-gray-500">{t("availability.blocked")}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

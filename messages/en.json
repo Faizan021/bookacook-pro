@@ -196,5 +196,15 @@
   "lang.de": "Deutsch",
   "lang.en": "English",
   "lang.tr": "Türkçe",
-  "lang.ar": "العربية"
+  "lang.ar": "العربية",
+
+  "empty.bookings": "No bookings yet",
+  "empty.bookingsDesc": "Booking requests will appear here once customers book.",
+  "empty.packages": "No packages yet",
+  "empty.packagesDesc": "Create your first catering package.",
+  "empty.payments": "No payments yet",
+  "empty.paymentsDesc": "Payments will appear here after bookings are completed.",
+  "empty.availability": "No booked dates",
+  "empty.availabilityDesc": "Confirmed booking dates will show here.",
+  "pkg.addFirst": "+ Create First Package"
 }

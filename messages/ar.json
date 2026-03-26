@@ -196,5 +196,15 @@
   "lang.de": "Deutsch",
   "lang.en": "English",
   "lang.tr": "Türkçe",
-  "lang.ar": "العربية"
+  "lang.ar": "العربية",
+
+  "empty.bookings": "لا توجد حجوزات بعد",
+  "empty.bookingsDesc": "ستظهر طلبات الحجز هنا عند قيام العملاء بالحجز.",
+  "empty.packages": "لا توجد باقات بعد",
+  "empty.packagesDesc": "أنشئ أول باقة طعام لك.",
+  "empty.payments": "لا توجد مدفوعات بعد",
+  "empty.paymentsDesc": "ستظهر المدفوعات هنا بعد اكتمال الحجوزات.",
+  "empty.availability": "لا توجد تواريخ محجوزة",
+  "empty.availabilityDesc": "ستظهر تواريخ الحجز المؤكدة هنا.",
+  "pkg.addFirst": "+ إنشاء أول باقة"
 }

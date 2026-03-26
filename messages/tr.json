@@ -196,5 +196,15 @@
   "lang.de": "Deutsch",
   "lang.en": "English",
   "lang.tr": "Türkçe",
-  "lang.ar": "العربية"
+  "lang.ar": "العربية",
+
+  "empty.bookings": "Henüz rezervasyon yok",
+  "empty.bookingsDesc": "Müşteriler rezervasyon yaptığında burada görünecek.",
+  "empty.packages": "Henüz paket yok",
+  "empty.packagesDesc": "İlk catering paketinizi oluşturun.",
+  "empty.payments": "Henüz ödeme yok",
+  "empty.paymentsDesc": "Rezervasyonlar tamamlandıktan sonra ödemeler burada görünecek.",
+  "empty.availability": "Rezerve edilmiş tarih yok",
+  "empty.availabilityDesc": "Onaylanan rezervasyon tarihleri burada görünecek.",
+  "pkg.addFirst": "+ İlk Paketi Oluştur"
 }
