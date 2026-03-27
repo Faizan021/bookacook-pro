@@ -76,6 +76,49 @@ A Next.js 16 dashboard-first web app connecting customers with professional cate
 | `verification-module.tsx` | Caterer verification status: profile fields, status badge (5 states), payout eligibility card, warning banners |
 | `admin-caterers-module.tsx` | Admin caterer review table with optimistic action buttons (under_review/verified/rejected/suspended) updating Supabase via browser client |
 
+## Package Creation Studio (components/packages/)
+
+The Package Studio is a shared content model — caterers enter data once in the dashboard, and the website reads the same records later.
+
+| File | Purpose |
+|---|---|
+| `lib/packages/types.ts` | Package type definitions + constants (no server imports, safe for client) |
+| `lib/packages/schema.ts` | Supabase read functions: `getCatererPackages`, `getPackageById`, `getPublicPackages`, `getFeaturedPackages` |
+| `lib/packages/actions.ts` | Server actions: `createPackage`, `updatePackage`, `duplicatePackage`, `deletePackage` |
+| `components/packages/package-form.tsx` | Guided package creation/edit form (client component) |
+
+### Package routes
+
+| Route | Description |
+|---|---|
+| `/caterer/packages` | List view — now uses `getCatererPackages` from shared model; cards link to edit |
+| `/caterer/packages/new` | Create new package (auth-protected) |
+| `/caterer/packages/[id]/edit` | Edit package, verifies ownership |
+| `/demo/caterer/packages/new` | Demo form (no auth needed) |
+| `/api/packages/ai-assist` | POST endpoint: suggest title / improve description / suggest keywords; falls back to smart demo suggestions if no OPENAI_API_KEY |
+
+### Package form sections
+
+1. **Grunddaten** (required) — title (with AI suggest + tips), summary, category, cuisine type
+2. **Preis & Kapazität** (required) — price per person, min/max guests
+3. **Veranstaltungsarten** — 10 event type checkboxes
+4. **Beschreibung** — rich textarea with tips + AI improve button
+5. **Leistungsumfang** — included items (tag input) + add-ons (name+price list)
+6. **Ernährungsoptionen** — 8 dietary option checkboxes
+7. **Logistik** (collapsible) — service area, setup time, booking notice
+8. **Bilder** (collapsible) — cover image + gallery URL inputs with live preview
+9. **Auffindbarkeit** (collapsible) — tags (with AI suggest), featured toggle
+
+### Website reuse pattern (for later)
+
+The website phase can import directly:
+```ts
+import { getPublicPackages, getFeaturedPackages } from "@/lib/packages/schema";
+// or for a single listing:
+import { getPublicPackageById } from "@/lib/packages/schema";
+```
+No second setup flow required — same `packages` table, filtered by `status = "active"`.
+
 ## Signup / Onboarding Routes
 
 ```
