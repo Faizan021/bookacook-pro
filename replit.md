@@ -63,6 +63,24 @@ A Next.js 16 dashboard-first web app connecting customers with professional cate
 | `availability-module.tsx` | Interactive month calendar with availability states |
 | `payments-module.tsx` | Revenue summary cards + transactions table |
 
+## Signup / Onboarding Routes
+
+```
+/signup             → Role chooser (Caterer card → /signup/caterer, Customer card → /signup/customer)
+/signup/caterer     → Full caterer registration (7 required fields incl. license number, live validation, Supabase auth)
+/signup/customer    → Simple customer registration (name, email, password, Supabase auth)
+```
+
+**Business rule:** Caterer signup is blocked client-side and server-side if `license_number` is empty.
+After successful caterer registration the `verification_status` is set to `"pending"`.
+
+### Supabase schema additions (migration file: supabase/migrations/001_add_caterer_fields.sql)
+
+```
+caterers table: + contact_person TEXT, + phone TEXT, + business_address TEXT, + license_number TEXT
+profiles table: + full_name TEXT, + phone TEXT
+```
+
 ## Data Layer (lib/)
 
 - `lib/supabase/client.ts` — Browser Supabase client

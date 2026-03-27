@@ -206,5 +206,37 @@
   "empty.paymentsDesc": "Zahlungen erscheinen hier nach abgeschlossenen Buchungen.",
   "empty.availability": "Keine Termine gebucht",
   "empty.availabilityDesc": "Bestätigte Buchungstermine werden hier angezeigt.",
-  "pkg.addFirst": "+ Erstes Paket erstellen"
+  "pkg.addFirst": "+ Erstes Paket erstellen",
+
+  "signup.chooseRole": "Wie möchten Sie sich registrieren?",
+  "signup.asCustomer": "Als Kunde registrieren",
+  "signup.asCaterer": "Als Caterer registrieren",
+  "signup.customerDesc": "Finden und buchen Sie Catering-Services für Ihre Veranstaltungen.",
+  "signup.catererDesc": "Bieten Sie Ihr Catering auf der BookaCook-Plattform an.",
+  "signup.customerCta": "Jetzt registrieren",
+  "signup.catererCta": "Jetzt bewerben",
+  "signup.backToChooser": "Zurück zur Auswahl",
+  "signup.customerSuccess": "Ihr Konto wurde erstellt. Sie können sich jetzt anmelden.",
+
+  "catererReg.title": "Als Caterer registrieren",
+  "catererReg.subtitle": "Alle Felder sind Pflichtfelder. Ihre Registrierung wird nach Prüfung aktiviert.",
+  "catererReg.businessName": "Firmenname",
+  "catererReg.contactPerson": "Ansprechpartner",
+  "catererReg.phone": "Telefonnummer",
+  "catererReg.businessAddress": "Geschäftsadresse",
+  "catererReg.licenseNumber": "Lizenz- / Registrierungsnummer",
+  "catererReg.licenseRequired": "Pflichtfeld",
+  "catererReg.licenseHelp": "Ohne gültige Lizenz- oder Registrierungsnummer ist eine Anmeldung nicht möglich.",
+  "catererReg.submit": "Registrierung absenden",
+  "catererReg.submitting": "Wird gesendet…",
+  "catererReg.successTitle": "Registrierung eingereicht",
+  "catererReg.successDesc": "Vielen Dank! Ihre Registrierung wird geprüft. Wir benachrichtigen Sie per E-Mail, sobald Ihr Konto aktiviert wurde.",
+  "catererReg.pendingBadge": "Prüfung ausstehend",
+  "catererReg.termsNote": "Mit der Registrierung akzeptieren Sie unsere Nutzungsbedingungen.",
+
+  "validation.required": "Dieses Feld ist Pflicht",
+  "validation.licenseRequired": "Lizenz- / Registrierungsnummer ist erforderlich und darf nicht leer sein.",
+  "validation.emailInvalid": "Bitte eine gültige E-Mail-Adresse eingeben",
+  "validation.passwordMin": "Passwort muss mindestens 8 Zeichen lang sein",
+  "validation.serverError": "Fehler bei der Registrierung. Bitte erneut versuchen."
 }

@@ -12,51 +12,68 @@ export default function SignupPage() {
       <div className="absolute end-4 top-4">
         <LanguageSwitcher />
       </div>
-      <div className="mx-auto flex min-h-[80vh] max-w-md items-center justify-center">
-        <div className="w-full rounded-2xl border bg-white p-8 shadow-sm">
-          <h1 className="text-3xl font-bold text-gray-900">{t("auth.createYour")}</h1>
-          <p className="mt-2 text-gray-500">{t("auth.signup")}</p>
 
-          <div className="mt-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">{t("auth.email")}</label>
-              <input
-                type="email"
-                className="mt-1 w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-              />
+      <div className="mx-auto flex min-h-[80vh] max-w-lg items-center justify-center">
+        <div className="w-full">
+          <div className="mb-8 text-center">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-500 shadow-sm shadow-orange-200">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="h-7 w-7">
+                <path d="M12 2C9.243 2 7 4.243 7 7v1H4v13h16V8h-3V7c0-2.757-2.243-5-5-5zm0 2c1.654 0 3 1.346 3 3v1H9V7c0-1.654 1.346-3 3-3zm0 8c1.103 0 2 .897 2 2s-.897 2-2 2-2-.897-2-2 .897-2 2-2z"/>
+              </svg>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">{t("auth.password")}</label>
-              <input
-                type="password"
-                className="mt-1 w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
-              />
-            </div>
+            <h1 className="mt-4 text-3xl font-bold text-gray-900">{t("auth.createAccount")}</h1>
+            <p className="mt-2 text-gray-500">{t("signup.chooseRole")}</p>
           </div>
 
-          <button className="mt-6 w-full rounded-xl bg-orange-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-orange-400">
-            {t("auth.createAccount")}
-          </button>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Link
+              href="/signup/caterer"
+              className="group rounded-2xl border-2 border-orange-200 bg-white p-6 shadow-sm transition-all hover:border-orange-500 hover:shadow-md"
+            >
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-orange-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M6 3a1 1 0 011-1h.01a1 1 0 010 2H7a1 1 0 01-1-1zm2 3a1 1 0 00-2 0v1a2 2 0 00-2 2v1a2 2 0 00-2 2v.683a3.7 3.7 0 011.055.485 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0A3.7 3.7 0 0118 12.683V12a2 2 0 00-2-2V9a2 2 0 00-2-2V6a1 1 0 10-2 0v1h-1V6a1 1 0 10-2 0v1H8V6zm10 8.868a3.704 3.704 0 01-4.055-.036 1.704 1.704 0 00-1.89 0 3.704 3.704 0 01-4.11 0 1.704 1.704 0 00-1.89 0A3.7 3.7 0 012 14.868V17a1 1 0 001 1h14a1 1 0 001-1v-2.132zM9 3a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm3 0a1 1 0 011-1h.01a1 1 0 110 2H13a1 1 0 01-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h2 className="font-bold text-gray-900 group-hover:text-orange-600 transition-colors">{t("signup.asCaterer")}</h2>
+              <p className="mt-1 text-sm text-gray-500">{t("signup.catererDesc")}</p>
+              <span className="mt-3 inline-block text-xs font-semibold text-orange-500">{t("signup.catererCta")} →</span>
+            </Link>
 
-          <p className="mt-4 text-center text-sm text-gray-500">
+            <Link
+              href="/signup/customer"
+              className="group rounded-2xl border-2 border-gray-100 bg-white p-6 shadow-sm transition-all hover:border-gray-300 hover:shadow-md"
+            >
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h2 className="font-bold text-gray-900 group-hover:text-gray-700 transition-colors">{t("signup.asCustomer")}</h2>
+              <p className="mt-1 text-sm text-gray-500">{t("signup.customerDesc")}</p>
+              <span className="mt-3 inline-block text-xs font-semibold text-gray-400">{t("signup.customerCta")} →</span>
+            </Link>
+          </div>
+
+          <p className="mt-6 text-center text-sm text-gray-500">
             {t("auth.hasAccount")}{" "}
             <Link href="/login" className="font-medium text-orange-500 hover:text-orange-600">
               {t("auth.goToLogin")}
             </Link>
           </p>
 
-          <div className="mt-6 border-t border-gray-100 pt-6">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
+          <div className="mt-8 border-t border-gray-100 pt-6">
+            <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-gray-400">
               {t("landing.previewLabel")}
             </p>
-            <div className="grid gap-2">
-              <Link href="/demo/customer" className="rounded-xl border px-4 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
+            <div className="grid gap-2 sm:grid-cols-3">
+              <Link href="/demo/customer" className="rounded-xl border px-3 py-2 text-center text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50">
                 {t("auth.previewCustomer")}
               </Link>
-              <Link href="/demo/caterer" className="rounded-xl border px-4 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
+              <Link href="/demo/caterer" className="rounded-xl border px-3 py-2 text-center text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50">
                 {t("auth.previewCaterer")}
               </Link>
-              <Link href="/demo/admin" className="rounded-xl border px-4 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
+              <Link href="/demo/admin" className="rounded-xl border px-3 py-2 text-center text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50">
                 {t("auth.previewAdmin")}
               </Link>
             </div>

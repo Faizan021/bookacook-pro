@@ -206,5 +206,37 @@
   "empty.paymentsDesc": "Payments will appear here after bookings are completed.",
   "empty.availability": "No booked dates",
   "empty.availabilityDesc": "Confirmed booking dates will show here.",
-  "pkg.addFirst": "+ Create First Package"
+  "pkg.addFirst": "+ Create First Package",
+
+  "signup.chooseRole": "How would you like to register?",
+  "signup.asCustomer": "Register as Customer",
+  "signup.asCaterer": "Register as Caterer",
+  "signup.customerDesc": "Find and book catering services for your events.",
+  "signup.catererDesc": "Offer your catering services on the BookaCook platform.",
+  "signup.customerCta": "Get started",
+  "signup.catererCta": "Apply now",
+  "signup.backToChooser": "Back to selection",
+  "signup.customerSuccess": "Your account has been created. You can now log in.",
+
+  "catererReg.title": "Register as a Caterer",
+  "catererReg.subtitle": "All fields are required. Your registration will be reviewed before activation.",
+  "catererReg.businessName": "Business Name",
+  "catererReg.contactPerson": "Contact Person",
+  "catererReg.phone": "Phone Number",
+  "catererReg.businessAddress": "Business Address",
+  "catererReg.licenseNumber": "License / Registration Number",
+  "catererReg.licenseRequired": "Required",
+  "catererReg.licenseHelp": "Registration cannot be completed without a valid license or registration number.",
+  "catererReg.submit": "Submit Registration",
+  "catererReg.submitting": "Submitting…",
+  "catererReg.successTitle": "Registration Submitted",
+  "catererReg.successDesc": "Thank you! Your registration is under review. We will notify you by email once your account has been activated.",
+  "catererReg.pendingBadge": "Pending verification",
+  "catererReg.termsNote": "By registering you agree to our terms of service.",
+
+  "validation.required": "This field is required",
+  "validation.licenseRequired": "License / Registration Number is required and cannot be empty.",
+  "validation.emailInvalid": "Please enter a valid email address",
+  "validation.passwordMin": "Password must be at least 8 characters long",
+  "validation.serverError": "Registration failed. Please try again."
 }

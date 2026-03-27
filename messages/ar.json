@@ -206,5 +206,37 @@
   "empty.paymentsDesc": "ستظهر المدفوعات هنا بعد اكتمال الحجوزات.",
   "empty.availability": "لا توجد تواريخ محجوزة",
   "empty.availabilityDesc": "ستظهر تواريخ الحجز المؤكدة هنا.",
-  "pkg.addFirst": "+ إنشاء أول باقة"
+  "pkg.addFirst": "+ إنشاء أول باقة",
+
+  "signup.chooseRole": "كيف تريد التسجيل؟",
+  "signup.asCustomer": "تسجيل كعميل",
+  "signup.asCaterer": "تسجيل كمزود طعام",
+  "signup.customerDesc": "ابحث واحجز خدمات الطعام لفعالياتك.",
+  "signup.catererDesc": "قدم خدمات الطعام الخاصة بك على منصة BookaCook.",
+  "signup.customerCta": "ابدأ الآن",
+  "signup.catererCta": "تقديم الطلب",
+  "signup.backToChooser": "العودة للاختيار",
+  "signup.customerSuccess": "تم إنشاء حسابك. يمكنك تسجيل الدخول الآن.",
+
+  "catererReg.title": "التسجيل كمزود طعام",
+  "catererReg.subtitle": "جميع الحقول مطلوبة. سيتم مراجعة طلبك قبل تفعيل الحساب.",
+  "catererReg.businessName": "اسم الشركة",
+  "catererReg.contactPerson": "الشخص المسؤول",
+  "catererReg.phone": "رقم الهاتف",
+  "catererReg.businessAddress": "عنوان الشركة",
+  "catererReg.licenseNumber": "رقم الترخيص / رقم التسجيل",
+  "catererReg.licenseRequired": "مطلوب",
+  "catererReg.licenseHelp": "لا يمكن إتمام التسجيل بدون رقم ترخيص أو تسجيل صالح.",
+  "catererReg.submit": "إرسال طلب التسجيل",
+  "catererReg.submitting": "جارٍ الإرسال…",
+  "catererReg.successTitle": "تم إرسال طلب التسجيل",
+  "catererReg.successDesc": "شكراً لك! طلبك قيد المراجعة. سنُبلغك عبر البريد الإلكتروني فور تفعيل حسابك.",
+  "catererReg.pendingBadge": "في انتظار التحقق",
+  "catererReg.termsNote": "بالتسجيل، أنت توافق على شروط الخدمة.",
+
+  "validation.required": "هذا الحقل مطلوب",
+  "validation.licenseRequired": "رقم الترخيص / رقم التسجيل مطلوب ولا يمكن تركه فارغاً.",
+  "validation.emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صالح",
+  "validation.passwordMin": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+  "validation.serverError": "فشل التسجيل. يرجى المحاولة مرة أخرى."
 }

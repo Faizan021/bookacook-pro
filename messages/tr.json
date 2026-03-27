@@ -206,5 +206,37 @@
   "empty.paymentsDesc": "Rezervasyonlar tamamlandıktan sonra ödemeler burada görünecek.",
   "empty.availability": "Rezerve edilmiş tarih yok",
   "empty.availabilityDesc": "Onaylanan rezervasyon tarihleri burada görünecek.",
-  "pkg.addFirst": "+ İlk Paketi Oluştur"
+  "pkg.addFirst": "+ İlk Paketi Oluştur",
+
+  "signup.chooseRole": "Nasıl kayıt olmak istersiniz?",
+  "signup.asCustomer": "Müşteri Olarak Kayıt Ol",
+  "signup.asCaterer": "Catering Firması Olarak Kayıt Ol",
+  "signup.customerDesc": "Etkinlikleriniz için catering hizmetleri bulun ve rezervasyon yapın.",
+  "signup.catererDesc": "BookaCook platformunda catering hizmetlerinizi sunun.",
+  "signup.customerCta": "Hemen başla",
+  "signup.catererCta": "Başvur",
+  "signup.backToChooser": "Seçime geri dön",
+  "signup.customerSuccess": "Hesabınız oluşturuldu. Artık giriş yapabilirsiniz.",
+
+  "catererReg.title": "Catering Firması Olarak Kayıt Ol",
+  "catererReg.subtitle": "Tüm alanlar zorunludur. Kaydınız incelendikten sonra aktive edilecektir.",
+  "catererReg.businessName": "Firma Adı",
+  "catererReg.contactPerson": "İletişim Kişisi",
+  "catererReg.phone": "Telefon Numarası",
+  "catererReg.businessAddress": "İş Adresi",
+  "catererReg.licenseNumber": "Lisans / Kayıt Numarası",
+  "catererReg.licenseRequired": "Zorunlu",
+  "catererReg.licenseHelp": "Geçerli bir lisans veya kayıt numarası olmadan kayıt tamamlanamaz.",
+  "catererReg.submit": "Kaydı Gönder",
+  "catererReg.submitting": "Gönderiliyor…",
+  "catererReg.successTitle": "Kayıt Gönderildi",
+  "catererReg.successDesc": "Teşekkürler! Kaydınız inceleniyor. Hesabınız aktive edildiğinde e-posta ile bilgilendirileceksiniz.",
+  "catererReg.pendingBadge": "Doğrulama bekleniyor",
+  "catererReg.termsNote": "Kayıt olarak hizmet şartlarımızı kabul etmiş olursunuz.",
+
+  "validation.required": "Bu alan zorunludur",
+  "validation.licenseRequired": "Lisans / Kayıt Numarası zorunludur ve boş bırakılamaz.",
+  "validation.emailInvalid": "Lütfen geçerli bir e-posta adresi girin",
+  "validation.passwordMin": "Şifre en az 8 karakter uzunluğunda olmalıdır",
+  "validation.serverError": "Kayıt başarısız oldu. Lütfen tekrar deneyin."
 }
