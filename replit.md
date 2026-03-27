@@ -28,6 +28,7 @@ A Next.js 16 dashboard-first web app connecting customers with professional cate
 /demo/caterer              → Caterer overview (sales, orders, packages)
 /demo/caterer/bookings     → Booking requests table
 /demo/caterer/packages     → Package management cards
+/demo/caterer/verification → Verification status (demo: pending + payout blocked)
 /demo/caterer/availability → Calendar availability module
 /demo/caterer/payments     → Earnings & payout history
 
@@ -37,9 +38,19 @@ A Next.js 16 dashboard-first web app connecting customers with professional cate
 
 ### Protected Dashboards (auth-gated, real Supabase data)
 ```
-/admin          → Admin dashboard (role: admin only)
-/caterer        → Caterer dashboard (role: caterer or admin)
-/customer       → Customer dashboard (role: customer or admin)
+/admin                  → Admin dashboard (role: admin only)
+/admin/bookings         → Admin bookings view
+/admin/caterers         → Caterer review + verification actions (real data, Supabase)
+/admin/payments         → Platform-wide GMV, commission, held/released/blocked summary
+
+/caterer                → Caterer dashboard (role: caterer or admin)
+/caterer/bookings       → Caterer bookings
+/caterer/packages       → Package management
+/caterer/availability   → Availability calendar
+/caterer/verification   → Verification status + payout eligibility (real data, Supabase)
+/caterer/payments       → Extended payment view: gross/commission/net/held/released
+
+/customer               → Customer dashboard (role: customer or admin)
 ```
 
 ### Auth Routes
@@ -61,7 +72,9 @@ A Next.js 16 dashboard-first web app connecting customers with professional cate
 | `bookings-module.tsx` | Bookings table (role-aware: admin/caterer/customer) |
 | `packages-module.tsx` | Catering package cards grid |
 | `availability-module.tsx` | Interactive month calendar with availability states |
-| `payments-module.tsx` | Revenue summary cards + transactions table |
+| `payments-module.tsx` | Summary cards + transactions table; supports extended caterer view (gross/commission/net/held/released) and admin summary view (GMV/commission/held/released/blocked) |
+| `verification-module.tsx` | Caterer verification status: profile fields, status badge (5 states), payout eligibility card, warning banners |
+| `admin-caterers-module.tsx` | Admin caterer review table with optimistic action buttons (under_review/verified/rejected/suspended) updating Supabase via browser client |
 
 ## Signup / Onboarding Routes
 
