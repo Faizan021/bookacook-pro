@@ -278,13 +278,35 @@ function ImageList({
   );
 }
 
+// ─── Normalise initialData so no null leaks overwrite array/string defaults ───
+
+function normalizeFormData(data?: Partial<PackageFormData>): Partial<PackageFormData> {
+  if (!data) return {};
+  return {
+    ...data,
+    title:              data.title              ?? "",
+    summary:            data.summary            ?? "",
+    description:        data.description        ?? "",
+    category:           data.category           ?? "",
+    cuisine_type:       data.cuisine_type       ?? "",
+    cover_image_url:    data.cover_image_url    ?? "",
+    service_area:       data.service_area       ?? "",
+    event_types:        data.event_types        ?? [],
+    dietary_options:    data.dietary_options    ?? [],
+    included_items:     data.included_items     ?? [],
+    add_ons:            data.add_ons            ?? [],
+    images:             data.images             ?? [],
+    tags:               data.tags               ?? [],
+  };
+}
+
 // ─── Main form ────────────────────────────────────────────────────────────────
 
 export function PackageForm({ mode, packageId, initialData }: PackageFormProps) {
   const t = useT();
   const router = useRouter();
 
-  const [form, setForm] = useState<PackageFormData>({ ...DEFAULT_PACKAGE_FORM, ...initialData });
+  const [form, setForm] = useState<PackageFormData>({ ...DEFAULT_PACKAGE_FORM, ...normalizeFormData(initialData) });
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof PackageFormData | "global", string>>>({});
   const [savedMsg, setSavedMsg] = useState("");
@@ -307,12 +329,12 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
 
   function validate(forPublish: boolean): boolean {
     const errs: typeof errors = {};
-    if (!form.title.trim()) errs.title = t("pkg.validation.titleRequired");
+    if (!(form.title ?? "").trim()) errs.title = t("pkg.validation.titleRequired");
     if (!form.price_per_person || form.price_per_person <= 0) errs.price_per_person = t("pkg.validation.priceRequired");
     if (!form.min_guests || !form.max_guests) errs.min_guests = t("pkg.validation.guestsRequired");
-    if (form.min_guests > form.max_guests) errs.max_guests = t("pkg.validation.guestsOrder");
-    if (forPublish && !form.summary.trim()) errs.summary = t("pkg.validation.summaryRequired");
-    if (forPublish && !form.description.trim()) errs.description = t("pkg.validation.descRequired");
+    if ((form.min_guests ?? 0) > (form.max_guests ?? 0)) errs.max_guests = t("pkg.validation.guestsOrder");
+    if (forPublish && !(form.summary ?? "").trim()) errs.summary = t("pkg.validation.summaryRequired");
+    if (forPublish && !(form.description ?? "").trim()) errs.description = t("pkg.validation.descRequired");
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -510,7 +532,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
                 />
                 <div className="mt-0.5 flex items-center justify-between">
                   <ErrorMsg msg={errors.title} />
-                  <span className="text-xs text-gray-400">{form.title.length}/100</span>
+                  <span className="text-xs text-gray-400">{(form.title?.length ?? 0)}/100</span>
                 </div>
               </div>
               <AiButton type="title" label={t("pkg.ai.suggestTitle")} />
@@ -532,7 +554,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
             />
             <div className="mt-0.5 flex items-center justify-between">
               <ErrorMsg msg={errors.summary} />
-              <span className="text-xs text-gray-400">{form.summary.length}/220</span>
+              <span className="text-xs text-gray-400">{(form.summary?.length ?? 0)}/220</span>
             </div>
           </div>
 
@@ -641,7 +663,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
               />
               <div className="mt-0.5 flex items-center justify-between">
                 <ErrorMsg msg={errors.description} />
-                <span className="text-xs text-gray-400">{form.description.length} Zeichen</span>
+                <span className="text-xs text-gray-400">{(form.description?.length ?? 0)}</span>
               </div>
             </div>
             <AiButton type="description" label={t("pkg.ai.improveDesc")} />
