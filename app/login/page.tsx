@@ -73,7 +73,7 @@ export default function LoginPage() {
 
     } catch (err) {
       console.error("[login] unexpected error:", err);
-      setError("Ein unerwarteter Fehler ist aufgetreten.");
+      setError(t("error.unexpected"));
       setLoading(false);
     }
   }

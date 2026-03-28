@@ -407,5 +407,11 @@
   "pkg.wizard.includesPlaceholder": "Type an item + Enter",
   "pkg.wizard.imageUrlLabel": "Image URL (optional)",
   "pkg.wizard.publishLabel": "Publish Package",
-  "pkg.wizard.publishDesc": "Makes this package visible to customers"
+  "pkg.wizard.publishDesc": "Makes this package visible to customers",
+  "error.unexpected": "An unexpected error occurred.",
+  "error.notLoggedIn": "Not logged in. Please sign in.",
+  "error.catererNotFound": "Caterer profile not found. Please contact support.",
+  "error.packageNotFound": "Package not found.",
+  "error.forbidden": "You are not authorized to perform this action.",
+  "error.auth": "Authentication error. Please sign in again."
 }

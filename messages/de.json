@@ -407,5 +407,11 @@
   "pkg.wizard.includesPlaceholder": "Eintrag eingeben + Enter",
   "pkg.wizard.imageUrlLabel": "Bild-URL (optional)",
   "pkg.wizard.publishLabel": "Paket veröffentlichen",
-  "pkg.wizard.publishDesc": "Macht dieses Paket für Kunden sichtbar"
+  "pkg.wizard.publishDesc": "Macht dieses Paket für Kunden sichtbar",
+  "error.unexpected": "Ein unerwarteter Fehler ist aufgetreten.",
+  "error.notLoggedIn": "Nicht angemeldet. Bitte melden Sie sich an.",
+  "error.catererNotFound": "Caterer-Profil nicht gefunden. Bitte wenden Sie sich an den Support.",
+  "error.packageNotFound": "Paket nicht gefunden.",
+  "error.forbidden": "Sie haben keine Berechtigung für diese Aktion.",
+  "error.auth": "Authentifizierungsfehler. Bitte erneut anmelden."
 }

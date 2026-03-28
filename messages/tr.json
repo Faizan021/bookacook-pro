@@ -407,5 +407,11 @@
   "pkg.wizard.includesPlaceholder": "Madde yaz + Enter",
   "pkg.wizard.imageUrlLabel": "Görsel URL (İsteğe bağlı)",
   "pkg.wizard.publishLabel": "Paketi Yayınla",
-  "pkg.wizard.publishDesc": "Bu paketi müşterilere görünür yapın"
+  "pkg.wizard.publishDesc": "Bu paketi müşterilere görünür yapın",
+  "error.unexpected": "Beklenmeyen bir hata oluştu.",
+  "error.notLoggedIn": "Giriş yapılmadı. Lütfen oturum açın.",
+  "error.catererNotFound": "Caterer profili bulunamadı. Lütfen destek ekibiyle iletişime geçin.",
+  "error.packageNotFound": "Paket bulunamadı.",
+  "error.forbidden": "Bu işlemi gerçekleştirme yetkiniz yok.",
+  "error.auth": "Kimlik doğrulama hatası. Lütfen tekrar giriş yapın."
 }

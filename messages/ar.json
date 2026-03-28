@@ -407,5 +407,11 @@
   "pkg.wizard.includesPlaceholder": "اكتب عنصراً + Enter",
   "pkg.wizard.imageUrlLabel": "رابط الصورة (اختياري)",
   "pkg.wizard.publishLabel": "نشر الحزمة",
-  "pkg.wizard.publishDesc": "يجعل هذه الحزمة مرئية للعملاء"
+  "pkg.wizard.publishDesc": "يجعل هذه الحزمة مرئية للعملاء",
+  "error.unexpected": "حدث خطأ غير متوقع.",
+  "error.notLoggedIn": "غير مسجّل الدخول. يرجى تسجيل الدخول.",
+  "error.catererNotFound": "لم يتم العثور على ملف الكاتيرر. يرجى التواصل مع الدعم.",
+  "error.packageNotFound": "الحزمة غير موجودة.",
+  "error.forbidden": "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
+  "error.auth": "خطأ في المصادقة. يرجى تسجيل الدخول مجدداً."
 }

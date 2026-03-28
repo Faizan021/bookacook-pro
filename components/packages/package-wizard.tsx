@@ -336,7 +336,7 @@ export function PackageWizard() {
       {/* Global error */}
       {globalError && (
         <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-          {globalError}
+          {t(globalError, globalError)}
         </div>
       )}
 

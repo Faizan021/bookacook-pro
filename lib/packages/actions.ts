@@ -8,7 +8,7 @@ import type { PackageFormData, PackageAddOn, PackageImage } from "./types";
 
 async function getAuthedCaterer() {
   const { user } = await getUserProfile();
-  if (!user) return { error: "Nicht angemeldet" as const, catererId: null };
+  if (!user) return { error: "error.notLoggedIn" as const, catererId: null };
 
   const supabase = await createClient();
   const { data: caterer } = await supabase
@@ -17,7 +17,7 @@ async function getAuthedCaterer() {
     .eq("user_id", user.id)
     .single();
 
-  if (!caterer) return { error: "Caterer-Profil nicht gefunden" as const, catererId: null };
+  if (!caterer) return { error: "error.catererNotFound" as const, catererId: null };
   return { error: null, catererId: caterer.id as string };
 }
 
@@ -53,7 +53,7 @@ export async function createPackage(
   data: PackageFormData
 ): Promise<{ id?: string; error?: string }> {
   const { error: authError, catererId } = await getAuthedCaterer();
-  if (authError || !catererId) return { error: authError ?? "Auth error" };
+  if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
   const { data: pkg, error } = await supabase
@@ -73,19 +73,18 @@ export async function updatePackage(
   data: Partial<PackageFormData>
 ): Promise<{ error?: string }> {
   const { error: authError, catererId } = await getAuthedCaterer();
-  if (authError || !catererId) return { error: authError ?? "Auth error" };
+  if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
 
-  // Verify ownership
   const { data: existing } = await supabase
     .from("packages")
     .select("caterer_id")
     .eq("id", packageId)
     .single();
 
-  if (!existing) return { error: "Paket nicht gefunden" };
-  if (existing.caterer_id !== catererId) return { error: "Keine Berechtigung" };
+  if (!existing) return { error: "error.packageNotFound" };
+  if (existing.caterer_id !== catererId) return { error: "error.forbidden" };
 
   const { error } = await supabase
     .from("packages")
@@ -102,7 +101,7 @@ export async function duplicatePackage(
   packageId: string
 ): Promise<{ id?: string; error?: string }> {
   const { error: authError, catererId } = await getAuthedCaterer();
-  if (authError || !catererId) return { error: authError ?? "Auth error" };
+  if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
   const { data: original } = await supabase
@@ -111,8 +110,8 @@ export async function duplicatePackage(
     .eq("id", packageId)
     .single();
 
-  if (!original) return { error: "Paket nicht gefunden" };
-  if (original.caterer_id !== catererId) return { error: "Keine Berechtigung" };
+  if (!original) return { error: "error.packageNotFound" };
+  if (original.caterer_id !== catererId) return { error: "error.forbidden" };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id: _id, created_at: _ca, updated_at: _ua, ...rest } = original;
@@ -121,7 +120,7 @@ export async function duplicatePackage(
     .from("packages")
     .insert({
       ...rest,
-      title: `${original.title} (Kopie)`,
+      title: `${original.title} (Copy)`,
       status: "draft",
       featured: false,
       created_at: new Date().toISOString(),
@@ -164,7 +163,7 @@ export async function createWizardPackage(
   data: WizardStep1
 ): Promise<{ id?: string; error?: string }> {
   const { error: authError, catererId } = await getAuthedCaterer();
-  if (authError || !catererId) return { error: authError ?? "Auth-Fehler" };
+  if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
   const { data: pkg, error } = await supabase
@@ -194,7 +193,7 @@ export async function updateWizardPackage(
   data: Partial<WizardStep1 & WizardStep2 & WizardStep3>
 ): Promise<{ error?: string }> {
   const { error: authError, catererId } = await getAuthedCaterer();
-  if (authError || !catererId) return { error: authError ?? "Auth-Fehler" };
+  if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
 
@@ -204,8 +203,8 @@ export async function updateWizardPackage(
     .eq("id", packageId)
     .single();
 
-  if (!existing) return { error: "Paket nicht gefunden" };
-  if (existing.caterer_id !== catererId) return { error: "Keine Berechtigung" };
+  if (!existing) return { error: "error.packageNotFound" };
+  if (existing.caterer_id !== catererId) return { error: "error.forbidden" };
 
   const { error } = await supabase
     .from("packages")
@@ -220,7 +219,7 @@ export async function updateWizardPackage(
 
 export async function deletePackage(packageId: string): Promise<{ error?: string }> {
   const { error: authError, catererId } = await getAuthedCaterer();
-  if (authError || !catererId) return { error: authError ?? "Auth error" };
+  if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
   const { data: existing } = await supabase
@@ -229,8 +228,8 @@ export async function deletePackage(packageId: string): Promise<{ error?: string
     .eq("id", packageId)
     .single();
 
-  if (!existing) return { error: "Paket nicht gefunden" };
-  if (existing.caterer_id !== catererId) return { error: "Keine Berechtigung" };
+  if (!existing) return { error: "error.packageNotFound" };
+  if (existing.caterer_id !== catererId) return { error: "error.forbidden" };
 
   const { error } = await supabase.from("packages").delete().eq("id", packageId);
   if (error) return { error: error.message };

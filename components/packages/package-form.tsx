@@ -489,7 +489,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
 
       {/* ── Global error banner ── */}
       {errors.global && (
-        <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{errors.global}</div>
+        <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{t(errors.global!, errors.global)}</div>
       )}
 
       {/* ── Section 1: Basics ── */}

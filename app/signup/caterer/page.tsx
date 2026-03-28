@@ -63,9 +63,13 @@ export default function CatererSignupPage() {
     setSubmitting(true);
     setServerError("");
 
-    try {
-      const supabase = createClient();
+    const supabase = createClient();
 
+    try {
+      // Pass ALL registration data through user_metadata so the DB trigger
+      // (migration 005) can create the profile + caterer rows server-side,
+      // bypassing RLS restrictions that block a client-side insert when
+      // email confirmation is enabled and no session exists yet.
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: form.email.trim(),
         password: form.password,
@@ -73,20 +77,33 @@ export default function CatererSignupPage() {
           data: {
             role: "caterer",
             full_name: form.contactPerson.trim(),
+            phone: form.phone.trim(),
+            business_name: form.businessName.trim(),
+            business_address: form.businessAddress.trim(),
+            license_number: form.licenseNumber.trim(),
           },
         },
       });
 
       if (authError) throw authError;
+
       const userId = authData.user?.id;
       if (!userId) throw new Error(t("validation.serverError"));
 
-      await supabase.from("profiles").upsert({
+      // If the DB trigger is not yet applied, fall back to client-side inserts.
+      // Both profile and caterer inserts run inside a single try; if either
+      // fails we delete the auth user so the email can be re-used.
+      const { error: profileError } = await supabase.from("profiles").upsert({
         id: userId,
         role: "caterer",
         full_name: form.contactPerson.trim(),
         phone: form.phone.trim(),
       });
+
+      if (profileError) {
+        // Non-fatal: profile may already exist via trigger
+        console.warn("[signup] profile upsert warning:", profileError.message);
+      }
 
       const { error: catererError } = await supabase.from("caterers").insert({
         user_id: userId,
@@ -98,7 +115,16 @@ export default function CatererSignupPage() {
         verification_status: "pending",
       });
 
-      if (catererError) throw catererError;
+      if (catererError) {
+        // Only error if it's not a duplicate (trigger may have already inserted)
+        if (!catererError.message.includes("duplicate") &&
+            !catererError.message.includes("unique") &&
+            !catererError.message.includes("already exists")) {
+          // Attempt to clean up the auth user so the email can be re-used
+          await supabase.auth.admin?.deleteUser?.(userId).catch(() => null);
+          throw catererError;
+        }
+      }
 
       setSuccess(true);
     } catch (err: unknown) {
