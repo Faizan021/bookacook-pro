@@ -134,6 +134,88 @@ export async function duplicatePackage(
   return { id: pkg.id };
 }
 
+// ─── Wizard: exact schema actions ─────────────────────────────────────────────
+
+export type WizardStep1 = {
+  title: string;
+  short_summary?: string | null;
+  description?: string | null;
+  event_type?: string | null;
+  cuisine_type?: string | null;
+};
+
+export type WizardStep2 = {
+  price_type: "fixed" | "per_person";
+  price_amount: number;
+  currency?: string;
+  min_guests?: number | null;
+  max_guests?: number | null;
+};
+
+export type WizardStep3 = {
+  dietary_options?: string[];
+  service_area?: string | null;
+  includes?: string[];
+  image_url?: string | null;
+  is_published?: boolean;
+};
+
+export async function createWizardPackage(
+  data: WizardStep1
+): Promise<{ id?: string; error?: string }> {
+  const { error: authError, catererId } = await getAuthedCaterer();
+  if (authError || !catererId) return { error: authError ?? "Auth-Fehler" };
+
+  const supabase = await createClient();
+  const { data: pkg, error } = await supabase
+    .from("packages")
+    .insert({
+      caterer_id: catererId,
+      title: data.title,
+      short_summary: data.short_summary ?? null,
+      description: data.description ?? null,
+      event_type: data.event_type ?? null,
+      cuisine_type: data.cuisine_type ?? null,
+      price_type: "fixed",
+      price_amount: 0,
+      currency: "EUR",
+      is_published: false,
+      is_active: true,
+    })
+    .select("id")
+    .single();
+
+  if (error) return { error: error.message };
+  return { id: pkg.id };
+}
+
+export async function updateWizardPackage(
+  packageId: string,
+  data: Partial<WizardStep1 & WizardStep2 & WizardStep3>
+): Promise<{ error?: string }> {
+  const { error: authError, catererId } = await getAuthedCaterer();
+  if (authError || !catererId) return { error: authError ?? "Auth-Fehler" };
+
+  const supabase = await createClient();
+
+  const { data: existing } = await supabase
+    .from("packages")
+    .select("caterer_id")
+    .eq("id", packageId)
+    .single();
+
+  if (!existing) return { error: "Paket nicht gefunden" };
+  if (existing.caterer_id !== catererId) return { error: "Keine Berechtigung" };
+
+  const { error } = await supabase
+    .from("packages")
+    .update({ ...data, updated_at: new Date().toISOString() })
+    .eq("id", packageId);
+
+  if (error) return { error: error.message };
+  return {};
+}
+
 // ─── Delete ───────────────────────────────────────────────────────────────────
 
 export async function deletePackage(packageId: string): Promise<{ error?: string }> {

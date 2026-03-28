@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getUserProfile } from "@/lib/auth/get-user-profile";
-import { PackageForm } from "@/components/packages/package-form";
+import { PackageWizard } from "@/components/packages/package-wizard";
 
 export const metadata = { title: "Neues Paket – BookaCook Pro" };
 
@@ -9,8 +9,8 @@ export default async function NewPackagePage() {
   if (!user) redirect("/login");
 
   return (
-    <div className="p-6">
-      <PackageForm mode="create" />
+    <div className="min-h-screen bg-gray-50 px-4 py-8 sm:px-6">
+      <PackageWizard />
     </div>
   );
 }

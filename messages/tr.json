@@ -7,11 +7,9 @@
   "nav.payments": "Ödemeler",
   "nav.myBookings": "Rezervasyonlarım",
   "nav.backToHome": "Ana Sayfaya Dön",
-
   "portal.admin": "Yönetici Portalı",
   "portal.caterer": "Catering Portalı",
   "portal.customer": "Müşteri Portalı",
-
   "landing.title1": "Catering",
   "landing.title2": "Yönetim Platformu",
   "landing.subtitle": "Rezervasyonları, paketleri, uygunluğu ve ödemeleri kolaylaştırın — yöneticiler, catering firmaları ve müşteriler için.",
@@ -25,7 +23,6 @@
   "landing.previewBtn": "Panoyu Önizle →",
   "landing.login": "Giriş Yap",
   "landing.createAccount": "Hesap Oluştur",
-
   "dashboard.admin.title": "Yönetici Genel Bakış",
   "dashboard.admin.subtitle": "Platform faaliyetlerine genel bakış",
   "dashboard.admin.welcome": "Tekrar hoş geldiniz",
@@ -35,13 +32,11 @@
   "dashboard.customer.title": "Müşteri Genel Bakış",
   "dashboard.customer.subtitle": "Rezervasyonlarınız ve aktiviteleriniz",
   "dashboard.customer.welcome": "Tekrar hoş geldiniz",
-
   "breadcrumb.app": "BookaCook",
   "breadcrumb.adminDashboard": "Yönetici Panosu",
   "breadcrumb.catererDashboard": "Catering Panosu",
   "breadcrumb.customerDashboard": "Müşteri Panosu",
   "breadcrumb.demo": "Demo",
-
   "metrics.platformRevenue": "Platform Geliri",
   "metrics.totalGmv": "Toplam brüt işlem hacmi",
   "metrics.commissionEarned": "Kazanılan Komisyon",
@@ -65,25 +60,21 @@
   "metrics.waitingUpdate": "Güncelleme bekleniyor",
   "metrics.favoriteCaterers": "Favori Catering Firmaları",
   "metrics.savedByCust": "Kaydedildi",
-
   "chart.platformRevenueTrend": "Platform Gelir Trendi",
   "chart.monthlySales": "Aylık Satışlar",
   "chart.orderHistory": "Sipariş Geçmişi",
   "chart.performance": "Seçilen dönem için performans genel bakışı",
   "chart.live": "Canlı",
-
   "activity.platformActivity": "Platform Aktivitesi",
   "activity.recentBookings": "Son Rezervasyonlar",
   "activity.recentOrders": "Son Siparişler",
   "activity.latest": "Son güncellemeler ve aktiviteler",
   "activity.viewAll": "Tümünü gör",
-
   "bookings.title": "Rezervasyonlar",
   "bookings.myTitle": "Rezervasyonlarım",
   "bookings.adminSubtitle": "Tüm platform rezervasyonları",
   "bookings.catererSubtitle": "Hizmetleriniz için rezervasyon talepleri",
   "bookings.customerSubtitle": "Catering siparişleriniz",
-
   "table.id": "ID",
   "table.customer": "Müşteri",
   "table.caterer": "Catering Firması",
@@ -100,7 +91,6 @@
   "table.rating": "Puan",
   "table.action": "İşlem",
   "table.description": "Açıklama",
-
   "status.confirmed": "Onaylandı",
   "status.pending": "Beklemede",
   "status.completed": "Tamamlandı",
@@ -112,18 +102,15 @@
   "status.paused": "Duraklatıldı",
   "status.paid": "Ödendi",
   "status.refunded": "İade Edildi",
-
   "btn.edit": "Düzenle",
   "btn.preview": "Önizle",
   "btn.review": "İncele",
   "btn.view": "Görüntüle",
   "btn.newPackage": "+ Yeni Paket",
-
   "packages.title": "Paketler",
   "packages.subtitle": "Catering paketlerinizi ve fiyatlandırmanızı yönetin",
   "packages.perPerson": "kişi başı",
   "packages.guests": "misafir",
-
   "availability.title": "Uygunluk",
   "availability.subtitle": "Müsait tarihlerinizi yönetin ve izin günleri ekleyin",
   "availability.available": "Müsait",
@@ -132,7 +119,6 @@
   "availability.daysThisMonth": "bu ay gün",
   "availability.confirmedEvents": "onaylanmış etkinlik",
   "availability.daysOff": "izin günü",
-
   "days.sun": "Paz",
   "days.mon": "Pzt",
   "days.tue": "Sal",
@@ -140,7 +126,6 @@
   "days.thu": "Per",
   "days.fri": "Cum",
   "days.sat": "Cmt",
-
   "months.0": "Ocak",
   "months.1": "Şubat",
   "months.2": "Mart",
@@ -153,7 +138,6 @@
   "months.9": "Ekim",
   "months.10": "Kasım",
   "months.11": "Aralık",
-
   "payments.title": "Ödemeler ve Gelir",
   "payments.adminSubtitle": "Platform genelinde ödeme genel bakışı",
   "payments.catererSubtitle": "Kazançlarınız ve ödemeleriniz",
@@ -170,13 +154,10 @@
   "payments.thirdLabel.customer": "Beklemede",
   "payments.awaitingConfirmation": "Onay bekleniyor",
   "payments.allTime": "Tüm zamanlar",
-
   "caterers.title": "Catering Yönetimi",
   "caterers.subtitle": "Başvuruları inceleyin ve kayıtlı catering firmalarını yönetin",
-
   "demo.mode": "Demo Modu",
   "demo.sampleData": "Yalnızca örnek veriler",
-
   "auth.email": "E-posta adresi",
   "auth.password": "Şifre",
   "auth.login": "Giriş Yap",
@@ -192,12 +173,10 @@
   "auth.previewCustomer": "Müşteri Demosunu Önizle",
   "auth.previewCaterer": "Catering Demosunu Önizle",
   "auth.previewAdmin": "Yönetici Demosunu Önizle",
-
   "lang.de": "Deutsch",
   "lang.en": "English",
   "lang.tr": "Türkçe",
   "lang.ar": "العربية",
-
   "empty.bookings": "Henüz rezervasyon yok",
   "empty.bookingsDesc": "Müşteriler rezervasyon yaptığında burada görünecek.",
   "empty.packages": "Henüz paket yok",
@@ -207,7 +186,6 @@
   "empty.availability": "Rezerve edilmiş tarih yok",
   "empty.availabilityDesc": "Onaylanan rezervasyon tarihleri burada görünecek.",
   "pkg.addFirst": "+ İlk Paketi Oluştur",
-
   "signup.chooseRole": "Nasıl kayıt olmak istersiniz?",
   "signup.asCustomer": "Müşteri Olarak Kayıt Ol",
   "signup.asCaterer": "Catering Firması Olarak Kayıt Ol",
@@ -217,7 +195,6 @@
   "signup.catererCta": "Başvur",
   "signup.backToChooser": "Seçime geri dön",
   "signup.customerSuccess": "Hesabınız oluşturuldu. Artık giriş yapabilirsiniz.",
-
   "catererReg.title": "Catering Firması Olarak Kayıt Ol",
   "catererReg.subtitle": "Tüm alanlar zorunludur. Kaydınız incelendikten sonra aktive edilecektir.",
   "catererReg.businessName": "Firma Adı",
@@ -233,15 +210,12 @@
   "catererReg.successDesc": "Teşekkürler! Kaydınız inceleniyor. Hesabınız aktive edildiğinde e-posta ile bilgilendirileceksiniz.",
   "catererReg.pendingBadge": "Doğrulama bekleniyor",
   "catererReg.termsNote": "Kayıt olarak hizmet şartlarımızı kabul etmiş olursunuz.",
-
   "validation.required": "Bu alan zorunludur",
   "validation.licenseRequired": "Lisans / Kayıt Numarası zorunludur ve boş bırakılamaz.",
   "validation.emailInvalid": "Lütfen geçerli bir e-posta adresi girin",
   "validation.passwordMin": "Şifre en az 8 karakter uzunluğunda olmalıdır",
   "validation.serverError": "Kayıt başarısız oldu. Lütfen tekrar deneyin.",
-
   "nav.verification": "Doğrulama",
-
   "verification.title": "Doğrulama Durumu",
   "verification.subtitle": "Catering profili ve mevcut doğrulama durumunuz",
   "verification.profileTitle": "Firma Profili",
@@ -260,20 +234,16 @@
   "verification.banner.under_review": "Hesabınız aktif olarak inceleniyor. Sorularımız olursa sizinle iletişime geçeceğiz.",
   "verification.banner.rejected": "Kaydınız reddedildi. Lütfen destek ekibimizle iletişime geçin.",
   "verification.banner.suspended": "Hesabınız geçici olarak askıya alındı. Lütfen destek ekibimizle iletişime geçin.",
-
   "status.under_review": "İnceleniyor",
   "status.verified": "Doğrulandı",
   "status.rejected": "Reddedildi",
-  "status.suspended": "Askıya Alındı",
   "status.pending_payment": "Ödeme Bekliyor",
   "status.funds_held": "Fonlar Tutuldu",
   "status.partially_released": "Kısmen Serbest Bırakıldı",
   "status.payout_pending": "Ödeme Bekliyor",
   "status.payout_released": "Ödeme Yapıldı",
   "status.partially_refunded": "Kısmen İade Edildi",
-  "status.cancelled": "İptal Edildi",
   "status.disputed": "İtiraz Edildi",
-
   "admin.caterers.title": "Catering Firmalarını Yönet",
   "admin.caterers.subtitle": "Başvuruları incele ve doğrulama durumunu yönet",
   "admin.caterers.noLicense": "Lisans kaydı yok",
@@ -288,7 +258,6 @@
   "admin.caterers.action.verified": "Doğrula",
   "admin.caterers.action.rejected": "Reddet",
   "admin.caterers.action.suspended": "Askıya Al",
-
   "payments.gross": "Brüt Tutar",
   "payments.commission10": "Komisyon (%10)",
   "payments.net": "Net Ödeme",
@@ -301,12 +270,10 @@
   "payments.heldFunds": "Tutulan Fonlar",
   "payments.blockedPayouts": "Engellenen Ödemeler",
   "payments.unverifiedCaterers": "Doğrulanmamış caterer'lar",
-
   "empty.verification": "Catering profili bulunamadı",
   "empty.verificationDesc": "Lütfen catering firması olarak giriş yapın.",
   "empty.caterers": "Henüz kayıtlı catering firması yok",
   "empty.caterersDesc": "Catering firmaları kayıt olduğunda burada görünecek.",
-
   "pkg.form.newTitle": "Yeni Paket Oluştur",
   "pkg.form.editTitle": "Paketi Düzenle",
   "pkg.form.basics": "Temel Bilgiler",
@@ -356,7 +323,6 @@
   "pkg.form.saved": "Paket kaydedildi!",
   "pkg.form.published": "Paket yayınlandı!",
   "pkg.form.back": "Paketlere Dön",
-
   "pkg.tip.titleTitle": "İyi başlıklar için ipuçları",
   "pkg.tip.title1": "Somut terimler kullanın — örn. \"Düğün Büfesi\" yerine sadece \"Paket\" değil.",
   "pkg.tip.title2": "Daha iyi keşfedilebilirlik için etkinlik veya mutfakla başlayın.",
@@ -369,7 +335,6 @@
   "pkg.tip.image1": "İyi ışıklı, profesyonel fotoğraflar kullanın.",
   "pkg.tip.image2": "Hem yiyeceği hem de atmosferi gösterin.",
   "pkg.tip.image3": "Önerilen: en az 1200×800 px, JPG veya WebP.",
-
   "pkg.ai.suggestTitle": "Yapay Zeka: Başlık öner",
   "pkg.ai.improveDesc": "Yapay Zeka: Açıklamayı geliştir",
   "pkg.ai.suggestTags": "Yapay Zeka: Anahtar kelimeler öner",
@@ -377,17 +342,14 @@
   "pkg.ai.apply": "Uygula",
   "pkg.ai.dismiss": "Kapat",
   "pkg.ai.demoNote": "Örnek öneri (AI anahtarı yapılandırılmadı)",
-
   "pkg.duplicate": "Kopyala",
   "pkg.delete": "Sil",
-
   "pkg.validation.titleRequired": "Paket başlığı zorunludur.",
   "pkg.validation.priceRequired": "Kişi başı fiyat zorunludur.",
   "pkg.validation.guestsRequired": "Min. ve maks. misafir sayısı zorunludur.",
   "pkg.validation.guestsOrder": "Min. misafir sayısı maks. misafir sayısından büyük olamaz.",
   "pkg.validation.summaryRequired": "Kısa özet yayınlama için gereklidir.",
   "pkg.validation.descRequired": "Tam açıklama yayınlama için gereklidir.",
-
   "event.wedding": "Düğün",
   "event.corporate": "Kurumsal",
   "event.birthday": "Doğum Günü",
@@ -398,7 +360,6 @@
   "event.graduation": "Mezuniyet",
   "event.anniversary": "Yıldönümü",
   "event.other": "Diğer",
-
   "dietary.vegan": "Vegan",
   "dietary.vegetarian": "Vejetaryen",
   "dietary.halal": "Helal",
@@ -406,5 +367,45 @@
   "dietary.gluten_free": "Glütensiz",
   "dietary.nut_free": "Fındıksız",
   "dietary.dairy_free": "Sütsüz",
-  "dietary.shellfish_free": "Kabuklular Hariç"
+  "dietary.shellfish_free": "Kabuklular Hariç",
+  "pkg.wizard.pageTitle": "Yeni Paket Oluştur",
+  "pkg.wizard.step1": "Temel Bilgiler",
+  "pkg.wizard.step2": "Fiyat & Misafirler",
+  "pkg.wizard.step3": "Detaylar & Yayınla",
+  "pkg.wizard.stepOf": "Adım {step} / 3",
+  "pkg.wizard.next": "İleri",
+  "pkg.wizard.back": "Geri",
+  "pkg.wizard.saving": "Kaydediliyor…",
+  "pkg.wizard.draftSaved": "Taslak kaydedildi",
+  "pkg.wizard.submitDraft": "Taslak Olarak Kaydet",
+  "pkg.wizard.submitPublish": "Paketi Yayınla",
+  "pkg.wizard.titleLabel": "Paket Başlığı *",
+  "pkg.wizard.titlePlaceholder": "örn. Premium Düğün Yemek Servisi",
+  "pkg.wizard.titleRequired": "Başlık zorunludur.",
+  "pkg.wizard.summaryLabel": "Kısa Özet",
+  "pkg.wizard.summaryPlaceholder": "Kısa açıklama (maks. 150 karakter)…",
+  "pkg.wizard.summaryMax": "En fazla 150 karakter girilebilir.",
+  "pkg.wizard.descLabel": "Tam Açıklama",
+  "pkg.wizard.descPlaceholder": "Paketinizi ayrıntılı açıklayın…",
+  "pkg.wizard.eventTypeLabel": "Etkinlik Türü",
+  "pkg.wizard.eventTypePlaceholder": "örn. Düğün, Kurumsal, Doğum Günü",
+  "pkg.wizard.cuisineLabel": "Mutfak Türü",
+  "pkg.wizard.cuisinePlaceholder": "örn. Türk, Akdeniz, Uluslararası",
+  "pkg.wizard.priceTypeLabel": "Fiyat Türü *",
+  "pkg.wizard.priceFixed": "Sabit Fiyat",
+  "pkg.wizard.pricePerPerson": "Kişi Başına",
+  "pkg.wizard.priceAmountLabel": "Tutar *",
+  "pkg.wizard.priceRequired": "Tutar 0'dan büyük olmalıdır.",
+  "pkg.wizard.currencyLabel": "Para Birimi",
+  "pkg.wizard.minGuestsLabel": "Min. Misafir",
+  "pkg.wizard.maxGuestsLabel": "Maks. Misafir",
+  "pkg.wizard.guestsOrder": "Min. misafir sayısı maks. sayıyı geçemez.",
+  "pkg.wizard.dietaryLabel": "Diyet Seçenekleri",
+  "pkg.wizard.serviceAreaLabel": "Hizmet Bölgesi",
+  "pkg.wizard.serviceAreaPlaceholder": "örn. Berlin, tüm Almanya",
+  "pkg.wizard.includesLabel": "Dahil Olanlar",
+  "pkg.wizard.includesPlaceholder": "Madde yaz + Enter",
+  "pkg.wizard.imageUrlLabel": "Görsel URL (İsteğe bağlı)",
+  "pkg.wizard.publishLabel": "Paketi Yayınla",
+  "pkg.wizard.publishDesc": "Bu paketi müşterilere görünür yapın"
 }

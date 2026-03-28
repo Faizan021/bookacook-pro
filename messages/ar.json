@@ -7,11 +7,9 @@
   "nav.payments": "المدفوعات",
   "nav.myBookings": "حجوزاتي",
   "nav.backToHome": "العودة للرئيسية",
-
   "portal.admin": "بوابة الإدارة",
   "portal.caterer": "بوابة مزود الطعام",
   "portal.customer": "بوابة العميل",
-
   "landing.title1": "منصة إدارة",
   "landing.title2": "خدمات الطعام",
   "landing.subtitle": "تبسيط الحجوزات والباقات والتوفر والمدفوعات — للمسؤولين ومزودي الطعام والعملاء.",
@@ -25,7 +23,6 @@
   "landing.previewBtn": "معاينة اللوحة ←",
   "landing.login": "تسجيل الدخول",
   "landing.createAccount": "إنشاء حساب",
-
   "dashboard.admin.title": "نظرة عامة للمسؤول",
   "dashboard.admin.subtitle": "عمليات المنصة في لمحة",
   "dashboard.admin.welcome": "مرحباً بعودتك",
@@ -35,13 +32,11 @@
   "dashboard.customer.title": "نظرة عامة للعميل",
   "dashboard.customer.subtitle": "حجوزاتك ونشاطاتك",
   "dashboard.customer.welcome": "مرحباً بعودتك",
-
   "breadcrumb.app": "بوكاكوك",
   "breadcrumb.adminDashboard": "لوحة تحكم المسؤول",
   "breadcrumb.catererDashboard": "لوحة تحكم مزود الطعام",
   "breadcrumb.customerDashboard": "لوحة تحكم العميل",
   "breadcrumb.demo": "تجريبي",
-
   "metrics.platformRevenue": "إيرادات المنصة",
   "metrics.totalGmv": "إجمالي حجم المعاملات",
   "metrics.commissionEarned": "العمولة المكتسبة",
@@ -65,25 +60,21 @@
   "metrics.waitingUpdate": "في انتظار التحديث",
   "metrics.favoriteCaterers": "مزودو الطعام المفضلون",
   "metrics.savedByCust": "محفوظ",
-
   "chart.platformRevenueTrend": "اتجاه إيرادات المنصة",
   "chart.monthlySales": "المبيعات الشهرية",
   "chart.orderHistory": "سجل الطلبات",
   "chart.performance": "نظرة عامة على الأداء للفترة المحددة",
   "chart.live": "مباشر",
-
   "activity.platformActivity": "نشاط المنصة",
   "activity.recentBookings": "الحجوزات الأخيرة",
   "activity.recentOrders": "الطلبات الأخيرة",
   "activity.latest": "آخر التحديثات والنشاطات",
   "activity.viewAll": "عرض الكل",
-
   "bookings.title": "الحجوزات",
   "bookings.myTitle": "حجوزاتي",
   "bookings.adminSubtitle": "جميع حجوزات المنصة",
   "bookings.catererSubtitle": "طلبات الحجز لخدماتك",
   "bookings.customerSubtitle": "طلبات الطعام الخاصة بك",
-
   "table.id": "المعرف",
   "table.customer": "العميل",
   "table.caterer": "مزود الطعام",
@@ -100,7 +91,6 @@
   "table.rating": "التقييم",
   "table.action": "إجراء",
   "table.description": "الوصف",
-
   "status.confirmed": "مؤكد",
   "status.pending": "معلق",
   "status.completed": "مكتمل",
@@ -112,18 +102,15 @@
   "status.paused": "متوقف مؤقتاً",
   "status.paid": "مدفوع",
   "status.refunded": "مسترد",
-
   "btn.edit": "تعديل",
   "btn.preview": "معاينة",
   "btn.review": "مراجعة",
   "btn.view": "عرض",
   "btn.newPackage": "+ باقة جديدة",
-
   "packages.title": "الباقات",
   "packages.subtitle": "إدارة باقات الطعام والأسعار",
   "packages.perPerson": "لكل شخص",
   "packages.guests": "ضيف",
-
   "availability.title": "التوفر",
   "availability.subtitle": "إدارة التواريخ المتاحة وحجب الأوقات",
   "availability.available": "متاح",
@@ -132,7 +119,6 @@
   "availability.daysThisMonth": "أيام هذا الشهر",
   "availability.confirmedEvents": "فعاليات مؤكدة",
   "availability.daysOff": "أيام إجازة",
-
   "days.sun": "أحد",
   "days.mon": "اثن",
   "days.tue": "ثلا",
@@ -140,7 +126,6 @@
   "days.thu": "خمي",
   "days.fri": "جمع",
   "days.sat": "سبت",
-
   "months.0": "يناير",
   "months.1": "فبراير",
   "months.2": "مارس",
@@ -153,7 +138,6 @@
   "months.9": "أكتوبر",
   "months.10": "نوفمبر",
   "months.11": "ديسمبر",
-
   "payments.title": "المدفوعات والإيرادات",
   "payments.adminSubtitle": "نظرة عامة على مدفوعات المنصة",
   "payments.catererSubtitle": "أرباحك ومدفوعاتك",
@@ -170,13 +154,10 @@
   "payments.thirdLabel.customer": "معلق",
   "payments.awaitingConfirmation": "في انتظار التأكيد",
   "payments.allTime": "كل الوقت",
-
   "caterers.title": "إدارة مزودي الطعام",
   "caterers.subtitle": "مراجعة الطلبات وإدارة مزودي الطعام المسجلين",
-
   "demo.mode": "وضع التجريب",
   "demo.sampleData": "بيانات نموذجية فقط",
-
   "auth.email": "عنوان البريد الإلكتروني",
   "auth.password": "كلمة المرور",
   "auth.login": "تسجيل الدخول",
@@ -192,12 +173,10 @@
   "auth.previewCustomer": "معاينة لوحة العميل",
   "auth.previewCaterer": "معاينة لوحة مزود الطعام",
   "auth.previewAdmin": "معاينة لوحة المسؤول",
-
   "lang.de": "Deutsch",
   "lang.en": "English",
   "lang.tr": "Türkçe",
   "lang.ar": "العربية",
-
   "empty.bookings": "لا توجد حجوزات بعد",
   "empty.bookingsDesc": "ستظهر طلبات الحجز هنا عند قيام العملاء بالحجز.",
   "empty.packages": "لا توجد باقات بعد",
@@ -207,7 +186,6 @@
   "empty.availability": "لا توجد تواريخ محجوزة",
   "empty.availabilityDesc": "ستظهر تواريخ الحجز المؤكدة هنا.",
   "pkg.addFirst": "+ إنشاء أول باقة",
-
   "signup.chooseRole": "كيف تريد التسجيل؟",
   "signup.asCustomer": "تسجيل كعميل",
   "signup.asCaterer": "تسجيل كمزود طعام",
@@ -217,7 +195,6 @@
   "signup.catererCta": "تقديم الطلب",
   "signup.backToChooser": "العودة للاختيار",
   "signup.customerSuccess": "تم إنشاء حسابك. يمكنك تسجيل الدخول الآن.",
-
   "catererReg.title": "التسجيل كمزود طعام",
   "catererReg.subtitle": "جميع الحقول مطلوبة. سيتم مراجعة طلبك قبل تفعيل الحساب.",
   "catererReg.businessName": "اسم الشركة",
@@ -233,15 +210,12 @@
   "catererReg.successDesc": "شكراً لك! طلبك قيد المراجعة. سنُبلغك عبر البريد الإلكتروني فور تفعيل حسابك.",
   "catererReg.pendingBadge": "في انتظار التحقق",
   "catererReg.termsNote": "بالتسجيل، أنت توافق على شروط الخدمة.",
-
   "validation.required": "هذا الحقل مطلوب",
   "validation.licenseRequired": "رقم الترخيص / رقم التسجيل مطلوب ولا يمكن تركه فارغاً.",
   "validation.emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صالح",
   "validation.passwordMin": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
   "validation.serverError": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
-
   "nav.verification": "التحقق",
-
   "verification.title": "حالة التحقق",
   "verification.subtitle": "ملف تعريف مزود الطعام وحالة التحقق الحالية",
   "verification.profileTitle": "ملف الشركة",
@@ -260,20 +234,16 @@
   "verification.banner.under_review": "جاري مراجعة حسابك بفاعلية. سنتواصل معك إذا كان لدينا أي استفسارات.",
   "verification.banner.rejected": "تم رفض تسجيلك. يرجى التواصل مع فريق الدعم.",
   "verification.banner.suspended": "تم تعليق حسابك مؤقتًا. يرجى التواصل مع فريق الدعم.",
-
   "status.under_review": "قيد المراجعة",
   "status.verified": "موثق",
   "status.rejected": "مرفوض",
-  "status.suspended": "موقوف",
   "status.pending_payment": "في انتظار الدفع",
   "status.funds_held": "الأموال محتجزة",
   "status.partially_released": "أُفرج جزئيًا",
   "status.payout_pending": "صرف في الانتظار",
   "status.payout_released": "تم الصرف",
   "status.partially_refunded": "استرداد جزئي",
-  "status.cancelled": "ملغى",
   "status.disputed": "متنازع عليه",
-
   "admin.caterers.title": "إدارة مزودي الطعام",
   "admin.caterers.subtitle": "مراجعة الطلبات وإدارة حالة التحقق",
   "admin.caterers.noLicense": "لا يوجد ترخيص مسجل",
@@ -288,7 +258,6 @@
   "admin.caterers.action.verified": "توثيق",
   "admin.caterers.action.rejected": "رفض",
   "admin.caterers.action.suspended": "تعليق",
-
   "payments.gross": "المبلغ الإجمالي",
   "payments.commission10": "العمولة (10%)",
   "payments.net": "صافي المبلغ",
@@ -301,12 +270,10 @@
   "payments.heldFunds": "الأموال المحتجزة",
   "payments.blockedPayouts": "المدفوعات المحظورة",
   "payments.unverifiedCaterers": "مزودو طعام غير موثقين",
-
   "empty.verification": "لم يتم العثور على ملف مزود الطعام",
   "empty.verificationDesc": "يرجى تسجيل الدخول كمزود طعام.",
   "empty.caterers": "لم يتم تسجيل أي مزودي طعام بعد",
   "empty.caterersDesc": "عند تسجيل مزودي الطعام سيظهرون هنا للمراجعة.",
-
   "pkg.form.newTitle": "إنشاء باقة جديدة",
   "pkg.form.editTitle": "تعديل الباقة",
   "pkg.form.basics": "البيانات الأساسية",
@@ -356,7 +323,6 @@
   "pkg.form.saved": "تم حفظ الباقة!",
   "pkg.form.published": "تم نشر الباقة!",
   "pkg.form.back": "العودة إلى الباقات",
-
   "pkg.tip.titleTitle": "نصائح لعناوين جيدة",
   "pkg.tip.title1": "استخدم مصطلحات محددة — مثل \"بوفيه زفاف\" بدلاً من \"باقة\" فقط.",
   "pkg.tip.title2": "ابدأ بنوع المناسبة أو المطبخ لتحسين الاكتشاف.",
@@ -369,7 +335,6 @@
   "pkg.tip.image1": "استخدم صوراً احترافية ومضاءة بشكل جيد.",
   "pkg.tip.image2": "اعرض الطعام والأجواء معاً.",
   "pkg.tip.image3": "موصى به: 1200×800 بكسل على الأقل، JPG أو WebP.",
-
   "pkg.ai.suggestTitle": "الذكاء الاصطناعي: اقتراح عنوان",
   "pkg.ai.improveDesc": "الذكاء الاصطناعي: تحسين الوصف",
   "pkg.ai.suggestTags": "الذكاء الاصطناعي: اقتراح كلمات مفتاحية",
@@ -377,17 +342,14 @@
   "pkg.ai.apply": "تطبيق",
   "pkg.ai.dismiss": "رفض",
   "pkg.ai.demoNote": "اقتراح تجريبي (لم يتم تهيئة مفتاح الذكاء الاصطناعي)",
-
   "pkg.duplicate": "نسخ",
   "pkg.delete": "حذف",
-
   "pkg.validation.titleRequired": "عنوان الباقة مطلوب.",
   "pkg.validation.priceRequired": "السعر لكل شخص مطلوب.",
   "pkg.validation.guestsRequired": "الحد الأدنى والأقصى للضيوف مطلوبان.",
   "pkg.validation.guestsOrder": "لا يمكن أن يكون الحد الأدنى للضيوف أكبر من الحد الأقصى.",
   "pkg.validation.summaryRequired": "الملخص القصير مطلوب للنشر.",
   "pkg.validation.descRequired": "الوصف الكامل مطلوب للنشر.",
-
   "event.wedding": "زفاف",
   "event.corporate": "فعالية شركات",
   "event.birthday": "عيد ميلاد",
@@ -398,7 +360,6 @@
   "event.graduation": "تخرج",
   "event.anniversary": "ذكرى سنوية",
   "event.other": "أخرى",
-
   "dietary.vegan": "نباتي صرف",
   "dietary.vegetarian": "نباتي",
   "dietary.halal": "حلال",
@@ -406,5 +367,45 @@
   "dietary.gluten_free": "خالٍ من الغلوتين",
   "dietary.nut_free": "خالٍ من المكسرات",
   "dietary.dairy_free": "خالٍ من الألبان",
-  "dietary.shellfish_free": "خالٍ من المحار"
+  "dietary.shellfish_free": "خالٍ من المحار",
+  "pkg.wizard.pageTitle": "إنشاء حزمة جديدة",
+  "pkg.wizard.step1": "المعلومات الأساسية",
+  "pkg.wizard.step2": "السعر والضيوف",
+  "pkg.wizard.step3": "التفاصيل والنشر",
+  "pkg.wizard.stepOf": "الخطوة {step} من 3",
+  "pkg.wizard.next": "التالي",
+  "pkg.wizard.back": "رجوع",
+  "pkg.wizard.saving": "جارٍ الحفظ…",
+  "pkg.wizard.draftSaved": "تم حفظ المسودة",
+  "pkg.wizard.submitDraft": "حفظ كمسودة",
+  "pkg.wizard.submitPublish": "نشر الحزمة",
+  "pkg.wizard.titleLabel": "عنوان الحزمة *",
+  "pkg.wizard.titlePlaceholder": "مثال: خدمة أفراح فاخرة",
+  "pkg.wizard.titleRequired": "العنوان مطلوب.",
+  "pkg.wizard.summaryLabel": "ملخص مختصر",
+  "pkg.wizard.summaryPlaceholder": "وصف مختصر (أقصى 150 حرفاً)…",
+  "pkg.wizard.summaryMax": "الحد الأقصى 150 حرفاً.",
+  "pkg.wizard.descLabel": "الوصف الكامل",
+  "pkg.wizard.descPlaceholder": "صف حزمتك بالتفصيل…",
+  "pkg.wizard.eventTypeLabel": "نوع الفعالية",
+  "pkg.wizard.eventTypePlaceholder": "مثال: حفل زفاف، مؤتمر شركات",
+  "pkg.wizard.cuisineLabel": "نوع المطبخ",
+  "pkg.wizard.cuisinePlaceholder": "مثال: عربي، متوسطي، دولي",
+  "pkg.wizard.priceTypeLabel": "نوع السعر *",
+  "pkg.wizard.priceFixed": "سعر ثابت",
+  "pkg.wizard.pricePerPerson": "لكل شخص",
+  "pkg.wizard.priceAmountLabel": "المبلغ *",
+  "pkg.wizard.priceRequired": "يجب أن يكون المبلغ أكبر من 0.",
+  "pkg.wizard.currencyLabel": "العملة",
+  "pkg.wizard.minGuestsLabel": "أدنى ضيوف",
+  "pkg.wizard.maxGuestsLabel": "أقصى ضيوف",
+  "pkg.wizard.guestsOrder": "لا يمكن أن يتجاوز الحد الأدنى الحد الأقصى.",
+  "pkg.wizard.dietaryLabel": "خيارات غذائية",
+  "pkg.wizard.serviceAreaLabel": "منطقة الخدمة",
+  "pkg.wizard.serviceAreaPlaceholder": "مثال: برلين، جميع ألمانيا",
+  "pkg.wizard.includesLabel": "ما يشمله الحزمة",
+  "pkg.wizard.includesPlaceholder": "اكتب عنصراً + Enter",
+  "pkg.wizard.imageUrlLabel": "رابط الصورة (اختياري)",
+  "pkg.wizard.publishLabel": "نشر الحزمة",
+  "pkg.wizard.publishDesc": "يجعل هذه الحزمة مرئية للعملاء"
 }
