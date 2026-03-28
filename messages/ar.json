@@ -404,8 +404,7 @@
   "pkg.wizard.maxGuestsLabel": "أقصى ضيوف",
   "pkg.wizard.guestsOrder": "لا يمكن أن يتجاوز الحد الأدنى الحد الأقصى.",
   "pkg.wizard.dietaryLabel": "خيارات غذائية",
-  "pkg.wizard.serviceAreaLabel": "منطقة الخدمة",
-  "pkg.wizard.serviceAreaPlaceholder": "مثال: برلين، جميع ألمانيا",
+  "pkg.wizard.serviceAreaLabel": "مناطق الخدمة",
   "pkg.wizard.includesLabel": "ما يشمله الحزمة",
   "pkg.wizard.includesPlaceholder": "اكتب عنصراً + Enter",
   "pkg.wizard.imageUrlLabel": "رابط الصورة (اختياري)",
@@ -416,5 +415,8 @@
   "error.catererNotFound": "لم يتم العثور على ملف الكاتيرر. يرجى التواصل مع الدعم.",
   "error.packageNotFound": "الحزمة غير موجودة.",
   "error.forbidden": "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
-  "error.auth": "خطأ في المصادقة. يرجى تسجيل الدخول مجدداً."
+  "error.auth": "خطأ في المصادقة. يرجى تسجيل الدخول مجدداً.",
+  "pkg.wizard.cityDropdownPlaceholder": "اختر مدينة من القائمة...",
+  "pkg.wizard.cityCustomPlaceholder": "أو اكتب مدينة واضغط Enter",
+  "pkg.wizard.cityAdd": "إضافة"
 }

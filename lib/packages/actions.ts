@@ -153,7 +153,7 @@ export type WizardStep2 = {
 
 export type WizardStep3 = {
   dietary_options?: string[];
-  service_area?: string | null;
+  service_area?: string[] | null;
   includes?: string[];
   image_url?: string | null;
   is_published?: boolean;

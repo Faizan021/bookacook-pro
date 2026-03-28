@@ -13,6 +13,16 @@ import {
 const DIETARY_OPTIONS = ["Halal", "Vegetarisch", "Vegan", "Glutenfrei"] as const;
 const CURRENCIES = ["EUR", "USD", "GBP", "CHF"] as const;
 
+const GERMAN_CITIES = [
+  "Berlin", "Hamburg", "München", "Köln", "Frankfurt", "Stuttgart",
+  "Düsseldorf", "Dortmund", "Essen", "Leipzig", "Bremen", "Dresden",
+  "Hannover", "Nürnberg", "Duisburg", "Bochum", "Wuppertal", "Bielefeld",
+  "Bonn", "Münster", "Karlsruhe", "Mannheim", "Augsburg", "Wiesbaden",
+  "Mönchengladbach", "Gelsenkirchen", "Aachen", "Braunschweig", "Kiel",
+  "Chemnitz", "Magdeburg", "Halle", "Freiburg", "Krefeld", "Lübeck",
+  "Oberhausen", "Erfurt", "Mainz", "Rostock", "Kassel",
+] as const;
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type WizardData = {
@@ -27,7 +37,7 @@ type WizardData = {
   min_guests: string;
   max_guests: string;
   dietary_options: string[];
-  service_area: string;
+  service_area: string[];
   includes: string[];
   image_url: string;
   is_published: boolean;
@@ -45,7 +55,7 @@ const DEFAULTS: WizardData = {
   min_guests: "",
   max_guests: "",
   dietary_options: [],
-  service_area: "",
+  service_area: [],
   includes: [],
   image_url: "",
   is_published: false,
@@ -162,6 +172,8 @@ export function PackageWizard() {
   const [draftSaved, setDraftSaved] = useState(false);
   const [includeInput, setIncludeInput] = useState("");
   const includeRef = useRef<HTMLInputElement>(null);
+  const [cityInput, setCityInput] = useState("");
+  const cityInputRef = useRef<HTMLInputElement>(null);
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -265,7 +277,7 @@ export function PackageWizard() {
     try {
       const result = await updateWizardPackage(packageId!, {
         dietary_options: data.dietary_options,
-        service_area: data.service_area || null,
+        service_area: data.service_area.length > 0 ? data.service_area : null,
         includes: data.includes,
         image_url: data.image_url || null,
         is_published: data.is_published,
@@ -299,6 +311,29 @@ export function PackageWizard() {
         ? data.dietary_options.filter((o) => o !== option)
         : [...data.dietary_options, option]
     );
+  }
+
+  function addCity(city: string) {
+    const v = city.trim();
+    if (v && !data.service_area.includes(v)) {
+      set("service_area", [...data.service_area, v]);
+    }
+  }
+
+  function addCityFromDropdown(e: React.ChangeEvent<HTMLSelectElement>) {
+    const city = e.target.value;
+    if (city) addCity(city);
+    e.target.value = "";
+  }
+
+  function addCustomCity() {
+    addCity(cityInput);
+    setCityInput("");
+    cityInputRef.current?.focus();
+  }
+
+  function removeCity(city: string) {
+    set("service_area", data.service_area.filter((c) => c !== city));
   }
 
   // ── Shared layout ────────────────────────────────────────────────────────
@@ -531,13 +566,68 @@ export function PackageWizard() {
           </Field>
 
           <Field label={t("pkg.wizard.serviceAreaLabel")}>
-            <input
-              type="text"
-              value={data.service_area}
-              onChange={(e) => set("service_area", e.target.value)}
-              placeholder={t("pkg.wizard.serviceAreaPlaceholder")}
-              className={inputCls}
-            />
+            <div className="space-y-2">
+              {/* Dropdown */}
+              <select
+                onChange={addCityFromDropdown}
+                defaultValue=""
+                className={inputCls}
+              >
+                <option value="" disabled>{t("pkg.wizard.cityDropdownPlaceholder")}</option>
+                {GERMAN_CITIES.map((city) => (
+                  <option
+                    key={city}
+                    value={city}
+                    disabled={data.service_area.includes(city)}
+                  >
+                    {city}
+                  </option>
+                ))}
+              </select>
+              {/* Custom city input */}
+              <div className="flex gap-2">
+                <input
+                  ref={cityInputRef}
+                  type="text"
+                  value={cityInput}
+                  onChange={(e) => setCityInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") { e.preventDefault(); addCustomCity(); }
+                  }}
+                  placeholder={t("pkg.wizard.cityCustomPlaceholder")}
+                  className={`${inputCls} flex-1`}
+                />
+                <button
+                  type="button"
+                  onClick={addCustomCity}
+                  disabled={!cityInput.trim()}
+                  className="rounded-xl bg-gray-100 px-4 text-sm font-medium text-gray-600 hover:bg-gray-200 disabled:opacity-40 transition-colors"
+                >
+                  {t("pkg.wizard.cityAdd")}
+                </button>
+              </div>
+              {/* Selected city chips */}
+              {data.service_area.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {data.service_area.map((city) => (
+                    <span
+                      key={city}
+                      className="flex items-center gap-1.5 rounded-full bg-orange-50 border border-orange-200 px-3 py-1 text-sm font-medium text-orange-700"
+                    >
+                      {city}
+                      <button
+                        type="button"
+                        onClick={() => removeCity(city)}
+                        className="text-orange-400 hover:text-red-500 transition-colors leading-none"
+                        aria-label={`Remove ${city}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </Field>
 
           {/* Includes tag input */}

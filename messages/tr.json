@@ -404,8 +404,7 @@
   "pkg.wizard.maxGuestsLabel": "Maks. Misafir",
   "pkg.wizard.guestsOrder": "Min. misafir sayısı maks. sayıyı geçemez.",
   "pkg.wizard.dietaryLabel": "Diyet Seçenekleri",
-  "pkg.wizard.serviceAreaLabel": "Hizmet Bölgesi",
-  "pkg.wizard.serviceAreaPlaceholder": "örn. Berlin, tüm Almanya",
+  "pkg.wizard.serviceAreaLabel": "Hizmet Bölgeleri",
   "pkg.wizard.includesLabel": "Dahil Olanlar",
   "pkg.wizard.includesPlaceholder": "Madde yaz + Enter",
   "pkg.wizard.imageUrlLabel": "Görsel URL (İsteğe bağlı)",
@@ -416,5 +415,8 @@
   "error.catererNotFound": "Caterer profili bulunamadı. Lütfen destek ekibiyle iletişime geçin.",
   "error.packageNotFound": "Paket bulunamadı.",
   "error.forbidden": "Bu işlemi gerçekleştirme yetkiniz yok.",
-  "error.auth": "Kimlik doğrulama hatası. Lütfen tekrar giriş yapın."
+  "error.auth": "Kimlik doğrulama hatası. Lütfen tekrar giriş yapın.",
+  "pkg.wizard.cityDropdownPlaceholder": "Listeden bir şehir seçin...",
+  "pkg.wizard.cityCustomPlaceholder": "Veya şehir yazıp Enter tuşuna basın",
+  "pkg.wizard.cityAdd": "Ekle"
 }

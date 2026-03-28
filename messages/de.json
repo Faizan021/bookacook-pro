@@ -404,8 +404,7 @@
   "pkg.wizard.maxGuestsLabel": "Maximalgäste",
   "pkg.wizard.guestsOrder": "Mindestgäste dürfen Maximalgäste nicht überschreiten.",
   "pkg.wizard.dietaryLabel": "Ernährungsoptionen",
-  "pkg.wizard.serviceAreaLabel": "Servicegebiet",
-  "pkg.wizard.serviceAreaPlaceholder": "z. B. Berlin, gesamte Deutschland",
+  "pkg.wizard.serviceAreaLabel": "Servicegebiete",
   "pkg.wizard.includesLabel": "Leistungsumfang",
   "pkg.wizard.includesPlaceholder": "Eintrag eingeben + Enter",
   "pkg.wizard.imageUrlLabel": "Bild-URL (optional)",
@@ -416,5 +415,8 @@
   "error.catererNotFound": "Caterer-Profil nicht gefunden. Bitte wenden Sie sich an den Support.",
   "error.packageNotFound": "Paket nicht gefunden.",
   "error.forbidden": "Sie haben keine Berechtigung für diese Aktion.",
-  "error.auth": "Authentifizierungsfehler. Bitte erneut anmelden."
+  "error.auth": "Authentifizierungsfehler. Bitte erneut anmelden.",
+  "pkg.wizard.cityDropdownPlaceholder": "Stadt aus der Liste wählen...",
+  "pkg.wizard.cityCustomPlaceholder": "Oder Stadt eingeben und Enter drücken",
+  "pkg.wizard.cityAdd": "Hinzufügen"
 }
