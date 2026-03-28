@@ -9,10 +9,10 @@ import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 
 function getRoleRedirect(role: string | null | undefined): string {
   switch (role) {
-    case "caterer": return "/caterer";
-    case "admin":   return "/admin";
+    case "caterer":  return "/caterer";
+    case "admin":    return "/admin";
     case "customer": return "/customer";
-    default:        return "/";
+    default:         return "/";
   }
 }
 
@@ -35,6 +35,7 @@ export default function LoginPage() {
     try {
       const supabase = createClient();
 
+      // ── 1. Authenticate ──────────────────────────────────────────────────
       const { data: authData, error: authError } =
         await supabase.auth.signInWithPassword({ email, password });
 
@@ -44,22 +45,55 @@ export default function LoginPage() {
         return;
       }
 
-      console.log("[login] auth success, user id:", authData.user?.id);
+      const userId = authData.user.id;
+      console.log("[login] auth success, user id:", userId);
 
-      // Fetch profile to get role
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", authData.user.id)
-        .single();
+      // ── 2. Resolve role (try 4 sources in order) ────────────────────────
+      let role: string | null = null;
 
-      if (profileError) {
-        console.warn("[login] profile fetch error:", profileError.message, "— defaulting to /");
+      // Source 1: get_my_role() RPC — SECURITY DEFINER, bypasses RLS entirely
+      // Requires migration 004 to be run in Supabase SQL Editor
+      const { data: rpcRole, error: rpcError } =
+        await supabase.rpc("get_my_role");
+
+      if (rpcError) {
+        console.warn("[login] get_my_role() RPC error:", rpcError.message,
+          "— run migration 004_profiles_rls.sql in Supabase SQL Editor");
+      } else {
+        console.log("[login] get_my_role() returned:", rpcRole);
+        role = rpcRole as string | null;
       }
 
-      const role = profile?.role as string | null;
+      // Source 2: direct profiles table query (works once RLS SELECT policy exists)
+      if (!role) {
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", userId)
+          .maybeSingle();
+
+        if (profileError) {
+          console.warn("[login] profiles table error:", profileError.message);
+        } else {
+          console.log("[login] profiles row:", profile);
+          role = profile?.role ?? null;
+        }
+      }
+
+      // Source 3: user_metadata (set during signup or via Supabase dashboard)
+      if (!role) {
+        const metaRole = authData.user.user_metadata?.role as string | undefined;
+        if (metaRole) { console.log("[login] role from user_metadata:", metaRole); role = metaRole; }
+      }
+
+      // Source 4: app_metadata (set via Supabase service key / dashboard)
+      if (!role) {
+        const appRole = authData.user.app_metadata?.role as string | undefined;
+        if (appRole) { console.log("[login] role from app_metadata:", appRole); role = appRole; }
+      }
+
       const destination = getRoleRedirect(role);
-      console.log("[login] role:", role, "→ redirecting to:", destination);
+      console.log("[login] final role:", role, "→ redirecting to:", destination);
 
       router.push(destination);
     } catch (err) {
