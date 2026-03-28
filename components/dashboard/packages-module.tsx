@@ -127,8 +127,8 @@ export function PackagesModule({ packages: packagesProp, isEditable = false }: P
                   <p className="text-xs font-medium text-gray-400">{pkg.category}</p>
                   <h3 className="mt-1 font-semibold text-gray-900 truncate">{pkg.name}</h3>
                 </div>
-                <span className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyles[pkg.status]}`}>
-                  {t(`status.${pkg.status}`)}
+                <span className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyles[pkg.status] ?? statusStyles.draft}`}>
+                  {t(`status.${pkg.status ?? "draft"}`, pkg.status ?? "draft")}
                 </span>
               </div>
 
@@ -147,7 +147,9 @@ export function PackagesModule({ packages: packagesProp, isEditable = false }: P
 
               <div className="mt-4 flex items-end justify-between border-t border-gray-100 pt-4 rtl:flex-row-reverse">
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">€{pkg.pricePerPerson}</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    €{Number(pkg.pricePerPerson).toLocaleString("de-DE", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                  </p>
                   <p className="text-xs text-gray-400">{t("packages.perPerson")}</p>
                 </div>
                 <div className="text-end">

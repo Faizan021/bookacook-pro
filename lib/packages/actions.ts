@@ -175,11 +175,9 @@ export async function createWizardPackage(
       description: data.description ?? null,
       event_type: data.event_type ?? null,
       cuisine_type: data.cuisine_type ?? null,
-      price_type: "fixed",
-      price_amount: 0,
-      currency: "EUR",
-      is_published: false,
-      is_active: true,
+      // Use canonical DB column names (migration 003 schema)
+      status: "draft",
+      price_per_person: 0,
     })
     .select("id")
     .single();
@@ -206,9 +204,20 @@ export async function updateWizardPackage(
   if (!existing) return { error: "error.packageNotFound" };
   if (existing.caterer_id !== catererId) return { error: "error.forbidden" };
 
+  // Map wizard internal field names → canonical DB column names
+  // The wizard uses price_amount / is_published; the DB uses price_per_person / status
+  const { price_amount, price_type: _pt, currency: _cur, is_published, ...rest } = data;
+  const dbPayload: Record<string, unknown> = { ...rest };
+  if (price_amount !== undefined) {
+    dbPayload.price_per_person = price_amount;
+  }
+  if (is_published !== undefined) {
+    dbPayload.status = is_published ? "active" : "draft";
+  }
+
   const { error } = await supabase
     .from("packages")
-    .update({ ...data, updated_at: new Date().toISOString() })
+    .update({ ...dbPayload, updated_at: new Date().toISOString() })
     .eq("id", packageId);
 
   if (error) return { error: error.message };
