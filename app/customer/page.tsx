@@ -6,9 +6,8 @@ import { CustomerOverviewDisplay } from "@/components/dashboard/customer-overvie
 export default async function CustomerPage() {
   const { user, profile } = await getUserProfile();
 
-  if (!user || !profile) {
-    redirect("/login");
-  }
+  if (!user) redirect("/login");
+  if (!profile) redirect("/");
 
   if (profile.role !== "customer" && profile.role !== "admin") {
     redirect("/dashboard");

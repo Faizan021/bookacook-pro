@@ -5,7 +5,8 @@ import { VerificationModule } from "@/components/dashboard/verification-module";
 
 export default async function CatererVerificationPage() {
   const { user, profile } = await getUserProfile();
-  if (!user || !profile) redirect("/login");
+  if (!user) redirect("/login");
+  if (!profile) redirect("/");
   if (profile.role !== "caterer" && profile.role !== "admin") redirect("/dashboard");
 
   const catererProfile = await getCatererProfile(user.id);

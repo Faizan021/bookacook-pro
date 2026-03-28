@@ -4,7 +4,8 @@ import { BookingsModule } from "@/components/dashboard/bookings-module";
 
 export default async function AdminBookingsPage() {
   const { user, profile } = await getUserProfile();
-  if (!user || !profile) redirect("/login");
+  if (!user) redirect("/login");
+  if (!profile) redirect("/");
   if (profile.role !== "admin") redirect("/dashboard");
 
   return (

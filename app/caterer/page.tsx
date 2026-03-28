@@ -6,9 +6,8 @@ import { CatererOverviewDisplay } from "@/components/dashboard/caterer-overview-
 export default async function CatererPage() {
   const { user, profile } = await getUserProfile();
 
-  if (!user || !profile) {
-    redirect("/login");
-  }
+  if (!user) redirect("/login");
+  if (!profile) redirect("/");
 
   if (profile.role !== "caterer" && profile.role !== "admin") {
     redirect("/dashboard");

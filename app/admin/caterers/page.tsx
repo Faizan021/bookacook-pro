@@ -5,7 +5,8 @@ import { AdminCaterersModule } from "@/components/dashboard/admin-caterers-modul
 
 export default async function AdminCaterersPage() {
   const { user, profile } = await getUserProfile();
-  if (!user || !profile) redirect("/login");
+  if (!user) redirect("/login");
+  if (!profile) redirect("/");
   if (profile.role !== "admin") redirect("/dashboard");
 
   const caterers = await getAdminCaterersList();

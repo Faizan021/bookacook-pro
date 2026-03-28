@@ -5,7 +5,8 @@ import { PaymentsModule } from "@/components/dashboard/payments-module";
 
 export default async function AdminPaymentsPage() {
   const { user, profile } = await getUserProfile();
-  if (!user || !profile) redirect("/login");
+  if (!user) redirect("/login");
+  if (!profile) redirect("/");
   if (profile.role !== "admin") redirect("/dashboard");
 
   const [payments, summary] = await Promise.all([

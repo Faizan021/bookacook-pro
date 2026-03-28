@@ -13,19 +13,41 @@ export async function getUserProfile() {
       return { user: null, profile: null };
     }
 
-    const { data: profile, error: profileError } = await supabase
+    // Try the profiles table (requires RLS SELECT policy — migration 004)
+    const { data: profile } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", user.id)
-      .single();
+      .maybeSingle(); // maybeSingle returns null (not an error) when 0 rows found
 
-    if (profileError) {
-      return { user, profile: null };
+    if (profile) {
+      return { user, profile };
     }
 
-    return { user, profile };
+    // Fallback: build a minimal profile from JWT metadata so authenticated
+    // users are never blocked solely because the RLS SELECT policy is missing.
+    const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+    const appMeta = (user.app_metadata ?? {}) as Record<string, unknown>;
+
+    const role =
+      (meta.role as string | undefined) ||
+      (appMeta.role as string | undefined) ||
+      null;
+
+    if (role) {
+      const syntheticProfile = {
+        id: user.id,
+        role,
+        full_name:  (meta.full_name  as string | undefined) ?? null,
+        first_name: (meta.first_name as string | undefined) ?? null,
+        phone:      (meta.phone      as string | undefined) ?? null,
+      };
+      return { user, profile: syntheticProfile };
+    }
+
+    // User is authenticated but we truly cannot determine their role yet
+    return { user, profile: null };
   } catch {
-    // Supabase not configured or network error — treat as unauthenticated
     return { user: null, profile: null };
   }
 }
