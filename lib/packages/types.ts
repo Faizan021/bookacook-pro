@@ -46,7 +46,11 @@ export type Package = {
   // Logistics
   service_area: string;
   setup_time_hours: number;
+  setup_time_minutes: number | null;
+  cleanup_time_minutes: number | null;
   booking_notice_days: number;
+  max_bookings_per_day: number | null;
+  cancellation_policy: string | null;
 
   // Media
   images: PackageImage[];
@@ -126,7 +130,11 @@ export const DEFAULT_PACKAGE_FORM: PackageFormData = {
   add_ons: [],
   service_area: "",
   setup_time_hours: 2,
+  setup_time_minutes: null,
+  cleanup_time_minutes: null,
   booking_notice_days: 3,
+  max_bookings_per_day: null,
+  cancellation_policy: null,
   images: [],
   cover_image_url: "",
   tags: [],
