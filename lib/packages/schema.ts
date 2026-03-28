@@ -76,7 +76,7 @@ export async function getPublicPackages(filters: PublicPackageFilters = {}): Pro
     let query = supabase.from("packages").select("*").eq("status", "active");
 
     if (filters.category) query = query.eq("category", filters.category);
-    if (filters.max_price) query = query.lte("price_per_person", filters.max_price);
+    if (filters.max_price) query = query.lte("price_amount", filters.max_price);
     if (filters.min_guests) query = query.lte("min_guests", filters.min_guests);
     if (filters.search) query = query.ilike("title", `%${filters.search}%`);
     if (filters.limit) query = query.limit(filters.limit);

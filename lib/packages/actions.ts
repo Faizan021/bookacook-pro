@@ -29,7 +29,7 @@ function toRow(data: Partial<PackageFormData>) {
     category: data.category,
     cuisine_type: data.cuisine_type,
     status: data.status,
-    price_per_person: data.price_per_person,
+    price_amount: data.price_amount,
     min_guests: data.min_guests,
     max_guests: data.max_guests,
     event_types: data.event_types ?? [],
@@ -175,9 +175,8 @@ export async function createWizardPackage(
       description: data.description ?? null,
       event_type: data.event_type ?? null,
       cuisine_type: data.cuisine_type ?? null,
-      // Use canonical DB column names (migration 003 schema)
       status: "draft",
-      price_per_person: 0,
+      price_amount: 0,
     })
     .select("id")
     .single();
@@ -204,12 +203,11 @@ export async function updateWizardPackage(
   if (!existing) return { error: "error.packageNotFound" };
   if (existing.caterer_id !== catererId) return { error: "error.forbidden" };
 
-  // Map wizard internal field names → canonical DB column names
-  // The wizard uses price_amount / is_published; the DB uses price_per_person / status
+  // Strip wizard-only fields that don't exist in the DB schema
   const { price_amount, price_type: _pt, currency: _cur, is_published, ...rest } = data;
   const dbPayload: Record<string, unknown> = { ...rest };
   if (price_amount !== undefined) {
-    dbPayload.price_per_person = price_amount;
+    dbPayload.price_amount = price_amount;
   }
   if (is_published !== undefined) {
     dbPayload.status = is_published ? "active" : "draft";

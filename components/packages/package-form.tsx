@@ -330,7 +330,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
   function validate(forPublish: boolean): boolean {
     const errs: typeof errors = {};
     if (!(form.title ?? "").trim()) errs.title = t("pkg.validation.titleRequired");
-    if (!form.price_per_person || form.price_per_person <= 0) errs.price_per_person = t("pkg.validation.priceRequired");
+    if (!form.price_amount || form.price_amount <= 0) errs.price_amount = t("pkg.validation.priceRequired");
     if (!form.min_guests || !form.max_guests) errs.min_guests = t("pkg.validation.guestsRequired");
     if ((form.min_guests ?? 0) > (form.max_guests ?? 0)) errs.max_guests = t("pkg.validation.guestsOrder");
     if (forPublish && !(form.summary ?? "").trim()) errs.summary = t("pkg.validation.summaryRequired");
@@ -593,13 +593,13 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
             <FieldLabel label={t("pkg.form.priceLabel")} required />
             <input
               type="number"
-              value={form.price_per_person || ""}
-              onChange={(e) => set("price_per_person", parseFloat(e.target.value) || 0)}
+              value={form.price_amount || ""}
+              onChange={(e) => set("price_amount", parseFloat(e.target.value) || 0)}
               min={0}
               step={0.5}
               className={inputCls}
             />
-            <ErrorMsg msg={errors.price_per_person} />
+            <ErrorMsg msg={errors.price_amount} />
           </div>
           <div>
             <FieldLabel label={t("pkg.form.minGuestsLabel")} required />

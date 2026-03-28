@@ -243,7 +243,7 @@ export async function getCatererPackagesList(
       id: String(p.id),
       name: p.name || p.title || "Package",
       description: p.description || p.summary || "",
-      pricePerPerson: Number(p.price_per_person || p.price || 0),
+      pricePerPerson: Number(p.price_amount || p.price_per_person || p.price || 0),
       minGuests: Number(p.min_guests || p.minimum_guests || 1),
       maxGuests: Number(p.max_guests || p.maximum_guests || 100),
       category: p.category || p.cuisine_type || "General",

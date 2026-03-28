@@ -13,23 +13,17 @@ export default async function CatererPackagesPage() {
   const packages = caterer ? await getCatererPackages(caterer.id) : [];
 
   // Map Package → CateringPackage shape expected by PackagesModule.
-  // Use defensive fallbacks to handle packages created before migrations
-  // 003 was applied (which introduced status + price_per_person columns)
-  // as well as packages created by the wizard (which saved price_amount).
   const mapped = packages.map((p) => {
     const raw = p as Record<string, unknown>;
 
-    // Status: prefer the canonical column; fall back to is_published flag or 'draft'
+    // Status: prefer canonical column; fall back to is_published flag or 'draft'
     const rawStatus = (p.status as string | undefined | null) ||
       (raw.is_published ? "active" : "draft");
     const status: PackageStatus =
       rawStatus === "active" || rawStatus === "paused" ? rawStatus : "draft";
 
-    // Price: prefer price_per_person; fall back to wizard's price_amount
-    const pricePerPerson =
-      Number(p.price_per_person) ||
-      Number(raw.price_amount) ||
-      0;
+    // Price: canonical column is price_amount
+    const pricePerPerson = Number(p.price_amount) || 0;
 
     return {
       id: p.id,

@@ -31,7 +31,7 @@ export type Package = {
   status: PackageStatus;
 
   // Pricing & capacity
-  price_per_person: number;
+  price_amount: number;
   min_guests: number;
   max_guests: number;
 
@@ -117,7 +117,7 @@ export const DEFAULT_PACKAGE_FORM: PackageFormData = {
   category: "",
   cuisine_type: "",
   status: "draft",
-  price_per_person: 0,
+  price_amount: 0,
   min_guests: 20,
   max_guests: 100,
   event_types: [],

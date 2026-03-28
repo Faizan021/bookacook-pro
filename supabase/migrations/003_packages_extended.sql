@@ -25,7 +25,7 @@ ALTER TABLE public.packages
 
 -- ─── Pricing & capacity ────────────────────────────────────────────────────────
 ALTER TABLE public.packages
-  ADD COLUMN IF NOT EXISTS price_per_person    NUMERIC(10,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS price_amount        NUMERIC(10,2) NOT NULL DEFAULT 0,
   ADD COLUMN IF NOT EXISTS min_guests          INTEGER       NOT NULL DEFAULT 1,
   ADD COLUMN IF NOT EXISTS max_guests          INTEGER       NOT NULL DEFAULT 100;
 
