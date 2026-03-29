@@ -44,8 +44,10 @@ function toRow(data: Partial<PackageFormData>) {
     max_bookings_per_day: data.max_bookings_per_day ?? null,
     cancellation_policy: data.cancellation_policy ?? null,
     images: (data.images ?? []) as PackageImage[],
-    cover_image_url: data.cover_image_url,
+    image_url: data.image_url ?? null,
+    gallery_images: data.gallery_images ?? [],
     tags: data.tags ?? [],
+    keywords: data.keywords ?? [],
     featured: data.featured ?? false,
     updated_at: new Date().toISOString(),
   };

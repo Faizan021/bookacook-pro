@@ -289,7 +289,8 @@ function normalizeFormData(data?: Partial<PackageFormData>): Partial<PackageForm
     description:        data.description        ?? "",
     category:           data.category           ?? "",
     cuisine_type:       data.cuisine_type       ?? "",
-    cover_image_url:    data.cover_image_url    ?? "",
+    image_url:          data.image_url          ?? "",
+    gallery_images:     data.gallery_images     ?? [],
     service_area:       data.service_area       ?? "",
     event_types:        data.event_types        ?? [],
     dietary_options:    data.dietary_options    ?? [],
@@ -297,6 +298,7 @@ function normalizeFormData(data?: Partial<PackageFormData>): Partial<PackageForm
     add_ons:            data.add_ons            ?? [],
     images:             data.images             ?? [],
     tags:               data.tags               ?? [],
+    keywords:           data.keywords           ?? [],
   };
 }
 
@@ -763,14 +765,14 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
             <FieldLabel label={t("pkg.form.coverImageLabel")} />
             <input
               type="url"
-              value={form.cover_image_url}
-              onChange={(e) => set("cover_image_url", e.target.value)}
+              value={form.image_url || ""}
+              onChange={(e) => set("image_url", e.target.value)}
               placeholder="https://..."
               className={inputCls}
             />
-            {form.cover_image_url && (
+            {form.image_url && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={form.cover_image_url} alt="" className="mt-2 h-36 w-full rounded-xl object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+              <img src={form.image_url} alt="" className="mt-2 h-36 w-full rounded-xl object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
             )}
           </div>
           <div>

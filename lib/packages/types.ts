@@ -54,10 +54,12 @@ export type Package = {
 
   // Media
   images: PackageImage[];
-  cover_image_url: string;
+  image_url: string;
+  gallery_images: string[];
 
   // Discovery
   tags: string[];
+  keywords: string[];
   featured: boolean;
 
   // Description
@@ -136,8 +138,10 @@ export const DEFAULT_PACKAGE_FORM: PackageFormData = {
   max_bookings_per_day: null,
   cancellation_policy: null,
   images: [],
-  cover_image_url: "",
+  image_url: "",
+  gallery_images: [],
   tags: [],
+  keywords: [],
   featured: false,
   description: "",
 };
