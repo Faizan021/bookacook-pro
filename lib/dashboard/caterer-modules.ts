@@ -137,11 +137,11 @@ function normalizePayoutStatus(s: string): PayoutStatus {
     "pending_payment", "funds_held", "partially_released", "payout_pending",
     "payout_released", "refunded", "partially_refunded", "cancelled", "disputed",
   ];
-  const v = s.toLowerCase() as PayoutStatus;
-  if (VALID.includes(v)) return v;
-  if (v === "paid" || v === "payout_sent") return "payout_released";
-  if (v === "refunded" || v === "reversed") return "refunded";
-  return "pending_payment";
+const v = s.toLowerCase();
+if (VALID.includes(v as PayoutStatus)) return v as PayoutStatus;
+if (v === "paid" || v === "payout_sent") return "payout_released";
+if (v === "refunded" || v === "reversed") return "refunded";
+return "pending_payment";
 }
 
 export async function getCatererIdForUser(
