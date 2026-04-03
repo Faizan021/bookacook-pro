@@ -105,7 +105,7 @@ function fmt(n: number): string {
 function normalizeBookingStatus(
   s: string
 ): "confirmed" | "pending" | "completed" | "cancelled" {
-  const v = s.toLowerCase();
+  const v = s.toLowerCase() as PayoutStatus;
   if (v === "confirmed" || v === "accepted" || v === "approved") return "confirmed";
   if (v === "completed" || v === "done" || v === "delivered") return "completed";
   if (v === "cancelled" || v === "rejected" || v === "declined") return "cancelled";
