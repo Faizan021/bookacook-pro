@@ -15,9 +15,18 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
+              // Force SameSite=None; Secure to match the browser client's
+              // cookie settings so session refresh works in the iframe.
+              cookieStore.set(name, value, {
+                ...options,
+                sameSite: "none",
+                secure: true,
+              })
             );
-          } catch {}
+          } catch {
+            // setAll throws in read-only contexts (e.g. Server Components);
+            // ignore — the session will be refreshed on the next request.
+          }
         },
       },
     }
