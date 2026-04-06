@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
-export default function SignupPage() {
-  const [contactPerson, setContactPerson] = useState("");
+export default function CatererSignupPage() {
+  const [businessName, setBusinessName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,7 +16,7 @@ export default function SignupPage() {
     event.preventDefault();
     setStatusMessage(null);
 
-    if (!contactPerson.trim() || !email.trim() || !password || !confirmPassword) {
+    if (!businessName.trim() || !email.trim() || !password || !confirmPassword) {
       setStatusMessage("Please fill in all fields.");
       return;
     }
@@ -33,8 +33,8 @@ export default function SignupPage() {
       password,
       options: {
         data: {
-          contact_person: contactPerson,
-          role: "customer",
+          business_name: businessName,
+          role: "caterer",
         },
       },
     });
@@ -59,8 +59,8 @@ export default function SignupPage() {
       body: JSON.stringify({
         id: signUpData.user.id,
         email,
-        contact_person: contactPerson,
-        role: "customer",
+        contact_person: businessName,
+        role: "caterer",
       }),
     });
 
@@ -77,7 +77,7 @@ export default function SignupPage() {
       );
     }
 
-    setContactPerson("");
+    setBusinessName("");
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -87,20 +87,20 @@ export default function SignupPage() {
     <main className="min-h-screen bg-gray-50 p-6">
       <div className="mx-auto flex min-h-[80vh] max-w-md items-center justify-center">
         <div className="w-full rounded-2xl border bg-white p-8 shadow-sm">
-          <h1 className="text-3xl font-bold text-gray-900">Customer Sign Up</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Caterer Sign Up</h1>
           <p className="mt-2 text-gray-600">
-            Create a new customer account with email, password, and contact person.
+            Create a new caterer account with email, password, and business name.
           </p>
 
           <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
             <label className="block">
-              <span className="text-sm font-medium text-gray-700">Contact Person</span>
+              <span className="text-sm font-medium text-gray-700">Business Name</span>
               <input
                 type="text"
-                value={contactPerson}
-                onChange={(event) => setContactPerson(event.target.value)}
+                value={businessName}
+                onChange={(event) => setBusinessName(event.target.value)}
                 className="mt-2 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 shadow-sm outline-none transition focus:border-black focus:ring-1 focus:ring-black"
-                placeholder="John Doe"
+                placeholder="Your Catering Business"
                 required
               />
             </label>
@@ -152,7 +152,7 @@ export default function SignupPage() {
               disabled={loading}
               className="w-full rounded-xl bg-black px-4 py-3 text-sm font-medium text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? "Creating account..." : "Create customer account"}
+              {loading ? "Creating account..." : "Create caterer account"}
             </button>
           </form>
 

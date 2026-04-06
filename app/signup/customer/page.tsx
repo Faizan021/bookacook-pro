@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 
-export default function SignupPage() {
+export default function CustomerSignupPage() {
   const [contactPerson, setContactPerson] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
