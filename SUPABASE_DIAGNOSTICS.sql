@@ -27,8 +27,8 @@ FROM pg_class WHERE relname IN ('profiles', 'caterers');
 
 -- ==== SECTION 5: Test Direct Insert (rolls back - safe) ====
 BEGIN;
-  INSERT INTO public.profiles (id, role, full_name, phone)
-  VALUES (gen_random_uuid(), 'customer', 'Diagnostic Test User', '+1-555-0000');
+  INSERT INTO public.profiles (id, role, phone)
+  VALUES (gen_random_uuid(), 'customer', '+1-555-0000');
 ROLLBACK;
 
 -- ==== SECTION 6: Recent Auth Users Count ====
