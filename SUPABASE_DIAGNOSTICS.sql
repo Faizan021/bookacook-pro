@@ -41,7 +41,19 @@ SELECT 'Total profiles in public.profiles: ' || count(*)::text FROM public.profi
 SELECT column_name || ' (' || data_type || ', nullable=' || is_nullable || ')' as check_name
 FROM information_schema.columns WHERE table_name = 'caterers';
 
--- ============================================================================
--- END OF DIAGNOSTIC SCRIPT
--- If all sections return results without errors, database is configured correctly
--- ============================================================================
+-- ==== SECTION 9: Trigger Function Body ====
+SELECT prosrc 
+FROM pg_proc 
+WHERE proname = 'handle_new_user';
+
+-- ==== SECTION 10: Full Profiles Schema (including generated columns) ====
+SELECT 
+  column_name, 
+  data_type, 
+  is_nullable,
+  is_generated,
+  generation_expression,
+  column_default
+FROM information_schema.columns 
+WHERE table_name = 'profiles'
+ORDER BY ordinal_position;
