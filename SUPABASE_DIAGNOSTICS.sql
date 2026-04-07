@@ -27,8 +27,7 @@ SELECT
   column_name || ' (' || data_type || ', nullable=' || is_nullable || ')' as check_name,
   3 as section_order
 FROM information_schema.columns
-WHERE table_name = 'profiles'
-ORDER BY ordinal_position;
+WHERE table_name = 'profiles';
 
 -- ==== SECTION 3: Check RLS on profiles table ====
 SELECT 
@@ -99,8 +98,7 @@ SELECT
   column_name || ' (' || data_type || ', nullable=' || is_nullable || ')' as check_name,
   8 as section_order
 FROM information_schema.columns
-WHERE table_name = 'caterers'
-ORDER BY ordinal_position;
+WHERE table_name = 'caterers';
 
 -- ============================================================================
 -- END OF DIAGNOSTIC SCRIPT
