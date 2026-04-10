@@ -26,12 +26,12 @@ export async function getCatererDashboardData(userId: string) {
 
   if (!caterer) {
     return {
-      totalSales: 12400,
-      totalOrders: 18,
-      pendingRequests: 4,
-      packagesLive: 6,
-      salesData: sampleSalesData(),
-      recentBookings: sampleRecentBookings(),
+      totalSales: 0,
+      totalOrders: 0,
+      pendingRequests: 0,
+      packagesLive: 0,
+      salesData: [],
+      recentBookings: [],
     };
   }
 
@@ -57,10 +57,9 @@ export async function getCatererDashboardData(userId: string) {
       ? payments
           .filter((p) => ["paid", "payout_sent"].includes(p.payment_status))
           .reduce((sum, p) => sum + Number(p.amount_total || 0), 0)
-      : 12400;
+      : 0;
 
-  const salesData =
-    payments.length > 0 ? buildSalesData(payments) : sampleSalesData();
+  const salesData = payments.length > 0 ? buildSalesData(payments) : [];
 
   const recentBookings =
     bookings.length > 0
@@ -73,14 +72,13 @@ export async function getCatererDashboardData(userId: string) {
             ? `€${booking.quoted_amount}`
             : undefined,
         }))
-      : sampleRecentBookings();
+      : [];
 
   return {
     totalSales,
-    totalOrders: bookings.length || 18,
-    pendingRequests:
-      bookings.filter((b) => b.status === "pending").length || 4,
-    packagesLive: packages.length || 6,
+    totalOrders: bookings.length,
+    pendingRequests: bookings.filter((b) => b.status === "pending").length,
+    packagesLive: packages.length,
     salesData,
     recentBookings,
   };
@@ -97,35 +95,4 @@ function buildSalesData(payments: PaymentRow[]) {
   }
 
   return Array.from(map.entries()).map(([name, value]) => ({ name, value }));
-}
-
-function sampleSalesData() {
-  return [
-    { name: "Jan", value: 1200 },
-    { name: "Feb", value: 1800 },
-    { name: "Mar", value: 1600 },
-    { name: "Apr", value: 2400 },
-    { name: "May", value: 2100 },
-    { name: "Jun", value: 3200 },
-  ];
-}
-
-function sampleRecentBookings() {
-  return [
-    {
-      title: "Corporate Lunch - Berlin",
-      subtitle: "24 guests • Confirmed",
-      amount: "€1,200",
-    },
-    {
-      title: "Wedding Catering - Potsdam",
-      subtitle: "80 guests • Pending",
-      amount: "€3,800",
-    },
-    {
-      title: "Private Dinner - Hamburg",
-      subtitle: "12 guests • Completed",
-      amount: "€640",
-    },
-  ];
 }
