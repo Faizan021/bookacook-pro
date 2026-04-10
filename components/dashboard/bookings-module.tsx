@@ -70,10 +70,10 @@ function EmptyState({ role }: { role: "admin" | "caterer" | "customer" }) {
 
       {role === "customer" && (
         <Link
-          href="/"
+          href="/caterers"
           className="mt-6 rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
         >
-          Caterer entdecken
+          {t("bookings.findCaterers")}
         </Link>
       )}
 
@@ -82,7 +82,7 @@ function EmptyState({ role }: { role: "admin" | "caterer" | "customer" }) {
           href="/caterer/packages"
           className="mt-6 rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
         >
-          Pakete hinzufügen
+          {t("bookings.addPackages")}
         </Link>
       )}
     </div>
