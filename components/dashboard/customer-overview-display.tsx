@@ -72,7 +72,7 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
 
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
-              href="/"
+              href="/caterers"
               className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
             >
               Find Caterers
@@ -90,7 +90,10 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">
           {hasHistory ? (
-            <SalesChart title={t("chart.orderHistory")} data={data.orderHistory} />
+            <SalesChart
+              title={t("chart.orderHistory")}
+              data={data.orderHistory}
+            />
           ) : (
             <div className="rounded-2xl border bg-white p-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
@@ -113,8 +116,8 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
                     Your booking activity chart will appear here.
                   </p>
                   <p className="mt-2 text-sm text-gray-500">
-                    Once you create bookings, you will be able to track activity
-                    over time.
+                    Once you create bookings, you will be able to track
+                    activity over time.
                   </p>
                 </div>
               </div>
