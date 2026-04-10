@@ -30,17 +30,7 @@ export async function getCustomerDashboardData(userId: string) {
     ["pending", "quoted", "confirmed"].includes(b.status)
   ).length;
 
-  const orderHistory =
-    bookings.length > 0
-      ? buildOrderHistory(bookings)
-      : [
-          { name: "Jan", value: 1 },
-          { name: "Feb", value: 3 },
-          { name: "Mar", value: 2 },
-          { name: "Apr", value: 4 },
-          { name: "May", value: 3 },
-          { name: "Jun", value: 5 },
-        ];
+  const orderHistory = bookings.length > 0 ? buildOrderHistory(bookings) : [];
 
   return {
     totalOrders,
@@ -53,24 +43,9 @@ export async function getCustomerDashboardData(userId: string) {
         ? bookings.slice(0, 3).map((booking, index) => ({
             title: `Booking #${index + 1}`,
             subtitle: `Status: ${booking.status}`,
+            amount: "",
           }))
-        : [
-            {
-              title: "BBQ Party Booking",
-              subtitle: "Booked with Berlin Grill House • Completed",
-              amount: "€850",
-            },
-            {
-              title: "Wedding Catering Inquiry",
-              subtitle: "Booked with Royal Events Catering • Pending",
-              amount: "€2,400",
-            },
-            {
-              title: "Corporate Lunch",
-              subtitle: "Booked with FreshBite Catering • Confirmed",
-              amount: "€1,150",
-            },
-          ],
+        : [],
   };
 }
 
