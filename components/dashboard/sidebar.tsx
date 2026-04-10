@@ -72,6 +72,14 @@ function ShieldCheckIcon() {
   );
 }
 
+function SettingsIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+      <path fillRule="evenodd" d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.192.96a6.97 6.97 0 011.384.573l.815-.544a1 1 0 011.265.125l1.67 1.67a1 1 0 01.125 1.265l-.544.815c.23.438.421.9.573 1.384l.96.192a1 1 0 01.804.98v2.36a1 1 0 01-.804.98l-.96.192a6.97 6.97 0 01-.573 1.384l.544.815a1 1 0 01-.125 1.265l-1.67 1.67a1 1 0 01-1.265.125l-.815-.544a6.97 6.97 0 01-1.384.573l-.192.96a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.192-.96a6.97 6.97 0 01-1.384-.573l-.815.544a1 1 0 01-1.265-.125l-1.67-1.67a1 1 0 01-.125-1.265l.544-.815a6.97 6.97 0 01-.573-1.384l-.96-.192A1 1 0 011 11.18V8.82a1 1 0 01.804-.98l.96-.192a6.97 6.97 0 01.573-1.384l-.544-.815a1 1 0 01.125-1.265l1.67-1.67a1 1 0 011.265-.125l.815.544c.438-.23.9-.421 1.384-.573l.192-.96zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
 function ArrowLeftIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 rtl:rotate-180">
@@ -84,6 +92,7 @@ function getNavItems(role: string, basePath: string): NavItem[] {
   const overview = { labelKey: "nav.overview", href: basePath, icon: <HomeIcon /> };
   const bookings = { labelKey: "nav.bookings", href: `${basePath}/bookings`, icon: <CalendarIcon /> };
   const payments = { labelKey: "nav.payments", href: `${basePath}/payments`, icon: <CurrencyIcon /> };
+  const settings = { labelKey: "nav.settings", href: `${basePath}/settings`, icon: <SettingsIcon /> };
 
   if (role === "admin") {
     return [
@@ -91,8 +100,10 @@ function getNavItems(role: string, basePath: string): NavItem[] {
       bookings,
       { labelKey: "nav.caterers", href: `${basePath}/caterers`, icon: <UsersIcon /> },
       payments,
+      settings,
     ];
   }
+
   if (role === "caterer") {
     return [
       overview,
@@ -101,11 +112,14 @@ function getNavItems(role: string, basePath: string): NavItem[] {
       { labelKey: "nav.availability", href: `${basePath}/availability`, icon: <ClockIcon /> },
       { labelKey: "nav.verification", href: `${basePath}/verification`, icon: <ShieldCheckIcon /> },
       payments,
+      settings,
     ];
   }
+
   return [
     overview,
     { labelKey: "nav.myBookings", href: `${basePath}/bookings`, icon: <CalendarIcon /> },
+    settings,
   ];
 }
 
@@ -154,7 +168,7 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
         })}
       </nav>
 
-      <div className="border-t border-gray-100 p-3 space-y-1">
+      <div className="space-y-1 border-t border-gray-100 p-3">
         <Link
           href="/"
           className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600 rtl:flex-row-reverse"
@@ -162,6 +176,7 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
           <ArrowLeftIcon />
           {t("nav.backToHome")}
         </Link>
+
         {isDemo && (
           <div className="rounded-lg border border-orange-100 bg-orange-50 px-3 py-2">
             <p className="text-xs font-semibold text-orange-600">{t("demo.mode")}</p>
