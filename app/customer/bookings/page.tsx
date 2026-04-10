@@ -1,23 +1,30 @@
+"use client";
+
 import Link from "next/link";
+import { useT } from "@/lib/i18n/context";
 
 export default function CustomerBookingsPage() {
+  const t = useT();
+
   return (
     <main className="min-h-screen bg-gray-50 p-6">
       <div className="mx-auto max-w-6xl">
         <div className="rounded-2xl border bg-white p-8 shadow-sm">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Meine Buchungen</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {t("bookings.myTitle")}
+              </h1>
               <p className="mt-2 text-sm text-gray-600">
-                Hier sehen Sie Ihre Buchungen, Anfragen und Status-Updates.
+                {t("bookings.customerSubtitle")}
               </p>
             </div>
 
             <Link
-              href="/"
+              href="/caterers"
               className="inline-flex rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
             >
-              Caterer entdecken
+              {t("bookings.findCaterers")}
             </Link>
           </div>
 
@@ -27,27 +34,26 @@ export default function CustomerBookingsPage() {
             </div>
 
             <h2 className="mt-4 text-lg font-semibold text-gray-900">
-              Noch keine Buchungen vorhanden
+              {t("empty.bookings")}
             </h2>
 
             <p className="mx-auto mt-2 max-w-xl text-sm text-gray-500">
-              Sie haben noch keine Buchungsanfragen erstellt. Sobald Sie einen
-              Caterer anfragen oder eine Buchung senden, erscheint sie hier.
+              {t("empty.bookingsDesc")}
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
-                href="/"
+                href="/caterers"
                 className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
               >
-                Jetzt Caterer finden
+                {t("bookings.findCaterers")}
               </Link>
 
               <Link
                 href="/customer"
                 className="rounded-xl border px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-white"
               >
-                Zum Dashboard
+                {t("bookings.backToDashboard")}
               </Link>
             </div>
           </div>
