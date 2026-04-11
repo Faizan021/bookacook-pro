@@ -48,12 +48,15 @@ async function saveRequest(formData: FormData) {
   const city = String(formData.get("city") || "");
   const postal_code = String(formData.get("postal_code") || "");
   const service_style = String(formData.get("service_style") || "");
+  const event_date = String(formData.get("event_date") || "");
+  const budget_total_raw = String(formData.get("budget_total") || "");
 
   if (!id) {
     throw new Error("Missing request ID");
   }
 
   const guest_count = guest_count_raw ? Number(guest_count_raw) : undefined;
+  const budget_total = budget_total_raw ? Number(budget_total_raw) : undefined;
 
   const cuisine_preferences = getSelectedValues(formData, "cuisine_preferences");
   const dietary_requirements = getSelectedValues(formData, "dietary_requirements");
@@ -66,6 +69,8 @@ async function saveRequest(formData: FormData) {
     city: city || undefined,
     postal_code: postal_code || undefined,
     service_style: service_style || undefined,
+    event_date: event_date || undefined,
+    budget_total,
     cuisine_preferences,
     dietary_requirements,
     extra_services,
@@ -185,6 +190,29 @@ export default async function EventRequestPage({ params }: PageProps) {
         </div>
 
         <div>
+          <label className="mb-1 block text-sm font-medium">Event Date</label>
+          <input
+            type="date"
+            name="event_date"
+            defaultValue={request.event_date || ""}
+            className="w-full rounded-md border p-2"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium">Budget Total (€)</label>
+          <input
+            type="number"
+            name="budget_total"
+            defaultValue={request.budget_total || ""}
+            className="w-full rounded-md border p-2"
+            min="0"
+            step="1"
+            placeholder="e.g. 2500"
+          />
+        </div>
+
+        <div>
           <label className="mb-1 block text-sm font-medium">Service Style</label>
           <select
             name="service_style"
@@ -236,6 +264,8 @@ export default async function EventRequestPage({ params }: PageProps) {
         <p><strong>Guest Count:</strong> {request.guest_count || "—"}</p>
         <p><strong>City:</strong> {request.city || "—"}</p>
         <p><strong>Postal Code:</strong> {request.postal_code || "—"}</p>
+        <p><strong>Event Date:</strong> {request.event_date || "—"}</p>
+        <p><strong>Budget Total:</strong> {request.budget_total || "—"}</p>
         <p><strong>Service Style:</strong> {request.service_style || "—"}</p>
         <p><strong>Cuisine Preferences:</strong> {(request.cuisine_preferences || []).join(", ") || "—"}</p>
         <p><strong>Dietary Requirements:</strong> {(request.dietary_requirements || []).join(", ") || "—"}</p>
