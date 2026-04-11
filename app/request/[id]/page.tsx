@@ -7,37 +7,44 @@ type PageProps = {
   }>;
 };
 
+async function saveStep1(formData: FormData) {
+  "use server";
+
+  const id = String(formData.get("request_id") || "");
+  const event_type = String(formData.get("event_type") || "");
+  const catering_type = String(formData.get("catering_type") || "");
+  const guest_count_raw = String(formData.get("guest_count") || "");
+  const city = String(formData.get("city") || "");
+  const postal_code = String(formData.get("postal_code") || "");
+
+  if (!id) {
+    throw new Error("Missing request ID");
+  }
+
+  const guest_count = guest_count_raw ? Number(guest_count_raw) : undefined;
+
+  await updateEventRequest(id, {
+    event_type: event_type || undefined,
+    catering_type: catering_type || undefined,
+    guest_count,
+    city: city || undefined,
+    postal_code: postal_code || undefined,
+  });
+
+  redirect(`/request/${id}`);
+}
+
 export default async function EventRequestPage({ params }: PageProps) {
   const { id } = await params;
   const request = await getEventRequestById(id);
-
-  async function saveStep1(formData: FormData) {
-    "use server";
-
-    const event_type = String(formData.get("event_type") || "");
-    const catering_type = String(formData.get("catering_type") || "");
-    const guest_count_raw = String(formData.get("guest_count") || "");
-    const city = String(formData.get("city") || "");
-    const postal_code = String(formData.get("postal_code") || "");
-
-    const guest_count = guest_count_raw ? Number(guest_count_raw) : undefined;
-
-    await updateEventRequest(id, {
-      event_type: event_type || undefined,
-      catering_type: catering_type || undefined,
-      guest_count,
-      city: city || undefined,
-      postal_code: postal_code || undefined,
-    });
-
-    redirect(`/request/${id}`);
-  }
 
   return (
     <div className="mx-auto max-w-3xl p-6">
       <h1 className="mb-6 text-2xl font-semibold">Create Event Request</h1>
 
       <form action={saveStep1} className="space-y-4 rounded-lg border p-6">
+        <input type="hidden" name="request_id" value={request.id} />
+
         <div>
           <label className="mb-1 block text-sm font-medium">Event Type</label>
           <select
