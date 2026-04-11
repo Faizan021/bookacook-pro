@@ -2,13 +2,15 @@ import { notFound } from "next/navigation";
 import { getEventRequestById } from "@/lib/dashboard/event-requests";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default async function EventRequestPage({ params }: PageProps) {
-  const request = await getEventRequestById(params.id).catch(() => null);
+  const { id } = await params;
+
+  const request = await getEventRequestById(id).catch(() => null);
 
   if (!request) {
     notFound();
