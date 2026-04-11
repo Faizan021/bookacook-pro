@@ -1,4 +1,8 @@
 import { getEventRequestById, updateEventRequest } from "@/lib/dashboard/event-requests";
+import {
+  generateMatchesForEventRequest,
+  getMatchesForEventRequest,
+} from "@/lib/dashboard/event-request-matching";
 import { redirect } from "next/navigation";
 
 type PageProps = {
@@ -74,7 +78,10 @@ async function saveRequest(formData: FormData) {
     cuisine_preferences,
     dietary_requirements,
     extra_services,
+    status: "submitted",
   });
+
+  await generateMatchesForEventRequest(id);
 
   redirect(`/request/${id}`);
 }
@@ -116,9 +123,10 @@ function CheckboxGroup({
 export default async function EventRequestPage({ params }: PageProps) {
   const { id } = await params;
   const request = await getEventRequestById(id);
+  const matches = await getMatchesForEventRequest(id).catch(() => []);
 
   return (
-    <div className="mx-auto max-w-3xl p-6">
+    <div className="mx-auto max-w-4xl p-6">
       <h1 className="mb-6 text-2xl font-semibold">Create Event Request</h1>
 
       <form action={saveRequest} className="space-y-4 rounded-lg border p-6">
@@ -251,7 +259,7 @@ export default async function EventRequestPage({ params }: PageProps) {
           type="submit"
           className="rounded-md bg-black px-4 py-2 text-white"
         >
-          Save Request
+          Save Request & Find Matches
         </button>
       </form>
 
@@ -270,6 +278,71 @@ export default async function EventRequestPage({ params }: PageProps) {
         <p><strong>Cuisine Preferences:</strong> {(request.cuisine_preferences || []).join(", ") || "—"}</p>
         <p><strong>Dietary Requirements:</strong> {(request.dietary_requirements || []).join(", ") || "—"}</p>
         <p><strong>Extra Services:</strong> {(request.extra_services || []).join(", ") || "—"}</p>
+      </div>
+
+      <div className="mt-6 rounded-lg border p-4">
+        <h2 className="mb-3 text-lg font-semibold">Suggested Caterers</h2>
+
+        {matches.length === 0 ? (
+          <p className="text-sm text-gray-500">
+            No matches yet. Save your request to generate suggestions.
+          </p>
+        ) : (
+          <div className="space-y-4">
+            {matches.map((match: any) => {
+              const caterer = Array.isArray(match.caterers)
+                ? match.caterers[0]
+                : match.caterers;
+
+              return (
+                <div key={match.id} className="rounded-lg border p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-base font-semibold text-gray-900">
+                        {caterer?.business_name || "Unnamed Caterer"}
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-500">
+                        {caterer?.city || "Location not available"}
+                      </p>
+                    </div>
+
+                    <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                      Score: {match.match_score}
+                    </span>
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {(caterer?.cuisine_types || []).map((cuisine: string) => (
+                      <span
+                        key={cuisine}
+                        className="rounded-full bg-orange-50 px-2 py-1 text-xs text-orange-700"
+                      >
+                        {cuisine}
+                      </span>
+                    ))}
+                  </div>
+
+                  <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-gray-600">
+                    {(match.match_reasons || []).map((reason: string) => (
+                      <li key={reason}>{reason}</li>
+                    ))}
+                  </ul>
+
+                  {caterer?.slug ? (
+                    <div className="mt-4">
+                      <a
+                        href={`/caterers/${caterer.slug}`}
+                        className="text-sm font-medium text-orange-600 hover:text-orange-500"
+                      >
+                        View Caterer
+                      </a>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
