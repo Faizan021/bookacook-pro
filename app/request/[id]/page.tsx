@@ -99,23 +99,43 @@ function CheckboxGroup({
 }) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium">{title}</label>
+      <label className="mb-2 block text-sm font-medium text-gray-900">
+        {title}
+      </label>
       <div className="grid gap-2 sm:grid-cols-2">
         {options.map((option) => (
           <label
             key={option}
-            className="flex items-center gap-2 rounded-md border p-3 text-sm"
+            className="flex cursor-pointer items-center gap-2 rounded-xl border border-gray-200 bg-white p-3 text-sm transition-colors hover:border-gray-300 hover:bg-gray-50"
           >
             <input
               type="checkbox"
               name={name}
               value={option}
               defaultChecked={selected.includes(option)}
+              className="h-4 w-4"
             />
             <span>{option}</span>
           </label>
         ))}
       </div>
+    </div>
+  );
+}
+
+function SummaryRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number | null | undefined;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 border-b border-gray-100 py-2 last:border-b-0">
+      <span className="text-sm text-gray-500">{label}</span>
+      <span className="text-right text-sm font-medium text-gray-900">
+        {value || "—"}
+      </span>
     </div>
   );
 }
@@ -126,223 +146,326 @@ export default async function EventRequestPage({ params }: PageProps) {
   const matches = await getMatchesForEventRequest(id).catch(() => []);
 
   return (
-    <div className="mx-auto max-w-4xl p-6">
-      <h1 className="mb-6 text-2xl font-semibold">Create Event Request</h1>
+    <div className="mx-auto max-w-6xl p-6">
+      <div className="mb-8 rounded-2xl border bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Create Event Request
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm text-gray-500">
+              Tell us about your event and preferences. We will use this
+              information to suggest the most relevant caterers for your needs.
+            </p>
+          </div>
 
-      <form action={saveRequest} className="space-y-4 rounded-lg border p-6">
-        <input type="hidden" name="request_id" value={request.id} />
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Event Type</label>
-          <select
-            name="event_type"
-            defaultValue={request.event_type || ""}
-            className="w-full rounded-md border p-2"
-          >
-            <option value="">Select event type</option>
-            <option value="wedding">Wedding</option>
-            <option value="birthday">Birthday</option>
-            <option value="corporate">Corporate Event</option>
-            <option value="summerfest">Summer Festival</option>
-            <option value="private_party">Private Party</option>
-          </select>
+          <div className="rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-600">
+            <span className="font-medium text-gray-900">Request ID:</span>{" "}
+            {request.id}
+          </div>
         </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Catering Type</label>
-          <select
-            name="catering_type"
-            defaultValue={request.catering_type || ""}
-            className="w-full rounded-md border p-2"
-          >
-            <option value="">Select catering type</option>
-            <option value="buffet">Buffet</option>
-            <option value="finger_food">Finger Food</option>
-            <option value="plated">Plated Menu</option>
-            <option value="live_station">Live Station</option>
-            <option value="bbq">BBQ</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Guest Count</label>
-          <input
-            type="number"
-            name="guest_count"
-            defaultValue={request.guest_count || ""}
-            className="w-full rounded-md border p-2"
-            min="1"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">City</label>
-          <input
-            type="text"
-            name="city"
-            defaultValue={request.city || ""}
-            className="w-full rounded-md border p-2"
-            placeholder="e.g. Berlin"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Postal Code</label>
-          <input
-            type="text"
-            name="postal_code"
-            defaultValue={request.postal_code || ""}
-            className="w-full rounded-md border p-2"
-            placeholder="e.g. 12681"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Event Date</label>
-          <input
-            type="date"
-            name="event_date"
-            defaultValue={request.event_date || ""}
-            className="w-full rounded-md border p-2"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Budget Total (€)</label>
-          <input
-            type="number"
-            name="budget_total"
-            defaultValue={request.budget_total || ""}
-            className="w-full rounded-md border p-2"
-            min="0"
-            step="1"
-            placeholder="e.g. 2500"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium">Service Style</label>
-          <select
-            name="service_style"
-            defaultValue={request.service_style || ""}
-            className="w-full rounded-md border p-2"
-          >
-            <option value="">Select service style</option>
-            <option value="drop_off">Drop-off only</option>
-            <option value="staffed">Staffed service</option>
-            <option value="full_service">Full service</option>
-          </select>
-        </div>
-
-        <CheckboxGroup
-          title="Cuisine Preferences"
-          name="cuisine_preferences"
-          options={CUISINE_OPTIONS}
-          selected={request.cuisine_preferences || []}
-        />
-
-        <CheckboxGroup
-          title="Dietary Requirements"
-          name="dietary_requirements"
-          options={DIETARY_OPTIONS}
-          selected={request.dietary_requirements || []}
-        />
-
-        <CheckboxGroup
-          title="Extra Services"
-          name="extra_services"
-          options={EXTRA_SERVICE_OPTIONS}
-          selected={request.extra_services || []}
-        />
-
-        <button
-          type="submit"
-          className="rounded-md bg-black px-4 py-2 text-white"
-        >
-          Save Request & Find Matches
-        </button>
-      </form>
-
-      <div className="mt-6 rounded-lg border p-4">
-        <h2 className="mb-3 text-lg font-semibold">Current Request Data</h2>
-        <p><strong>ID:</strong> {request.id}</p>
-        <p><strong>Status:</strong> {request.status}</p>
-        <p><strong>Event Type:</strong> {request.event_type || "—"}</p>
-        <p><strong>Catering Type:</strong> {request.catering_type || "—"}</p>
-        <p><strong>Guest Count:</strong> {request.guest_count || "—"}</p>
-        <p><strong>City:</strong> {request.city || "—"}</p>
-        <p><strong>Postal Code:</strong> {request.postal_code || "—"}</p>
-        <p><strong>Event Date:</strong> {request.event_date || "—"}</p>
-        <p><strong>Budget Total:</strong> {request.budget_total || "—"}</p>
-        <p><strong>Service Style:</strong> {request.service_style || "—"}</p>
-        <p><strong>Cuisine Preferences:</strong> {(request.cuisine_preferences || []).join(", ") || "—"}</p>
-        <p><strong>Dietary Requirements:</strong> {(request.dietary_requirements || []).join(", ") || "—"}</p>
-        <p><strong>Extra Services:</strong> {(request.extra_services || []).join(", ") || "—"}</p>
       </div>
 
-      <div className="mt-6 rounded-lg border p-4">
-        <h2 className="mb-3 text-lg font-semibold">Suggested Caterers</h2>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <form action={saveRequest} className="space-y-6 rounded-2xl border bg-white p-6 shadow-sm">
+            <input type="hidden" name="request_id" value={request.id} />
 
-        {matches.length === 0 ? (
-          <p className="text-sm text-gray-500">
-            No matches yet. Save your request to generate suggestions.
-          </p>
-        ) : (
-          <div className="space-y-4">
-            {matches.map((match: any) => {
-              const caterer = Array.isArray(match.caterers)
-                ? match.caterers[0]
-                : match.caterers;
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Event Details
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Share the basics of your event so we can understand what kind of
+                catering you need.
+              </p>
+            </div>
 
-              return (
-                <div key={match.id} className="rounded-lg border p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="text-base font-semibold text-gray-900">
-                        {caterer?.business_name || "Unnamed Caterer"}
-                      </h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        {caterer?.city || "Location not available"}
-                      </p>
-                    </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  Event Type
+                </label>
+                <select
+                  name="event_type"
+                  defaultValue={request.event_type || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                >
+                  <option value="">Select event type</option>
+                  <option value="wedding">Wedding</option>
+                  <option value="birthday">Birthday</option>
+                  <option value="corporate">Corporate Event</option>
+                  <option value="summerfest">Summer Festival</option>
+                  <option value="private_party">Private Party</option>
+                </select>
+              </div>
 
-                    <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-                      Score: {match.match_score}
-                    </span>
-                  </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  Catering Type
+                </label>
+                <select
+                  name="catering_type"
+                  defaultValue={request.catering_type || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                >
+                  <option value="">Select catering type</option>
+                  <option value="buffet">Buffet</option>
+                  <option value="finger_food">Finger Food</option>
+                  <option value="plated">Plated Menu</option>
+                  <option value="live_station">Live Station</option>
+                  <option value="bbq">BBQ</option>
+                </select>
+              </div>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {(caterer?.cuisine_types || []).map((cuisine: string) => (
-                      <span
-                        key={cuisine}
-                        className="rounded-full bg-orange-50 px-2 py-1 text-xs text-orange-700"
-                      >
-                        {cuisine}
-                      </span>
-                    ))}
-                  </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  Guest Count
+                </label>
+                <input
+                  type="number"
+                  name="guest_count"
+                  defaultValue={request.guest_count || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                  min="1"
+                />
+              </div>
 
-                  <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-gray-600">
-                    {(match.match_reasons || []).map((reason: string) => (
-                      <li key={reason}>{reason}</li>
-                    ))}
-                  </ul>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  Event Date
+                </label>
+                <input
+                  type="date"
+                  name="event_date"
+                  defaultValue={request.event_date || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                />
+              </div>
 
-                  {caterer?.slug ? (
-                    <div className="mt-4">
-                      <a
-                        href={`/caterers/${caterer.slug}`}
-                        className="text-sm font-medium text-orange-600 hover:text-orange-500"
-                      >
-                        View Caterer
-                      </a>
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  City
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  defaultValue={request.city || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                  placeholder="e.g. Berlin"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  Postal Code
+                </label>
+                <input
+                  type="text"
+                  name="postal_code"
+                  defaultValue={request.postal_code || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                  placeholder="e.g. 12681"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  Budget Total (€)
+                </label>
+                <input
+                  type="number"
+                  name="budget_total"
+                  defaultValue={request.budget_total || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 2500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-900">
+                  Service Style
+                </label>
+                <select
+                  name="service_style"
+                  defaultValue={request.service_style || ""}
+                  className="w-full rounded-xl border border-gray-300 p-3 text-sm"
+                >
+                  <option value="">Select service style</option>
+                  <option value="drop_off">Drop-off only</option>
+                  <option value="staffed">Staffed service</option>
+                  <option value="full_service">Full service</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-100 pt-6">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Food Preferences
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Choose cuisines, dietary needs, and any additional services you
+                would like included.
+              </p>
+            </div>
+
+            <CheckboxGroup
+              title="Cuisine Preferences"
+              name="cuisine_preferences"
+              options={CUISINE_OPTIONS}
+              selected={request.cuisine_preferences || []}
+            />
+
+            <CheckboxGroup
+              title="Dietary Requirements"
+              name="dietary_requirements"
+              options={DIETARY_OPTIONS}
+              selected={request.dietary_requirements || []}
+            />
+
+            <CheckboxGroup
+              title="Extra Services"
+              name="extra_services"
+              options={EXTRA_SERVICE_OPTIONS}
+              selected={request.extra_services || []}
+            />
+
+            <div className="flex flex-wrap items-center gap-3 border-t border-gray-100 pt-6">
+              <button
+                type="submit"
+                className="rounded-xl bg-black px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+              >
+                Save Request & Find Matches
+              </button>
+
+              <span className="text-sm text-gray-500">
+                Status:{" "}
+                <span className="font-medium text-gray-900">
+                  {request.status}
+                </span>
+              </span>
+            </div>
+          </form>
+        </div>
+
+        <div className="space-y-6">
+          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Request Summary
+            </h2>
+            <p className="mt-1 text-sm text-gray-500">
+              A quick overview of the details you have provided so far.
+            </p>
+
+            <div className="mt-4">
+              <SummaryRow label="Event Type" value={request.event_type} />
+              <SummaryRow label="Catering Type" value={request.catering_type} />
+              <SummaryRow label="Guest Count" value={request.guest_count} />
+              <SummaryRow label="City" value={request.city} />
+              <SummaryRow label="Postal Code" value={request.postal_code} />
+              <SummaryRow label="Event Date" value={request.event_date} />
+              <SummaryRow label="Budget Total" value={request.budget_total} />
+              <SummaryRow label="Service Style" value={request.service_style} />
+              <SummaryRow
+                label="Cuisine Preferences"
+                value={(request.cuisine_preferences || []).join(", ")}
+              />
+              <SummaryRow
+                label="Dietary Requirements"
+                value={(request.dietary_requirements || []).join(", ")}
+              />
+              <SummaryRow
+                label="Extra Services"
+                value={(request.extra_services || []).join(", ")}
+              />
+            </div>
           </div>
-        )}
+
+          <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Best Matches for Your Event
+              </h2>
+              <p className="mt-1 text-sm text-gray-500">
+                We rank caterers based on your event details, preferences, and
+                package fit.
+              </p>
+            </div>
+
+            {matches.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 p-4 text-sm text-gray-500">
+                No matches yet. Save your request to generate suggestions.
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {matches.map((match: any) => {
+                  const caterer = Array.isArray(match.caterers)
+                    ? match.caterers[0]
+                    : match.caterers;
+
+                  return (
+                    <div
+                      key={match.id}
+                      className="rounded-xl border border-gray-200 p-4"
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-base font-semibold text-gray-900">
+                            {caterer?.business_name || "Unnamed Caterer"}
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-500">
+                            {caterer?.city || "Location not available"}
+                          </p>
+                        </div>
+
+                        <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                          Score {match.match_score}
+                        </span>
+                      </div>
+
+                      {(caterer?.cuisine_types || []).length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {(caterer.cuisine_types || []).map((cuisine: string) => (
+                            <span
+                              key={cuisine}
+                              className="rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700"
+                            >
+                              {cuisine}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {(match.match_reasons || []).length > 0 && (
+                        <ul className="mt-3 space-y-1 text-sm text-gray-600">
+                          {(match.match_reasons || []).map((reason: string) => (
+                            <li key={reason} className="flex gap-2">
+                              <span className="mt-[2px] text-orange-500">•</span>
+                              <span>{reason}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {caterer?.slug ? (
+                        <div className="mt-4">
+                          <a
+                            href={`/caterers/${caterer.slug}`}
+                            className="text-sm font-semibold text-orange-600 hover:text-orange-500"
+                          >
+                            View Caterer
+                          </a>
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
