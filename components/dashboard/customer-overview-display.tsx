@@ -83,6 +83,12 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
             >
               View My Bookings
             </Link>
+            <Link
+              href="/request/new"
+              className="rounded-xl bg-black px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+            >
+              Create Event Request
+            </Link>
           </div>
         </div>
       )}
