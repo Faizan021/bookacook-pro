@@ -7,10 +7,34 @@ type PageProps = {
   }>;
 };
 
-function parseCommaSeparated(value: string) {
-  return value
-    .split(",")
-    .map((item) => item.trim())
+const CUISINE_OPTIONS = [
+  "Turkish",
+  "Mediterranean",
+  "Italian",
+  "Arabic",
+  "German",
+  "BBQ",
+  "Vegan",
+];
+
+const DIETARY_OPTIONS = [
+  "Halal",
+  "Vegetarian",
+  "Vegan",
+  "Gluten-free",
+];
+
+const EXTRA_SERVICE_OPTIONS = [
+  "Drinks",
+  "Staff",
+  "Tableware",
+  "Setup & Cleanup",
+];
+
+function getSelectedValues(formData: FormData, key: string) {
+  return formData
+    .getAll(key)
+    .map((value) => String(value).trim())
     .filter(Boolean);
 }
 
@@ -23,17 +47,17 @@ async function saveRequest(formData: FormData) {
   const guest_count_raw = String(formData.get("guest_count") || "");
   const city = String(formData.get("city") || "");
   const postal_code = String(formData.get("postal_code") || "");
-
   const service_style = String(formData.get("service_style") || "");
-  const cuisine_preferences_raw = String(formData.get("cuisine_preferences") || "");
-  const dietary_requirements_raw = String(formData.get("dietary_requirements") || "");
-  const extra_services_raw = String(formData.get("extra_services") || "");
 
   if (!id) {
     throw new Error("Missing request ID");
   }
 
   const guest_count = guest_count_raw ? Number(guest_count_raw) : undefined;
+
+  const cuisine_preferences = getSelectedValues(formData, "cuisine_preferences");
+  const dietary_requirements = getSelectedValues(formData, "dietary_requirements");
+  const extra_services = getSelectedValues(formData, "extra_services");
 
   await updateEventRequest(id, {
     event_type: event_type || undefined,
@@ -42,12 +66,46 @@ async function saveRequest(formData: FormData) {
     city: city || undefined,
     postal_code: postal_code || undefined,
     service_style: service_style || undefined,
-    cuisine_preferences: parseCommaSeparated(cuisine_preferences_raw),
-    dietary_requirements: parseCommaSeparated(dietary_requirements_raw),
-    extra_services: parseCommaSeparated(extra_services_raw),
+    cuisine_preferences,
+    dietary_requirements,
+    extra_services,
   });
 
   redirect(`/request/${id}`);
+}
+
+function CheckboxGroup({
+  title,
+  name,
+  options,
+  selected,
+}: {
+  title: string;
+  name: string;
+  options: string[];
+  selected: string[];
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-sm font-medium">{title}</label>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {options.map((option) => (
+          <label
+            key={option}
+            className="flex items-center gap-2 rounded-md border p-3 text-sm"
+          >
+            <input
+              type="checkbox"
+              name={name}
+              value={option}
+              defaultChecked={selected.includes(option)}
+            />
+            <span>{option}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default async function EventRequestPage({ params }: PageProps) {
@@ -140,38 +198,26 @@ export default async function EventRequestPage({ params }: PageProps) {
           </select>
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">Cuisine Preferences</label>
-          <input
-            type="text"
-            name="cuisine_preferences"
-            defaultValue={(request.cuisine_preferences || []).join(", ")}
-            className="w-full rounded-md border p-2"
-            placeholder="e.g. Turkish, Mediterranean"
-          />
-        </div>
+        <CheckboxGroup
+          title="Cuisine Preferences"
+          name="cuisine_preferences"
+          options={CUISINE_OPTIONS}
+          selected={request.cuisine_preferences || []}
+        />
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">Dietary Requirements</label>
-          <input
-            type="text"
-            name="dietary_requirements"
-            defaultValue={(request.dietary_requirements || []).join(", ")}
-            className="w-full rounded-md border p-2"
-            placeholder="e.g. Halal, Vegetarian"
-          />
-        </div>
+        <CheckboxGroup
+          title="Dietary Requirements"
+          name="dietary_requirements"
+          options={DIETARY_OPTIONS}
+          selected={request.dietary_requirements || []}
+        />
 
-        <div>
-          <label className="mb-1 block text-sm font-medium">Extra Services</label>
-          <input
-            type="text"
-            name="extra_services"
-            defaultValue={(request.extra_services || []).join(", ")}
-            className="w-full rounded-md border p-2"
-            placeholder="e.g. Drinks, Tableware, Staff"
-          />
-        </div>
+        <CheckboxGroup
+          title="Extra Services"
+          name="extra_services"
+          options={EXTRA_SERVICE_OPTIONS}
+          selected={request.extra_services || []}
+        />
 
         <button
           type="submit"
