@@ -1,6 +1,9 @@
 {
   "nav.overview": "Genel Bakış",
   "nav.bookings": "Rezervasyonlar",
+  "bookings.findCaterers": "Catering Firmalarını Keşfet",
+"bookings.backToDashboard": "Panele Dön",
+"bookings.addPackages": "Paket Ekle",
   "nav.caterers": "Catering Firmaları",
   "nav.packages": "Paketler",
   "nav.availability": "Uygunluk",
