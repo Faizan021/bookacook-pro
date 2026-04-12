@@ -69,32 +69,92 @@ function CheckIcon() {
   );
 }
 
+function DecorativePlate() {
+  return (
+    <div className="relative h-[420px] w-full overflow-hidden rounded-[2.5rem] border border-border bg-[linear-gradient(180deg,#fffdf9_0%,#f3ece3_100%)] shadow-[0_30px_80px_rgba(31,28,23,0.08)]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(198,162,122,0.22),transparent_28%),radial-gradient(circle_at_78%_14%,rgba(85,98,74,0.18),transparent_24%),radial-gradient(circle_at_70%_82%,rgba(198,162,122,0.12),transparent_30%)]" />
+
+      <div className="absolute left-8 top-8 right-8 rounded-[2rem] border border-border bg-card/90 p-5 backdrop-blur">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="text-[11px] uppercase tracking-[0.24em] text-primary/80">
+              Curated request
+            </div>
+            <div className="mt-2 text-xl font-semibold text-foreground">
+              A cleaner way to start event catering
+            </div>
+          </div>
+          <div className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
+            Premium
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-border bg-background p-3">
+          <div className="flex items-center gap-3 rounded-xl bg-card px-4 py-3">
+            <SearchIcon />
+            <span className="text-sm text-muted-foreground">
+              Wedding dinner in Berlin for 60 guests, elegant buffet, halal options
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute left-8 right-8 top-[150px] grid gap-3">
+        <div className="rounded-[1.75rem] border border-border bg-card/90 p-5 backdrop-blur">
+          <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+            Occasion
+          </div>
+          <div className="mt-2 text-lg font-semibold text-foreground">Wedding reception</div>
+          <div className="mt-2 text-sm text-muted-foreground">
+            Refined service, seasonal menu direction, premium presentation.
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-[1.75rem] border border-border bg-card/90 p-5 backdrop-blur">
+            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              Guest count
+            </div>
+            <div className="mt-2 text-lg font-semibold text-foreground">20 to 300+</div>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-border bg-card/90 p-5 backdrop-blur">
+            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              Service style
+            </div>
+            <div className="mt-2 text-lg font-semibold text-foreground">Buffet / staffed</div>
+          </div>
+        </div>
+
+        <div className="rounded-[1.75rem] border border-border bg-primary p-5 text-primary-foreground shadow-sm">
+          <div className="text-[11px] uppercase tracking-[0.22em] text-primary-foreground/70">
+            Selection notes
+          </div>
+          <div className="mt-2 text-base font-semibold">
+            Cuisine, dietary preferences, service format, budget, city
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute bottom-8 left-8 right-8 flex flex-wrap gap-3">
+        <div className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground">
+          Weddings
+        </div>
+        <div className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground">
+          Corporate events
+        </div>
+        <div className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground">
+          Private occasions
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const t = useT();
   const isRTL = useIsRTL();
   const [aiQuery, setAiQuery] = useState("");
-
-  const highlights = useMemo(
-    () => [
-      {
-        title: t("home.highlight1.title"),
-        description: t("home.highlight1.desc"),
-      },
-      {
-        title: t("home.highlight2.title"),
-        description: t("home.highlight2.desc"),
-      },
-      {
-        title: t("home.highlight3.title"),
-        description: t("home.highlight3.desc"),
-      },
-      {
-        title: t("home.highlight4.title"),
-        description: t("home.highlight4.desc"),
-      },
-    ],
-    [t],
-  );
 
   const occasionCards = useMemo(
     () => [
@@ -143,34 +203,14 @@ export default function Home() {
     [t],
   );
 
-  const chips = useMemo(
-    () => [
-      t("home.chips.wedding"),
-      t("home.chips.corporate"),
-      t("home.chips.private"),
-      t("home.chips.ramadan"),
-      t("home.chips.bbq"),
-      t("home.chips.office"),
-    ],
-    [t],
-  );
-
   const aiPrompts = useMemo(
     () => [
       t("home.chips.wedding"),
       t("home.chips.corporate"),
       t("home.chips.private"),
-      t("home.chips.office"),
     ],
     [t],
   );
-
-  const stats = [
-    { value: "700+", label: t("metrics.registeredCaterers") },
-    { value: "10%", label: t("metrics.platformShare") },
-    { value: "24h", label: t("metrics.waitingResponse") },
-    { value: "4", label: t("home.steps.title") },
-  ];
 
   const handleAiSubmit = () => {
     const params = new URLSearchParams();
@@ -201,8 +241,8 @@ export default function Home() {
             <a href="#how-it-works" className="text-sm text-muted-foreground transition hover:text-foreground">
               {t("home.nav.howItWorks")}
             </a>
-            <a href="#why-speisely" className="text-sm text-muted-foreground transition hover:text-foreground">
-              {t("home.nav.whySpeisely")}
+            <a href="#occasions" className="text-sm text-muted-foreground transition hover:text-foreground">
+              {t("home.occasions.title")}
             </a>
             <Link href="/login" className="text-sm text-muted-foreground transition hover:text-foreground">
               {t("home.nav.login")}
@@ -228,35 +268,56 @@ export default function Home() {
       </header>
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(198,162,122,0.16),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(85,98,74,0.10),transparent_20%),linear-gradient(to_bottom,rgba(255,255,255,0.24),transparent)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(198,162,122,0.18),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(85,98,74,0.10),transparent_20%)]" />
 
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-14 lg:grid-cols-[1.08fr_0.92fr] lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-14 px-6 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-primary">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-primary">
               <SparklesIcon />
               <span>{t("home.badge")}</span>
             </div>
 
-            <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-foreground sm:text-6xl lg:text-7xl">
-              {t("home.heroTitle")}
+            <h1 className="mt-8 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.05em] text-foreground sm:text-6xl xl:text-7xl">
+              Premium catering,
+              <br />
+              curated with more clarity.
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-              {t("home.heroSubtitle")}
+            <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
+              Speisely helps you move from broad event ideas to refined catering selections — with a premium request flow built for weddings, business events, and private occasions.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {chips.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground shadow-sm"
+            <div className="mt-8 max-w-xl rounded-[1.75rem] border border-border bg-card p-3 shadow-sm">
+              <div className="flex items-center gap-3 rounded-[1.2rem] bg-background px-4 py-3">
+                <SearchIcon />
+                <input
+                  value={aiQuery}
+                  onChange={(e) => setAiQuery(e.target.value)}
+                  placeholder="Describe your event, city, guest count, and menu direction"
+                  className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                />
+                <button
+                  onClick={handleAiSubmit}
+                  className="shrink-0 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
                 >
-                  {item}
-                </span>
-              ))}
+                  {t("home.guided.cta")}
+                </button>
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {aiPrompts.map((prompt) => (
+                  <button
+                    key={prompt}
+                    onClick={() => setAiQuery(prompt)}
+                    className="rounded-full border border-border bg-secondary px-3 py-1.5 text-xs text-muted-foreground transition hover:bg-muted"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/request/new"
                 className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
@@ -271,170 +332,81 @@ export default function Home() {
               >
                 {t("home.cta.browse")}
               </Link>
-
-              <Link
-                href="/login"
-                className="rounded-2xl border border-border bg-secondary px-6 py-3.5 text-sm font-semibold text-primary transition hover:opacity-90"
-              >
-                {t("home.cta.dashboard")}
-              </Link>
             </div>
 
-            <div className="mt-12 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
-              {stats.map((item) => (
-                <div
-                  key={item.value + item.label}
-                  className="rounded-2xl border border-border bg-card p-4 shadow-sm"
-                >
-                  <div className="text-2xl font-semibold tracking-tight text-foreground">
-                    {item.value}
-                  </div>
-                  <div className="mt-1 text-xs leading-5 text-muted-foreground">{item.label}</div>
+            <div className="mt-10 grid max-w-2xl gap-4 sm:grid-cols-3">
+              {[
+                "Structured request flow",
+                "Premium positioning for caterers",
+                "Built for modern event planning",
+              ].map((item) => (
+                <div key={item} className="text-sm leading-6 text-muted-foreground">
+                  <div className="mb-2 h-px w-10 bg-border" />
+                  {item}
                 </div>
               ))}
             </div>
           </div>
 
           <div className="relative z-10">
-            <div className="rounded-[2rem] border border-border bg-card p-4 shadow-sm">
-              <div className="rounded-[1.6rem] border border-border bg-secondary p-6 text-foreground">
-                <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-primary">
-                  <SparklesIcon />
-                  <span>{t("home.guided.label")}</span>
-                </div>
-
-                <h2 className="mt-4 text-2xl font-semibold tracking-tight">
-                  {t("home.guided.title")}
-                </h2>
-
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  {t("home.guided.subtitle")}
-                </p>
-
-                <div className="mt-6 rounded-3xl border border-border bg-card p-3">
-                  <div className="flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3">
-                    <SearchIcon />
-                    <input
-                      value={aiQuery}
-                      onChange={(e) => setAiQuery(e.target.value)}
-                      placeholder={t("home.guided.title")}
-                      className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-                    />
-                    <button
-                      onClick={handleAiSubmit}
-                      className="shrink-0 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
-                    >
-                      {t("home.guided.cta")}
-                    </button>
-                  </div>
-
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {aiPrompts.map((prompt) => (
-                      <button
-                        key={prompt}
-                        onClick={() => setAiQuery(prompt)}
-                        className="rounded-full border border-border bg-secondary px-3 py-1.5 text-xs text-muted-foreground transition hover:bg-muted"
-                      >
-                        {prompt}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-6 space-y-3">
-                  <div className="rounded-2xl border border-border bg-card p-4">
-                    <div className="text-xs text-muted-foreground">{t("home.guided.eventType")}</div>
-                    <div className="mt-1 font-medium">{t("home.guided.eventTypeValue")}</div>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-border bg-card p-4">
-                      <div className="text-xs text-muted-foreground">{t("home.guided.guests")}</div>
-                      <div className="mt-1 font-medium">{t("home.guided.guestsValue")}</div>
-                    </div>
-                    <div className="rounded-2xl border border-border bg-card p-4">
-                      <div className="text-xs text-muted-foreground">{t("home.guided.budget")}</div>
-                      <div className="mt-1 font-medium">{t("home.guided.budgetValue")}</div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-border bg-card p-4">
-                    <div className="text-xs text-muted-foreground">{t("home.guided.preferences")}</div>
-                    <div className="mt-1 font-medium">{t("home.guided.preferencesValue")}</div>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link
-                    href="/request/new"
-                    className="inline-flex rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
-                  >
-                    {t("home.guided.cta")}
-                  </Link>
-
-                  <Link
-                    href="/caterers"
-                    className="inline-flex rounded-2xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
-                  >
-                    {t("home.cta.browse")}
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <DecorativePlate />
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-6 lg:py-8">
-        <div className="rounded-[2rem] border border-border bg-card px-6 py-6 shadow-sm">
-          <div className="text-center text-sm font-medium text-muted-foreground">
-            Built for weddings, office catering, private events, and premium occasions
-          </div>
-        </div>
-      </section>
-
-      <section id="why-speisely" className="mx-auto max-w-7xl px-6 py-8 lg:py-12">
-        <div className="rounded-[2rem] border border-border bg-card p-8 shadow-sm lg:p-10">
-          <div className="max-w-2xl">
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              {t("home.why.label")}
+      <section className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
+        <div className="grid gap-8 rounded-[2.5rem] border border-border bg-card p-8 shadow-sm lg:grid-cols-[1.05fr_0.95fr] lg:p-12">
+          <div>
+            <div className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+              Curated, not crowded
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              {t("home.why.title")}
+            <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              A stronger product experience than a simple caterer list.
             </h2>
-            <p className="mt-4 text-muted-foreground">{t("home.why.subtitle")}</p>
+            <p className="mt-5 max-w-xl text-base leading-8 text-muted-foreground">
+              Speisely is designed to feel closer to a refined event concierge than a directory. You begin with intent, shape your request with clarity, and continue into a more premium planning journey.
+            </p>
           </div>
 
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {highlights.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[1.6rem] border border-border bg-secondary p-5 transition hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-card text-primary shadow-sm">
-                  <SparklesIcon />
+          <div className="grid gap-4">
+            {[
+              {
+                title: "Curated discovery",
+                desc: "Start from the occasion, not from endless filters and scattered listings.",
+              },
+              {
+                title: "Structured selection",
+                desc: "Turn your event details into a request that actually helps caterers respond well.",
+              },
+              {
+                title: "Clear continuation",
+                desc: "Move naturally from website discovery into your dashboard and booking flow.",
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-[1.75rem] border border-border bg-secondary p-6">
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 rounded-full bg-card p-2 text-primary">
+                    <CheckIcon />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-7 text-muted-foreground">{item.desc}</p>
+                  </div>
                 </div>
-
-                <h3 className="mt-5 text-base font-semibold text-foreground">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                  {item.description}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-8 lg:py-12">
+      <section id="occasions" className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <div className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
               {t("home.occasions.label")}
             </div>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              {t("home.occasions.title")}
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              Explore catering by occasion
             </h2>
           </div>
 
@@ -446,24 +418,21 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {occasionCards.map((card) => (
             <Link
               key={card.title}
               href={card.href}
-              className="group rounded-[1.75rem] border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1.5 hover:shadow-lg"
+              className="group rounded-[2rem] border border-border bg-card p-7 shadow-sm transition hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(31,28,23,0.08)]"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-primary text-lg">
                 ✦
               </div>
 
-              <h3 className="mt-5 text-lg font-semibold text-foreground">
-                {card.title}
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                {card.description}
-              </p>
-              <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary">
+              <h3 className="mt-6 text-xl font-semibold text-foreground">{card.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">{card.description}</p>
+
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
                 {t("home.occasions.cardCta")}
                 <ArrowUpRightIcon />
               </div>
@@ -472,18 +441,18 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-8 lg:py-12">
-        <div className="rounded-[2rem] border border-border bg-card p-8 text-card-foreground shadow-sm lg:p-10">
+      <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
+        <div className="rounded-[2.5rem] border border-border bg-card p-8 shadow-sm lg:p-12">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              <div className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
                 {t("home.steps.label")}
               </div>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-                {t("home.steps.title")}
+              <h2 className="mt-4 max-w-md text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+                A cleaner path from discovery to event planning.
               </h2>
-              <p className="mt-4 text-sm leading-7 text-muted-foreground">
-                {t("home.steps.subtitle")}
+              <p className="mt-5 max-w-md text-base leading-8 text-muted-foreground">
+                Instead of sending people into a noisy marketplace, Speisely can guide them through a more premium flow — from first request to better-matched caterers.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
@@ -495,26 +464,23 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/login"
-                  className="rounded-2xl border border-border bg-white px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
+                  className="rounded-2xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
                 >
                   {t("home.cta.dashboard")}
                 </Link>
               </div>
             </div>
 
-            <div className="grid gap-4">
+            <div className="space-y-4">
               {steps.map((item) => (
-                <div
-                  key={item.step}
-                  className="rounded-3xl border border-border bg-secondary p-6"
-                >
+                <div key={item.step} className="rounded-[1.75rem] border border-border bg-secondary p-6">
                   <div className="flex items-start gap-4">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
                       {item.step}
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      <p className="mt-2 text-sm leading-7 text-muted-foreground">
                         {item.description}
                       </p>
                     </div>
@@ -526,73 +492,33 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-8 lg:py-12">
-        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[2rem] border border-border bg-card p-8 shadow-sm">
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-              Premium positioning
-            </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-              Designed to feel premium before the booking even begins.
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Speisely should feel like a modern product, not a messy directory. The website
-              should inspire confidence, the request flow should reduce friction, and the
-              dashboard should make planning feel controlled.
-            </p>
-
-            <div className="mt-6 space-y-4">
-              {[
-                "Premium brand feel across website and dashboard",
-                "AI-style discovery plus structured booking flow",
-                "Built for weddings, office catering, and premium private events",
-              ].map((line) => (
-                <div key={line} className="flex items-start gap-3">
-                  <div className="mt-0.5 rounded-full bg-secondary p-1 text-primary">
-                    <CheckIcon />
-                  </div>
-                  <p className="text-sm leading-6 text-muted-foreground">{line}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-[2rem] border border-border bg-secondary p-8 text-foreground shadow-sm">
-            <div className="text-xs uppercase tracking-[0.2em] text-primary">
-              Smart request entry
-            </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">
-              Add AI search now, then evolve it into true matching later.
-            </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground">
-              Start with a premium AI-style prompt bar that forwards user intent into your
-              request flow. Later, connect it to real caterer matching, package suggestions,
-              cuisine filtering, and city-aware discovery.
-            </p>
-
-            <div className="mt-8 rounded-3xl border border-border bg-card p-5">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border bg-background p-4">
-                  <div className="text-xs text-muted-foreground">Phase 1</div>
-                  <div className="mt-1 font-semibold text-foreground">Intent capture</div>
-                  <div className="mt-2 text-sm text-muted-foreground">
-                    User types a request and continues into `/request/new`.
-                  </div>
-                </div>
-                <div className="rounded-2xl border border-border bg-background p-4">
-                  <div className="text-xs text-muted-foreground">Phase 2</div>
-                  <div className="mt-1 font-semibold text-foreground">Smart matching</div>
-                  <div className="mt-2 text-sm text-muted-foreground">
-                    Suggest caterers, packages, cuisines, and service styles.
-                  </div>
-                </div>
+      <section className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
+        <div className="rounded-[2.5rem] border border-border bg-primary px-8 py-10 text-primary-foreground shadow-sm lg:px-12 lg:py-14">
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <div className="text-xs uppercase tracking-[0.24em] text-primary-foreground/70">
+                Premium request entry
               </div>
+              <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+                Describe the event. Refine the selection. Continue with clarity.
+              </h2>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-primary-foreground/80">
+                Speisely is built to feel composed from the first click — with a request flow that captures intent, improves discovery, and prepares the ground for better matching later.
+              </p>
+            </div>
 
+            <div className="flex flex-wrap gap-3">
               <Link
                 href="/request/new"
-                className="mt-5 inline-flex rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                className="rounded-2xl bg-card px-6 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
               >
-                Launch the request flow
+                Start your event request
+              </Link>
+              <Link
+                href="/caterers"
+                className="rounded-2xl border border-primary-foreground/20 px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-white/10"
+              >
+                Browse caterers
               </Link>
             </div>
           </div>
@@ -601,35 +527,33 @@ export default function Home() {
 
       <footer className="mt-8 border-t border-border bg-card">
         <div className="mx-auto max-w-7xl px-6 py-12">
-          <div className="rounded-[2rem] border border-border bg-background p-8 shadow-sm">
-            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-              <div>
-                <div className="text-base font-semibold">Speisely</div>
-                <div className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
-                  {t("home.footerTagline")}
-                </div>
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <div className="text-base font-semibold">Speisely</div>
+              <div className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
+                Premium catering marketplace for weddings, business events, and private occasions.
               </div>
+            </div>
 
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/caterers"
-                  className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
-                >
-                  {t("home.nav.browse")}
-                </Link>
-                <Link
-                  href="/request/new"
-                  className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
-                >
-                  {t("home.cta.planEvent")}
-                </Link>
-                <Link
-                  href="/login"
-                  className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
-                >
-                  {t("home.nav.login")}
-                </Link>
-              </div>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/caterers"
+                className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+              >
+                {t("home.nav.browse")}
+              </Link>
+              <Link
+                href="/request/new"
+                className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+              >
+                {t("home.cta.planEvent")}
+              </Link>
+              <Link
+                href="/login"
+                className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+              >
+                {t("home.nav.login")}
+              </Link>
             </div>
           </div>
         </div>
