@@ -497,13 +497,13 @@ export default function Home() {
         <div className="rounded-[2rem] border border-border bg-card p-8 text-card-foreground shadow-sm lg:p-10">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <div className="text-xs uppercase tracking-[0.2em] text-white/40">
+              <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                 {t("home.steps.label")}
               </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
                 {t("home.steps.title")}
               </h2>
-              <p className="mt-4 text-sm leading-7 text-white/70">
+              <p className="mt-4 text-sm leading-7 text-muted-foreground">
                 {t("home.steps.subtitle")}
               </p>
 
@@ -527,15 +527,15 @@ export default function Home() {
               {steps.map((item) => (
                 <div
                   key={item.step}
-                  className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur"
+                  className="rounded-3xl border border-border bg-secondary p-6"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 text-sm font-bold text-white">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
                       {item.step}
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold">{item.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-white/70">
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
                         {item.description}
                       </p>
                     </div>
@@ -578,7 +578,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-orange-200 bg-gradient-to-br from-orange-500 via-orange-500 to-orange-600 p-8 text-white shadow-[0_24px_80px_rgba(249,115,22,0.22)]">
+          <div className="rounded-[2rem] border border-border bg-primary p-8 text-primary-foreground shadow-sm">
             <div className="text-xs uppercase tracking-[0.2em] text-white/70">
               Smart request entry
             </div>
