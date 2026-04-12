@@ -488,3 +488,62 @@
   "home.steps.step3Desc": "Prüfen Sie Ihre Anfrage, entdecken Sie Caterer und setzen Sie Ihre Reise im Dashboard fort.",
   "home.footerTagline": "Premium Catering-Marktplatz für moderne Eventplanung."
 }
+{
+  "home": {
+    "editorialHeroTitle": "Premium Catering, klarer kuratiert.",
+    "editorialHeroSubtitle": "Speisely hilft dir dabei, aus einer ersten Event-Idee eine hochwertige Catering-Auswahl zu machen — mit einem geführten Anfrageprozess für Hochzeiten, Business-Events und private Anlässe.",
+    "editorialSearchPlaceholder": "Beschreibe dein Event, deine Stadt, Gästezahl und kulinarische Richtung",
+
+    "heroBenefit1": "Strukturierter Anfrageprozess",
+    "heroBenefit2": "Premium-Auftritt für Caterer",
+    "heroBenefit3": "Für modernes Event-Planning entwickelt",
+
+    "heroPanel": {
+      "label": "Kuratiere Anfrage",
+      "title": "Ein klarerer Start für Event-Catering",
+      "badge": "Premium",
+      "occasionDesc": "Anspruchsvoller Service, saisonale Menüauswahl und hochwertige Präsentation.",
+      "guestLabel": "Gästezahl",
+      "guestValue": "20 bis 300+",
+      "notesLabel": "Auswahlpunkte",
+      "notesValue": "Küche, Ernährungswünsche, Serviceformat, Budget, Stadt",
+      "tag1": "Hochzeiten",
+      "tag2": "Business Events",
+      "tag3": "Private Anlässe"
+    },
+
+    "principles": {
+      "label": "Kuratiert statt überladen",
+      "title": "Ein stärkeres Produkterlebnis als nur eine einfache Caterer-Liste.",
+      "subtitle": "Speisely soll sich eher wie ein hochwertiger Event-Concierge anfühlen als wie ein Verzeichnis. Du startest mit einer Idee, schärfst deine Anfrage und gehst in einen besseren Planungsfluss über.",
+      "item1Title": "Kuratiertes Entdecken",
+      "item1Desc": "Starte vom Anlass aus — nicht mit endlosen Filtern und unübersichtlichen Listings.",
+      "item2Title": "Strukturierte Auswahl",
+      "item2Desc": "Verwandle Eventdetails in eine Anfrage, mit der Caterer wirklich gut arbeiten können.",
+      "item3Title": "Klare Weiterführung",
+      "item3Desc": "Wechsle natürlich von der Website in Dashboard und Buchungsprozess."
+    },
+
+    "languagesLabel": "Mehrsprachiger Vorteil",
+    "languagesTitle": "Deutsch zuerst. Zusätzlich Englisch, Türkisch und Arabisch.",
+    "languagesSubtitle": "Speisely kann Kundinnen und Kunden in mehreren Sprachen abholen — ein echter Vorteil für diverse Events, internationale Teams und moderne Gastgeber.",
+
+    "editorialOccasionsTitle": "Catering nach Anlass entdecken",
+    "editorialStepsTitle": "Ein klarerer Weg von der Entdeckung zur Eventplanung.",
+    "editorialStepsSubtitle": "Statt Menschen in einen lauten Marktplatz zu schicken, kann Speisely sie durch einen hochwertigeren Ablauf führen — von der ersten Anfrage bis zu besser passenden Caterern.",
+
+    "editorialCtaLabel": "Premium Anfrage-Einstieg",
+    "editorialCtaTitle": "Event beschreiben. Auswahl verfeinern. Klarer weiterplanen.",
+    "editorialCtaSubtitle": "Speisely soll sich vom ersten Klick an hochwertig anfühlen — mit einem Anfragefluss, der Absicht erfasst, Entdeckung verbessert und später bessere Matches ermöglicht.",
+    "editorialCtaPrimary": "Event-Anfrage starten",
+    "editorialCtaSecondary": "Caterer entdecken",
+
+    "editorialFooterTagline": "Premium Catering-Marktplatz für Hochzeiten, Business-Events und private Anlässe.",
+
+    "images": {
+      "heroAlt": "Premium Catering Präsentation",
+      "businessAlt": "Business Catering Präsentation",
+      "ctaAlt": "Private Catering Präsentation"
+    }
+  }
+}
