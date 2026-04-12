@@ -30,20 +30,24 @@ export function DashboardShell({
 
   return (
     <div
-      className={`flex h-screen overflow-hidden bg-gray-50 ${isRTL ? "flex-row-reverse" : ""}`}
+      className={`flex h-screen overflow-hidden bg-gray-50 ${
+        isRTL ? "flex-row-reverse" : ""
+      }`}
       dir={isRTL ? "rtl" : "ltr"}
     >
       <Sidebar role={role} basePath={basePath} isDemo={isDemo} />
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-12 flex-shrink-0 items-center justify-between border-b border-gray-100 bg-white px-6">
+        <header className="flex h-14 flex-shrink-0 items-center justify-between border-b border-gray-100 bg-white px-6">
           <div className="flex items-center gap-1.5 text-xs text-gray-400">
             <Link href="/" className="transition-colors hover:text-gray-600">
-              {t("breadcrumb.app")}
+              Speisely
             </Link>
             <span>/</span>
             <span className="font-medium text-gray-700">{t(breadcrumbKey)}</span>
-            {isDemo && <span className="text-gray-300">— {t("breadcrumb.demo")}</span>}
+            {isDemo && (
+              <span className="text-gray-300">— {t("breadcrumb.demo")}</span>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -53,8 +57,8 @@ export function DashboardShell({
                 DEMO
               </span>
             ) : (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-xs font-bold text-white shadow-sm">
-                U
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-xs font-bold text-white shadow-sm">
+                S
               </div>
             )}
           </div>
