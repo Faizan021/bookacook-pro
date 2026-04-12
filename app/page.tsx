@@ -190,7 +190,7 @@ export default function Home() {
       <header className="sticky top-0 z-40 border-b border-black/5 bg-[#f7f5f1]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black text-sm font-bold text-white shadow-sm">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground shadow-sm">
               S
             </div>
             <div>
@@ -224,7 +224,7 @@ export default function Home() {
             </Link>
             <Link
               href="/request/new"
-              className="inline-flex rounded-xl bg-black px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800"
+              className="inline-flex rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
             >
               {t("home.cta.planEvent")}
             </Link>
@@ -264,7 +264,7 @@ export default function Home() {
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 href="/request/new"
-                className="inline-flex items-center gap-2 rounded-2xl bg-black px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
               >
                 {t("home.cta.startRequest")}
                 <ArrowUpRightIcon />
@@ -640,7 +640,7 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/request/new"
-                  className="rounded-xl bg-black px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+                  className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
                 >
                   {t("home.cta.planEvent")}
                 </Link>
