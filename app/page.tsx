@@ -494,7 +494,7 @@ export default function Home() {
       </section>
 
       <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-8 lg:py-12">
-        <div className="rounded-[2rem] bg-neutral-950 p-8 text-white lg:p-10">
+        <div className="rounded-[2rem] border border-border bg-card p-8 text-card-foreground shadow-sm lg:p-10">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
               <div className="text-xs uppercase tracking-[0.2em] text-white/40">
