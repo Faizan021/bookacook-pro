@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useT, useIsRTL } from "@/lib/i18n/context";
@@ -54,6 +55,23 @@ function SearchIcon() {
   );
 }
 
+function GlobeIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-5 w-5"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3c2.8 3 4.2 6 4.2 9s-1.4 6-4.2 9c-2.8-3-4.2-6-4.2-9s1.4-6 4.2-9z" />
+    </svg>
+  );
+}
+
 function CheckIcon() {
   return (
     <svg
@@ -69,114 +87,36 @@ function CheckIcon() {
   );
 }
 
-function DecorativePlate() {
-  return (
-    <div className="relative h-[420px] w-full overflow-hidden rounded-[2.5rem] border border-border bg-[linear-gradient(180deg,#fffdf9_0%,#f3ece3_100%)] shadow-[0_30px_80px_rgba(31,28,23,0.08)]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(198,162,122,0.22),transparent_28%),radial-gradient(circle_at_78%_14%,rgba(85,98,74,0.18),transparent_24%),radial-gradient(circle_at_70%_82%,rgba(198,162,122,0.12),transparent_30%)]" />
-
-      <div className="absolute left-8 top-8 right-8 rounded-[2rem] border border-border bg-card/90 p-5 backdrop-blur">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.24em] text-primary/80">
-              Curated request
-            </div>
-            <div className="mt-2 text-xl font-semibold text-foreground">
-              A cleaner way to start event catering
-            </div>
-          </div>
-          <div className="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-primary">
-            Premium
-          </div>
-        </div>
-
-        <div className="mt-5 rounded-2xl border border-border bg-background p-3">
-          <div className="flex items-center gap-3 rounded-xl bg-card px-4 py-3">
-            <SearchIcon />
-            <span className="text-sm text-muted-foreground">
-              Wedding dinner in Berlin for 60 guests, elegant buffet, halal options
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute left-8 right-8 top-[150px] grid gap-3">
-        <div className="rounded-[1.75rem] border border-border bg-card/90 p-5 backdrop-blur">
-          <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-            Occasion
-          </div>
-          <div className="mt-2 text-lg font-semibold text-foreground">Wedding reception</div>
-          <div className="mt-2 text-sm text-muted-foreground">
-            Refined service, seasonal menu direction, premium presentation.
-          </div>
-        </div>
-
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="rounded-[1.75rem] border border-border bg-card/90 p-5 backdrop-blur">
-            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              Guest count
-            </div>
-            <div className="mt-2 text-lg font-semibold text-foreground">20 to 300+</div>
-          </div>
-
-          <div className="rounded-[1.75rem] border border-border bg-card/90 p-5 backdrop-blur">
-            <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-              Service style
-            </div>
-            <div className="mt-2 text-lg font-semibold text-foreground">Buffet / staffed</div>
-          </div>
-        </div>
-
-        <div className="rounded-[1.75rem] border border-border bg-primary p-5 text-primary-foreground shadow-sm">
-          <div className="text-[11px] uppercase tracking-[0.22em] text-primary-foreground/70">
-            Selection notes
-          </div>
-          <div className="mt-2 text-base font-semibold">
-            Cuisine, dietary preferences, service format, budget, city
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute bottom-8 left-8 right-8 flex flex-wrap gap-3">
-        <div className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground">
-          Weddings
-        </div>
-        <div className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground">
-          Corporate events
-        </div>
-        <div className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground">
-          Private occasions
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Home() {
   const t = useT();
   const isRTL = useIsRTL();
   const [aiQuery, setAiQuery] = useState("");
 
-  const occasionCards = useMemo(
+  const occasions = useMemo(
     () => [
       {
         title: t("home.occasions.wedding"),
         description: t("home.occasions.weddingDesc"),
         href: "/request/new",
+        image: "/images/speisely-wedding.jpg",
       },
       {
         title: t("home.occasions.corporate"),
         description: t("home.occasions.corporateDesc"),
         href: "/request/new",
+        image: "/images/speisely-business.jpg",
       },
       {
         title: t("home.occasions.private"),
         description: t("home.occasions.privateDesc"),
         href: "/request/new",
+        image: "/images/speisely-private.jpg",
       },
       {
         title: t("home.occasions.ramadan"),
         description: t("home.occasions.ramadanDesc"),
         href: "/request/new",
+        image: "/images/speisely-ramadan.jpg",
       },
     ],
     [t],
@@ -203,7 +143,7 @@ export default function Home() {
     [t],
   );
 
-  const aiPrompts = useMemo(
+  const prompts = useMemo(
     () => [
       t("home.chips.wedding"),
       t("home.chips.corporate"),
@@ -221,30 +161,33 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground" dir={isRTL ? "rtl" : "ltr"}>
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-xl">
+    <main
+      className="min-h-screen bg-[#e7efe3] text-[#2f392f]"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
+      <header className="sticky top-0 z-40 border-b border-[#d6dfd0] bg-[#e7efe3]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground shadow-sm">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#4f6044] text-sm font-bold text-[#fbf8f1] shadow-sm">
               S
             </div>
             <div>
               <div className="text-[15px] font-semibold tracking-tight">Speisely</div>
-              <div className="text-sm text-muted-foreground">{t("home.brandTagline")}</div>
+              <div className="text-sm text-[#6a7367]">{t("home.brandTagline")}</div>
             </div>
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex">
-            <Link href="/caterers" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <Link href="/caterers" className="text-sm text-[#5d665b] transition hover:text-[#2f392f]">
               {t("home.nav.browse")}
             </Link>
-            <a href="#how-it-works" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <a href="#how-it-works" className="text-sm text-[#5d665b] transition hover:text-[#2f392f]">
               {t("home.nav.howItWorks")}
             </a>
-            <a href="#occasions" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <a href="#occasions" className="text-sm text-[#5d665b] transition hover:text-[#2f392f]">
               {t("home.occasions.title")}
             </a>
-            <Link href="/login" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <Link href="/login" className="text-sm text-[#5d665b] transition hover:text-[#2f392f]">
               {t("home.nav.login")}
             </Link>
           </nav>
@@ -253,13 +196,13 @@ export default function Home() {
             <LanguageSwitcher />
             <Link
               href="/login"
-              className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary sm:inline-flex"
+              className="hidden rounded-xl border border-[#d6dfd0] bg-[#fbf8f1] px-4 py-2 text-sm font-medium text-[#2f392f] transition hover:bg-[#f3ecde] sm:inline-flex"
             >
               {t("home.cta.dashboard")}
             </Link>
             <Link
               href="/request/new"
-              className="inline-flex rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+              className="inline-flex rounded-xl bg-[#4f6044] px-4 py-2 text-sm font-semibold text-[#fbf8f1] transition hover:opacity-90"
             >
               {t("home.cta.planEvent")}
             </Link>
@@ -268,48 +211,46 @@ export default function Home() {
       </header>
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(198,162,122,0.18),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(85,98,74,0.10),transparent_20%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(184,100,60,0.14),transparent_26%),radial-gradient(circle_at_85%_18%,rgba(79,96,68,0.12),transparent_24%)]" />
 
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-20">
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-primary">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#d6dfd0] bg-[#fbf8f1] px-3 py-1 text-xs font-medium text-[#4f6044]">
               <SparklesIcon />
               <span>{t("home.badge")}</span>
             </div>
 
-            <h1 className="mt-8 max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.05em] text-foreground sm:text-6xl xl:text-7xl">
-              Premium catering,
-              <br />
-              curated with more clarity.
+            <h1 className="mt-8 max-w-3xl text-5xl font-semibold leading-[0.96] tracking-[-0.05em] text-[#2f392f] sm:text-6xl xl:text-7xl">
+              {t("home.editorialHeroTitle")}
             </h1>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">
-              Speisely helps you move from broad event ideas to refined catering selections — with a premium request flow built for weddings, business events, and private occasions.
+            <p className="mt-6 max-w-xl text-lg leading-8 text-[#667063]">
+              {t("home.editorialHeroSubtitle")}
             </p>
 
-            <div className="mt-8 max-w-xl rounded-[1.75rem] border border-border bg-card p-3 shadow-sm">
-              <div className="flex items-center gap-3 rounded-[1.2rem] bg-background px-4 py-3">
+            <div className="mt-8 max-w-xl rounded-[1.75rem] border border-[#d6dfd0] bg-[#fbf8f1] p-3 shadow-[0_18px_40px_rgba(47,57,47,0.06)]">
+              <div className="flex items-center gap-3 rounded-[1.15rem] bg-white px-4 py-3">
                 <SearchIcon />
                 <input
                   value={aiQuery}
                   onChange={(e) => setAiQuery(e.target.value)}
-                  placeholder="Describe your event, city, guest count, and menu direction"
-                  className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  placeholder={t("home.editorialSearchPlaceholder")}
+                  className="w-full bg-transparent text-sm text-[#2f392f] placeholder:text-[#798274] focus:outline-none"
                 />
                 <button
                   onClick={handleAiSubmit}
-                  className="shrink-0 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
+                  className="shrink-0 rounded-xl bg-[#4f6044] px-4 py-2 text-xs font-semibold text-[#fbf8f1] transition hover:opacity-90"
                 >
                   {t("home.guided.cta")}
                 </button>
               </div>
 
               <div className="mt-3 flex flex-wrap gap-2">
-                {aiPrompts.map((prompt) => (
+                {prompts.map((prompt) => (
                   <button
                     key={prompt}
                     onClick={() => setAiQuery(prompt)}
-                    className="rounded-full border border-border bg-secondary px-3 py-1.5 text-xs text-muted-foreground transition hover:bg-muted"
+                    className="rounded-full border border-[#d6dfd0] bg-[#f3ecde] px-3 py-1.5 text-xs text-[#667063] transition hover:bg-[#ece4d4]"
                   >
                     {prompt}
                   </button>
@@ -320,7 +261,7 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href="/request/new"
-                className="inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-2xl bg-[#4f6044] px-6 py-3.5 text-sm font-semibold text-[#fbf8f1] transition hover:opacity-90"
               >
                 {t("home.cta.startRequest")}
                 <ArrowUpRightIcon />
@@ -328,73 +269,202 @@ export default function Home() {
 
               <Link
                 href="/caterers"
-                className="rounded-2xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition hover:bg-secondary"
+                className="rounded-2xl border border-[#d6dfd0] bg-[#fbf8f1] px-6 py-3.5 text-sm font-semibold text-[#2f392f] transition hover:bg-[#f3ecde]"
               >
                 {t("home.cta.browse")}
               </Link>
             </div>
 
-            <div className="mt-10 grid max-w-2xl gap-4 sm:grid-cols-3">
-              {[
-                "Structured request flow",
-                "Premium positioning for caterers",
-                "Built for modern event planning",
-              ].map((item) => (
-                <div key={item} className="text-sm leading-6 text-muted-foreground">
-                  <div className="mb-2 h-px w-10 bg-border" />
-                  {item}
-                </div>
-              ))}
+            <div className="mt-10 grid max-w-2xl gap-5 sm:grid-cols-3">
+              <div className="text-sm leading-6 text-[#667063]">
+                <div className="mb-2 h-px w-10 bg-[#cfd8ca]" />
+                {t("home.heroBenefit1")}
+              </div>
+              <div className="text-sm leading-6 text-[#667063]">
+                <div className="mb-2 h-px w-10 bg-[#cfd8ca]" />
+                {t("home.heroBenefit2")}
+              </div>
+              <div className="text-sm leading-6 text-[#667063]">
+                <div className="mb-2 h-px w-10 bg-[#cfd8ca]" />
+                {t("home.heroBenefit3")}
+              </div>
             </div>
           </div>
 
           <div className="relative z-10">
-            <DecorativePlate />
+            <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="relative min-h-[520px] overflow-hidden rounded-[2.5rem] border border-[#d6dfd0] bg-[#fbf8f1] shadow-[0_30px_80px_rgba(47,57,47,0.08)]">
+                <Image
+                  src="/images/speisely-hero.jpg"
+                  alt={t("home.images.heroAlt")}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(47,57,47,0.50),rgba(47,57,47,0.10),transparent)]" />
+
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <div className="max-w-md rounded-[1.75rem] bg-[#fbf8f1]/92 p-5 backdrop-blur">
+                    <div className="text-[11px] uppercase tracking-[0.24em] text-[#4f6044]">
+                      {t("home.heroPanel.label")}
+                    </div>
+                    <div className="mt-2 text-xl font-semibold text-[#2f392f]">
+                      {t("home.heroPanel.title")}
+                    </div>
+                    <div className="mt-3 text-sm leading-6 text-[#667063]">
+                      {t("home.heroPanel.occasionDesc")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-4">
+                <div className="overflow-hidden rounded-[2rem] border border-[#d6dfd0] bg-[#fbf8f1] shadow-sm">
+                  <div className="relative h-52">
+                    <Image
+                      src="/images/speisely-business.jpg"
+                      alt={t("home.images.businessAlt")}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <div className="text-[11px] uppercase tracking-[0.22em] text-[#7a846f]">
+                      {t("home.heroPanel.guestLabel")}
+                    </div>
+                    <div className="mt-2 text-lg font-semibold text-[#2f392f]">
+                      {t("home.heroPanel.guestValue")}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overflow-hidden rounded-[2rem] border border-[#d6dfd0] bg-[#4f6044] text-[#fbf8f1] shadow-sm">
+                  <div className="p-5">
+                    <div className="text-[11px] uppercase tracking-[0.22em] text-[#fbf8f1]/70">
+                      {t("home.heroPanel.notesLabel")}
+                    </div>
+                    <div className="mt-2 text-lg font-semibold">
+                      {t("home.heroPanel.notesValue")}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-px bg-[#6f7f63]/30">
+                    <div className="bg-[#5b6d4e] px-4 py-3 text-sm">{t("home.heroPanel.tag1")}</div>
+                    <div className="bg-[#5b6d4e] px-4 py-3 text-sm">{t("home.heroPanel.tag2")}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-3">
+              <div className="rounded-full border border-[#d6dfd0] bg-[#fbf8f1] px-4 py-2 text-sm text-[#2f392f]">
+                {t("home.heroPanel.tag1")}
+              </div>
+              <div className="rounded-full border border-[#d6dfd0] bg-[#fbf8f1] px-4 py-2 text-sm text-[#2f392f]">
+                {t("home.heroPanel.tag2")}
+              </div>
+              <div className="rounded-full border border-[#d6dfd0] bg-[#fbf8f1] px-4 py-2 text-sm text-[#2f392f]">
+                {t("home.heroPanel.tag3")}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
-        <div className="grid gap-8 rounded-[2.5rem] border border-border bg-card p-8 shadow-sm lg:grid-cols-[1.05fr_0.95fr] lg:p-12">
+        <div className="grid gap-8 rounded-[2.5rem] border border-[#d6dfd0] bg-[#fbf8f1] p-8 shadow-sm lg:grid-cols-[1.02fr_0.98fr] lg:p-12">
           <div>
-            <div className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-              Curated, not crowded
+            <div className="text-xs uppercase tracking-[0.24em] text-[#7a846f]">
+              {t("home.principles.label")}
             </div>
-            <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              A stronger product experience than a simple caterer list.
+            <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-[#2f392f] sm:text-4xl">
+              {t("home.principles.title")}
             </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-muted-foreground">
-              Speisely is designed to feel closer to a refined event concierge than a directory. You begin with intent, shape your request with clarity, and continue into a more premium planning journey.
+            <p className="mt-5 max-w-xl text-base leading-8 text-[#667063]">
+              {t("home.principles.subtitle")}
             </p>
           </div>
 
           <div className="grid gap-4">
-            {[
-              {
-                title: "Curated discovery",
-                desc: "Start from the occasion, not from endless filters and scattered listings.",
-              },
-              {
-                title: "Structured selection",
-                desc: "Turn your event details into a request that actually helps caterers respond well.",
-              },
-              {
-                title: "Clear continuation",
-                desc: "Move naturally from website discovery into your dashboard and booking flow.",
-              },
-            ].map((item) => (
-              <div key={item.title} className="rounded-[1.75rem] border border-border bg-secondary p-6">
-                <div className="flex items-start gap-4">
-                  <div className="mt-1 rounded-full bg-card p-2 text-primary">
-                    <CheckIcon />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-7 text-muted-foreground">{item.desc}</p>
-                  </div>
+            <div className="rounded-[1.75rem] border border-[#d6dfd0] bg-white p-6">
+              <div className="flex items-start gap-4">
+                <div className="mt-1 rounded-full bg-[#f3ecde] p-2 text-[#4f6044]">
+                  <CheckIcon />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-[#2f392f]">
+                    {t("home.principles.item1Title")}
+                  </h3>
+                  <p className="mt-2 text-sm leading-7 text-[#667063]">
+                    {t("home.principles.item1Desc")}
+                  </p>
                 </div>
               </div>
-            ))}
+            </div>
+
+            <div className="rounded-[1.75rem] border border-[#d6dfd0] bg-[#f3ecde] p-6">
+              <div className="flex items-start gap-4">
+                <div className="mt-1 rounded-full bg-white p-2 text-[#4f6044]">
+                  <CheckIcon />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-[#2f392f]">
+                    {t("home.principles.item2Title")}
+                  </h3>
+                  <p className="mt-2 text-sm leading-7 text-[#667063]">
+                    {t("home.principles.item2Desc")}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[1.75rem] border border-[#d6dfd0] bg-white p-6">
+              <div className="flex items-start gap-4">
+                <div className="mt-1 rounded-full bg-[#f3ecde] p-2 text-[#4f6044]">
+                  <CheckIcon />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-[#2f392f]">
+                    {t("home.principles.item3Title")}
+                  </h3>
+                  <p className="mt-2 text-sm leading-7 text-[#667063]">
+                    {t("home.principles.item3Desc")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-4 lg:py-6">
+        <div className="rounded-[2rem] border border-[#d6dfd0] bg-[#fbf8f1] px-6 py-5 shadow-sm">
+          <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <div className="text-xs uppercase tracking-[0.24em] text-[#7a846f]">
+                {t("home.languagesLabel")}
+              </div>
+              <div className="mt-2 text-lg font-semibold text-[#2f392f]">
+                {t("home.languagesTitle")}
+              </div>
+              <div className="mt-2 text-sm leading-7 text-[#667063]">
+                {t("home.languagesSubtitle")}
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#e7efe3] px-4 py-2 text-sm font-medium text-[#2f392f]">
+                <GlobeIcon />
+                <span>DE</span>
+              </div>
+              <div className="rounded-full border border-[#d6dfd0] bg-white px-4 py-2 text-sm text-[#2f392f]">
+                EN
+              </div>
+              <div className="rounded-full border border-[#d6dfd0] bg-white px-4 py-2 text-sm text-[#2f392f]">
+                TR
+              </div>
+              <div className="rounded-full border border-[#d6dfd0] bg-white px-4 py-2 text-sm text-[#2f392f]">
+                AR
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -402,39 +472,46 @@ export default function Home() {
       <section id="occasions" className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <div className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+            <div className="text-xs uppercase tracking-[0.24em] text-[#7a846f]">
               {t("home.occasions.label")}
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              Explore catering by occasion
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#2f392f] sm:text-4xl">
+              {t("home.editorialOccasionsTitle")}
             </h2>
           </div>
 
           <Link
             href="/caterers"
-            className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary md:inline-flex"
+            className="hidden rounded-xl border border-[#d6dfd0] bg-[#fbf8f1] px-4 py-2 text-sm font-medium text-[#2f392f] transition hover:bg-[#f3ecde] md:inline-flex"
           >
             {t("home.occasions.viewAll")}
           </Link>
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {occasionCards.map((card) => (
+          {occasions.map((card) => (
             <Link
               key={card.title}
               href={card.href}
-              className="group rounded-[2rem] border border-border bg-card p-7 shadow-sm transition hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(31,28,23,0.08)]"
+              className="group overflow-hidden rounded-[2rem] border border-[#d6dfd0] bg-[#fbf8f1] shadow-sm transition hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(47,57,47,0.08)]"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-primary text-lg">
-                ✦
+              <div className="relative h-56">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                />
               </div>
 
-              <h3 className="mt-6 text-xl font-semibold text-foreground">{card.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">{card.description}</p>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-[#2f392f]">{card.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[#667063]">{card.description}</p>
 
-              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary">
-                {t("home.occasions.cardCta")}
-                <ArrowUpRightIcon />
+                <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#4f6044]">
+                  {t("home.occasions.cardCta")}
+                  <ArrowUpRightIcon />
+                </div>
               </div>
             </Link>
           ))}
@@ -442,29 +519,29 @@ export default function Home() {
       </section>
 
       <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
-        <div className="rounded-[2.5rem] border border-border bg-card p-8 shadow-sm lg:p-12">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="rounded-[2.5rem] border border-[#d6dfd0] bg-[#fbf8f1] p-8 shadow-sm lg:p-12">
+          <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr]">
             <div>
-              <div className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+              <div className="text-xs uppercase tracking-[0.24em] text-[#7a846f]">
                 {t("home.steps.label")}
               </div>
-              <h2 className="mt-4 max-w-md text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                A cleaner path from discovery to event planning.
+              <h2 className="mt-4 max-w-md text-3xl font-semibold tracking-tight text-[#2f392f] sm:text-4xl">
+                {t("home.editorialStepsTitle")}
               </h2>
-              <p className="mt-5 max-w-md text-base leading-8 text-muted-foreground">
-                Instead of sending people into a noisy marketplace, Speisely can guide them through a more premium flow — from first request to better-matched caterers.
+              <p className="mt-5 max-w-md text-base leading-8 text-[#667063]">
+                {t("home.editorialStepsSubtitle")}
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/request/new"
-                  className="rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                  className="rounded-2xl bg-[#4f6044] px-5 py-3 text-sm font-semibold text-[#fbf8f1] transition hover:opacity-90"
                 >
                   {t("home.cta.planEvent")}
                 </Link>
                 <Link
                   href="/login"
-                  className="rounded-2xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
+                  className="rounded-2xl border border-[#d6dfd0] bg-white px-5 py-3 text-sm font-semibold text-[#2f392f] transition hover:bg-[#f3ecde]"
                 >
                   {t("home.cta.dashboard")}
                 </Link>
@@ -473,14 +550,14 @@ export default function Home() {
 
             <div className="space-y-4">
               {steps.map((item) => (
-                <div key={item.step} className="rounded-[1.75rem] border border-border bg-secondary p-6">
+                <div key={item.step} className="rounded-[1.75rem] border border-[#d6dfd0] bg-white p-6">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#4f6044] text-sm font-bold text-[#fbf8f1]">
                       {item.step}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-foreground">{item.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                      <h3 className="text-lg font-semibold text-[#2f392f]">{item.title}</h3>
+                      <p className="mt-2 text-sm leading-7 text-[#667063]">
                         {item.description}
                       </p>
                     </div>
@@ -493,64 +570,74 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-8 lg:py-14">
-        <div className="rounded-[2.5rem] border border-border bg-primary px-8 py-10 text-primary-foreground shadow-sm lg:px-12 lg:py-14">
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <div className="text-xs uppercase tracking-[0.24em] text-primary-foreground/70">
-                Premium request entry
+        <div className="overflow-hidden rounded-[2.5rem] border border-[#d6dfd0] bg-[#4f6044] text-[#fbf8f1] shadow-sm">
+          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="px-8 py-10 lg:px-12 lg:py-14">
+              <div className="text-xs uppercase tracking-[0.24em] text-[#fbf8f1]/70">
+                {t("home.editorialCtaLabel")}
               </div>
               <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
-                Describe the event. Refine the selection. Continue with clarity.
+                {t("home.editorialCtaTitle")}
               </h2>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-primary-foreground/80">
-                Speisely is built to feel composed from the first click — with a request flow that captures intent, improves discovery, and prepares the ground for better matching later.
+              <p className="mt-5 max-w-2xl text-base leading-8 text-[#fbf8f1]/80">
+                {t("home.editorialCtaSubtitle")}
               </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/request/new"
+                  className="rounded-2xl bg-[#fbf8f1] px-6 py-3 text-sm font-semibold text-[#2f392f] transition hover:bg-[#f3ecde]"
+                >
+                  {t("home.editorialCtaPrimary")}
+                </Link>
+                <Link
+                  href="/caterers"
+                  className="rounded-2xl border border-white/20 px-6 py-3 text-sm font-semibold text-[#fbf8f1] transition hover:bg-white/10"
+                >
+                  {t("home.editorialCtaSecondary")}
+                </Link>
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/request/new"
-                className="rounded-2xl bg-card px-6 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
-              >
-                Start your event request
-              </Link>
-              <Link
-                href="/caterers"
-                className="rounded-2xl border border-primary-foreground/20 px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-white/10"
-              >
-                Browse caterers
-              </Link>
+            <div className="relative min-h-[280px]">
+              <Image
+                src="/images/speisely-private.jpg"
+                alt={t("home.images.ctaAlt")}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(to_left,rgba(79,96,68,0.08),rgba(79,96,68,0.42))]" />
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="mt-8 border-t border-border bg-card">
+      <footer className="mt-8 border-t border-[#d6dfd0] bg-[#fbf8f1]">
         <div className="mx-auto max-w-7xl px-6 py-12">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <div className="text-base font-semibold">Speisely</div>
-              <div className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">
-                Premium catering marketplace for weddings, business events, and private occasions.
+              <div className="text-base font-semibold text-[#2f392f]">Speisely</div>
+              <div className="mt-2 max-w-2xl text-sm leading-7 text-[#667063]">
+                {t("home.editorialFooterTagline")}
               </div>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/caterers"
-                className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+                className="rounded-xl border border-[#d6dfd0] bg-white px-4 py-2.5 text-sm font-medium text-[#2f392f] transition hover:bg-[#f3ecde]"
               >
                 {t("home.nav.browse")}
               </Link>
               <Link
                 href="/request/new"
-                className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                className="rounded-xl bg-[#4f6044] px-4 py-2.5 text-sm font-semibold text-[#fbf8f1] transition hover:opacity-90"
               >
                 {t("home.cta.planEvent")}
               </Link>
               <Link
                 href="/login"
-                className="rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+                className="rounded-xl border border-[#d6dfd0] bg-white px-4 py-2.5 text-sm font-medium text-[#2f392f] transition hover:bg-[#f3ecde]"
               >
                 {t("home.nav.login")}
               </Link>
