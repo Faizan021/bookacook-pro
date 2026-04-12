@@ -14,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BookaCook Pro",
-  description: "The all-in-one catering management platform for admins, caterers and customers.",
+  title: "Speisely",
+  description:
+    "Premium catering marketplace for weddings, corporate events, private parties, and more.",
 };
 
 export default function RootLayout({
