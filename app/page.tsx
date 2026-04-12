@@ -165,7 +165,7 @@ export default function Home() {
     [t],
   );
 
-  const trustBrands = ["Spotify", "Meta", "Airbnb", "EY", "N26", "Bolt", "Notion", "HubSpot"];
+  const trustBrands = [];
 
   const stats = [
     { value: "700+", label: t("metrics.registeredCaterers") },
@@ -393,7 +393,7 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-6 py-6 lg:py-8">
         <div className="rounded-[2rem] border border-black/5 bg-white px-6 py-6 shadow-sm">
           <div className="text-center text-sm font-medium text-neutral-500">
-            Trusted by modern teams planning events, office catering, and premium occasions
+            Built for weddings, office catering, private events, and premium occasions
           </div>
 
           <div className="mt-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm font-semibold text-neutral-400">
