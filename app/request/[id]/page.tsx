@@ -11,6 +11,28 @@ type PageProps = {
   }>;
 };
 
+const EVENT_TYPE_OPTIONS = [
+  { value: "wedding", label: "Wedding" },
+  { value: "birthday", label: "Birthday" },
+  { value: "corporate", label: "Corporate Event" },
+  { value: "summerfest", label: "Summer Festival" },
+  { value: "private_party", label: "Private Party" },
+];
+
+const CATERING_TYPE_OPTIONS = [
+  { value: "buffet", label: "Buffet" },
+  { value: "finger_food", label: "Finger Food" },
+  { value: "plated", label: "Plated Menu" },
+  { value: "live_station", label: "Live Station" },
+  { value: "bbq", label: "BBQ" },
+];
+
+const SERVICE_STYLE_OPTIONS = [
+  { value: "drop_off", label: "Drop-off only" },
+  { value: "staffed", label: "Staffed service" },
+  { value: "full_service", label: "Full service" },
+];
+
 const CUISINE_OPTIONS = [
   "Turkish",
   "Mediterranean",
@@ -106,7 +128,7 @@ function CheckboxGroup({
         {options.map((option) => (
           <label
             key={option}
-            className="flex cursor-pointer items-center gap-2 rounded-xl border border-gray-200 bg-white p-3 text-sm transition-colors hover:border-gray-300 hover:bg-gray-50"
+            className="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 text-sm transition-colors hover:border-gray-300 hover:bg-gray-50"
           >
             <input
               type="checkbox"
@@ -151,11 +173,12 @@ export default async function EventRequestPage({ params }: PageProps) {
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Create Event Request
+              Plan Your Event
             </h1>
             <p className="mt-2 max-w-2xl text-sm text-gray-500">
-              Tell us about your event and preferences. We will use this
-              information to suggest the most relevant caterers for your needs.
+              Share your event details and preferences. Speisely will use this
+              information to help you discover suitable caterers for your
+              occasion.
             </p>
           </div>
 
@@ -168,7 +191,10 @@ export default async function EventRequestPage({ params }: PageProps) {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <form action={saveRequest} className="space-y-6 rounded-2xl border bg-white p-6 shadow-sm">
+          <form
+            action={saveRequest}
+            className="space-y-6 rounded-2xl border bg-white p-6 shadow-sm"
+          >
             <input type="hidden" name="request_id" value={request.id} />
 
             <div>
@@ -176,8 +202,8 @@ export default async function EventRequestPage({ params }: PageProps) {
                 Event Details
               </h2>
               <p className="mt-1 text-sm text-gray-500">
-                Share the basics of your event so we can understand what kind of
-                catering you need.
+                Start with the basics so we can understand your event and
+                recommend relevant catering options.
               </p>
             </div>
 
@@ -192,11 +218,11 @@ export default async function EventRequestPage({ params }: PageProps) {
                   className="w-full rounded-xl border border-gray-300 p-3 text-sm"
                 >
                   <option value="">Select event type</option>
-                  <option value="wedding">Wedding</option>
-                  <option value="birthday">Birthday</option>
-                  <option value="corporate">Corporate Event</option>
-                  <option value="summerfest">Summer Festival</option>
-                  <option value="private_party">Private Party</option>
+                  {EVENT_TYPE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -210,17 +236,17 @@ export default async function EventRequestPage({ params }: PageProps) {
                   className="w-full rounded-xl border border-gray-300 p-3 text-sm"
                 >
                   <option value="">Select catering type</option>
-                  <option value="buffet">Buffet</option>
-                  <option value="finger_food">Finger Food</option>
-                  <option value="plated">Plated Menu</option>
-                  <option value="live_station">Live Station</option>
-                  <option value="bbq">BBQ</option>
+                  {CATERING_TYPE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-900">
-                  Guest Count
+                  Number of Guests
                 </label>
                 <input
                   type="number"
@@ -228,6 +254,7 @@ export default async function EventRequestPage({ params }: PageProps) {
                   defaultValue={request.guest_count || ""}
                   className="w-full rounded-xl border border-gray-300 p-3 text-sm"
                   min="1"
+                  placeholder="e.g. 60"
                 />
               </div>
 
@@ -265,7 +292,7 @@ export default async function EventRequestPage({ params }: PageProps) {
                   name="postal_code"
                   defaultValue={request.postal_code || ""}
                   className="w-full rounded-xl border border-gray-300 p-3 text-sm"
-                  placeholder="e.g. 12681"
+                  placeholder="e.g. 10115"
                 />
               </div>
 
@@ -294,19 +321,21 @@ export default async function EventRequestPage({ params }: PageProps) {
                   className="w-full rounded-xl border border-gray-300 p-3 text-sm"
                 >
                   <option value="">Select service style</option>
-                  <option value="drop_off">Drop-off only</option>
-                  <option value="staffed">Staffed service</option>
-                  <option value="full_service">Full service</option>
+                  {SERVICE_STYLE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
             <div className="border-t border-gray-100 pt-6">
               <h2 className="text-xl font-semibold text-gray-900">
-                Food Preferences
+                Catering Preferences
               </h2>
               <p className="mt-1 text-sm text-gray-500">
-                Choose cuisines, dietary needs, and any additional services you
+                Select cuisines, dietary preferences, and any extra services you
                 would like included.
               </p>
             </div>
@@ -362,7 +391,7 @@ export default async function EventRequestPage({ params }: PageProps) {
             <div className="mt-4">
               <SummaryRow label="Event Type" value={request.event_type} />
               <SummaryRow label="Catering Type" value={request.catering_type} />
-              <SummaryRow label="Guest Count" value={request.guest_count} />
+              <SummaryRow label="Number of Guests" value={request.guest_count} />
               <SummaryRow label="City" value={request.city} />
               <SummaryRow label="Postal Code" value={request.postal_code} />
               <SummaryRow label="Event Date" value={request.event_date} />
@@ -386,11 +415,11 @@ export default async function EventRequestPage({ params }: PageProps) {
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
             <div className="mb-4">
               <h2 className="text-xl font-semibold text-gray-900">
-                Best Matches for Your Event
+                Suggested Caterers
               </h2>
               <p className="mt-1 text-sm text-gray-500">
-                We rank caterers based on your event details, preferences, and
-                package fit.
+                Based on your request details, here are the most relevant
+                caterers we found so far.
               </p>
             </div>
 
@@ -427,14 +456,16 @@ export default async function EventRequestPage({ params }: PageProps) {
 
                       {(caterer?.cuisine_types || []).length > 0 && (
                         <div className="mt-3 flex flex-wrap gap-2">
-                          {(caterer.cuisine_types || []).map((cuisine: string) => (
-                            <span
-                              key={cuisine}
-                              className="rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700"
-                            >
-                              {cuisine}
-                            </span>
-                          ))}
+                          {(caterer.cuisine_types || []).map(
+                            (cuisine: string) => (
+                              <span
+                                key={cuisine}
+                                className="rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700"
+                              >
+                                {cuisine}
+                              </span>
+                            )
+                          )}
                         </div>
                       )}
 
