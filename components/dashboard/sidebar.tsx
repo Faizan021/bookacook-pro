@@ -137,7 +137,7 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
         <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-orange-500 text-sm shadow-sm shadow-orange-200">
           🍽
         </div>
-        <span className="text-base font-bold tracking-tight text-gray-900">BookaCook</span>
+        <span className="text-base font-bold tracking-tight text-gray-900">Speisely</span>
       </div>
 
       <div className="px-4 pb-1 pt-4">
