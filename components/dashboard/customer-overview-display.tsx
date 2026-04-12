@@ -63,31 +63,33 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
       {!hasOrders && (
         <div className="rounded-2xl border border-dashed bg-white p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-gray-900">
-            No bookings yet
+            No event requests yet
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-gray-500">
-            You have not placed any booking requests yet. Start by exploring
-            caterers and sending your first booking inquiry.
+            Tell us about your event and Speisely will help you discover
+            suitable caterers for your occasion.
           </p>
 
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
+              href="/request/new"
+              className="rounded-xl bg-black px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+            >
+              Plan an Event
+            </Link>
+
+            <Link
               href="/caterers"
               className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
             >
-              Find Caterers
+              Browse Caterers
             </Link>
+
             <Link
               href="/customer/bookings"
               className="rounded-xl border px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
             >
-              View My Bookings
-            </Link>
-            <Link
-              href="/request/new"
-              className="rounded-xl bg-black px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
-            >
-              Create Event Request
+              View My Requests
             </Link>
           </div>
         </div>
@@ -108,7 +110,7 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
                     {t("chart.orderHistory")}
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">
-                    No booking history yet.
+                    No request history yet.
                   </p>
                 </div>
                 <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-500">
@@ -119,11 +121,11 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
               <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 text-center">
                 <div className="max-w-sm px-6">
                   <p className="text-sm font-medium text-gray-700">
-                    Your booking activity chart will appear here.
+                    Your event request activity will appear here.
                   </p>
                   <p className="mt-2 text-sm text-gray-500">
-                    Once you create bookings, you will be able to track
-                    activity over time.
+                    Once you start planning events, you will be able to track
+                    your request history over time.
                   </p>
                 </div>
               </div>
@@ -152,10 +154,10 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
 
               <div className="mt-6 rounded-xl border border-dashed border-gray-200 bg-gray-50 p-6 text-center">
                 <p className="text-sm font-medium text-gray-700">
-                  No recent orders yet
+                  No recent requests yet
                 </p>
                 <p className="mt-2 text-sm text-gray-500">
-                  When you place your first booking, it will appear here.
+                  When you create your first event request, it will appear here.
                 </p>
               </div>
             </div>
