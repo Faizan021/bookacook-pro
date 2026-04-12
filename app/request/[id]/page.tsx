@@ -33,6 +33,12 @@ const SERVICE_STYLE_OPTIONS = [
   { value: "full_service", label: "Full service" },
 ];
 
+const PLANNING_STAGE_OPTIONS = [
+  { value: "just_looking", label: "Just looking" },
+  { value: "comparing", label: "Comparing options" },
+  { value: "ready_to_book", label: "Ready to book" },
+];
+
 const CUISINE_OPTIONS = [
   "Turkish",
   "Mediterranean",
