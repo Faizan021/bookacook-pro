@@ -1018,3 +1018,21 @@
   "home.steps.step3Desc": "Talebinizi gözden geçirin, catering firmalarını keşfedin ve yolculuğunuza panel üzerinden devam edin.",
   "home.footerTagline": "Modern etkinlik planlaması için premium catering pazaryeri."
 }
+{
+  "home.aiDemo.requestLabel": "Talebiniz",
+  "home.aiDemo.request": "Berlin’de 80 kişilik düğün, ağırlıklı vejetaryen, zarif, kişi başı yaklaşık 35 €",
+  "home.aiDemo.understands": "Speisely anlıyor",
+  "home.aiDemo.recommended": "Önerilen catering firmaları",
+  "home.aiDemo.tagEvent": "Düğün",
+  "home.aiDemo.tagCity": "Berlin",
+  "home.aiDemo.tagGuests": "80 kişi",
+  "home.aiDemo.tagDiet": "Vejetaryen",
+  "home.aiDemo.tagStyle": "Zarif",
+  "home.aiDemo.tagBudget": "35 € / kişi",
+  "home.aiDemo.caterer1Name": "Berliner Genussküche",
+  "home.aiDemo.caterer1Meta": "Fine Dining · Vejetaryen",
+  "home.aiDemo.caterer2Name": "Grüne Tafel Events",
+  "home.aiDemo.caterer2Meta": "Düğünler · Organik",
+  "home.aiDemo.caterer3Name": "Villa Catering",
+  "home.aiDemo.caterer3Meta": "Premium · Çok mutfaklı"
+}
