@@ -95,6 +95,7 @@ export default function HomePage() {
 
   const handleAiSubmit = () => {
     const query = aiQuery.trim();
+
     if (!query) {
       window.location.href = "/request/new";
       return;
@@ -115,8 +116,11 @@ export default function HomePage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-card text-foreground shadow-sm">
               <LogoMark className="h-5 w-5" />
             </div>
+
             <div className="flex flex-col">
-              <span className="text-base font-semibold tracking-tight">Speisely</span>
+              <span className="text-base font-semibold tracking-tight">
+                Speisely
+              </span>
               <span className="text-xs text-muted-foreground">
                 {t("home.brandTagline")}
               </span>
@@ -130,18 +134,21 @@ export default function HomePage() {
             >
               {t("home.nav.browse")}
             </Link>
+
             <a
               href="#how-it-works"
               className="text-sm text-muted-foreground transition hover:text-foreground"
             >
               {t("home.nav.howItWorks")}
             </a>
+
             <a
               href="#occasions"
               className="text-sm text-muted-foreground transition hover:text-foreground"
             >
               {t("home.occasions.title")}
             </a>
+
             <Link
               href="/login"
               className="text-sm text-muted-foreground transition hover:text-foreground"
@@ -272,6 +279,7 @@ export default function HomePage() {
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
                     {item.step}
                   </div>
+
                   <div>
                     <h3 className="text-base font-semibold">{item.title}</h3>
                     <p className="mt-2 text-sm leading-7 text-muted-foreground">
@@ -310,6 +318,7 @@ export default function HomePage() {
                 <div className="text-[11px] uppercase tracking-[0.22em] text-white/55">
                   {t("home.aiDemo.understands")}
                 </div>
+
                 <div className="mt-4 flex flex-wrap gap-2">
                   {[
                     t("home.aiDemo.tagEvent"),
@@ -353,7 +362,9 @@ export default function HomePage() {
                       key={name}
                       className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.04)] px-4 py-4"
                     >
-                      <div className="text-sm font-semibold text-white">{name}</div>
+                      <div className="text-sm font-semibold text-white">
+                        {name}
+                      </div>
                       <div className="mt-1 text-xs text-white/60">{meta}</div>
                     </div>
                   ))}
@@ -469,7 +480,9 @@ export default function HomePage() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8 text-white">
                   <LogoMark className="h-5 w-5" />
                 </div>
-                <div className="text-base font-semibold text-white">Speisely</div>
+                <div className="text-base font-semibold text-white">
+                  Speisely
+                </div>
               </div>
 
               <div className="mt-3 max-w-2xl text-sm leading-7 text-white/74">
