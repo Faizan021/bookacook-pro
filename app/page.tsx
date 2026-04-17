@@ -9,7 +9,14 @@ import { LogoMark } from "@/components/ui/logo-mark";
 
 function SparklesIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-4 w-4"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
       <path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z" />
       <path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9L19 14z" />
       <path d="M5 15l.9 2.1L8 18l-2.1.9L5 21l-.9-2.1L2 18l2.1-.9L5 15z" />
@@ -19,7 +26,14 @@ function SparklesIcon() {
 
 function ArrowUpRightIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-4 w-4"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
       <path d="M7 17L17 7" />
       <path d="M9 7h8v8" />
     </svg>
@@ -28,7 +42,14 @@ function ArrowUpRightIcon() {
 
 function SearchIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-5 w-5"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
       <circle cx="11" cy="11" r="6.5" />
       <path d="M20 20l-3.5-3.5" />
     </svg>
@@ -102,12 +123,19 @@ export default function Home() {
 
   const handleAiSubmit = () => {
     const params = new URLSearchParams();
-    if (aiQuery.trim()) params.set("q", aiQuery.trim());
-    window.location.href = `/request/new${params.toString() ? `?${params.toString()}` : ""}`;
+    if (aiQuery.trim()) {
+      params.set("q", aiQuery.trim());
+    }
+    window.location.href = `/request/new${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground" dir={isRTL ? "rtl" : "ltr"}>
+    <main
+      className="min-h-screen bg-background text-foreground"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/88 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-3">
@@ -115,34 +143,56 @@ export default function Home() {
               <LogoMark className="h-6 w-6" />
             </div>
             <div>
-              <div className="text-[15px] font-semibold tracking-tight">Speisely</div>
-              <div className="text-sm text-muted-foreground">{t("home.brandTagline")}</div>
+              <div className="text-[15px] font-semibold tracking-tight">
+                Speisely
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {t("home.brandTagline")}
+              </div>
             </div>
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex">
-            <Link href="/caterers" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <Link
+              href="/caterers"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
               {t("home.nav.browse")}
             </Link>
-            <a href="#how-it-works" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <a
+              href="#how-it-works"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
               {t("home.nav.howItWorks")}
             </a>
-            <a href="#occasions" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <a
+              href="#occasions"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
               {t("home.occasions.title")}
             </a>
-            <Link href="/login" className="text-sm text-muted-foreground transition hover:text-foreground">
+            <Link
+              href="/login"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
               {t("home.nav.login")}
             </Link>
           </nav>
 
-          <div className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>
-            <LanguageSwitcher />
+          <div
+            className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
+          >
+            <div className="opacity-80 hover:opacity-100 transition">
+              <LanguageSwitcher />
+            </div>
+
             <Link
               href="/login"
               className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary sm:inline-flex"
             >
               {t("home.cta.dashboard")}
             </Link>
+
             <Link
               href="/request/new"
               className="inline-flex rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-[color:var(--primary-hover)]"
@@ -160,19 +210,19 @@ export default function Home() {
             src="/images/speisely-hero.png"
             alt={t("home.images.heroAlt")}
             fill
-            className="object-cover opacity-35"
             priority
+            className="object-cover opacity-35"
           />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:py-24">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-surface-dark-border bg-white/6 px-4 py-2 text-xs font-medium tracking-[0.16em] text-surface-dark-foreground/85 uppercase">
+            <div className="inline-flex items-center gap-2 rounded-full border border-surface-dark-border bg-white/6 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-surface-dark-foreground/85">
               <SparklesIcon />
               <span>{t("home.badge")}</span>
             </div>
 
-            <h1 className="mt-8 text-balance text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-surface-dark-foreground sm:text-6xl xl:text-7xl">
+            <h1 className="text-balance mt-8 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-surface-dark-foreground sm:text-6xl xl:text-7xl">
               {t("home.editorialHeroTitle")}
             </h1>
 
@@ -185,12 +235,14 @@ export default function Home() {
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <SearchIcon />
                 </div>
+
                 <input
                   value={aiQuery}
                   onChange={(e) => setAiQuery(e.target.value)}
                   placeholder={t("home.editorialSearchPlaceholder")}
                   className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                 />
+
                 <button
                   onClick={handleAiSubmit}
                   className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-[color:var(--primary-hover)]"
@@ -223,15 +275,20 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
+      <section
+        id="how-it-works"
+        className="mx-auto max-w-7xl px-6 py-10 lg:py-14"
+      >
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <div className="premium-card p-8 lg:p-10">
             <div className="text-xs uppercase tracking-[0.24em] text-accent">
               {t("home.principles.label")}
             </div>
-            <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+
+            <h2 className="text-balance mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
               {t("home.principles.title")}
             </h2>
+
             <p className="mt-5 max-w-xl text-base leading-8 text-muted-foreground">
               {t("home.principles.subtitle")}
             </p>
@@ -240,13 +297,18 @@ export default function Home() {
 
             <div className="mt-8 space-y-4">
               {steps.map((item) => (
-                <div key={item.step} className="flex items-start gap-4 rounded-2xl bg-secondary/70 p-4">
+                <div
+                  key={item.step}
+                  className="flex items-start gap-4 rounded-2xl bg-secondary/70 p-4"
+                >
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-sm font-bold text-primary-foreground">
                     {item.step}
                   </div>
                   <div>
                     <h3 className="text-base font-semibold">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-7 text-muted-foreground">{item.description}</p>
+                    <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -257,9 +319,11 @@ export default function Home() {
             <div className="text-xs uppercase tracking-[0.24em] text-accent-gold">
               {t("home.steps.label")}
             </div>
+
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-surface-dark-foreground sm:text-4xl">
               {t("home.editorialStepsTitle")}
             </h2>
+
             <p className="mt-5 max-w-xl text-base leading-8 text-surface-dark-foreground/78">
               {t("home.editorialStepsSubtitle")}
             </p>
@@ -267,25 +331,28 @@ export default function Home() {
             <div className="mt-8 grid gap-4">
               <div className="dark-card p-5">
                 <div className="text-[11px] uppercase tracking-[0.22em] text-surface-dark-muted">
-                  {t("home.heroPanel.label")}
+                  {t("home.aiDemo.requestLabel", "Your request")}
                 </div>
                 <div className="mt-3 text-lg font-semibold text-surface-dark-foreground">
-                  “Hochzeit für 80 Gäste in Berlin, überwiegend vegetarisch, elegant, ca. 35 € p.P.”
+                  {t(
+                    "home.aiDemo.request",
+                    "Wedding for 80 guests in Berlin, mostly vegetarian, elegant, around €35 p.p."
+                  )}
                 </div>
               </div>
 
               <div className="dark-card p-5">
                 <div className="text-[11px] uppercase tracking-[0.22em] text-surface-dark-muted">
-                  Speisely erkennt
+                  {t("home.aiDemo.understands", "Speisely understands")}
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {[
-                    "Hochzeit",
-                    "Berlin",
-                    "80 Gäste",
-                    "Vegetarisch",
-                    "Elegant",
-                    "35 € / Person",
+                    t("home.aiDemo.tagEvent", "Wedding"),
+                    t("home.aiDemo.tagCity", "Berlin"),
+                    t("home.aiDemo.tagGuests", "80 guests"),
+                    t("home.aiDemo.tagDiet", "Vegetarian"),
+                    t("home.aiDemo.tagStyle", "Elegant"),
+                    t("home.aiDemo.tagBudget", "€35 / person"),
                   ].map((tag) => (
                     <span
                       key={tag}
@@ -299,17 +366,34 @@ export default function Home() {
 
               <div className="dark-card p-5">
                 <div className="text-[11px] uppercase tracking-[0.22em] text-surface-dark-muted">
-                  Empfohlene Caterer
+                  {t("home.aiDemo.recommended", "Suggested matches")}
                 </div>
+
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
                   {[
-                    ["Berliner Genussküche", "Fine Dining · Vegetarisch"],
-                    ["Grüne Tafel Events", "Hochzeiten · Bio"],
-                    ["Villa Catering", "Premium · Multiküche"],
+                    [
+                      t("home.aiDemo.caterer1Name", "Berliner Genussküche"),
+                      t("home.aiDemo.caterer1Meta", "Fine Dining · Vegetarian"),
+                    ],
+                    [
+                      t("home.aiDemo.caterer2Name", "Grüne Tafel Events"),
+                      t("home.aiDemo.caterer2Meta", "Weddings · Organic"),
+                    ],
+                    [
+                      t("home.aiDemo.caterer3Name", "Villa Catering"),
+                      t("home.aiDemo.caterer3Meta", "Premium · Multi-cuisine"),
+                    ],
                   ].map(([name, meta]) => (
-                    <div key={name} className="rounded-2xl border border-surface-dark-border bg-surface-dark-card px-4 py-4">
-                      <div className="text-sm font-semibold text-surface-dark-foreground">{name}</div>
-                      <div className="mt-1 text-xs text-surface-dark-muted">{meta}</div>
+                    <div
+                      key={name}
+                      className="rounded-2xl border border-surface-dark-border bg-surface-dark-card px-4 py-4"
+                    >
+                      <div className="text-sm font-semibold text-surface-dark-foreground">
+                        {name}
+                      </div>
+                      <div className="mt-1 text-xs text-surface-dark-muted">
+                        {meta}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -325,7 +409,7 @@ export default function Home() {
             <div className="text-xs uppercase tracking-[0.24em] text-accent">
               {t("home.occasions.label")}
             </div>
-            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="text-balance mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
               {t("home.editorialOccasionsTitle")}
             </h2>
           </div>
@@ -357,7 +441,9 @@ export default function Home() {
 
               <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                 <h3 className="text-xl font-semibold">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/78">{card.description}</p>
+                <p className="mt-3 text-sm leading-7 text-white/78">
+                  {card.description}
+                </p>
                 <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--accent-gold)]">
                   {t("home.occasions.cardCta")}
                   <ArrowUpRightIcon />
@@ -369,15 +455,17 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
-        <div className="overflow-hidden rounded-[2rem] border border-surface-dark-border section-dark">
+        <div className="section-dark overflow-hidden rounded-[2rem] border border-surface-dark-border">
           <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="px-8 py-10 lg:px-12 lg:py-14">
               <div className="text-xs uppercase tracking-[0.24em] text-accent-gold">
                 {t("home.editorialCtaLabel")}
               </div>
-              <h2 className="mt-4 max-w-2xl text-balance text-3xl font-semibold tracking-tight text-surface-dark-foreground sm:text-4xl">
+
+              <h2 className="text-balance mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-surface-dark-foreground sm:text-4xl">
                 {t("home.editorialCtaTitle")}
               </h2>
+
               <p className="mt-5 max-w-2xl text-base leading-8 text-surface-dark-foreground/78">
                 {t("home.editorialCtaSubtitle")}
               </p>
@@ -389,6 +477,7 @@ export default function Home() {
                 >
                   {t("home.editorialCtaPrimary")}
                 </Link>
+
                 <Link
                   href="/caterers"
                   className="rounded-2xl border border-surface-dark-border px-6 py-3 text-sm font-semibold text-surface-dark-foreground transition hover:bg-white/8"
@@ -419,11 +508,15 @@ export default function Home() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8 text-surface-dark-foreground">
                   <LogoMark className="h-5 w-5" />
                 </div>
-                <div className="text-base font-semibold text-surface-dark-foreground">Speisely</div>
+                <div className="text-base font-semibold text-surface-dark-foreground">
+                  Speisely
+                </div>
               </div>
+
               <div className="mt-3 max-w-2xl text-sm leading-7 text-surface-dark-foreground/74">
                 {t("home.editorialFooterTagline")}
               </div>
+
               <div className="mt-4 text-xs uppercase tracking-[0.22em] text-surface-dark-muted">
                 DE / EN / TR / AR
               </div>
@@ -436,12 +529,14 @@ export default function Home() {
               >
                 {t("home.nav.browse")}
               </Link>
+
               <Link
                 href="/request/new"
                 className="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground transition hover:opacity-90"
               >
                 {t("home.cta.planEvent")}
               </Link>
+
               <Link
                 href="/login"
                 className="rounded-xl border border-surface-dark-border bg-white/6 px-4 py-2.5 text-sm font-medium text-surface-dark-foreground transition hover:bg-white/10"
