@@ -46,25 +46,25 @@ export default function Home() {
         title: t("home.occasions.wedding"),
         description: t("home.occasions.weddingDesc"),
         href: "/request/new",
-        image: "/images/speisely-wedding.jpg",
+        image: "/images/speisely-wedding.png",
       },
       {
         title: t("home.occasions.corporate"),
         description: t("home.occasions.corporateDesc"),
         href: "/request/new",
-        image: "/images/speisely-business.jpg",
+        image: "/images/speisely-business.png",
       },
       {
         title: t("home.occasions.private"),
         description: t("home.occasions.privateDesc"),
         href: "/request/new",
-        image: "/images/speisely-private.jpg",
+        image: "/images/speisely-private.png",
       },
       {
         title: t("home.occasions.ramadan"),
         description: t("home.occasions.ramadanDesc"),
         href: "/request/new",
-        image: "/images/speisely-ramadan.jpg",
+        image: "/images/speisely-ramadan.png",
       },
     ],
     [t],
@@ -157,7 +157,7 @@ export default function Home() {
         <div className="hero-overlay absolute inset-0 z-0" />
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/speisely-hero.jpg"
+            src="/images/speisely-hero.png"
             alt={t("home.images.heroAlt")}
             fill
             className="object-cover opacity-35"
@@ -400,7 +400,7 @@ export default function Home() {
 
             <div className="relative min-h-[320px]">
               <Image
-                src="/images/speisely-private.jpg"
+                src="/images/speisely-private.png"
                 alt={t("home.images.ctaAlt")}
                 fill
                 className="object-cover"
