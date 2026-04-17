@@ -528,3 +528,21 @@
   "home.images.businessAlt": "عرض ضيافة لفعاليات الأعمال",
   "home.images.ctaAlt": "عرض ضيافة للمناسبات الخاصة"
 }
+{
+  "home.aiDemo.requestLabel": "طلبك",
+  "home.aiDemo.request": "حفل زفاف لـ 80 ضيفًا في برلين، أغلبه نباتي، بطابع أنيق، حوالي 35 يورو للشخص",
+  "home.aiDemo.understands": "يفهم Speisely",
+  "home.aiDemo.recommended": "مقدمو الطعام المناسبون",
+  "home.aiDemo.tagEvent": "زفاف",
+  "home.aiDemo.tagCity": "برلين",
+  "home.aiDemo.tagGuests": "80 ضيفًا",
+  "home.aiDemo.tagDiet": "نباتي",
+  "home.aiDemo.tagStyle": "أنيق",
+  "home.aiDemo.tagBudget": "35 € / للشخص",
+  "home.aiDemo.caterer1Name": "Berliner Genussküche",
+  "home.aiDemo.caterer1Meta": "مطبخ راقٍ · نباتي",
+  "home.aiDemo.caterer2Name": "Grüne Tafel Events",
+  "home.aiDemo.caterer2Meta": "حفلات زفاف · عضوي",
+  "home.aiDemo.caterer3Name": "Villa Catering",
+  "home.aiDemo.caterer3Meta": "فاخر · مطابخ متعددة"
+}
