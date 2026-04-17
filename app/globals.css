@@ -41,7 +41,21 @@
   --input: #dcd2bb;
   --ring: #4a7a4e;
 
-  --radius: 0.875rem;
+  /* Radius scale */
+  --radius-sm: 0.75rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  /* Shadows */
+  --shadow-soft: 0 8px 24px rgba(22, 22, 16, 0.05);
+  --shadow-card: 0 12px 32px rgba(22, 22, 16, 0.06);
+  --shadow-card-hover: 0 18px 40px rgba(22, 22, 16, 0.1);
+  --shadow-dark: 0 14px 34px rgba(0, 0, 0, 0.22);
+
+  --radius: var(--radius-md);
 }
 
 @theme inline {
@@ -83,8 +97,19 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ============================================================
+   BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   background: var(--background);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -92,9 +117,99 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+::selection {
+  background: rgba(42, 74, 44, 0.16);
+  color: var(--foreground);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   TYPOGRAPHY HELPERS
+   ============================================================ */
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  text-wrap: balance;
+  letter-spacing: -0.03em;
+}
+
+.body-muted {
+  color: var(--muted-foreground);
+  line-height: 1.8;
+}
+
+/* ============================================================
+   LAYOUT HELPERS
+   ============================================================ */
+
+.page-container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.section-shell {
+  padding-block: 2.5rem;
+}
+
+.section-shell-lg {
+  padding-block: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .section-shell {
+    padding-block: 3.5rem;
+  }
+
+  .section-shell-lg {
+    padding-block: 5rem;
+  }
+}
+
+/* ============================================================
+   SURFACES
+   ============================================================ */
 
 .section-dark {
   background-color: var(--surface-dark);
@@ -105,6 +220,43 @@ body {
   background-color: var(--surface-dark-mid);
   color: var(--surface-dark-foreground);
 }
+
+.premium-card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+}
+
+.premium-card-hover {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.premium-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.dark-card {
+  border: 1px solid var(--surface-dark-border);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-dark);
+}
+
+.glass-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  border-radius: var(--radius-2xl);
+}
+
+/* ============================================================
+   DECORATIVE HELPERS
+   ============================================================ */
 
 .divider-accent {
   height: 1px;
@@ -135,18 +287,102 @@ body {
     linear-gradient(to bottom, rgba(25, 43, 26, 0.16), rgba(25, 43, 26, 0.46));
 }
 
-.premium-card {
+/* ============================================================
+   FORM PRIMITIVES
+   ============================================================ */
+
+.field {
+  width: 100%;
+  border: 1px solid var(--input);
+  background: rgba(250, 247, 241, 0.9);
+  color: var(--foreground);
+  border-radius: var(--radius-xl);
+  padding: 0.875rem 1rem;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.field::placeholder {
+  color: var(--muted-foreground);
+}
+
+.field:hover {
+  border-color: var(--border);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 4px rgba(74, 122, 78, 0.12);
+}
+
+.field:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.field-dark {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--surface-dark-foreground);
+  border-radius: var(--radius-xl);
+  padding: 0.875rem 1rem;
+}
+
+.field-dark::placeholder {
+  color: rgba(232, 222, 203, 0.6);
+}
+
+/* ============================================================
+   BUTTON-LIKE HELPERS
+   ============================================================ */
+
+.btn-soft {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xl);
   border: 1px solid var(--border);
   background: var(--card);
-  border-radius: 1.5rem;
+  color: var(--foreground);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 
-.dark-card {
-  border: 1px solid var(--surface-dark-border);
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 1.5rem;
+.btn-soft:hover {
+  background: var(--secondary);
 }
 
-.text-balance {
-  text-wrap: balance;
+.btn-soft:active {
+  transform: translateY(1px);
+}
+
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--surface-dark-foreground);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.btn-dark:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-dark:active {
+  transform: translateY(1px);
 }
