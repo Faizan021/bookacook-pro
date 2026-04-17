@@ -14,9 +14,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Speisely",
+  title: {
+    default: "Speisely",
+    template: "%s | Speisely",
+  },
   description:
-    "Premium catering marketplace for weddings, corporate events, private parties, and more.",
+    "Speisely is a premium AI-assisted catering marketplace in Germany for weddings, corporate events, private gatherings, and curated caterer discovery.",
+  applicationName: "Speisely",
+  keywords: [
+    "catering marketplace Germany",
+    "premium caterers Berlin",
+    "event catering Germany",
+    "wedding catering Berlin",
+    "corporate catering Germany",
+    "AI catering marketplace",
+    "Speisely",
+  ],
 };
 
 export default function RootLayout({
@@ -29,9 +42,12 @@ export default function RootLayout({
       lang="de"
       dir="ltr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
-        <I18nProvider>{children}</I18nProvider>
+      <body className="min-h-screen bg-background text-foreground">
+        <I18nProvider>
+          <div className="flex min-h-screen flex-col">{children}</div>
+        </I18nProvider>
       </body>
     </html>
   );
