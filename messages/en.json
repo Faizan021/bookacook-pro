@@ -527,3 +527,21 @@
   "home.images.businessAlt": "Business catering presentation",
   "home.images.ctaAlt": "Private catering presentation"
 }
+{
+  "home.aiDemo.requestLabel": "Your request",
+  "home.aiDemo.request": "Wedding for 80 guests in Berlin, mostly vegetarian, elegant, around €35 per person",
+  "home.aiDemo.understands": "Speisely understands",
+  "home.aiDemo.recommended": "Suggested matches",
+  "home.aiDemo.tagEvent": "Wedding",
+  "home.aiDemo.tagCity": "Berlin",
+  "home.aiDemo.tagGuests": "80 guests",
+  "home.aiDemo.tagDiet": "Vegetarian",
+  "home.aiDemo.tagStyle": "Elegant",
+  "home.aiDemo.tagBudget": "€35 / person",
+  "home.aiDemo.caterer1Name": "Berliner Genussküche",
+  "home.aiDemo.caterer1Meta": "Fine Dining · Vegetarian",
+  "home.aiDemo.caterer2Name": "Grüne Tafel Events",
+  "home.aiDemo.caterer2Meta": "Weddings · Organic",
+  "home.aiDemo.caterer3Name": "Villa Catering",
+  "home.aiDemo.caterer3Meta": "Premium · Multi-cuisine"
+}
