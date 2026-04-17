@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowUpRight, Search, Sparkles } from "lucide-react";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useIsRTL, useT } from "@/lib/i18n/context";
 import { LogoMark } from "@/components/ui/logo-mark";
@@ -22,15 +21,86 @@ type StepItem = {
 };
 
 function SparklesIcon() {
-  return <Sparkles className="h-3.5 w-3.5" />;
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-3.5 w-3.5"
+      aria-hidden="true"
+    >
+      <path
+        d="M12 3l1.2 3.3L16.5 7.5l-3.3 1.2L12 12l-1.2-3.3L7.5 7.5l3.3-1.2L12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M18.5 14l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6 14.5l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9.9-2.2Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 function SearchIcon() {
-  return <Search className="h-4 w-4" />;
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
+      <circle
+        cx="11"
+        cy="11"
+        r="6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M20 20l-4.2-4.2"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
 }
 
 function ArrowUpRightIcon() {
-  return <ArrowUpRight className="h-4 w-4" />;
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
+      <path
+        d="M7 17L17 7"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      <path
+        d="M9 7h8v8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 export default function HomePage() {
