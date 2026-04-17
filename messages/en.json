@@ -2,7 +2,7 @@
   "nav.overview": "Overview",
   "nav.bookings": "Bookings",
   "nav.caterers": "Caterers",
-  "nav.packages": "Packages",hom
+  "nav.packages": "Packages", 
   "nav.availability": "Availability",
   "nav.payments": "Payments",
   "nav.myBookings": "My Bookings",
@@ -541,4 +541,4 @@
 "home.aiDemo.caterer2Name": "Grüne Tafel Events",
 "home.aiDemo.caterer2Meta": "Weddings · Organic",
 "home.aiDemo.caterer3Name": "Villa Catering",
-"home.aiDemo.caterer3Meta": "Premium · Multi-cuisine"
+}
