@@ -1,32 +1,47 @@
 @import "tailwindcss";
 
+/* ============================================================
+   SPEISELY — DESIGN TOKEN SYSTEM
+   Premium AI catering marketplace
+   ============================================================ */
+
 :root {
-  --background: #f6f1e8;
-  --foreground: #1f1c17;
+  /* Light surfaces */
+  --background: #f3ede2;
+  --foreground: #161610;
 
-  --card: #fffdf9;
-  --card-foreground: #1f1c17;
+  --card: #faf7f1;
+  --card-foreground: #161610;
 
-  --popover: #fffdf9;
-  --popover-foreground: #1f1c17;
+  --popover: #faf7f1;
+  --popover-foreground: #161610;
 
-  --primary: #55624a;
-  --primary-foreground: #fffdf9;
+  --primary: #2a4a2c;
+  --primary-foreground: #f3ede2;
+  --primary-hover: #35603a;
 
-  --secondary: #f1e9dd;
-  --secondary-foreground: #1f1c17;
+  --secondary: #e8decb;
+  --secondary-foreground: #161610;
 
-  --muted: #f3ece3;
-  --muted-foreground: #6f675c;
+  --muted: #ede5d6;
+  --muted-foreground: #564e42;
 
-  --accent: #c6a27a;
-  --accent-foreground: #1f1c17;
+  --accent: #b07b49;
+  --accent-foreground: #faf7f1;
+  --accent-gold: #c59b47;
 
-  --border: #e7ded2;
-  --input: #e7ded2;
-  --ring: #8a9a7b;
+  --surface-dark: #192b1a;
+  --surface-dark-mid: #213524;
+  --surface-dark-card: #2c4430;
+  --surface-dark-foreground: #e8decb;
+  --surface-dark-muted: #8ea086;
+  --surface-dark-border: #334d38;
 
-  --radius: 1rem;
+  --border: #d4c8b0;
+  --input: #dcd2bb;
+  --ring: #4a7a4e;
+
+  --radius: 0.875rem;
 }
 
 @theme inline {
@@ -41,6 +56,7 @@
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
 
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -50,17 +66,87 @@
 
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-gold: var(--accent-gold);
 
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
 
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-dark-mid: var(--surface-dark-mid);
+  --color-surface-dark-card: var(--surface-dark-card);
+  --color-surface-dark-foreground: var(--surface-dark-foreground);
+  --color-surface-dark-muted: var(--surface-dark-muted);
+  --color-surface-dark-border: var(--surface-dark-border);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  background: var(--background);
+}
+
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.section-dark {
+  background-color: var(--surface-dark);
+  color: var(--surface-dark-foreground);
+}
+
+.section-dark-mid {
+  background-color: var(--surface-dark-mid);
+  color: var(--surface-dark-foreground);
+}
+
+.divider-accent {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent) 30%,
+    var(--accent-gold) 50%,
+    var(--accent) 70%,
+    transparent
+  );
+  opacity: 0.55;
+}
+
+.grain-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-overlay {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(197, 155, 71, 0.14), transparent 26%),
+    radial-gradient(circle at 85% 15%, rgba(176, 123, 73, 0.12), transparent 22%),
+    linear-gradient(to bottom, rgba(25, 43, 26, 0.16), rgba(25, 43, 26, 0.46));
+}
+
+.premium-card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 1.5rem;
+}
+
+.dark-card {
+  border: 1px solid var(--surface-dark-border);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 1.5rem;
+}
+
+.text-balance {
+  text-wrap: balance;
 }
