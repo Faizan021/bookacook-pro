@@ -521,4 +521,4 @@ export default function HomePage() {
       </footer>
     </main>
   );
-}fix error and write full code you moron
+}
