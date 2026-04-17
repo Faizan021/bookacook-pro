@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { LogoMark } from "@/components/ui/logo-mark";
+import { ArrowUpRight, Search, Sparkles } from "lucide-react";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useIsRTL, useT } from "@/lib/i18n/context";
 import { LogoMark } from "@/components/ui/logo-mark";
@@ -521,4 +521,4 @@ export default function HomePage() {
       </footer>
     </main>
   );
-}
+}fix error and write full code you moron
