@@ -1,21 +1,24 @@
+{
   "home.brandTagline": "Premium-Catering, intelligent vermittelt.",
   "home.nav.browse": "Caterer entdecken",
   "home.nav.howItWorks": "So funktioniert es",
   "home.nav.whySpeisely": "Warum Speisely",
-  "home.nav.login": "Login",
+  "home.nav.login": "Anmelden",
   "home.badge": "KI-gestützte Catering-Entdeckung",
   "home.heroTitle": "Premium Catering für Hochzeiten, Business-Events und private Anlässe.",
-  "home.heroSubtitle": "Speisely hilft Ihnen dabei, Caterer zu entdecken, Ihr Event zu planen und durch einen klareren, hochwertigeren Buchungsprozess weiterzugehen.",
+  "home.heroSubtitle": "Speisely hilft Ihnen dabei, Caterer zu entdecken, Ihr Event zu planen und in einen klareren, hochwertigeren Buchungsprozess überzugehen.",
   "home.cta.dashboard": "Dashboard",
   "home.cta.planEvent": "Event planen",
   "home.cta.startRequest": "Event-Anfrage starten",
   "home.cta.browse": "Caterer entdecken",
+
   "home.chips.wedding": "Elegante Hochzeit in Berlin",
   "home.chips.corporate": "Office Lunch für 40 Personen",
   "home.chips.private": "Privates Dinner mit Servicepersonal",
   "home.chips.ramadan": "Iftar für 120 Gäste",
   "home.chips.bbq": "BBQ & Grill",
   "home.chips.office": "Office Catering",
+
   "home.guided.label": "Geführte Event-Planung",
   "home.guided.title": "Erzählen Sie uns von Ihrem Event",
   "home.guided.subtitle": "Starten Sie mit Eventtyp, Gästezahl, Stadt und Budget. Gehen Sie dann in einen strukturierten Anfrageprozess über und entdecken Sie passende Caterer.",
@@ -28,17 +31,20 @@
   "home.guided.preferences": "Wünsche",
   "home.guided.preferencesValue": "Küche, Ernährungswünsche, Serviceart, Zusatzleistungen",
   "home.guided.cta": "KI-Event-Brief starten",
+
   "home.why.label": "Warum Speisely",
   "home.why.title": "Ein stärkeres Produkterlebnis als nur eine einfache Caterer-Liste.",
-  "home.why.subtitle": "Speisely soll sich vom ersten Klick an hochwertig, geführt und nützlich anfühlen. Die Website führt in die Marke ein, und der Produktfluss hilft Nutzern natürlich in die Eventplanung weiterzugehen.",
+  "home.why.subtitle": "Speisely soll sich vom ersten Klick an hochwertig, geführt und nützlich anfühlen. Die Website führt in die Marke ein, und der Produktfluss hilft Nutzerinnen und Nutzern dabei, natürlich in die Eventplanung überzugehen.",
+
   "home.highlight1.title": "Kuratiertes Caterer-Angebot",
   "home.highlight1.desc": "Entdecken Sie ausgewählte Anbieter für Hochzeiten, Firmenevents, Familienfeiern und hochwertige private Anlässe.",
-  "home.highlight2.title": "Smarte Event-Zuordnung",
+  "home.highlight2.title": "Intelligentes Event-Matching",
   "home.highlight2.desc": "Beschreiben Sie Ihr Event und gehen Sie in einen geführten Anfrageprozess über, der Ihnen hilft, passende Caterer zu entdecken.",
   "home.highlight3.title": "Flexibel für jeden Anlass",
   "home.highlight3.desc": "Von Buffet und Fingerfood bis hin zu gesetzten Menüs und Full-Service-Personal unterstützt Speisely verschiedene Eventformate.",
   "home.highlight4.title": "Ein klarer Weg",
   "home.highlight4.desc": "Starten Sie auf der Website, entdecken Sie Caterer, senden Sie Ihre Anfrage und machen Sie nahtlos in Ihrem Dashboard weiter.",
+
   "home.occasions.label": "Anlässe",
   "home.occasions.title": "Catering nach Anlass entdecken",
   "home.occasions.viewAll": "Alle Caterer ansehen",
@@ -51,6 +57,7 @@
   "home.occasions.privateDesc": "Flexible Menüs für Geburtstage, Jubiläen, Familienessen und Feiern.",
   "home.occasions.ramadan": "Ramadan / Iftar",
   "home.occasions.ramadanDesc": "Passende Catering-Optionen für Gemeinschaftsessen, Familienabende und besondere Anlässe.",
+
   "home.steps.label": "So funktioniert es",
   "home.steps.title": "Ein klarerer Weg von der Entdeckung zur Eventplanung",
   "home.steps.subtitle": "Statt Nutzer in einen verwirrenden Marktplatz zu werfen, kann Speisely sie gezielt zum richtigen nächsten Schritt führen.",
@@ -60,14 +67,18 @@
   "home.steps.step2Desc": "Durchsuchen Sie Profile und gehen Sie in einen Anfrageprozess über, der Ihnen hilft, relevante Optionen zu finden.",
   "home.steps.step3Title": "Vergleichen und fortfahren",
   "home.steps.step3Desc": "Prüfen Sie Ihre Anfrage, entdecken Sie Caterer und setzen Sie Ihre Reise im Dashboard fort.",
+
   "home.footerTagline": "Premium Catering-Marktplatz für moderne Eventplanung.",
+
   "home.editorialHeroTitle": "Beschreiben Sie Ihr Event. Finden Sie die passenden Caterer.",
   "home.editorialHeroSubtitle": "Speisely verwandelt Ihre Event-Idee in ein klareres Catering-Briefing — und hilft Ihnen dann, Caterer zu entdecken, die zu Stil, Budget, Gästezahl und Ernährungswünschen passen.",
   "home.editorialSearchPlaceholder": "Hochzeit für 80 Gäste in Berlin, überwiegend vegetarisch, elegant, ca. 35 € pro Person",
+
   "home.heroBenefit1": "Natürliche Spracheingabe für Events",
   "home.heroBenefit2": "Intelligentere Zuordnung",
   "home.heroBenefit3": "Premium-Catering-Entdeckung",
-  "home.heroPanel.label": "Kuratiere Anfrage",
+
+  "home.heroPanel.label": "Kuratiertes Briefing",
   "home.heroPanel.title": "Ein klarerer Start für Event-Catering",
   "home.heroPanel.badge": "Premium",
   "home.heroPanel.occasionDesc": "Anspruchsvoller Service, saisonale Menüauswahl und hochwertige Präsentation.",
@@ -78,6 +89,7 @@
   "home.heroPanel.tag1": "Hochzeiten",
   "home.heroPanel.tag2": "Business Events",
   "home.heroPanel.tag3": "Private Anlässe",
+
   "home.principles.label": "So funktioniert es",
   "home.principles.title": "Von der Event-Idee zu einer besseren Auswahl",
   "home.principles.subtitle": "Statt Sie in ein langes Verzeichnis zu schicken, hilft Speisely dabei, Ihre Anfrage zu strukturieren und Sie zu relevanteren Caterern zu führen.",
@@ -87,25 +99,31 @@
   "home.principles.item2Desc": "Verwandeln Sie Eventdetails in eine Anfrage, mit der Caterer wirklich gut arbeiten können.",
   "home.principles.item3Title": "Klare Weiterführung",
   "home.principles.item3Desc": "Wechseln Sie natürlich von der Website in Dashboard und Buchungsprozess.",
+
   "home.languagesLabel": "Mehrsprachiger Vorteil",
   "home.languagesTitle": "Deutsch zuerst. Plus Englisch, Türkisch und Arabisch.",
   "home.languagesSubtitle": "Speisely kann Kundinnen und Kunden in mehreren Sprachen abholen — ein echter Vorteil für diverse Events, internationale Teams und moderne Gastgeber.",
+
   "home.editorialOccasionsTitle": "Mit dem Anlass starten, dann mit Speisely verfeinern",
   "home.editorialStepsTitle": "So versteht Speisely Ihr Event",
   "home.editorialStepsSubtitle": "Aus einer einfachen Anfrage wird ein strukturierteres Catering-Briefing — für schnellere, klarere und relevantere Entdeckung.",
+
   "home.editorialCtaLabel": "Planung starten",
   "home.editorialCtaTitle": "Starten Sie mit Ihrem Event, nicht mit einem Verzeichnis.",
   "home.editorialCtaSubtitle": "Sagen Sie Speisely, was Sie planen, und machen Sie mit einem intelligenteren Catering-Anfragefluss weiter.",
   "home.editorialCtaPrimary": "Event beschreiben",
   "home.editorialCtaSecondary": "Caterer entdecken",
-  "home.editorialFooterTagline": "Speisely verbindet Premium-Caterer-Entdeckung mit KI-gestützter Event-Aufnahme für moderne Events.",
+
+  "home.editorialFooterTagline": "Speisely verbindet Premium-Caterer-Entdeckung mit KI-gestützter Event-Anfrage für moderne Events.",
+
   "home.images.heroAlt": "Premium Catering Präsentation",
   "home.images.businessAlt": "Business Catering Präsentation",
   "home.images.ctaAlt": "Private Catering Präsentation",
+
   "home.aiDemo.requestLabel": "Ihre Anfrage",
   "home.aiDemo.request": "Hochzeit für 80 Gäste in Berlin, überwiegend vegetarisch, elegant, ca. 35 € pro Person",
   "home.aiDemo.understands": "Speisely versteht",
-  "home.aiDemo.recommended": "Vorgeschlagene Matches",
+  "home.aiDemo.recommended": "Empfohlene Caterer",
   "home.aiDemo.tagEvent": "Hochzeit",
   "home.aiDemo.tagCity": "Berlin",
   "home.aiDemo.tagGuests": "80 Gäste",
@@ -118,3 +136,4 @@
   "home.aiDemo.caterer2Meta": "Hochzeiten · Bio",
   "home.aiDemo.caterer3Name": "Villa Catering",
   "home.aiDemo.caterer3Meta": "Premium · Multiküche"
+}
