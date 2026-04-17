@@ -2,7 +2,7 @@ type LogoMarkProps = {
   className?: string;
 };
 
-export function LogoMark({ className = "h-9 w-9" }: LogoMarkProps) {
+export function LogoMark({ className = "h-10 w-10" }: LogoMarkProps) {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -10,60 +10,46 @@ export function LogoMark({ className = "h-9 w-9" }: LogoMarkProps) {
       className={className}
       aria-hidden="true"
     >
-      {/* Plate */}
       <circle
         cx="32"
-        cy="33"
-        r="13.5"
+        cy="32"
+        r="13"
         stroke="currentColor"
-        strokeWidth="2.4"
+        strokeWidth="2.6"
       />
       <circle
         cx="32"
-        cy="33"
-        r="9"
+        cy="32"
+        r="8.5"
         stroke="currentColor"
-        strokeWidth="1.8"
-        opacity="0.5"
+        strokeWidth="1.7"
+        opacity="0.45"
       />
-
-      {/* Spoon */}
       <ellipse
-        cx="18"
+        cx="19"
         cy="24"
-        rx="2.8"
-        ry="4.2"
+        rx="2.6"
+        ry="3.8"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="2.1"
       />
       <path
-        d="M18 28v16"
+        d="M19 28v14"
         stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-
-      {/* Knife */}
-      <path
-        d="M46 20c2.8 4.6 2.8 9.6 0 14"
-        stroke="currentColor"
-        strokeWidth="2.2"
+        strokeWidth="2.1"
         strokeLinecap="round"
       />
       <path
-        d="M46 34v10"
+        d="M45 21c2.3 4.2 2.3 8.6 0 12.8"
         stroke="currentColor"
-        strokeWidth="2.2"
+        strokeWidth="2.1"
         strokeLinecap="round"
       />
-
-      {/* Small premium top arc */}
       <path
-        d="M22 18c3.2-2.6 6.4-3.8 10-3.8s6.8 1.2 10 3.8"
+        d="M45 33.8V42"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="2.1"
         strokeLinecap="round"
-        opacity="0.7"
       />
     </svg>
   );
