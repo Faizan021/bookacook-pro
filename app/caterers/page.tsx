@@ -1,13 +1,32 @@
+"use client";
+
 import Link from "next/link";
 
-const sampleCaterers = [
+type CatererCard = {
+  id: string;
+  name: string;
+  city: string;
+  cuisine: string;
+  description: string;
+  tags: string[];
+  startingPrice: string;
+  guestRange: string;
+  verified?: boolean;
+  featured?: boolean;
+};
+
+const sampleCaterers: CatererCard[] = [
   {
     id: "berlin-bbq-house",
     name: "Berlin BBQ House",
     city: "Berlin",
     cuisine: "BBQ & Grill",
     description:
-      "Authentic BBQ catering for private parties, office lunches, and outdoor events.",
+      "Authentic live grill catering for private parties, summer celebrations, and relaxed premium outdoor events.",
+    tags: ["BBQ", "Outdoor Events", "Private Parties"],
+    startingPrice: "from €29 p.p.",
+    guestRange: "40–180 guests",
+    verified: true,
   },
   {
     id: "royal-events-catering",
@@ -15,7 +34,12 @@ const sampleCaterers = [
     city: "Hamburg",
     cuisine: "Wedding & Fine Dining",
     description:
-      "Elegant catering for weddings, receptions, and premium private events.",
+      "Elegant full-service catering for weddings, formal receptions, and refined private celebrations.",
+    tags: ["Weddings", "Fine Dining", "Full Service"],
+    startingPrice: "from €49 p.p.",
+    guestRange: "50–250 guests",
+    verified: true,
+    featured: true,
   },
   {
     id: "freshbite-catering",
@@ -23,64 +47,234 @@ const sampleCaterers = [
     city: "Munich",
     cuisine: "Corporate & Healthy Menus",
     description:
-      "Modern menus for offices, business lunches, and team events.",
+      "Modern business catering with fresh seasonal menus for office lunches, team events, and brand activations.",
+    tags: ["Corporate", "Healthy Menus", "Business Events"],
+    startingPrice: "from €24 p.p.",
+    guestRange: "20–140 guests",
   },
+  {
+    id: "atelier-table-berlin",
+    name: "Atelier Table Berlin",
+    city: "Berlin",
+    cuisine: "Modern European",
+    description:
+      "Curated premium menus for intimate dinners, private celebrations, and design-led event concepts.",
+    tags: ["Private Dining", "Modern European", "Curated Menus"],
+    startingPrice: "from €58 p.p.",
+    guestRange: "15–80 guests",
+    featured: true,
+  },
+  {
+    id: "green-plate-events",
+    name: "Green Plate Events",
+    city: "Cologne",
+    cuisine: "Vegetarian & Vegan",
+    description:
+      "Plant-forward catering concepts with elegant presentation for conscious weddings and premium corporate events.",
+    tags: ["Vegetarian", "Vegan", "Sustainable"],
+    startingPrice: "from €31 p.p.",
+    guestRange: "30–160 guests",
+    verified: true,
+  },
+  {
+    id: "levant-feast-studio",
+    name: "Levant Feast Studio",
+    city: "Frankfurt",
+    cuisine: "Middle Eastern",
+    description:
+      "Warm, abundant sharing menus and stylish event catering for family gatherings, receptions, and cultural celebrations.",
+    tags: ["Sharing Menus", "Middle Eastern", "Celebrations"],
+    startingPrice: "from €34 p.p.",
+    guestRange: "30–200 guests",
+  },
+];
+
+const quickFilters = [
+  "Berlin",
+  "Corporate",
+  "Wedding",
+  "Vegetarian",
+  "Fine Dining",
+  "Private Party",
 ];
 
 export default function CaterersPage() {
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="rounded-2xl border bg-white p-8 shadow-sm">
-          <h1 className="text-2xl font-bold text-gray-900">Find Caterers</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Browse catering providers and discover options for your next event.
-          </p>
+    <main className="min-h-screen bg-background text-foreground">
+      <section className="page-container section-shell-lg">
+        <div className="premium-card overflow-hidden p-8 lg:p-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <div className="eyebrow text-primary">Marketplace</div>
+              <h1 className="section-title mt-3 text-3xl font-semibold sm:text-4xl">
+                Browse premium caterers for weddings, corporate events, and private gatherings
+              </h1>
+              <p className="body-muted mt-4 max-w-2xl text-base">
+                Discover curated caterers across Germany, compare styles and specialties, and continue
+                into inquiry or booking. Prefer guidance? Start with an AI-assisted event brief.
+              </p>
+            </div>
 
-          <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {sampleCaterers.map((caterer) => (
-              <div
-                key={caterer.id}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
+            <Link
+              href="/request/new"
+              className="inline-flex items-center justify-center rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+            >
+              Describe your event
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <div className="field flex items-center text-sm text-muted-foreground">
+              City
+            </div>
+            <div className="field flex items-center text-sm text-muted-foreground">
+              Event type
+            </div>
+            <div className="field flex items-center text-sm text-muted-foreground">
+              Cuisine
+            </div>
+            <div className="field flex items-center text-sm text-muted-foreground">
+              Dietary preferences
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {quickFilters.map((item) => (
+              <button
+                key={item}
+                type="button"
+                className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-secondary"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900">
-                      {caterer.name}
-                    </h2>
-                    <p className="mt-1 text-sm text-gray-500">
-                      {caterer.city} · {caterer.cuisine}
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-medium text-orange-600">
-                    Caterer
-                  </span>
-                </div>
-
-                <p className="mt-4 text-sm leading-6 text-gray-600">
-                  {caterer.description}
-                </p>
-
-                <div className="mt-6 flex gap-3">
-                  <Link
-                    href="/customer/bookings"
-                    className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
-                  >
-                    Request Booking
-                  </Link>
-
-                  <Link
-                    href={`/caterers/${caterer.id}`}
-                    className="rounded-xl border px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
-                  >
-                    View Profile
-                  </Link>
-                </div>
-              </div>
+                {item}
+              </button>
             ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      <section className="page-container section-shell">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <div className="eyebrow text-primary">Curated Selection</div>
+            <h2 className="section-title mt-3 text-2xl font-semibold sm:text-3xl">
+              Caterers to explore
+            </h2>
+          </div>
+
+          <div className="text-sm text-muted-foreground">
+            {sampleCaterers.length} caterers
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {sampleCaterers.map((caterer) => (
+            <article
+              key={caterer.id}
+              className="premium-card premium-card-hover p-6"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-xl font-semibold tracking-tight">
+                    {caterer.name}
+                  </h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {caterer.city} · {caterer.cuisine}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {caterer.featured ? (
+                    <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
+                      Featured
+                    </span>
+                  ) : null}
+
+                  {caterer.verified ? (
+                    <span className="rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-foreground">
+                      Verified
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm leading-7 text-muted-foreground">
+                {caterer.description}
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {caterer.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-border bg-background px-3 py-1 text-xs text-muted-foreground"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-6 grid grid-cols-2 gap-3 rounded-2xl bg-secondary/55 p-4">
+                <div>
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Starting price
+                  </div>
+                  <div className="mt-1 text-sm font-semibold">
+                    {caterer.startingPrice}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    Event size
+                  </div>
+                  <div className="mt-1 text-sm font-semibold">
+                    {caterer.guestRange}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href={`/caterers/${caterer.id}`}
+                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                >
+                  View profile
+                </Link>
+
+                <Link
+                  href={`/request/new?caterer=${caterer.id}`}
+                  className="btn-soft text-sm"
+                >
+                  Plan with this caterer
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="page-container section-shell">
+        <div className="dark-card overflow-hidden px-8 py-10">
+          <div className="max-w-2xl">
+            <div className="eyebrow text-accent-gold">Need a faster match?</div>
+            <h2 className="section-title mt-3 text-3xl font-semibold text-surface-dark-foreground">
+              Describe your event and let Speisely guide the brief
+            </h2>
+            <p className="mt-4 max-w-xl text-sm leading-7 text-surface-dark-muted">
+              Tell us your city, guest count, style, budget, and dietary needs. Speisely turns that
+              into a structured request and helps you discover suitable caterers faster.
+            </p>
+
+            <div className="mt-6">
+              <Link
+                href="/request/new"
+                className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
+              >
+                Start guided request
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
