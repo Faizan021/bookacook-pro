@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import { ArrowUpRight, Search, Sparkles } from "lucide-react";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useIsRTL, useT } from "@/lib/i18n/context";
-import { LogoMark } from "@/components/logo-mark";
+import { LogoMark } from "@/components/ui/logo-mark";
 
 type OccasionCard = {
   title: string;
