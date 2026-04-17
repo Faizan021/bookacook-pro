@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useIsRTL, useT } from "@/lib/i18n/context";
 import { LogoMark } from "@/components/ui/logo-mark";
@@ -20,14 +21,16 @@ type StepItem = {
   description: string;
 };
 
+type FeaturedCard = {
+  title: string;
+  meta: string;
+  description: string;
+  href: string;
+};
+
 function SparklesIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className="h-3.5 w-3.5"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" aria-hidden="true">
       <path
         d="M12 3l1.2 3.3L16.5 7.5l-3.3 1.2L12 12l-1.2-3.3L7.5 7.5l3.3-1.2L12 3Z"
         stroke="currentColor"
@@ -55,43 +58,17 @@ function SparklesIcon() {
 
 function SearchIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <circle
-        cx="11"
-        cy="11"
-        r="6"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M20 20l-4.2-4.2"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
+      <circle cx="11" cy="11" r="6" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M20 20l-4.2-4.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }
 
 function ArrowUpRightIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className="h-4 w-4"
-      aria-hidden="true"
-    >
-      <path
-        d="M7 17L17 7"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
+      <path d="M7 17L17 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
       <path
         d="M9 7h8v8"
         stroke="currentColor"
@@ -106,6 +83,7 @@ function ArrowUpRightIcon() {
 export default function HomePage() {
   const t = useT();
   const isRTL = useIsRTL();
+  const router = useRouter();
   const [aiQuery, setAiQuery] = useState("");
 
   const prompts = useMemo(
@@ -140,26 +118,47 @@ export default function HomePage() {
     {
       title: t("home.occasions.wedding"),
       description: t("home.occasions.weddingDesc"),
-      href: "/request/new",
+      href: "/request/new?occasion=wedding",
       image: "/images/speisely-wedding.png",
     },
     {
       title: t("home.occasions.corporate"),
       description: t("home.occasions.corporateDesc"),
-      href: "/request/new",
+      href: "/caterers?occasion=corporate",
       image: "/images/speisely-business.png",
     },
     {
       title: t("home.occasions.private"),
       description: t("home.occasions.privateDesc"),
-      href: "/request/new",
+      href: "/caterers?occasion=private",
       image: "/images/speisely-private.png",
     },
     {
       title: t("home.occasions.ramadan"),
       description: t("home.occasions.ramadanDesc"),
-      href: "/request/new",
+      href: "/request/new?occasion=ramadan",
       image: "/images/speisely-ramadan.png",
+    },
+  ];
+
+  const featured: FeaturedCard[] = [
+    {
+      title: t("home.featured.card1Title"),
+      meta: t("home.featured.card1Meta"),
+      description: t("home.featured.card1Desc"),
+      href: "/caterers",
+    },
+    {
+      title: t("home.featured.card2Title"),
+      meta: t("home.featured.card2Meta"),
+      description: t("home.featured.card2Desc"),
+      href: "/caterers",
+    },
+    {
+      title: t("home.featured.card3Title"),
+      meta: t("home.featured.card3Meta"),
+      description: t("home.featured.card3Desc"),
+      href: "/caterers",
     },
   ];
 
@@ -167,12 +166,11 @@ export default function HomePage() {
     const query = aiQuery.trim();
 
     if (!query) {
-      window.location.href = "/request/new";
+      router.push("/request/new");
       return;
     }
 
-    const encoded = encodeURIComponent(query);
-    window.location.href = `/request/new?q=${encoded}`;
+    router.push(`/request/new?q=${encodeURIComponent(query)}`);
   };
 
   return (
@@ -188,12 +186,8 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col">
-              <span className="text-base font-semibold tracking-tight">
-                Speisely
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {t("home.brandTagline")}
-              </span>
+              <span className="text-base font-semibold tracking-tight">Speisely</span>
+              <span className="text-xs text-muted-foreground">{t("home.brandTagline")}</span>
             </div>
           </Link>
 
@@ -212,12 +206,12 @@ export default function HomePage() {
               {t("home.nav.howItWorks")}
             </a>
 
-            <a
-              href="#occasions"
+            <Link
+              href="/for-caterers"
               className="text-sm text-muted-foreground transition hover:text-foreground"
             >
-              {t("home.occasions.title")}
-            </a>
+              {t("home.nav.forCaterers")}
+            </Link>
 
             <Link
               href="/login"
@@ -227,9 +221,7 @@ export default function HomePage() {
             </Link>
           </nav>
 
-          <div
-            className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
-          >
+          <div className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>
             <div className="opacity-80 transition hover:opacity-100">
               <LanguageSwitcher />
             </div>
@@ -278,6 +270,21 @@ export default function HomePage() {
               {t("home.editorialHeroSubtitle")}
             </p>
 
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                href="/caterers"
+                className="rounded-2xl border border-white/12 bg-white/8 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/12"
+              >
+                {t("home.heroBrowseCta")}
+              </Link>
+              <Link
+                href="/request/new"
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
+              >
+                {t("home.heroPlanCta")}
+              </Link>
+            </div>
+
             <div className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-white/10 bg-white/8 p-3 backdrop-blur-xl">
               <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
                 <div className="flex items-center gap-3 text-muted-foreground">
@@ -320,6 +327,55 @@ export default function HomePage() {
               <span>{t("home.heroBenefit3")}</span>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="border-y border-border/60 bg-card/40">
+        <div className="mx-auto grid max-w-7xl gap-6 px-6 py-5 text-sm text-muted-foreground md:grid-cols-3">
+          <div className="font-medium">{t("home.trust.curated")}</div>
+          <div className="font-medium">{t("home.trust.verified")}</div>
+          <div className="font-medium">{t("home.trust.transparent")}</div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <div className="text-xs uppercase tracking-[0.24em] text-primary">
+              {t("home.featured.label")}
+            </div>
+            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+              {t("home.featured.title")}
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-muted-foreground">
+              {t("home.featured.subtitle")}
+            </p>
+          </div>
+
+          <Link
+            href="/caterers"
+            className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary md:inline-flex"
+          >
+            {t("home.featured.viewAll")}
+          </Link>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+          {featured.map((item) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className="rounded-[1.5rem] border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(22,22,16,0.08)]"
+            >
+              <div className="text-xs uppercase tracking-[0.18em] text-primary">{item.meta}</div>
+              <h3 className="mt-3 text-xl font-semibold tracking-tight">{item.title}</h3>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.description}</p>
+              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                {t("home.featured.cardCta")}
+                <ArrowUpRightIcon />
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -415,26 +471,15 @@ export default function HomePage() {
 
                 <div className="mt-4 grid gap-3 md:grid-cols-3">
                   {[
-                    [
-                      t("home.aiDemo.caterer1Name"),
-                      t("home.aiDemo.caterer1Meta"),
-                    ],
-                    [
-                      t("home.aiDemo.caterer2Name"),
-                      t("home.aiDemo.caterer2Meta"),
-                    ],
-                    [
-                      t("home.aiDemo.caterer3Name"),
-                      t("home.aiDemo.caterer3Meta"),
-                    ],
+                    [t("home.aiDemo.caterer1Name"), t("home.aiDemo.caterer1Meta")],
+                    [t("home.aiDemo.caterer2Name"), t("home.aiDemo.caterer2Meta")],
+                    [t("home.aiDemo.caterer3Name"), t("home.aiDemo.caterer3Meta")],
                   ].map(([name, meta]) => (
                     <div
                       key={name}
                       className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.04)] px-4 py-4"
                     >
-                      <div className="text-sm font-semibold text-white">
-                        {name}
-                      </div>
+                      <div className="text-sm font-semibold text-white">{name}</div>
                       <div className="mt-1 text-xs text-white/60">{meta}</div>
                     </div>
                   ))}
@@ -483,9 +528,7 @@ export default function HomePage() {
 
               <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                 <h3 className="text-xl font-semibold">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/78">
-                  {card.description}
-                </p>
+                <p className="mt-3 text-sm leading-7 text-white/78">{card.description}</p>
                 <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-amber-300">
                   {t("home.occasions.cardCta")}
                   <ArrowUpRightIcon />
@@ -550,9 +593,7 @@ export default function HomePage() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8 text-white">
                   <LogoMark className="h-5 w-5" />
                 </div>
-                <div className="text-base font-semibold text-white">
-                  Speisely
-                </div>
+                <div className="text-base font-semibold text-white">Speisely</div>
               </div>
 
               <div className="mt-3 max-w-2xl text-sm leading-7 text-white/74">
