@@ -2,7 +2,7 @@ type LogoMarkProps = {
   className?: string;
 };
 
-export function LogoMark({ className = "h-8 w-8" }: LogoMarkProps) {
+export function LogoMark({ className = "h-9 w-9" }: LogoMarkProps) {
   return (
     <svg
       viewBox="0 0 64 64"
@@ -10,58 +10,60 @@ export function LogoMark({ className = "h-8 w-8" }: LogoMarkProps) {
       className={className}
       aria-hidden="true"
     >
-      <ellipse
+      {/* Plate */}
+      <circle
         cx="32"
         cy="33"
-        rx="16"
-        ry="11.5"
+        r="13.5"
         stroke="currentColor"
         strokeWidth="2.4"
       />
-      <ellipse
+      <circle
         cx="32"
         cy="33"
-        rx="11"
-        ry="7.2"
+        r="9"
         stroke="currentColor"
-        strokeWidth="1.6"
+        strokeWidth="1.8"
+        opacity="0.5"
+      />
+
+      {/* Spoon */}
+      <ellipse
+        cx="18"
+        cy="24"
+        rx="2.8"
+        ry="4.2"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <path
+        d="M18 28v16"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+
+      {/* Knife */}
+      <path
+        d="M46 20c2.8 4.6 2.8 9.6 0 14"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M46 34v10"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
+
+      {/* Small premium top arc */}
+      <path
+        d="M22 18c3.2-2.6 6.4-3.8 10-3.8s6.8 1.2 10 3.8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
         opacity="0.7"
-      />
-      <path
-        d="M14 19v14"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M18 19v14"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M22 19v14"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M18 33v12"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M46 19v26"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M50 19c0 5-1.4 8.4-4 11"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
       />
     </svg>
   );
