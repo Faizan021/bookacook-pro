@@ -528,3 +528,21 @@
   "home.images.businessAlt": "Business Catering Präsentation",
   "home.images.ctaAlt": "Private Catering Präsentation"
 }
+{
+  "home.aiDemo.requestLabel": "Deine Anfrage",
+  "home.aiDemo.request": "Hochzeit für 80 Gäste in Berlin, überwiegend vegetarisch, elegant, ca. 35 € pro Person",
+  "home.aiDemo.understands": "Speisely erkennt",
+  "home.aiDemo.recommended": "Passende Caterer",
+  "home.aiDemo.tagEvent": "Hochzeit",
+  "home.aiDemo.tagCity": "Berlin",
+  "home.aiDemo.tagGuests": "80 Gäste",
+  "home.aiDemo.tagDiet": "Vegetarisch",
+  "home.aiDemo.tagStyle": "Elegant",
+  "home.aiDemo.tagBudget": "35 € / Person",
+  "home.aiDemo.caterer1Name": "Berliner Genussküche",
+  "home.aiDemo.caterer1Meta": "Fine Dining · Vegetarisch",
+  "home.aiDemo.caterer2Name": "Grüne Tafel Events",
+  "home.aiDemo.caterer2Meta": "Hochzeiten · Bio",
+  "home.aiDemo.caterer3Name": "Villa Catering",
+  "home.aiDemo.caterer3Meta": "Premium · Multiküche"
+}
