@@ -109,18 +109,18 @@ export default function CatererSignupPage() {
 
   const inputBase =
     "mt-1 w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:ring-2";
-  const inputOk = `${inputBase} border-gray-200 focus:border-orange-400 focus:ring-orange-100`;
-  const inputErr = `${inputBase} border-red-300 bg-red-50 focus:border-red-400 focus:ring-red-100`;
+  const inputOk = `${inputBase} border-border bg-background text-foreground focus:border-primary focus:ring-primary/10`;
+  const inputErr = `${inputBase} border-red-300 bg-red-50 text-foreground focus:border-red-400 focus:ring-red-100`;
 
   if (success) {
     return (
-      <main className="min-h-screen bg-gray-50 p-6">
+      <main className="min-h-screen bg-background text-foreground">
         <div className="absolute end-4 top-4">
           <LanguageSwitcher />
         </div>
 
-        <div className="mx-auto flex min-h-[80vh] max-w-md items-center justify-center">
-          <div className="w-full rounded-2xl border bg-white p-8 text-center shadow-sm">
+        <div className="mx-auto flex min-h-screen max-w-md items-center justify-center px-6 py-10">
+          <div className="w-full rounded-[1.75rem] border border-border bg-card p-8 text-center shadow-sm">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -138,11 +138,11 @@ export default function CatererSignupPage() {
               </svg>
             </div>
 
-            <h1 className="mt-5 text-2xl font-bold text-gray-900">
+            <h1 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
               {t("catererReg.successTitle")}
             </h1>
 
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               {t("catererReg.successDesc")}
             </p>
 
@@ -153,14 +153,14 @@ export default function CatererSignupPage() {
             <div className="mt-6 space-y-2">
               <Link
                 href="/login"
-                className="block w-full rounded-xl bg-orange-500 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-orange-400"
+                className="block w-full rounded-xl bg-primary py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:opacity-90"
               >
                 {t("auth.goToLogin")}
               </Link>
 
               <Link
                 href="/"
-                className="block w-full rounded-xl border py-2.5 text-center text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+                className="block w-full rounded-xl border border-border bg-background py-2.5 text-center text-sm font-medium text-foreground transition hover:bg-secondary"
               >
                 {t("nav.backToHome")}
               </Link>
@@ -172,16 +172,16 @@ export default function CatererSignupPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="absolute end-4 top-4">
         <LanguageSwitcher />
       </div>
 
-      <div className="mx-auto max-w-2xl py-10">
+      <div className="mx-auto max-w-2xl px-6 py-10">
         <div className="mb-2">
           <Link
             href="/signup"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-gray-600 rtl:flex-row-reverse"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground rtl:flex-row-reverse"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -199,12 +199,12 @@ export default function CatererSignupPage() {
           </Link>
         </div>
 
-        <div className="rounded-2xl border bg-white p-8 shadow-sm">
+        <div className="rounded-[1.75rem] border border-border bg-card p-8 shadow-sm">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
               {t("catererReg.title")}
             </h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               {t("catererReg.subtitle")}
             </p>
           </div>
@@ -213,7 +213,7 @@ export default function CatererSignupPage() {
             <div className="space-y-5">
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     {t("catererReg.businessName")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -232,7 +232,7 @@ export default function CatererSignupPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     {t("catererReg.contactPerson")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -253,7 +253,7 @@ export default function CatererSignupPage() {
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     {t("auth.email")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -271,7 +271,7 @@ export default function CatererSignupPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-foreground">
                     {t("catererReg.phone")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -289,7 +289,7 @@ export default function CatererSignupPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                   {t("catererReg.businessAddress")}
                   <span className="ms-1 text-red-500">*</span>
                 </label>
@@ -307,11 +307,11 @@ export default function CatererSignupPage() {
                 )}
               </div>
 
-              <div className="rounded-xl border-2 border-orange-100 bg-orange-50/50 p-4">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-800 rtl:flex-row-reverse">
+              <div className="rounded-xl border border-border bg-secondary/35 p-4">
+                <label className="flex items-center gap-2 text-sm font-semibold text-foreground rtl:flex-row-reverse">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-orange-500"
+                    className="h-4 w-4 text-primary"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -322,7 +322,7 @@ export default function CatererSignupPage() {
                     />
                   </svg>
                   {t("catererReg.licenseNumber")}
-                  <span className="ms-auto rounded-full bg-orange-500 px-2 py-0.5 text-[10px] font-bold text-white">
+                  <span className="ms-auto rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
                     {t("catererReg.licenseRequired")}
                   </span>
                 </label>
@@ -333,13 +333,13 @@ export default function CatererSignupPage() {
                   onChange={(e) => setField("licenseNumber", e.target.value)}
                   className={
                     errors.licenseNumber
-                      ? `${inputBase} border-red-300 bg-red-50 focus:border-red-400 focus:ring-red-100`
-                      : `${inputBase} border-orange-200 bg-white focus:border-orange-400 focus:ring-orange-100`
+                      ? `${inputBase} border-red-300 bg-red-50 text-foreground focus:border-red-400 focus:ring-red-100`
+                      : `${inputBase} border-border bg-background text-foreground focus:border-primary focus:ring-primary/10`
                   }
                   placeholder="z.B. HRB-123456 / IHK-2024-789"
                 />
 
-                <p className="mt-1.5 text-xs text-orange-600">
+                <p className="mt-1.5 text-xs text-muted-foreground">
                   {t("catererReg.licenseHelp")}
                 </p>
 
@@ -351,7 +351,7 @@ export default function CatererSignupPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-foreground">
                   {t("auth.password")}
                   <span className="ms-1 text-red-500">*</span>
                 </label>
@@ -361,6 +361,7 @@ export default function CatererSignupPage() {
                   onChange={(e) => setField("password", e.target.value)}
                   className={errors.password ? inputErr : inputOk}
                   autoComplete="new-password"
+                  placeholder="••••••••"
                 />
                 {errors.password && (
                   <p className="mt-1 text-xs text-red-500">
@@ -379,20 +380,20 @@ export default function CatererSignupPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-6 w-full rounded-xl bg-orange-500 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-6 w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? t("catererReg.submitting") : t("catererReg.submit")}
             </button>
 
-            <p className="mt-4 text-center text-xs text-gray-400">
+            <p className="mt-4 text-center text-xs text-muted-foreground">
               {t("catererReg.termsNote")}
             </p>
 
-            <p className="mt-3 text-center text-sm text-gray-500">
+            <p className="mt-3 text-center text-sm text-muted-foreground">
               {t("auth.hasAccount")}{" "}
               <Link
                 href="/login"
-                className="font-medium text-orange-500 hover:text-orange-600"
+                className="font-medium text-primary transition hover:opacity-80"
               >
                 {t("auth.goToLogin")}
               </Link>
