@@ -23,10 +23,12 @@ export type UpdateEventRequestInput = {
   dietary_requirements?: string[];
   extra_services?: string[];
   status?: string;
+  ai_query?: string;
+  preferred_caterer_id?: string | null;
 };
 
 export async function createEventRequestDraft(
-  input: CreateEventRequestDraftInput = {}
+  input?: CreateEventRequestDraftInput
 ) {
   const supabase = await createClient();
 
@@ -39,28 +41,15 @@ export async function createEventRequestDraft(
     throw new Error("Unauthorized");
   }
 
-  const insertPayload: Record<string, unknown> = {
-    customer_id: user.id,
-    status: "draft",
-  };
-
-  if (input.event_type) {
-    insertPayload.event_type = input.event_type;
-  }
-
-  if (input.ai_query?.trim()) {
-    insertPayload.special_requests = input.ai_query.trim();
-  }
-
-  // Only keep this if your table already has a preferred_caterer_id column.
-  // If it does not exist yet, leave this commented out for now.
-  // if (input.preferred_caterer_id) {
-  //   insertPayload.preferred_caterer_id = input.preferred_caterer_id;
-  // }
-
   const { data, error } = await supabase
     .from("event_requests")
-    .insert(insertPayload)
+    .insert({
+      customer_id: user.id,
+      status: "draft",
+      ai_query: input?.ai_query ?? "",
+      event_type: input?.event_type ?? null,
+      preferred_caterer_id: input?.preferred_caterer_id ?? null,
+    })
     .select()
     .single();
 
@@ -125,9 +114,7 @@ export async function getEventRequestById(id: string) {
   }
 
   if (!data) {
-    throw new Error(
-      `No event request found for id=${id} and customer_id=${user.id}`
-    );
+    throw new Error(`No event request found for id=${id} and customer_id=${user.id}`);
   }
 
   return data;
