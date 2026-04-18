@@ -1,359 +1,285 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { useMemo, useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LanguageSwitcher } from "@/components/i18n/language-switcher";
-import { useIsRTL, useT } from "@/lib/i18n/context";
-import { LogoMark } from "@/components/ui/logo-mark";
+import { 
+  CheckIcon, 
+  MapPin, 
+  Users, 
+  Calendar, 
+  Euro, 
+  ChevronRight, 
+  Sparkles,
+  Info
+} from "lucide-react";
+
+// NOTE: These are your existing server-side functions. 
+// Because this is a 'use client' component, we handle the interaction via a standard form action.
+// The actual data fetching is handled by the parent (Server Component).
+// Therefore, I am providing the CLIENT-SIDE UI structure.
+
+import { getEventRequestById, updateEventRequest } from "@/lib/dashboard/event-requests"; 
+import { getMatchesForEventRequest } from "@/lib/dashboard/event-request-matching";
 
 // --- Types ---
-type OccasionCard = {
-  title: string;
-  description: string;
-  href: string;
-  image: string;
-  size: "large" | "small"; // For editorial grid
+type PageProps = {
+  params: Promise<{ id: string }>;
 };
 
-type StepItem = {
-  step: string;
-  title: string;
-  description: string;
-};
+// --- Constants (Matching your server logic) ---
+const EVENT_TYPE_OPTIONS = [
+  { value: "wedding", label: "Wedding" },
+  { value: "birthday", label: "Birthday" },
+  { value: "corporate", label: "Corporate Event" },
+  { value: "summerfest", label: "Summer Festival" },
+  { value: "private_party", label: "Private Party" },
+];
 
-// --- Icons ---
-function SparklesIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 text-accent-gold" aria-hidden="true">
-      <path d="M12 3l1.2 3.3L16.5 7.5l-3.3 1.2L12 12l-1.2-3.3L7.5 7.5l3.3-1.2L12 3Z" fill="currentColor" />
-      <path d="M18.5 14l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z" fill="currentColor" />
-      <path d="M6 14.5l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9.9-2.2Z" fill="currentColor" />
-    </svg>
-  );
-}
+const CATERING_TYPE_OPTIONS = [
+  { value: "buffet", label: "Buffet" },
+  { value: "finger_food", label: "Finger Food" },
+  { value: "plated", label: "Plated Menu" },
+  { value: "live_station", label: "Live Station" },
+  { value: "bbq", label: "BBQ" },
+];
 
-function ArrowRightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-      <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
+const SERVICE_STYLE_OPTIONS = [
+  { value: "drop_off", label: "Drop-off" },
+  { value: "staffed", label: "Staffed" },
+  { value: "full_service", label: "Full Service" },
+];
 
-export default function HomePage() {
-  const t = useT();
-  const isRTL = useIsRTL();
-  const router = useRouter();
-  const [aiQuery, setAiQuery] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
+const CUISINE_OPTIONS = ["Turkish", "Mediterranean", "Italian", "Arabic", "German", "BBQ", "Vegan"];
+const DIETARY_OPTIONS = ["Halal", "Vegetarian", "Vegan", "Gluten-free"];
+const EXTRA_SERVICE_OPTIONS = ["Drinks", "Staff", "Tableware", "Setup & Cleanup"];
 
-  const prompts = useMemo(
-    () => [
-      t("home.chips.wedding"),
-      t("home.chips.corporate"),
-      t("home.chips.private"),
-      t("home.chips.ramadan"),
-    ],
-    [t]
-  );
+// --- Sub-Components ---
 
-  const steps: StepItem[] = [
-    { step: "01", title: t("home.steps.step1Title"), description: t("home.steps.step1Desc") },
-    { step: "02", title: t("home.steps.step2Title"), description: t("home.steps.step2Desc") },
-    { step: "03", title: t("home.steps.step3Title"), description: t("home.steps.step3Desc") },
-  ];
-
-  const occasions: OccasionCard[] = [
-    {
-      title: t("home.occasions.wedding"),
-      description: t("home.occasions.weddingDesc"),
-      href: "/request/new?occasion=wedding",
-      image: "/images/speisely-wedding.png",
-      size: "large",
-    },
-    {
-      title: t("home.occasions.corporate"),
-      description: t("home.occasions.corporateDesc"),
-      href: "/caterers?occasion=corporate",
-      image: "/images/speisely-business.png",
-      size: "small",
-    },
-    {
-      title: t("home.occasions.private"),
-      description: t("home.occasions.privateDesc"),
-      href: "/caterers?occasion=private",
-      image: "/images/speisely-private.png",
-      size: "small",
-    },
-    {
-      title: t("home.occasions.ramadan"),
-      description: t("home.occasions.ramadanDesc"),
-      href: "/request/new?occasion=ramadan",
-      image: "/images/speisely-ramadan.png",
-      size: "large",
-    },
-  ];
-
-  const handleAiSubmit = () => {
-    const query = aiQuery.trim();
-    if (!query) {
-      router.push("/request/new");
-      return;
-    }
-    router.push(`/request/new?q=${encodeURIComponent(query)}`);
-  };
+function MatchCard({ match }: { match: any }) {
+  const caterer = Array.isArray(match.caterers) ? match.caterers[0] : match.caterers;
+  const score = Math.round(match.match_score * 100) || 0;
 
   return (
-    <main className="min-h-screen bg-background text-foreground selection:bg-accent-gold/30">
-
-      {/* ═══════════════════════════════════════════════════════════
-          NAVBAR: Minimalist & Elegant
-      ═══════════════════════════════════════════════════════════ */}
-      <header className="fixed top-0 z-[100] w-full border-b border-white/5 bg-surface-dark/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link href="/" className={`flex items-center ${isRTL ? "flex-row-reverse" : ""}`}>
-            <LogoMark size={28} color="#e4d9c2" showWordmark />
-          </Link>
-
-          <nav className="hidden items-center gap-10 md:flex">
-            {[
-              { label: t("home.nav.browse"), href: "/caterers" },
-              { label: t("home.nav.howItWorks"), href: "#how-it-works" },
-              { label: t("home.nav.forCaterers"), href: "/signup?role=caterer" },
-            ].map((item) => (
-              <Link key={item.label} href={item.href} className="text-sm font-medium tracking-wide text-surface-dark-foreground/70 transition hover:text-accent-gold">
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className={`flex items-center gap-5 ${isRTL ? "flex-row-reverse" : ""}`}>
-            <LanguageSwitcher />
-            <Link href="/login" className="hidden text-sm font-semibold text-surface-dark-foreground sm:block">
-              {t("home.nav.login")}
-            </Link>
-            <Link
-              href="/request/new"
-              className="rounded-full bg-accent-gold px-6 py-2.5 text-sm font-bold text-black transition hover:scale-105 hover:brightness-110 active:scale-95"
-            >
-              {t("home.cta.planEvent")}
-            </Link>
+    <div className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-6 transition-all hover:bg-white/10 hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-surface-dark-mid text-xl font-bold text-accent-gold">
+            {caterer?.business_name?.charAt(0) || "C"}
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-surface-dark-foreground">{caterer?.business_name || "Premium Caterer"}</h3>
+            <p className="text-sm text-surface-dark-muted">{caterer?.city || "Local Specialist"}</p>
           </div>
         </div>
-      </header>
-
-      {/* ═══════════════════════════════════════════════════════════
-          HERO: The "Concierge" Experience
-          Visual: Deep Forest Background + Glowing AI Input
-      ═══════════════════════════════════════════════════════════ */}
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-dark pt-20">
-        {/* Ambient Background Elements */}
-        <div className="absolute inset-0">
-          <Image src="/images/speisely-hero.png" alt="" fill className="object-cover opacity-10" priority />
-          <div className="absolute inset-0 bg-gradient-to-b from-surface-dark via-surface-dark/80 to-background" />
-          <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[120px]" />
+        <div className="text-right">
+          <div className="text-[10px] font-bold uppercase tracking-widest text-accent-gold">{score}% Match</div>
+          <div className="mt-1 h-1 w-16 rounded-full bg-white/10">
+            <div className="h-full rounded-full bg-accent-gold" style={{ width: `${score}%` }} />
+          </div>
         </div>
+      </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
-          <div className="mb-8 flex justify-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-widest text-accent-gold uppercase">
-              <SparklesIcon /> {t("home.badge")}
+      {match.match_reasons?.length > 0 && (
+        <div className="mt-6 flex flex-wrap gap-2">
+          {match.match_reasons.map((reason: string) => (
+            <span key={reason} className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-medium text-accent-gold uppercase tracking-wider">
+              <CheckIcon className="h-3 w-3" /> {reason}
             </span>
-          </div>
-
-          <h1 className="mb-6 text-balance text-5xl font-medium leading-[1.1] tracking-tight text-surface-dark-foreground sm:text-7xl xl:text-8xl">
-            {t("home.editorialHeroTitle")}
-          </h1>
-
-          <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-surface-dark-muted sm:text-xl">
-            {t("home.editorialHeroSubtitle")}
-          </p>
-
-          {/* THE AI CONCIERGE INPUT */}
-          <div 
-            className={`group relative mx-auto max-w-3xl transition-all duration-500 ${isFocused ? "scale-[1.02]" : "scale-100"}`}
-          >
-            <div className={`absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-accent-gold/20 to-primary/20 opacity-0 blur-xl transition duration-500 ${isFocused ? "opacity-100" : "opacity-0"}`} />
-            
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-2 backdrop-blur-2xl">
-              <div className="flex flex-col gap-2 rounded-[1.5rem] bg-white/5 p-4 md:flex-row md:items-center md:gap-4">
-                <div className="flex items-center gap-3 pl-2 text-accent-gold">
-                  <SparklesIcon />
-                </div>
-                <input
-                  value={aiQuery}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
-                  onChange={(e) => setAiQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleAiSubmit()}
-                  placeholder={t("home.editorialSearchPlaceholder")}
-                  className="w-full bg-transparent py-3 text-lg text-surface-dark-foreground placeholder:text-surface-dark-muted focus:outline-none"
-                />
-                <button
-                  onClick={handleAiSubmit}
-                  className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-accent-gold px-8 py-3.5 text-sm font-bold text-black transition hover:brightness-110 active:scale-95"
-                >
-                  {t("home.guided.cta")}
-                  <ArrowRightIcon />
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Prompts */}
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              {prompts.map((prompt) => (
-                <button
-                  key={prompt}
-                  onClick={() => setAiQuery(prompt)}
-                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-surface-dark-foreground/80 transition hover:border-accent-gold/50 hover:bg-white/10"
-                >
-                  {prompt}
-                </button>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
-      </section>
+      )}
 
-      {/* ═══════════════════════════════════════════════════════════
-          HOW IT WORKS: The "Transformation" Section
-      ═══════════════════════════════════════════════════════════ */}
-      <section id="how-it-works" className="py-24 bg-background">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-20 text-center">
-            <span className="text-sm font-bold tracking-[0.3em] text-accent-gold uppercase">{t("home.principles.label")}</span>
-            <h2 className="mt-4 text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
-              {t("home.principles.title")}
-            </h2>
-          </div>
+      <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-4">
+        <a href={`/caterers/${caterer?.slug}`} className="text-sm font-bold text-surface-dark-foreground transition hover:text-accent-gold">View Portfolio</a>
+        <button className="rounded-full bg-accent-gold px-5 py-2 text-xs font-bold text-black transition hover:scale-105">Inquire Now</button>
+      </div>
+    </div>
+  );
+}
 
-          <div className="grid gap-16 lg:grid-cols-3">
-            {steps.map((item, idx) => (
-              <div key={idx} className="group relative">
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-card text-2xl font-bold text-primary transition group-hover:border-accent-gold group-hover:text-accent-gold">
-                  {item.step}
-                </div>
-                <h3 className="mb-4 text-xl font-semibold text-foreground">{item.title}</h3>
-                <p className="leading-relaxed text-muted-foreground">{item.description}</p>
-                {idx < 2 && (
-                  <div className="absolute left-[50%] top-16 hidden h-24 w-px bg-gradient-to-b from-accent-gold/50 to-transparent lg:block" />
-                )}
-              </div>
-            ))}
-          </div>
+// --- Main Component ---
+
+// Note: We use a Server Component wrapper to fetch data, 
+// and then pass it to this Client Component for the interactive UI.
+// For the sake of this implementation, I'm assuming this is the client component 
+// that handles the complex state of the refinement form.
+
+export default function EventRequestClient({ 
+  request, 
+  matches 
+}: { 
+  request: any; 
+  matches: any[] 
+}) {
+  const [loading, setLoading] = useState(false);
+
+  async function handleSave(formData: FormData) {
+    setLoading(true);
+    // Logic to call the server action goes here...
+    // (In a real Next.js app, you'd use useFormStatus or a transition)
+  }
+
+  return (
+    <main className="min-h-screen bg-background text-foreground">
+      {/* 1. HERO DOSSIER SECTION */}
+      <section className="relative bg-surface-dark pt-24 pb-20 text-surface-dark-foreground">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary blur-[120px]" />
         </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════
-          OCCASIONS: Editorial Gallery
-          Visual: Large, beautiful imagery with elegant typography
-      ═══════════════════════════════════════════════════════════ */}
-      <section className="bg-surface-dark-mid py-24 text-surface-dark-foreground">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="mb-16 flex flex-col items-end justify-between gap-6 md:flex-row">
-            <div className="max-w-xl text-right">
-              <span className="text-sm font-bold tracking-[0.3em] text-accent-gold uppercase">{t("home.occasions.label")}</span>
-              <h2 className="mt-4 text-4xl font-medium tracking-tight sm:text-5xl">{t("home.editorialOccasionsTitle")}</h2>
-            </div>
-            <Link href="/caterers" className="rounded-full border border-white/10 bg-white/5 px-8 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
-              {t("home.occasions.viewAll")}
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
-            {occasions.map((card, idx) => (
-              <Link
-                key={idx}
-                href={card.href}
-                className={`group relative overflow-hidden rounded-[2rem] ${
-                  card.size === "large" ? "md:col-span-7" : "md:col-span-5"
-                }`}
-              >
-                <div className="relative h-[500px] w-full transition-transform duration-700 group-hover:scale-105">
-                  <Image src={card.image} alt={card.title} fill className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-transparent to-transparent opacity-80" />
-                </div>
-                <div className="absolute bottom-0 p-8 text-white">
-                  <h3 className="text-3xl font-semibold">{card.title}</h3>
-                  <p className="mt-2 text-white/70">{card.description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════
-          CTA: Final Premium Touch
-      ═══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-background py-24">
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          <div className="relative z-10">
-            <h2 className="text-4xl font-medium tracking-tight text-foreground sm:text-6xl">
-              {t("home.editorialCtaTitle")}
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-              {t("home.editorialCtaSubtitle")}
-            </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                href="/request/new"
-                className="w-full rounded-full bg-primary px-10 py-4 text-lg font-bold text-white transition hover:scale-105 sm:w-auto"
-              >
-                {t("home.editorialCtaPrimary")}
-              </Link>
-              <Link
-                href="/caterers"
-                className="w-full rounded-full border border-border px-10 py-4 text-lg font-semibold text-foreground transition hover:bg-secondary sm:w-auto"
-              >
-                {t("home.editorialCtaSecondary")}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════
-          FOOTER: Clean & Structured
-      ═══════════════════════════════════════════════════════════ */}
-      <footer className="border-t border-border bg-card py-16 text-foreground">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
-            <div className="col-span-2">
-              <LogoMark size={32} color="var(--primary)" showWordmark />
-              <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
-                {t("home.editorialFooterTagline")}
+        
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <div className="eyebrow text-accent-gold">Event Dossier</div>
+              <h1 className="mt-4 text-4xl font-medium tracking-tight sm:text-6xl">
+                Refine your <span className="italic">vision</span>
+              </h1>
+              <p className="mt-6 text-lg leading-relaxed text-surface-dark-muted">
+                Your initial concept has been captured. Fine-tune the details to ensure your matches are perfectly curated.
               </p>
             </div>
-            <div>
-              <h4 className="mb-6 text-sm font-bold uppercase tracking-widest text-primary">Explore</h4>
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li><Link href="/caterers" className="hover:text-primary">Browse Caterers</Link></li>
-                <li><Link href="/request/new" className="hover:text-primary">Plan an Event</Link></li>
-                <li><Link href="/signup?role=caterer" className="hover:text-primary">Join as Caterer</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-6 text-sm font-bold uppercase tracking-widest text-primary">Company</h4>
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li><Link href="/impressum" className="hover:text-primary">Impressum</Link></li>
-                <li><Link href="/datenschutz" className="hover:text-primary">Datenschutz</Link></li>
-                <li><Link href="/about" className="hover:text-primary">About Speisely</Link></li>
-              </ul>
+            <div className="rounded-2xl bg-white/5 px-6 py-4 border border-white/10 text-sm">
+              <span className="text-surface-dark-muted">Ref: </span>
+              <span className="font-mono font-bold">#{request.id.slice(-6).toUpperCase()}</span>
             </div>
           </div>
-          <div className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-border pt-8 md:flex-row">
-            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Speisely. All rights reserved.</p>
-            <div className="flex gap-6 text-xs text-muted-foreground">
-              <span>Germany</span>
-              <span>English</span>
-              <span>Deutsch</span>
+
+          {/* THE AI QUOTE */}
+          {request.special_requests && (
+            <div className="mt-12 relative max-w-4xl">
+              <div className="absolute -left-4 top-0 h-full w-1 bg-accent-gold/30" />
+              <div className="flex gap-4">
+                <SparklesIcon />
+                <blockquote className="text-2xl italic leading-relaxed text-surface-dark-foreground/90">
+                  "{request.special_requests}"
+                </blockquote>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      </footer>
+      </section>
+
+      {/* 2. MAIN CONTENT GRID */}
+      <section className="mx-auto max-w-7xl px-6 -mt-8 pb-24">
+        <div className="grid gap-10 lg:grid-cols-[1fr_400px]">
+          
+          {/* LEFT: THE REFINEMENT FORM */}
+          <div className="space-y-10">
+            <form action={handleSave} className="space-y-12">
+              
+              {/* GROUP 1: CORE LOGISTICS */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-1 rounded-full bg-accent-gold" />
+                  <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary">01. Core Logistics</h3>
+                </div>
+                
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase">Event Type</label>
+                    <select name="event_type" defaultValue={request.event_type || ""} className="w-full rounded-2xl border-border bg-card p-4 text-sm outline-none focus:ring-2 focus:ring-accent-gold">
+                      <option value="">Select type...</option>
+                      {EVENT_TYPE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase">Catering Style</label>
+                    <select name="catering_type" defaultValue={request.catering_type || ""} className="w-full rounded-2xl border-border bg-card p-4 text-sm outline-none focus:ring-2 focus:ring-accent-gold">
+                      <option value="">Select style...</option>
+                      {CATERING_TYPE_OPTIONS.map(opt => <option key={opt.value} value={opt.label}>{opt.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase">Guest Count</label>
+                    <div className="relative">
+                       <Users className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                       <input type="number" name="guest_count" defaultValue={request.guest_count || ""} placeholder="e.g. 50" className="w-full rounded-2xl border-border bg-card pl-10 pr-4 py-4 text-sm outline-none focus:ring-2 focus:ring-accent-gold" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold text-muted-foreground uppercase">Budget Total (€)</label>
+                    <div className="relative">
+                       <Euro className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                       <input type="number" name="budget_total" defaultValue={request.budget_total || ""} placeholder="e.g. 3000" className="w-full rounded-2xl border-border bg-card pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-accent-gold" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* GROUP 2: CULINARY TILE SELECTORS */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-1 rounded-full bg-accent-gold" />
+                  <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary">02. Culinary Preferences</h3>
+                </div>
+                
+                <div className="space-y-4">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase">Cuisine Styles</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {CUISINE_OPTIONS.map(option => (
+                      <label key={option} className="cursor-pointer">
+                        <input type="checkbox" name="cuisine_preferences" value={option} defaultChecked={request.cuisine_preferences?.includes(option)} className="peer hidden" />
+                        <div className="rounded-xl border border-border bg-card p-3 text-center text-xs font-medium transition peer-checked:border-accent-gold peer-checked:bg-accent-gold/10 peer-checked:text-accent-gold">
+                          {option}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase">Dietary Requirements</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {DIETARY_OPTIONS.map(option => (
+                      <label key={option} className="cursor-pointer">
+                        <input type="checkbox" name="dietary_requirements" value={option} defaultChecked={request.dietary_requirements?.includes(option)} className="peer hidden" />
+                        <div className="rounded-xl border border-border bg-card p-3 text-center text-xs font-medium transition peer-checked:border-accent-gold peer-checked:bg-accent-gold/10 peer-checked:text-accent-gold">
+                          {option}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" className="w-full rounded-full bg-primary py-5 text-lg font-bold text-primary-foreground transition hover:scale-[1.02] active:scale-95 shadow-xl">
+                Update Brief & Refresh Matches
+              </button>
+            </form>
+          </div>
+
+          {/* RIGHT: THE MATCHES GALLERY */}
+          <div className="space-y-8">
+             <div className="rounded-[2rem] border border-border bg-card p-8">
+                <h3 className="text-lg font-semibold">Event Summary</h3>
+                <div className="mt-6 space-y-4 text-sm">
+                  <div className="flex justify-between"><span className="text-muted-foreground">Type</span><span className="font-medium">{request.event_type || "—"}</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Guests</span><span className="font-medium">{request.guest_count || "—"}</span></div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">Budget</span><span className="font-medium">€{request.budget_total || "—"}</span></div>
+                </div>
+             </div>
+
+             <div className="space-y-4">
+                <div className="flex items-center justify-between px-2">
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-primary">Curated Matches</h3>
+                </div>
+                
+                {matches.length === 0 ? (
+                  <div className="rounded-3xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+                    Refining your brief will reveal matches.
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {matches.map((match: any, idx: number) => (
+                      <MatchCard key={idx} match={match} />
+                    ))}
+                  </div>
+                )}
+             </div>
+          </div>
+
+        </div>
+      </section>
     </main>
   );
 }
