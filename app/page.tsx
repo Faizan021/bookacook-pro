@@ -181,10 +181,9 @@ export default function HomePage() {
             href="/"
             className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-card text-foreground shadow-sm">
-              <LogoMark className="h-5 w-5" />
-            </div>
-
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-card text-primary shadow-sm">
+  <LogoMark className="h-5 w-5" />
+</div>
             <div className="flex flex-col">
               <span className="text-base font-semibold tracking-tight">Speisely</span>
               <span className="text-xs text-muted-foreground">{t("home.brandTagline")}</span>
@@ -590,9 +589,9 @@ export default function HomePage() {
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8 text-white">
-                  <LogoMark className="h-5 w-5" />
-                </div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/12 bg-white/10 text-white shadow-sm">
+  <LogoMark className="h-5 w-5" />
+</div>
                 <div className="text-base font-semibold text-white">Speisely</div>
               </div>
 
