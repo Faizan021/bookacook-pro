@@ -107,24 +107,25 @@ export default function CatererSignupPage() {
     }
   }
 
+  // PREMIUM INPUT STYLES
   const inputBase =
-    "mt-1 w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:ring-2";
-  const inputOk = `${inputBase} border-border bg-background text-foreground focus:border-primary focus:ring-primary/10`;
-  const inputErr = `${inputBase} border-red-300 bg-red-50 text-foreground focus:border-red-400 focus:ring-red-100`;
+    "mt-1 w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-all duration-200";
+  const inputOk = `${inputBase} border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-white/30 focus:bg-white/10 focus:ring-4 focus:ring-white/5`;
+  const inputErr = `${inputBase} border-red-500/50 bg-red-500/10 text-red-200 placeholder:text-red-300/30 focus:border-red-500 focus:ring-4 focus:ring-red-500/10`;
 
   if (success) {
     return (
-      <main className="min-h-screen bg-background text-foreground">
+      <main className="min-h-screen bg-surface-dark text-white">
         <div className="absolute end-4 top-4">
           <LanguageSwitcher />
         </div>
 
         <div className="mx-auto flex min-h-screen max-w-md items-center justify-center px-6 py-10">
-          <div className="w-full rounded-[1.75rem] border border-border bg-card p-8 text-center shadow-sm">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+          <div className="w-full rounded-[2rem] border border-white/10 bg-card p-10 text-center shadow-2xl backdrop-blur-xl">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/20">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-green-600"
+                className="h-10 w-10 text-[var(--accent-gold)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -132,35 +133,36 @@ export default function CatererSignupPage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   d="M5 13l4 4L19 7"
                 />
               </svg>
             </div>
 
-            <h1 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
+            <h1 className="mt-6 text-2xl font-semibold tracking-tight text-white">
               {t("catererReg.successTitle")}
             </h1>
 
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-3 text-sm text-white/60">
               {t("catererReg.successDesc")}
             </p>
 
-            <div className="mt-4 inline-flex items-center rounded-full bg-amber-50 px-4 py-1.5 text-xs font-semibold text-amber-700">
+            <div className="mt-5 inline-flex items-center rounded-full bg-white/5 px-4 py-1.5 text-xs font-semibold text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
               {t("catererReg.pendingBadge")}
             </div>
 
-            <div className="mt-6 space-y-2">
+            <div className="mt-8 space-y-3">
               <Link
                 href="/login"
-                className="block w-full rounded-xl bg-primary py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                className="block w-full rounded-xl px-4 py-3 text-center text-sm font-semibold text-black transition hover:brightness-110"
+                style={{ background: "var(--accent-gold)" }}
               >
                 {t("auth.goToLogin")}
               </Link>
 
               <Link
                 href="/"
-                className="block w-full rounded-xl border border-border bg-background py-2.5 text-center text-sm font-medium text-foreground transition hover:bg-secondary"
+                className="block w-full rounded-xl border border-white/10 bg-white/5 py-3 text-center text-sm font-medium text-white transition hover:bg-white/10"
               >
                 {t("nav.backToHome")}
               </Link>
@@ -172,16 +174,16 @@ export default function CatererSignupPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-surface-dark text-white">
       <div className="absolute end-4 top-4">
         <LanguageSwitcher />
       </div>
 
-      <div className="mx-auto max-w-2xl px-6 py-10">
-        <div className="mb-2">
+      <div className="mx-auto max-w-2xl px-6 py-12">
+        <div className="mb-4">
           <Link
             href="/signup"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground rtl:flex-row-reverse"
+            className="inline-flex items-center gap-1.5 text-sm text-white/50 transition hover:text-white rtl:flex-row-reverse"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -199,21 +201,21 @@ export default function CatererSignupPage() {
           </Link>
         </div>
 
-        <div className="rounded-[1.75rem] border border-border bg-card p-8 shadow-sm">
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+        <div className="rounded-[2rem] border border-white/10 bg-card p-8 shadow-2xl backdrop-blur-md sm:p-10">
+          <div className="mb-8">
+            <h1 className="text-3xl font-semibold tracking-tight text-white">
               {t("catererReg.title")}
             </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-white/50">
               {t("catererReg.subtitle")}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} noValidate>
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-foreground">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
                     {t("catererReg.businessName")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -225,14 +227,14 @@ export default function CatererSignupPage() {
                     placeholder="Berlin BBQ House GmbH"
                   />
                   {errors.businessName && (
-                    <p className="mt-1 text-xs text-red-500">
+                    <p className="mt-1.5 text-xs text-red-400 font-medium">
                       {errors.businessName}
                     </p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
                     {t("catererReg.contactPerson")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -244,7 +246,7 @@ export default function CatererSignupPage() {
                     placeholder="Max Mustermann"
                   />
                   {errors.contactPerson && (
-                    <p className="mt-1 text-xs text-red-500">
+                    <p className="mt-1.5 text-xs text-red-400 font-medium">
                       {errors.contactPerson}
                     </p>
                   )}
@@ -253,7 +255,7 @@ export default function CatererSignupPage() {
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-foreground">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
                     {t("auth.email")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -266,12 +268,12 @@ export default function CatererSignupPage() {
                     autoComplete="email"
                   />
                   {errors.email && (
-                    <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+                    <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.email}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-foreground">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
                     {t("catererReg.phone")}
                     <span className="ms-1 text-red-500">*</span>
                   </label>
@@ -283,13 +285,13 @@ export default function CatererSignupPage() {
                     placeholder="+49 30 12345678"
                   />
                   {errors.phone && (
-                    <p className="mt-1 text-xs text-red-500">{errors.phone}</p>
+                    <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.phone}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
                   {t("catererReg.businessAddress")}
                   <span className="ms-1 text-red-500">*</span>
                 </label>
@@ -301,28 +303,29 @@ export default function CatererSignupPage() {
                   placeholder="Musterstraße 1, 10115 Berlin"
                 />
                 {errors.businessAddress && (
-                  <p className="mt-1 text-xs text-red-500">
+                  <p className="mt-1.5 text-xs text-red-400 font-medium">
                     {errors.businessAddress}
                   </p>
                 )}
               </div>
 
-              <div className="rounded-xl border border-border bg-secondary/35 p-4">
-                <label className="flex items-center gap-2 text-sm font-semibold text-foreground rtl:flex-row-reverse">
+              {/* LICENSE BOX - Premium Styling */}
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors focus-within:border-white/20">
+                <label className="flex items-center gap-2 text-sm font-semibold text-white rtl:flex-row-reverse">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-primary"
+                    className="h-5 w-5 text-[var(--accent-gold)]"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
                     <path
                       fillRule="evenodd"
-                      d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 4h3a3 3 0 006 0h3a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm2.5 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3zm2.45 4a2.5 2.5 0 10-4.9 0h4.9zM12 9a1 1 0 100 2h3a1 1 0 100-2h-3zm-1 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z"
+                      d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.925-3.31 9.128-7.834 10.614a.75.75 0 01-.532 0C5.31 16.073 2 11.87 2 7c0-.682.057-1.35.166-2.001zm11.54 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clipRule="evenodd"
                     />
                   </svg>
                   {t("catererReg.licenseNumber")}
-                  <span className="ms-auto rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground">
+                  <span className="ms-auto rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
                     {t("catererReg.licenseRequired")}
                   </span>
                 </label>
@@ -333,25 +336,25 @@ export default function CatererSignupPage() {
                   onChange={(e) => setField("licenseNumber", e.target.value)}
                   className={
                     errors.licenseNumber
-                      ? `${inputBase} border-red-300 bg-red-50 text-foreground focus:border-red-400 focus:ring-red-100`
-                      : `${inputBase} border-border bg-background text-foreground focus:border-primary focus:ring-primary/10`
+                      ? inputErr
+                      : inputOk
                   }
                   placeholder="z.B. HRB-123456 / IHK-2024-789"
                 />
 
-                <p className="mt-1.5 text-xs text-muted-foreground">
+                <p className="mt-2 text-[11px] text-white/40 italic">
                   {t("catererReg.licenseHelp")}
                 </p>
 
                 {errors.licenseNumber && (
-                  <p className="mt-1 text-xs font-semibold text-red-600">
+                  <p className="mt-2 text-xs font-semibold text-red-400">
                     {errors.licenseNumber}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-foreground">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
                   {t("auth.password")}
                   <span className="ms-1 text-red-500">*</span>
                 </label>
@@ -364,7 +367,7 @@ export default function CatererSignupPage() {
                   placeholder="••••••••"
                 />
                 {errors.password && (
-                  <p className="mt-1 text-xs text-red-500">
+                  <p className="mt-1.5 text-xs text-red-400 font-medium">
                     {errors.password}
                   </p>
                 )}
@@ -372,28 +375,30 @@ export default function CatererSignupPage() {
             </div>
 
             {serverError && (
-              <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
                 {serverError}
               </div>
             )}
 
+            {/* PREMIUM CTA: Gold Background, Black Text */}
             <button
               type="submit"
               disabled={submitting}
-              className="mt-6 w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-8 w-full rounded-xl px-4 py-4 text-sm font-bold text-black shadow-lg shadow-black/20 transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+              style={{ background: "var(--accent-gold)" }}
             >
               {submitting ? t("catererReg.submitting") : t("catererReg.submit")}
             </button>
 
-            <p className="mt-4 text-center text-xs text-muted-foreground">
+            <p className="mt-6 text-center text-xs text-white/40">
               {t("catererReg.termsNote")}
             </p>
 
-            <p className="mt-3 text-center text-sm text-muted-foreground">
+            <p className="mt-4 text-center text-sm text-white/60">
               {t("auth.hasAccount")}{" "}
               <Link
                 href="/login"
-                className="font-medium text-primary transition hover:opacity-80"
+                className="font-semibold text-[var(--accent-gold)] transition hover:text-white"
               >
                 {t("auth.goToLogin")}
               </Link>
