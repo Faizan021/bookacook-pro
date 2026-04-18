@@ -250,135 +250,142 @@ export default function HomePage() {
             alt={t("home.images.heroAlt")}
             fill
             priority
-            className="object-cover opacity-30"
+            className="object-cover opacity-20"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,22,15,0.56)_0%,rgba(14,22,15,0.70)_45%,rgba(14,22,15,0.84)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,18,12,0.72)_0%,rgba(10,18,12,0.82)_48%,rgba(10,18,12,0.90)_100%)]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:py-24">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-white/85">
-              <SparklesIcon />
-              <span>{t("home.badge")}</span>
-            </div>
-
-            <h1 className="mt-8 text-balance text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-white sm:text-6xl xl:text-7xl">
-              {t("home.editorialHeroTitle")}
-            </h1>
-
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/84">
-              {t("home.editorialHeroSubtitle")}
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/caterers"
-                className="rounded-2xl border border-white/22 bg-white/16 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-white/22"
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
+            <div className="mx-auto max-w-4xl text-center lg:mx-0 lg:max-w-none lg:text-left">
+              <div
+                className={`inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-white/90 ${
+                  isRTL ? "flex-row-reverse" : ""
+                }`}
               >
-                {t("home.heroBrowseCta")}
-              </Link>
+                <SparklesIcon />
+                <span>{t("home.badge")}</span>
+              </div>
 
-              <Link
-                href="/request/new"
-                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black shadow-sm transition hover:bg-white"
-              >
-                {t("home.heroPlanCta")}
-              </Link>
-            </div>
+              <h1 className="mt-8 max-w-4xl text-balance text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-white sm:text-6xl xl:text-7xl">
+                {t("home.editorialHeroTitle")}
+              </h1>
 
-            <div className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-white/12 bg-white/10 p-3 backdrop-blur-xl">
-              <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <SearchIcon />
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/88 lg:max-w-3xl">
+                {t("home.editorialHeroSubtitle")}
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                <Link
+                  href="/caterers"
+                  className="inline-flex min-w-[180px] items-center justify-center rounded-2xl border border-white/30 bg-white/18 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-white/26"
+                >
+                  {t("home.heroBrowseCta")}
+                </Link>
+
+                <Link
+                  href="/request/new"
+                  className="inline-flex min-w-[180px] items-center justify-center rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-black shadow-sm transition hover:bg-white/90"
+                >
+                  {t("home.heroPlanCta")}
+                </Link>
+              </div>
+
+              <div className="mt-10 max-w-4xl rounded-[1.75rem] border border-white/12 bg-white/10 p-3 backdrop-blur-xl">
+                <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <SearchIcon />
+                  </div>
+
+                  <input
+                    value={aiQuery}
+                    onChange={(e) => setAiQuery(e.target.value)}
+                    placeholder={t("home.editorialSearchPlaceholder")}
+                    className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  />
+
+                  <button
+                    onClick={handleAiSubmit}
+                    className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
+                  >
+                    {t("home.guided.cta")}
+                  </button>
                 </div>
 
-                <input
-                  value={aiQuery}
-                  onChange={(e) => setAiQuery(e.target.value)}
-                  placeholder={t("home.editorialSearchPlaceholder")}
-                  className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-                />
+                <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
+                  {prompts.map((prompt) => (
+                    <button
+                      key={prompt}
+                      onClick={() => setAiQuery(prompt)}
+                      className="rounded-full border border-white/14 bg-white/10 px-3 py-1.5 text-xs text-white/92 transition hover:bg-white/16"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-                <button
-                  onClick={handleAiSubmit}
-                  className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-white/84 lg:justify-start">
+                <span>{t("home.heroBenefit1")}</span>
+                <span className="h-1 w-1 rounded-full bg-amber-400" />
+                <span>{t("home.heroBenefit2")}</span>
+                <span className="h-1 w-1 rounded-full bg-amber-400" />
+                <span>{t("home.heroBenefit3")}</span>
+              </div>
+            </div>
+
+            <div className="hidden lg:block">
+              <div className="grid gap-4">
+                <Link
+                  href="/caterers?occasion=wedding"
+                  className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/6 shadow-[0_20px_50px_rgba(0,0,0,0.18)] transition hover:-translate-y-1"
                 >
-                  {t("home.guided.cta")}
-                </button>
-              </div>
+                  <div className="relative h-44">
+                    <Image
+                      src="/images/speisely-wedding.png"
+                      alt={t("home.occasions.wedding")}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,24,17,0.88)] via-[rgba(15,24,17,0.24)] to-transparent" />
+                  </div>
 
-              <div className="mt-3 flex flex-wrap justify-center gap-2">
-                {prompts.map((prompt) => (
-                  <button
-                    key={prompt}
-                    onClick={() => setAiQuery(prompt)}
-                    className="rounded-full border border-white/14 bg-white/10 px-3 py-1.5 text-xs text-white/90 transition hover:bg-white/16"
-                  >
-                    {prompt}
-                  </button>
-                ))}
-              </div>
-            </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <div className="text-lg font-semibold text-white">
+                      {t("home.occasions.wedding")}
+                    </div>
+                    <div className="mt-1 text-sm text-white/82">
+                      {t("home.occasions.weddingDesc")}
+                    </div>
+                  </div>
+                </Link>
 
-            <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-3 text-sm text-white/80">
-              <span>{t("home.heroBenefit1")}</span>
-              <span className="h-1 w-1 rounded-full bg-amber-400" />
-              <span>{t("home.heroBenefit2")}</span>
-              <span className="h-1 w-1 rounded-full bg-amber-400" />
-              <span>{t("home.heroBenefit3")}</span>
+                <Link
+                  href="/caterers?occasion=corporate"
+                  className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/6 shadow-[0_20px_50px_rgba(0,0,0,0.18)] transition hover:-translate-y-1"
+                >
+                  <div className="relative h-56">
+                    <Image
+                      src="/images/speisely-business.png"
+                      alt={t("home.occasions.corporate")}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,24,17,0.88)] via-[rgba(15,24,17,0.24)] to-transparent" />
+                  </div>
+
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <div className="text-lg font-semibold text-white">
+                      {t("home.occasions.corporate")}
+                    </div>
+                    <div className="mt-1 text-sm text-white/82">
+                      {t("home.occasions.corporateDesc")}
+                    </div>
+                  </div>
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="border-y border-border/60 bg-card/40">
-        <div className="mx-auto grid max-w-7xl gap-6 px-6 py-5 text-sm text-muted-foreground md:grid-cols-3">
-          <div className="font-medium">{t("home.trust.curated")}</div>
-          <div className="font-medium">{t("home.trust.verified")}</div>
-          <div className="font-medium">{t("home.trust.transparent")}</div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <div className="text-xs uppercase tracking-[0.24em] text-primary">
-              {t("home.featured.label")}
-            </div>
-            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-              {t("home.featured.title")}
-            </h2>
-            <p className="mt-4 max-w-2xl text-base leading-8 text-muted-foreground">
-              {t("home.featured.subtitle")}
-            </p>
-          </div>
-
-          <Link
-            href="/caterers"
-            className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary md:inline-flex"
-          >
-            {t("home.featured.viewAll")}
-          </Link>
-        </div>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {featured.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="rounded-[1.5rem] border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(22,22,16,0.08)]"
-            >
-              <div className="text-xs uppercase tracking-[0.18em] text-primary">
-                {item.meta}
-              </div>
-              <h3 className="mt-3 text-xl font-semibold tracking-tight">{item.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.description}</p>
-              <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground">
-                {t("home.featured.cardCta")}
-                <ArrowUpRightIcon />
-              </div>
-            </Link>
-          ))}
         </div>
       </section>
 
@@ -429,13 +436,13 @@ export default function HomePage() {
               {t("home.editorialStepsTitle")}
             </h2>
 
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/84">
+            <p className="mt-5 max-w-xl text-base leading-8 text-white/86">
               {t("home.editorialStepsSubtitle")}
             </p>
 
             <div className="mt-8 grid gap-4">
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/70">
                   {t("home.aiDemo.requestLabel")}
                 </div>
                 <div className="mt-3 text-lg font-semibold text-white">
@@ -444,7 +451,7 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/70">
                   {t("home.aiDemo.understands")}
                 </div>
 
@@ -468,7 +475,7 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/70">
                   {t("home.aiDemo.recommended")}
                 </div>
 
@@ -483,7 +490,7 @@ export default function HomePage() {
                       className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.04)] px-4 py-4"
                     >
                       <div className="text-sm font-semibold text-white">{name}</div>
-                      <div className="mt-1 text-xs text-white/72">{meta}</div>
+                      <div className="mt-1 text-xs text-white/76">{meta}</div>
                     </div>
                   ))}
                 </div>
@@ -526,12 +533,12 @@ export default function HomePage() {
                   fill
                   className="object-cover transition duration-700 group-hover:scale-[1.04]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.76)] via-[rgba(25,43,26,0.14)] to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.84)] via-[rgba(25,43,26,0.18)] to-transparent" />
               </div>
 
               <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                 <h3 className="text-xl font-semibold">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/86">{card.description}</p>
+                <p className="mt-3 text-sm leading-7 text-white/90">{card.description}</p>
                 <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-amber-300">
                   {t("home.occasions.cardCta")}
                   <ArrowUpRightIcon />
@@ -554,21 +561,21 @@ export default function HomePage() {
                 {t("home.editorialCtaTitle")}
               </h2>
 
-              <p className="mt-5 max-w-2xl text-base leading-8 text-white/84">
+              <p className="mt-5 max-w-2xl text-base leading-8 text-white/88">
                 {t("home.editorialCtaSubtitle")}
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   href="/request/new"
-                  className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
+                  className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-white/90"
                 >
                   {t("home.editorialCtaPrimary")}
                 </Link>
 
                 <Link
                   href="/caterers"
-                  className="rounded-2xl border border-white/12 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/8"
+                  className="rounded-2xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
                 >
                   {t("home.editorialCtaSecondary")}
                 </Link>
@@ -582,7 +589,7 @@ export default function HomePage() {
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-[rgba(25,43,26,0.10)] via-[rgba(25,43,26,0.40)] to-[rgba(25,43,26,0.75)]" />
+              <div className="absolute inset-0 bg-gradient-to-l from-[rgba(18,30,21,0.20)] via-[rgba(18,30,21,0.56)] to-[rgba(18,30,21,0.78)]" />
             </div>
           </div>
         </div>
@@ -599,11 +606,11 @@ export default function HomePage() {
                 <div className="text-base font-semibold text-white">Speisely</div>
               </div>
 
-              <div className="mt-3 max-w-2xl text-sm leading-7 text-white/74">
+              <div className="mt-3 max-w-2xl text-sm leading-7 text-white/82">
                 {t("home.editorialFooterTagline")}
               </div>
 
-              <div className="mt-4 text-xs uppercase tracking-[0.22em] text-white/45">
+              <div className="mt-4 text-xs uppercase tracking-[0.22em] text-white/55">
                 DE / EN
               </div>
             </div>
@@ -611,7 +618,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/caterers"
-                className="rounded-xl border border-white/12 bg-white/6 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/10"
+                className="rounded-xl border border-white/26 bg-white/10 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/18"
               >
                 {t("home.nav.browse")}
               </Link>
@@ -625,7 +632,7 @@ export default function HomePage() {
 
               <Link
                 href="/login"
-                className="rounded-xl border border-white/12 bg-white/6 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/10"
+                className="rounded-xl border border-white/26 bg-white/10 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-white/18"
               >
                 {t("home.nav.login")}
               </Link>
