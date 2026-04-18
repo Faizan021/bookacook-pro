@@ -2,17 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { useIsRTL, useT } from "@/lib/i18n/context";
 import { LogoMark } from "@/components/ui/logo-mark";
 
+// --- Types ---
 type OccasionCard = {
   title: string;
   description: string;
   href: string;
   image: string;
+  size: "large" | "small"; // For editorial grid
 };
 
 type StepItem = {
@@ -21,54 +23,21 @@ type StepItem = {
   description: string;
 };
 
+// --- Icons ---
 function SparklesIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" aria-hidden="true">
-      <path
-        d="M12 3l1.2 3.3L16.5 7.5l-3.3 1.2L12 12l-1.2-3.3L7.5 7.5l3.3-1.2L12 3Z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M18.5 14l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M6 14.5l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9.9-2.2Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 text-accent-gold" aria-hidden="true">
+      <path d="M12 3l1.2 3.3L16.5 7.5l-3.3 1.2L12 12l-1.2-3.3L7.5 7.5l3.3-1.2L12 3Z" fill="currentColor" />
+      <path d="M18.5 14l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z" fill="currentColor" />
+      <path d="M6 14.5l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9.9-2.2Z" fill="currentColor" />
     </svg>
   );
 }
 
-function SearchIcon() {
+function ArrowRightIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0" aria-hidden="true">
-      <circle cx="11" cy="11" r="6" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M20 20l-4.2-4.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function ArrowUpRightIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
-      <path d="M7 17L17 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path
-        d="M9 7h8v8"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+      <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -78,6 +47,7 @@ export default function HomePage() {
   const isRTL = useIsRTL();
   const router = useRouter();
   const [aiQuery, setAiQuery] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
   const prompts = useMemo(
     () => [
@@ -90,21 +60,9 @@ export default function HomePage() {
   );
 
   const steps: StepItem[] = [
-    {
-      step: "01",
-      title: t("home.steps.step1Title"),
-      description: t("home.steps.step1Desc"),
-    },
-    {
-      step: "02",
-      title: t("home.steps.step2Title"),
-      description: t("home.steps.step2Desc"),
-    },
-    {
-      step: "03",
-      title: t("home.steps.step3Title"),
-      description: t("home.steps.step3Desc"),
-    },
+    { step: "01", title: t("home.steps.step1Title"), description: t("home.steps.step1Desc") },
+    { step: "02", title: t("home.steps.step2Title"), description: t("home.steps.step2Desc") },
+    { step: "03", title: t("home.steps.step3Title"), description: t("home.steps.step3Desc") },
   ];
 
   const occasions: OccasionCard[] = [
@@ -113,24 +71,28 @@ export default function HomePage() {
       description: t("home.occasions.weddingDesc"),
       href: "/request/new?occasion=wedding",
       image: "/images/speisely-wedding.png",
+      size: "large",
     },
     {
       title: t("home.occasions.corporate"),
       description: t("home.occasions.corporateDesc"),
       href: "/caterers?occasion=corporate",
       image: "/images/speisely-business.png",
+      size: "small",
     },
     {
       title: t("home.occasions.private"),
       description: t("home.occasions.privateDesc"),
       href: "/caterers?occasion=private",
       image: "/images/speisely-private.png",
+      size: "small",
     },
     {
       title: t("home.occasions.ramadan"),
       description: t("home.occasions.ramadanDesc"),
       href: "/request/new?occasion=ramadan",
       image: "/images/speisely-ramadan.png",
+      size: "large",
     },
   ];
 
@@ -144,518 +106,254 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-background text-foreground selection:bg-accent-gold/30">
 
       {/* ═══════════════════════════════════════════════════════════
-          NAVBAR
+          NAVBAR: Minimalist & Elegant
       ═══════════════════════════════════════════════════════════ */}
-      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
-
-          <Link
-            href="/"
-            className={`flex items-center ${isRTL ? "flex-row-reverse" : ""}`}
-          >
-            <LogoMark size={24} color="var(--primary)" showWordmark />
+      <header className="fixed top-0 z-[100] w-full border-b border-white/5 bg-surface-dark/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <Link href="/" className={`flex items-center ${isRTL ? "flex-row-reverse" : ""}`}>
+            <LogoMark size={28} color="#e4d9c2" showWordmark />
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            <Link
-              href="/caterers"
-              className="text-sm text-muted-foreground transition hover:text-foreground"
-            >
-              {t("home.nav.browse")}
-            </Link>
-            <a
-              href="#how-it-works"
-              className="text-sm text-muted-foreground transition hover:text-foreground"
-            >
-              {t("home.nav.howItWorks")}
-            </a>
-            <Link
-              href="/signup?role=caterer"
-              className="text-sm text-muted-foreground transition hover:text-foreground"
-            >
-              {t("home.nav.forCaterers")}
-            </Link>
-            <Link
-              href="/login"
-              className="text-sm text-muted-foreground transition hover:text-foreground"
-            >
-              {t("home.nav.login")}
-            </Link>
+          <nav className="hidden items-center gap-10 md:flex">
+            {[
+              { label: t("home.nav.browse"), href: "/caterers" },
+              { label: t("home.nav.howItWorks"), href: "#how-it-works" },
+              { label: t("home.nav.forCaterers"), href: "/signup?role=caterer" },
+            ].map((item) => (
+              <Link key={item.label} href={item.href} className="text-sm font-medium tracking-wide text-surface-dark-foreground/70 transition hover:text-accent-gold">
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
-          <div className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>
-            <div className="opacity-80 transition hover:opacity-100">
-              <LanguageSwitcher />
-            </div>
-            <Link
-              href="/login"
-              className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-secondary sm:inline-flex"
-            >
-              {t("home.cta.dashboard")}
+          <div className={`flex items-center gap-5 ${isRTL ? "flex-row-reverse" : ""}`}>
+            <LanguageSwitcher />
+            <Link href="/login" className="hidden text-sm font-semibold text-surface-dark-foreground sm:block">
+              {t("home.nav.login")}
             </Link>
-            
-            {/* FIX: Changed bg-primary to Gold for high visibility */}
             <Link
               href="/request/new"
-              className="inline-flex rounded-xl px-4 py-2 text-sm font-semibold text-black transition hover:brightness-110 sm:inline-flex"
-              style={{ background: "var(--accent-gold)" }}
+              className="rounded-full bg-accent-gold px-6 py-2.5 text-sm font-bold text-black transition hover:scale-105 hover:brightness-110 active:scale-95"
             >
               {t("home.cta.planEvent")}
             </Link>
           </div>
-
         </div>
       </header>
 
       {/* ═══════════════════════════════════════════════════════════
-          HERO
+          HERO: The "Concierge" Experience
+          Visual: Deep Forest Background + Glowing AI Input
       ═══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-surface-dark">
-
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-dark pt-20">
+        {/* Ambient Background Elements */}
         <div className="absolute inset-0">
-          <Image
-            src="/images/speisely-hero.png"
-            alt={t("home.images.heroAlt")}
-            fill
-            priority
-            className="object-cover opacity-20"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,18,12,0.68)_0%,rgba(10,18,12,0.78)_50%,rgba(10,18,12,0.93)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_38%_38%,rgba(58,94,60,0.18)_0%,transparent_68%)]" />
+          <Image src="/images/speisely-hero.png" alt="" fill className="object-cover opacity-10" priority />
+          <div className="absolute inset-0 bg-gradient-to-b from-surface-dark via-surface-dark/80 to-background" />
+          <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[120px]" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:py-24">
-          <div className="grid items-center gap-10 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
-
-            <div className="mx-auto max-w-4xl text-center lg:mx-0 lg:max-w-none lg:text-left">
-
-              <div
-                className={`inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-white/90 ${
-                  isRTL ? "flex-row-reverse" : ""
-                }`}
-              >
-                <SparklesIcon />
-                <span>{t("home.badge")}</span>
-              </div>
-
-              <h1 className="mt-8 max-w-4xl text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.03em] text-white sm:text-6xl xl:text-7xl">
-                {t("home.editorialHeroTitle")}
-              </h1>
-
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80 lg:max-w-3xl">
-                {t("home.editorialHeroSubtitle")}
-              </p>
-
-              {/* ── AI INPUT — PRIMARY ACTION ── */}
-              <div className="mt-10 max-w-4xl rounded-[1.75rem] border border-white/12 bg-white/10 p-3 backdrop-blur-xl transition focus-within:border-white/22">
-                <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <SearchIcon />
-                  </div>
-                  <input
-                    value={aiQuery}
-                    onChange={(e) => setAiQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleAiSubmit()}
-                    placeholder={t("home.editorialSearchPlaceholder")}
-                    className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-                  />
-                  
-                  {/* FIX: Changed button from bg-primary to Gold for readability */}
-                  <button
-                    onClick={handleAiSubmit}
-                    className="inline-flex shrink-0 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-black shadow-sm transition hover:brightness-110 active:scale-[0.98]"
-                    style={{ background: "var(--accent-gold)" }}
-                  >
-                    {t("home.guided.cta")}
-                  </button>
-                </div>
-
-                <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
-                  {prompts.map((prompt) => (
-                    <button
-                      key={prompt}
-                      onClick={() => setAiQuery(prompt)}
-                      className="rounded-full border border-white/14 bg-white/10 px-3 py-1.5 text-xs text-white/90 transition hover:bg-white/18 hover:text-white"
-                    >
-                      {prompt}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-start">
-                <Link
-                  href="/caterers"
-                  className="text-sm text-white/58 underline-offset-4 transition hover:text-white/82 hover:underline"
-                >
-                  {t("home.heroBrowseCta")}
-                </Link>
-                <span className="select-none text-xs text-white/26" aria-hidden="true">·</span>
-                <Link
-                  href="/request/new"
-                  className="text-sm text-white/58 underline-offset-4 transition hover:text-white/82 hover:underline"
-                >
-                  {t("home.heroPlanCta")}
-                </Link>
-              </div>
-
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-white/70 lg:justify-start">
-                <span>{t("home.heroBenefit1")}</span>
-                <span
-                  className="h-1 w-1 rounded-full"
-                  style={{ background: "var(--accent-gold)" }}
-                  aria-hidden="true"
-                />
-                <span>{t("home.heroBenefit2")}</span>
-                <span
-                  className="h-1 w-1 rounded-full"
-                  style={{ background: "var(--accent-gold)" }}
-                  aria-hidden="true"
-                />
-                <span>{t("home.heroBenefit3")}</span>
-              </div>
-            </div>
-
-            <div className="hidden lg:block">
-              <div className="grid gap-4">
-                <Link
-                  href="/caterers?occasion=wedding"
-                  className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/6 shadow-[0_20px_50px_rgba(0,0,0,0.18)] transition hover:-translate-y-1"
-                >
-                  <div className="relative h-44">
-                    <Image
-                      src="/images/speisely-wedding.png"
-                      alt={t("home.occasions.wedding")}
-                      fill
-                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,24,17,0.88)] via-[rgba(15,24,17,0.24)] to-transparent" />
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-5">
-                    <div className="text-lg font-semibold text-white">
-                      {t("home.occasions.wedding")}
-                    </div>
-                    <div className="mt-1 text-sm text-white/80">
-                      {t("home.occasions.weddingDesc")}
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/caterers?occasion=corporate"
-                  className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/6 shadow-[0_20px_50px_rgba(0,0,0,0.18)] transition hover:-translate-y-1"
-                >
-                  <div className="relative h-56">
-                    <Image
-                      src="/images/speisely-business.png"
-                      alt={t("home.occasions.corporate")}
-                      fill
-                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,24,17,0.88)] via-[rgba(15,24,17,0.24)] to-transparent" />
-                  </div>
-                  <div className="absolute inset-x-0 bottom-0 p-5">
-                    <div className="text-lg font-semibold text-white">
-                      {t("home.occasions.corporate")}
-                    </div>
-                    <div className="mt-1 text-sm text-white/80">
-                      {t("home.occasions.corporateDesc")}
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
+        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
+          <div className="mb-8 flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-widest text-accent-gold uppercase">
+              <SparklesIcon /> {t("home.badge")}
+            </span>
           </div>
-        </div>
-      </section>
 
-      {/* ═══════════════════════════════════════════════════════════
-          HOW IT WORKS
-      ═══════════════════════════════════════════════════════════ */}
-      <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
-        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <h1 className="mb-6 text-balance text-5xl font-medium leading-[1.1] tracking-tight text-surface-dark-foreground sm:text-7xl xl:text-8xl">
+            {t("home.editorialHeroTitle")}
+          </h1>
 
-          <div className="rounded-[1.75rem] border border-border bg-card p-8 shadow-sm lg:p-10">
-            <div className="text-xs uppercase tracking-[0.24em] text-primary">
-              {t("home.principles.label")}
-            </div>
-            <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-              {t("home.principles.title")}
-            </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-muted-foreground">
-              {t("home.principles.subtitle")}
-            </p>
+          <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-surface-dark-muted sm:text-xl">
+            {t("home.editorialHeroSubtitle")}
+          </p>
 
-            <div className="mt-10">
-              {steps.map((item, index) => (
-                <div key={item.step} className="relative flex gap-6 pb-9 last:pb-0">
-                  {index < steps.length - 1 && (
-                    <div
-                      className="absolute left-[19px] top-11 bottom-0 w-px bg-border"
-                      aria-hidden="true"
-                    />
-                  )}
-                  <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-card text-xs font-bold text-primary">
-                    {item.step}
-                  </div>
-                  <div className="pt-1.5">
-                    <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </div>
+          {/* THE AI CONCIERGE INPUT */}
+          <div 
+            className={`group relative mx-auto max-w-3xl transition-all duration-500 ${isFocused ? "scale-[1.02]" : "scale-100"}`}
+          >
+            <div className={`absolute -inset-1 rounded-[2rem] bg-gradient-to-r from-accent-gold/20 to-primary/20 opacity-0 blur-xl transition duration-500 ${isFocused ? "opacity-100" : "opacity-0"}`} />
+            
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 p-2 backdrop-blur-2xl">
+              <div className="flex flex-col gap-2 rounded-[1.5rem] bg-white/5 p-4 md:flex-row md:items-center md:gap-4">
+                <div className="flex items-center gap-3 pl-2 text-accent-gold">
+                  <SparklesIcon />
                 </div>
+                <input
+                  value={aiQuery}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  onChange={(e) => setAiQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleAiSubmit()}
+                  placeholder={t("home.editorialSearchPlaceholder")}
+                  className="w-full bg-transparent py-3 text-lg text-surface-dark-foreground placeholder:text-surface-dark-muted focus:outline-none"
+                />
+                <button
+                  onClick={handleAiSubmit}
+                  className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-accent-gold px-8 py-3.5 text-sm font-bold text-black transition hover:brightness-110 active:scale-95"
+                >
+                  {t("home.guided.cta")}
+                  <ArrowRightIcon />
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Prompts */}
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              {prompts.map((prompt) => (
+                <button
+                  key={prompt}
+                  onClick={() => setAiQuery(prompt)}
+                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-surface-dark-foreground/80 transition hover:border-accent-gold/50 hover:bg-white/10"
+                >
+                  {prompt}
+                </button>
               ))}
             </div>
           </div>
-
-          <div className="overflow-hidden rounded-[1.75rem] border border-white/8 bg-surface-dark-mid p-8 lg:p-10">
-            <div
-              className="text-xs uppercase tracking-[0.24em]"
-              style={{ color: "var(--accent-gold)" }}
-            >
-              {t("home.steps.label")}
-            </div>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              {t("home.editorialStepsTitle")}
-            </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/82">
-              {t("home.editorialStepsSubtitle")}
-            </p>
-
-            <div className="mt-8 grid gap-4">
-              <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/60">
-                  {t("home.aiDemo.requestLabel")}
-                </div>
-                <div className="mt-3 text-lg font-semibold text-white">
-                  {t("home.aiDemo.request")}
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/60">
-                  {t("home.aiDemo.understands")}
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {[
-                    t("home.aiDemo.tagEvent"),
-                    t("home.aiDemo.tagCity"),
-                    t("home.aiDemo.tagGuests"),
-                    t("home.aiDemo.tagDiet"),
-                    t("home.aiDemo.tagStyle"),
-                    t("home.aiDemo.tagBudget"),
-                  ].map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-xs text-white"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/60">
-                  {t("home.aiDemo.recommended")}
-                </div>
-                <div className="mt-4 grid gap-3 md:grid-cols-3">
-                  {[
-                    [t("home.aiDemo.caterer1Name"), t("home.aiDemo.caterer1Meta")],
-                    [t("home.aiDemo.caterer2Name"), t("home.aiDemo.caterer2Meta")],
-                    [t("home.aiDemo.caterer3Name"), t("home.aiDemo.caterer3Meta")],
-                  ].map(([name, meta]) => (
-                    <div
-                      key={name}
-                      className="rounded-2xl border border-white/10 bg-white/4 px-4 py-4"
-                    >
-                      <div className="text-sm font-semibold text-white">{name}</div>
-                      <div className="mt-1 text-xs text-white/68">{meta}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          OCCASIONS
+          HOW IT WORKS: The "Transformation" Section
       ═══════════════════════════════════════════════════════════ */}
-      <section id="occasions" className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <div className="text-xs uppercase tracking-[0.24em] text-primary">
-              {t("home.occasions.label")}
-            </div>
-            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
-              {t("home.editorialOccasionsTitle")}
+      <section id="how-it-works" className="py-24 bg-background">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-20 text-center">
+            <span className="text-sm font-bold tracking-[0.3em] text-accent-gold uppercase">{t("home.principles.label")}</span>
+            <h2 className="mt-4 text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
+              {t("home.principles.title")}
             </h2>
           </div>
-          <Link
-            href="/caterers"
-            className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary md:inline-flex"
-          >
-            {t("home.occasions.viewAll")}
-          </Link>
-        </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {occasions.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className="group relative overflow-hidden rounded-[1.75rem] shadow-sm transition hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(18,28,18,0.14)]"
-            >
-              <div className="relative h-80">
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.90)] via-[rgba(25,43,26,0.22)] to-transparent" />
-              </div>
-              <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                <h3 className="text-xl font-semibold">{card.title}</h3>
-                <p className="mt-2.5 text-sm leading-6 text-white/84">{card.description}</p>
-                <div
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold"
-                  style={{ color: "var(--accent-gold)" }}
-                >
-                  {t("home.occasions.cardCta")}
-                  <ArrowUpRightIcon />
+          <div className="grid gap-16 lg:grid-cols-3">
+            {steps.map((item, idx) => (
+              <div key={idx} className="group relative">
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-card text-2xl font-bold text-primary transition group-hover:border-accent-gold group-hover:text-accent-gold">
+                  {item.step}
                 </div>
+                <h3 className="mb-4 text-xl font-semibold text-foreground">{item.title}</h3>
+                <p className="leading-relaxed text-muted-foreground">{item.description}</p>
+                {idx < 2 && (
+                  <div className="absolute left-[50%] top-16 hidden h-24 w-px bg-gradient-to-b from-accent-gold/50 to-transparent lg:block" />
+                )}
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          OCCASIONS: Editorial Gallery
+          Visual: Large, beautiful imagery with elegant typography
+      ═══════════════════════════════════════════════════════════ */}
+      <section className="bg-surface-dark-mid py-24 text-surface-dark-foreground">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-16 flex flex-col items-end justify-between gap-6 md:flex-row">
+            <div className="max-w-xl text-right">
+              <span className="text-sm font-bold tracking-[0.3em] text-accent-gold uppercase">{t("home.occasions.label")}</span>
+              <h2 className="mt-4 text-4xl font-medium tracking-tight sm:text-5xl">{t("home.editorialOccasionsTitle")}</h2>
+            </div>
+            <Link href="/caterers" className="rounded-full border border-white/10 bg-white/5 px-8 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+              {t("home.occasions.viewAll")}
             </Link>
-          ))}
-        </div>
-      </section>
+          </div>
 
-      {/* ═══════════════════════════════════════════════════════════
-          CTA SECTION
-      ═══════════════════════════════════════════════════════════ */}
-      <section className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
-        <div className="overflow-hidden rounded-[2rem] border border-white/8 bg-surface-dark">
-          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="px-8 py-10 lg:px-12 lg:py-14">
-              <div
-                className="text-xs uppercase tracking-[0.24em]"
-                style={{ color: "var(--accent-gold)" }}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+            {occasions.map((card, idx) => (
+              <Link
+                key={idx}
+                href={card.href}
+                className={`group relative overflow-hidden rounded-[2rem] ${
+                  card.size === "large" ? "md:col-span-7" : "md:col-span-5"
+                }`}
               >
-                {t("home.editorialCtaLabel")}
-              </div>
-              <h2 className="mt-4 max-w-2xl text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                {t("home.editorialCtaTitle")}
-              </h2>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-white/84">
-                {t("home.editorialCtaSubtitle")}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                
-                {/* FIX: Primary CTA changed to Gold for extreme visibility against dark box */}
-                <Link
-                  href="/request/new"
-                  className="rounded-2xl px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110 active:scale-[0.98]"
-                  style={{ background: "var(--accent-gold)" }}
-                >
-                  {t("home.editorialCtaPrimary")}
-                </Link>
-
-                <Link
-                  href="/caterers"
-                  className="rounded-2xl border border-white/28 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
-                >
-                  {t("home.editorialCtaSecondary")}
-                </Link>
-              </div>
-            </div>
-
-            <div className="relative min-h-[320px]">
-              <Image
-                src="/images/speisely-private.png"
-                alt={t("home.images.ctaAlt")}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-l from-[rgba(18,30,21,0.18)] via-[rgba(18,30,21,0.54)] to-[rgba(18,30,21,0.82)]" />
-            </div>
+                <div className="relative h-[500px] w-full transition-transform duration-700 group-hover:scale-105">
+                  <Image src={card.image} alt={card.title} fill className="object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-transparent to-transparent opacity-80" />
+                </div>
+                <div className="absolute bottom-0 p-8 text-white">
+                  <h3 className="text-3xl font-semibold">{card.title}</h3>
+                  <p className="mt-2 text-white/70">{card.description}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          FOOTER
+          CTA: Final Premium Touch
       ═══════════════════════════════════════════════════════════ */}
-      <footer className="mt-8 border-t border-white/8 bg-surface-dark">
-        <div className="mx-auto max-w-7xl px-6 py-12">
-          <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-
-            <div>
-              <LogoMark size={22} color="#e4d9c2" showWordmark wordmarkColor="#e4d9c2" />
-
-              <p className="mt-4 max-w-sm text-sm leading-7 text-white/68">
-                {t("home.editorialFooterTagline")}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
-                <Link
-                  href="/caterers"
-                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
-                >
-                  {t("home.nav.browse")}
-                </Link>
-                <Link
-                  href="/signup?role=caterer"
-                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
-                >
-                  {t("home.nav.forCaterers")}
-                </Link>
-                <Link
-                  href="/login"
-                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
-                >
-                  {t("home.nav.login")}
-                </Link>
-                <Link
-                  href="/impressum"
-                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
-                >
-                  Impressum
-                </Link>
-                <Link
-                  href="/datenschutz"
-                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
-                >
-                  Datenschutz
-                </Link>
-              </div>
-            </div>
-
-            <div className="flex flex-col items-start gap-3 lg:items-end">
+      <section className="relative overflow-hidden bg-background py-24">
+        <div className="mx-auto max-w-5xl px-6 text-center">
+          <div className="relative z-10">
+            <h2 className="text-4xl font-medium tracking-tight text-foreground sm:text-6xl">
+              {t("home.editorialCtaTitle")}
+            </h2>
+            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
+              {t("home.editorialCtaSubtitle")}
+            </p>
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/request/new"
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-110 active:scale-[0.98]"
-                style={{ background: "var(--accent-gold)" }}
+                className="w-full rounded-full bg-primary px-10 py-4 text-lg font-bold text-white transition hover:scale-105 sm:w-auto"
               >
-                {t("home.cta.planEvent")}
+                {t("home.editorialCtaPrimary")}
               </Link>
-              <span className="text-xs text-white/32">
-                © {new Date().getFullYear()} Speisely
-              </span>
+              <Link
+                href="/caterers"
+                className="w-full rounded-full border border-border px-10 py-4 text-lg font-semibold text-foreground transition hover:bg-secondary sm:w-auto"
+              >
+                {t("home.editorialCtaSecondary")}
+              </Link>
             </div>
+          </div>
+        </div>
+      </section>
 
+      {/* ═══════════════════════════════════════════════════════════
+          FOOTER: Clean & Structured
+      ═══════════════════════════════════════════════════════════ */}
+      <footer className="border-t border-border bg-card py-16 text-foreground">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+            <div className="col-span-2">
+              <LogoMark size={32} color="var(--primary)" showWordmark />
+              <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                {t("home.editorialFooterTagline")}
+              </p>
+            </div>
+            <div>
+              <h4 className="mb-6 text-sm font-bold uppercase tracking-widest text-primary">Explore</h4>
+              <ul className="space-y-4 text-sm text-muted-foreground">
+                <li><Link href="/caterers" className="hover:text-primary">Browse Caterers</Link></li>
+                <li><Link href="/request/new" className="hover:text-primary">Plan an Event</Link></li>
+                <li><Link href="/signup?role=caterer" className="hover:text-primary">Join as Caterer</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="mb-6 text-sm font-bold uppercase tracking-widest text-primary">Company</h4>
+              <ul className="space-y-4 text-sm text-muted-foreground">
+                <li><Link href="/impressum" className="hover:text-primary">Impressum</Link></li>
+                <li><Link href="/datenschutz" className="hover:text-primary">Datenschutz</Link></li>
+                <li><Link href="/about" className="hover:text-primary">About Speisely</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-border pt-8 md:flex-row">
+            <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Speisely. All rights reserved.</p>
+            <div className="flex gap-6 text-xs text-muted-foreground">
+              <span>Germany</span>
+              <span>English</span>
+              <span>Deutsch</span>
+            </div>
           </div>
         </div>
       </footer>
-
     </main>
   );
 }
