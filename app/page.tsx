@@ -6,13 +6,13 @@
       alt={t("home.images.heroAlt")}
       fill
       priority
-      className="object-cover opacity-18 mix-blend-soft-light"
+      className="object-cover opacity-20 mix-blend-soft-light"
     />
   </div>
 
-  <div className="relative z-10 mx-auto grid max-w-7xl gap-10 px-6 py-18 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
+  <div className="relative z-10 mx-auto grid max-w-7xl gap-10 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
     <div className="max-w-3xl">
-      <div className="inline-flex items-center gap-2 rounded-full border border-[#a87040]/35 bg-white/6 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#f3ddbf]">
+      <div className="inline-flex items-center gap-2 rounded-full border border-[#a87040]/35 bg-white/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#f3ddbf]">
         <SparklesIcon />
         <span>{t("home.badge")}</span>
       </div>
@@ -21,11 +21,11 @@
         {t("home.editorialHeroTitle")}
       </h1>
 
-      <p className="mt-5 max-w-2xl text-lg leading-8 text-white/78">
+      <p className="mt-5 max-w-2xl text-lg leading-8 text-white/80">
         {t("home.editorialHeroSubtitle")}
       </p>
 
-      <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/7 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl">
+      <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/10 p-3 shadow-[0_20px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl">
         <div className="flex flex-col gap-3 rounded-[1.2rem] bg-[#fbf7f0] px-4 py-4 md:flex-row md:items-center">
           <div className="flex items-center gap-3 text-[#6b6255]">
             <SearchIcon />
@@ -51,7 +51,7 @@
             <button
               key={prompt}
               onClick={() => setAiQuery(prompt)}
-              className="rounded-full border border-white/12 bg-white/8 px-3 py-1.5 text-xs text-white/88 transition hover:border-[#a87040]/40 hover:bg-white/12"
+              className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-white/90 transition hover:border-[#a87040]/40 hover:bg-white/15"
             >
               {prompt}
             </button>
@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-white/74">
+      <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-white/80">
         <span>{t("home.heroBenefit1")}</span>
         <span className="h-1 w-1 rounded-full bg-[#c59b47]" />
         <span>{t("home.heroBenefit2")}</span>
@@ -77,7 +77,7 @@
 
         <Link
           href="/caterers"
-          className="inline-flex min-w-[180px] items-center justify-center rounded-2xl border border-white/18 bg-white/8 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/14"
+          className="inline-flex min-w-[180px] items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/15"
         >
           {t("home.heroBrowseCta")}
         </Link>
@@ -98,12 +98,15 @@
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[rgba(14,22,15,0.88)] via-[rgba(14,22,15,0.28)] to-transparent" />
         </div>
+
         <div className="absolute inset-x-0 bottom-0 p-6">
           <div className="text-xs uppercase tracking-[0.2em] text-[#e3bf87]">
             {t("home.occasions.wedding")}
           </div>
-          <div className="mt-2 text-2xl font-semibold text-white">Elegant weddings</div>
-          <div className="mt-2 max-w-sm text-sm leading-7 text-white/82">
+          <div className="mt-2 text-2xl font-semibold text-white">
+            Elegant weddings
+          </div>
+          <div className="mt-2 max-w-sm text-sm leading-7 text-white/85">
             {t("home.occasions.weddingDesc")}
           </div>
         </div>
@@ -122,12 +125,15 @@
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[rgba(14,22,15,0.88)] via-[rgba(14,22,15,0.28)] to-transparent" />
         </div>
+
         <div className="absolute inset-x-0 bottom-0 p-6">
           <div className="text-xs uppercase tracking-[0.2em] text-[#e3bf87]">
             {t("home.occasions.corporate")}
           </div>
-          <div className="mt-2 text-2xl font-semibold text-white">Business events</div>
-          <div className="mt-2 max-w-sm text-sm leading-7 text-white/82">
+          <div className="mt-2 text-2xl font-semibold text-white">
+            Business events
+          </div>
+          <div className="mt-2 max-w-sm text-sm leading-7 text-white/85">
             {t("home.occasions.corporateDesc")}
           </div>
         </div>
