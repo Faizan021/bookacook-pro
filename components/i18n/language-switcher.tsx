@@ -6,8 +6,6 @@ import { useLocale, type Locale } from "@/lib/i18n/context";
 const LOCALES: { code: Locale; label: string; name: string }[] = [
   { code: "de", label: "DE", name: "Deutsch" },
   { code: "en", label: "EN", name: "English" },
-  { code: "tr", label: "TR", name: "Türkçe" },
-  { code: "ar", label: "AR", name: "العربية" },
 ];
 
 function ChevronIcon() {
@@ -16,7 +14,7 @@ function ChevronIcon() {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"
-      className="h-3 w-3 text-gray-400"
+      className="h-3 w-3 text-muted-foreground"
     >
       <path
         fillRule="evenodd"
@@ -38,6 +36,7 @@ export function LanguageSwitcher() {
         setOpen(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -47,30 +46,33 @@ export function LanguageSwitcher() {
   return (
     <div ref={ref} className="relative">
       <button
+        type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50"
         aria-label="Select language"
+        aria-expanded={open}
+        className="flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-secondary"
       >
         <span>{current.label}</span>
         <ChevronIcon />
       </button>
 
       {open && (
-        <div className="absolute end-0 top-full z-50 mt-1.5 min-w-[140px] overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-lg">
+        <div className="absolute end-0 top-full z-50 mt-2 min-w-[150px] overflow-hidden rounded-2xl border border-border bg-card py-1 shadow-lg">
           {LOCALES.map((l) => (
             <button
               key={l.code}
+              type="button"
               onClick={() => {
                 setLocale(l.code);
                 setOpen(false);
               }}
-              className={`flex w-full items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
+              className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-sm transition ${
                 locale === l.code
-                  ? "bg-orange-50 font-semibold text-orange-600"
-                  : "text-gray-700 hover:bg-gray-50"
+                  ? "bg-secondary font-semibold text-primary"
+                  : "text-foreground hover:bg-secondary"
               }`}
             >
-              <span className="w-6 text-xs font-bold text-gray-400">
+              <span className="w-6 text-xs font-bold text-muted-foreground">
                 {l.label}
               </span>
               <span>{l.name}</span>
