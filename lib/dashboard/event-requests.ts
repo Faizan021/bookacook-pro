@@ -1,5 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 
+export type CreateEventRequestDraftInput = {
+  ai_query?: string;
+  event_type?: string | null;
+  preferred_caterer_id?: string | null;
+};
+
 export type UpdateEventRequestInput = {
   event_type?: string;
   catering_type?: string;
@@ -19,7 +25,9 @@ export type UpdateEventRequestInput = {
   status?: string;
 };
 
-export async function createEventRequestDraft() {
+export async function createEventRequestDraft(
+  input: CreateEventRequestDraftInput = {}
+) {
   const supabase = await createClient();
 
   const {
@@ -31,12 +39,28 @@ export async function createEventRequestDraft() {
     throw new Error("Unauthorized");
   }
 
+  const insertPayload: Record<string, unknown> = {
+    customer_id: user.id,
+    status: "draft",
+  };
+
+  if (input.event_type) {
+    insertPayload.event_type = input.event_type;
+  }
+
+  if (input.ai_query?.trim()) {
+    insertPayload.special_requests = input.ai_query.trim();
+  }
+
+  // Only keep this if your table already has a preferred_caterer_id column.
+  // If it does not exist yet, leave this commented out for now.
+  // if (input.preferred_caterer_id) {
+  //   insertPayload.preferred_caterer_id = input.preferred_caterer_id;
+  // }
+
   const { data, error } = await supabase
     .from("event_requests")
-    .insert({
-      customer_id: user.id,
-      status: "draft",
-    })
+    .insert(insertPayload)
     .select()
     .single();
 
