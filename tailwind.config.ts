@@ -1,47 +1,58 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  // 1. This tells Tailwind where to look for your classes
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      // 2. This maps your CSS Variables to Tailwind Classes
       colors: {
-        primary: "var(--primary)",
-        "primary-foreground": "var(--primary-foreground)",
-        secondary: "var(--secondary)",
-        "secondary-foreground": "var(--secondary-foreground)",
-        accent: "var(--accent)",
-        "accent-gold": "var(--accent-gold)",
         background: "var(--background)",
         foreground: "var(--foreground)",
-        card: "var(--card)",
-        "card-foreground": "var(--card-foreground)",
-        "muted": "var(--muted)",
-        "muted-foreground": "var(--muted-foreground)",
-        "popover": "var(--popover)",
-        "popover-foreground": "var(--popover-foreground)",
-        "border": "var(--border)",
-        "input": "var(--input)",
-        "ring": "var(--ring)",
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
+        },
+        popover: {
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
+        },
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+          hover: "var(--primary-hover)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
+        muted: {
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
+        },
+        accent: {
+          DEFAULT: "var(--accent)",
+          foreground: "var(--accent-foreground)",
+          gold: "var(--accent-gold)",
+        },
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
         surface: {
           dark: "var(--surface-dark)",
-          "dark-mid": "var(--surface-dark-mid)",
-          "dark-card": "var(--surface-dark-card)",
-          foreground: "var(--surface-dark-foreground)",
-          muted: "var(--surface-dark-muted)",
-          border: "var(--surface-dark-border)",
-        }
+          darkMid: "var(--surface-dark-mid)",
+          darkCard: "var(--surface-dark-card)",
+          darkForeground: "var(--surface-dark-foreground)",
+          darkMuted: "var(--surface-dark-muted)",
+          darkBorder: "var(--surface-dark-border)",
+        },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--radius-lg)",
+        md: "var(--radius-md)",
+        sm: "var(--radius-sm)",
       },
     },
   },
