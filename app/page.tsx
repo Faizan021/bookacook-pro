@@ -181,8 +181,8 @@ export default function HomePage() {
             href="/"
             className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-card text-primary shadow-sm">
-  <LogoMark className="h-5 w-5" />
+            <div className="flex items-center justify-center text-primary">
+  <LogoMark className="h-7 w-7" />
 </div>
             <div className="flex flex-col">
               <span className="text-base font-semibold tracking-tight">Speisely</span>
@@ -590,7 +590,7 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/12 bg-white/10 text-white shadow-sm">
-  <LogoMark className="h-5 w-5" />
+  <LogoMark className="h-7 w-7" />
 </div>
                 <div className="text-base font-semibold text-white">Speisely</div>
               </div>
