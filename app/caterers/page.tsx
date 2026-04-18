@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useState } from "react";
 
 type CatererCard = {
   id: string;
@@ -99,6 +100,70 @@ const quickFilters = [
 ];
 
 export default function CaterersPage() {
+  const [city, setCity] = useState("");
+  const [eventType, setEventType] = useState("");
+  const [cuisine, setCuisine] = useState("");
+  const [dietary, setDietary] = useState("");
+
+  function applyQuickFilter(value: string) {
+    const lower = value.toLowerCase();
+
+    if (["berlin", "hamburg", "munich", "cologne", "frankfurt"].includes(lower)) {
+      setCity(value);
+      return;
+    }
+
+    if (["corporate", "wedding", "private party"].includes(lower)) {
+      setEventType(value);
+      return;
+    }
+
+    if (["vegetarian", "fine dining", "bbq"].includes(lower)) {
+      setCuisine(value);
+      return;
+    }
+  }
+
+  function clearFilters() {
+    setCity("");
+    setEventType("");
+    setCuisine("");
+    setDietary("");
+  }
+
+  const filteredCaterers = useMemo(() => {
+    return sampleCaterers.filter((caterer) => {
+      const haystack = [
+        caterer.name,
+        caterer.city,
+        caterer.cuisine,
+        caterer.description,
+        ...caterer.tags,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const cityMatch = !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
+
+      const eventMatch =
+        !eventType ||
+        haystack.includes(eventType.toLowerCase()) ||
+        caterer.tags.some((tag) => tag.toLowerCase().includes(eventType.toLowerCase()));
+
+      const cuisineMatch =
+        !cuisine ||
+        caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()) ||
+        caterer.tags.some((tag) => tag.toLowerCase().includes(cuisine.toLowerCase()));
+
+      const dietaryMatch =
+        !dietary ||
+        haystack.includes(dietary.toLowerCase()) ||
+        caterer.tags.some((tag) => tag.toLowerCase().includes(dietary.toLowerCase()));
+
+      return cityMatch && eventMatch && cuisineMatch && dietaryMatch;
+    });
+  }, [city, eventType, cuisine, dietary]);
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="page-container section-shell-lg">
@@ -124,30 +189,70 @@ export default function CaterersPage() {
           </div>
 
           <div className="mt-8 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <div className="field flex items-center text-sm text-muted-foreground">
-              City
-            </div>
-            <div className="field flex items-center text-sm text-muted-foreground">
-              Event type
-            </div>
-            <div className="field flex items-center text-sm text-muted-foreground">
-              Cuisine
-            </div>
-            <div className="field flex items-center text-sm text-muted-foreground">
-              Dietary preferences
-            </div>
+            <input
+              type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="City"
+              className="field text-sm text-foreground placeholder:text-muted-foreground"
+            />
+
+            <select
+              value={eventType}
+              onChange={(e) => setEventType(e.target.value)}
+              className="field text-sm text-foreground"
+            >
+              <option value="">Event type</option>
+              <option value="Wedding">Wedding</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Private Party">Private Party</option>
+            </select>
+
+            <select
+              value={cuisine}
+              onChange={(e) => setCuisine(e.target.value)}
+              className="field text-sm text-foreground"
+            >
+              <option value="">Cuisine</option>
+              <option value="BBQ">BBQ</option>
+              <option value="Fine Dining">Fine Dining</option>
+              <option value="Vegetarian">Vegetarian</option>
+              <option value="Middle Eastern">Middle Eastern</option>
+              <option value="Modern European">Modern European</option>
+            </select>
+
+            <select
+              value={dietary}
+              onChange={(e) => setDietary(e.target.value)}
+              className="field text-sm text-foreground"
+            >
+              <option value="">Dietary preferences</option>
+              <option value="Vegetarian">Vegetarian</option>
+              <option value="Vegan">Vegan</option>
+              <option value="Healthy">Healthy</option>
+              <option value="Sustainable">Sustainable</option>
+            </select>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap items-center gap-2">
             {quickFilters.map((item) => (
               <button
                 key={item}
                 type="button"
+                onClick={() => applyQuickFilter(item)}
                 className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-secondary"
               >
                 {item}
               </button>
             ))}
+
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="rounded-full border border-border bg-transparent px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:bg-secondary"
+            >
+              Clear filters
+            </button>
           </div>
         </div>
       </section>
@@ -162,12 +267,12 @@ export default function CaterersPage() {
           </div>
 
           <div className="text-sm text-muted-foreground">
-            {sampleCaterers.length} caterers
+            {filteredCaterers.length} caterers
           </div>
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {sampleCaterers.map((caterer) => (
+          {filteredCaterers.map((caterer) => (
             <article
               key={caterer.id}
               className="premium-card premium-card-hover p-6"
@@ -250,6 +355,22 @@ export default function CaterersPage() {
             </article>
           ))}
         </div>
+
+        {filteredCaterers.length === 0 ? (
+          <div className="mt-8 rounded-2xl border border-border bg-card p-8 text-center">
+            <h3 className="text-lg font-semibold">No caterers found</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Try changing or clearing your filters.
+            </p>
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="mt-4 inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+            >
+              Reset filters
+            </button>
+          </div>
+        ) : null}
       </section>
 
       <section className="page-container section-shell">
