@@ -3,45 +3,41 @@
 /* ============================================================
    SPEISELY — DESIGN TOKEN SYSTEM
    Premium AI catering marketplace
+   Direction: deep forest + refined ivory + bronze precision
    ============================================================ */
 
 :root {
-  /* Light surfaces */
-  --background: #f3ede2;
+  --background: #f0e9d8;
+  --card: #faf6ee;
+  --popover: #faf6ee;
+  --secondary: #e4d9c2;
+  --muted: #e9e0cc;
+
   --foreground: #161610;
-
-  --card: #faf7f1;
   --card-foreground: #161610;
-
-  --popover: #faf7f1;
   --popover-foreground: #161610;
+  --secondary-foreground: #161610;
+  --muted-foreground: #564e42;
+  --accent-foreground: #faf6ee;
 
   --primary: #2a4a2c;
-  --primary-foreground: #f3ede2;
+  --primary-foreground: #f0e9d8;
   --primary-hover: #35603a;
 
-  --secondary: #e8decb;
-  --secondary-foreground: #161610;
-
-  --muted: #ede5d6;
-  --muted-foreground: #564e42;
-
-  --accent: #b07b49;
-  --accent-foreground: #faf7f1;
-  --accent-gold: #c59b47;
+  --accent: #a87040;
+  --accent-gold: #c49840;
 
   --surface-dark: #192b1a;
   --surface-dark-mid: #213524;
   --surface-dark-card: #2c4430;
-  --surface-dark-foreground: #f3ede2;
-  --surface-dark-muted: #d8cfbf;
-  --surface-dark-border: #3e5a43;
+  --surface-dark-foreground: #e4d9c2;
+  --surface-dark-muted: #7a9470;
+  --surface-dark-border: #334d38;
 
   --border: #d4c8b0;
   --input: #dcd2bb;
   --ring: #4a7a4e;
 
-  /* Radius scale */
   --radius-sm: 0.75rem;
   --radius-md: 0.875rem;
   --radius-lg: 1rem;
@@ -49,14 +45,17 @@
   --radius-2xl: 1.5rem;
   --radius-3xl: 2rem;
 
-  /* Shadows */
   --shadow-soft: 0 8px 24px rgba(22, 22, 16, 0.05);
   --shadow-card: 0 12px 32px rgba(22, 22, 16, 0.06);
   --shadow-card-hover: 0 18px 40px rgba(22, 22, 16, 0.1);
   --shadow-dark: 0 14px 34px rgba(0, 0, 0, 0.22);
 
-  --radius: var(--radius-md);
+  --radius: 0.75rem;
 }
+
+/* ============================================================
+   TAILWIND V4 THEME BRIDGE
+   ============================================================ */
 
 @theme inline {
   --color-background: var(--background);
@@ -117,14 +116,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), sans-serif;
-  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-::selection {
-  background: rgba(42, 74, 44, 0.16);
-  color: var(--foreground);
 }
 
 img {
@@ -146,6 +139,11 @@ button {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+::selection {
+  background: rgba(42, 74, 44, 0.16);
+  color: var(--foreground);
 }
 
 :focus-visible {
@@ -242,7 +240,8 @@ a {
 
 .dark-card {
   border: 1px solid var(--surface-dark-border);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--surface-dark);
+  color: var(--surface-dark-foreground);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-dark);
 }
@@ -268,33 +267,26 @@ a {
     var(--accent) 70%,
     transparent
   );
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 .grain-overlay::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 1;
 }
 
-.hero-overlay {
-  background:
-    radial-gradient(circle at 15% 20%, rgba(197, 155, 71, 0.14), transparent 26%),
-    radial-gradient(circle at 85% 15%, rgba(176, 123, 73, 0.12), transparent 22%),
-    linear-gradient(to bottom, rgba(25, 43, 26, 0.16), rgba(25, 43, 26, 0.46));
-}
-
 /* ============================================================
-   FORM PRIMITIVES
+   FORM HELPERS
    ============================================================ */
 
 .field {
   width: 100%;
   border: 1px solid var(--input);
-  background: rgba(250, 247, 241, 0.9);
+  background: rgba(250, 246, 238, 0.94);
   color: var(--foreground);
   border-radius: var(--radius-xl);
   padding: 0.875rem 1rem;
@@ -318,26 +310,21 @@ a {
   box-shadow: 0 0 0 4px rgba(74, 122, 78, 0.12);
 }
 
-.field:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
 .field-dark {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--surface-dark-foreground);
   border-radius: var(--radius-xl);
   padding: 0.875rem 1rem;
 }
 
 .field-dark::placeholder {
-  color: rgba(243, 237, 226, 0.68);
+  color: rgba(228, 217, 194, 0.6);
 }
 
 /* ============================================================
-   BUTTON-LIKE HELPERS
+   BUTTON HELPERS
    ============================================================ */
 
 .btn-soft {
@@ -369,8 +356,8 @@ a {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-xl);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--surface-dark-foreground);
   padding: 0.75rem 1rem;
   font-weight: 600;
@@ -380,7 +367,7 @@ a {
 }
 
 .btn-dark:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .btn-dark:active {
