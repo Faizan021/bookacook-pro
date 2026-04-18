@@ -148,9 +148,6 @@ export default function HomePage() {
 
       {/* ═══════════════════════════════════════════════════════════
           NAVBAR
-          Fix: removed tagline sub-text under wordmark.
-          Premium brands don't explain themselves in the nav.
-          Logo now uses the new LogoMark API (size + color props).
       ═══════════════════════════════════════════════════════════ */}
       <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
@@ -199,9 +196,12 @@ export default function HomePage() {
             >
               {t("home.cta.dashboard")}
             </Link>
+            
+            {/* FIX: Changed bg-primary to Gold for high visibility */}
             <Link
               href="/request/new"
-              className="inline-flex rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+              className="inline-flex rounded-xl px-4 py-2 text-sm font-semibold text-black transition hover:brightness-110 sm:inline-flex"
+              style={{ background: "var(--accent-gold)" }}
             >
               {t("home.cta.planEvent")}
             </Link>
@@ -212,17 +212,6 @@ export default function HomePage() {
 
       {/* ═══════════════════════════════════════════════════════════
           HERO
-          Fixes applied:
-          1. bg-surface-dark token replaces hardcoded rgb(20,31,22)
-          2. Radial vignette layer — subtle warm lift at content
-             centre adds atmospheric depth vs a flat colour wall
-          3. AI input promoted ABOVE the two CTA buttons —
-             it is the product, it must be the first action
-          4. CTAs demoted to small text links below the input
-          5. Headline tracking eased from -0.05em to -0.03em —
-             slightly less blunt, more hospitality-appropriate
-          6. Bronze dots on benefit strip use accent-gold token
-          7. Enter key support on AI input
       ═══════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden bg-surface-dark">
 
@@ -234,20 +223,15 @@ export default function HomePage() {
             priority
             className="object-cover opacity-20"
           />
-          {/* Primary overlay — darkens bottom for legibility */}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,18,12,0.68)_0%,rgba(10,18,12,0.78)_50%,rgba(10,18,12,0.93)_100%)]" />
-          {/* Radial vignette — adds atmospheric warmth at text centre.
-              This is the difference between a flat wall and an environment. */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_38%_38%,rgba(58,94,60,0.18)_0%,transparent_68%)]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:py-24">
           <div className="grid items-center gap-10 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
 
-            {/* ── Left column ── */}
             <div className="mx-auto max-w-4xl text-center lg:mx-0 lg:max-w-none lg:text-left">
 
-              {/* Badge */}
               <div
                 className={`inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-white/90 ${
                   isRTL ? "flex-row-reverse" : ""
@@ -257,19 +241,15 @@ export default function HomePage() {
                 <span>{t("home.badge")}</span>
               </div>
 
-              {/* Headline */}
               <h1 className="mt-8 max-w-4xl text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.03em] text-white sm:text-6xl xl:text-7xl">
                 {t("home.editorialHeroTitle")}
               </h1>
 
-              {/* Subtitle */}
               <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80 lg:max-w-3xl">
                 {t("home.editorialHeroSubtitle")}
               </p>
 
-              {/* ── AI INPUT — PRIMARY ACTION ──
-                  Sits above CTAs. This is the product centrepiece.
-              ── */}
+              {/* ── AI INPUT — PRIMARY ACTION ── */}
               <div className="mt-10 max-w-4xl rounded-[1.75rem] border border-white/12 bg-white/10 p-3 backdrop-blur-xl transition focus-within:border-white/22">
                 <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
                   <div className="flex items-center gap-3 text-muted-foreground">
@@ -282,15 +262,17 @@ export default function HomePage() {
                     placeholder={t("home.editorialSearchPlaceholder")}
                     className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
                   />
+                  
+                  {/* FIX: Changed button from bg-primary to Gold for readability */}
                   <button
                     onClick={handleAiSubmit}
-                    className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 active:scale-[0.98]"
+                    className="inline-flex shrink-0 items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold text-black shadow-sm transition hover:brightness-110 active:scale-[0.98]"
+                    style={{ background: "var(--accent-gold)" }}
                   >
                     {t("home.guided.cta")}
                   </button>
                 </div>
 
-                {/* Example chips */}
                 <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
                   {prompts.map((prompt) => (
                     <button
@@ -304,7 +286,6 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Secondary CTAs — demoted to text links below input */}
               <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-start">
                 <Link
                   href="/caterers"
@@ -321,7 +302,6 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              {/* Benefits strip — bronze dots use accent-gold token */}
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-white/70 lg:justify-start">
                 <span>{t("home.heroBenefit1")}</span>
                 <span
@@ -339,7 +319,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* ── Right column — occasion preview cards (unchanged) ── */}
             <div className="hidden lg:block">
               <div className="grid gap-4">
                 <Link
@@ -396,15 +375,10 @@ export default function HomePage() {
 
       {/* ═══════════════════════════════════════════════════════════
           HOW IT WORKS
-          Left panel fix: replaced nested bg-secondary/70 step boxes
-          (SaaS checklist pattern) with a clean vertical timeline.
-          Number circles + connecting line = editorial, not generic.
-          Right panel (AI demo) is unchanged — it was already strong.
       ═══════════════════════════════════════════════════════════ */}
       <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
 
-          {/* Left panel — editorial timeline */}
           <div className="rounded-[1.75rem] border border-border bg-card p-8 shadow-sm lg:p-10">
             <div className="text-xs uppercase tracking-[0.24em] text-primary">
               {t("home.principles.label")}
@@ -416,22 +390,18 @@ export default function HomePage() {
               {t("home.principles.subtitle")}
             </p>
 
-            {/* Vertical timeline — replaces nested step boxes */}
             <div className="mt-10">
               {steps.map((item, index) => (
                 <div key={item.step} className="relative flex gap-6 pb-9 last:pb-0">
-                  {/* Connecting line to next step */}
                   {index < steps.length - 1 && (
                     <div
                       className="absolute left-[19px] top-11 bottom-0 w-px bg-border"
                       aria-hidden="true"
                     />
                   )}
-                  {/* Step number circle */}
                   <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-card text-xs font-bold text-primary">
                     {item.step}
                   </div>
-                  {/* Step content */}
                   <div className="pt-1.5">
                     <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
                     <p className="mt-2 text-sm leading-7 text-muted-foreground">
@@ -443,7 +413,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right panel — AI demo (unchanged) */}
           <div className="overflow-hidden rounded-[1.75rem] border border-white/8 bg-surface-dark-mid p-8 lg:p-10">
             <div
               className="text-xs uppercase tracking-[0.24em]"
@@ -519,9 +488,6 @@ export default function HomePage() {
 
       {/* ═══════════════════════════════════════════════════════════
           OCCASIONS
-          Fixes: removed border/bg-card wrapper from photo cards
-          (the photo is the card — no border needed).
-          Bronze accent-gold token on card CTA link.
       ═══════════════════════════════════════════════════════════ */}
       <section id="occasions" className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
         <div className="flex items-end justify-between gap-4">
@@ -575,7 +541,6 @@ export default function HomePage() {
 
       {/* ═══════════════════════════════════════════════════════════
           CTA SECTION
-          Fix: bg-surface-dark token, consistent accent-gold label.
       ═══════════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
         <div className="overflow-hidden rounded-[2rem] border border-white/8 bg-surface-dark">
@@ -594,12 +559,16 @@ export default function HomePage() {
                 {t("home.editorialCtaSubtitle")}
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
+                
+                {/* FIX: Primary CTA changed to Gold for extreme visibility against dark box */}
                 <Link
                   href="/request/new"
-                  className="rounded-2xl bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-white/90 active:scale-[0.98]"
+                  className="rounded-2xl px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110 active:scale-[0.98]"
+                  style={{ background: "var(--accent-gold)" }}
                 >
                   {t("home.editorialCtaPrimary")}
                 </Link>
+
                 <Link
                   href="/caterers"
                   className="rounded-2xl border border-white/28 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
@@ -624,29 +593,18 @@ export default function HomePage() {
 
       {/* ═══════════════════════════════════════════════════════════
           FOOTER
-          Fixes:
-          - bg-surface-dark token replaces hardcoded rgb(20,31,22)
-          - LogoMark uses new size + color API (no className sizing)
-          - Removed "DE / EN" placeholder hardcode
-          - Added proper nav + legal links (Impressum, Datenschutz
-            are proper nouns in German law — fine to hardcode)
-          - Added copyright year
-          - Bronze accent-gold on footer CTA button
       ═══════════════════════════════════════════════════════════ */}
       <footer className="mt-8 border-t border-white/8 bg-surface-dark">
         <div className="mx-auto max-w-7xl px-6 py-12">
           <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
 
             <div>
-              {/* Logo — hardcoded ivory (#e4d9c2 = var(--surface-dark-foreground))
-                  for SVG fill reliability across all browsers */}
               <LogoMark size={22} color="#e4d9c2" showWordmark wordmarkColor="#e4d9c2" />
 
               <p className="mt-4 max-w-sm text-sm leading-7 text-white/68">
                 {t("home.editorialFooterTagline")}
               </p>
 
-              {/* Footer links */}
               <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
                 <Link
                   href="/caterers"
@@ -684,7 +642,7 @@ export default function HomePage() {
             <div className="flex flex-col items-start gap-3 lg:items-end">
               <Link
                 href="/request/new"
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-black transition hover:opacity-90 active:scale-[0.98]"
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-110 active:scale-[0.98]"
                 style={{ background: "var(--accent-gold)" }}
               >
                 {t("home.cta.planEvent")}
