@@ -17,7 +17,6 @@
   "landing.title1": "Die Catering-",
   "landing.title2": "Management-Plattform",
   "landing.subtitle": "Verwalten Sie Buchungen, Pakete, Verfügbarkeiten und Zahlungen — entwickelt für Admins, Caterer und Kunden.",
-  "landing.previewLabel": "Dashboard-Vorschau",
   "landing.adminTitle": "Admin-Dashboard",
   "landing.adminDesc": "Plattformumsatz, Caterer-Freigaben, Buchungen und Provisionsverfolgung.",
   "landing.catererTitle": "Caterer-Dashboard",
@@ -42,7 +41,6 @@
   "breadcrumb.adminDashboard": "Admin-Dashboard",
   "breadcrumb.catererDashboard": "Caterer-Dashboard",
   "breadcrumb.customerDashboard": "Kunden-Dashboard",
-  "breadcrumb.demo": "Demo",
 
   "metrics.platformRevenue": "Plattformumsatz",
   "metrics.totalGmv": "Gesamtes GMV auf der Plattform",
@@ -203,8 +201,6 @@
   "caterers.title": "Caterer-Verwaltung",
   "caterers.subtitle": "Prüfen Sie Anträge und verwalten Sie registrierte Caterer",
 
-  "demo.mode": "Demo-Modus",
-  "demo.sampleData": "Nur Beispieldaten",
 
   "auth.email": "E-Mail-Adresse",
   "auth.password": "Passwort",
@@ -218,9 +214,6 @@
   "auth.forgotPassword": "Passwort vergessen?",
   "auth.goToSignup": "Zur Registrierung",
   "auth.goToLogin": "Zur Anmeldung",
-  "auth.previewCustomer": "Kunden-Demo ansehen",
-  "auth.previewCaterer": "Caterer-Demo ansehen",
-  "auth.previewAdmin": "Admin-Demo ansehen",
 
   "lang.de": "Deutsch",
   "lang.en": "English",
