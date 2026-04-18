@@ -11,14 +11,20 @@ import {
 
 import de from "@/messages/de.json";
 import en from "@/messages/en.json";
-// Import others if you have them: import ar from "@/messages/ar.json";
+import ar from "@/messages/ar.json"; // Ensure this file exists in your messages folder!
 
-export type Locale = "de" | "en"; // Add "ar" here later
+// 1. ADD "ar" TO THE TYPE DEFINITION
+export type Locale = "de" | "en" | "ar"; 
 
 // This type allows for deeply nested objects in your JSON
 type NestedMessages = { [key: string]: any };
 
-const MESSAGES: Record<Locale, NestedMessages> = { de, en };
+// 2. ADD "ar" TO THE MESSAGES OBJECT
+const MESSAGES: Record<Locale, NestedMessages> = { 
+  de, 
+  en, 
+  ar 
+};
 
 const STORAGE_KEY = "speisely_lang";
 const LEGACY_STORAGE_KEY = "bookacook_lang";
@@ -43,7 +49,6 @@ const I18nContext = createContext<I18nContextType>({
 
 /**
  * HELPER FUNCTION: Digs through a nested object using a dot-notation string.
- * Example: getNestedValue({ a: { b: "hello" } }, "a.b") -> "hello"
  */
 function getNestedValue(obj: any, path: string): any {
   const keys = path.split(".");
@@ -103,19 +108,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   /**
    * FIXED TRANSLATION FUNCTION
-   * Now supports "home.nav.login" by digging into the object
    */
   function t(key: string, fallback?: string): string {
-    // Try to find the value in the current locale
     const value = getNestedValue(MESSAGES[locale], key);
     
     if (value !== undefined) return String(value);
 
-    // If not found, try to find it in the default locale
     const defaultValue = getNestedValue(MESSAGES[DEFAULT_LOCALE], key);
     if (defaultValue !== undefined) return String(defaultValue);
 
-    // If still not found, return fallback or the key itself
     return fallback ?? key;
   }
 
