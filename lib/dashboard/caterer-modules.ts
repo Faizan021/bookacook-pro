@@ -1,5 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 
+/**
+ * TYPE DEFINITIONS
+ * These define the strict boundaries of our data to prevent errors.
+ */
+
 export type VerificationStatus =
   | "pending"
   | "under_review"
@@ -86,6 +91,10 @@ export type ExtendedPaymentTotals = {
   remainingTotal: string;
 };
 
+/**
+ * UTILITIES
+ */
+
 function formatDate(iso: string): string {
   try {
     return new Date(iso).toLocaleDateString("de-DE", {
@@ -102,10 +111,14 @@ function fmt(n: number): string {
   return `€${n.toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-function normalizeBookingStatus(
-  s: string
-): "confirmed" | "pending" | "completed" | "cancelled" {
-  const v = s.toLowerCase() as PayoutStatus;
+/**
+ * NORMALIZATION ENGINES
+ * These convert messy database strings into strict, predictable types.
+ */
+
+function normalizeBookingStatus(s: string): "confirmed" | "pending" | "completed" | "cancelled" {
+  // FIX: We treat 'v' as a simple string to avoid the "no overlap" Type Error
+  const v = s.toLowerCase(); 
   if (v === "confirmed" || v === "accepted" || v === "approved") return "confirmed";
   if (v === "completed" || v === "done" || v === "delivered") return "completed";
   if (v === "cancelled" || v === "rejected" || v === "declined") return "cancelled";
@@ -113,14 +126,16 @@ function normalizeBookingStatus(
 }
 
 function normalizePaymentStatus(s: string): "paid" | "pending" | "refunded" {
-  const v = s.toLowerCase() as PayoutStatus;
+  // FIX: We treat 'v' as a simple string to avoid the "no overlap" Type Error
+  const v = s.toLowerCase();
   if (v === "paid" || v === "payout_sent" || v === "completed") return "paid";
   if (v === "refunded" || v === "reversed") return "refunded";
   return "pending";
 }
 
 function normalizePackageStatus(s: string): "active" | "draft" | "paused" {
- const v = s.toLowerCase() as PayoutStatus;
+  // FIX: We treat 'v' as a simple string to avoid the "no overlap" Type Error
+  const v = s.toLowerCase();
   if (v === "active" || v === "published" || v === "live") return "active";
   if (v === "paused" || v === "hidden") return "paused";
   return "draft";
@@ -137,12 +152,16 @@ function normalizePayoutStatus(s: string): PayoutStatus {
     "pending_payment", "funds_held", "partially_released", "payout_pending",
     "payout_released", "refunded", "partially_refunded", "cancelled", "disputed",
   ];
-const v = s.toLowerCase() as PayoutStatus;
-if (VALID.includes(v as PayoutStatus)) return v as PayoutStatus;
-if (v === "paid" || v === "payout_sent") return "payout_released";
-if (v === "refunded" || v === "reversed") return "refunded";
-return "pending_payment";
+  const v = s.toLowerCase();
+  if (VALID.includes(v as PayoutStatus)) return v as PayoutStatus;
+  if (v === "paid" || v === "payout_sent") return "payout_released";
+  if (v === "refunded" || v === "reversed") return "refunded";
+  return "pending_payment";
 }
+
+/**
+ * DATA ACCESS LAYER (DAL)
+ */
 
 export async function getCatererIdForUser(
   userId: string
@@ -173,7 +192,6 @@ export async function getCatererProfile(userId: string): Promise<CatererProfile 
 
     if (error || !data) return null;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const row = data as any;
     const vs = normalizeVerificationStatus(row.verification_status || "pending");
 
@@ -206,7 +224,6 @@ export async function getCatererBookingsList(
 
     if (error || !data) return [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (data as any[]).map((b) => ({
       id: String(b.id).slice(0, 8).toUpperCase(),
       event: b.event_type || b.service_type || b.package_name || "Catering Event",
@@ -238,7 +255,6 @@ export async function getCatererPackagesList(
 
     if (error || !data) return [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (data as any[]).map((p) => ({
       id: String(p.id),
       name: p.name || p.title || "Package",
@@ -265,7 +281,6 @@ export async function getCatererBookingDates(catererId: string): Promise<string[
 
     if (error || !data) return [];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (data as any[])
       .map((b) => b.event_date || b.created_at)
       .filter(Boolean) as string[];
@@ -291,7 +306,6 @@ export async function getCatererPaymentsList(catererId: string): Promise<{
       return { payments: [], totals: { total: "€0", commission: "€0", pending: "€0" } };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rows = data as any[];
     const paidSum = rows
       .filter((p) => normalizePaymentStatus(p.payment_status) === "paid")
@@ -346,7 +360,6 @@ export async function getCatererExtendedPayments(catererId: string): Promise<{
       return { payments: [], totals: ZERO_TOTALS };
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rows = data as any[];
 
     const payments: ExtendedPayment[] = rows.map((p) => {
