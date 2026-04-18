@@ -181,8 +181,8 @@ export default function HomePage() {
             href="/"
             className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-card text-foreground shadow-sm">
-              <LogoMark className="h-5 w-5" />
+            <div className="flex items-center justify-center text-primary">
+              <LogoMark className="h-8 w-8" />
             </div>
 
             <div className="flex flex-col">
@@ -207,7 +207,7 @@ export default function HomePage() {
             </a>
 
             <Link
-              href="/for-caterers"
+              href="/signup?role=caterer"
               className="text-sm text-muted-foreground transition hover:text-foreground"
             >
               {t("home.nav.forCaterers")}
@@ -228,7 +228,7 @@ export default function HomePage() {
 
             <Link
               href="/login"
-              className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary sm:inline-flex"
+              className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-secondary sm:inline-flex"
             >
               {t("home.cta.dashboard")}
             </Link>
@@ -252,7 +252,7 @@ export default function HomePage() {
             priority
             className="object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,22,15,0.72)_0%,rgba(14,22,15,0.82)_45%,rgba(14,22,15,0.92)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,22,15,0.56)_0%,rgba(14,22,15,0.70)_45%,rgba(14,22,15,0.84)_100%)]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:py-24">
@@ -266,26 +266,27 @@ export default function HomePage() {
               {t("home.editorialHeroTitle")}
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/78">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/84">
               {t("home.editorialHeroSubtitle")}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/caterers"
-                className="rounded-2xl border border-white/12 bg-white/8 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/12"
+                className="rounded-2xl border border-white/22 bg-white/16 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-white/22"
               >
                 {t("home.heroBrowseCta")}
               </Link>
+
               <Link
                 href="/request/new"
-                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black shadow-sm transition hover:bg-white"
               >
                 {t("home.heroPlanCta")}
               </Link>
             </div>
 
-            <div className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-white/10 bg-white/8 p-3 backdrop-blur-xl">
+            <div className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-white/12 bg-white/10 p-3 backdrop-blur-xl">
               <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <SearchIcon />
@@ -300,7 +301,7 @@ export default function HomePage() {
 
                 <button
                   onClick={handleAiSubmit}
-                  className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                  className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
                 >
                   {t("home.guided.cta")}
                 </button>
@@ -311,7 +312,7 @@ export default function HomePage() {
                   <button
                     key={prompt}
                     onClick={() => setAiQuery(prompt)}
-                    className="rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-xs text-white/85 transition hover:bg-white/14"
+                    className="rounded-full border border-white/14 bg-white/10 px-3 py-1.5 text-xs text-white/90 transition hover:bg-white/16"
                   >
                     {prompt}
                   </button>
@@ -319,7 +320,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-3 text-sm text-white/72">
+            <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-3 text-sm text-white/80">
               <span>{t("home.heroBenefit1")}</span>
               <span className="h-1 w-1 rounded-full bg-amber-400" />
               <span>{t("home.heroBenefit2")}</span>
@@ -367,7 +368,9 @@ export default function HomePage() {
               href={item.href}
               className="rounded-[1.5rem] border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(22,22,16,0.08)]"
             >
-              <div className="text-xs uppercase tracking-[0.18em] text-primary">{item.meta}</div>
+              <div className="text-xs uppercase tracking-[0.18em] text-primary">
+                {item.meta}
+              </div>
               <h3 className="mt-3 text-xl font-semibold tracking-tight">{item.title}</h3>
               <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.description}</p>
               <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-foreground">
@@ -426,13 +429,13 @@ export default function HomePage() {
               {t("home.editorialStepsTitle")}
             </h2>
 
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/78">
+            <p className="mt-5 max-w-xl text-base leading-8 text-white/84">
               {t("home.editorialStepsSubtitle")}
             </p>
 
             <div className="mt-8 grid gap-4">
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
                   {t("home.aiDemo.requestLabel")}
                 </div>
                 <div className="mt-3 text-lg font-semibold text-white">
@@ -441,7 +444,7 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
                   {t("home.aiDemo.understands")}
                 </div>
 
@@ -465,7 +468,7 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
                   {t("home.aiDemo.recommended")}
                 </div>
 
@@ -480,7 +483,7 @@ export default function HomePage() {
                       className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.04)] px-4 py-4"
                     >
                       <div className="text-sm font-semibold text-white">{name}</div>
-                      <div className="mt-1 text-xs text-white/60">{meta}</div>
+                      <div className="mt-1 text-xs text-white/72">{meta}</div>
                     </div>
                   ))}
                 </div>
@@ -523,12 +526,12 @@ export default function HomePage() {
                   fill
                   className="object-cover transition duration-700 group-hover:scale-[1.04]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.88)] via-[rgba(25,43,26,0.20)] to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.76)] via-[rgba(25,43,26,0.14)] to-transparent" />
               </div>
 
               <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                 <h3 className="text-xl font-semibold">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/78">{card.description}</p>
+                <p className="mt-3 text-sm leading-7 text-white/86">{card.description}</p>
                 <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-amber-300">
                   {t("home.occasions.cardCta")}
                   <ArrowUpRightIcon />
@@ -551,7 +554,7 @@ export default function HomePage() {
                 {t("home.editorialCtaTitle")}
               </h2>
 
-              <p className="mt-5 max-w-2xl text-base leading-8 text-white/78">
+              <p className="mt-5 max-w-2xl text-base leading-8 text-white/84">
                 {t("home.editorialCtaSubtitle")}
               </p>
 
@@ -590,8 +593,8 @@ export default function HomePage() {
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/8 text-white">
-                  <LogoMark className="h-5 w-5" />
+                <div className="flex items-center justify-center text-white">
+                  <LogoMark className="h-8 w-8" />
                 </div>
                 <div className="text-base font-semibold text-white">Speisely</div>
               </div>
