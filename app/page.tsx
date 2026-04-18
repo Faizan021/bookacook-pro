@@ -74,6 +74,21 @@ export default function HomePage() {
             {/* Subtle Gradient Overlay to blend image into dark background */}
             <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-transparent to-transparent opacity-60" />
           </div>
+          // Inside your Hero <section> in app/page.tsx
+<section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface-dark">
+  {/* 1. The Grain Overlay */}
+  <div className="grain-overlay" />
+
+  {/* 2. The "Spotlight" (Radial Gradient) */}
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--color-primary)_0%,_transparent_70%)] opacity-30" />
+
+  {/* 3. The Ambient Glow (The light coming from the bottom) */}
+  <div className="absolute bottom-0 left-1/2 h-[500px] w-[800px] -translate-x-1/2 translate-y-1/2 rounded-full bg-accent-gold/10 blur-[120px]" />
+
+  <div className="relative z-10 ...">
+     {/* Your Hero Content */}
+  </div>
+</section>
           
           {/* Floating "Premium" Badge */}
           <div className="absolute -bottom-6 -left-6 rounded-2xl border border-white/10 bg-card p-6 shadow-xl hidden md:block">
