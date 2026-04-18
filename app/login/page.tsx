@@ -74,6 +74,7 @@ export default function LoginPage() {
               <div className="flex items-center justify-center text-primary">
                 <LogoMark className="h-8 w-8" />
               </div>
+
               <div className="flex flex-col">
                 <span className="text-base font-semibold tracking-tight">Speisely</span>
                 <span className="text-xs text-muted-foreground">
@@ -93,9 +94,11 @@ export default function LoginPage() {
                 <div className="text-xs uppercase tracking-[0.24em] text-primary">
                   {t("home.badge")}
                 </div>
+
                 <h1 className="mt-4 text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-foreground">
                   {t("auth.welcomeBack")}
                 </h1>
+
                 <p className="mt-5 text-base leading-8 text-muted-foreground">
                   {t("home.editorialFooterTagline")}
                 </p>
@@ -129,6 +132,7 @@ export default function LoginPage() {
                     <div className="flex items-center justify-center text-primary lg:hidden">
                       <LogoMark className="h-8 w-8" />
                     </div>
+
                     <div>
                       <h2 className="text-3xl font-semibold tracking-tight text-foreground">
                         {t("auth.welcomeBack")}
@@ -201,7 +205,7 @@ export default function LoginPage() {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                           />
                         </svg>
-                        {t("pkg.form.saving")}
+                        {t("auth.login")}
                       </span>
                     ) : (
                       t("auth.login")
@@ -213,40 +217,11 @@ export default function LoginPage() {
                   {t("auth.noAccount")}{" "}
                   <Link
                     href="/signup"
-                    className="font-semibold text-primary transition hover:text-primary-hover"
+                    className="font-semibold text-primary transition hover:opacity-80"
                   >
                     {t("auth.goToSignup")}
                   </Link>
                 </p>
-
-                <div className="mt-6 border-t border-border pt-6">
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    {t("landing.previewLabel")}
-                  </p>
-
-                  <div className="grid gap-2">
-                    <Link
-                      href="/demo/customer"
-                      className="rounded-xl border border-border bg-background px-4 py-2.5 text-center text-sm font-medium text-foreground transition hover:bg-secondary"
-                    >
-                      {t("auth.previewCustomer")}
-                    </Link>
-
-                    <Link
-                      href="/demo/caterer"
-                      className="rounded-xl border border-border bg-background px-4 py-2.5 text-center text-sm font-medium text-foreground transition hover:bg-secondary"
-                    >
-                      {t("auth.previewCaterer")}
-                    </Link>
-
-                    <Link
-                      href="/demo/admin"
-                      className="rounded-xl border border-border bg-background px-4 py-2.5 text-center text-sm font-medium text-foreground transition hover:bg-secondary"
-                    >
-                      {t("auth.previewAdmin")}
-                    </Link>
-                  </div>
-                </div>
               </div>
             </section>
           </div>
