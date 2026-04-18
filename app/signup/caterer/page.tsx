@@ -28,6 +28,10 @@ const EMPTY: FormFields = {
   password: "",
 };
 
+// PREMIUM IMAGE URLS (Unsplash)
+const HERO_IMAGE_URL = "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1200&auto=format&fit=crop";
+const SUCCESS_IMAGE_URL = "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=1200&auto=format&fit=crop";
+
 export default function CatererSignupPage() {
   const t = useT();
   const [form, setForm] = useState<FormFields>(EMPTY);
@@ -115,13 +119,19 @@ export default function CatererSignupPage() {
 
   if (success) {
     return (
-      <main className="min-h-screen bg-surface-dark text-white">
-        <div className="absolute end-4 top-4">
+      <main className="min-h-screen bg-surface-dark text-white flex flex-col lg:flex-row">
+        <div className="absolute end-4 top-4 z-50">
           <LanguageSwitcher />
         </div>
 
-        <div className="mx-auto flex min-h-screen max-w-md items-center justify-center px-6 py-10">
-          <div className="w-full rounded-[2rem] border border-white/10 bg-card p-10 text-center shadow-2xl backdrop-blur-xl">
+        {/* Success Image (Desktop) */}
+        <div className="hidden lg:block lg:w-1/2 relative">
+          <img src={SUCCESS_IMAGE_URL} alt="Success" className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+        </div>
+
+        <div className="flex w-full items-center justify-center px-6 py-10 lg:w-1/2">
+          <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-card p-10 text-center shadow-2xl backdrop-blur-xl">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/20">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -175,235 +185,261 @@ export default function CatererSignupPage() {
 
   return (
     <main className="min-h-screen bg-surface-dark text-white">
-      <div className="absolute end-4 top-4">
+      <div className="absolute end-4 top-4 z-50">
         <LanguageSwitcher />
       </div>
 
-      <div className="mx-auto max-w-2xl px-6 py-12">
-        <div className="mb-4">
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-1.5 text-sm text-white/50 transition hover:text-white rtl:flex-row-reverse"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="h-4 w-4 rtl:rotate-180"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {t("signup.backToChooser")}
-          </Link>
-        </div>
-
-        <div className="rounded-[2rem] border border-white/10 bg-card p-8 shadow-2xl backdrop-blur-md sm:p-10">
-          <div className="mb-8">
-            <h1 className="text-3xl font-semibold tracking-tight text-white">
-              {t("catererReg.title")}
-            </h1>
-            <p className="mt-2 text-sm text-white/50">
-              {t("catererReg.subtitle")}
+      <div className="grid min-h-screen lg:grid-cols-2">
+        
+        {/* LEFT SIDE: EYE-CATCHING IMAGE (Hidden on Mobile) */}
+        <div className="hidden lg:block relative overflow-hidden">
+          <img 
+            src={HERO_IMAGE_URL} 
+            alt="Catering Excellence" 
+            className="absolute inset-0 h-full w-full object-cover" 
+          />
+          {/* Overlay to keep it premium and moody */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+          
+          {/* Subtle Floating Text on Image */}
+          <div className="absolute bottom-16 left-16 max-w-md">
+            <h2 className="text-3xl font-semibold text-white leading-tight">
+              Elevate your catering business with Speisely.
+            </h2>
+            <p className="mt-4 text-white/60">
+              Join the most exclusive marketplace for professional catering services.
             </p>
           </div>
+        </div>
 
-          <form onSubmit={handleSubmit} noValidate>
-            <div className="space-y-6">
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
-                    {t("catererReg.businessName")}
-                    <span className="ms-1 text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={form.businessName}
-                    onChange={(e) => setField("businessName", e.target.value)}
-                    className={errors.businessName ? inputErr : inputOk}
-                    placeholder="Berlin BBQ House GmbH"
+        {/* RIGHT SIDE: THE FORM */}
+        <div className="flex items-center justify-center px-6 py-12 lg:px-16 lg:py-12">
+          <div className="w-full max-w-xl">
+            <div className="mb-8">
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-1.5 text-sm text-white/40 transition hover:text-white rtl:flex-row-reverse"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-4 w-4 rtl:rotate-180"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                    clipRule="evenodd"
                   />
-                  {errors.businessName && (
-                    <p className="mt-1.5 text-xs text-red-400 font-medium">
-                      {errors.businessName}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
-                    {t("catererReg.contactPerson")}
-                    <span className="ms-1 text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={form.contactPerson}
-                    onChange={(e) => setField("contactPerson", e.target.value)}
-                    className={errors.contactPerson ? inputErr : inputOk}
-                    placeholder="Max Mustermann"
-                  />
-                  {errors.contactPerson && (
-                    <p className="mt-1.5 text-xs text-red-400 font-medium">
-                      {errors.contactPerson}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
-                    {t("auth.email")}
-                    <span className="ms-1 text-red-500">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    value={form.email}
-                    onChange={(e) => setField("email", e.target.value)}
-                    className={errors.email ? inputErr : inputOk}
-                    placeholder="kontakt@berlincatering.de"
-                    autoComplete="email"
-                  />
-                  {errors.email && (
-                    <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.email}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
-                    {t("catererReg.phone")}
-                    <span className="ms-1 text-red-500">*</span>
-                  </label>
-                  <input
-                    type="tel"
-                    value={form.phone}
-                    onChange={(e) => setField("phone", e.target.value)}
-                    className={errors.phone ? inputErr : inputOk}
-                    placeholder="+49 30 12345678"
-                  />
-                  {errors.phone && (
-                    <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.phone}</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
-                  {t("catererReg.businessAddress")}
-                  <span className="ms-1 text-red-500">*</span>
-                </label>
-                <textarea
-                  rows={2}
-                  value={form.businessAddress}
-                  onChange={(e) => setField("businessAddress", e.target.value)}
-                  className={`${errors.businessAddress ? inputErr : inputOk} resize-none`}
-                  placeholder="Musterstraße 1, 10115 Berlin"
-                />
-                {errors.businessAddress && (
-                  <p className="mt-1.5 text-xs text-red-400 font-medium">
-                    {errors.businessAddress}
-                  </p>
-                )}
-              </div>
-
-              {/* LICENSE BOX - Premium Styling */}
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors focus-within:border-white/20">
-                <label className="flex items-center gap-2 text-sm font-semibold text-white rtl:flex-row-reverse">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-[var(--accent-gold)]"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.925-3.31 9.128-7.834 10.614a.75.75 0 01-.532 0C5.31 16.073 2 11.87 2 7c0-.682.057-1.35.166-2.001zm11.54 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {t("catererReg.licenseNumber")}
-                  <span className="ms-auto rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
-                    {t("catererReg.licenseRequired")}
-                  </span>
-                </label>
-
-                <input
-                  type="text"
-                  value={form.licenseNumber}
-                  onChange={(e) => setField("licenseNumber", e.target.value)}
-                  className={
-                    errors.licenseNumber
-                      ? inputErr
-                      : inputOk
-                  }
-                  placeholder="z.B. HRB-123456 / IHK-2024-789"
-                />
-
-                <p className="mt-2 text-[11px] text-white/40 italic">
-                  {t("catererReg.licenseHelp")}
-                </p>
-
-                {errors.licenseNumber && (
-                  <p className="mt-2 text-xs font-semibold text-red-400">
-                    {errors.licenseNumber}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-white/70">
-                  {t("auth.password")}
-                  <span className="ms-1 text-red-500">*</span>
-                </label>
-                <input
-                  type="password"
-                  value={form.password}
-                  onChange={(e) => setField("password", e.target.value)}
-                  className={errors.password ? inputErr : inputOk}
-                  autoComplete="new-password"
-                  placeholder="••••••••"
-                />
-                {errors.password && (
-                  <p className="mt-1.5 text-xs text-red-400 font-medium">
-                    {errors.password}
-                  </p>
-                )}
-              </div>
+                </svg>
+                {t("signup.backToChooser")}
+              </Link>
             </div>
 
-            {serverError && (
-              <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                {serverError}
+            <div className="rounded-[2rem] border border-white/10 bg-card p-8 shadow-2xl backdrop-blur-md sm:p-10">
+              <div className="mb-8">
+                <h1 className="text-3xl font-semibold tracking-tight text-white">
+                  {t("catererReg.title")}
+                </h1>
+                <p className="mt-2 text-sm text-white/50">
+                  {t("catererReg.subtitle")}
+                </p>
               </div>
-            )}
 
-            {/* PREMIUM CTA: Gold Background, Black Text */}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="mt-8 w-full rounded-xl px-4 py-4 text-sm font-bold text-black shadow-lg shadow-black/20 transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-              style={{ background: "var(--accent-gold)" }}
-            >
-              {submitting ? t("catererReg.submitting") : t("catererReg.submit")}
-            </button>
+              <form onSubmit={handleSubmit} noValidate>
+                <div className="space-y-6">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
+                        {t("catererReg.businessName")}
+                        <span className="ms-1 text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={form.businessName}
+                        onChange={(e) => setField("businessName", e.target.value)}
+                        className={errors.businessName ? inputErr : inputOk}
+                        placeholder="Berlin BBQ House GmbH"
+                      />
+                      {errors.businessName && (
+                        <p className="mt-1.5 text-xs text-red-400 font-medium">
+                          {errors.businessName}
+                        </p>
+                      )}
+                    </div>
 
-            <p className="mt-6 text-center text-xs text-white/40">
-              {t("catererReg.termsNote")}
-            </p>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
+                        {t("catererReg.contactPerson")}
+                        <span className="ms-1 text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={form.contactPerson}
+                        onChange={(e) => setField("contactPerson", e.target.value)}
+                        className={errors.contactPerson ? inputErr : inputOk}
+                        placeholder="Max Mustermann"
+                      />
+                      {errors.contactPerson && (
+                        <p className="mt-1.5 text-xs text-red-400 font-medium">
+                          {errors.contactPerson}
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-            <p className="mt-4 text-center text-sm text-white/60">
-              {t("auth.hasAccount")}{" "}
-              <Link
-                href="/login"
-                className="font-semibold text-[var(--accent-gold)] transition hover:text-white"
-              >
-                {t("auth.goToLogin")}
-              </Link>
-            </p>
-          </form>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
+                        {t("auth.email")}
+                        <span className="ms-1 text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => setField("email", e.target.value)}
+                        className={errors.email ? inputErr : inputOk}
+                        placeholder="kontakt@berlincatering.de"
+                        autoComplete="email"
+                      />
+                      {errors.email && (
+                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.email}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
+                        {t("catererReg.phone")}
+                        <span className="ms-1 text-red-500">*</span>
+                      </label>
+                      <input
+                        type="tel"
+                        value={form.phone}
+                        onChange={(e) => setField("phone", e.target.value)}
+                        className={errors.phone ? inputErr : inputOk}
+                        placeholder="+49 30 12345678"
+                      />
+                      {errors.phone && (
+                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.phone}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
+                      {t("catererReg.businessAddress")}
+                      <span className="ms-1 text-red-500">*</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={form.businessAddress}
+                      onChange={(e) => setField("businessAddress", e.target.value)}
+                      className={`${errors.businessAddress ? inputErr : inputOk} resize-none`}
+                      placeholder="Musterstraße 1, 10115 Berlin"
+                    />
+                    {errors.businessAddress && (
+                      <p className="mt-1.5 text-xs text-red-400 font-medium">
+                        {errors.businessAddress}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors focus-within:border-white/20">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-white rtl:flex-row-reverse">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-[var(--accent-gold)]"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.925-3.31 9.128-7.834 10.614a.75.75 0 01-.532 0C5.31 16.073 2 11.87 2 7c0-.682.057-1.35.166-2.001zm11.54 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      {t("catererReg.licenseNumber")}
+                      <span className="ms-auto rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
+                        {t("catererReg.licenseRequired")}
+                      </span>
+                    </label>
+
+                    <input
+                      type="text"
+                      value={form.licenseNumber}
+                      onChange={(e) => setField("licenseNumber", e.target.value)}
+                      className={
+                        errors.licenseNumber
+                          ? inputErr
+                          : inputOk
+                      }
+                      placeholder="z.B. HRB-123456 / IHK-2024-789"
+                    />
+
+                    <p className="mt-2 text-[11px] text-white/40 italic">
+                      {t("catererReg.licenseHelp")}
+                    </p>
+
+                    {errors.licenseNumber && (
+                      <p className="mt-2 text-xs font-semibold text-red-400">
+                        {errors.licenseNumber}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
+                      {t("auth.password")}
+                      <span className="ms-1 text-red-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      value={form.password}
+                      onChange={(e) => setField("password", e.target.value)}
+                      className={errors.password ? inputErr : inputOk}
+                      autoComplete="new-password"
+                      placeholder="••••••••"
+                    />
+                    {errors.password && (
+                      <p className="mt-1.5 text-xs text-red-400 font-medium">
+                        {errors.password}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {serverError && (
+                  <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                    {serverError}
+                  </div>
+                )}
+
+                {/* PREMIUM CTA: Gold Background, Black Text */}
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="mt-8 w-full rounded-xl px-4 py-4 text-sm font-bold text-black shadow-lg shadow-black/20 transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                  style={{ background: "var(--accent-gold)" }}
+                >
+                  {submitting ? t("catererReg.submitting") : t("catererReg.submit")}
+                </button>
+
+                <p className="mt-6 text-center text-xs text-white/40">
+                  {t("catererReg.termsNote")}
+                </p>
+
+                <p className="mt-4 text-center text-sm text-white/60">
+                  {t("auth.hasAccount")}{" "}
+                  <Link
+                    href="/login"
+                    className="font-semibold text-[var(--accent-gold)] transition hover:text-white"
+                  >
+                    {t("auth.goToLogin")}
+                  </Link>
+                </p>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </main>
