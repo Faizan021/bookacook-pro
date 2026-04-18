@@ -182,7 +182,7 @@ export default function HomePage() {
             className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}
           >
             <div className="flex items-center justify-center text-primary">
-  <LogoMark className="h-7 w-7" />
+  <LogoMark className="h-8 w-8" />
 </div>
             <div className="flex flex-col">
               <span className="text-base font-semibold tracking-tight">Speisely</span>
@@ -212,13 +212,12 @@ export default function HomePage() {
   {t("home.nav.forCaterers")}
 </Link>
 
-            <Link
-              href="/login"
-              className="text-sm text-muted-foreground transition hover:text-foreground"
-            >
-              {t("home.nav.login")}
-            </Link>
-          </nav>
+           <Link
+  href="/signup?role=caterer"
+  className="text-sm text-muted-foreground transition hover:text-foreground"
+>
+  {t("home.nav.forCaterers")}
+</Link>
 
           <div className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>
             <div className="opacity-80 transition hover:opacity-100">
@@ -269,16 +268,16 @@ export default function HomePage() {
               {t("home.editorialHeroSubtitle")}
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <<div className="mt-8 flex flex-wrap items-center justify-center gap-3">
   <Link
     href="/caterers"
-    className="rounded-2xl border border-white/18 bg-white/12 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
+    className="rounded-2xl border border-white/22 bg-white/16 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-white/22"
   >
     {t("home.heroBrowseCta")}
   </Link>
   <Link
     href="/request/new"
-    className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white/90"
+    className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black shadow-sm transition hover:bg-white"
   >
     {t("home.heroPlanCta")}
   </Link>
@@ -590,7 +589,7 @@ export default function HomePage() {
             <div>
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/12 bg-white/10 text-white shadow-sm">
-  <LogoMark className="h-7 w-7" />
+  <LogoMark className="h-8 w-8" />
 </div>
                 <div className="text-base font-semibold text-white">Speisely</div>
               </div>
