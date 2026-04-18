@@ -5,21 +5,27 @@ import {
   useContext,
   useEffect,
   useState,
+  useMemo,
   type ReactNode,
 } from "react";
 
 import de from "@/messages/de.json";
 import en from "@/messages/en.json";
+// Import others if you have them: import ar from "@/messages/ar.json";
 
-export type Locale = "de" | "en";
+export type Locale = "de" | "en"; // Add "ar" here later
 
-type Messages = Record<string, string>;
+// This type allows for deeply nested objects in your JSON
+type NestedMessages = { [key: string]: any };
 
-const MESSAGES: Record<Locale, Messages> = { de, en };
+const MESSAGES: Record<Locale, NestedMessages> = { de, en };
 
 const STORAGE_KEY = "speisely_lang";
 const LEGACY_STORAGE_KEY = "bookacook_lang";
 const DEFAULT_LOCALE: Locale = "de";
+
+// List of languages that should read from Right-to-Left (e.g., Arabic)
+const RTL_LOCALES: Locale[] = ["ar"]; 
 
 type I18nContextType = {
   locale: Locale;
@@ -35,13 +41,31 @@ const I18nContext = createContext<I18nContextType>({
   isRTL: false,
 });
 
+/**
+ * HELPER FUNCTION: Digs through a nested object using a dot-notation string.
+ * Example: getNestedValue({ a: { b: "hello" } }, "a.b") -> "hello"
+ */
+function getNestedValue(obj: any, path: string): any {
+  const keys = path.split(".");
+  let current = obj;
+
+  for (const key of keys) {
+    if (current && typeof current === "object" && key in current) {
+      current = current[key];
+    } else {
+      return undefined;
+    }
+  }
+  return current;
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
   const [mounted, setMounted] = useState(false);
 
+  // 1. Handle initial language load from LocalStorage
   useEffect(() => {
     setMounted(true);
-
     try {
       const saved =
         (localStorage.getItem(STORAGE_KEY) as Locale | null) ||
@@ -51,42 +75,48 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         setLocaleState(saved);
         localStorage.setItem(STORAGE_KEY, saved);
         localStorage.removeItem(LEGACY_STORAGE_KEY);
-      } else {
-        localStorage.setItem(STORAGE_KEY, DEFAULT_LOCALE);
-        localStorage.removeItem(LEGACY_STORAGE_KEY);
       }
-    } catch {
-      // localStorage may not be available
+    } catch (error) {
+      console.error("Failed to load locale from storage", error);
     }
   }, []);
 
-  const isRTL = false;
+  // 2. Detect if current language is RTL (for Arabic support)
+  const isRTL = useMemo(() => RTL_LOCALES.includes(locale), [locale]);
 
+  // 3. Update HTML attributes (lang and dir) when locale changes
   useEffect(() => {
     if (!mounted) return;
-
-    document.documentElement.dir = "ltr";
     document.documentElement.lang = locale;
-  }, [locale, mounted]);
+    document.documentElement.dir = isRTL ? "rtl" : "ltr";
+  }, [locale, isRTL, mounted]);
 
   function setLocale(l: Locale) {
     setLocaleState(l);
-
     try {
       localStorage.setItem(STORAGE_KEY, l);
       localStorage.removeItem(LEGACY_STORAGE_KEY);
-    } catch {
-      // ignore
+    } catch (error) {
+      console.error("Failed to save locale", error);
     }
   }
 
+  /**
+   * FIXED TRANSLATION FUNCTION
+   * Now supports "home.nav.login" by digging into the object
+   */
   function t(key: string, fallback?: string): string {
-    return (
-      MESSAGES[locale][key] ??
-      MESSAGES[DEFAULT_LOCALE][key] ??
-      fallback ??
-      key
-    );
+    // Try to find the value in the current locale
+    const value = getNestedValue(MESSAGES[locale], key);
+    
+    if (value !== undefined) return String(value);
+
+    // If not found, try to find it in the default locale
+    const defaultValue = getNestedValue(MESSAGES[DEFAULT_LOCALE], key);
+    if (defaultValue !== undefined) return String(defaultValue);
+
+    // If still not found, return fallback or the key itself
+    return fallback ?? key;
   }
 
   return (
@@ -96,6 +126,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Custom hooks for easy usage
 export function useI18n() {
   return useContext(I18nContext);
 }
