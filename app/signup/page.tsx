@@ -3,7 +3,27 @@
 import { useState } from "react";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase/browser";
+import { redirect } from "next/navigation";
 
+export default function SignupPage({
+  searchParams,
+}: {
+  searchParams?: {
+    role?: string;
+  };
+}) {
+  const role = searchParams?.role;
+
+  if (role === "caterer") {
+    redirect("/signup/caterer");
+  }
+
+  if (role === "customer") {
+    redirect("/signup/customer");
+  }
+
+  redirect("/signup/customer");
+}
 export default function SignupPage() {
   const [contactPerson, setContactPerson] = useState("");
   const [email, setEmail] = useState("");
