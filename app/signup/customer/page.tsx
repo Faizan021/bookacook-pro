@@ -1,448 +1,660 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { useT } from "@/lib/i18n/context";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
-import { createClient } from "@/lib/supabase/client";
+import { useIsRTL, useT } from "@/lib/i18n/context";
+import { LogoMark } from "@/components/ui/logo-mark";
 
-type FormFields = {
-  businessName: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
-  businessAddress: string;
-  licenseNumber: string;
-  password: string;
+type OccasionCard = {
+  title: string;
+  description: string;
+  href: string;
+  image: string;
 };
 
-type FormErrors = Partial<Record<keyof FormFields, string>>;
-
-const EMPTY: FormFields = {
-  businessName: "",
-  contactPerson: "",
-  email: "",
-  phone: "",
-  businessAddress: "",
-  licenseNumber: "",
-  password: "",
+type StepItem = {
+  step: string;
+  title: string;
+  description: string;
 };
 
-// PREMIUM IMAGE URLS
-const HERO_IMAGE_URL = "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1200&auto=format&fit=crop";
-const SUCCESS_IMAGE_URL = "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=1200&auto=format&fit=crop";
+function SparklesIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" aria-hidden="true">
+      <path
+        d="M12 3l1.2 3.3L16.5 7.5l-3.3 1.2L12 12l-1.2-3.3L7.5 7.5l3.3-1.2L12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M18.5 14l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6 14.5l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9.9-2.2Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
-export default function CatererSignupPage() {
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 shrink-0" aria-hidden="true">
+      <circle cx="11" cy="11" r="6" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M20 20l-4.2-4.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ArrowUpRightIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
+      <path d="M7 17L17 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path
+        d="M9 7h8v8"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export default function HomePage() {
   const t = useT();
-  const [form, setForm] = useState<FormFields>(EMPTY);
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [submitting, setSubmitting] = useState(false);
-  const [serverError, setServerError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const isRTL = useIsRTL();
+  const router = useRouter();
+  const [aiQuery, setAiQuery] = useState("");
 
-  function setField(field: keyof FormFields, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
+  const prompts = useMemo(
+    () => [
+      t("home.chips.wedding"),
+      t("home.chips.corporate"),
+      t("home.chips.private"),
+      t("home.chips.ramadan"),
+    ],
+    [t]
+  );
+
+  const steps: StepItem[] = [
+    {
+      step: "01",
+      title: t("home.steps.step1Title"),
+      description: t("home.steps.step1Desc"),
+    },
+    {
+      step: "02",
+      title: t("home.steps.step2Title"),
+      description: t("home.steps.step2Desc"),
+    },
+    {
+      step: "03",
+      title: t("home.steps.step3Title"),
+      description: t("home.steps.step3Desc"),
+    },
+  ];
+
+  const occasions: OccasionCard[] = [
+    {
+      title: t("home.occasions.wedding"),
+      description: t("home.occasions.weddingDesc"),
+      href: "/request/new?occasion=wedding",
+      image: "/images/speisely-wedding.png",
+    },
+    {
+      title: t("home.occasions.corporate"),
+      description: t("home.occasions.corporateDesc"),
+      href: "/caterers?occasion=corporate",
+      image: "/images/speisely-business.png",
+    },
+    {
+      title: t("home.occasions.private"),
+      description: t("home.occasions.privateDesc"),
+      href: "/caterers?occasion=private",
+      image: "/images/speisely-private.png",
+    },
+    {
+      title: t("home.occasions.ramadan"),
+      description: t("home.occasions.ramadanDesc"),
+      href: "/request/new?occasion=ramadan",
+      image: "/images/speisely-ramadan.png",
+    },
+  ];
+
+  const handleAiSubmit = () => {
+    const query = aiQuery.trim();
+    if (!query) {
+      router.push("/request/new");
+      return;
     }
-  }
-
-  function validate(): FormErrors {
-    const e: FormErrors = {};
-
-    if (!form.businessName.trim()) e.businessName = t("validation.required");
-    if (!form.contactPerson.trim()) e.contactPerson = t("validation.required");
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      e.email = t("validation.emailInvalid");
-    }
-    if (!form.phone.trim()) e.phone = t("validation.required");
-    if (!form.businessAddress.trim()) e.businessAddress = t("validation.required");
-    if (!form.licenseNumber.trim()) e.licenseNumber = t("validation.licenseRequired");
-    if (!form.password || form.password.length < 8) {
-      e.password = t("validation.passwordMin");
-    }
-
-    return e;
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const validationErrors = validate();
-    setErrors(validationErrors);
-    setServerError("");
-
-    if (Object.keys(validationErrors).length > 0) return;
-
-    setSubmitting(true);
-
-    try {
-      const supabase = createClient();
-
-      const { error } = await supabase.auth.signUp({
-        email: form.email.trim(),
-        password: form.password,
-        options: {
-          data: {
-            role: "caterer",
-            first_name: form.contactPerson.trim(),
-            phone: form.phone.trim(),
-            language: "de",
-            city: "",
-            business_name: form.businessName.trim(),
-            business_address: form.businessAddress.trim(),
-            license_number: form.licenseNumber.trim(),
-          },
-        },
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      setSuccess(true);
-      setForm(EMPTY);
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : t("validation.serverError");
-      setServerError(message);
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  // STYLES FOR DARK THEME FORM
-  // We use explicit text-white and bg-white/5 to ensure visibility
-  const inputBase =
-    "mt-1 w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-all duration-200";
-  const inputOk = `${inputBase} border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-white/30 focus:bg-white/10 focus:ring-4 focus:ring-white/5`;
-  const inputErr = `${inputBase} border-red-500/50 bg-red-500/10 text-red-200 placeholder:text-red-300/30 focus:border-red-500 focus:ring-4 focus:ring-red-500/10`;
-
-  if (success) {
-    return (
-      <main className="min-h-screen bg-surface-dark text-white flex flex-col lg:flex-row">
-        <div className="absolute end-4 top-4 z-50">
-          <LanguageSwitcher />
-        </div>
-
-        <div className="hidden lg:block lg:w-1/2 relative">
-          <img src={SUCCESS_IMAGE_URL} alt="Success" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
-        </div>
-
-        <div className="flex w-full items-center justify-center px-6 py-10 lg:w-1/2">
-          <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-card p-10 text-center shadow-2xl backdrop-blur-xl">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/20">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-[var(--accent-gold)]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-
-            <h1 className="mt-6 text-2xl font-semibold tracking-tight text-white">
-              {t("catererReg.successTitle")}
-            </h1>
-
-            <p className="mt-3 text-sm text-white/60">
-              {t("catererReg.successDesc")}
-            </p>
-
-            <div className="mt-5 inline-flex items-center rounded-full bg-white/5 px-4 py-1.5 text-xs font-semibold text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
-              {t("catererReg.pendingBadge")}
-            </div>
-
-            <div className="mt-8 space-y-3">
-              <Link
-                href="/login"
-                className="block w-full rounded-xl px-4 py-3 text-center text-sm font-semibold text-black transition hover:brightness-110"
-                style={{ background: "var(--accent-gold)" }}
-              >
-                {t("auth.goToLogin")}
-              </Link>
-
-              <Link
-                href="/"
-                className="block w-full rounded-xl border border-white/10 bg-white/5 py-3 text-center text-sm font-medium text-white transition hover:bg-white/10"
-              >
-                {t("nav.backToHome")}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
-  }
+    router.push(`/request/new?q=${encodeURIComponent(query)}`);
+  };
 
   return (
-    <main className="min-h-screen bg-surface-dark text-white">
-      <div className="absolute end-4 top-4 z-50">
-        <LanguageSwitcher />
-      </div>
+    <main className="min-h-screen bg-background text-foreground">
 
-      <div className="grid min-h-screen lg:grid-cols-2">
-        
-        {/* LEFT SIDE: EYE-CATCHING IMAGE */}
-        <div className="hidden lg:block relative overflow-hidden">
-          <img 
-            src={HERO_IMAGE_URL} 
-            alt="Catering Excellence" 
-            className="absolute inset-0 h-full w-full object-cover" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-          
-          <div className="absolute bottom-16 left-16 max-w-md">
-            <h2 className="text-4xl font-semibold text-white leading-tight">
-              Elevate your catering business with Speisely.
-            </h2>
-            <p className="mt-4 text-lg text-white/60">
-              Join the most exclusive marketplace for professional catering services.
-            </p>
+      {/* ═══════════════════════════════════════════════════════════
+          NAVBAR
+      ═══════════════════════════════════════════════════════════ */}
+      <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+
+          <Link
+            href="/"
+            className={`flex items-center ${isRTL ? "flex-row-reverse" : ""}`}
+          >
+            <LogoMark size={24} color="var(--primary)" showWordmark />
+          </Link>
+
+          <nav className="hidden items-center gap-8 md:flex">
+            <Link
+              href="/caterers"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
+              {t("home.nav.browse")}
+            </Link>
+            <a
+              href="#how-it-works"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
+              {t("home.nav.howItWorks")}
+            </a>
+            <Link
+              href="/signup?role=caterer"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
+              {t("home.nav.forCaterers")}
+            </Link>
+            <Link
+              href="/login"
+              className="text-sm text-muted-foreground transition hover:text-foreground"
+            >
+              {t("home.nav.login")}
+            </Link>
+          </nav>
+
+          <div className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>
+            <div className="opacity-80 transition hover:opacity-100">
+              <LanguageSwitcher />
+            </div>
+            <Link
+              href="/login"
+              className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-secondary sm:inline-flex"
+            >
+              {t("home.cta.dashboard")}
+            </Link>
+            
+            {/* FIX: Used Tailwind Arbitrary Value instead of inline style */}
+            <Link
+              href="/request/new"
+              className="inline-flex rounded-xl bg-[var(--accent-gold)] px-4 py-2 text-sm font-semibold text-black transition hover:brightness-110 active:scale-95 sm:inline-flex"
+            >
+              {t("home.cta.planEvent")}
+            </Link>
           </div>
+
+        </div>
+      </header>
+
+      {/* ═══════════════════════════════════════════════════════════
+          HERO
+      ═══════════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-surface-dark">
+
+        <div className="absolute inset-0">
+          <Image
+            src="/images/speisely-hero.png"
+            alt={t("home.images.heroAlt")}
+            fill
+            priority
+            className="object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,18,12,0.68)_0%,rgba(10,18,12,0.78)_50%,rgba(10,18,12,0.93)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_38%_38%,rgba(58,94,60,0.18)_0%,transparent_68%)]" />
         </div>
 
-        {/* RIGHT SIDE: THE FORM (FIXED CONTRAST) */}
-        <div className="flex items-center justify-center px-6 py-12 lg:px-16 lg:py-12 bg-[#0a120e]"> 
-          {/* Note: Added explicit dark hex bg-color above to ensure the background is dark even if theme fails */}
-          
-          <div className="w-full max-w-xl">
-            <div className="mb-8">
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-1.5 text-sm text-white/40 transition hover:text-white rtl:flex-row-reverse"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="h-4 w-4 rtl:rotate-180"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                {t("signup.backToChooser")}
-              </Link>
-            </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
 
-            {/* THE FORM CONTAINER - NOW DARK & TRANSPARENT (Glassmorphism) */}
-            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-md sm:p-10">
-              <div className="mb-8">
-                <h1 className="text-3xl font-semibold tracking-tight text-white">
-                  {t("catererReg.title")}
-                </h1>
-                <p className="mt-2 text-sm text-white/50">
-                  {t("catererReg.subtitle")}
-                </p>
+            <div className="mx-auto max-w-4xl text-center lg:mx-0 lg:max-w-none lg:text-left">
+
+              <div
+                className={`inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/8 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-white/90 ${
+                  isRTL ? "flex-row-reverse" : ""
+                }`}
+              >
+                <SparklesIcon />
+                <span>{t("home.badge")}</span>
               </div>
 
-              <form onSubmit={handleSubmit} noValidate>
-                <div className="space-y-6">
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("catererReg.businessName")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.businessName}
-                        onChange={(e) => setField("businessName", e.target.value)}
-                        className={errors.businessName ? inputErr : inputOk}
-                        placeholder="Berlin BBQ House GmbH"
-                      />
-                      {errors.businessName && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">
-                          {errors.businessName}
-                        </p>
-                      )}
-                    </div>
+              <h1 className="mt-8 max-w-4xl text-balance text-5xl font-semibold leading-[0.98] tracking-[-0.03em] text-white sm:text-6xl xl:text-7xl">
+                {t("home.editorialHeroTitle")}
+              </h1>
 
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("catererReg.contactPerson")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.contactPerson}
-                        onChange={(e) => setField("contactPerson", e.target.value)}
-                        className={errors.contactPerson ? inputErr : inputOk}
-                        placeholder="Max Mustermann"
-                      />
-                      {errors.contactPerson && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">
-                          {errors.contactPerson}
-                        </p>
-                      )}
-                    </div>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80 lg:max-w-3xl">
+                {t("home.editorialHeroSubtitle")}
+              </p>
+
+              {/* ── AI INPUT — PRIMARY ACTION ── */}
+              <div className="mt-10 max-w-4xl rounded-[1.75rem] border border-white/12 bg-white/10 p-3 backdrop-blur-xl transition focus-within:border-white/22">
+                <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
+                  <div className="flex items-center gap-3 text-muted-foreground">
+                    <SearchIcon />
                   </div>
-
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("auth.email")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => setField("email", e.target.value)}
-                        className={errors.email ? inputErr : inputOk}
-                        placeholder="kontakt@berlincatering.de"
-                        autoComplete="email"
-                      />
-                      {errors.email && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.email}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("catererReg.phone")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        value={form.phone}
-                        onChange={(e) => setField("phone", e.target.value)}
-                        className={errors.phone ? inputErr : inputOk}
-                        placeholder="+49 30 12345678"
-                      />
-                      {errors.phone && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.phone}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                      {t("catererReg.businessAddress")}
-                      <span className="ms-1 text-red-500">*</span>
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={form.businessAddress}
-                      onChange={(e) => setField("businessAddress", e.target.value)}
-                      className={`${errors.businessAddress ? inputErr : inputOk} resize-none`}
-                      placeholder="Musterstraße 1, 10115 Berlin"
-                    />
-                    {errors.businessAddress && (
-                      <p className="mt-1.5 text-xs text-red-400 font-medium">
-                        {errors.businessAddress}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors focus-within:border-white/20">
-                    <label className="flex items-center gap-2 text-sm font-semibold text-white rtl:flex-row-reverse">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-[var(--accent-gold)]"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.925-3.31 9.128-7.834 10.614a.75.75 0 01-.532 0C5.31 16.073 2 11.87 2 7c0-.682.057-1.35.166-2.001zm11.54 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {t("catererReg.licenseNumber")}
-                      <span className="ms-auto rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
-                        {t("catererReg.licenseRequired")}
-                      </span>
-                    </label>
-
-                    <input
-                      type="text"
-                      value={form.licenseNumber}
-                      onChange={(e) => setField("licenseNumber", e.target.value)}
-                      className={
-                        errors.licenseNumber
-                          ? inputErr
-                          : inputOk
-                      }
-                      placeholder="z.B. HRB-123456 / IHK-2024-789"
-                    />
-
-                    <p className="mt-2 text-[11px] text-white/40 italic">
-                      {t("catererReg.licenseHelp")}
-                    </p>
-
-                    {errors.licenseNumber && (
-                      <p className="mt-2 text-xs font-semibold text-red-400">
-                        {errors.licenseNumber}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                      {t("auth.password")}
-                      <span className="ms-1 text-red-500">*</span>
-                    </label>
-                    <input
-                      type="password"
-                      value={form.password}
-                      onChange={(e) => setField("password", e.target.value)}
-                      className={errors.password ? inputErr : inputOk}
-                      autoComplete="new-password"
-                      placeholder="••••••••"
-                    />
-                    {errors.password && (
-                      <p className="mt-1.5 text-xs text-red-400 font-medium">
-                        {errors.password}
-                      </p>
-                    )}
-                  </div>
+                  <input
+                    value={aiQuery}
+                    onChange={(e) => setAiQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleAiSubmit()}
+                    placeholder={t("home.editorialSearchPlaceholder")}
+                    className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  />
+                  
+                  {/* FIX: Used Tailwind Arbitrary Value instead of inline style */}
+                  <button
+                    onClick={handleAiSubmit}
+                    className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[var(--accent-gold)] px-5 py-3 text-sm font-semibold text-black shadow-sm transition hover:brightness-110 active:scale-95"
+                  >
+                    {t("home.guided.cta")}
+                  </button>
                 </div>
 
-                {serverError && (
-                  <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                    {serverError}
-                  </div>
-                )}
+                <div className="mt-3 flex flex-wrap justify-center gap-2 lg:justify-start">
+                  {prompts.map((prompt) => (
+                    <button
+                      key={prompt}
+                      onClick={() => setAiQuery(prompt)}
+                      className="rounded-full border border-white/14 bg-white/10 px-3 py-1.5 text-xs text-white/90 transition hover:bg-white/18 hover:text-white"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-                {/* PREMIUM CTA: Gold Background, Black Text */}
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="mt-8 w-full rounded-xl px-4 py-4 text-sm font-bold text-black shadow-lg shadow-black/20 transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-                  style={{ background: "var(--accent-gold)" }}
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-start">
+                <Link
+                  href="/caterers"
+                  className="text-sm text-white/58 underline-offset-4 transition hover:text-white/82 hover:underline"
                 >
-                  {submitting ? t("catererReg.submitting") : t("catererReg.submit")}
-                </button>
+                  {t("home.heroBrowseCta")}
+                </Link>
+                <span className="select-none text-xs text-white/26" aria-hidden="true">·</span>
+                <Link
+                  href="/request/new"
+                  className="text-sm text-white/58 underline-offset-4 transition hover:text-white/82 hover:underline"
+                >
+                  {t("home.heroPlanCta")}
+                </Link>
+              </div>
 
-                <p className="mt-6 text-center text-xs text-white/40">
-                  {t("catererReg.termsNote")}
-                </p>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-white/70 lg:justify-start">
+                <span>{t("home.heroBenefit1")}</span>
+                <span
+                  className="h-1 w-1 rounded-full"
+                  style={{ background: "var(--accent-gold)" }}
+                  aria-hidden="true"
+                />
+                <span>{t("home.heroBenefit2")}</span>
+                <span
+                  className="h-1 w-1 rounded-full"
+                  style={{ background: "var(--accent-gold)" }}
+                  aria-hidden="true"
+                />
+                <span>{t("home.heroBenefit3")}</span>
+              </div>
+            </div>
 
-                <p className="mt-4 text-center text-sm text-white/60">
-                  {t("auth.hasAccount")}{" "}
-                  <Link
-                    href="/login"
-                    className="font-semibold text-[var(--accent-gold)] transition hover:text-white"
-                  >
-                    {t("auth.goToLogin")}
-                  </Link>
-                </p>
-              </form>
+            <div className="hidden lg:block">
+              <div className="grid gap-4">
+                <Link
+                  href="/caterers?occasion=wedding"
+                  className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/6 shadow-[0_20px_50px_rgba(0,0,0,0.18)] transition hover:-translate-y-1"
+                >
+                  <div className="relative h-44">
+                    <Image
+                      src="/images/speisely-wedding.png"
+                      alt={t("home.occasions.wedding")}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,24,17,0.88)] via-[rgba(15,24,17,0.24)] to-transparent" />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <div className="text-lg font-semibold text-white">
+                      {t("home.occasions.wedding")}
+                    </div>
+                    <div className="mt-1 text-sm text-white/80">
+                      {t("home.occasions.weddingDesc")}
+                    </div>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/caterers?occasion=corporate"
+                  className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/6 shadow-[0_20px_50px_rgba(0,0,0,0.18)] transition hover:-translate-y-1"
+                >
+                  <div className="relative h-56">
+                    <Image
+                      src="/images/speisely-business.png"
+                      alt={t("home.occasions.corporate")}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,24,17,0.88)] via-[rgba(15,24,17,0.24)] to-transparent" />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <div className="text-lg font-semibold text-white">
+                      {t("home.occasions.corporate")}
+                    </div>
+                    <div className="mt-1 text-sm text-white/80">
+                      {t("home.occasions.corporateDesc")}
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          HOW IT WORKS
+      ═══════════════════════════════════════════════════════════ */}
+      <section id="how-it-works" className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
+        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+
+          <div className="rounded-[1.75rem] border border-border bg-card p-8 shadow-sm lg:p-10">
+            <div className="text-xs uppercase tracking-[0.24em] text-primary">
+              {t("home.principles.label")}
+            </div>
+            <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+              {t("home.principles.title")}
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-8 text-muted-foreground">
+              {t("home.principles.subtitle")}
+            </p>
+
+            <div className="mt-10">
+              {steps.map((item, index) => (
+                <div key={item.step} className="relative flex gap-6 pb-9 last:pb-0">
+                  {index < steps.length - 1 && (
+                    <div
+                      className="absolute left-[19px] top-11 bottom-0 w-px bg-border"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-card text-xs font-bold text-primary">
+                    {item.step}
+                  </div>
+                  <div className="pt-1.5">
+                    <h3 className="text-base font-semibold tracking-tight">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-[1.75rem] border border-white/8 bg-surface-dark-mid p-8 lg:p-10">
+            <div
+              className="text-xs uppercase tracking-[0.24em]"
+              style={{ color: "var(--accent-gold)" }}
+            >
+              {t("home.steps.label")}
+            </div>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {t("home.editorialStepsTitle")}
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-8 text-white/82">
+              {t("home.editorialStepsSubtitle")}
+            </p>
+
+            <div className="mt-8 grid gap-4">
+              <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/60">
+                  {t("home.aiDemo.requestLabel")}
+                </div>
+                <div className="mt-3 text-lg font-semibold text-white">
+                  {t("home.aiDemo.request")}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/60">
+                  {t("home.aiDemo.understands")}
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {[
+                    t("home.aiDemo.tagEvent"),
+                    t("home.aiDemo.tagCity"),
+                    t("home.aiDemo.tagGuests"),
+                    t("home.aiDemo.tagDiet"),
+                    t("home.aiDemo.tagStyle"),
+                    t("home.aiDemo.tagBudget"),
+                  ].map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-white/10 bg-white/6 px-3 py-1.5 text-xs text-white"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/60">
+                  {t("home.aiDemo.recommended")}
+                </div>
+                <div className="mt-4 grid gap-3 md:grid-cols-3">
+                  {[
+                    [t("home.aiDemo.caterer1Name"), t("home.aiDemo.caterer1Meta")],
+                    [t("home.aiDemo.caterer2Name"), t("home.aiDemo.caterer2Meta")],
+                    [t("home.aiDemo.caterer3Name"), t("home.aiDemo.caterer3Meta")],
+                  ].map(([name, meta]) => (
+                    <div
+                      key={name}
+                      className="rounded-2xl border border-white/10 bg-white/4 px-4 py-4"
+                    >
+                      <div className="text-sm font-semibold text-white">{name}</div>
+                      <div className="mt-1 text-xs text-white/68">{meta}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          OCCASIONS
+      ═══════════════════════════════════════════════════════════ */}
+      <section id="occasions" className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <div className="text-xs uppercase tracking-[0.24em] text-primary">
+              {t("home.occasions.label")}
+            </div>
+            <h2 className="mt-3 text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+              {t("home.editorialOccasionsTitle")}
+            </h2>
+          </div>
+          <Link
+            href="/caterers"
+            className="hidden rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary md:inline-flex"
+          >
+            {t("home.occasions.viewAll")}
+          </Link>
+        </div>
+
+        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {occasions.map((card) => (
+            <Link
+              key={card.title}
+              href={card.href}
+              className="group relative overflow-hidden rounded-[1.75rem] shadow-sm transition hover:-translate-y-1 hover:shadow-[0_20px_44px_rgba(18,28,18,0.14)]"
+            >
+              <div className="relative h-80">
+                <Image
+                  src={card.image}
+                  alt={card.title}
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.90)] via-[rgba(25,43,26,0.22)] to-transparent" />
+              </div>
+              <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                <h3 className="text-xl font-semibold">{card.title}</h3>
+                <p className="mt-2.5 text-sm leading-6 text-white/84">{card.description}</p>
+                <div
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold"
+                  style={{ color: "var(--accent-gold)" }}
+                >
+                  {t("home.occasions.cardCta")}
+                  <ArrowUpRightIcon />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          CTA SECTION
+      ═══════════════════════════════════════════════════════════ */}
+      <section className="mx-auto max-w-7xl px-6 py-10 lg:py-14">
+        <div className="overflow-hidden rounded-[2rem] border border-white/8 bg-surface-dark">
+          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="px-8 py-10 lg:px-12 lg:py-14">
+              <div
+                className="text-xs uppercase tracking-[0.24em]"
+                style={{ color: "var(--accent-gold)" }}
+              >
+                {t("home.editorialCtaLabel")}
+              </div>
+              <h2 className="mt-4 max-w-2xl text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                {t("home.editorialCtaTitle")}
+              </h2>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-white/84">
+                {t("home.editorialCtaSubtitle")}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                
+                {/* FIX: Used Tailwind Arbitrary Value instead of inline style */}
+                <Link
+                  href="/request/new"
+                  className="rounded-2xl bg-[var(--accent-gold)] px-6 py-3 text-sm font-semibold text-black transition hover:brightness-110 active:scale-95"
+                >
+                  {t("home.editorialCtaPrimary")}
+                </Link>
+
+                <Link
+                  href="/caterers"
+                  className="rounded-2xl border border-white/28 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
+                >
+                  {t("home.editorialCtaSecondary")}
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative min-h-[320px]">
+              <Image
+                src="/images/speisely-private.png"
+                alt={t("home.images.ctaAlt")}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-l from-[rgba(18,30,21,0.18)] via-[rgba(18,30,21,0.54)] to-[rgba(18,30,21,0.82)]" />
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          FOOTER
+      ═══════════════════════════════════════════════════════════ */}
+      <footer className="mt-8 border-t border-white/8 bg-surface-dark">
+        <div className="mx-auto max-w-7xl px-6 py-12">
+          <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+
+            <div>
+              <LogoMark size={22} color="#e4d9c2" showWordmark wordmarkColor="#e4d9c2" />
+
+              <p className="mt-4 max-w-sm text-sm leading-7 text-white/68">
+                {t("home.editorialFooterTagline")}
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                <Link
+                  href="/caterers"
+                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
+                >
+                  {t("home.nav.browse")}
+                </Link>
+                <Link
+                  href="/signup?role=caterer"
+                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
+                >
+                  {t("home.nav.forCaterers")}
+                </Link>
+                <Link
+                  href="/login"
+                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
+                >
+                  {t("home.nav.login")}
+                </Link>
+                <Link
+                  href="/impressum"
+                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
+                >
+                  Impressum
+                </Link>
+                <Link
+                  href="/datenschutz"
+                  className="text-xs text-white/44 underline-offset-4 transition hover:text-white/70 hover:underline"
+                >
+                  Datenschutz
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-start gap-3 lg:items-end">
+              
+              {/* FIX: Used Tailwind Arbitrary Value instead of inline style */}
+              <Link
+                href="/request/new"
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-black transition hover:brightness-110 active:scale-95 bg-[var(--accent-gold)]"
+              >
+                {t("home.cta.planEvent")}
+              </Link>
+              
+              <span className="text-xs text-white/32">
+                © {new Date().getFullYear()} Speisely
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </footer>
+
     </main>
   );
 }
