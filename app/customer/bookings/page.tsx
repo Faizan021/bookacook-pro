@@ -7,51 +7,51 @@ export default function CustomerBookingsPage() {
   const t = useT();
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
+    <main className="min-h-screen bg-background px-6 py-8 text-foreground">
       <div className="mx-auto max-w-6xl">
-        <div className="rounded-2xl border bg-white p-8 shadow-sm">
+        <div className="rounded-[1.75rem] border border-border bg-card p-8 shadow-sm">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground">
                 {t("bookings.myTitle")}
               </h1>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-muted-foreground">
                 {t("bookings.customerSubtitle")}
               </p>
             </div>
 
             <Link
               href="/caterers"
-              className="inline-flex rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
+              className="inline-flex rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
             >
               {t("bookings.findCaterers")}
             </Link>
           </div>
 
-          <div className="mt-8 rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-10 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm">
+          <div className="mt-8 rounded-[1.5rem] border border-dashed border-border bg-secondary/35 p-10 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-border bg-background shadow-sm">
               <span className="text-2xl">📋</span>
             </div>
 
-            <h2 className="mt-4 text-lg font-semibold text-gray-900">
+            <h2 className="mt-4 text-lg font-semibold text-foreground">
               {t("empty.bookings")}
             </h2>
 
-            <p className="mx-auto mt-2 max-w-xl text-sm text-gray-500">
+            <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
               {t("empty.bookingsDesc")}
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/caterers"
-                className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
+                className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
               >
                 {t("bookings.findCaterers")}
               </Link>
 
               <Link
                 href="/customer"
-                className="rounded-xl border px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-white"
+                className="rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
               >
                 {t("bookings.backToDashboard")}
               </Link>
