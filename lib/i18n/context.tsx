@@ -10,14 +10,12 @@ import {
 
 import de from "@/messages/de.json";
 import en from "@/messages/en.json";
-import tr from "@/messages/tr.json";
-import ar from "@/messages/ar.json";
 
-export type Locale = "de" | "en" | "tr" | "ar";
+export type Locale = "de" | "en";
 
 type Messages = Record<string, string>;
 
-const MESSAGES: Record<Locale, Messages> = { de, en, tr, ar };
+const MESSAGES: Record<Locale, Messages> = { de, en };
 
 const STORAGE_KEY = "speisely_lang";
 const LEGACY_STORAGE_KEY = "bookacook_lang";
@@ -51,9 +49,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
       if (saved && MESSAGES[saved]) {
         setLocaleState(saved);
-
-        // migrate old key to new key
         localStorage.setItem(STORAGE_KEY, saved);
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+      } else {
+        localStorage.setItem(STORAGE_KEY, DEFAULT_LOCALE);
         localStorage.removeItem(LEGACY_STORAGE_KEY);
       }
     } catch {
@@ -61,14 +60,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const isRTL = locale === "ar";
+  const isRTL = false;
 
   useEffect(() => {
     if (!mounted) return;
 
-    document.documentElement.dir = isRTL ? "rtl" : "ltr";
+    document.documentElement.dir = "ltr";
     document.documentElement.lang = locale;
-  }, [locale, isRTL, mounted]);
+  }, [locale, mounted]);
 
   function setLocale(l: Locale) {
     setLocaleState(l);
