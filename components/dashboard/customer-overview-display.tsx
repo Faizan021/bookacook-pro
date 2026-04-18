@@ -27,11 +27,11 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border bg-white p-6 shadow-sm">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-sm">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           {t("dashboard.customer.title")}
         </h1>
-        <p className="mt-1 text-gray-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           {t("dashboard.customer.welcome")}
           {data.userName ? `, ${data.userName}` : ""}
         </p>
@@ -61,33 +61,33 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
       </div>
 
       {!hasOrders && (
-        <div className="rounded-2xl border border-dashed bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900">
+        <div className="rounded-[1.75rem] border border-dashed border-border bg-card p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-foreground">
             No event requests yet
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-gray-500">
-            Tell us about your event and Speisely will help you discover
-            suitable caterers for your occasion.
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            Tell us about your event and Speisely will help you discover suitable
+            caterers for your occasion.
           </p>
 
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href="/request/new"
-              className="rounded-xl bg-black px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-gray-800"
+              className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
             >
               Plan an Event
             </Link>
 
             <Link
               href="/caterers"
-              className="rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
+              className="rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-secondary"
             >
               Browse Caterers
             </Link>
 
             <Link
               href="/customer/bookings"
-              className="rounded-xl border px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              className="rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
             >
               View My Requests
             </Link>
@@ -103,27 +103,27 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
               data={data.orderHistory}
             />
           ) : (
-            <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-foreground">
                     {t("chart.orderHistory")}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     No request history yet.
                   </p>
                 </div>
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-500">
+                <span className="rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
                   Empty
                 </span>
               </div>
 
-              <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 text-center">
+              <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-[1.25rem] border border-dashed border-border bg-secondary/35 text-center">
                 <div className="max-w-sm px-6">
-                  <p className="text-sm font-medium text-gray-700">
+                  <p className="text-sm font-medium text-foreground">
                     Your event request activity will appear here.
                   </p>
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     Once you start planning events, you will be able to track
                     your request history over time.
                   </p>
@@ -140,23 +140,23 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
               items={data.recentOrders}
             />
           ) : (
-            <div className="rounded-2xl border bg-white p-6 shadow-sm">
+            <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-foreground">
                     {t("activity.recentOrders")}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     Latest updates and activity
                   </p>
                 </div>
               </div>
 
-              <div className="mt-6 rounded-xl border border-dashed border-gray-200 bg-gray-50 p-6 text-center">
-                <p className="text-sm font-medium text-gray-700">
+              <div className="mt-6 rounded-[1.25rem] border border-dashed border-border bg-secondary/35 p-6 text-center">
+                <p className="text-sm font-medium text-foreground">
                   No recent requests yet
                 </p>
-                <p className="mt-2 text-sm text-gray-500">
+                <p className="mt-2 text-sm text-muted-foreground">
                   When you create your first event request, it will appear here.
                 </p>
               </div>
