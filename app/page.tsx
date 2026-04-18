@@ -270,19 +270,19 @@ export default function HomePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/caterers"
-                className="rounded-2xl border border-white/12 bg-white/8 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/12"
-              >
-                {t("home.heroBrowseCta")}
-              </Link>
-              <Link
-                href="/request/new"
-                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-secondary"
-              >
-                {t("home.heroPlanCta")}
-              </Link>
-            </div>
+  <Link
+    href="/caterers"
+    className="rounded-2xl border border-white/18 bg-white/12 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
+  >
+    {t("home.heroBrowseCta")}
+  </Link>
+  <Link
+    href="/request/new"
+    className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white/90"
+  >
+    {t("home.heroPlanCta")}
+  </Link>
+</div>
 
             <div className="mx-auto mt-10 max-w-3xl rounded-[1.75rem] border border-white/10 bg-white/8 p-3 backdrop-blur-xl">
               <div className="flex flex-col gap-3 rounded-[1.2rem] bg-white px-4 py-4 md:flex-row md:items-center">
@@ -299,7 +299,7 @@ export default function HomePage() {
 
                 <button
                   onClick={handleAiSubmit}
-                  className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+                  className="inline-flex shrink-0 items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
                 >
                   {t("home.guided.cta")}
                 </button>
