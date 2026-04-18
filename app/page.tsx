@@ -206,12 +206,12 @@ export default function HomePage() {
               {t("home.nav.howItWorks")}
             </a>
 
-            <Link
-              href="/for-caterers"
-              className="text-sm text-muted-foreground transition hover:text-foreground"
-            >
-              {t("home.nav.forCaterers")}
-            </Link>
+          <Link
+  href="/caterer"
+  className="text-sm text-muted-foreground transition hover:text-foreground"
+>
+  {t("home.nav.forCaterers")}
+</Link>
 
             <Link
               href="/login"
