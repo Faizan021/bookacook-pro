@@ -1,4 +1,4 @@
-href="/signup?role=caterer"import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 
 type SignupPageProps = {
   searchParams?: Promise<{
