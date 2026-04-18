@@ -251,7 +251,7 @@ export default function HomePage() {
             priority
             className="object-cover opacity-30"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,22,15,0.72)_0%,rgba(14,22,15,0.82)_45%,rgba(14,22,15,0.92)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,22,15,0.56)_0%,rgba(14,22,15,0.70)_45%,rgba(14,22,15,0.84)_100%)]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 lg:py-24">
@@ -265,7 +265,7 @@ export default function HomePage() {
               {t("home.editorialHeroTitle")}
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/78">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/84">
               {t("home.editorialHeroSubtitle")}
             </p>
 
@@ -318,7 +318,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-3 text-sm text-white/72">
+            <div className="mx-auto mt-8 flex max-w-2xl flex-wrap items-center justify-center gap-3 text-sm text-white/80">
               <span>{t("home.heroBenefit1")}</span>
               <span className="h-1 w-1 rounded-full bg-amber-400" />
               <span>{t("home.heroBenefit2")}</span>
@@ -425,13 +425,13 @@ export default function HomePage() {
               {t("home.editorialStepsTitle")}
             </h2>
 
-            <p className="mt-5 max-w-xl text-base leading-8 text-white/78">
+            <p className="mt-5 max-w-xl text-base leading-8 text-white/84">
               {t("home.editorialStepsSubtitle")}
             </p>
 
             <div className="mt-8 grid gap-4">
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
                   {t("home.aiDemo.requestLabel")}
                 </div>
                 <div className="mt-3 text-lg font-semibold text-white">
@@ -440,7 +440,7 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
                   {t("home.aiDemo.understands")}
                 </div>
 
@@ -464,7 +464,7 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-2xl border border-white/8 bg-white/6 p-5">
-                <div className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                <div className="text-[11px] uppercase tracking-[0.22em] text-white/68">
                   {t("home.aiDemo.recommended")}
                 </div>
 
@@ -479,7 +479,7 @@ export default function HomePage() {
                       className="rounded-2xl border border-white/10 bg-[rgba(255,255,255,0.04)] px-4 py-4"
                     >
                       <div className="text-sm font-semibold text-white">{name}</div>
-                      <div className="mt-1 text-xs text-white/60">{meta}</div>
+                      <div className="mt-1 text-xs text-white/72">{meta}</div>
                     </div>
                   ))}
                 </div>
@@ -522,12 +522,12 @@ export default function HomePage() {
                   fill
                   className="object-cover transition duration-700 group-hover:scale-[1.04]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.88)] via-[rgba(25,43,26,0.20)] to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(25,43,26,0.76)] via-[rgba(25,43,26,0.14)] to-transparent" />
               </div>
 
               <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                 <h3 className="text-xl font-semibold">{card.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-white/78">{card.description}</p>
+                <p className="mt-3 text-sm leading-7 text-white/86">{card.description}</p>
                 <div className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-amber-300">
                   {t("home.occasions.cardCta")}
                   <ArrowUpRightIcon />
@@ -550,7 +550,7 @@ export default function HomePage() {
                 {t("home.editorialCtaTitle")}
               </h2>
 
-              <p className="mt-5 max-w-2xl text-base leading-8 text-white/78">
+              <p className="mt-5 max-w-2xl text-base leading-8 text-white/84">
                 {t("home.editorialCtaSubtitle")}
               </p>
 
