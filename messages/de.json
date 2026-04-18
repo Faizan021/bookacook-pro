@@ -4,6 +4,29 @@
   "home.nav.howItWorks": "So funktioniert es",
   "home.nav.whySpeisely": "Warum Speisely",
   "home.nav.login": "Anmelden",
+  
+  "home.nav.forCaterers": "Für Caterer",
+  "home.heroBrowseCta": "Caterer entdecken",
+  "home.heroPlanCta": "Event planen",
+  "home.trust.curated": "Kuratiertes Premium-Netzwerk",
+  "home.trust.verified": "Geprüfte Catering-Anbieter",
+  "home.trust.transparent": "Klare Pakete und transparente Anfragewege",
+
+  "home.featured.label": "Ausgewählte Caterer",
+  "home.featured.title": "Entdecken Sie passende Catering-Stile",
+  "home.featured.subtitle": "Von Hochzeiten bis Business-Events – Speisely hilft Ihnen, passende Caterer schneller zu finden.",
+  "home.featured.viewAll": "Alle Caterer ansehen",
+  "home.featured.card1Title": "Elegante Hochzeiten",
+  "home.featured.card1Meta": "Hochzeiten",
+  "home.featured.card1Desc": "Kuratiertes Catering für stilvolle Hochzeiten, Empfänge und ganztägige Feiern.",
+  "home.featured.card2Title": "Business & Corporate",
+  "home.featured.card2Meta": "Corporate Events",
+  "home.featured.card2Desc": "Professionelle Catering-Konzepte für Meetings, Office Lunches und Firmenveranstaltungen.",
+  "home.featured.card3Title": "Private Feiern",
+  "home.featured.card3Meta": "Private Events",
+  "home.featured.card3Desc": "Flexible Menüs und hochwertige Catering-Optionen für Geburtstage, Dinner und besondere Anlässe.",
+  "home.featured.cardCta": "Mehr entdecken",
+
   "home.badge": "KI-gestützte Catering-Entdeckung",
   "home.heroTitle": "Premium Catering für Hochzeiten, Business-Events und private Anlässe.",
   "home.heroSubtitle": "Speisely hilft Ihnen dabei, Caterer zu entdecken, Ihr Event zu planen und in einen klareren, hochwertigeren Buchungsprozess überzugehen.",
@@ -101,8 +124,8 @@
   "home.principles.item3Desc": "Wechseln Sie natürlich von der Website in Dashboard und Buchungsprozess.",
 
   "home.languagesLabel": "Mehrsprachiger Vorteil",
-  "home.languagesTitle": "Deutsch zuerst. Plus Englisch, Türkisch und Arabisch.",
-  "home.languagesSubtitle": "Speisely kann Kundinnen und Kunden in mehreren Sprachen abholen — ein echter Vorteil für diverse Events, internationale Teams und moderne Gastgeber.",
+  "home.languagesTitle": "Deutsch zuerst. Plus Englisch.",
+"home.languagesSubtitle": "Speisely startet mit Deutsch und Englisch, damit moderne Gastgeber und Caterer einfacher planen und anfragen können."
 
   "home.editorialOccasionsTitle": "Mit dem Anlass starten, dann mit Speisely verfeinern",
   "home.editorialStepsTitle": "So versteht Speisely Ihr Event",
