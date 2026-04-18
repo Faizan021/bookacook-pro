@@ -362,13 +362,15 @@ export default function CaterersPage() {
       </section>
 
       <section className="page-container section-shell">
-        <div className="dark-card overflow-hidden px-8 py-10">
+        <div className="overflow-hidden rounded-[1.75rem] border border-surface-dark-border bg-surface-dark px-8 py-10 shadow-[0_14px_34px_rgba(0,0,0,0.22)]">
           <div className="max-w-2xl">
             <div className="eyebrow text-amber-300">Need a faster match?</div>
+
             <h2 className="mt-3 text-3xl font-semibold text-white">
               Describe your event and let Speisely guide the brief
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-white/80">
+
+            <p className="mt-4 max-w-xl text-sm leading-7 text-white/82">
               Tell us your city, guest count, style, budget, and dietary needs. Speisely turns that
               into a structured request and helps you discover suitable caterers faster.
             </p>
