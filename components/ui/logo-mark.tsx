@@ -13,42 +13,45 @@ export function LogoMark({ className = "h-10 w-10" }: LogoMarkProps) {
       <circle
         cx="32"
         cy="32"
-        r="13"
+        r="11.5"
         stroke="currentColor"
         strokeWidth="3"
       />
-      <circle
-        cx="32"
-        cy="32"
-        r="8.5"
+      <path
+        d="M19 21.5c0 2.1-1.2 3.9-3 4.8v15.2"
         stroke="currentColor"
-        strokeWidth="2"
-        opacity="0.72"
-      />
-      <ellipse
-        cx="19"
-        cy="24"
-        rx="2.8"
-        ry="4"
-        stroke="currentColor"
-        strokeWidth="2.3"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
-        d="M19 28v14"
+        d="M16 21.5v4.8"
         stroke="currentColor"
-        strokeWidth="2.3"
+        strokeWidth="2.6"
         strokeLinecap="round"
       />
       <path
-        d="M45 21c2.3 4.2 2.3 8.6 0 12.8"
+        d="M19 21.5v4.8"
         stroke="currentColor"
-        strokeWidth="2.3"
+        strokeWidth="2.6"
         strokeLinecap="round"
       />
       <path
-        d="M45 33.8V42"
+        d="M22 21.5v4.8"
         stroke="currentColor"
-        strokeWidth="2.3"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+      />
+      <path
+        d="M46 20c2 4.2 2 8.9 0 13.1"
+        stroke="currentColor"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+      />
+      <path
+        d="M46 33.1V42"
+        stroke="currentColor"
+        strokeWidth="2.6"
         strokeLinecap="round"
       />
     </svg>
