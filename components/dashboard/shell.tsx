@@ -30,7 +30,7 @@ export function DashboardShell({
 
   return (
     <div
-      className={`flex h-screen overflow-hidden bg-gray-50 ${
+      className={`flex h-screen overflow-hidden bg-background text-foreground ${
         isRTL ? "flex-row-reverse" : ""
       }`}
       dir={isRTL ? "rtl" : "ltr"}
@@ -38,33 +38,29 @@ export function DashboardShell({
       <Sidebar role={role} basePath={basePath} isDemo={isDemo} />
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex h-14 flex-shrink-0 items-center justify-between border-b border-gray-100 bg-white px-6">
-          <div className="flex items-center gap-1.5 text-xs text-gray-400">
-            <Link href="/" className="transition-colors hover:text-gray-600">
+        <header className="flex h-16 flex-shrink-0 items-center justify-between border-b border-border/60 bg-background/90 px-6 backdrop-blur-xl">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Link href="/" className="transition hover:text-foreground">
               Speisely
             </Link>
             <span>/</span>
-            <span className="font-medium text-gray-700">{t(breadcrumbKey)}</span>
-            {isDemo && (
-              <span className="text-gray-300">— {t("breadcrumb.demo")}</span>
-            )}
+            <span className="font-medium text-foreground">{t(breadcrumbKey)}</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <LanguageSwitcher />
-            {isDemo ? (
-              <span className="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold tracking-wide text-orange-600">
-                DEMO
-              </span>
-            ) : (
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-xs font-bold text-white shadow-sm">
+
+            {!isDemo && (
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground shadow-sm">
                 S
               </div>
             )}
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-background px-6 py-8">
+          {children}
+        </main>
       </div>
     </div>
   );
