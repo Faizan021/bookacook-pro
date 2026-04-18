@@ -20,8 +20,8 @@ export default function CustomerSignupPage() {
 
   const inputBase =
     "mt-1 w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-colors focus:ring-2";
-  const inputOk = `${inputBase} border-gray-200 focus:border-orange-400 focus:ring-orange-100`;
-  const inputErr = `${inputBase} border-red-300 bg-red-50 focus:border-red-400 focus:ring-red-100`;
+  const inputOk = `${inputBase} border-border bg-background text-foreground focus:border-primary focus:ring-primary/10`;
+  const inputErr = `${inputBase} border-red-300 bg-red-50 text-foreground focus:border-red-400 focus:ring-red-100`;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -85,13 +85,13 @@ export default function CustomerSignupPage() {
 
   if (success) {
     return (
-      <main className="min-h-screen bg-gray-50 p-6">
+      <main className="min-h-screen bg-background text-foreground">
         <div className="absolute end-4 top-4">
           <LanguageSwitcher />
         </div>
 
-        <div className="mx-auto flex min-h-[80vh] max-w-md items-center justify-center">
-          <div className="w-full rounded-2xl border bg-white p-8 text-center shadow-sm">
+        <div className="mx-auto flex min-h-screen max-w-md items-center justify-center px-6 py-10">
+          <div className="w-full rounded-[1.75rem] border border-border bg-card p-8 text-center shadow-sm">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -109,17 +109,17 @@ export default function CustomerSignupPage() {
               </svg>
             </div>
 
-            <h1 className="mt-5 text-2xl font-bold text-gray-900">
+            <h1 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
               {t("auth.createAccount")}
             </h1>
 
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-2 text-sm text-muted-foreground">
               {t("signup.customerSuccess")}
             </p>
 
             <Link
               href="/login"
-              className="mt-6 block w-full rounded-xl bg-orange-500 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-orange-400"
+              className="mt-6 block w-full rounded-xl bg-primary py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:opacity-90"
             >
               {t("auth.goToLogin")}
             </Link>
@@ -130,17 +130,17 @@ export default function CustomerSignupPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="absolute end-4 top-4">
         <LanguageSwitcher />
       </div>
 
-      <div className="mx-auto flex min-h-[80vh] max-w-md items-center justify-center">
-        <div className="w-full rounded-2xl border bg-white p-8 shadow-sm">
+      <div className="mx-auto flex min-h-screen max-w-md items-center justify-center px-6 py-10">
+        <div className="w-full rounded-[1.75rem] border border-border bg-card p-8 shadow-sm">
           <div className="mb-2">
             <Link
               href="/signup"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 rtl:flex-row-reverse"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground rtl:flex-row-reverse"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -158,15 +158,17 @@ export default function CustomerSignupPage() {
             </Link>
           </div>
 
-          <h1 className="mt-3 text-2xl font-bold text-gray-900">
+          <h1 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">
             {t("signup.asCustomer")}
           </h1>
 
-          <p className="mt-1 text-sm text-gray-500">{t("auth.createYour")}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {t("auth.createYour")}
+          </p>
 
           <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-foreground">
                 {t("catererReg.contactPerson")}
                 <span className="ms-1 text-red-500">*</span>
               </label>
@@ -184,7 +186,7 @@ export default function CustomerSignupPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-foreground">
                 {t("auth.email")}
                 <span className="ms-1 text-red-500">*</span>
               </label>
@@ -197,12 +199,13 @@ export default function CustomerSignupPage() {
                 }}
                 className={emailErr ? inputErr : inputOk}
                 autoComplete="email"
+                placeholder="anna@example.com"
               />
               {emailErr && <p className="mt-1 text-xs text-red-500">{emailErr}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-foreground">
                 {t("auth.password")}
                 <span className="ms-1 text-red-500">*</span>
               </label>
@@ -215,6 +218,7 @@ export default function CustomerSignupPage() {
                 }}
                 className={passwordErr ? inputErr : inputOk}
                 autoComplete="new-password"
+                placeholder="••••••••"
               />
               {passwordErr && (
                 <p className="mt-1 text-xs text-red-500">{passwordErr}</p>
@@ -230,17 +234,17 @@ export default function CustomerSignupPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full rounded-xl bg-orange-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-orange-400 disabled:opacity-60"
+              className="w-full rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
             >
               {submitting ? "..." : t("auth.createAccount")}
             </button>
           </form>
 
-          <p className="mt-4 text-center text-sm text-gray-500">
+          <p className="mt-4 text-center text-sm text-muted-foreground">
             {t("auth.hasAccount")}{" "}
             <Link
               href="/login"
-              className="font-medium text-orange-500 hover:text-orange-600"
+              className="font-medium text-primary transition hover:opacity-80"
             >
               {t("auth.goToLogin")}
             </Link>
