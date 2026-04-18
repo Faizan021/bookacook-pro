@@ -33,9 +33,9 @@
   --surface-dark: #192b1a;
   --surface-dark-mid: #213524;
   --surface-dark-card: #2c4430;
-  --surface-dark-foreground: #e8decb;
-  --surface-dark-muted: #8ea086;
-  --surface-dark-border: #334d38;
+  --surface-dark-foreground: #f3ede2;
+  --surface-dark-muted: #d8cfbf;
+  --surface-dark-border: #3e5a43;
 
   --border: #d4c8b0;
   --input: #dcd2bb;
@@ -242,7 +242,7 @@ a {
 
 .dark-card {
   border: 1px solid var(--surface-dark-border);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-dark);
 }
@@ -325,15 +325,15 @@ a {
 
 .field-dark {
   width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--surface-dark-foreground);
   border-radius: var(--radius-xl);
   padding: 0.875rem 1rem;
 }
 
 .field-dark::placeholder {
-  color: rgba(232, 222, 203, 0.6);
+  color: rgba(243, 237, 226, 0.68);
 }
 
 /* ============================================================
@@ -369,8 +369,8 @@ a {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-xl);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.10);
   color: var(--surface-dark-foreground);
   padding: 0.75rem 1rem;
   font-weight: 600;
@@ -380,7 +380,7 @@ a {
 }
 
 .btn-dark:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .btn-dark:active {
