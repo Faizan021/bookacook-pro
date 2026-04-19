@@ -117,7 +117,7 @@ export function LogoMark({
         <span
           style={{
             color: wordmarkColor,
-            fontFamily: "var(--font-sans, sans-serif)",
+            fontFamily: "var(--font-geist-sans, sans-serif)",
             fontSize: size * 0.6,
             fontWeight: 500,
             letterSpacing: "-0.02em",
