@@ -28,8 +28,9 @@ const EMPTY: FormFields = {
   password: "",
 };
 
-const SUCCESS_IMAGE_URL =
-  "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=1200&auto=format&fit=crop";
+// PREMIUM IMAGE URLS (Unsplash)
+const HERO_IMAGE_URL = "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1200&auto=format&fit=crop";
+const SUCCESS_IMAGE_URL = "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=1200&auto=format&fit=crop";
 
 export default function CatererSignupPage() {
   const t = useT();
@@ -110,11 +111,13 @@ export default function CatererSignupPage() {
     }
   }
 
+  // PREMIUM INPUT STYLES
   const inputBase =
     "mt-1 w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-all duration-200";
   const inputOk = `${inputBase} border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-white/30 focus:bg-white/10 focus:ring-4 focus:ring-white/5`;
   const inputErr = `${inputBase} border-red-500/50 bg-red-500/10 text-red-200 placeholder:text-red-300/30 focus:border-red-500 focus:ring-4 focus:ring-red-500/10`;
 
+  // SUCCESS STATE UI
   if (success) {
     return (
       <main className="min-h-screen bg-surface-dark text-white flex flex-col lg:flex-row">
@@ -122,12 +125,9 @@ export default function CatererSignupPage() {
           <LanguageSwitcher />
         </div>
 
+        {/* Success Image (Desktop) */}
         <div className="hidden lg:block lg:w-1/2 relative">
-          <img
-            src={SUCCESS_IMAGE_URL}
-            alt="Success"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          <img src={SUCCESS_IMAGE_URL} alt="Success" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
         </div>
 
@@ -184,6 +184,7 @@ export default function CatererSignupPage() {
     );
   }
 
+  // DEFAULT SIGNUP FORM UI
   return (
     <main className="min-h-screen bg-surface-dark text-white">
       <div className="absolute end-4 top-4 z-50">
@@ -191,56 +192,27 @@ export default function CatererSignupPage() {
       </div>
 
       <div className="grid min-h-screen lg:grid-cols-2">
-        <div className="hidden lg:flex items-center justify-center border-r border-white/10 bg-[#192b1a] px-12 py-16">
-          <div className="max-w-md">
-            <div className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent-gold)]">
-              Speisely Partner
-            </div>
-
-            <h2 className="mt-6 text-4xl font-semibold leading-tight text-white">
-              Grow your catering business with Speisely.
+        
+        {/* LEFT SIDE: IMAGE SECTION (Hidden on Mobile) */}
+        <div className="hidden lg:block relative overflow-hidden">
+          <img 
+            src={HERO_IMAGE_URL} 
+            alt="Catering Excellence" 
+            className="absolute inset-0 h-full w-full object-cover" 
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+          
+          <div className="absolute bottom-16 left-16 max-w-md">
+            <h2 className="text-3xl font-semibold text-white leading-tight">
+              Elevate your catering business with Speisely.
             </h2>
-
             <p className="mt-4 text-white/60">
-              Join a premium marketplace for weddings, corporate events, and
-              private dining.
+              Join the most exclusive marketplace for professional catering services.
             </p>
-
-            <div className="mt-10 space-y-4 rounded-[1.5rem] border border-white/10 bg-white/5 p-6">
-              <div>
-                <div className="text-xs uppercase tracking-[0.18em] text-white/40">
-                  Premium marketplace
-                </div>
-                <div className="mt-1 text-lg font-medium text-white">
-                  Curated leads, better visibility
-                </div>
-              </div>
-
-              <div className="h-px bg-white/10" />
-
-              <div>
-                <div className="text-xs uppercase tracking-[0.18em] text-white/40">
-                  Verification first
-                </div>
-                <div className="mt-1 text-lg font-medium text-white">
-                  Trusted onboarding for quality caterers
-                </div>
-              </div>
-
-              <div className="h-px bg-white/10" />
-
-              <div>
-                <div className="text-xs uppercase tracking-[0.18em] text-white/40">
-                  Built for growth
-                </div>
-                <div className="mt-1 text-lg font-medium text-white">
-                  Packages, bookings, availability, payouts
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
+        {/* RIGHT SIDE: THE FORM */}
         <div className="flex items-center justify-center px-6 py-12 lg:px-16 lg:py-12">
           <div className="w-full max-w-xl">
             <div className="mb-8">
@@ -331,9 +303,7 @@ export default function CatererSignupPage() {
                         autoComplete="email"
                       />
                       {errors.email && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">
-                          {errors.email}
-                        </p>
+                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.email}</p>
                       )}
                     </div>
 
@@ -350,9 +320,7 @@ export default function CatererSignupPage() {
                         placeholder="+49 30 12345678"
                       />
                       {errors.phone && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">
-                          {errors.phone}
-                        </p>
+                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.phone}</p>
                       )}
                     </div>
                   </div>
