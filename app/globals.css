@@ -1,58 +1,125 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { I18nProvider } from "@/lib/i18n/context";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+/* ============================================================
+   SPEISELY — DESIGN TOKEN SYSTEM
+   ============================================================ */
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+:root {
+  --background: #f0e9d8;
+  --card: #faf6ee;
+  --popover: #faf6ee;
+  --secondary: #e4d9c2;
+  --muted: #e9e0cc;
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-};
+  --foreground: #161610;
+  --card-foreground: #161610;
+  --popover-foreground: #161610;
+  --secondary-foreground: #161610;
+  --muted-foreground: #564e42;
+  --accent-foreground: #faf6ee;
 
-export const metadata: Metadata = {
-  title: {
-    default: "Speisely",
-    template: "%s | Speisely",
-  },
-  description:
-    "Speisely is a premium AI-assisted catering marketplace in Germany for weddings, corporate events, private gatherings, and curated caterer discovery.",
-  applicationName: "Speisely",
-  keywords: [
-    "catering marketplace Germany",
-    "premium caterers Berlin",
-    "event catering Germany",
-    "wedding catering Berlin",
-    "corporate catering Germany",
-    "AI catering marketplace",
-    "Speisely",
-  ],
-};
+  --primary: #2a4a2c;
+  --primary-foreground: #f0e9d8;
+  --primary-hover: #35603a;
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html
-      lang="de"
-      dir="ltr"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      suppressHydrationWarning
-    >
-      <body className="min-h-screen bg-background text-foreground">
-        <I18nProvider>{children}</I18nProvider>
-      </body>
-    </html>
-  );
+  --accent: #a87040;
+  --accent-gold: #c49840;
+
+  --surface-dark: #192b1a;
+  --surface-dark-mid: #213524;
+  --surface-dark-card: #2c4430;
+  --surface-dark-foreground: #e4d9c2;
+  --surface-dark-muted: #7a9470;
+  --surface-dark-border: #334d38;
+
+  --border: #d4c8b0;
+  --input: #dcd2bb;
+  --ring: #4a7a4e;
+
+  --radius-sm: 0.75rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  --shadow-soft: 0 8px 24px rgba(22, 22, 16, 0.05);
+  --shadow-card: 0 12px 32px rgba(22, 22, 16, 0.06);
+  --shadow-card-hover: 0 18px 40px rgba(22, 22, 16, 0.1);
+  --shadow-dark: 0 14px 34px rgba(0, 0, 0, 0.22);
+
+  --radius: 0.75rem;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.premium-card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+}
+
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--surface-dark-foreground);
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  transition: all 160ms ease;
+}
+
+.btn-dark:active {
+  transform: translateY(1px);
+}
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
