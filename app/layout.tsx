@@ -16,8 +16,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="de">
+      {/* We set the background here so the whole site is dark by default */}
       <body className={`${inter.className} bg-[#192b1a] text-white antialiased`}>
-        {/* This wraps every page in your website */}
         {children}
       </body>
     </html>
