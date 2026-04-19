@@ -56,15 +56,15 @@ export default function HomePage() {
             caterers for your weddings, corporate events, and celebrations.
           </p>
 
-          {/* SEARCH INPUT BOX */}
-          <div className="relative mt-10 max-w-xl">
+          {/* SEARCH INPUT BOX - Fixed width container to prevent squashing */}
+          <div className="relative mt-10 w-full max-w-xl">
             <div className="relative flex items-center rounded-[2rem] border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur-2xl">
               <input
                 type="text"
                 placeholder="e.g. Elegant wedding for 80 guests in Berlin..."
                 className="w-full bg-transparent px-6 py-4 text-lg text-white placeholder:text-white/30 focus:outline-none"
               />
-              <button className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105 hover:brightness-110">
+              <button className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105 hover:brightness-110 flex-shrink-0">
                 <ArrowRight className="h-6 w-6" />
               </button>
             </div>
