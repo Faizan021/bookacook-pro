@@ -13,7 +13,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// This fixes the "zoom" issue on mobile devices
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -52,17 +51,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground">
-        <I18nProvider>
-          <div className="flex min-h-screen flex-col">
-            {/* 
-               FIX: The wrapper below prevents the "zoomed out" look. 
-               It centers the content and limits the width to 1280px (max-w-7xl).
-            */}
-            <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              {children}
-            </main>
-          </div>
-        </I18nProvider>
+        <I18nProvider>{children}</I18nProvider>
       </body>
     </html>
   );
