@@ -1,5 +1,6 @@
 // app/page.tsx
 import Link from "next/link";
+<h1>TESTING THE CONNECTION</h1>
 import { Sparkles, ArrowRight } from "lucide-react";
 
 export default function HomePage() {
