@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   ShieldCheck,
   Sparkles,
+  Wand2,
 } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
@@ -80,7 +81,7 @@ export default function HomePage() {
             {t("home.heroPlanCta")}
           </Link>
           <Link href="/about" className="transition hover:text-[#c49840]">
-            {t("nav.about", "Über Speisely")}
+            {t("nav.about", "About Speisely")}
           </Link>
         </nav>
 
@@ -102,14 +103,14 @@ export default function HomePage() {
       </header>
 
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-14 md:px-8 md:pb-24 md:pt-24">
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
               <Sparkles className="h-3.5 w-3.5" />
               {t("home.badge")}
             </div>
 
-            <h1 className="mt-8 text-5xl font-medium leading-[0.98] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[82px]">
+            <h1 className="mt-8 text-5xl font-medium leading-[0.96] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[80px]">
               {t("home.editorialHeroTitle")}
             </h1>
 
@@ -158,52 +159,77 @@ export default function HomePage() {
           </div>
 
           <div className="rounded-[2.3rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl">
-            <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              {t("home.heroPanel.label")}
-            </div>
-            <div className="mt-4 flex items-center justify-between gap-4">
-              <h2 className="text-2xl font-semibold text-white">
-                {t("home.heroPanel.title")}
-              </h2>
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                {t("home.aiDemo.requestLabel", "Your request")}
+              </div>
               <span className="rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c49840]">
                 {t("home.heroPanel.badge")}
               </span>
             </div>
 
-            <p className="mt-4 text-base leading-7 text-[#96a592]">
-              {t("home.heroPanel.occasionDesc")}
-            </p>
-
-            <div className="mt-8 space-y-5">
-              <div className="rounded-[1.4rem] border border-white/10 bg-black/10 p-4">
-                <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
-                  {t("home.heroPanel.guestLabel")}
-                </div>
-                <div className="mt-2 text-lg font-semibold text-white">
-                  {t("home.heroPanel.guestValue")}
-                </div>
-              </div>
-
-              <div className="rounded-[1.4rem] border border-white/10 bg-black/10 p-4">
-                <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
-                  {t("home.heroPanel.notesLabel")}
-                </div>
-                <div className="mt-2 text-base leading-7 text-white/90">
-                  {t("home.heroPanel.notesValue")}
-                </div>
-              </div>
+            <div className="mt-4 rounded-[1.4rem] border border-white/10 bg-black/10 p-5">
+              <p className="text-base leading-7 text-white/90">
+                “{t("home.aiDemo.request")}”
+              </p>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-2">
-              <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                {t("home.heroPanel.tag1")}
-              </span>
-              <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                {t("home.heroPanel.tag2")}
-              </span>
-              <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                {t("home.heroPanel.tag3")}
-              </span>
+            <div className="mt-6 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+              <Wand2 className="h-3.5 w-3.5" />
+              {t("home.aiDemo.understands", "Speisely understands")}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {[
+                t("home.aiDemo.tagEvent"),
+                t("home.aiDemo.tagCity"),
+                t("home.aiDemo.tagGuests"),
+                t("home.aiDemo.tagDiet"),
+                t("home.aiDemo.tagStyle"),
+                t("home.aiDemo.tagBudget"),
+              ].map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-[#ddd5c6]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-7 border-t border-white/10 pt-6">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                {t("home.aiDemo.recommended", "Suggested matches")}
+              </div>
+
+              <div className="mt-4 space-y-3">
+                <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
+                  <div className="font-semibold text-white">
+                    {t("home.aiDemo.caterer1Name")}
+                  </div>
+                  <div className="mt-1 text-sm text-[#93a28f]">
+                    {t("home.aiDemo.caterer1Meta")}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
+                  <div className="font-semibold text-white">
+                    {t("home.aiDemo.caterer2Name")}
+                  </div>
+                  <div className="mt-1 text-sm text-[#93a28f]">
+                    {t("home.aiDemo.caterer2Meta")}
+                  </div>
+                </div>
+
+                <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
+                  <div className="font-semibold text-white">
+                    {t("home.aiDemo.caterer3Name")}
+                  </div>
+                  <div className="mt-1 text-sm text-[#93a28f]">
+                    {t("home.aiDemo.caterer3Meta")}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -257,7 +283,7 @@ export default function HomePage() {
           <p className="mt-4 text-base leading-8 text-[#96a592]">
             {t(
               "home.occasions.subtitle",
-              "Entdecken Sie Catering-Lösungen für Hochzeiten, Business-Events und private Anlässe.",
+              "Explore catering solutions for weddings, business events, and private occasions.",
             )}
           </p>
         </div>
@@ -266,15 +292,18 @@ export default function HomePage() {
           {occasionKeys.map((occasion) => (
             <div
               key={occasion.titleKey}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl"
+              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 transition hover:-translate-y-1 hover:border-[#c49840]/20 hover:bg-white/[0.055]"
             >
-              <h3 className="text-xl font-semibold text-white">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                {t("home.occasions.label")}
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-white">
                 {t(occasion.titleKey)}
               </h3>
               <p className="mt-4 text-sm leading-7 text-[#92a18f]">
                 {t(occasion.descKey)}
               </p>
-              <div className="mt-6">
+              <div className="mt-8">
                 <Link
                   href="/request/new"
                   className="text-sm font-semibold text-[#c49840] transition hover:text-white"
