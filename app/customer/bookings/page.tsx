@@ -1,4 +1,4 @@
-"use client";
+"use client"; // <--- MOVED TO THE TOP
 
 import Link from "next/link";
 import { useT } from "@/lib/i18n/context";
