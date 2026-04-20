@@ -215,9 +215,6 @@
 
   "lang.de": "Deutsch",
   "lang.en": "English",
-  "lang.tr": "Türkçe",
-  "lang.ar": "العربية",
-
   "empty.bookings": "Noch keine Buchungen",
   "empty.bookingsDesc": "Buchungsanfragen erscheinen hier, sobald Kunden buchen.",
   "empty.packages": "Noch keine Pakete",
