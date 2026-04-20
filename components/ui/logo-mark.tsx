@@ -11,81 +11,61 @@ interface LogoMarkProps {
 }
 
 export function LogoMark({
-  size = 32,
+  size = 30,
   color = "currentColor",
   showWordmark = false,
   wordmarkColor = "currentColor",
   className = "",
 }: LogoMarkProps) {
+  const iconWidth = size;
+  const iconHeight = size;
+
   return (
     <span
-      className={`inline-flex items-center gap-2.5 ${className}`}
+      className={`inline-flex items-center gap-3 ${className}`}
       aria-label="Speisely"
     >
       <svg
-        width={size * 2}
-        height={size}
-        viewBox="0 0 64 32"
+        width={iconWidth}
+        height={iconHeight}
+        viewBox="0 0 32 32"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        <rect x="8" y="17" width="1.2" height="10" rx="0.6" fill={color} />
-        <rect x="7.6" y="13.5" width="2" height="3.5" rx="0.5" fill={color} />
-        <rect x="6.5" y="5" width="0.9" height="9" rx="0.45" fill={color} />
-        <rect x="8.05" y="5" width="0.9" height="9" rx="0.45" fill={color} />
-        <rect x="9.6" y="5" width="0.9" height="9" rx="0.45" fill={color} />
-
-        <ellipse
-          cx="32"
-          cy="18"
-          rx="10.5"
-          ry="6.5"
-          stroke={color}
-          strokeWidth="1.1"
-          fill="none"
-        />
-        <ellipse
-          cx="32"
-          cy="18"
-          rx="7.5"
-          ry="4.6"
-          stroke={color}
-          strokeWidth="0.7"
-          strokeOpacity="0.55"
-          fill="none"
-        />
-        <path
-          d="M25 17.5 C25 12.5 39 12.5 39 17.5"
-          stroke={color}
-          strokeWidth="0.85"
-          strokeLinecap="round"
-          fill="none"
-          opacity="0.4"
-        />
-
-        <rect x="54.8" y="17" width="1.2" height="10" rx="0.6" fill={color} />
         <rect
-          x="54.5"
-          y="14.5"
-          width="1.8"
-          height="2.5"
-          rx="0.4"
-          fill={color}
-        />
-        <path
-          d="M55.4 14.5 L56 5 L54.8 14.5 Z"
-          fill={color}
-          opacity="0.9"
-        />
-        <line
-          x1="55.4"
-          y1="14.5"
-          x2="56"
-          y2="5"
+          x="0.75"
+          y="0.75"
+          width="30.5"
+          height="30.5"
+          rx="15.25"
           stroke={color}
-          strokeWidth="0.6"
-          strokeLinecap="round"
+          strokeOpacity="0.22"
+          strokeWidth="1.5"
+        />
+
+        {/* Fork */}
+        <rect x="10.2" y="10" width="1.1" height="10.5" rx="0.55" fill={color} />
+        <rect x="8.55" y="7.6" width="0.85" height="4.6" rx="0.42" fill={color} />
+        <rect x="10.2" y="7.6" width="0.85" height="4.6" rx="0.42" fill={color} />
+        <rect x="11.85" y="7.6" width="0.85" height="4.6" rx="0.42" fill={color} />
+
+        {/* Knife */}
+        <rect x="19.55" y="10" width="1.15" height="10.5" rx="0.55" fill={color} />
+        <path
+          d="M20.15 7.6C21.25 9.15 21.35 11.35 20.75 13.2L19.55 13.2L19.55 7.6H20.15Z"
+          fill={color}
+        />
+
+        {/* Elegant center divider / table line */}
+        <line
+          x1="14.9"
+          y1="8.3"
+          x2="14.9"
+          y2="22.2"
+          stroke={color}
+          strokeOpacity="0.18"
+          strokeWidth="0.9"
         />
       </svg>
 
@@ -93,12 +73,12 @@ export function LogoMark({
         <span
           style={{
             color: wordmarkColor,
-            fontFamily: "var(--font-geist-sans, sans-serif)",
-            fontSize: size * 0.6,
-            fontWeight: 500,
-            letterSpacing: "-0.02em",
+            fontSize: size * 0.72,
+            fontWeight: 600,
+            letterSpacing: "-0.03em",
             lineHeight: 1,
           }}
+          className="tracking-tight"
         >
           Speisely
         </span>
@@ -116,7 +96,7 @@ export function LogoLockup({
   dark?: boolean;
   className?: string;
 }) {
-  const c = dark ? "#e4d9c2" : "#2a4a2c";
+  const c = dark ? "#eadfca" : "#173222";
 
   return (
     <LogoMark
