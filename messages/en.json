@@ -691,5 +691,21 @@
 "forCaterers.finalLabel": "Get started",
 "forCaterers.finalTitle": "Join a more modern catering marketplace.",
 "forCaterers.finalSubtitle": "Create your account, complete your profile, and start receiving better event opportunities through Speisely.",
-"forCaterers.secondImageAlt": "Catering service setup for an event"
+"forCaterers.secondImageAlt": "Catering service setup for an event",
+"footer.brandLine": "AI-guided catering marketplace",
+"footer.description": "Speisely connects event hosts with curated catering partners through a more premium, structured, and AI-guided discovery flow.",
+"footer.customersTitle": "For customers",
+"footer.customersLink1": "Describe your event",
+"footer.customersLink2": "Browse caterers",
+"footer.customersLink3": "About Speisely",
+"footer.caterersTitle": "For caterers",
+"footer.caterersLink1": "Join as a caterer",
+"footer.caterersLink2": "Caterer login",
+"footer.caterersLink3": "For caterers",
+"footer.contactTitle": "Contact",
+"footer.country": "Germany",
+"footer.socialTitle": "Social",
+"footer.bottomRequest": "Request a quote",
+"footer.imprint": "Imprint",
+"footer.privacy": "Privacy"
 }
