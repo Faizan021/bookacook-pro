@@ -161,8 +161,7 @@ export function PackageWizard() {
   const t = useT();
   const [locale] = useLocale();
   const router = useRouter();
-  const isRtl = locale === "ar";
-
+  const isRtl = false;
   const [step, setStep] = useState(1);
   const [data, setData] = useState<WizardData>(DEFAULTS);
   const [packageId, setPackageId] = useState<string | null>(null);
