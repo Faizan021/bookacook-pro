@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Sparkles,
   Stars,
+  Search,
 } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
@@ -69,6 +70,8 @@ export default function HomePage() {
     t("home.aiDemo.tagCity"),
     t("home.aiDemo.tagGuests"),
     t("home.aiDemo.tagDiet"),
+    t("home.aiDemo.tagStyle"),
+    t("home.aiDemo.tagBudget"),
   ];
 
   const featuredMatches = [
@@ -80,6 +83,17 @@ export default function HomePage() {
       name: t("home.aiDemo.caterer2Name"),
       meta: t("home.aiDemo.caterer2Meta"),
     },
+    {
+      name: t("home.aiDemo.caterer3Name"),
+      meta: t("home.aiDemo.caterer3Meta"),
+    },
+  ];
+
+  const promptExamples = [
+    t("home.editorialSearchPlaceholder"),
+    t("home.chips.corporate"),
+    t("home.chips.private"),
+    t("home.chips.ramadan"),
   ];
 
   return (
@@ -89,7 +103,7 @@ export default function HomePage() {
           className="absolute inset-0 opacity-70"
           style={{
             background:
-              "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
+              "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.16) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
           }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
@@ -132,25 +146,26 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16">
-        <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-14 pt-8 md:px-8 md:pb-20 md:pt-12">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
               <Sparkles className="h-3.5 w-3.5" />
               {t("home.badge")}
             </div>
 
-            <h1 className="mt-8 text-5xl font-medium leading-[0.95] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[82px]">
+            <h1 className="mt-7 text-5xl font-medium leading-[0.93] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[80px]">
               {t("home.editorialHeroTitle")}
             </h1>
 
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-[#a5b3a0] md:text-xl">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#a5b3a0] md:text-[1.15rem]">
               {t("home.editorialHeroSubtitle")}
             </p>
 
-            <div className="mt-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center">
-                <div className="flex h-16 flex-1 items-center rounded-[1.4rem] bg-black/10 px-5">
+            <div className="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.04] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+              <div className="flex flex-col gap-3">
+                <div className="flex h-16 items-center gap-3 rounded-[1.4rem] bg-black/10 px-5">
+                  <Search className="h-4.5 w-4.5 text-[#c49840]" />
                   <input
                     type="text"
                     placeholder={t("home.editorialSearchPlaceholder")}
@@ -158,24 +173,38 @@ export default function HomePage() {
                   />
                 </div>
 
-                <Link
-                  href="/request/new"
-                  className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-7 font-semibold text-black transition hover:scale-[1.02]"
-                >
-                  {t("home.editorialCtaPrimary")}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+                <div className="flex flex-col gap-3 md:flex-row">
+                  <Link
+                    href="/request/new"
+                    className="flex h-14 flex-1 items-center justify-center gap-2 rounded-[1.2rem] bg-[#c49840] px-6 font-semibold text-black transition hover:scale-[1.01]"
+                  >
+                    {t("home.editorialCtaPrimary")}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
 
-                <Link
-                  href="/caterers"
-                  className="flex h-16 items-center justify-center rounded-[1.3rem] border border-white/10 bg-white/[0.03] px-7 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-                >
-                  {t("home.editorialCtaSecondary")}
-                </Link>
+                  <Link
+                    href="/caterers"
+                    className="flex h-14 items-center justify-center rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-6 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                  >
+                    {t("home.editorialCtaSecondary")}
+                  </Link>
+                </div>
               </div>
             </div>
 
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-4 flex flex-wrap gap-2">
+              {promptExamples.map((prompt) => (
+                <Link
+                  key={prompt}
+                  href="/request/new"
+                  className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs text-[#d7cfbf] transition hover:border-[#c49840]/30 hover:text-white"
+                >
+                  {prompt}
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-3">
               <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#d7cfbf]">
                 {t("home.heroBenefit1")}
               </span>
@@ -187,7 +216,7 @@ export default function HomePage() {
               </span>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-2">
+            <div className="mt-6 flex flex-wrap gap-2">
               {trustKeys.map((key) => (
                 <span
                   key={key}
@@ -199,7 +228,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="rounded-[2.3rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl">
+          <div className="rounded-[2.3rem] border border-white/10 bg-white/[0.045] p-7 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl">
             <div className="flex items-start justify-between gap-4">
               <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
                 {t("home.aiDemo.requestLabel", "Your request")}
@@ -234,18 +263,31 @@ export default function HomePage() {
             </div>
 
             <div className="mt-7 border-t border-white/10 pt-6">
-              <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#c49840]">
-                {t("home.aiDemo.recommended")}
+              <div className="flex items-center justify-between gap-4">
+                <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#c49840]">
+                  {t("home.aiDemo.recommended")}
+                </div>
+                <Link
+                  href="/request/new"
+                  className="text-xs font-medium text-[#c49840] transition hover:text-white"
+                >
+                  {t("home.editorialCtaPrimary")} →
+                </Link>
               </div>
 
               <div className="mt-4 space-y-3">
-                {featuredMatches.map((item) => (
+                {featuredMatches.map((item, index) => (
                   <div
                     key={item.name}
-                    className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3"
+                    className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3"
                   >
-                    <div className="text-sm font-semibold text-white">{item.name}</div>
-                    <div className="mt-1 text-xs text-[#9aaa96]">{item.meta}</div>
+                    <div>
+                      <div className="text-sm font-semibold text-white">{item.name}</div>
+                      <div className="mt-1 text-xs text-[#9aaa96]">{item.meta}</div>
+                    </div>
+                    <div className="rounded-full border border-[#c49840]/15 bg-[#c49840]/8 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#c49840]">
+                      #{index + 1}
+                    </div>
                   </div>
                 ))}
 
@@ -306,7 +348,7 @@ export default function HomePage() {
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-8 md:py-20">
         <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div className="relative overflow-hidden rounded-[2.4rem] border border-white/10">
-            <div className="absolute inset-0 z-10 bg-[linear-gradient(to_top,rgba(7,17,12,0.72),rgba(7,17,12,0.18))]" />
+            <div className="absolute inset-0 z-10 bg-[linear-gradient(to_top,rgba(7,17,12,0.74),rgba(7,17,12,0.2))]" />
             <Image
               src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1400&q=80"
               alt={t("home.images.heroAlt")}
@@ -368,6 +410,49 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-14">
+        <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl md:p-10">
+          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <div>
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                {t("home.trust.curated")}
+              </div>
+              <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
+                Premium planning deserves a clearer starting point.
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-8 text-[#96a592]">
+                Speisely combines curated discovery, structured event intake, and
+                premium positioning so customers do not need to dig through generic
+                directories to find the right caterer.
+              </p>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-[1.6rem] border border-white/10 bg-black/10 p-5">
+                <div className="text-3xl font-semibold text-white">AI</div>
+                <p className="mt-2 text-sm leading-7 text-[#92a18f]">
+                  Natural-language event search that feels modern and premium.
+                </p>
+              </div>
+
+              <div className="rounded-[1.6rem] border border-white/10 bg-black/10 p-5">
+                <div className="text-3xl font-semibold text-white">Curated</div>
+                <p className="mt-2 text-sm leading-7 text-[#92a18f]">
+                  Stronger quality perception than a crowded listing directory.
+                </p>
+              </div>
+
+              <div className="rounded-[1.6rem] border border-white/10 bg-black/10 p-5">
+                <div className="text-3xl font-semibold text-white">Premium</div>
+                <p className="mt-2 text-sm leading-7 text-[#92a18f]">
+                  Designed for weddings, corporate dining, seasonal events, and more.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-8 md:py-20">
         <div className="mb-10 max-w-3xl">
           <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
@@ -384,13 +469,13 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
           {occasionKeys.map((occasion) => (
             <div
               key={occasion.titleKey}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#c49840]/20 hover:bg-white/[0.055]"
+              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#c49840]/20 hover:bg-white/[0.055]"
             >
-              <h3 className="text-xl font-semibold text-white">
+              <h3 className="text-lg font-semibold text-white">
                 {t(occasion.titleKey)}
               </h3>
               <p className="mt-4 text-sm leading-7 text-[#92a18f]">
