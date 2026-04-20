@@ -1,21 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo, useEffect } from "react";
-import { 
-  Sparkles, 
-  ArrowRight, 
-  BrainCircuit, 
-  MapPin, 
-  Calendar, 
-  CheckCircle2, 
-  Search, 
-  Star,
-  Layers,
-  Zap
-} from "lucide-react";
+import { useState, useMemo } from "react";
+import { Sparkles, ArrowRight, Star, BrainCircuit, MapPin, Calendar, CheckCircle2, Layers, Zap } from "lucide-react";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
+// This is the "Rulebook". I have added the missing fields so TypeScript is happy.
 type CatererCard = {
   id: string;
   name: string;
@@ -26,7 +16,8 @@ type CatererCard = {
   startingPrice: string;
   guestRange: string;
   verified?: boolean;
-  rating: number;
+  featured?: boolean; // <--- ADDED THIS
+  rating: number;     // <--- ADDED THIS
 };
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
@@ -37,8 +28,8 @@ const sampleCaterers: CatererCard[] = [
     city: "Berlin",
     cuisine: "BBQ & Grill",
     description: "Authentic live grill catering for premium outdoor events and private celebrations.",
-    tags: ["BBQ", "Outdoor", "Private"],
-    startingPrice: "€29 p.p.",
+    tags: ["BBQ", "Outdoor Events", "Private Parties"],
+    startingPrice: "from €29 p.p.",
     guestRange: "40–180 guests",
     verified: true,
     rating: 4.9
@@ -48,30 +39,65 @@ const sampleCaterers: CatererCard[] = [
     name: "Royal Events Catering",
     city: "Hamburg",
     cuisine: "Wedding & Fine Dining",
-    description: "Elegant full-service catering for weddings and refined private celebrations.",
-    tags: ["Weddings", "Fine Dining", "Luxury"],
-    startingPrice: "€49 p.p.",
+    description: "Elegant full-service catering for weddings, formal receptions, and refined private celebrations.",
+    tags: ["Weddings", "Fine Dining", "Full Service"],
+    startingPrice: "from €49 p.p.",
     guestRange: "50–250 guests",
     verified: true,
+    featured: true,
     rating: 5.0
+  },
+  {
+    id: "freshbite-catering",
+    name: "FreshBite Catering",
+    city: "Munich",
+    cuisine: "Corporate & Healthy Menus",
+    description: "Modern business catering with fresh seasonal menus for office lunches, team events, and brand activations.",
+    tags: ["Corporate", "Healthy Menus", "Business Events"],
+    startingPrice: "from €24 p.p.",
+    guestRange: "20–140 guests",
+    rating: 4.7
   },
   {
     id: "atelier-table-berlin",
     name: "Atelier Table Berlin",
     city: "Berlin",
     cuisine: "Modern European",
-    description: "Curated premium menus for intimate, design-led event concepts.",
-    tags: ["Private Dining", "Modern", "Minimalist"],
-    startingPrice: "€58 p.p.",
+    description: "Curated premium menus for intimate dinners, private celebrations, and design-led event concepts.",
+    tags: ["Private Dining", "Modern European", "Curated Menus"],
+    startingPrice: "from €58 p.p.",
     guestRange: "15–80 guests",
     featured: true,
     rating: 4.8
-  }
+  },
+  {
+    id: "green-plate-events",
+    name: "Green Plate Events",
+    city: "Cologne",
+    cuisine: "Vegetarian & Vegan",
+    description: "Plant-forward catering concepts with elegant presentation for conscious weddings and premium corporate events.",
+    tags: ["Vegetarian", "Vegan", "Sustainable"],
+    startingPrice: "fromnt €31 p.p.",
+    guestRange: "30–160 guests",
+    verified: true,
+    rating: 4.9
+  },
+  {
+    id: "levant-feast-studio",
+    name: "Levant Feast Studio",
+    city: "Frankfurt",
+    cuisine: "Middle Eastern",
+    description: "Warm, abundant sharing menus and stylish event catering for family gatherings, receptions, and cultural celebrations.",
+    tags: ["Sharing Menus", "Middle Eastern", "Celebrations"],
+    startingPrice: "from €34 p.p.",
+    guestRange: "30–200 guests",
+    rating: 4.6
+  },
 ];
 
-const quickFilters = ["Berlin", "Wedding", "Corporate", "Vegan", "Fine Dining"];
+const quickFilters = ["Berlin", "Corporate", "Wedding", "Vegetarian", "Fine Dining", "Private Party"];
 
-// ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
+// ─── MAIN PAGE COMPONENT ─────────────────────────────────────────────────────
 export default function HomePage() {
   const [viewMode, setViewMode] = useState<"ai" | "browse">("ai");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -89,7 +115,7 @@ export default function HomePage() {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      setViewMode("browse"); // After "thinking", show the results
+      setViewMode("browse"); 
     }, 2000);
   };
 
@@ -97,22 +123,19 @@ export default function HomePage() {
     return sampleCaterers.filter((caterer) => {
       const haystack = [caterer.name, caterer.city, caterer.cuisine, caterer.description, ...caterer.tags].join(" ").toLowerCase();
       const cityMatch = !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
-      const eventMatch = !eventType || haystack.includes(eventType.toLowerCase());
-      const cuisineMatch = !cuisine || caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase());
+      const eventMatch = !eventType || haystack.includes(eventType.toLowerCase()) || caterer.tags.some(tag => tag.toLowerCase().includes(eventType.toLowerCase()));
+      const cuisineMatch = !cuisine || caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()) || caterer.tags.some(tag => tag.toLowerCase().includes(cuisine.toLowerCase()));
       return cityMatch && eventMatch && cuisineMatch;
     });
   }, [city, eventType, cuisine]);
 
   return (
-    <main className="relative min-h-screen bg-[#0a1a0a] text-[#f4f1ea] overflow-x-hidden font-sans">
-      
-      {/* 1. THE ATMOSPHERE (Background) */}
+    <main className="relative min-h-screen overflow-x-hidden bg-[#0a1a0a] text-[#f4f1ea]">
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#1a3a1a_0%,transparent_50%)] opacity-60" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,#2a4a2c_0%,transparent_50%)] opacity-40" />
         <div className="absolute inset-0 grain-overlay opacity-[0.04]" />
       </div>
 
-      {/* 2. ELEGANT NAVIGATION */}
       <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-8 py-8">
         <div className="text-2xl font-serif tracking-[0.3em] uppercase text-[#c49840]">Speisely</div>
         <nav className="hidden items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-[#f4f1ea]/50 md:flex">
@@ -123,69 +146,55 @@ export default function HomePage() {
         <Link href="/login" className="text-[10px] font-bold uppercase tracking-widest text-[#f4f1ea] border-b border-[#c49840] pb-1">Login</Link>
       </header>
 
-      {/* 3. HERO SECTION (The AI Interface) */}
-      <section className="relative z-10 mx-auto max-w-5xl px-6 pt-24 pb-32 text-center">
-        {viewMode === "ai" ? (
-          <>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/30 bg-[#c49840]/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-[#c49840] mb-10">
-              <BrainCircuit className="h-3.5 w-3.5" /> Intelligent Concierge
-            </div>
-            
-            <h1 className="text-5xl font-serif leading-[1.1] tracking-tight text-white sm:text-7xl md:text-8xl mb-8">
-              Crafting <br />
-              <span className="italic text-[#c49840]">Unforgettable</span> <br />
-              Moments.
-            </h1>
-            
-            <p className="max-w-xl mx-auto text-lg leading-relaxed text-[#7a9470] font-light mb-12">
-              Don't search. Describe. Our AI interprets your vision to curate the perfect culinary experience.
-            </p>
+      <section className="relative z-10 mx-auto max-w-5xl px-6 pt-20 pb-32 text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/30 bg-[#c49840]/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-[#c49840] mb-10">
+          <BrainCircuit className="h-3.5 w-3.5" /> Intelligent Concierge
+        </div>
+        
+        <h1 className="text-5xl font-serif leading-[1.1] tracking-tight text-white sm:text-7xl md:text-8xl">
+          Exceptional <br />
+          <span className="italic text-[#c49840]">Catering.</span>
+        </h1>
+        
+        <p className="max-w-xl mx-auto mt-8 text-lg leading-relaxed text-[#7a9470] font-light">
+          The intelligent way to discover and book elite culinary experiences for your most important moments.
+        </p>
 
-            <form onSubmit={handleAISearch} className="relative max-w-2xl mx-auto">
-              <div className="relative flex items-center rounded-full border border-white/10 bg-white/[0.03] p-1.5 shadow-[0_0_60px_rgba(196,152,64,0.1)] backdrop-blur-xl transition-all focus-within:border-[#c49840]/50">
+        <div className="mt-12 max-w-2xl mx-auto">
+          {viewMode === "ai" ? (
+            <form onSubmit={handleAISearch} className="relative">
+              <div className="relative flex items-center rounded-full border border-white/10 bg-white/[0.03] p-1.5 shadow-[0_0_60px_rgba(196,152,64,0.1)] backdrop-blur-xl">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="e.g. A minimalist sushi experience for 30 guests in Berlin..."
+                  placeholder="Describe your vision (e.g. 'A luxury garden wedding in Berlin')..."
                   className="w-full bg-transparent px-8 py-5 text-xl text-white placeholder:text-white/20 focus:outline-none font-light italic"
                 />
                 <button 
                   type="submit"
                   disabled={isProcessing}
-                  className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-110 disabled:opacity-50"
+                  className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105 disabled:opacity-50"
                 >
-                  {isProcessing ? (
-                    <div className="h-5 w-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                  ) : (
-                    <ArrowRight className="h-6 w-6" />
-                  )}
+                  {isProcessing ? <div className="h-5 w-5 border-2 border-black/30 border-t-black rounded-full animate-spin" /> : <ArrowRight className="h-6 w-6" />}
                 </button>
               </div>
-              <div className="mt-6 flex justify-center gap-4 text-[10px] font-bold uppercase tracking-widest text-[#7a9470]">
-                <span>Try:</span>
-                <button type="button" onClick={() => setSearchQuery("A luxury wedding in Hamburg")} className="hover:text-white">Luxury Wedding</button>
-                <span>•</span>
-                <button type="button" onClick={() => setSearchQuery("Modern corporate lunch in Berlin")} className="hover:text-white">Corporate Lunch</button>
-              </div>
+              <p className="mt-6 text-xs text-[#7a9470] italic">Try: "Minimalist sushi experience in Munich" or "Elegant corporate lunch"</p>
             </form>
-          </>
-        ) : (
-          /* MODE SWITCHER REVEAL (If they switch to Browse) */
-          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
-             <h2 className="text-4xl font-serif text-white mb-4">Explore the Collection</h2>
-             <p className="text-[#7a9470]">Manually browse our curated network of culinary masters.</p>
-             <button 
-              onClick={() => setViewMode("ai")}
-              className="mt-6 text-[10px] font-bold uppercase tracking-widest text-[#c49840] border-b border-[#c49840] pb-1"
-             >
-               Return to AI Concierge
-             </button>
-          </div>
-        )}
+          ) : (
+            <div className="flex justify-center">
+              <button 
+                onClick={() => setViewMode("ai")}
+                className="text-[10px] font-bold uppercase tracking-widest text-[#c49840] hover:text-white transition-colors"
+              >
+                $\leftarrow$ Return to AI Concierge
+              </button>
+            </div>
+          )}
+        </div>
       </section>
 
-      {/* 4. THE TECHNOLOGY (The "Grant-Winning" Section) */}
+      {/* 6. THE TECHNOLOGY (The "Grant-Winning" Section) */}
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-24 border-t border-white/5">
         <div className="grid gap-16 md:grid-cols-3">
           <div className="text-center group">
@@ -218,10 +227,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. THE MARKETPLACE (Visible when in Browse mode or after AI search) */}
+      {/* 7. THE MARKETPLACE (Visible when in Browse mode) */}
       {viewMode === "browse" && (
-        <section className="relative z-10 mx-auto max-w-7xl px-6 pb-32 animate-in fade-in slide-in-from-bottom-12 duration-700">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <section className="relative z-10 mx-auto max-w-7xl px-6 pb-32">
+          <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="text-left">
               <h2 className="text-3xl font-serif text-white">Curated Selection</h2>
               <div className="h-px w-12 bg-[#c49840] mt-4" />
@@ -229,11 +238,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-2">
               {quickFilters.map(f => (
-                <button 
-                  key={f} 
-                  onClick={() => {setCity(f); setEventType(""); setCuisine("");}}
-                  className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 bg-white/5 text-white hover:bg-[#c49840] hover:text-black transition"
-                >
+                <button key={f} onClick={() => {setCity(f); setEventType(""); setCuisine("");}} className="text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 bg-white/5 text-white hover:bg-[#c49840] hover:text-black transition">
                   {f}
                 </button>
               ))}
@@ -274,7 +279,6 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* 6. FOOTER */}
       <footer className="relative z-10 border-t border-white/5 bg-[#081208] py-16 text-center">
         <div className="text-sm font-serif tracking-widest uppercase text-[#c49840] mb-4">Speisely</div>
         <p className="text-[10px] uppercase tracking-[0.4em] text-[#7a9470]">The Art of Culinary Intelligence</p>
