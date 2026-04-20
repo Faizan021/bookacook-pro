@@ -64,6 +64,24 @@ const trustKeys = [
 export default function HomePage() {
   const t = useT();
 
+  const aiTags = [
+    t("home.aiDemo.tagEvent"),
+    t("home.aiDemo.tagCity"),
+    t("home.aiDemo.tagGuests"),
+    t("home.aiDemo.tagDiet"),
+  ];
+
+  const featuredMatches = [
+    {
+      name: t("home.aiDemo.caterer1Name"),
+      meta: t("home.aiDemo.caterer1Meta"),
+    },
+    {
+      name: t("home.aiDemo.caterer2Name"),
+      meta: t("home.aiDemo.caterer2Meta"),
+    },
+  ];
+
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
       <div className="pointer-events-none fixed inset-0">
@@ -204,24 +222,14 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                  {t("home.aiDemo.tagEvent")}
-                </span>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                  {t("home.aiDemo.tagCity")}
-                </span>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                  {t("home.aiDemo.tagGuests")}
-                </span>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                  {t("home.aiDemo.tagDiet")}
-                </span>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                  {t("home.aiDemo.tagStyle")}
-                </span>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
-                  {t("home.aiDemo.tagBudget")}
-                </span>
+                {aiTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -231,20 +239,7 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 space-y-3">
-                {[
-                  {
-                    name: t("home.aiDemo.caterer1Name"),
-                    meta: t("home.aiDemo.caterer1Meta"),
-                  },
-                  {
-                    name: t("home.aiDemo.caterer2Name"),
-                    meta: t("home.aiDemo.caterer2Meta"),
-                  },
-                  {
-                    name: t("home.aiDemo.caterer3Name"),
-                    meta: t("home.aiDemo.caterer3Meta"),
-                  },
-                ].map((item) => (
+                {featuredMatches.map((item) => (
                   <div
                     key={item.name}
                     className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3"
@@ -253,6 +248,18 @@ export default function HomePage() {
                     <div className="mt-1 text-xs text-[#9aaa96]">{item.meta}</div>
                   </div>
                 ))}
+
+                <div className="rounded-[1.2rem] border border-dashed border-[#c49840]/25 bg-[#c49840]/[0.04] px-4 py-3">
+                  <div className="text-sm font-medium text-[#e6d8bd]">
+                    + {t("home.aiDemo.moreMatches", "More curated matches")}
+                  </div>
+                  <div className="mt-1 text-xs text-[#9aaa96]">
+                    {t(
+                      "home.aiDemo.moreMatchesDesc",
+                      "Continue to your event brief to unlock a more tailored shortlist.",
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -377,11 +384,11 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {occasionKeys.map((occasion) => (
             <div
               key={occasion.titleKey}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl"
+              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#c49840]/20 hover:bg-white/[0.055]"
             >
               <h3 className="text-xl font-semibold text-white">
                 {t(occasion.titleKey)}
