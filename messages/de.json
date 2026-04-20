@@ -690,5 +690,21 @@
 "forCaterers.finalLabel": "Jetzt starten",
 "forCaterers.finalTitle": "Werden Sie Teil eines moderneren Catering-Marktplatzes.",
 "forCaterers.finalSubtitle": "Erstellen Sie Ihr Konto, vervollständigen Sie Ihr Profil und erhalten Sie bessere Event-Anfragen über Speisely.",
-"forCaterers.secondImageAlt": "Catering-Service beim Aufbau eines Events"
+"forCaterers.secondImageAlt": "Catering-Service beim Aufbau eines Events",
+  "footer.brandLine": "KI-gestützter Catering-Marktplatz",
+"footer.description": "Speisely verbindet Event-Gastgeber mit kuratierten Catering-Partnern durch einen hochwertigeren, strukturierteren und KI-gestützten Discovery-Prozess.",
+"footer.customersTitle": "Für Kunden",
+"footer.customersLink1": "Event beschreiben",
+"footer.customersLink2": "Caterer entdecken",
+"footer.customersLink3": "Über Speisely",
+"footer.caterersTitle": "Für Caterer",
+"footer.caterersLink1": "Als Caterer beitreten",
+"footer.caterersLink2": "Caterer-Login",
+"footer.caterersLink3": "Für Caterer",
+"footer.contactTitle": "Kontakt",
+"footer.country": "Deutschland",
+"footer.socialTitle": "Social Media",
+"footer.bottomRequest": "Angebot anfragen",
+"footer.imprint": "Impressum",
+"footer.privacy": "Datenschutz"
 }
