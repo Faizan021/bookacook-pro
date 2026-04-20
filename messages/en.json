@@ -229,6 +229,41 @@
   "empty.verificationDesc": "Please log in as a caterer.",
   "empty.caterers": "No caterers registered yet",
   "empty.caterersDesc": "When caterers sign up they will appear here for review.",
+  "about.value1Title": "AI-guided discovery",
+"about.value1Desc": "Speisely transforms natural-language event requests into a clearer catering brief so customers can start faster and discover more relevant partners.",
+"about.value2Title": "Curated quality",
+"about.value2Desc": "We focus on a more premium and trustworthy catering experience with clearer presentation, stronger positioning, and a more selective marketplace feel.",
+"about.value3Title": "Better for both sides",
+"about.value3Desc": "Customers get a smoother planning flow, while caterers receive more structured inquiries that are easier to understand and respond to.",
+
+"about.whyDesc1": "Many catering platforms feel like simple directories. Customers often have an idea in mind, but not a perfect specification. Caterers, on the other hand, need better context to respond well.",
+"about.whyDesc2": "Speisely sits between those two needs. It helps customers express what they want in a more natural way, then structures that intent into something more useful for matching, browsing, and booking.",
+
+"about.aiDesc1": "Speisely uses AI as a layer of interpretation and guidance. A user can describe an event in plain language, and the system can help identify signals like occasion, city, guest count, dietary needs, service style, and budget direction.",
+"about.aiDesc2": "The goal is not AI for the sake of AI. The goal is a better request flow, stronger partner discovery, and a smoother premium experience from homepage to shortlist.",
+
+"about.approachLabel": "Our approach",
+"about.approachTitle": "Built around a smarter hospitality flow",
+"about.approachSubtitle": "Speisely is designed to feel less like a cluttered listing site and more like a premium planning experience.",
+
+"about.principle1Title": "Start with the event, not filters",
+"about.principle1Desc": "Instead of sending people into an endless directory, Speisely begins with the occasion, intent, and event details.",
+"about.principle2Title": "Turn rough ideas into structured briefs",
+"about.principle2Desc": "A short request like Wedding for 80 guests in Berlin becomes a clearer starting point for matching, browsing, and inquiry.",
+"about.principle3Title": "Premium experience throughout",
+"about.principle3Desc": "From homepage to request flow to dashboard, Speisely is designed to feel polished, premium, and easier to trust.",
+
+"about.customersLabel": "For customers",
+"about.customersTitle": "From vague idea to better shortlist",
+"about.customersDesc": "Customers often know the feeling or outcome they want, but not the exact catering language. Speisely helps bridge that gap through a guided experience that starts with natural intent and moves toward more structured planning.",
+
+"about.caterersLabel": "For caterers",
+"about.caterersTitle": "Better visibility and better inquiries",
+"about.caterersDesc": "Caterers benefit from a more premium presentation layer and from incoming requests that are more structured than a simple message. That creates better clarity, stronger positioning, and more useful leads.",
+
+"about.ctaLabel": "Start planning",
+"about.ctaTitle": "Start with your event, not a directory.",
+"about.ctaSubtitle": "Tell Speisely what you are planning and continue into a smarter, more premium catering journey.",
 
   "pkg.addFirst": "+ Create First Package",
 
