@@ -7,8 +7,8 @@ import {
   CheckCircle2, Zap, Search
 } from "lucide-react";
 
-// ─── THE RULEBOOK (TYPES) ───────────────────────────────────────────────────
-// Every single property used in the 'sampleCaterers' list MUST be listed here.
+// ─── 1. THE RULEBOOK (TYPES) ─────────────────────────────────────────────────
+// Every single property used in the list below MUST be listed here.
 type CatererCard = {
   id: string;
   name: string;
@@ -18,12 +18,12 @@ type CatererCard = {
   tags: string[];
   startingPrice: string;
   guestRange: string;
-  verified?: boolean; // The '?' makes it optional
-  featured?: boolean; // This is what was causing your error
-  rating: number;     // This must be here for the star component to work
+  verified?: boolean; // The '?' means it is optional
+  featured?: boolean; // This is what was causing your error - it is now fixed!
+  rating: number;     // This is also required
 };
 
-// ─── THE DATA (MATCHING THE RULEBOOK) ───────────────────────────────────────
+// ─── 2. THE DATA (MATCHING THE RULEBOOK) ─────────────────────────────────────
 const sampleCaterers: CatererCard[] = [
   {
     id: "1",
@@ -66,26 +66,36 @@ const sampleCaterers: CatererCard[] = [
 
 const quickFilters = ["Berlin", "Corporate", "Wedding", "Vegetarian", "Fine Dining"];
 
-// ─── MAIN PAGE COMPONENT ─────────────────────────────────────────────────────
+// ─── 3. THE MAIN COMPONENT ───────────────────────────────────────────────────
 export default function HomePage() {
   const [viewMode, setViewMode] = useState<"ai" | "browse">("ai");
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
+  // Filter States
   const [city, setCity] = useState("");
   const [eventType, setEventType] = useState("");
   const [cuisine, setCuisine] = useState("");
 
+  // Handle AI Search Simulation
   const handleAISearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery) return;
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      setViewMode("browse"); 
+      setViewMode("browse");
     }, 2500);
   };
 
+  // Handle Quick Filter Clicks
+  const applyQuickFilter = (val: string) => {
+    if (["Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt"].includes(val)) setCity(val);
+    else if (["Corporate", "Wedding", "Private Party"].includes(val)) setEventType(val);
+    else setCuisine(val);
+  };
+
+  // Filter Logic
   const filteredCaterers = useMemo(() => {
     return sampleCaterers.filter((caterer) => {
       const haystack = [caterer.name, caterer.city, caterer.cuisine, caterer.description, ...caterer.tags].join(" ").toLowerCase();
@@ -106,7 +116,7 @@ export default function HomePage() {
       </div>
 
       {/* 2. HEADER */}
-      <header className="relative z-50 mx-auto max-w-7xl flex items-center justify-between px-6 py-6">
+      <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <div className="text-2xl font-bold text-[#e4d9c2] tracking-tighter">Speisely</div>
         <nav className="hidden items-center gap-8 text-sm font-medium text-[#e4d9c2]/70 md:flex">
           <Link href="/caterers" className="transition hover:text-[#c49840]">Browse Caterers</Link>
@@ -151,7 +161,7 @@ export default function HomePage() {
             <img
               src="https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
               alt="Luxury Catering Experience"
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition duration-1000 hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#192b1a] via-transparent to-transparent opacity-60" />
           </div>
@@ -236,10 +246,4 @@ export default function HomePage() {
       </footer>
     </main>
   );
-}
-
-// Helper function outside component to keep it clean
-function applyQuickFilter(val: string) {
-  // This is a dummy helper for the button clicks
-  // In a real app, this would be state-managed more robustly
 }
