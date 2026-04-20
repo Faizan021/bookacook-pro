@@ -7,9 +7,13 @@ import {
   ArrowRight,
   BrainCircuit,
   CheckCircle2,
+  Facebook,
+  Instagram,
+  Linkedin,
   ShieldCheck,
   Sparkles,
   Stars,
+  Tiktok,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useT } from "@/lib/i18n/context";
@@ -89,63 +93,63 @@ function parseHeroIntent(input: string) {
     text.includes("wedding") || text.includes("hochzeit")
       ? "Wedding"
       : text.includes("corporate") ||
-        text.includes("office") ||
-        text.includes("business") ||
-        text.includes("firma") ||
-        text.includes("meeting")
-      ? "Corporate Event"
-      : text.includes("summer") || text.includes("bbq") || text.includes("garten")
-      ? "Summer Party"
-      : text.includes("birthday") || text.includes("geburtstag")
-      ? "Birthday"
-      : text.includes("graduation") || text.includes("abschluss")
-      ? "Graduation"
-      : text.includes("christmas") ||
-        text.includes("weihnacht") ||
-        text.includes("holiday")
-      ? "Christmas Dinner"
-      : text.includes("ramadan") || text.includes("iftar")
-      ? "Ramadan / Iftar"
-      : text.includes("festival") ||
-        text.includes("fair") ||
-        text.includes("messe") ||
-        text.includes("large") ||
-        text.includes("groß")
-      ? "Large Event"
-      : text.includes("private") ||
-        text.includes("dinner") ||
-        text.includes("party") ||
-        text.includes("jubiläum")
-      ? "Private Party"
-      : "Event";
+          text.includes("office") ||
+          text.includes("business") ||
+          text.includes("firma") ||
+          text.includes("meeting")
+        ? "Corporate Event"
+        : text.includes("summer") || text.includes("bbq") || text.includes("garten")
+          ? "Summer Party"
+          : text.includes("birthday") || text.includes("geburtstag")
+            ? "Birthday"
+            : text.includes("graduation") || text.includes("abschluss")
+              ? "Graduation"
+              : text.includes("christmas") ||
+                  text.includes("weihnacht") ||
+                  text.includes("holiday")
+                ? "Christmas Dinner"
+                : text.includes("ramadan") || text.includes("iftar")
+                  ? "Ramadan / Iftar"
+                  : text.includes("festival") ||
+                      text.includes("fair") ||
+                      text.includes("messe") ||
+                      text.includes("large") ||
+                      text.includes("groß")
+                    ? "Large Event"
+                    : text.includes("private") ||
+                        text.includes("dinner") ||
+                        text.includes("party") ||
+                        text.includes("jubiläum")
+                      ? "Private Party"
+                      : "Event";
 
   const city =
     text.includes("berlin")
       ? "Berlin"
       : text.includes("hamburg")
-      ? "Hamburg"
-      : text.includes("munich") || text.includes("münchen")
-      ? "Munich"
-      : text.includes("frankfurt")
-      ? "Frankfurt"
-      : text.includes("cologne") || text.includes("köln")
-      ? "Cologne"
-      : text.includes("dortmund")
-      ? "Dortmund"
-      : text.includes("düsseldorf") || text.includes("duesseldorf")
-      ? "Düsseldorf"
-      : "City";
+        ? "Hamburg"
+        : text.includes("munich") || text.includes("münchen")
+          ? "Munich"
+          : text.includes("frankfurt")
+            ? "Frankfurt"
+            : text.includes("cologne") || text.includes("köln")
+              ? "Cologne"
+              : text.includes("dortmund")
+                ? "Dortmund"
+                : text.includes("düsseldorf") || text.includes("duesseldorf")
+                  ? "Düsseldorf"
+                  : "City";
 
   const diet =
     text.includes("vegan")
       ? "Vegan"
       : text.includes("vegetarian") || text.includes("vegetar")
-      ? "Vegetarian"
-      : text.includes("halal")
-      ? "Halal"
-      : text.includes("gluten")
-      ? "Gluten-free"
-      : "Preferred menu";
+        ? "Vegetarian"
+        : text.includes("halal")
+          ? "Halal"
+          : text.includes("gluten")
+            ? "Gluten-free"
+            : "Preferred menu";
 
   const guestMatch =
     input.match(/(\d+)\s*(guests|guest|people|persons)/i) ||
@@ -668,8 +672,116 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/5 py-10 text-center">
-        <p className="text-sm text-[#7f9380]">{t("home.editorialFooterTagline")}</p>
+      <footer className="relative z-10 border-t border-[#c49840]/10 bg-[#0a120d]">
+        <div className="mx-auto max-w-7xl px-6 py-14 md:px-8">
+          <div className="grid gap-10 md:grid-cols-3">
+            <div>
+              <div className="flex items-center gap-3 text-[#eadfca]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10">
+                  <LogoMark size={18} color="#e8ddc8" />
+                </div>
+                <div>
+                  <div className="text-2xl font-semibold tracking-tight">Speisely</div>
+                  <div className="mt-1 text-sm text-[#c49840]">
+                    AI-guided catering marketplace
+                  </div>
+                </div>
+              </div>
+
+              <p className="mt-6 max-w-md text-base leading-8 text-[#b7b0a2]">
+                Speisely connects event hosts with curated catering partners through a
+                more premium, structured, and AI-guided discovery flow.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-[#e8d9b8]">For customers</h3>
+              <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
+                <Link href="/request/new" className="transition hover:text-[#c49840]">
+                  Describe your event
+                </Link>
+                <Link href="/caterers" className="transition hover:text-[#c49840]">
+                  Browse caterers
+                </Link>
+                <Link href="/about" className="transition hover:text-[#c49840]">
+                  About Speisely
+                </Link>
+              </div>
+
+              <h3 className="mt-8 text-xl font-semibold text-[#e8d9b8]">For caterers</h3>
+              <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
+                <Link href="/signup" className="transition hover:text-[#c49840]">
+                  Join as a caterer
+                </Link>
+                <Link href="/login" className="transition hover:text-[#c49840]">
+                  Caterer login
+                </Link>
+                <Link href="/caterers" className="transition hover:text-[#c49840]">
+                  Explore marketplace
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-[#e8d9b8]">Contact</h3>
+              <div className="mt-5 space-y-3 text-[#cfc6b4]">
+                <p>info@speisely.de</p>
+                <p>Germany</p>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="text-sm font-medium uppercase tracking-[0.2em] text-[#c49840]">
+                  Social
+                </h4>
+                <div className="mt-4 flex items-center gap-3">
+                  <a
+                    href="#"
+                    aria-label="Facebook"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                  >
+                    <Facebook className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="#"
+                    aria-label="Instagram"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                  >
+                    <Instagram className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="#"
+                    aria-label="TikTok"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                  >
+                    <Tiktok className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="#"
+                    aria-label="LinkedIn"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-4 border-t border-[#c49840]/10 pt-6 text-sm text-[#8f8777] md:flex-row md:items-center md:justify-between">
+            <p>© 2025 Speisely</p>
+            <div className="flex flex-wrap items-center gap-6">
+              <Link href="/impressum" className="transition hover:text-[#c49840]">
+                Impressum
+              </Link>
+              <Link href="/datenschutz" className="transition hover:text-[#c49840]">
+                Datenschutz
+              </Link>
+              <Link href="/request/new" className="transition hover:text-[#c49840]">
+                Angebot anfragen
+              </Link>
+            </div>
+          </div>
+        </div>
       </footer>
     </main>
   );
