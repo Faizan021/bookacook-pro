@@ -327,16 +327,16 @@ export default function HomePage() {
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
-          <Link href="/caterers" className="transition hover:text-[#c49840]">
-            {t("home.nav.browse")}
-          </Link>
-          <Link href="/for-caterers" className="transition hover:text-[#c49840]">
-            {t("home.nav.forCaterers", "For Caterers")}
-          </Link>
-          <Link href="/about" className="transition hover:text-[#c49840]">
-            {t("nav.about", "About Speisely")}
-          </Link>
-        </nav>
+  <Link href="/caterers" className="transition hover:text-[#c49840]">
+    {t("home.nav.browse")}
+  </Link>
+  <Link href="/for-caterers" className="transition hover:text-[#c49840]">
+    {t("home.nav.forCaterers")}
+  </Link>
+  <Link href="/about" className="transition hover:text-[#c49840]">
+    {t("nav.about")}
+  </Link>
+</nav>
 
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
