@@ -1,228 +1,157 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
 import {
   ArrowRight,
   BrainCircuit,
   CheckCircle2,
-  Search,
   ShieldCheck,
   Sparkles,
-  Star,
 } from "lucide-react";
 
-type CatererCard = {
-  id: string;
-  name: string;
-  city: string;
-  cuisine: string;
-  description: string;
-  tags: string[];
-  startingPrice: string;
-  guestRange: string;
-  verified?: boolean;
-  featured?: boolean;
-  rating: number;
-};
-
-const sampleCaterers: CatererCard[] = [
-  {
-    id: "1",
-    name: "Maison Ember",
-    city: "Berlin",
-    cuisine: "Live Fire & Contemporary European",
-    description:
-      "Refined live-fire catering for elevated private celebrations, design-led receptions, and outdoor hospitality experiences.",
-    tags: ["Live Fire", "Private Celebrations", "Outdoor Hospitality"],
-    startingPrice: "from €49 p.p.",
-    guestRange: "40–180 guests",
-    verified: true,
-    rating: 4.9,
-  },
-  {
-    id: "2",
-    name: "Atelier Royal Dining",
-    city: "Hamburg",
-    cuisine: "Wedding & Fine Dining",
-    description:
-      "Elegant full-service catering for weddings, formal dinners, and premium receptions with polished hospitality execution.",
-    tags: ["Weddings", "Fine Dining", "Full Service"],
-    startingPrice: "from €69 p.p.",
-    guestRange: "50–250 guests",
-    verified: true,
-    featured: true,
-    rating: 5.0,
-  },
-  {
-    id: "3",
-    name: "Studio Table Berlin",
-    city: "Berlin",
-    cuisine: "Modern European",
-    description:
-      "Curated premium menus for intimate dinners, executive gatherings, and private events with a strong editorial aesthetic.",
-    tags: ["Private Dining", "Modern European", "Curated Menus"],
-    startingPrice: "from €58 p.p.",
-    guestRange: "15–80 guests",
-    featured: true,
-    rating: 4.8,
-  },
-];
-
-const quickFilters = ["Berlin", "Corporate", "Wedding", "Vegetarian", "Fine Dining"];
-
-const intelligenceSignals = [
+const valuePillars = [
   {
     icon: BrainCircuit,
-    title: "Natural-language event capture",
+    title: "Natürlichsprachiges Event-Verständnis",
     description:
-      "Capture hospitality requirements the way clients naturally describe them, not through rigid forms.",
-  },
-  {
-    icon: Search,
-    title: "Semantic qualification engine",
-    description:
-      "Translate event intent into qualified catering matches based on style, scale, cuisine, and service expectations.",
+      "Speisely erfasst Event-Anforderungen so, wie Kunden sie tatsächlich formulieren – nicht nur über starre Filter oder Kategorien.",
   },
   {
     icon: ShieldCheck,
-    title: "Curated premium supply",
+    title: "Kuratiertes Premium-Netzwerk",
     description:
-      "Surface verified hospitality partners in a more trusted, design-led, and premium discovery experience.",
+      "Wir verbinden Event-Anfragen mit ausgewählten Catering-Partnern, die zu Qualität, Stil und Anspruch passen.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Präzisere Vermittlung",
+    description:
+      "Aus Anlass, Gästezahl, Budget, Küche und Serviceformat entstehen qualifiziertere und hochwertigere Matches.",
   },
 ];
 
-const processSteps = [
+const howItWorks = [
   {
     number: "01",
-    title: "Describe the event",
+    title: "Event beschreiben",
     description:
-      "Share the event in natural language, including tone, guest count, cuisine direction, service format, and special requirements.",
+      "Teilen Sie Anlass, Gästezahl, kulinarische Richtung, Servicewünsche und besondere Anforderungen in natürlicher Sprache mit.",
   },
   {
     number: "02",
-    title: "Interpret the intent",
+    title: "Bedarf intelligent verstehen",
     description:
-      "Speisely structures the request semantically to understand hospitality fit beyond simple keyword matching.",
+      "Speisely interpretiert Ihre Anfrage semantisch – mit mehr Kontext, Stilverständnis und Hospitality-Fit als klassische Marktplätze.",
   },
   {
     number: "03",
-    title: "Match with precision",
+    title: "Passende Partner erhalten",
     description:
-      "Receive curated catering partners aligned with event style, execution needs, and premium expectations.",
+      "Sie erhalten qualifizierte Catering-Matches, die besser zu Eventtyp, Anspruch und Durchführung passen.",
+  },
+];
+
+const occasions = [
+  {
+    title: "Hochzeiten",
+    description:
+      "Elegante Catering-Lösungen für unvergessliche Feiern mit gehobenem Anspruch.",
+  },
+  {
+    title: "Corporate Events",
+    description:
+      "Professionelle Hospitality für Business-Dinner, Team-Events, Empfänge und Firmenveranstaltungen.",
+  },
+  {
+    title: "Private Feiern",
+    description:
+      "Hochwertige Catering-Optionen für stilvolle persönliche Anlässe und besondere Momente.",
+  },
+  {
+    title: "Brand Events",
+    description:
+      "Kuratiertes Catering für Launches, Showrooms, Presse-Events und exklusive Gästebetreuung.",
   },
 ];
 
 export default function HomePage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [city, setCity] = useState("");
-  const [eventType, setEventType] = useState("");
-  const [cuisine, setCuisine] = useState("");
-
-  const applyQuickFilter = (val: string) => {
-    if (["Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt"].includes(val)) {
-      setCity(val);
-    } else if (["Corporate", "Wedding", "Private Party"].includes(val)) {
-      setEventType(val);
-    } else {
-      setCuisine(val);
-    }
-  };
-
-  const filteredCaterers = useMemo(() => {
-    return sampleCaterers.filter((caterer) => {
-      const haystack = [
-        caterer.name,
-        caterer.city,
-        caterer.cuisine,
-        caterer.description,
-        ...caterer.tags,
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      const cityMatch =
-        !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
-
-      const eventMatch =
-        !eventType ||
-        haystack.includes(eventType.toLowerCase()) ||
-        caterer.tags.some((tag) => tag.toLowerCase().includes(eventType.toLowerCase()));
-
-      const cuisineMatch =
-        !cuisine ||
-        caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()) ||
-        caterer.tags.some((tag) => tag.toLowerCase().includes(cuisine.toLowerCase()));
-
-      return cityMatch && eventMatch && cuisineMatch;
-    });
-  }, [city, eventType, cuisine]);
-
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#06110c] text-[#f6f1e8]">
+    <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
       <div className="pointer-events-none fixed inset-0">
         <div
           className="absolute inset-0 opacity-60"
           style={{
             background:
-              "radial-gradient(circle at top center, rgba(196,152,64,0.15) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(77,103,84,0.18) 0%, transparent 25%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 20%)",
+              "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 28%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
           }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_25%,transparent_70%,rgba(255,255,255,0.02))]" />
-        <div className="absolute inset-0 opacity-[0.03] [background-image:radial-gradient(rgba(255,255,255,0.8)_0.5px,transparent_0.5px)] [background-size:18px_18px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
       </div>
 
       <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-8">
-        <Link href="/" className="text-2xl font-semibold tracking-tight text-[#eadfca]">
-          Speisely
+        <Link href="/" className="flex items-center gap-3 text-[#eadfca]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10 text-sm font-semibold">
+            S
+          </div>
+          <div>
+            <div className="text-xl font-semibold tracking-tight">Speisely</div>
+          </div>
         </Link>
 
-        <nav className="hidden items-center gap-8 text-sm text-[#d6cfbf]/70 md:flex">
+        <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
           <Link href="/caterers" className="transition hover:text-[#c49840]">
-            Selected Partners
+            Partner entdecken
           </Link>
           <Link href="/request/new" className="transition hover:text-[#c49840]">
-            Plan Event
+            Event beschreiben
+          </Link>
+          <Link href="/about" className="transition hover:text-[#c49840]">
+            Über Speisely
           </Link>
         </nav>
 
-        <Link
-          href="/login"
-          className="rounded-full border border-white/10 bg-white/[0.02] px-4 py-2 text-sm font-medium text-[#eadfca] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-        >
-          Login
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-[#eadfca] transition hover:border-[#c49840]/40 hover:text-[#c49840] md:inline-flex"
+          >
+            Login
+          </Link>
+          <Link
+            href="/request/new"
+            className="rounded-full bg-[#c49840] px-5 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.02]"
+          >
+            Jetzt starten
+          </Link>
+        </div>
       </header>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-14 pt-14 md:px-8 md:pb-20 md:pt-24">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-14 md:px-8 md:pb-24 md:pt-24">
         <div className="mx-auto max-w-5xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             <Sparkles className="h-3.5 w-3.5" />
-            NLP-powered hospitality intelligence
+            KI-gestützte Hospitality Intelligence
           </div>
 
-          <h1 className="mt-8 text-5xl font-medium leading-[0.98] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[84px]">
-            From event intent to
+          <h1 className="mt-8 text-5xl font-medium leading-[0.98] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[82px]">
+            Wo außergewöhnliche Events auf
             <span className="mt-2 block italic text-[#c49840]">
-              exceptional catering matches.
+              intelligente Catering-Vermittlung treffen.
             </span>
           </h1>
 
           <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-[#a5b3a0] md:text-xl">
-            Speisely is a natural-language platform for premium hospitality discovery.
-            We interpret event requirements in semantic detail and match them with
-            curated catering partners based on style, scale, cuisine, service format,
-            and guest expectations.
+            Speisely hilft Kunden, Events in natürlicher Sprache zu beschreiben,
+            und übersetzt diese Anforderungen in qualifizierte Catering-Matches
+            für Hochzeiten, Corporate Events und private Feiern.
           </p>
 
-          <form className="mx-auto mt-12 max-w-4xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
+          <div className="mx-auto mt-12 max-w-4xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
             <div className="flex flex-col gap-3 md:flex-row md:items-center">
               <div className="flex h-16 flex-1 items-center rounded-[1.4rem] bg-black/10 px-5">
                 <input
                   type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Private wedding in Berlin for 90 guests, elegant plated service, vegetarian-friendly, modern European menu..."
+                  placeholder="Hochzeit in Berlin für 90 Gäste, elegantes Dinner, vegetarische Optionen, moderner europäischer Stil..."
                   className="w-full bg-transparent text-[15px] text-white placeholder:text-white/30 focus:outline-none"
                 />
               </div>
@@ -231,29 +160,36 @@ export default function HomePage() {
                 href="/request/new"
                 className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-7 font-semibold text-black transition hover:scale-[1.02]"
               >
-                Start with Speisely AI
+                Event beschreiben
                 <ArrowRight className="h-4 w-4" />
               </Link>
+
+              <Link
+                href="/caterers"
+                className="flex h-16 items-center justify-center rounded-[1.3rem] border border-white/10 bg-white/[0.03] px-7 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+              >
+                Partner entdecken
+              </Link>
             </div>
-          </form>
+          </div>
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3 text-sm text-[#d7cfbf]">
             <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
-              Natural-language input
+              Natürlichsprachige Anfrage
             </span>
             <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
-              Verified hospitality partners
+              Kuratierte Premium-Partner
             </span>
             <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
-              Semantic event matching
+              Intelligentere Vermittlung
             </span>
           </div>
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-14">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
         <div className="grid gap-5 lg:grid-cols-3">
-          {intelligenceSignals.map((item) => {
+          {valuePillars.map((item) => {
             const Icon = item.icon;
             return (
               <div
@@ -264,7 +200,7 @@ export default function HomePage() {
                   <Icon className="h-4.5 w-4.5 text-[#c49840]" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold text-white">{item.title}</h3>
-                <p className="mt-3 max-w-sm text-sm leading-7 text-[#92a18f]">
+                <p className="mt-3 text-sm leading-7 text-[#92a18f]">
                   {item.description}
                 </p>
               </div>
@@ -277,22 +213,21 @@ export default function HomePage() {
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              Platform intelligence
+              So funktioniert Speisely
             </div>
             <h2 className="mt-4 text-3xl font-semibold leading-tight text-white md:text-5xl">
-              Designed to resolve the semantic gap in premium hospitality discovery.
+              Entwickelt, um den semantischen Abstand zwischen Event-Wunsch und Catering-Angebot zu schließen.
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#9dac98]">
-              Traditional marketplaces rely on filters and fragmented browsing.
-              Speisely is built to understand what clients actually mean when they
-              describe an event, then map that intent to the right hospitality supply
-              with more precision and confidence.
+              Klassische Catering-Plattformen setzen auf Kategorien, Filter und manuelle
+              Suche. Speisely versteht, was Kunden tatsächlich meinen, wenn sie ein Event
+              beschreiben – und übersetzt diesen Bedarf in präzisere, hochwertigere Matches.
             </p>
           </div>
 
           <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
             <div className="grid gap-4 md:grid-cols-3">
-              {processSteps.map((step) => (
+              {howItWorks.map((step) => (
                 <div
                   key={step.number}
                   className="rounded-[1.6rem] border border-white/10 bg-black/10 p-5"
@@ -311,158 +246,62 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 md:px-8">
-        <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              Selected partners
-            </div>
-            <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
-              Featured hospitality partners
-            </h2>
-            <p className="mt-3 max-w-2xl text-base leading-7 text-[#8ea18b]">
-              Explore a refined set of catering partners or begin with a
-              natural-language request to receive a more qualified match.
-            </p>
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-16">
+        <div className="mb-10 max-w-3xl">
+          <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+            Für besondere Anlässe
           </div>
-
-          <Link
-            href="/request/new"
-            className="rounded-[1rem] bg-[#c49840] px-6 py-3 font-semibold text-black transition hover:scale-[1.02]"
-          >
-            Describe your event
-          </Link>
+          <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
+            Premium Catering für Events mit Anspruch
+          </h2>
+          <p className="mt-4 text-base leading-8 text-[#96a592]">
+            Speisely ist für Anlässe konzipiert, bei denen Qualität, Stil und ein
+            stimmiger Hospitality-Fit entscheidend sind.
+          </p>
         </div>
 
-        <div className="mb-8 flex flex-wrap gap-3">
-          <select
-            value={eventType}
-            onChange={(e) => setEventType(e.target.value)}
-            className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none"
-          >
-            <option value="" className="bg-[#0d1711]">
-              All event types
-            </option>
-            <option value="Wedding" className="bg-[#0d1711]">
-              Wedding
-            </option>
-            <option value="Corporate" className="bg-[#0d1711]">
-              Corporate
-            </option>
-          </select>
-
-          <select
-            value={cuisine}
-            onChange={(e) => setCuisine(e.target.value)}
-            className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none"
-          >
-            <option value="" className="bg-[#0d1711]">
-              All cuisines
-            </option>
-            <option value="BBQ" className="bg-[#0d1711]">
-              BBQ
-            </option>
-            <option value="Fine Dining" className="bg-[#0d1711]">
-              Fine Dining
-            </option>
-          </select>
-
-          <div className="flex flex-wrap gap-2">
-            {quickFilters.map((f) => (
-              <button
-                key={f}
-                onClick={() => applyQuickFilter(f)}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-[#e7e0d3] transition hover:border-[#c49840]/40 hover:bg-[#c49840] hover:text-black"
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {filteredCaterers.map((caterer) => (
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {occasions.map((occasion) => (
             <div
-              key={caterer.id}
-              className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] transition duration-300 hover:-translate-y-1 hover:border-white/15 hover:bg-white/[0.06]"
+              key={occasion.title}
+              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl"
             >
-              <div className="relative border-b border-white/10 px-6 pb-5 pt-6">
-                <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(196,152,64,0.12),transparent_70%)]" />
-                <div className="relative flex items-start justify-between gap-4">
-                  <div>
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
-                      {caterer.city}
-                    </div>
-                    <h3 className="mt-2 text-2xl font-semibold text-white">{caterer.name}</h3>
-                    <p className="mt-2 text-sm text-[#9baa98]">{caterer.cuisine}</p>
-                  </div>
-
-                  {caterer.verified && (
-                    <span className="rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c49840]">
-                      Verified
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="px-6 py-6">
-                <p className="text-sm leading-7 text-[#9faf9b]">{caterer.description}</p>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {caterer.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-[#ddd5c6]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-7 border-t border-white/10 pt-5">
-                  <div className="flex items-end justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-1.5 text-sm text-[#ddd5c6]">
-                        <Star className="h-4 w-4 fill-[#c49840] text-[#c49840]" />
-                        {caterer.rating}
-                      </div>
-                      <div className="mt-3 text-sm text-[#8ea18b]">{caterer.guestRange}</div>
-                      <div className="mt-1 text-lg font-semibold text-white">
-                        {caterer.startingPrice}
-                      </div>
-                    </div>
-
-                    <Link
-                      href={`/caterers/${caterer.id}`}
-                      className="rounded-[0.9rem] bg-[#c49840] px-4 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.03]"
-                    >
-                      View profile
-                    </Link>
-                  </div>
-                </div>
-              </div>
+              <h3 className="text-xl font-semibold text-white">{occasion.title}</h3>
+              <p className="mt-4 text-sm leading-7 text-[#92a18f]">
+                {occasion.description}
+              </p>
             </div>
           ))}
         </div>
+      </section>
 
-        <div className="mt-20 rounded-[2.3rem] border border-white/10 bg-white/[0.04] px-8 py-10 text-center backdrop-blur-xl md:px-12 md:py-14">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-12 md:px-8">
+        <div className="rounded-[2.4rem] border border-white/10 bg-white/[0.045] px-8 py-12 text-center backdrop-blur-xl md:px-12 md:py-16">
           <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-            Premium event planning
+            Premium Event Planning
           </div>
-          <h3 className="mt-4 text-3xl font-semibold text-white md:text-4xl">
-            Plan with precision. Book with confidence.
+          <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
+            Planen Sie Ihr Event mit mehr Präzision.
           </h3>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-[#94a391]">
-            Describe your event once. Let Speisely translate it into a more refined,
-            qualified, and premium catering discovery experience.
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#94a391]">
+            Beschreiben Sie Ihr Event einmal – Speisely übersetzt Ihre Anforderungen
+            in eine hochwertigere, intelligentere Catering-Vermittlung.
           </p>
-          <div className="mt-8">
+
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/request/new"
               className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
             >
-              Start your request
+              Jetzt starten
               <ArrowRight className="h-4 w-4" />
+            </Link>
+
+            <Link
+              href="/caterers"
+              className="inline-flex items-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+            >
+              Partner entdecken
             </Link>
           </div>
         </div>
@@ -470,7 +309,7 @@ export default function HomePage() {
 
       <footer className="relative z-10 border-t border-white/5 py-10 text-center">
         <p className="text-sm text-[#7f9380]">
-          © 2026 Speisely. Natural-language hospitality intelligence.
+          © 2026 Speisely. Natürlichsprachige Hospitality Intelligence.
         </p>
       </footer>
     </main>
