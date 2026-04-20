@@ -662,5 +662,14 @@
   "marketplace.quick.wedding": "Wedding",
   "marketplace.quick.vegetarian": "Vegetarian",
   "marketplace.quick.fineDining": "Fine Dining",
-  "marketplace.quick.privateParty": "Private Party"
+  "marketplace.quick.privateParty": "Private Party",
+  {
+  "about.badge": "About Speisely",
+  "about.heroTitle": "A premium catering marketplace, shaped by AI-guided event planning.",
+  "about.heroSubtitle": "Speisely is built to make catering discovery feel more elegant, structured, and intelligent. Instead of forcing customers through a generic marketplace flow, Speisely helps turn event intent into a clearer request and connect that request to the right catering partners.",
+  "about.whyLabel": "Why Speisely exists",
+  "about.whyTitle": "Catering discovery should feel clearer, more premium, and more useful.",
+  "about.aiLabel": "The AI role",
+  "about.aiTitle": "AI should make event planning simpler, not more confusing."
+}
 }
