@@ -7,13 +7,9 @@ import {
   ArrowRight,
   BrainCircuit,
   CheckCircle2,
-  Facebook,
-  Instagram,
-  Linkedin,
   ShieldCheck,
   Sparkles,
   Stars,
-  Tiktok,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useT } from "@/lib/i18n/context";
@@ -158,14 +154,7 @@ function parseHeroIntent(input: string) {
 
   const guests = guestMatch ? `${guestMatch[1]} guests` : "Guest count";
 
-  const budgetMatch =
-    input.match(/€\s?\d+/i) ||
-    input.match(/\d+\s?€/i) ||
-    input.match(/(\d+)\s*(eur|euro)/i);
-
-  const budget = budgetMatch ? budgetMatch[0] : "Budget";
-
-  return { event, city, guests, diet, budget };
+  return { event, city, guests, diet };
 }
 
 function getSuggestedMatches(event: string) {
@@ -261,6 +250,26 @@ function getSuggestedMatches(event: string) {
         },
       ];
   }
+}
+
+function SocialButton({
+  href,
+  label,
+  short,
+}: {
+  href: string;
+  label: string;
+  short: string;
+}) {
+  return (
+    <a
+      href={href}
+      aria-label={label}
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-xs font-semibold text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+    >
+      {short}
+    </a>
+  );
 }
 
 export default function HomePage() {
@@ -808,10 +817,7 @@ export default function HomePage() {
                 <Link href="/login" className="transition hover:text-[#c49840]">
                   {t("footer.caterersLink2")}
                 </Link>
-                <Link
-                  href="/for-caterers"
-                  className="transition hover:text-[#c49840]"
-                >
+                <Link href="/for-caterers" className="transition hover:text-[#c49840]">
                   {t("footer.caterersLink3")}
                 </Link>
               </div>
@@ -831,34 +837,10 @@ export default function HomePage() {
                   {t("footer.socialTitle")}
                 </h4>
                 <div className="mt-4 flex items-center gap-3">
-                  <a
-                    href="#"
-                    aria-label="Facebook"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-                  >
-                    <Facebook className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="#"
-                    aria-label="Instagram"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-                  >
-                    <Instagram className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="#"
-                    aria-label="TikTok"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-                  >
-                    <Tiktok className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="#"
-                    aria-label="LinkedIn"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </a>
+                  <SocialButton href="#" label="Facebook" short="f" />
+                  <SocialButton href="#" label="Instagram" short="ig" />
+                  <SocialButton href="#" label="TikTok" short="tt" />
+                  <SocialButton href="#" label="LinkedIn" short="in" />
                 </div>
               </div>
             </div>
