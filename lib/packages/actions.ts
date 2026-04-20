@@ -4,8 +4,6 @@ import { createClient } from "@/lib/supabase/server";
 import { getUserProfile } from "@/lib/auth/get-user-profile";
 import type { PackageFormData, PackageAddOn, PackageImage } from "./types";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 async function getAuthedCaterer() {
   const { user } = await getUserProfile();
   if (!user) return { error: "error.notLoggedIn" as const, catererId: null };
@@ -17,30 +15,33 @@ async function getAuthedCaterer() {
     .eq("user_id", user.id)
     .single();
 
-  if (!caterer) return { error: "error.catererNotFound" as const, catererId: null };
+  if (!caterer) {
+    return { error: "error.catererNotFound" as const, catererId: null };
+  }
+
   return { error: null, catererId: caterer.id as string };
 }
 
 function toRow(data: Partial<PackageFormData>) {
   return {
-    title: data.title,
-    summary: data.summary,
-    description: data.description,
-    category: data.category,
-    cuisine_type: data.cuisine_type,
-    status: data.status,
-    price_amount: data.price_amount,
-    min_guests: data.min_guests,
-    max_guests: data.max_guests,
+    title: data.title ?? "",
+    summary: data.summary ?? "",
+    description: data.description ?? "",
+    category: data.category ?? "",
+    cuisine_type: data.cuisine_type ?? "",
+    status: data.status ?? "draft",
+    price_amount: data.price_amount ?? 0,
+    min_guests: data.min_guests ?? null,
+    max_guests: data.max_guests ?? null,
     event_types: data.event_types ?? [],
     dietary_options: data.dietary_options ?? [],
     included_items: data.included_items ?? [],
     add_ons: (data.add_ons ?? []) as PackageAddOn[],
-    service_area: data.service_area,
-    setup_time_hours: data.setup_time_hours,
+    service_area: data.service_area ?? "",
+    setup_time_hours: data.setup_time_hours ?? null,
     setup_time_minutes: data.setup_time_minutes ?? null,
     cleanup_time_minutes: data.cleanup_time_minutes ?? null,
-    booking_notice_days: data.booking_notice_days,
+    booking_notice_days: data.booking_notice_days ?? null,
     max_bookings_per_day: data.max_bookings_per_day ?? null,
     cancellation_policy: data.cancellation_policy ?? null,
     images: (data.images ?? []) as PackageImage[],
@@ -53,8 +54,6 @@ function toRow(data: Partial<PackageFormData>) {
   };
 }
 
-// ─── Create ───────────────────────────────────────────────────────────────────
-
 export async function createPackage(
   data: PackageFormData
 ): Promise<{ id?: string; error?: string }> {
@@ -62,17 +61,20 @@ export async function createPackage(
   if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
+
   const { data: pkg, error } = await supabase
     .from("packages")
-    .insert({ ...toRow(data), caterer_id: catererId, created_at: new Date().toISOString() })
+    .insert({
+      ...toRow(data),
+      caterer_id: catererId,
+      created_at: new Date().toISOString(),
+    })
     .select("id")
     .single();
 
   if (error) return { error: error.message };
   return { id: pkg.id };
 }
-
-// ─── Update ───────────────────────────────────────────────────────────────────
 
 export async function updatePackage(
   packageId: string,
@@ -101,8 +103,6 @@ export async function updatePackage(
   return {};
 }
 
-// ─── Duplicate ────────────────────────────────────────────────────────────────
-
 export async function duplicatePackage(
   packageId: string
 ): Promise<{ id?: string; error?: string }> {
@@ -110,6 +110,7 @@ export async function duplicatePackage(
   if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
+
   const { data: original } = await supabase
     .from("packages")
     .select("*")
@@ -119,7 +120,6 @@ export async function duplicatePackage(
   if (!original) return { error: "error.packageNotFound" };
   if (original.caterer_id !== catererId) return { error: "error.forbidden" };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id: _id, created_at: _ca, updated_at: _ua, ...rest } = original;
 
   const { data: pkg, error } = await supabase
@@ -139,11 +139,9 @@ export async function duplicatePackage(
   return { id: pkg.id };
 }
 
-// ─── Wizard: exact schema actions ─────────────────────────────────────────────
-
 export type WizardStep1 = {
   title: string;
-  short_summary?: string | null;
+  summary?: string | null;
   description?: string | null;
   event_type?: string | null;
   cuisine_type?: string | null;
@@ -159,8 +157,8 @@ export type WizardStep2 = {
 
 export type WizardStep3 = {
   dietary_options?: string[];
-  service_area?: string[] | null;
-  includes?: string[];
+  service_area?: string | null;
+  included_items?: string[];
   image_url?: string | null;
   is_published?: boolean;
 };
@@ -172,17 +170,20 @@ export async function createWizardPackage(
   if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
+
   const { data: pkg, error } = await supabase
     .from("packages")
     .insert({
       caterer_id: catererId,
       title: data.title,
-      short_summary: data.short_summary ?? null,
+      summary: data.summary ?? null,
       description: data.description ?? null,
-      event_type: data.event_type ?? null,
+      event_types: data.event_type ? [data.event_type] : [],
       cuisine_type: data.cuisine_type ?? null,
       status: "draft",
       price_amount: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     })
     .select("id")
     .single();
@@ -209,32 +210,41 @@ export async function updateWizardPackage(
   if (!existing) return { error: "error.packageNotFound" };
   if (existing.caterer_id !== catererId) return { error: "error.forbidden" };
 
-  // Strip wizard-only fields that don't exist in the DB schema
-  const { price_amount, price_type: _pt, currency: _cur, is_published, ...rest } = data;
-  const dbPayload: Record<string, unknown> = { ...rest };
-  if (price_amount !== undefined) {
-    dbPayload.price_amount = price_amount;
-  }
-  if (is_published !== undefined) {
-    dbPayload.status = is_published ? "active" : "draft";
-  }
+  const payload: Record<string, unknown> = {
+    updated_at: new Date().toISOString(),
+  };
+
+  if (data.title !== undefined) payload.title = data.title;
+  if (data.summary !== undefined) payload.summary = data.summary;
+  if (data.description !== undefined) payload.description = data.description;
+  if (data.event_type !== undefined) payload.event_types = data.event_type ? [data.event_type] : [];
+  if (data.cuisine_type !== undefined) payload.cuisine_type = data.cuisine_type;
+  if (data.price_amount !== undefined) payload.price_amount = data.price_amount;
+  if (data.min_guests !== undefined) payload.min_guests = data.min_guests;
+  if (data.max_guests !== undefined) payload.max_guests = data.max_guests;
+  if (data.dietary_options !== undefined) payload.dietary_options = data.dietary_options;
+  if (data.service_area !== undefined) payload.service_area = data.service_area;
+  if (data.included_items !== undefined) payload.included_items = data.included_items;
+  if (data.image_url !== undefined) payload.image_url = data.image_url;
+  if (data.is_published !== undefined) payload.status = data.is_published ? "active" : "draft";
 
   const { error } = await supabase
     .from("packages")
-    .update({ ...dbPayload, updated_at: new Date().toISOString() })
+    .update(payload)
     .eq("id", packageId);
 
   if (error) return { error: error.message };
   return {};
 }
 
-// ─── Delete ───────────────────────────────────────────────────────────────────
-
-export async function deletePackage(packageId: string): Promise<{ error?: string }> {
+export async function deletePackage(
+  packageId: string
+): Promise<{ error?: string }> {
   const { error: authError, catererId } = await getAuthedCaterer();
   if (authError || !catererId) return { error: authError ?? "error.auth" };
 
   const supabase = await createClient();
+
   const { data: existing } = await supabase
     .from("packages")
     .select("caterer_id")
@@ -245,6 +255,7 @@ export async function deletePackage(packageId: string): Promise<{ error?: string
   if (existing.caterer_id !== catererId) return { error: "error.forbidden" };
 
   const { error } = await supabase.from("packages").delete().eq("id", packageId);
+
   if (error) return { error: error.message };
   return {};
 }
