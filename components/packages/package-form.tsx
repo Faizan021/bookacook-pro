@@ -31,13 +31,13 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="premium-card p-6 lg:p-7">
+    <section className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl lg:p-7">
       <div className="mb-5 flex items-center gap-2">
-        <h3 className="text-base font-semibold tracking-tight text-foreground">
+        <h3 className="text-base font-semibold tracking-tight text-white">
           {title}
         </h3>
         {badge ? (
-          <span className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground">
+          <span className="rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#c49840]">
             {badge}
           </span>
         ) : null}
@@ -59,15 +59,15 @@ function CollapsibleSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="premium-card overflow-hidden">
+    <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl">
       <button
         type="button"
         onClick={onToggle}
-        className="flex w-full items-center justify-between px-6 py-5 text-left text-base font-semibold tracking-tight text-foreground rtl:flex-row-reverse"
+        className="flex w-full items-center justify-between px-6 py-5 text-left text-base font-semibold tracking-tight text-white rtl:flex-row-reverse"
       >
         {title}
         <svg
-          className={`h-5 w-5 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}
+          className={`h-5 w-5 text-[#8ea18b] transition-transform ${open ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -81,7 +81,7 @@ function CollapsibleSection({
         </svg>
       </button>
 
-      {open ? <div className="border-t border-border p-6">{children}</div> : null}
+      {open ? <div className="border-t border-white/10 p-6">{children}</div> : null}
     </section>
   );
 }
@@ -94,16 +94,16 @@ function FieldLabel({
   required?: boolean;
 }) {
   return (
-    <label className="mb-1.5 block text-sm font-medium text-foreground">
+    <label className="mb-1.5 block text-sm font-medium text-[#f6f1e8]">
       {label}
-      {required ? <span className="ml-1 text-accent">*</span> : null}
+      {required ? <span className="ml-1 text-[#c49840]">*</span> : null}
     </label>
   );
 }
 
 function ErrorMsg({ msg }: { msg?: string }) {
   if (!msg) return null;
-  return <p className="mt-1 text-xs text-red-600">{msg}</p>;
+  return <p className="mt-1 text-xs text-red-400">{msg}</p>;
 }
 
 function TipPanel({
@@ -120,7 +120,7 @@ function TipPanel({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 text-xs font-medium text-primary transition hover:text-primary-hover"
+        className="flex items-center gap-1.5 text-xs font-medium text-[#c49840] transition hover:text-[#e0b868]"
       >
         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -147,9 +147,9 @@ function TipPanel({
       </button>
 
       {open ? (
-        <ul className="mt-2 space-y-1 rounded-xl bg-secondary/65 p-3">
+        <ul className="mt-2 space-y-1 rounded-xl border border-white/10 bg-black/10 p-3">
           {tips.map((tip, i) => (
-            <li key={i} className="text-xs leading-6 text-muted-foreground">
+            <li key={i} className="text-xs leading-6 text-[#96a592]">
               • {tip}
             </li>
           ))}
@@ -182,13 +182,13 @@ function TagInput({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="flex items-center gap-1 rounded-full border border-border bg-background px-3 py-1 text-sm text-foreground"
+            className="flex items-center gap-1 rounded-full border border-white/10 bg-black/10 px-3 py-1 text-sm text-[#f6f1e8]"
           >
             {tag}
             <button
               type="button"
               onClick={() => onChange(tags.filter((t) => t !== tag))}
-              className="ml-0.5 text-muted-foreground transition hover:text-foreground"
+              className="ml-0.5 text-[#8ea18b] transition hover:text-white"
             >
               ×
             </button>
@@ -208,9 +208,13 @@ function TagInput({
             }
           }}
           placeholder={placeholder}
-          className="field flex-1"
+          className="flex-1 rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c49840]/40"
         />
-        <button type="button" onClick={add} className="btn-soft px-3 py-2 text-sm">
+        <button
+          type="button"
+          onClick={add}
+          className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+        >
           +
         </button>
       </div>
@@ -246,20 +250,20 @@ function AddOnList({
             value={ao.name}
             onChange={(e) => update(i, "name", e.target.value)}
             placeholder={labelName}
-            className="field flex-1"
+            className="flex-1 rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c49840]/40"
           />
           <input
             type="number"
             value={ao.price}
             onChange={(e) => update(i, "price", parseFloat(e.target.value) || 0)}
             placeholder={labelPrice}
-            className="field w-28"
+            className="w-28 rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c49840]/40"
             min={0}
           />
           <button
             type="button"
             onClick={() => onChange(addOns.filter((_, j) => j !== i))}
-            className="rounded-xl p-2 text-muted-foreground transition hover:bg-red-50 hover:text-red-500"
+            className="rounded-xl p-2 text-[#8ea18b] transition hover:bg-red-500/10 hover:text-red-300"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -276,7 +280,7 @@ function AddOnList({
       <button
         type="button"
         onClick={() => onChange([...addOns, { name: "", price: 0 }])}
-        className="mt-1 flex items-center gap-1.5 text-sm font-medium text-primary transition hover:text-primary-hover"
+        className="mt-1 flex items-center gap-1.5 text-sm font-medium text-[#c49840] transition hover:text-[#e0b868]"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -314,7 +318,6 @@ function ImageList({
       {images.map((img, i) => (
         <div key={i} className="flex items-center gap-3 rtl:flex-row-reverse">
           {img.url ? (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={img.url}
               alt=""
@@ -330,13 +333,13 @@ function ImageList({
             value={img.url}
             onChange={(e) => updateUrl(i, e.target.value)}
             placeholder={labelUrl}
-            className="field flex-1"
+            className="flex-1 rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c49840]/40"
           />
 
           <button
             type="button"
             onClick={() => onChange(images.filter((_, j) => j !== i))}
-            className="rounded-xl p-2 text-muted-foreground transition hover:bg-red-50 hover:text-red-500"
+            className="rounded-xl p-2 text-[#8ea18b] transition hover:bg-red-500/10 hover:text-red-300"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -355,7 +358,7 @@ function ImageList({
         onClick={() =>
           onChange([...images, { url: "", alt: "", order: images.length }])
         }
-        className="flex items-center gap-1.5 text-sm font-medium text-primary transition hover:text-primary-hover"
+        className="flex items-center gap-1.5 text-sm font-medium text-[#c49840] transition hover:text-[#e0b868]"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -477,9 +480,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
         setTimeout(() => setSavedMsg(""), 3500);
 
         if (mode === "create" && (result as { id?: string }).id) {
-          router.push(
-            `/caterer-dashboard/packages/${(result as { id: string }).id}/edit`
-          );
+          router.push(`/caterer/packages/${(result as { id: string }).id}/edit`);
         } else if (mode === "edit") {
           router.refresh();
         }
@@ -555,7 +556,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
         type="button"
         onClick={() => handleAiAssist(type)}
         disabled={saving || (aiLoading && aiTarget !== type)}
-        className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-xs font-semibold text-primary transition hover:bg-secondary disabled:opacity-50"
+        className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-black/10 px-3 py-2 text-xs font-semibold text-[#c49840] transition hover:border-[#c49840]/40 hover:bg-white/[0.03] disabled:opacity-50"
       >
         {isLoading ? (
           <>
@@ -597,18 +598,18 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
     if (aiTarget === null || aiLoading || !aiSuggestion) return null;
 
     return (
-      <div className="mt-3 rounded-xl border border-border bg-secondary/70 p-4">
+      <div className="mt-3 rounded-xl border border-white/10 bg-black/10 p-4">
         {aiIsDemo ? (
-          <p className="mb-2 text-xs font-medium text-primary">{t("pkg.ai.demoNote")}</p>
+          <p className="mb-2 text-xs font-medium text-[#c49840]">{t("pkg.ai.demoNote")}</p>
         ) : null}
 
-        <p className="text-sm leading-7 text-foreground">{aiSuggestion}</p>
+        <p className="text-sm leading-7 text-[#f6f1e8]">{aiSuggestion}</p>
 
         <div className="mt-3 flex gap-2">
           <button
             type="button"
             onClick={applyAiSuggestion}
-            className="inline-flex items-center justify-center rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground transition hover:opacity-90"
+            className="inline-flex items-center justify-center rounded-xl bg-[#c49840] px-3 py-2 text-xs font-semibold text-black transition hover:brightness-110"
           >
             {t("pkg.ai.apply")}
           </button>
@@ -618,7 +619,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
               setAiTarget(null);
               setAiSuggestion(null);
             }}
-            className="btn-soft px-3 py-2 text-xs"
+            className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
           >
             {t("pkg.ai.dismiss")}
           </button>
@@ -627,16 +628,17 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
     );
   }
 
-  const inputCls = "field";
+  const inputCls =
+    "w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c49840]/40";
   const checkCls = "flex cursor-pointer select-none items-center gap-2";
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 pb-12">
-      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-border bg-background/90 px-6 py-4 shadow-sm backdrop-blur rtl:flex-row-reverse">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-white/10 bg-[#09130e]/90 px-6 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.18)] backdrop-blur-xl rtl:flex-row-reverse">
         <div className="flex items-center gap-3 rtl:flex-row-reverse">
           <Link
-            href="/caterer-dashboard/packages"
-            className="flex items-center gap-1.5 rounded-xl px-2 py-1 text-sm text-muted-foreground transition hover:bg-secondary rtl:flex-row-reverse"
+            href="/caterer/packages"
+            className="flex items-center gap-1.5 rounded-xl px-2 py-1 text-sm text-[#8ea18b] transition hover:bg-white/[0.03] hover:text-white rtl:flex-row-reverse"
           >
             <svg className="h-4 w-4 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -650,10 +652,10 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
           </Link>
 
           <div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-primary">
+            <div className="text-[11px] uppercase tracking-[0.18em] text-[#c49840]">
               Caterer Studio
             </div>
-            <h1 className="text-base font-semibold tracking-tight text-foreground">
+            <h1 className="text-base font-semibold tracking-tight text-white">
               {t(mode === "create" ? "pkg.form.newTitle" : "pkg.form.editTitle")}
             </h1>
           </div>
@@ -665,7 +667,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
             onChange={(e) =>
               set("status", e.target.value as "draft" | "active" | "paused")
             }
-            className="field w-auto min-w-[120px] px-3 py-2 text-xs font-semibold"
+            className="min-w-[120px] rounded-xl border border-white/10 bg-black/10 px-3 py-2 text-xs font-semibold text-white outline-none transition focus:border-[#c49840]/40"
           >
             <option value="draft">{t("status.draft")}</option>
             <option value="active">{t("status.active")}</option>
@@ -676,7 +678,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
             type="button"
             onClick={() => handleSave("draft")}
             disabled={saving}
-            className="btn-soft text-sm disabled:opacity-50"
+            className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-white transition hover:border-[#c49840]/40 hover:text-[#c49840] disabled:opacity-50"
           >
             {saving ? t("pkg.form.saving") : t("pkg.form.saveDraft")}
           </button>
@@ -685,7 +687,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
             type="button"
             onClick={() => handleSave("active")}
             disabled={saving}
-            className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-50"
+            className="inline-flex items-center justify-center rounded-xl bg-[#c49840] px-4 py-2 text-sm font-semibold text-black transition hover:brightness-110 disabled:opacity-50"
           >
             {saving ? t("pkg.form.saving") : t("pkg.form.publish")}
           </button>
@@ -693,13 +695,13 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
       </div>
 
       {savedMsg ? (
-        <div className="rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+        <div className="rounded-xl border border-green-400/20 bg-green-500/10 px-4 py-3 text-sm font-medium text-green-300">
           ✓ {savedMsg}
         </div>
       ) : null}
 
       {errors.global ? (
-        <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="rounded-xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
           {t(errors.global, errors.global)}
         </div>
       ) : null}
@@ -720,7 +722,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
                 />
                 <div className="mt-0.5 flex items-center justify-between">
                   <ErrorMsg msg={errors.title} />
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-[#8ea18b]">
                     {(form.title?.length ?? 0)}/100
                   </span>
                 </div>
@@ -746,7 +748,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
             />
             <div className="mt-0.5 flex items-center justify-between">
               <ErrorMsg msg={errors.summary} />
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-[#8ea18b]">
                 {(form.summary?.length ?? 0)}/220
               </span>
             </div>
@@ -838,9 +840,9 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
                     : form.event_types.filter((x) => x !== ev);
                   set("event_types", next);
                 }}
-                className="h-4 w-4 rounded border-border accent-[var(--primary)]"
+                className="h-4 w-4 rounded border-white/20 accent-[#c49840]"
               />
-              <span className="text-sm text-foreground">{t(`event.${ev}`)}</span>
+              <span className="text-sm text-[#f6f1e8]">{t(`event.${ev}`)}</span>
             </label>
           ))}
         </div>
@@ -860,7 +862,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
               />
               <div className="mt-0.5 flex items-center justify-between">
                 <ErrorMsg msg={errors.description} />
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-[#8ea18b]">
                   {form.description?.length ?? 0}
                 </span>
               </div>
@@ -912,9 +914,9 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
                     : form.dietary_options.filter((x) => x !== d);
                   set("dietary_options", next);
                 }}
-                className="h-4 w-4 rounded border-border accent-[var(--primary)]"
+                className="h-4 w-4 rounded border-white/20 accent-[#c49840]"
               />
-              <span className="text-sm text-foreground">{t(`dietary.${d}`)}</span>
+              <span className="text-sm text-[#f6f1e8]">{t(`dietary.${d}`)}</span>
             </label>
           ))}
         </div>
@@ -982,7 +984,6 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
               className={inputCls}
             />
             {form.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={form.image_url}
                 alt=""
@@ -1036,13 +1037,13 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
               type="checkbox"
               checked={form.featured}
               onChange={(e) => set("featured", e.target.checked)}
-              className="h-4 w-4 rounded border-border accent-[var(--primary)]"
+              className="h-4 w-4 rounded border-white/20 accent-[#c49840]"
             />
             <div>
-              <p className="text-sm font-medium text-foreground">
+              <p className="text-sm font-medium text-white">
                 {t("pkg.form.featuredLabel")}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-[#96a592]">
                 {t("pkg.form.featuredDesc")}
               </p>
             </div>
@@ -1050,10 +1051,10 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
         </div>
       </CollapsibleSection>
 
-      <div className="flex items-center justify-end gap-3 rounded-[1.5rem] border border-border bg-card px-6 py-4 shadow-sm rtl:flex-row-reverse">
+      <div className="flex items-center justify-end gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.045] px-6 py-4 shadow-sm rtl:flex-row-reverse">
         <Link
-          href="/caterer-dashboard/packages"
-          className="btn-soft text-sm"
+          href="/caterer/packages"
+          className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
         >
           {t("pkg.form.back")}
         </Link>
@@ -1062,7 +1063,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
           type="button"
           onClick={() => handleSave("draft")}
           disabled={saving}
-          className="btn-soft text-sm disabled:opacity-50"
+          className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-white transition hover:border-[#c49840]/40 hover:text-[#c49840] disabled:opacity-50"
         >
           {saving ? t("pkg.form.saving") : t("pkg.form.saveDraft")}
         </button>
@@ -1071,7 +1072,7 @@ export function PackageForm({ mode, packageId, initialData }: PackageFormProps) 
           type="button"
           onClick={() => handleSave("active")}
           disabled={saving}
-          className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-50"
+          className="inline-flex items-center justify-center rounded-xl bg-[#c49840] px-5 py-2 text-sm font-semibold text-black transition hover:brightness-110 disabled:opacity-50"
         >
           {saving ? t("pkg.form.saving") : t("pkg.form.publish")}
         </button>
