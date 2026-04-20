@@ -39,6 +39,20 @@ function getOccasionLabel(value: string) {
   return found?.label ?? "Event";
 }
 
+function normalizeOccasionValue(value: string) {
+  if (!value) return "";
+
+  const lower = value.toLowerCase();
+
+  if (lower === "wedding") return "wedding";
+  if (lower === "corporate" || lower === "corporate event") return "corporate";
+  if (lower === "private_party" || lower === "private party") return "private_party";
+  if (lower === "christmas" || lower === "christmas dinner") return "christmas";
+  if (lower === "ramadan" || lower === "ramadan / iftar") return "ramadan";
+
+  return value;
+}
+
 function parseBudget(input: string) {
   const euroRangeMatch = input.match(/€\s?\d+\s?-\s?€?\s?\d+|\d+\s?-\s?\d+\s?€/i);
   if (euroRangeMatch) return euroRangeMatch[0];
@@ -58,9 +72,7 @@ function parseIntent(input: string, selectedOccasion: string): ParsedIntent {
 
   const detectedOccasion =
     selectedOccasion ||
-    (text.includes("christmas") ||
-    text.includes("xmas") ||
-    text.includes("weihnachten")
+    (text.includes("christmas") || text.includes("xmas") || text.includes("weihnachten")
       ? "christmas"
       : text.includes("ramadan") || text.includes("iftar")
       ? "ramadan"
@@ -138,11 +150,19 @@ export function RequestIntakePage({
   const router = useRouter();
 
   const [query, setQuery] = useState(initialQuery);
-  const [occasion, setOccasion] = useState(initialOccasion);
+  const [occasion, setOccasion] = useState(normalizeOccasionValue(initialOccasion));
   const [caterer] = useState(initialCaterer);
   const [loading, setLoading] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setQuery(initialQuery ?? "");
+  }, [initialQuery]);
+
+  useEffect(() => {
+    setOccasion(normalizeOccasionValue(initialOccasion ?? ""));
+  }, [initialOccasion]);
 
   useEffect(() => {
     if (query.trim().length < 12) {
@@ -176,9 +196,13 @@ export function RequestIntakePage({
         preferred_caterer_id: caterer || null,
       });
 
+      if (!draft?.id) {
+        throw new Error("No draft id returned.");
+      }
+
       router.push(`/request/${draft.id}`);
     } catch (err) {
-      console.error(err);
+      console.error("createRequestDraftAction failed:", err);
       setError("Speisely could not start your briefing right now. Please try again.");
       setLoading(false);
     }
