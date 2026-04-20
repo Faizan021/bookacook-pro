@@ -78,9 +78,6 @@ export default function AboutPage() {
           <Link href="/caterers" className="transition hover:text-[#c49840]">
             {t("home.nav.browse")}
           </Link>
-          <Link href="/request/new" className="transition hover:text-[#c49840]">
-            {t("home.heroPlanCta")}
-          </Link>
           <Link href="/for-caterers" className="transition hover:text-[#c49840]">
             {t("home.nav.forCaterers")}
           </Link>
@@ -107,7 +104,7 @@ export default function AboutPage() {
       </header>
 
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16">
-        <div className="max-w-4xl">
+        <div className="max-w-5xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             <Sparkles className="h-3.5 w-3.5" />
             {t("about.badge")}
@@ -117,7 +114,7 @@ export default function AboutPage() {
             {t("about.heroTitle")}
           </h1>
 
-          <p className="mt-7 max-w-3xl text-lg leading-8 text-[#a5b3a0] md:text-xl">
+          <p className="mt-7 max-w-4xl text-lg leading-8 text-[#a5b3a0] md:text-xl">
             {t("about.heroSubtitle")}
           </p>
         </div>
@@ -277,9 +274,7 @@ export default function AboutPage() {
       </section>
 
       <footer className="relative z-10 border-t border-white/5 py-10 text-center">
-        <p className="text-sm text-[#7f9380]">
-          {t("home.editorialFooterTagline")}
-        </p>
+        <p className="text-sm text-[#7f9380]">{t("home.editorialFooterTagline")}</p>
       </footer>
     </main>
   );
