@@ -5,20 +5,24 @@ export const metadata: Metadata = {
   title: "Plan your event",
 };
 
-export default function NewEventRequestPage({
+type SearchParams = Promise<{
+  q?: string;
+  occasion?: string;
+  caterer?: string;
+}>;
+
+export default async function NewEventRequestPage({
   searchParams,
 }: {
-  searchParams?: {
-    q?: string;
-    occasion?: string;
-    caterer?: string;
-  };
+  searchParams: SearchParams;
 }) {
+  const resolvedSearchParams = await searchParams;
+
   return (
     <RequestIntakePage
-      initialQuery={searchParams?.q ?? ""}
-      initialOccasion={searchParams?.occasion ?? ""}
-      initialCaterer={searchParams?.caterer ?? ""}
+      initialQuery={resolvedSearchParams.q ?? ""}
+      initialOccasion={resolvedSearchParams.occasion ?? ""}
+      initialCaterer={resolvedSearchParams.caterer ?? ""}
     />
   );
 }
