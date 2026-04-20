@@ -1,32 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
-  --background: #192b1a; /* Changed to Dark Green to match your brand */
+  --background: #192b1a;
   --surface-dark: #192b1a;
   --accent-gold: #c49840;
   --text-muted: #7a9470;
 }
 
-html, body {
-  background: var(--background);
+html,
+body {
   margin: 0;
   padding: 0;
+  background: var(--background);
 }
 
 body {
   min-height: 100vh;
   color: white;
-  font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* FIX: Move grain to z-index 0 so it doesn't block buttons */
 .grain-overlay {
   position: fixed;
   inset: 0;
-  z-index: 0; 
+  z-index: 0;
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
