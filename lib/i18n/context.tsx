@@ -14,9 +14,9 @@ import en from "@/messages/en.json";
 
 export type Locale = "de" | "en";
 
-type NestedMessages = { [key: string]: any };
+type Messages = Record<string, any>;
 
-const MESSAGES: Record<Locale, NestedMessages> = {
+const MESSAGES: Record<Locale, Messages> = {
   de,
   en,
 };
@@ -55,6 +55,10 @@ function getNestedValue(obj: any, path: string): any {
   return current;
 }
 
+function isValidLocale(value: string | null): value is Locale {
+  return value === "de" || value === "en";
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
   const [mounted, setMounted] = useState(false);
@@ -64,10 +68,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
     try {
       const saved =
-        (localStorage.getItem(STORAGE_KEY) as Locale | null) ||
-        (localStorage.getItem(LEGACY_STORAGE_KEY) as Locale | null);
+        localStorage.getItem(STORAGE_KEY) ||
+        localStorage.getItem(LEGACY_STORAGE_KEY);
 
-      if (saved && MESSAGES[saved]) {
+      if (isValidLocale(saved)) {
         setLocaleState(saved);
         localStorage.setItem(STORAGE_KEY, saved);
         localStorage.removeItem(LEGACY_STORAGE_KEY);
@@ -86,11 +90,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
   }, [locale, isRTL, mounted]);
 
-  function setLocale(l: Locale) {
-    setLocaleState(l);
+  function setLocale(nextLocale: Locale) {
+    setLocaleState(nextLocale);
 
     try {
-      localStorage.setItem(STORAGE_KEY, l);
+      localStorage.setItem(STORAGE_KEY, nextLocale);
       localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch (error) {
       console.error("Failed to save locale", error);
@@ -98,11 +102,20 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }
 
   function t(key: string, fallback?: string): string {
-    const value = getNestedValue(MESSAGES[locale], key);
-    if (value !== undefined) return String(value);
+    const localeMessages = MESSAGES[locale];
+    const defaultMessages = MESSAGES[DEFAULT_LOCALE];
 
-    const defaultValue = getNestedValue(MESSAGES[DEFAULT_LOCALE], key);
-    if (defaultValue !== undefined) return String(defaultValue);
+    const directValue = localeMessages[key];
+    if (directValue !== undefined) return String(directValue);
+
+    const nestedValue = getNestedValue(localeMessages, key);
+    if (nestedValue !== undefined) return String(nestedValue);
+
+    const directDefaultValue = defaultMessages[key];
+    if (directDefaultValue !== undefined) return String(directDefaultValue);
+
+    const nestedDefaultValue = getNestedValue(defaultMessages, key);
+    if (nestedDefaultValue !== undefined) return String(nestedDefaultValue);
 
     return fallback ?? key;
   }
@@ -122,7 +135,7 @@ export function useT() {
   return useContext(I18nContext).t;
 }
 
-export function useLocale(): [Locale, (l: Locale) => void] {
+export function useLocale(): [Locale, (locale: Locale) => void] {
   const { locale, setLocale } = useContext(I18nContext);
   return [locale, setLocale];
 }
