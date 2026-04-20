@@ -327,16 +327,16 @@ export default function HomePage() {
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
-  <Link href="/caterers" className="transition hover:text-[#c49840]">
-    {t("home.nav.browse")}
-  </Link>
-  <Link href="/for-caterers" className="transition hover:text-[#c49840]">
-    {t("home.nav.forCaterers")}
-  </Link>
-  <Link href="/about" className="transition hover:text-[#c49840]">
-    {t("nav.about")}
-  </Link>
-</nav>
+          <Link href="/caterers" className="transition hover:text-[#c49840]">
+            {t("home.nav.browse")}
+          </Link>
+          <Link href="/for-caterers" className="transition hover:text-[#c49840]">
+            {t("home.nav.forCaterers")}
+          </Link>
+          <Link href="/about" className="transition hover:text-[#c49840]">
+            {t("nav.about")}
+          </Link>
+        </nav>
 
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
@@ -811,9 +811,6 @@ export default function HomePage() {
                 {t("footer.caterersTitle")}
               </h3>
               <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
-               <Link href="/about" className="transition hover:text-[#c49840]">
-  {t("nav.about")}
-</Link>
                 <Link href="/signup" className="transition hover:text-[#c49840]">
                   {t("footer.caterersLink1")}
                 </Link>
@@ -850,7 +847,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-12 flex flex-col gap-4 border-t border-[#c49840]/10 pt-6 text-sm text-[#8f8777] md:flex-row md:items-center md:justify-between">
-            <p>© 2025 Speisely</p>
+            <p>© {new Date().getFullYear()} Speisely</p>
             <div className="flex flex-wrap items-center gap-6">
               <Link href="/impressum" className="transition hover:text-[#c49840]">
                 {t("footer.imprint")}
