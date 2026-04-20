@@ -303,6 +303,51 @@ export default function AboutPage() {
         <p className="text-sm text-[#7f9380]">
           {t("home.editorialFooterTagline")}
         </p>
+        <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 md:px-8">
+  <div className="overflow-hidden rounded-[2.4rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl">
+    <div className="grid gap-0 lg:grid-cols-[1fr_1fr]">
+      <div className="px-8 py-12 md:px-12 md:py-16">
+        <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+          {t("home.catererSection.label", "For Caterers")}
+        </div>
+        <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
+          {t("home.catererSection.title", "Grow with better catering inquiries.")}
+        </h3>
+        <p className="mt-5 max-w-2xl text-base leading-8 text-[#94a391]">
+          {t(
+            "home.catererSection.subtitle",
+            "Speisely helps premium caterers receive clearer event requests, present packages professionally, and manage inquiries through one structured platform."
+          )}
+        </p>
+
+        <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <Link
+            href="/for-caterers"
+            className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
+          >
+            {t("home.catererSection.primaryCta", "For Caterers")}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+
+          <Link
+            href="/signup"
+            className="inline-flex items-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+          >
+            {t("home.catererSection.secondaryCta", "Join Speisely")}
+          </Link>
+        </div>
+      </div>
+
+      <div className="relative min-h-[320px] border-t border-white/10 lg:min-h-full lg:border-l lg:border-t-0">
+        <Image
+          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+          alt={t("home.images.catererAlt", "Professional catering team")}
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(7,17,12,0.55),rgba(7,17,12,0.2))]" />
+  </div>
+</section>
       </footer>
     </main>
   );
