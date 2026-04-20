@@ -318,8 +318,8 @@ export default function HomePage() {
           <Link href="/caterers" className="transition hover:text-[#c49840]">
             {t("home.nav.browse")}
           </Link>
-          <Link href="/request/new" className="transition hover:text-[#c49840]">
-            {t("home.heroPlanCta")}
+          <Link href="/for-caterers" className="transition hover:text-[#c49840]">
+            {t("home.nav.forCaterers", "For Caterers")}
           </Link>
           <Link href="/about" className="transition hover:text-[#c49840]">
             {t("nav.about", "About Speisely")}
@@ -627,6 +627,95 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-8 md:py-20">
+        <div className="overflow-hidden rounded-[2.4rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl">
+          <div className="grid gap-0 lg:grid-cols-[1fr_1fr]">
+            <div className="px-8 py-12 md:px-12 md:py-16">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                {t("home.catererSection.label", "For Caterers")}
+              </div>
+              <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
+                {t(
+                  "home.catererSection.title",
+                  "Grow with better catering inquiries."
+                )}
+              </h3>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-[#94a391]">
+                {t(
+                  "home.catererSection.subtitle",
+                  "Speisely helps premium caterers receive clearer event requests, present packages professionally, and manage inquiries through one structured platform."
+                )}
+              </p>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                <div className="rounded-[1.4rem] border border-white/10 bg-black/10 p-4">
+                  <div className="text-sm font-semibold text-white">
+                    {t("home.catererSection.card1Title", "Better inquiries")}
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-[#9aaa96]">
+                    {t(
+                      "home.catererSection.card1Desc",
+                      "Receive more structured requests with clearer event details."
+                    )}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.4rem] border border-white/10 bg-black/10 p-4">
+                  <div className="text-sm font-semibold text-white">
+                    {t("home.catererSection.card2Title", "Premium presence")}
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-[#9aaa96]">
+                    {t(
+                      "home.catererSection.card2Desc",
+                      "Showcase packages, menus, and service strengths more professionally."
+                    )}
+                  </p>
+                </div>
+
+                <div className="rounded-[1.4rem] border border-white/10 bg-black/10 p-4">
+                  <div className="text-sm font-semibold text-white">
+                    {t("home.catererSection.card3Title", "One platform")}
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-[#9aaa96]">
+                    {t(
+                      "home.catererSection.card3Desc",
+                      "Manage leads, packages, availability, and visibility in one place."
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="/for-caterers"
+                  className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
+                >
+                  {t("home.catererSection.primaryCta", "For Caterers")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                >
+                  {t("home.catererSection.secondaryCta", "Join Speisely")}
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative min-h-[320px] border-t border-white/10 lg:min-h-full lg:border-l lg:border-t-0">
+              <Image
+                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+                alt={t("home.images.catererAlt", "Professional catering team")}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(7,17,12,0.55),rgba(7,17,12,0.2))]" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 md:px-8">
         <div className="overflow-hidden rounded-[2.4rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl">
           <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
@@ -710,14 +799,17 @@ export default function HomePage() {
 
               <h3 className="mt-8 text-xl font-semibold text-[#e8d9b8]">For caterers</h3>
               <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
+                <Link
+                  href="/for-caterers"
+                  className="transition hover:text-[#c49840]"
+                >
+                  For caterers
+                </Link>
                 <Link href="/signup" className="transition hover:text-[#c49840]">
                   Join as a caterer
                 </Link>
                 <Link href="/login" className="transition hover:text-[#c49840]">
                   Caterer login
-                </Link>
-                <Link href="/caterers" className="transition hover:text-[#c49840]">
-                  Explore marketplace
                 </Link>
               </div>
             </div>
