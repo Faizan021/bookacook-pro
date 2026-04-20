@@ -649,5 +649,11 @@
   "marketplace.quick.wedding": "Wedding",
   "marketplace.quick.vegetarian": "Vegetarian",
   "marketplace.quick.fineDining": "Fine Dining",
-  "marketplace.quick.privateParty": "Private Party"
+  "marketplace.quick.privateParty": "Private Party",
+  "nav.about": "About Speisely",
+"home.occasions.subtitle": "Explore catering solutions for weddings, business events, festive dinners, and private occasions.",
+"home.occasions.christmas": "Christmas Dinner",
+"home.occasions.christmasDesc": "Seasonal catering for festive dinners, company celebrations, end-of-year events, and elegant winter gatherings.",
+"home.aiDemo.moreMatches": "More curated matches",
+"home.aiDemo.moreMatchesDesc": "Continue to your event brief to unlock a more tailored shortlist."
 }
