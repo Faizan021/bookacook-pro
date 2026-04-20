@@ -17,36 +17,36 @@ import { LogoMark } from "@/components/ui/logo-mark";
 const valueCards = [
   {
     icon: BrainCircuit,
-    title: "AI-guided discovery",
-    desc: "Speisely transforms natural-language event requests into a clearer catering brief so customers can start faster and discover more relevant partners.",
+    titleKey: "about.value1Title",
+    descKey: "about.value1Desc",
   },
   {
     icon: ShieldCheck,
-    title: "Curated quality",
-    desc: "We focus on a more premium and trustworthy catering experience with clearer presentation, stronger positioning, and a more selective marketplace feel.",
+    titleKey: "about.value2Title",
+    descKey: "about.value2Desc",
   },
   {
     icon: Users,
-    title: "Better for both sides",
-    desc: "Customers get a smoother planning flow, while caterers receive more structured inquiries that are easier to understand and respond to.",
+    titleKey: "about.value3Title",
+    descKey: "about.value3Desc",
   },
 ];
 
 const principles = [
   {
     icon: Sparkles,
-    title: "Start with the event, not filters",
-    desc: "Instead of sending people into an endless directory, Speisely begins with the occasion, intent, and event details.",
+    titleKey: "about.principle1Title",
+    descKey: "about.principle1Desc",
   },
   {
     icon: Wand2,
-    title: "Turn rough ideas into structured briefs",
-    desc: "A short request like “Wedding for 80 guests in Berlin” becomes a clearer starting point for matching, browsing, and inquiry.",
+    titleKey: "about.principle2Title",
+    descKey: "about.principle2Desc",
   },
   {
     icon: CheckCircle2,
-    title: "Premium experience throughout",
-    desc: "From homepage to request flow to dashboard, Speisely is designed to feel polished, premium, and easier to trust.",
+    titleKey: "about.principle3Title",
+    descKey: "about.principle3Desc",
   },
 ];
 
@@ -75,9 +75,6 @@ export default function AboutPage() {
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
-          <Link href="/about" className="text-[#c49840]">
-  {t("nav.about")}
-</Link>
           <Link href="/caterers" className="transition hover:text-[#c49840]">
             {t("home.nav.browse")}
           </Link>
@@ -85,10 +82,10 @@ export default function AboutPage() {
             {t("home.heroPlanCta")}
           </Link>
           <Link href="/for-caterers" className="transition hover:text-[#c49840]">
-            {t("home.nav.forCaterers", "For Caterers")}
+            {t("home.nav.forCaterers")}
           </Link>
           <Link href="/about" className="text-[#c49840]">
-            {t("nav.about", "About Speisely")}
+            {t("nav.about")}
           </Link>
         </nav>
 
@@ -113,22 +110,15 @@ export default function AboutPage() {
         <div className="max-w-4xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             <Sparkles className="h-3.5 w-3.5" />
-            About Speisely
+            {t("about.badge")}
           </div>
 
           <h1 className="mt-8 text-5xl font-medium leading-[0.95] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[82px]">
-            A premium catering marketplace,
-            <span className="mt-2 block text-[#c49840]">
-              shaped by AI-guided event planning.
-            </span>
+            {t("about.heroTitle")}
           </h1>
 
           <p className="mt-7 max-w-3xl text-lg leading-8 text-[#a5b3a0] md:text-xl">
-            Speisely is built to make catering discovery feel more elegant,
-            structured, and intelligent. Instead of forcing customers through a
-            generic marketplace flow, Speisely helps turn event intent into a
-            clearer request — and helps connect that request to the right
-            catering partners.
+            {t("about.heroSubtitle")}
           </p>
         </div>
       </section>
@@ -139,17 +129,17 @@ export default function AboutPage() {
             const Icon = item.icon;
             return (
               <div
-                key={item.title}
+                key={item.titleKey}
                 className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/20 bg-[#c49840]/10">
                   <Icon className="h-4.5 w-4.5 text-[#c49840]" />
                 </div>
                 <h2 className="mt-5 text-xl font-semibold text-white">
-                  {item.title}
+                  {t(item.titleKey)}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-[#92a18f]">
-                  {item.desc}
+                  {t(item.descKey)}
                 </p>
               </div>
             );
@@ -161,41 +151,31 @@ export default function AboutPage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
           <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
             <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              Why Speisely exists
+              {t("about.whyLabel")}
             </div>
             <h2 className="mt-4 text-3xl font-semibold text-white md:text-4xl">
-              Catering discovery should feel clearer, more premium, and more useful.
+              {t("about.whyTitle")}
             </h2>
             <p className="mt-5 text-base leading-8 text-[#96a592]">
-              Many catering platforms feel like simple directories. Customers
-              often have an idea in mind, but not a perfect specification.
-              Caterers, on the other hand, need better context to respond well.
+              {t("about.whyDesc1")}
             </p>
             <p className="mt-4 text-base leading-8 text-[#96a592]">
-              Speisely sits between those two needs. It helps customers express
-              what they want in a more natural way, then structures that intent
-              into something more useful for matching, browsing, and booking.
+              {t("about.whyDesc2")}
             </p>
           </div>
 
           <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
             <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              The AI role
+              {t("about.aiLabel")}
             </div>
             <h2 className="mt-4 text-3xl font-semibold text-white md:text-4xl">
-              AI should make event planning simpler,
-              <span className="block">not more confusing.</span>
+              {t("about.aiTitle")}
             </h2>
             <p className="mt-5 text-base leading-8 text-[#96a592]">
-              Speisely uses AI as a layer of interpretation and guidance. A user
-              can describe an event in plain language, and the system can help
-              identify signals like occasion, city, guest count, dietary needs,
-              service style, and budget direction.
+              {t("about.aiDesc1")}
             </p>
             <p className="mt-4 text-base leading-8 text-[#96a592]">
-              The goal is not AI for the sake of AI. The goal is a better
-              request flow, stronger partner discovery, and a smoother premium
-              experience from homepage to shortlist.
+              {t("about.aiDesc2")}
             </p>
           </div>
         </div>
@@ -204,14 +184,13 @@ export default function AboutPage() {
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-8 md:px-8 md:py-14">
         <div className="mb-10 max-w-3xl">
           <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-            Our approach
+            {t("about.approachLabel")}
           </div>
           <h2 className="mt-3 text-3xl font-semibold text-white md:text-5xl">
-            Built around a smarter hospitality flow
+            {t("about.approachTitle")}
           </h2>
           <p className="mt-4 text-base leading-8 text-[#96a592]">
-            Speisely is designed to feel less like a cluttered listing site and
-            more like a premium planning experience.
+            {t("about.approachSubtitle")}
           </p>
         </div>
 
@@ -220,17 +199,17 @@ export default function AboutPage() {
             const Icon = item.icon;
             return (
               <div
-                key={item.title}
+                key={item.titleKey}
                 className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/20 bg-[#c49840]/10">
                   <Icon className="h-4.5 w-4.5 text-[#c49840]" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold text-white">
-                  {item.title}
+                  {t(item.titleKey)}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-[#92a18f]">
-                  {item.desc}
+                  {t(item.descKey)}
                 </p>
               </div>
             );
@@ -242,31 +221,25 @@ export default function AboutPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
             <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              For customers
+              {t("about.customersLabel")}
             </div>
             <h3 className="mt-4 text-3xl font-semibold text-white">
-              From vague idea to better shortlist
+              {t("about.customersTitle")}
             </h3>
             <p className="mt-5 text-base leading-8 text-[#96a592]">
-              Customers often know the feeling or outcome they want, but not the
-              exact catering language. Speisely helps bridge that gap through a
-              guided experience that starts with natural intent and moves toward
-              more structured planning.
+              {t("about.customersDesc")}
             </p>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
             <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              For caterers
+              {t("about.caterersLabel")}
             </div>
             <h3 className="mt-4 text-3xl font-semibold text-white">
-              Better visibility and better inquiries
+              {t("about.caterersTitle")}
             </h3>
             <p className="mt-5 text-base leading-8 text-[#96a592]">
-              Caterers benefit from a more premium presentation layer and from
-              incoming requests that are more structured than a simple message.
-              That creates better clarity, stronger positioning, and more useful
-              leads.
+              {t("about.caterersDesc")}
             </p>
           </div>
         </div>
@@ -275,15 +248,13 @@ export default function AboutPage() {
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 md:px-8">
         <div className="rounded-[2.4rem] border border-white/10 bg-white/[0.045] px-8 py-12 text-center backdrop-blur-xl md:px-12 md:py-16">
           <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-            Start planning
+            {t("about.ctaLabel")}
           </div>
           <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
-            Start with your event,
-            <span className="block">not a directory.</span>
+            {t("about.ctaTitle")}
           </h3>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#94a391]">
-            Tell Speisely what you are planning and continue into a smarter,
-            more premium catering journey.
+            {t("about.ctaSubtitle")}
           </p>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
