@@ -1,9 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createRequestDraftAction } from "@/app/request/new/actions";
-import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Sparkles,
+  Stars,
+} from "lucide-react";
 
 type Props = {
   initialQuery?: string;
@@ -23,23 +30,54 @@ const OCCASION_OPTIONS = [
   { value: "wedding", label: "Wedding" },
   { value: "corporate", label: "Corporate Event" },
   { value: "private_party", label: "Private Party" },
+  { value: "christmas", label: "Christmas Dinner" },
   { value: "ramadan", label: "Ramadan / Iftar" },
 ];
+
+function getOccasionLabel(value: string) {
+  const found = OCCASION_OPTIONS.find((item) => item.value === value);
+  return found?.label ?? "Event";
+}
+
+function parseBudget(input: string) {
+  const euroRangeMatch = input.match(/€\s?\d+\s?-\s?€?\s?\d+|\d+\s?-\s?\d+\s?€/i);
+  if (euroRangeMatch) return euroRangeMatch[0];
+
+  const euroMatch = input.match(/€\s?\d+|\d+\s?€/i);
+  if (euroMatch) return euroMatch[0];
+
+  const perPersonMatch = input.match(/\d+\s?(€|eur|euros?)\s?(per person|pp|p\.p\.)/i);
+  if (perPersonMatch) return perPersonMatch[0];
+
+  if (input.toLowerCase().includes("budget")) return "Budget mentioned";
+  return "Flexible budget";
+}
 
 function parseIntent(input: string, selectedOccasion: string): ParsedIntent {
   const text = input.toLowerCase();
 
-  const occasion =
+  const detectedOccasion =
     selectedOccasion ||
-    (text.includes("wedding")
-      ? "Wedding"
-      : text.includes("corporate") || text.includes("office") || text.includes("business")
-      ? "Corporate Event"
-      : text.includes("birthday") || text.includes("private") || text.includes("dinner")
-      ? "Private Party"
+    (text.includes("christmas") ||
+    text.includes("xmas") ||
+    text.includes("weihnachten")
+      ? "christmas"
       : text.includes("ramadan") || text.includes("iftar")
-      ? "Ramadan / Iftar"
-      : "Event");
+      ? "ramadan"
+      : text.includes("wedding") || text.includes("hochzeit")
+      ? "wedding"
+      : text.includes("corporate") ||
+        text.includes("office") ||
+        text.includes("business") ||
+        text.includes("firma") ||
+        text.includes("company")
+      ? "corporate"
+      : text.includes("birthday") ||
+        text.includes("private") ||
+        text.includes("dinner") ||
+        text.includes("party")
+      ? "private_party"
+      : "");
 
   const city = text.includes("berlin")
     ? "Berlin"
@@ -51,16 +89,22 @@ function parseIntent(input: string, selectedOccasion: string): ParsedIntent {
     ? "Frankfurt"
     : text.includes("cologne") || text.includes("köln")
     ? "Cologne"
+    : text.includes("dortmund")
+    ? "Dortmund"
+    : text.includes("düsseldorf") || text.includes("duesseldorf")
+    ? "Düsseldorf"
     : "To be confirmed";
 
   const dietary = text.includes("vegan")
     ? "Vegan"
-    : text.includes("vegetarian")
+    : text.includes("vegetarian") || text.includes("vegetar")
     ? "Vegetarian"
     : text.includes("halal")
     ? "Halal"
     : text.includes("gluten")
     ? "Gluten-free"
+    : text.includes("kosher")
+    ? "Kosher"
     : "No specific preference yet";
 
   const style = text.includes("elegant")
@@ -73,12 +117,17 @@ function parseIntent(input: string, selectedOccasion: string): ParsedIntent {
     ? "Sharing Style"
     : text.includes("casual")
     ? "Casual"
+    : text.includes("luxury") || text.includes("premium")
+    ? "Premium Hospitality"
     : "Refined hospitality";
 
-  const budgetMatch = input.match(/€\s?\d+|\d+\s?€/);
-  const budget = budgetMatch ? budgetMatch[0] : "Flexible budget";
-
-  return { occasion, city, dietary, style, budget };
+  return {
+    occasion: getOccasionLabel(detectedOccasion),
+    city,
+    dietary,
+    style,
+    budget: parseBudget(input),
+  };
 }
 
 export function RequestIntakePage({
@@ -109,10 +158,7 @@ export function RequestIntakePage({
     return () => clearTimeout(timeout);
   }, [query]);
 
-  const understood = useMemo(
-    () => parseIntent(query, occasion),
-    [query, occasion],
-  );
+  const understood = useMemo(() => parseIntent(query, occasion), [query, occasion]);
 
   async function handleContinue() {
     if (!query.trim()) {
@@ -125,7 +171,7 @@ export function RequestIntakePage({
 
     try {
       const draft = await createRequestDraftAction({
-        ai_query: query,
+        ai_query: query.trim(),
         event_type: occasion || null,
         preferred_caterer_id: caterer || null,
       });
@@ -151,7 +197,17 @@ export function RequestIntakePage({
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
       </div>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-20 pt-16 md:px-8 md:pt-24">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-20 pt-10 md:px-8 md:pb-24 md:pt-14">
+        <div className="mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#d8d1c2] transition hover:border-[#c49840]/30 hover:text-[#c49840]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to homepage
+          </Link>
+        </div>
+
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             <Sparkles className="h-3.5 w-3.5" />
@@ -172,7 +228,7 @@ export function RequestIntakePage({
           </p>
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="mt-14 grid gap-8 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_30px_80px_rgba(0,0,0,0.28)] backdrop-blur-2xl md:p-7">
             <div className="flex flex-wrap gap-2">
               {OCCASION_OPTIONS.map((item) => {
@@ -240,7 +296,8 @@ export function RequestIntakePage({
 
           <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl md:p-7">
             <div className="flex items-center justify-between gap-4">
-              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+              <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                <Stars className="h-3.5 w-3.5" />
                 Speisely understands
               </div>
               {isThinking && (
