@@ -62,37 +62,87 @@ const trustKeys = [
   "home.trust.transparent",
 ];
 
+function parseHomepageIntent(input: string) {
+  const text = input.toLowerCase();
+
+  const occasion = text.includes("wedding") || text.includes("hochzeit")
+    ? "Wedding"
+    : text.includes("corporate") || text.includes("business") || text.includes("office")
+    ? "Corporate"
+    : text.includes("christmas") || text.includes("weihnacht")
+    ? "Christmas Dinner"
+    : text.includes("ramadan") || text.includes("iftar")
+    ? "Ramadan / Iftar"
+    : text.includes("birthday") || text.includes("private") || text.includes("dinner")
+    ? "Private Party"
+    : "";
+
+  const city = text.includes("berlin")
+    ? "Berlin"
+    : text.includes("hamburg")
+    ? "Hamburg"
+    : text.includes("munich") || text.includes("münchen")
+    ? "Munich"
+    : text.includes("frankfurt")
+    ? "Frankfurt"
+    : text.includes("cologne") || text.includes("köln")
+    ? "Cologne"
+    : "";
+
+  const guestsMatch =
+    input.match(/(\d+)\s*(guests|guest|gäste)/i) ||
+    input.match(/for\s+(\d+)/i);
+
+  const guests = guestsMatch ? `${guestsMatch[1]} guests` : "";
+
+  const diet = text.includes("vegan")
+    ? "Vegan"
+    : text.includes("vegetarian") || text.includes("vegetar")
+    ? "Vegetarian"
+    : text.includes("halal")
+    ? "Halal"
+    : text.includes("gluten")
+    ? "Gluten-free"
+    : "";
+
+  const budgetMatch =
+    input.match(/€\s?\d+/i) ||
+    input.match(/\d+\s?€/i) ||
+    input.match(/around\s+€?\s?\d+/i) ||
+    input.match(/ca\.?\s+\d+\s?€/i);
+
+  const budget = budgetMatch ? budgetMatch[0] : "";
+
+  return [occasion, city, guests, diet, budget].filter(Boolean);
+}
+
 export default function HomePage() {
   const t = useT();
   const [heroQuery, setHeroQuery] = useState("");
 
-  const aiTags = useMemo(
-    () => [
-      t("home.aiDemo.tagEvent"),
-      t("home.aiDemo.tagCity"),
-      t("home.aiDemo.tagGuests"),
-      t("home.aiDemo.tagDiet"),
-    ],
-    [t],
-  );
-
-  const featuredMatches = useMemo(
-    () => [
-      {
-        name: t("home.aiDemo.caterer1Name"),
-        meta: t("home.aiDemo.caterer1Meta"),
-      },
-      {
-        name: t("home.aiDemo.caterer2Name"),
-        meta: t("home.aiDemo.caterer2Meta"),
-      },
-    ],
-    [t],
-  );
-
-  const heroSearchHref = heroQuery.trim()
+  const heroHref = heroQuery.trim()
     ? `/request/new?q=${encodeURIComponent(heroQuery.trim())}`
     : "/request/new";
+
+  const parsedTags = useMemo(() => parseHomepageIntent(heroQuery), [heroQuery]);
+
+  const featuredMatches = [
+    {
+      name: t("home.aiDemo.caterer1Name"),
+      meta: t("home.aiDemo.caterer1Meta"),
+    },
+    {
+      name: t("home.aiDemo.caterer2Name"),
+      meta: t("home.aiDemo.caterer2Meta"),
+    },
+  ];
+
+  const quickPrompts = [
+    t("home.chips.wedding"),
+    t("home.chips.corporate"),
+    t("home.chips.private"),
+    t("home.chips.ramadan"),
+  ];
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
@@ -161,31 +211,51 @@ export default function HomePage() {
             </p>
 
             <div className="mt-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center">
-                <div className="flex h-16 flex-1 items-center rounded-[1.4rem] bg-black/10 px-5">
-                  <input
-                    type="text"
-                    value={heroQuery}
-                    onChange={(e) => setHeroQuery(e.target.value)}
-                    placeholder={t("home.editorialSearchPlaceholder")}
-                    className="w-full bg-transparent text-[15px] text-white placeholder:text-white/30 focus:outline-none"
-                  />
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 md:flex-row md:items-center">
+                  <div className="flex h-16 flex-1 items-center rounded-[1.4rem] bg-black/10 px-5">
+                    <input
+                      type="text"
+                      value={heroQuery}
+                      onChange={(e) => setHeroQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          window.location.href = heroHref;
+                        }
+                      }}
+                      placeholder={t("home.editorialSearchPlaceholder")}
+                      className="w-full bg-transparent text-[15px] text-white placeholder:text-white/30 focus:outline-none"
+                    />
+                  </div>
+
+                  <Link
+                    href={heroHref}
+                    className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-7 font-semibold text-black transition hover:scale-[1.02]"
+                  >
+                    {t("home.heroSearchCta", "Start briefing")}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+
+                  <Link
+                    href="/caterers"
+                    className="flex h-16 items-center justify-center rounded-[1.3rem] border border-white/10 bg-white/[0.03] px-7 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                  >
+                    {t("home.editorialCtaSecondary")}
+                  </Link>
                 </div>
 
-                <Link
-                  href={heroSearchHref}
-                  className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-7 font-semibold text-black transition hover:scale-[1.02]"
-                >
-                  {t("home.heroSearchCta", "Start briefing")}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-
-                <Link
-                  href="/caterers"
-                  className="flex h-16 items-center justify-center rounded-[1.3rem] border border-white/10 bg-white/[0.03] px-7 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-                >
-                  {t("home.editorialCtaSecondary")}
-                </Link>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {quickPrompts.map((prompt) => (
+                    <button
+                      key={prompt}
+                      type="button"
+                      onClick={() => setHeroQuery(prompt)}
+                      className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-2 text-xs text-[#d7cfbf] transition hover:border-[#c49840]/30 hover:text-[#c49840]"
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -225,7 +295,7 @@ export default function HomePage() {
 
             <div className="mt-4 rounded-[1.35rem] border border-white/10 bg-black/10 p-4">
               <p className="text-sm leading-7 text-white/90">
-                “{t("home.aiDemo.request")}”
+                “{heroQuery.trim() || t("home.aiDemo.request")}”
               </p>
             </div>
 
@@ -236,7 +306,12 @@ export default function HomePage() {
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {aiTags.map((tag) => (
+                {(parsedTags.length ? parsedTags : [
+                  t("home.aiDemo.tagEvent"),
+                  t("home.aiDemo.tagCity"),
+                  t("home.aiDemo.tagGuests"),
+                  t("home.aiDemo.tagDiet"),
+                ]).map((tag) => (
                   <span
                     key={tag}
                     className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]"
