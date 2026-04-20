@@ -523,7 +523,7 @@
 
   "home.occasions.label": "Occasions",
   "home.occasions.title": "Explore catering by occasion",
-  "home.occasions.subtitle": "Explore catering solutions for weddings, business events, and private occasions.",
+  "home.occasions.subtitle": "Explore catering solutions for weddings, business events, festive dinners, and private occasions.",
   "home.occasions.viewAll": "Browse all caterers",
   "home.occasions.cardCta": "Start request",
   "home.occasions.wedding": "Wedding",
@@ -532,6 +532,8 @@
   "home.occasions.corporateDesc": "Modern catering for office gatherings, conferences, launches, and team events.",
   "home.occasions.private": "Private Party",
   "home.occasions.privateDesc": "Flexible menus for birthdays, anniversaries, family dinners, and celebrations.",
+  "home.occasions.christmas": "Christmas Dinner",
+  "home.occasions.christmasDesc": "Seasonal catering for festive dinners, company celebrations, end-of-year events, and elegant winter gatherings.",
   "home.occasions.ramadan": "Ramadan / Iftar",
   "home.occasions.ramadanDesc": "Event-ready options for community dinners, family gatherings, and special evenings.",
 
@@ -613,8 +615,10 @@
   "home.aiDemo.caterer2Meta": "Weddings · Organic",
   "home.aiDemo.caterer3Name": "Villa Catering",
   "home.aiDemo.caterer3Meta": "Premium · Multi-cuisine",
+  "home.aiDemo.moreMatches": "More curated matches",
+  "home.aiDemo.moreMatchesDesc": "Continue to your event brief to unlock a more tailored shortlist.",
 
-   "marketplace.badge": "Curated premium partners",
+  "marketplace.badge": "Curated premium partners",
   "marketplace.title": "Discover catering partners",
   "marketplace.titleAccent": "for exceptional events.",
   "marketplace.subtitle": "Explore selected catering partners for weddings, corporate events, private celebrations, and premium hospitality formats — or describe your event and let Speisely match more intelligently.",
@@ -649,9 +653,5 @@
   "marketplace.quick.wedding": "Wedding",
   "marketplace.quick.vegetarian": "Vegetarian",
   "marketplace.quick.fineDining": "Fine Dining",
-  "marketplace.quick.privateParty": "Private Party",
-
-  "home.occasions.christmas": "Christmas Dinner",
-  "home.occasions.christmasDesc": "Seasonal catering for festive dinners, company celebrations, end-of-year events, and elegant winter gatherings.",
-  "home.aiDemo.moreMatches": "More curated matches",
-  "home.aiDemo.moreMatchesDesc": "Continue to your event brief to unlock a more tailored shortlist."
+  "marketplace.quick.privateParty": "Private Party"
+}
