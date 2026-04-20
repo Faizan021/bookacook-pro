@@ -811,6 +811,9 @@ export default function HomePage() {
                 {t("footer.caterersTitle")}
               </h3>
               <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
+               <Link href="/about" className="transition hover:text-[#c49840]">
+  {t("nav.about")}
+</Link>
                 <Link href="/signup" className="transition hover:text-[#c49840]">
                   {t("footer.caterersLink1")}
                 </Link>
