@@ -662,5 +662,13 @@
   "marketplace.quick.wedding": "Hochzeit",
   "marketplace.quick.vegetarian": "Vegetarisch",
   "marketplace.quick.fineDining": "Fine Dining",
-  "marketplace.quick.privateParty": "Private Feier"
+  "marketplace.quick.privateParty": "Private Feier",
+  "about.badge": "Über Speisely",
+  "about.heroTitle": "Ein Premium-Catering-Marktplatz, geprägt durch KI-gestützte Eventplanung.",
+  "about.heroSubtitle": "Speisely wurde entwickelt, um die Suche nach Catering eleganter, strukturierter und intelligenter zu machen. Statt Kundinnen und Kunden durch einen generischen Marktplatz zu führen, verwandelt Speisely Event-Ideen in klarere Anfragen und verbindet diese mit den passenden Catering-Partnern.",
+  "about.whyLabel": "Warum Speisely existiert",
+  "about.whyTitle": "Die Suche nach Catering sollte klarer, hochwertiger und nützlicher sein.",
+  "about.aiLabel": "Die Rolle von KI",
+  "about.aiTitle": "KI sollte Eventplanung einfacher machen, nicht komplizierter."
+}
 }
