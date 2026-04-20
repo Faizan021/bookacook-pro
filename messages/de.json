@@ -230,6 +230,42 @@
   "empty.caterers": "Noch keine Caterer registriert",
   "empty.caterersDesc": "Wenn Caterer sich registrieren, erscheinen sie hier zur Prüfung.",
 
+  "about.value1Title": "KI-gestützte Entdeckung",
+"about.value1Desc": "Speisely verwandelt natürlich formulierte Event-Anfragen in ein klareres Catering-Briefing, damit Kundinnen und Kunden schneller starten und passendere Partner entdecken können.",
+"about.value2Title": "Kuratiert und hochwertig",
+"about.value2Desc": "Wir setzen auf ein hochwertigeres und vertrauenswürdigeres Catering-Erlebnis mit klarerer Präsentation, stärkerer Positionierung und einem selektiveren Marktplatzgefühl.",
+"about.value3Title": "Besser für beide Seiten",
+"about.value3Desc": "Kundinnen und Kunden erhalten einen reibungsloseren Planungsablauf, während Caterer strukturiertere Anfragen bekommen, die leichter zu verstehen und zu beantworten sind.",
+
+"about.whyDesc1": "Viele Catering-Plattformen wirken wie einfache Verzeichnisse. Kundinnen und Kunden haben oft schon eine Vorstellung, aber noch keine perfekte Spezifikation. Caterer wiederum brauchen besseren Kontext, um passend reagieren zu können.",
+"about.whyDesc2": "Speisely verbindet diese beiden Bedürfnisse. Die Plattform hilft Kundinnen und Kunden dabei, ihre Wünsche natürlicher auszudrücken, und strukturiert diese Absicht in etwas, das für Matching, Entdeckung und Buchung nützlicher ist.",
+
+"about.aiDesc1": "Speisely nutzt KI als Ebene für Interpretation und Orientierung. Nutzerinnen und Nutzer können ein Event in natürlicher Sprache beschreiben, und das System erkennt Signale wie Anlass, Stadt, Gästezahl, Ernährungswünsche, Service-Stil und Budgetrichtung.",
+"about.aiDesc2": "Das Ziel ist nicht KI um der KI willen. Das Ziel ist ein besserer Anfrageprozess, eine stärkere Partner-Entdeckung und ein hochwertigeres Premium-Erlebnis vom ersten Besuch bis zur engeren Auswahl.",
+
+"about.approachLabel": "Unser Ansatz",
+"about.approachTitle": "Gebaut für einen intelligenteren Hospitality-Flow",
+"about.approachSubtitle": "Speisely soll sich weniger wie eine überladene Listing-Seite und mehr wie ein hochwertiges Planungserlebnis anfühlen.",
+
+"about.principle1Title": "Mit dem Event starten, nicht mit Filtern",
+"about.principle1Desc": "Statt Menschen in ein endloses Verzeichnis zu schicken, beginnt Speisely mit Anlass, Absicht und Event-Details.",
+"about.principle2Title": "Aus groben Ideen strukturierte Briefings machen",
+"about.principle2Desc": "Eine kurze Anfrage wie Hochzeit für 80 Gäste in Berlin wird zu einem klareren Ausgangspunkt für Matching, Entdeckung und Anfrage.",
+"about.principle3Title": "Premium-Erlebnis durchgehend",
+"about.principle3Desc": "Von der Startseite über den Anfragefluss bis zum Dashboard ist Speisely darauf ausgelegt, hochwertig, klar und vertrauenswürdig zu wirken.",
+
+"about.customersLabel": "Für Kunden",
+"about.customersTitle": "Von einer groben Idee zur besseren Auswahl",
+"about.customersDesc": "Kundinnen und Kunden kennen oft das gewünschte Gefühl oder Ergebnis, aber nicht die genaue Catering-Sprache. Speisely schließt diese Lücke mit einem geführten Erlebnis, das mit natürlicher Absicht beginnt und zu strukturierterer Planung führt.",
+
+"about.caterersLabel": "Für Caterer",
+"about.caterersTitle": "Mehr Sichtbarkeit und bessere Anfragen",
+"about.caterersDesc": "Caterer profitieren von einer hochwertigeren Präsentation und von eingehenden Anfragen, die strukturierter sind als eine einfache Nachricht. Das schafft mehr Klarheit, stärkere Positionierung und nützlichere Leads.",
+
+"about.ctaLabel": "Planung starten",
+"about.ctaTitle": "Starten Sie mit Ihrem Event, nicht mit einem Verzeichnis.",
+"about.ctaSubtitle": "Sagen Sie Speisely, was Sie planen, und wechseln Sie in eine intelligentere und hochwertigere Catering-Journey.",
+
   "pkg.addFirst": "+ Erstes Paket erstellen",
 
   "signup.chooseRole": "Wie möchten Sie sich registrieren?",
