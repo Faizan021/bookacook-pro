@@ -27,98 +27,98 @@ type CatererCard = {
   rating?: number;
 };
 
-const sampleCaterers: CatererCard[] = [
-  {
-    id: "maison-ember",
-    name: "Maison Ember",
-    city: "Berlin",
-    cuisine: "Live Fire & Contemporary European",
-    description:
-      "Elegantes Live-Fire-Catering für private Feiern, gehobene Outdoor-Events und designorientierte Hospitality-Konzepte.",
-    tags: ["Live Fire", "Private Feiern", "Outdoor Hospitality"],
-    startingPrice: "ab 49 € p. P.",
-    guestRange: "40–180 Gäste",
-    verified: true,
-    featured: true,
-    rating: 4.9,
-  },
-  {
-    id: "atelier-royal-dining",
-    name: "Atelier Royal Dining",
-    city: "Hamburg",
-    cuisine: "Wedding & Fine Dining",
-    description:
-      "Full-Service-Catering für Hochzeiten, elegante Dinner und anspruchsvolle Empfänge mit hochwertiger Ausführung.",
-    tags: ["Hochzeiten", "Fine Dining", "Full Service"],
-    startingPrice: "ab 69 € p. P.",
-    guestRange: "50–250 Gäste",
-    verified: true,
-    featured: true,
-    rating: 5.0,
-  },
-  {
-    id: "studio-table-berlin",
-    name: "Studio Table Berlin",
-    city: "Berlin",
-    cuisine: "Modern European",
-    description:
-      "Kuratiertes Premium-Catering für intime Dinner, private Anlässe und designorientierte Eventformate.",
-    tags: ["Private Dining", "Modern European", "Kuratiert"],
-    startingPrice: "ab 58 € p. P.",
-    guestRange: "15–80 Gäste",
-    featured: true,
-    rating: 4.8,
-  },
-  {
-    id: "green-plate-collective",
-    name: "Green Plate Collective",
-    city: "Köln",
-    cuisine: "Vegetarisch & Vegan",
-    description:
-      "Pflanzenbasierte Catering-Konzepte mit gehobener Präsentation für moderne Corporate Events und stilvolle Feiern.",
-    tags: ["Vegetarisch", "Vegan", "Saisonal"],
-    startingPrice: "ab 36 € p. P.",
-    guestRange: "30–160 Gäste",
-    verified: true,
-    rating: 4.7,
-  },
-  {
-    id: "nordic-boardroom-catering",
-    name: "Nordic Boardroom Catering",
-    city: "München",
-    cuisine: "Corporate & Executive Dining",
-    description:
-      "Professionelles Business-Catering für Board-Dinner, Team-Lunches und hochwertige Unternehmensveranstaltungen.",
-    tags: ["Corporate", "Business Dining", "Executive"],
-    startingPrice: "ab 42 € p. P.",
-    guestRange: "20–140 Gäste",
-    verified: true,
-    rating: 4.8,
-  },
-  {
-    id: "levant-feast-studio",
-    name: "Levant Feast Studio",
-    city: "Frankfurt",
-    cuisine: "Middle Eastern",
-    description:
-      "Warme Sharing-Menüs und stilvolle Event-Begleitung für Empfänge, Familienfeiern und kulturelle Anlässe.",
-    tags: ["Sharing Menüs", "Middle Eastern", "Celebrations"],
-    startingPrice: "ab 39 € p. P.",
-    guestRange: "30–200 Gäste",
-    rating: 4.6,
-  },
-];
-
 export default function CaterersPage() {
   const t = useT();
 
+  const sampleCaterers: CatererCard[] = [
+    {
+      id: "maison-ember",
+      name: "Maison Ember",
+      city: "Berlin",
+      cuisine: "Live Fire & Contemporary European",
+      description:
+        "Elegantes Live-Fire-Catering für private Feiern, gehobene Outdoor-Events und designorientierte Hospitality-Konzepte.",
+      tags: ["Live Fire", "Private Feiern", "Outdoor Hospitality"],
+      startingPrice: "ab 49 € p. P.",
+      guestRange: "40–180 Gäste",
+      verified: true,
+      featured: true,
+      rating: 4.9,
+    },
+    {
+      id: "atelier-royal-dining",
+      name: "Atelier Royal Dining",
+      city: "Hamburg",
+      cuisine: "Wedding & Fine Dining",
+      description:
+        "Full-Service-Catering für Hochzeiten, elegante Dinner und anspruchsvolle Empfänge mit hochwertiger Ausführung.",
+      tags: ["Hochzeiten", "Fine Dining", "Full Service"],
+      startingPrice: "ab 69 € p. P.",
+      guestRange: "50–250 Gäste",
+      verified: true,
+      featured: true,
+      rating: 5.0,
+    },
+    {
+      id: "studio-table-berlin",
+      name: "Studio Table Berlin",
+      city: "Berlin",
+      cuisine: "Modern European",
+      description:
+        "Kuratiertes Premium-Catering für intime Dinner, private Anlässe und designorientierte Eventformate.",
+      tags: ["Private Dining", "Modern European", "Kuratiert"],
+      startingPrice: "ab 58 € p. P.",
+      guestRange: "15–80 Gäste",
+      featured: true,
+      rating: 4.8,
+    },
+    {
+      id: "green-plate-collective",
+      name: "Green Plate Collective",
+      city: "Köln",
+      cuisine: "Vegetarisch & Vegan",
+      description:
+        "Pflanzenbasierte Catering-Konzepte mit gehobener Präsentation für moderne Corporate Events und stilvolle Feiern.",
+      tags: ["Vegetarisch", "Vegan", "Saisonal"],
+      startingPrice: "ab 36 € p. P.",
+      guestRange: "30–160 Gäste",
+      verified: true,
+      rating: 4.7,
+    },
+    {
+      id: "nordic-boardroom-catering",
+      name: "Nordic Boardroom Catering",
+      city: "München",
+      cuisine: "Corporate & Executive Dining",
+      description:
+        "Professionelles Business-Catering für Board-Dinner, Team-Lunches und hochwertige Unternehmensveranstaltungen.",
+      tags: ["Corporate", "Business Dining", "Executive"],
+      startingPrice: "ab 42 € p. P.",
+      guestRange: "20–140 Gäste",
+      verified: true,
+      rating: 4.8,
+    },
+    {
+      id: "levant-feast-studio",
+      name: "Levant Feast Studio",
+      city: "Frankfurt",
+      cuisine: "Middle Eastern",
+      description:
+        "Warme Sharing-Menüs und stilvolle Event-Begleitung für Empfänge, Familienfeiern und kulturelle Anlässe.",
+      tags: ["Sharing Menüs", "Middle Eastern", "Celebrations"],
+      startingPrice: "ab 39 € p. P.",
+      guestRange: "30–200 Gäste",
+      rating: 4.6,
+    },
+  ];
+
   const quickFilters = [
-    "Berlin",
-    "Corporate",
-    "Hochzeit",
-    "Vegetarisch",
-    "Fine Dining",
-    "Private Feier",
+    t("marketplace.quick.berlin", "Berlin"),
+    t("marketplace.quick.corporate", "Corporate"),
+    t("marketplace.quick.wedding", "Hochzeit"),
+    t("marketplace.quick.vegetarian", "Vegetarisch"),
+    t("marketplace.quick.fineDining", "Fine Dining"),
+    t("marketplace.quick.privateParty", "Private Feier"),
   ];
 
   const [query, setQuery] = useState("");
@@ -139,12 +139,16 @@ export default function CaterersPage() {
       return;
     }
 
-    if (["corporate", "hochzeit", "wedding", "private feier"].includes(lower)) {
+    if (
+      ["corporate", "hochzeit", "wedding", "private feier", "private party"].includes(
+        lower,
+      )
+    ) {
       setEventType(value);
       return;
     }
 
-    if (["vegetarisch", "fine dining"].includes(lower)) {
+    if (["vegetarisch", "vegetarian", "fine dining"].includes(lower)) {
       setCuisine(value);
     }
   }
@@ -189,7 +193,7 @@ export default function CaterersPage() {
 
       return queryMatch && cityMatch && eventMatch && cuisineMatch && specialMatch;
     });
-  }, [query, city, eventType, cuisine, specialRequest]);
+  }, [query, city, eventType, cuisine, specialRequest, sampleCaterers]);
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
@@ -220,7 +224,7 @@ export default function CaterersPage() {
             {t("home.heroPlanCta", "Event planen")}
           </Link>
           <Link href="/about" className="transition hover:text-[#c49840]">
-            {t("home.nav.whySpeisely", "Über Speisely")}
+            {t("nav.about", "Über Speisely")}
           </Link>
         </nav>
 
@@ -245,20 +249,21 @@ export default function CaterersPage() {
         <div className="max-w-4xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             <ShieldCheck className="h-3.5 w-3.5" />
-            {t("home.trust.curated", "Kuratiertes Premium-Netzwerk")}
+            {t("marketplace.badge", "Kuratierte Premium-Partner")}
           </div>
 
           <h1 className="mt-8 text-4xl font-medium leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
-            Entdecken Sie Catering-Partner
+            {t("marketplace.title", "Entdecken Sie Catering-Partner")}
             <span className="mt-2 block italic text-[#c49840]">
-              für anspruchsvolle Events.
+              {t("marketplace.titleAccent", "für anspruchsvolle Events.")}
             </span>
           </h1>
 
           <p className="mt-6 max-w-3xl text-lg leading-8 text-[#a4b29f]">
-            Erkunden Sie ausgewählte Catering-Partner für Hochzeiten, Corporate Events,
-            private Feiern und hochwertige Hospitality-Formate — oder beschreiben Sie Ihr
-            Event und lassen Sie Speisely intelligenter vermitteln.
+            {t(
+              "marketplace.subtitle",
+              "Erkunden Sie ausgewählte Catering-Partner für Hochzeiten, Corporate Events, private Feiern und hochwertige Hospitality-Formate — oder beschreiben Sie Ihr Event und lassen Sie Speisely intelligenter vermitteln.",
+            )}
           </p>
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -274,7 +279,7 @@ export default function CaterersPage() {
               onClick={clearFilters}
               className="inline-flex items-center justify-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
             >
-              Filter zurücksetzen
+              {t("marketplace.clearFilters", "Filter zurücksetzen")}
             </button>
           </div>
         </div>
@@ -284,40 +289,43 @@ export default function CaterersPage() {
         <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 backdrop-blur-xl md:p-6">
           <div className="mb-5 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#c49840]">
             <SlidersHorizontal className="h-4 w-4" />
-            Filter & Auswahl
+            {t("marketplace.filtersTitle", "Filter & Auswahl")}
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
             <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3 xl:col-span-2">
               <div className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
                 <Search className="h-3.5 w-3.5" />
-                Suche
+                {t("marketplace.searchLabel", "Suche")}
               </div>
               <input
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="z. B. Hochzeit, Fine Dining, vegan, Berlin..."
+                placeholder={t(
+                  "marketplace.searchPlaceholder",
+                  "z. B. Hochzeit, Fine Dining, vegan, Berlin...",
+                )}
                 className="w-full bg-transparent text-white placeholder:text-white/30 focus:outline-none"
               />
             </div>
 
             <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
               <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
-                Stadt
+                {t("marketplace.cityLabel", "Stadt")}
               </div>
               <input
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="z. B. Berlin"
+                placeholder={t("marketplace.cityPlaceholder", "z. B. Berlin")}
                 className="w-full bg-transparent text-white placeholder:text-white/30 focus:outline-none"
               />
             </div>
 
             <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
               <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
-                Eventtyp
+                {t("marketplace.eventTypeLabel", "Eventtyp")}
               </div>
               <select
                 value={eventType}
@@ -325,23 +333,23 @@ export default function CaterersPage() {
                 className="w-full bg-transparent text-white focus:outline-none"
               >
                 <option value="" className="bg-[#0d1711]">
-                  Alle Eventtypen
+                  {t("marketplace.allEventTypes", "Alle Eventtypen")}
                 </option>
                 <option value="Hochzeit" className="bg-[#0d1711]">
-                  Hochzeit
+                  {t("marketplace.eventWedding", "Hochzeit")}
                 </option>
                 <option value="Corporate" className="bg-[#0d1711]">
-                  Corporate
+                  {t("marketplace.eventCorporate", "Corporate")}
                 </option>
                 <option value="Private Feier" className="bg-[#0d1711]">
-                  Private Feier
+                  {t("marketplace.eventPrivate", "Private Feier")}
                 </option>
               </select>
             </div>
 
             <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
               <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
-                Küche / Stil
+                {t("marketplace.cuisineLabel", "Küche / Stil")}
               </div>
               <select
                 value={cuisine}
@@ -349,29 +357,32 @@ export default function CaterersPage() {
                 className="w-full bg-transparent text-white focus:outline-none"
               >
                 <option value="" className="bg-[#0d1711]">
-                  Alle Richtungen
+                  {t("marketplace.allStyles", "Alle Richtungen")}
                 </option>
                 <option value="Fine Dining" className="bg-[#0d1711]">
-                  Fine Dining
+                  {t("marketplace.styleFineDining", "Fine Dining")}
                 </option>
                 <option value="Vegetarisch" className="bg-[#0d1711]">
-                  Vegetarisch
+                  {t("marketplace.styleVegetarian", "Vegetarisch")}
                 </option>
                 <option value="Modern European" className="bg-[#0d1711]">
-                  Modern European
+                  {t("marketplace.styleModernEuropean", "Modern European")}
                 </option>
               </select>
             </div>
 
             <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3 md:col-span-2 xl:col-span-5">
               <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
-                Besondere Wünsche
+                {t("marketplace.specialLabel", "Besondere Wünsche")}
               </div>
               <input
                 type="text"
                 value={specialRequest}
                 onChange={(e) => setSpecialRequest(e.target.value)}
-                placeholder="z. B. vegan, sharing, executive dining, plated service..."
+                placeholder={t(
+                  "marketplace.specialPlaceholder",
+                  "z. B. vegan, sharing, executive dining, plated service...",
+                )}
                 className="w-full bg-transparent text-white placeholder:text-white/30 focus:outline-none"
               />
             </div>
@@ -395,14 +406,16 @@ export default function CaterersPage() {
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              Partnerübersicht
+              {t("marketplace.resultsLabel", "Partnerübersicht")}
             </div>
             <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
-              {filteredCaterers.length} ausgewählte Partner
+              {filteredCaterers.length} {t("marketplace.resultsCountSuffix", "ausgewählte Partner")}
             </h2>
             <p className="mt-3 max-w-2xl text-base leading-7 text-[#90a08d]">
-              Eine kuratierte Auswahl für Premium-Events, hochwertige Anlässe und
-              anspruchsvolle Hospitality-Erlebnisse.
+              {t(
+                "marketplace.resultsSubtitle",
+                "Eine kuratierte Auswahl für Premium-Events, hochwertige Anlässe und anspruchsvolle Hospitality-Erlebnisse.",
+              )}
             </p>
           </div>
 
@@ -410,7 +423,7 @@ export default function CaterersPage() {
             href="/request/new"
             className="rounded-[1rem] border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
           >
-            Lieber intelligent matchen lassen
+            {t("marketplace.smartMatchCta", "Lieber intelligent matchen lassen")}
           </Link>
         </div>
 
@@ -434,7 +447,7 @@ export default function CaterersPage() {
 
                   {caterer.verified && (
                     <span className="rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c49840]">
-                      Verified
+                      {t("marketplace.verified", "Verifiziert")}
                     </span>
                   )}
                 </div>
@@ -471,7 +484,7 @@ export default function CaterersPage() {
                       href={`/caterers/${caterer.id}`}
                       className="rounded-[0.9rem] bg-[#c49840] px-4 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.03]"
                     >
-                      Profil ansehen
+                      {t("marketplace.viewProfile", "Profil ansehen")}
                     </Link>
                   </div>
                 </div>
@@ -482,16 +495,20 @@ export default function CaterersPage() {
 
         {filteredCaterers.length === 0 && (
           <div className="mt-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-10 text-center backdrop-blur-xl">
-            <h3 className="text-2xl font-semibold text-white">Keine Partner gefunden</h3>
+            <h3 className="text-2xl font-semibold text-white">
+              {t("marketplace.emptyTitle", "Keine Partner gefunden")}
+            </h3>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[#92a18f]">
-              Passen Sie die Filter an oder beschreiben Sie Ihr Event direkt, damit
-              Speisely Sie intelligenter zum passenden Catering-Partner führen kann.
+              {t(
+                "marketplace.emptySubtitle",
+                "Passen Sie die Filter an oder beschreiben Sie Ihr Event direkt, damit Speisely Sie intelligenter zum passenden Catering-Partner führen kann.",
+              )}
             </p>
             <Link
               href="/request/new"
               className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
             >
-              Event beschreiben
+              {t("home.editorialCtaPrimary", "Event beschreiben")}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
