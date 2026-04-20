@@ -14,7 +14,7 @@
   "portal.caterer": "Caterer Portal",
   "portal.customer": "Customer Portal",
 
-  "landing.title1": ""The Catering Management Platform",
+  "landing.title": ""The Catering Management Platform",
   "landing.subtitle": "Streamline bookings, packages, availability, and payments — built for admins, caterers, and customers.",
   "landing.adminTitle": "Admin Dashboard",
   "landing.adminDesc": "Platform revenue, caterer approvals, bookings, and commission tracking.",
