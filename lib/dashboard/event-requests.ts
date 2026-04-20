@@ -27,6 +27,23 @@ export type UpdateEventRequestInput = {
   preferred_caterer_id?: string | null;
 };
 
+function cleanString(value?: string | null) {
+  if (value == null) return null;
+  const trimmed = value.trim();
+  return trimmed === "" ? null : trimmed;
+}
+
+function cleanStringArray(values?: string[] | null) {
+  if (!values) return [];
+  return values.map((v) => v.trim()).filter(Boolean);
+}
+
+function removeUndefinedFields<T extends Record<string, unknown>>(obj: T) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, value]) => value !== undefined)
+  );
+}
+
 export async function createEventRequestDraft(
   input?: CreateEventRequestDraftInput
 ) {
@@ -41,16 +58,18 @@ export async function createEventRequestDraft(
     throw new Error("Unauthorized");
   }
 
+  const payload = {
+    customer_id: user.id,
+    status: "draft",
+    ai_query: cleanString(input?.ai_query) ?? "",
+    event_type: cleanString(input?.event_type),
+    preferred_caterer_id: input?.preferred_caterer_id ?? null,
+  };
+
   const { data, error } = await supabase
     .from("event_requests")
-    .insert({
-      customer_id: user.id,
-      status: "draft",
-      ai_query: input?.ai_query ?? "",
-      event_type: input?.event_type ?? null,
-      preferred_caterer_id: input?.preferred_caterer_id ?? null,
-    })
-    .select()
+    .insert(payload)
+    .select("*")
     .single();
 
   if (error) {
@@ -75,12 +94,45 @@ export async function updateEventRequest(
     throw new Error("Unauthorized");
   }
 
+  const payload = removeUndefinedFields({
+    event_type: cleanString(updates.event_type),
+    catering_type: cleanString(updates.catering_type),
+    service_style: cleanString(updates.service_style),
+    venue_type: cleanString(updates.venue_type),
+    guest_count: updates.guest_count,
+    event_date: cleanString(updates.event_date),
+    city: cleanString(updates.city),
+    postal_code: cleanString(updates.postal_code),
+    budget_total: updates.budget_total,
+    budget_per_person: updates.budget_per_person,
+    planning_stage: cleanString(updates.planning_stage),
+    special_requests: cleanString(updates.special_requests),
+    cuisine_preferences:
+      updates.cuisine_preferences !== undefined
+        ? cleanStringArray(updates.cuisine_preferences)
+        : undefined,
+    dietary_requirements:
+      updates.dietary_requirements !== undefined
+        ? cleanStringArray(updates.dietary_requirements)
+        : undefined,
+    extra_services:
+      updates.extra_services !== undefined
+        ? cleanStringArray(updates.extra_services)
+        : undefined,
+    status: cleanString(updates.status),
+    ai_query: cleanString(updates.ai_query),
+    preferred_caterer_id:
+      updates.preferred_caterer_id !== undefined
+        ? updates.preferred_caterer_id
+        : undefined,
+  });
+
   const { data, error } = await supabase
     .from("event_requests")
-    .update(updates)
+    .update(payload)
     .eq("id", id)
     .eq("customer_id", user.id)
-    .select()
+    .select("*")
     .single();
 
   if (error) {
@@ -114,7 +166,7 @@ export async function getEventRequestById(id: string) {
   }
 
   if (!data) {
-    throw new Error(`No event request found for id=${id} and customer_id=${user.id}`);
+    throw new Error("Event request not found");
   }
 
   return data;
