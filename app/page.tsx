@@ -271,16 +271,19 @@ export default function HomePage() {
   const fallbackQuery = t("home.aiDemo.request");
   const previewQuery = heroQuery.trim() || fallbackQuery;
   const parsedHero = parseHeroIntent(previewQuery);
+
   const aiTags = [
     parsedHero.event,
     parsedHero.city,
     parsedHero.guests,
     parsedHero.diet,
   ];
+
   const featuredMatches = getSuggestedMatches(parsedHero.event);
 
   function handleHeroSearch() {
     const q = heroQuery.trim();
+
     if (!q) {
       router.push("/request/new");
       return;
@@ -635,10 +638,7 @@ export default function HomePage() {
                 {t("home.catererSection.label", "For Caterers")}
               </div>
               <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
-                {t(
-                  "home.catererSection.title",
-                  "Grow with better catering inquiries."
-                )}
+                {t("home.catererSection.title", "Grow with better catering inquiries.")}
               </h3>
               <p className="mt-5 max-w-2xl text-base leading-8 text-[#94a391]">
                 {t(
@@ -772,58 +772,63 @@ export default function HomePage() {
                 <div>
                   <div className="text-2xl font-semibold tracking-tight">Speisely</div>
                   <div className="mt-1 text-sm text-[#c49840]">
-                    AI-guided catering marketplace
+                    {t("footer.brandLine")}
                   </div>
                 </div>
               </div>
 
               <p className="mt-6 max-w-md text-base leading-8 text-[#b7b0a2]">
-                Speisely connects event hosts with curated catering partners through a
-                more premium, structured, and AI-guided discovery flow.
+                {t("footer.description")}
               </p>
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-[#e8d9b8]">For customers</h3>
+              <h3 className="text-xl font-semibold text-[#e8d9b8]">
+                {t("footer.customersTitle")}
+              </h3>
               <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
                 <Link href="/request/new" className="transition hover:text-[#c49840]">
-                  Describe your event
+                  {t("footer.customersLink1")}
                 </Link>
                 <Link href="/caterers" className="transition hover:text-[#c49840]">
-                  Browse caterers
+                  {t("footer.customersLink2")}
                 </Link>
                 <Link href="/about" className="transition hover:text-[#c49840]">
-                  About Speisely
+                  {t("footer.customersLink3")}
                 </Link>
               </div>
 
-              <h3 className="mt-8 text-xl font-semibold text-[#e8d9b8]">For caterers</h3>
+              <h3 className="mt-8 text-xl font-semibold text-[#e8d9b8]">
+                {t("footer.caterersTitle")}
+              </h3>
               <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
+                <Link href="/signup" className="transition hover:text-[#c49840]">
+                  {t("footer.caterersLink1")}
+                </Link>
+                <Link href="/login" className="transition hover:text-[#c49840]">
+                  {t("footer.caterersLink2")}
+                </Link>
                 <Link
                   href="/for-caterers"
                   className="transition hover:text-[#c49840]"
                 >
-                  For caterers
-                </Link>
-                <Link href="/signup" className="transition hover:text-[#c49840]">
-                  Join as a caterer
-                </Link>
-                <Link href="/login" className="transition hover:text-[#c49840]">
-                  Caterer login
+                  {t("footer.caterersLink3")}
                 </Link>
               </div>
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-[#e8d9b8]">Contact</h3>
+              <h3 className="text-xl font-semibold text-[#e8d9b8]">
+                {t("footer.contactTitle")}
+              </h3>
               <div className="mt-5 space-y-3 text-[#cfc6b4]">
                 <p>info@speisely.de</p>
-                <p>Germany</p>
+                <p>{t("footer.country")}</p>
               </div>
 
               <div className="mt-8">
                 <h4 className="text-sm font-medium uppercase tracking-[0.2em] text-[#c49840]">
-                  Social
+                  {t("footer.socialTitle")}
                 </h4>
                 <div className="mt-4 flex items-center gap-3">
                   <a
@@ -863,13 +868,13 @@ export default function HomePage() {
             <p>© 2025 Speisely</p>
             <div className="flex flex-wrap items-center gap-6">
               <Link href="/impressum" className="transition hover:text-[#c49840]">
-                Impressum
+                {t("footer.imprint")}
               </Link>
               <Link href="/datenschutz" className="transition hover:text-[#c49840]">
-                Datenschutz
+                {t("footer.privacy")}
               </Link>
               <Link href="/request/new" className="transition hover:text-[#c49840]">
-                Angebot anfragen
+                {t("footer.bottomRequest")}
               </Link>
             </div>
           </div>
