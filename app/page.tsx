@@ -3,13 +3,11 @@
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import { 
-  Sparkles, ArrowRight, Star, BrainCircuit, Compass, 
-  CheckCircle2, Zap, Search
+  Sparkles, ArrowRight, Star, BrainCircuit, 
+  CheckCircle2, Search, ChevronRight
 } from "lucide-react";
 
-// ─── THE RULEBOOK (TYPES) ───────────────────────────────────────────────────
-// This is the most important part. If a property exists in the data below, 
-// it MUST be listed here, or the build will fail.
+// ─── TYPES ───────────────────────────────────────────────────────────────────
 type CatererCard = {
   id: string;
   name: string;
@@ -19,12 +17,11 @@ type CatererCard = {
   tags: string[];
   startingPrice: string;
   guestRange: string;
-  verified?: boolean; // The '?' means it is optional
-  featured?: boolean; // ADDED THIS TO FIX THE ERROR
-  rating: number;     // ADDED THIS TO FIX THE ERROR
+  verified?: boolean;
+  rating: number;
 };
 
-// ─── THE DATA (MATCHING THE RULEBOOK) ───────────────────────────────────────
+// ─── DATA ────────────────────────────────────────────────────────────────────
 const sampleCaterers: CatererCard[] = [
   {
     id: "1",
@@ -32,8 +29,8 @@ const sampleCaterers: CatererCard[] = [
     city: "Berlin",
     cuisine: "BBQ & Grill",
     description: "Authentic live grill catering for premium outdoor events and private celebrations.",
-    tags: ["BBQ", "Outdoor Events", "Private Parties"],
-    startingPrice: "from €29 p.p.",
+    tags: ["BBQ", "Outdoor Events"],
+    startingPrice: "€29 p.p.",
     guestRange: "40–180 guests",
     verified: true,
     rating: 4.9
@@ -44,8 +41,8 @@ const sampleCaterers: CatererCard[] = [
     city: "Hamburg",
     cuisine: "Wedding & Fine Dining",
     description: "Elegant full-service catering for weddings, formal receptions, and refined private celebrations.",
-    tags: ["Weddings", "Fine Dining", "Full Service"],
-    startingPrice: "from €49 p.p.",
+    tags: ["Weddings", "Fine Dining"],
+    startingPrice: "€49 p.p.",
     guestRange: "50–250 guests",
     verified: true,
     featured: true,
@@ -57,8 +54,8 @@ const sampleCaterers: CatererCard[] = [
     city: "Berlin",
     cuisine: "Modern European",
     description: "Curated premium menus for intimate dinners, private celebrations, and design-led event concepts.",
-    tags: ["Private Dining", "Modern European", "Curated Menus"],
-    startingPrice: "from €58 p.p.",
+    tags: ["Private Dining", "Modern"],
+    startingPrice: "€58 p.p.",
     guestRange: "15–80 guests",
     featured: true,
     rating: 4.8
@@ -67,181 +64,162 @@ const sampleCaterers: CatererCard[] = [
 
 const quickFilters = ["Berlin", "Corporate", "Wedding", "Vegetarian", "Fine Dining"];
 
-// ─── MAIN PAGE COMPONENT ─────────────────────────────────────────────────────
+// ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 export default function HomePage() {
   const [viewMode, setViewMode] = useState<"ai" | "browse">("ai");
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
-  // Traditional Filter State
   const [city, setCity] = useState("");
   const [eventType, setEventType] = useState("");
   const [cuisine, setCuisine] = useState("");
 
-  // Simulate AI "Thinking"
   const handleAISearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery) return;
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
-      setViewMode("browse"); 
+      setViewMode("browse");
     }, 2500);
   };
 
   const filteredCaterers = useMemo(() => {
     return sampleCaterers.filter((caterer) => {
       const haystack = [caterer.name, caterer.city, caterer.cuisine, caterer.description, ...caterer.tags].join(" ").toLowerCase();
-      const cityMatch = !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
-      const eventMatch = !eventType || haystack.includes(eventType.toLowerCase()) || caterer.tags.some(tag => tag.toLowerCase().includes(eventType.toLowerCase()));
-      const cuisineMatch = !cuisine || caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()) || caterer.tags.some(tag => tag.toLowerCase().includes(cuisine.toLowerCase()));
-      return cityMatch && eventMatch && cuisineMatch;
+      return (!city || caterer.city.toLowerCase().includes(city.toLowerCase())) &&
+             (!eventType || haystack.includes(eventType.toLowerCase())) &&
+             (!cuisine || caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()));
     });
   }, [city, eventType, cuisine]);
 
-  const applyQuickFilter = (val: string) => {
-    if (["Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt"].includes(val)) setCity(val);
-    else if (["Corporate", "Wedding", "Private Party"].includes(val)) setEventType(val);
-    else setCuisine(val);
-  };
-
   return (
-    <main className="relative min-h-screen bg-[#0a120a] text-[#f4f1ea] overflow-x-hidden">
-      {/* 1. BACKGROUND EFFECTS */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 opacity-30" style={{ background: "radial-gradient(circle at center, #2a4a2c 0%, transparent 70%)" }} />
-        <div className="absolute bottom-0 left-1/2 h-[500px] w-[800px] -translate-x-1/2 translate-y-1/2 rounded-full opacity-20 blur-[120px]" style={{ backgroundColor: "#c49840" }} />
-        <div className="absolute inset-0 grain-overlay opacity-[0.04]" />
-      </div>
+    <main className="relative min-h-screen bg-[#0a120a] text-[#f4f1ea] overflow-x-hidden font-sans">
+      
+      {/* 1. THE HERO (The "Dream" Atmosphere) */}
+      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden">
+        {/* The Image Layer */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
+            className="h-full w-full object-cover"
+            alt="Luxury Catering"
+          />
+          {/* THE SCRIM: This is the most important part. It creates the contrast. */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a120a]/80 via-[#0a120a]/60 to-[#0a120a] z-10" />
+        </div>
 
-      {/* 2. HEADER */}
-      <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <div className="text-2xl font-bold text-[#e4d9c2] tracking-tighter">Speisely</div>
-        <nav className="hidden items-center gap-8 text-sm font-medium text-[#e4d9c2]/70 md:flex">
-          <Link href="/caterers" className="transition hover:text-[#c49840]">Browse Caterers</Link>
-          <Link href="/request/new" className="transition hover:text-[#c49840]">Plan Event</Link>
-        </nav>
-        <Link href="/login" className="text-sm font-bold text-[#e4d9c2]">Login</Link>
-      </header>
-
-      {/* 3. HERO SECTION */}
-      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-120px)] max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
-        <div className="order-2 text-left lg:order-1">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#c49840]">
-            <Sparkles className="h-3.5 w-3.5" /> Digital Concierge
+        {/* The Content Layer */}
+        <div className="relative z-20 max-w-5xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/30 bg-[#c49840]/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-[#c49840] mb-8">
+            <Sparkles className="h-3.5 w-3.5" /> Intelligent Concierge
           </div>
-          <h1 className="text-5xl font-medium leading-[1.1] tracking-tight text-white sm:text-7xl">
-            Premium Catering, <br />
-            <span className="italic text-[#c49840]">Intelligently Matched.</span>
+          
+          <h1 className="text-5xl font-serif leading-[1.1] tracking-tight text-white sm:text-7xl md:text-8xl mb-8">
+            Exceptional <br />
+            <span className="italic text-[#c49840]">Catering.</span>
           </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#7a9470]">
-            Describe your vision in your own words. Our AI finds the perfect
-            caterers for your weddings, corporate events, and celebrations.
+          
+          <p className="max-w-xl mx-auto text-lg leading-relaxed text-[#7a9470] font-light mb-12">
+            Describe your vision. Our AI finds the perfect caterers for your most important moments.
           </p>
 
-          <div className="relative mt-10 w-full max-w-xl">
-            <div className="relative flex items-center rounded-[2rem] border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur-2xl">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="e.g. Elegant wedding for 80 guests in Berlin..."
-                className="w-full bg-transparent px-6 py-4 text-lg text-white placeholder:text-white/30 focus:outline-none"
-              />
-              <button className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105 flex-shrink-0">
-                <ArrowRight className="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative order-1 h-[450px] w-full lg:order-2 lg:h-[650px]">
-          <div className="absolute inset-0 overflow-hidden rounded-[3rem] border border-white/10 shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
-              alt="Luxury Catering"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#192b1a] via-transparent to-transparent opacity-60" />
+          {/* The AI Search Box */}
+          <div className="max-w-2xl mx-auto">
+            <form onSubmit={handleAISearch} className="relative group">
+              <div className="relative flex items-center rounded-full border border-white/10 bg-white/[0.05] p-2 shadow-2xl backdrop-blur-md transition-all focus-within:border-[#c49840]/50">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="e.g. 'An elegant wedding for 80 guests in Berlin'..."
+                  className="w-full bg-transparent px-8 py-4 text-xl text-white placeholder:text-white/30 focus:outline-none font-light italic"
+                />
+                <button 
+                  type="submit" 
+                  disabled={isProcessing}
+                  className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105 disabled:opacity-50"
+                >
+                  {isProcessing ? <div className="h-5 w-5 border-2 border-black/30 border-t-black rounded-full animate-spin" /> : <ArrowRight className="h-6 w-6" />}
+                </button>
+              </div>
+              {isProcessing && <p className="mt-4 text-xs font-medium uppercase tracking-widest text-[#c49840] animate-pulse">Synthesizing your vision...</p>}
+            </form>
+            
+            <button 
+              onClick={() => setViewMode("browse")}
+              className="mt-8 text-[10px] font-bold uppercase tracking-[0.2em] text-[#7a9470] hover:text-[#c49840] transition-colors"
+            >
+              Or browse our marketplace manually $\rightarrow$
+            </button>
           </div>
         </div>
       </section>
 
-      {/* 4. MARKETPLACE SECTION */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 py-24">
-        <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between">
-          <div>
-            <h2 className="text-3xl font-semibold text-white">Explore Our Curated Caterers</h2>
-            <p className="text-[#7a9470] mt-2">Filter by event type or cuisine to find your match.</p>
+      {/* 2. THE MARKETPLACE (The "Reality" Atmosphere - Solid Background) */}
+      <section className="relative z-20 bg-[#0a120a] py-32">
+        <div className="max-w-7xl mx-auto px-6">
+          
+          {/* Header & Filters */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-10">
+            <div className="text-left">
+              <h2 className="text-4xl font-serif text-white">Curated Selection</h2>
+              <div className="h-px w-16 bg-[#c49840] mt-4" />
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              {quickFilters.map(f => (
+                <button 
+                  key={f} 
+                  onClick={() => setCity(f)}
+                  className={`text-[10px] font-bold uppercase tracking-widest px-5 py-2 rounded-full border transition-all ${
+                    city === f ? 'bg-[#c49840] text-black border-[#c49840]' : 'border-white/10 text-white hover:border-[#c49840]'
+                  }`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
           </div>
-          <Link href="/request/new" className="mt-6 md:mt-0 rounded-xl bg-[#c49840] px-6 py-3 font-semibold text-black transition hover:scale-105">
-            Describe your event
-          </Link>
-        </div>
 
-        {/* Filters */}
-        <div className="mb-10 flex flex-wrap gap-4">
-          <select 
-            value={eventType} 
-            onChange={(e) => setEventType(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white outline-none"
-          >
-            <option value="" className="bg-[#192b1a]">All Event Types</option>
-            <option value="Wedding" className="bg-[#192b1a]">Wedding</option>
-            <option value="Corporate" className="bg-[#192b1a]">Corporate</option>
-          </select>
-
-          <select 
-            value={cuisine} 
-            onChange={(e) => setCuisine(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white outline-none"
-          >
-            <option value="" className="bg-[#192b1a]">All Cuisines</option>
-            <option value="BBQ" className="bg-[#192b1a]">BBQ</option>
-            <option value="Fine Dining" className="bg-[#192b1a]">Fine Dining</option>
-          </select>
-
-          <div className="flex gap-2">
-            {quickFilters.map(f => (
-              <button 
-                key={f} 
-                onClick={() => applyQuickFilter(f)}
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white hover:bg-[#c49840] hover:text-black transition"
-              >
-                {f}
-              </button>
+          {/* The Grid */}
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+            {filteredCaterers.map((caterer) => (
+              <div key={caterer.id} className="group relative bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] transition-all hover:bg-white/[0.05] hover:border-[#c49840]/30">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-2xl font-serif text-white group-hover:text-[#c49840] transition-colors">{caterer.name}</h3>
+                    <p className="text-xs uppercase tracking-widest text-[#7a9470] mt-1">{caterer.city} • {caterer.cuisine}</p>
+                  </div>
+                  {caterer.verified && <span className="text-[10px] font-bold bg-[#c49840]/20 text-[#c49840] px-2 py-1 rounded">VERIFIED</span>}
+                </div>
+                <p className="text-sm leading-relaxed text-[#7a9470] mb-8 line-clamp-2">{caterer.description}</p>
+                <div className="flex items-center justify-between pt-6 border-t border-white/5">
+                  <div>
+                    <span className="block text-[10px] uppercase tracking-widest text-[#7a9470]">Starting at</span>
+                    <span className="text-lg font-medium text-white">{caterer.startingPrice}</span>
+                  </div>
+                  <Link href={`/caterers/${caterer.id}`} className="text-[10px] font-bold uppercase tracking-widest text-[#c49840] hover:text-white transition-colors">
+                    Explore $\rightarrow$
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
 
-        {/* Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {filteredCaterers.map((caterer) => (
-            <div key={caterer.id} className="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-xl font-bold text-white">{caterer.name}</h3>
-                  <p className="text-sm text-[#7a9470]">{caterer.city} • {caterer.cuisine}</p>
-                </div>
-                {caterer.verified && <span className="text-[10px] font-bold bg-[#c49840]/20 text-[#c49840] px-2 py-1 rounded">VERIFIED</span>}
-              </div>
-              <p className="mt-4 text-sm text-[#7a9470] line-clamp-2">{caterer.description}</p>
-              <div className="mt-6 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] uppercase text-[#7a9470]">Starting at</div>
-                  <div className="text-white font-semibold">{caterer.startingPrice}</div>
-                </div>
-                <Link href={`/caterers/${caterer.id}`} className="rounded-xl bg-[#c49840] px-4 py-2 text-sm font-bold text-black hover:scale-105 transition">
-                  View Profile
-                </Link>
-              </div>
+          {filteredCaterers.length === 0 && (
+            <div className="text-center py-20">
+              <p className="text-[#7a9470]">No matches found. Try resetting your filters.</p>
+              <button onClick={() => {setCity(""); setEventType(""); setCuisine("");}} className="mt-4 text-[#c49840] underline text-sm">Reset Filters</button>
             </div>
-          ))}
+          )}
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/5 bg-[#081008] py-12 text-center">
-        <p className="text-[#7a9470] text-sm">© 2024 Speisely. Premium Catering Intelligence.</p>
+      {/* 3. FOOTER */}
+      <footer className="relative z-20 border-t border-white/5 bg-[#081008] py-20 text-center">
+        <div className="text-xl font-serif tracking-[0.4em] uppercase text-[#c49840] mb-4">Speisely</div>
+        <p className="text-[10px] uppercase tracking-[0.4em] text-[#7a9470]">The Art of Culinary Intelligence</p>
       </footer>
     </main>
   );
