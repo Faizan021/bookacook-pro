@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createRequestDraftAction } from "@/app/request/new/actions";
-import { SparklesIcon } from "@/components/ui/sparkles-icon"; // I will provide this below
-import { ArrowRightIcon } from "@/components/ui/arrow-right-icon"; // I will provide this below
+import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 
 type Props = {
   initialQuery?: string;
@@ -12,40 +11,112 @@ type Props = {
   initialCaterer?: string;
 };
 
+type ParsedIntent = {
+  occasion: string;
+  city: string;
+  dietary: string;
+  style: string;
+  budget: string;
+};
+
+const OCCASION_OPTIONS = [
+  { value: "wedding", label: "Wedding" },
+  { value: "corporate", label: "Corporate Event" },
+  { value: "private_party", label: "Private Party" },
+  { value: "ramadan", label: "Ramadan / Iftar" },
+];
+
+function parseIntent(input: string, selectedOccasion: string): ParsedIntent {
+  const text = input.toLowerCase();
+
+  const occasion =
+    selectedOccasion ||
+    (text.includes("wedding")
+      ? "Wedding"
+      : text.includes("corporate") || text.includes("office") || text.includes("business")
+      ? "Corporate Event"
+      : text.includes("birthday") || text.includes("private") || text.includes("dinner")
+      ? "Private Party"
+      : text.includes("ramadan") || text.includes("iftar")
+      ? "Ramadan / Iftar"
+      : "Event");
+
+  const city = text.includes("berlin")
+    ? "Berlin"
+    : text.includes("hamburg")
+    ? "Hamburg"
+    : text.includes("munich") || text.includes("münchen")
+    ? "Munich"
+    : text.includes("frankfurt")
+    ? "Frankfurt"
+    : text.includes("cologne") || text.includes("köln")
+    ? "Cologne"
+    : "To be confirmed";
+
+  const dietary = text.includes("vegan")
+    ? "Vegan"
+    : text.includes("vegetarian")
+    ? "Vegetarian"
+    : text.includes("halal")
+    ? "Halal"
+    : text.includes("gluten")
+    ? "Gluten-free"
+    : "No specific preference yet";
+
+  const style = text.includes("elegant")
+    ? "Elegant"
+    : text.includes("fine dining")
+    ? "Fine Dining"
+    : text.includes("buffet")
+    ? "Buffet"
+    : text.includes("sharing")
+    ? "Sharing Style"
+    : text.includes("casual")
+    ? "Casual"
+    : "Refined hospitality";
+
+  const budgetMatch = input.match(/€\s?\d+|\d+\s?€/);
+  const budget = budgetMatch ? budgetMatch[0] : "Flexible budget";
+
+  return { occasion, city, dietary, style, budget };
+}
+
 export function RequestIntakePage({
   initialQuery = "",
   initialOccasion = "",
   initialCaterer = "",
 }: Props) {
   const router = useRouter();
+
   const [query, setQuery] = useState(initialQuery);
   const [occasion, setOccasion] = useState(initialOccasion);
-  const [caterer, setCaterer] = useState(initialCaterer);
+  const [caterer] = useState(initialCaterer);
   const [loading, setLoading] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [error, setError] = useState("");
 
-  // Simulate "AI intelligence" for the UI
-  // In a real app, you'd call a lightweight API to parse the text as they type
   useEffect(() => {
-    if (query.length > 10) {
-      const timeout = setTimeout(() => {
-        setIsThinking(true);
-        // Mocking the AI detection of occasion
-        if (query.toLowerCase().includes("wedding")) setOccasion("wedding");
-        else if (query.toLowerCase().includes("corporate")) setOccasion("corporate");
-        else if (query.toLowerCase().includes("party")) setOccasion("private_party");
-        else if (query.toLowerCase().includes("ramadan")) setOccasion("ramadan");
-        
-        setTimeout(() => setIsThinking(false), 800);
-      }, 1000);
-      return () => clearTimeout(timeout);
+    if (query.trim().length < 12) {
+      setIsThinking(false);
+      return;
     }
+
+    setIsThinking(true);
+    const timeout = setTimeout(() => {
+      setIsThinking(false);
+    }, 700);
+
+    return () => clearTimeout(timeout);
   }, [query]);
+
+  const understood = useMemo(
+    () => parseIntent(query, occasion),
+    [query, occasion],
+  );
 
   async function handleContinue() {
     if (!query.trim()) {
-      setError("Please tell us a little about your event.");
+      setError("Please describe your event so Speisely can prepare your briefing.");
       return;
     }
 
@@ -59,115 +130,192 @@ export function RequestIntakePage({
         preferred_caterer_id: caterer || null,
       });
 
-      // Elegant transition
       router.push(`/request/${draft.id}`);
     } catch (err) {
       console.error(err);
-      setError("The concierge is momentarily unavailable. Please try again.");
+      setError("Speisely could not start your briefing right now. Please try again.");
       setLoading(false);
     }
   }
 
   return (
-    <main className="relative min-h-screen flex items-center justify-center overflow-hidden bg-surface-dark">
-      {/* Ambient Background Glow */}
-      <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[120px]" />
+    <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
+      <div className="pointer-events-none fixed inset-0">
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(circle at top center, rgba(196,152,64,0.15) 0%, transparent 28%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.16) 0%, transparent 18%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
+      </div>
 
-      <div className="relative z-10 w-full max-w-3xl px-6 py-12">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-widest text-accent-gold uppercase mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-gold opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-gold"></span>
-            </span>
-            Digital Concierge
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-20 pt-16 md:px-8 md:pt-24">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+            <Sparkles className="h-3.5 w-3.5" />
+            AI-guided event intake
           </div>
-          <h1 className="text-balance text-4xl font-medium tracking-tight text-surface-dark-foreground sm:text-6xl">
-            How can we assist <br />
-            <span className="italic text-accent-gold">your event?</span>
+
+          <h1 className="mt-8 text-4xl font-medium leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
+            Describe your event.
+            <span className="mt-2 block italic text-[#c49840]">
+              Speisely prepares the briefing.
+            </span>
           </h1>
-          <p className="mt-6 text-lg text-surface-dark-muted">
-            Describe your vision in your own words. Our AI will handle the details.
+
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#a4b29f]">
+            Tell us what you are planning in natural language. Speisely translates your
+            event intent into a clearer, more structured request for the right catering
+            partners.
           </p>
         </div>
 
-        <div className="relative group">
-          {/* The Input Container */}
-          <div className={`relative rounded-[2.5rem] border transition-all duration-500 ${
-            isThinking ? "border-accent-gold/50 shadow-[0_0_30px_rgba(196,152,64,0.15)]" : "border-white/10 bg-white/5"
-          } backdrop-blur-xl p-4 md:p-6`}>
-            
-            <div className="flex flex-col gap-6">
-              <div className="relative">
-                <textarea
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  rows={5}
-                  placeholder="e.g., An elegant wedding for 80 guests in Berlin, mostly vegetarian, around €35 per person..."
-                  className="w-full resize-none bg-transparent px-4 py-2 text-xl leading-relaxed text-surface-dark-foreground placeholder:text-surface-dark-muted/50 focus:outline-none"
-                />
-                
-                {/* AI "Thinking" Indicator */}
-                {isThinking && (
-                  <div className="absolute bottom-4 right-4 flex items-center gap-2 text-xs font-medium text-accent-gold animate-pulse">
-                    <SparklesIcon />
-                    <span>AI is analyzing...</span>
-                  </div>
-                )}
+        <div className="mt-14 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_30px_80px_rgba(0,0,0,0.28)] backdrop-blur-2xl md:p-7">
+            <div className="flex flex-wrap gap-2">
+              {OCCASION_OPTIONS.map((item) => {
+                const active = occasion === item.value;
+                return (
+                  <button
+                    key={item.value}
+                    type="button"
+                    onClick={() => setOccasion(item.value)}
+                    className={`rounded-full border px-4 py-2 text-xs font-medium transition ${
+                      active
+                        ? "border-[#c49840]/25 bg-[#c49840]/12 text-[#c49840]"
+                        : "border-white/10 bg-white/[0.03] text-[#ddd5c6] hover:border-[#c49840]/25 hover:text-[#c49840]"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-5 rounded-[1.6rem] border border-white/10 bg-black/10 p-4 md:p-5">
+              <textarea
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                rows={7}
+                placeholder="Wedding for 80 guests in Berlin, mostly vegetarian, elegant atmosphere, around €35 per person..."
+                className="w-full resize-none bg-transparent text-lg leading-8 text-white placeholder:text-white/30 focus:outline-none"
+              />
+            </div>
+
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5">
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-[#d9d1c3]">
+                  Natural-language input
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-[#d9d1c3]">
+                  Curated hospitality brief
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-[#d9d1c3]">
+                  Premium partner matching
+                </span>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-4">
-                {/* Smart Metadata (Visual only, to show user the AI is working) */}
-                <div className="flex flex-wrap gap-2">
-                  {occasion && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-accent-gold/10 px-3 py-2 text-xs font-medium text-accent-gold">
-                      {occasion.charAt(0).toUpperCase() + occasion.slice(1)}
-                    </span>
-                  )}
-                  {query.split(' ').length > 5 && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-2 text-xs font-medium text-surface-dark-foreground/70">
-                      {query.split(' ').length} words
-                    </span>
-                  )}
+              <button
+                onClick={handleContinue}
+                disabled={loading || !query.trim()}
+                className={`inline-flex items-center gap-2 rounded-[1rem] px-6 py-3.5 text-sm font-semibold transition ${
+                  loading || !query.trim()
+                    ? "cursor-not-allowed bg-white/5 text-white/30"
+                    : "bg-[#c49840] text-black hover:scale-[1.02]"
+                }`}
+              >
+                {loading ? "Starting briefing..." : "Continue to briefing"}
+                {!loading && <ArrowRight className="h-4 w-4" />}
+              </button>
+            </div>
+
+            {error && (
+              <div className="mt-4 rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
+                {error}
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl md:p-7">
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                Speisely understands
+              </div>
+              {isThinking && (
+                <span className="text-xs font-medium text-[#c49840]">
+                  Interpreting request...
+                </span>
+              )}
+            </div>
+
+            <div className="mt-5 space-y-4">
+              <div className="rounded-[1.3rem] border border-white/10 bg-black/10 p-4">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
+                  Occasion
+                </div>
+                <div className="mt-2 text-lg font-semibold text-white">
+                  {understood.occasion}
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[1.3rem] border border-white/10 bg-black/10 p-4">
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
+                    City
+                  </div>
+                  <div className="mt-2 text-base font-medium text-white">
+                    {understood.city}
+                  </div>
                 </div>
 
-                <button
-                  onClick={handleContinue}
-                  disabled={loading || !query.trim()}
-                  className={`group flex items-center gap-3 rounded-full px-8 py-4 text-sm font-bold transition-all duration-300 ${
-                    loading || !query.trim() 
-                      ? "bg-white/5 text-white/20 cursor-not-allowed" 
-                      : "bg-accent-gold text-black hover:scale-105 hover:brightness-110 active:scale-95"
-                  }`}
-                >
-                  {loading ? (
-                    <span className="flex items-center gap-2">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-black/20 border-t-black" />
-                      Starting...
-                    </span>
-                  ) : (
-                    <>
-                      Continue to Briefing
-                      <ArrowRightIcon />
-                    </>
-                  )}
-                </button>
+                <div className="rounded-[1.3rem] border border-white/10 bg-black/10 p-4">
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
+                    Budget
+                  </div>
+                  <div className="mt-2 text-base font-medium text-white">
+                    {understood.budget}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[1.3rem] border border-white/10 bg-black/10 p-4">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
+                  Dietary preference
+                </div>
+                <div className="mt-2 text-base font-medium text-white">
+                  {understood.dietary}
+                </div>
+              </div>
+
+              <div className="rounded-[1.3rem] border border-white/10 bg-black/10 p-4">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
+                  Event style
+                </div>
+                <div className="mt-2 text-base font-medium text-white">
+                  {understood.style}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-[1.4rem] border border-[#c49840]/15 bg-[#c49840]/8 p-4">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 text-[#c49840]" />
+                <p className="text-sm leading-7 text-[#e7dcc7]">
+                  Speisely uses your natural-language request as the starting point for a
+                  more structured catering brief and a better shortlist of suitable
+                  partners.
+                </p>
               </div>
             </div>
           </div>
-
-          {/* Error Message */}
-          {error && (
-            <div className="absolute -bottom-12 left-0 right-0 text-center text-sm font-medium text-red-400 animate-bounce">
-              {error}
-            </div>
-          )}
         </div>
 
-        <p className="mt-12 text-center text-xs tracking-widest text-surface-dark-muted/50 uppercase">
-          Speisely — The Intelligence of Hospitality
+        <p className="mt-12 text-center text-[11px] uppercase tracking-[0.22em] text-[#7f9380]">
+          Speisely — premium catering intelligence
         </p>
-      </div>
+      </section>
     </main>
   );
 }
