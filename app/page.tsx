@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { Sparkles, ArrowRight, Search } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 type CatererCard = {
@@ -91,21 +91,17 @@ const quickFilters = ["Berlin", "Corporate", "Wedding", "Vegetarian", "Fine Dini
 
 // ─── MAIN PAGE COMPONENT ─────────────────────────────────────────────────────
 export default function HomePage() {
-  // State for filtering
   const [city, setCity] = useState("");
   const [eventType, setEventType] = useState("");
   const [cuisine, setCuisine] = useState("");
 
-  // Filtering Logic
   const filteredCaterers = useMemo(() => {
     return sampleCaterers.filter((caterer) => {
       const haystack = [caterer.name, caterer.city, caterer.cuisine, caterer.description, ...caterer.tags]
         .join(" ").toLowerCase();
-
       const cityMatch = !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
       const eventMatch = !eventType || haystack.includes(eventType.toLowerCase()) || caterer.tags.some(tag => tag.toLowerCase().includes(eventType.toLowerCase()));
       const cuisineMatch = !cuisine || caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()) || caterer.tags.some(tag => tag.toLowerCase().includes(cuisine.toLowerCase()));
-
       return cityMatch && eventMatch && cuisineMatch;
     });
   }, [city, eventType, cuisine]);
@@ -117,12 +113,11 @@ export default function HomePage() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#192b1a]">
+    <main className="relative min-h-screen bg-[#192b1a] overflow-x-hidden">
       {/* 1. BACKGROUND EFFECTS */}
       <div className="grain-overlay" />
       <div className="absolute inset-0 opacity-30" style={{ background: "radial-gradient(circle at center, #2a4a2c 0%, transparent 70%)" }} />
-      <div className="absolute bottom-0 left-1/2 h-[500px] w-[800px] -translate-x-1/2 translate-y-1/2 rounded-full opacity-20 blur-[120px]" style={{ backgroundColor: "#c49840" }} />
-
+      
       {/* 2. HEADER */}
       <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <div className="text-2xl font-bold text-[#e4d9c2] tracking-tighter">Speisely</div>
@@ -133,87 +128,63 @@ export default function HomePage() {
         <Link href="/login" className="text-sm font-bold text-[#e4d9c2]">Login</Link>
       </header>
 
-      {/* 3. HERO SECTION */}
-      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-120px)] max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
-        <div className="order-2 text-left lg:order-1">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#c49840]">
+      {/* 3. COMPACT HERO SECTION (The fix: Reduced height) */}
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pt-12 pb-24 lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
+        <div className="text-left">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#c49840]">
             <Sparkles className="h-3.5 w-3.5" /> Digital Concierge
           </div>
-          <h1 className="text-5xl font-medium leading-[1.1] tracking-tight text-white sm:text-7xl">
+          <h1 className="text-4xl font-medium leading-tight tracking-tight text-white sm:text-6xl">
             Premium Catering, <br />
             <span className="italic text-[#c49840]">Intelligently Matched.</span>
           </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#7a9470]">
-            Describe your vision in your own words. Our AI finds the perfect caterers for your weddings, corporate events, and celebrations.
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-[#7a9470]">
+            Describe your vision. Our AI finds the perfect caterers for your next event.
           </p>
 
-          {/* Interactive Search Bar (Updates filters below) */}
-          <div className="relative mt-10 w-full max-w-xl">
-            <div className="relative flex items-center rounded-[2rem] border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur-2xl">
+          {/* Search Bar - Now positioned perfectly under the text */}
+          <div className="mt-8 relative max-w-md">
+            <div className="flex items-center rounded-full border border-white/10 bg-white/5 p-1.5 shadow-2xl backdrop-blur-md">
               <input
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="Search by city (e.g. Berlin)..."
-                className="w-full bg-transparent px-6 py-4 text-lg text-white placeholder:text-white/30 focus:outline-none"
+                placeholder="Search by city..."
+                className="w-full bg-transparent px-5 py-3 text-white placeholder:text-white/30 focus:outline-none"
               />
-              <button className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105 flex-shrink-0">
-                <ArrowRight className="h-6 w-6" />
+              <button className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105">
+                <ArrowRight className="h-5 w-5" />
               </button>
             </div>
           </div>
         </div>
 
-        <div className="relative order-1 h-[450px] w-full lg:order-2 lg:h-[650px]">
-          <div className="absolute inset-0 overflow-hidden rounded-[3rem] border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
+        {/* Hero Image - Scaled down to allow content below to show */}
+        <div className="mt-12 lg:mt-0 lg:relative">
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
             <img
               src="https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
               alt="Luxury Catering"
-              className="h-full w-full object-cover transition duration-1000 hover:scale-105"
+              className="h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#192b1a] via-transparent to-transparent opacity-60" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#192b1a] via-transparent to-transparent opacity-40" />
           </div>
         </div>
       </section>
 
-      {/* 4. THE MARKETPLACE (The real logic) */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 py-24">
-        <div className="mb-12">
-          <h2 className="text-3xl font-semibold text-white">Explore Our Curated Caterers</h2>
-          <p className="text-[#7a9470] mt-2">Filter by event type or cuisine to find your match.</p>
-        </div>
-
-        {/* Filter Controls */}
-        <div className="mb-10 flex flex-wrap items-center gap-4">
-          <select 
-            value={eventType} 
-            onChange={(e) => setEventType(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white focus:outline-none"
-          >
-            <option value="">All Event Types</option>
-            <option value="Wedding">Wedding</option>
-            <option value="Corporate">Corporate</option>
-            <option value="Private Party">Private Party</option>
-          </select>
-
-          <select 
-            value={cuisine} 
-            onChange={(e) => setCuisine(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white focus:outline-none"
-          >
-            <option value="">All Cuisines</option>
-            <option value="BBQ">BBQ</option>
-            <option value="Fine Dining">Fine Dining</option>
-            <option value="Vegetarian">Vegetarian</option>
-            <option value="Middle Eastern">Middle Eastern</option>
-          </select>
-
+      {/* 4. THE MARKETPLACE (Visible immediately below Hero) */}
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-12 bg-white/5 backdrop-blur-sm rounded-t-[3rem]">
+        <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h2 className="text-3xl font-semibold text-white">Explore Curated Caterers</h2>
+            <p className="text-[#7a9470] mt-2">Find your perfect match using our smart filters.</p>
+          </div>
           <div className="flex gap-2">
-            {quickFilters.map(f => (
+             {quickFilters.map(f => (
               <button 
                 key={f} 
                 onClick={() => applyQuickFilter(f)}
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs text-white hover:bg-[#c49840] hover:text-black transition"
+                className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white hover:bg-[#c49840] hover:text-black transition"
               >
                 {f}
               </button>
@@ -221,7 +192,24 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Caterer Grid */}
+        {/* Filter Row */}
+        <div className="mb-12 grid gap-4 md:grid-cols-3">
+          <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="rounded-xl border border-white/10 bg-[#192b1a] p-3 text-white outline-none">
+            <option value="">All Event Types</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Corporate">Corporate</option>
+            <option value="Private Party">Private Party</option>
+          </select>
+          <select value={cuisine} onChange={(e) => setCuisine(e.target.value)} className="rounded-xl border border-white/10 bg-[#192b1a] p-3 text-white outline-none">
+            <option value="">All Cuisines</option>
+            <option value="BBQ">BBQ</option>
+            <option value="Fine Dining">Fine Dining</option>
+            <option value="Vegetarian">Vegetarian</option>
+          </select>
+          <button onClick={() => {setCity(""); setEventType(""); setCuisine("");}} className="text-sm text-[#7a9470] hover:text-white underline">Reset Filters</button>
+        </div>
+
+        {/* Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {filteredCaterers.map((caterer) => (
             <div key={caterer.id} className="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10">
@@ -245,20 +233,10 @@ export default function HomePage() {
             </div>
           ))}
         </div>
-
-        {filteredCaterers.length === 0 && (
-          <div className="py-20 text-center">
-            <p className="text-[#7a9470]">No caterers match your selection. Try clearing filters.</p>
-            <button onClick={() => {setCity(""); setEventType(""); setCuisine("");}} className="mt-4 text-[#c49840] underline">Clear All</button>
-          </div>
-        )}
       </section>
 
-      {/* 5. FOOTER / CTA */}
-      <footer className="relative z-10 border-t border-white/5 bg-[#142214] py-12">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <p className="text-[#7a9470] text-sm">© 2024 Speisely. Premium Catering Intelligence.</p>
-        </div>
+      <footer className="relative z-10 bg-[#142214] py-12 text-center">
+        <p className="text-[#7a9470] text-sm">© 2024 Speisely. Premium Catering Intelligence.</p>
       </footer>
     </main>
   );
