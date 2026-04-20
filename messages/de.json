@@ -468,6 +468,7 @@
 
   "home.heroBrowseCta": "Caterer entdecken",
   "home.heroPlanCta": "Event planen",
+  "home.heroSearchCta": "Briefing starten",
 
   "home.trust.curated": "Kuratiertes Premium-Netzwerk",
   "home.trust.verified": "Geprüfte Anbieter",
@@ -523,7 +524,7 @@
 
   "home.occasions.label": "Anlässe",
   "home.occasions.title": "Catering nach Anlass entdecken",
-  "home.occasions.subtitle": "Entdecken Sie Catering-Lösungen für Hochzeiten, Business-Events, festliche Dinner und private Anlässe.",
+  "home.occasions.subtitle": "Entdecken Sie Catering-Lösungen für Hochzeiten, Business-Events und private Anlässe.",
   "home.occasions.viewAll": "Alle Caterer ansehen",
   "home.occasions.cardCta": "Anfrage starten",
   "home.occasions.wedding": "Hochzeit",
@@ -533,7 +534,7 @@
   "home.occasions.private": "Private Feier",
   "home.occasions.privateDesc": "Flexible Menüs für Geburtstage, Jubiläen und Familienessen.",
   "home.occasions.christmas": "Weihnachtsdinner",
-  "home.occasions.christmasDesc": "Saisonales Catering für festliche Dinner, Firmenfeiern, Jahresabschluss-Events und elegante Winteranlässe.",
+  "home.occasions.christmasDesc": "Saisonales Catering für festliche Dinner, Firmenfeiern, Jahresabschlüsse und elegante Winterveranstaltungen.",
   "home.occasions.ramadan": "Ramadan / Iftar",
   "home.occasions.ramadanDesc": "Passende Optionen für Gemeinschaftsessen und besondere Anlässe.",
 
@@ -552,7 +553,6 @@
   "home.editorialHeroTitle": "Beschreiben Sie Ihr Event. Finden Sie die perfekten Partner.",
   "home.editorialHeroSubtitle": "Speisely verwandelt Ihre Vision in ein präzises Catering-Briefing — und findet die Caterer, die exakt zu Ihrem Stil, Budget und Ihren Wünschen passen.",
   "home.editorialSearchPlaceholder": "Hochzeit für 80 Gäste in Berlin, vegetarisch, elegant, ca. 35 € pro Person",
-  "home.editorialCtaPrimary": "Briefing starten",
 
   "home.heroBenefit1": "Natürliche Spracheingabe",
   "home.heroBenefit2": "Intelligentes Matching",
