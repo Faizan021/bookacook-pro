@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -7,10 +8,11 @@ import {
   CheckCircle2,
   ShieldCheck,
   Sparkles,
-  Wand2,
+  Stars,
 } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { LogoMark } from "@/components/ui/logo-mark";
 
 const occasionKeys = [
   {
@@ -24,6 +26,10 @@ const occasionKeys = [
   {
     titleKey: "home.occasions.private",
     descKey: "home.occasions.privateDesc",
+  },
+  {
+    titleKey: "home.occasions.christmas",
+    descKey: "home.occasions.christmasDesc",
   },
   {
     titleKey: "home.occasions.ramadan",
@@ -49,6 +55,12 @@ const principleKeys = [
   },
 ];
 
+const trustKeys = [
+  "home.trust.curated",
+  "home.trust.verified",
+  "home.trust.transparent",
+];
+
 export default function HomePage() {
   const t = useT();
 
@@ -56,10 +68,10 @@ export default function HomePage() {
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
       <div className="pointer-events-none fixed inset-0">
         <div
-          className="absolute inset-0 opacity-60"
+          className="absolute inset-0 opacity-70"
           style={{
             background:
-              "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 28%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
+              "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
           }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
@@ -67,8 +79,8 @@ export default function HomePage() {
 
       <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-8">
         <Link href="/" className="flex items-center gap-3 text-[#eadfca]">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10 text-sm font-semibold">
-            S
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10">
+            <LogoMark size={18} color="#e8ddc8" />
           </div>
           <div className="text-xl font-semibold tracking-tight">Speisely</div>
         </Link>
@@ -102,15 +114,15 @@ export default function HomePage() {
         </div>
       </header>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-14 md:px-8 md:pb-24 md:pt-24">
-        <div className="grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16">
+        <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
               <Sparkles className="h-3.5 w-3.5" />
               {t("home.badge")}
             </div>
 
-            <h1 className="mt-8 text-5xl font-medium leading-[0.96] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[80px]">
+            <h1 className="mt-8 text-5xl font-medium leading-[0.95] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[82px]">
               {t("home.editorialHeroTitle")}
             </h1>
 
@@ -156,10 +168,21 @@ export default function HomePage() {
                 {t("home.heroBenefit3")}
               </span>
             </div>
+
+            <div className="mt-8 flex flex-wrap gap-2">
+              {trustKeys.map((key) => (
+                <span
+                  key={key}
+                  className="rounded-full border border-[#c49840]/15 bg-[#c49840]/8 px-3.5 py-2 text-xs text-[#e5d8bf]"
+                >
+                  {t(key)}
+                </span>
+              ))}
+            </div>
           </div>
 
           <div className="rounded-[2.3rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-start justify-between gap-4">
               <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
                 {t("home.aiDemo.requestLabel", "Your request")}
               </div>
@@ -168,67 +191,68 @@ export default function HomePage() {
               </span>
             </div>
 
-            <div className="mt-4 rounded-[1.4rem] border border-white/10 bg-black/10 p-5">
-              <p className="text-base leading-7 text-white/90">
+            <div className="mt-4 rounded-[1.35rem] border border-white/10 bg-black/10 p-4">
+              <p className="text-sm leading-7 text-white/90">
                 “{t("home.aiDemo.request")}”
               </p>
             </div>
 
-            <div className="mt-6 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-              <Wand2 className="h-3.5 w-3.5" />
-              {t("home.aiDemo.understands", "Speisely understands")}
-            </div>
+            <div className="mt-6">
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#c49840]">
+                <Stars className="h-3.5 w-3.5" />
+                {t("home.aiDemo.understands")}
+              </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
-              {[
-                t("home.aiDemo.tagEvent"),
-                t("home.aiDemo.tagCity"),
-                t("home.aiDemo.tagGuests"),
-                t("home.aiDemo.tagDiet"),
-                t("home.aiDemo.tagStyle"),
-                t("home.aiDemo.tagBudget"),
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-[#ddd5c6]"
-                >
-                  {tag}
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
+                  {t("home.aiDemo.tagEvent")}
                 </span>
-              ))}
+                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
+                  {t("home.aiDemo.tagCity")}
+                </span>
+                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
+                  {t("home.aiDemo.tagGuests")}
+                </span>
+                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
+                  {t("home.aiDemo.tagDiet")}
+                </span>
+                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
+                  {t("home.aiDemo.tagStyle")}
+                </span>
+                <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#ddd5c6]">
+                  {t("home.aiDemo.tagBudget")}
+                </span>
+              </div>
             </div>
 
             <div className="mt-7 border-t border-white/10 pt-6">
-              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-                {t("home.aiDemo.recommended", "Suggested matches")}
+              <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-[#c49840]">
+                {t("home.aiDemo.recommended")}
               </div>
 
               <div className="mt-4 space-y-3">
-                <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
-                  <div className="font-semibold text-white">
-                    {t("home.aiDemo.caterer1Name")}
+                {[
+                  {
+                    name: t("home.aiDemo.caterer1Name"),
+                    meta: t("home.aiDemo.caterer1Meta"),
+                  },
+                  {
+                    name: t("home.aiDemo.caterer2Name"),
+                    meta: t("home.aiDemo.caterer2Meta"),
+                  },
+                  {
+                    name: t("home.aiDemo.caterer3Name"),
+                    meta: t("home.aiDemo.caterer3Meta"),
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.name}
+                    className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3"
+                  >
+                    <div className="text-sm font-semibold text-white">{item.name}</div>
+                    <div className="mt-1 text-xs text-[#9aaa96]">{item.meta}</div>
                   </div>
-                  <div className="mt-1 text-sm text-[#93a28f]">
-                    {t("home.aiDemo.caterer1Meta")}
-                  </div>
-                </div>
-
-                <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
-                  <div className="font-semibold text-white">
-                    {t("home.aiDemo.caterer2Name")}
-                  </div>
-                  <div className="mt-1 text-sm text-[#93a28f]">
-                    {t("home.aiDemo.caterer2Meta")}
-                  </div>
-                </div>
-
-                <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
-                  <div className="font-semibold text-white">
-                    {t("home.aiDemo.caterer3Name")}
-                  </div>
-                  <div className="mt-1 text-sm text-[#93a28f]">
-                    {t("home.aiDemo.caterer3Meta")}
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
@@ -273,6 +297,71 @@ export default function HomePage() {
       </section>
 
       <section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-8 md:py-20">
+        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+          <div className="relative overflow-hidden rounded-[2.4rem] border border-white/10">
+            <div className="absolute inset-0 z-10 bg-[linear-gradient(to_top,rgba(7,17,12,0.72),rgba(7,17,12,0.18))]" />
+            <Image
+              src="https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1400&q=80"
+              alt={t("home.images.heroAlt")}
+              width={1400}
+              height={1000}
+              className="h-[420px] w-full object-cover"
+              priority
+            />
+            <div className="absolute bottom-0 left-0 z-20 p-7 md:p-8">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                {t("home.featured.label")}
+              </div>
+              <h3 className="mt-3 max-w-xl text-3xl font-semibold text-white md:text-4xl">
+                {t("home.featured.title")}
+              </h3>
+              <p className="mt-4 max-w-lg text-sm leading-7 text-[#d6d0c3]">
+                {t("home.featured.subtitle")}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+              <div className="text-xs uppercase tracking-[0.18em] text-[#c49840]">
+                {t("home.featured.card1Meta")}
+              </div>
+              <h3 className="mt-4 text-2xl font-semibold text-white">
+                {t("home.featured.card1Title")}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-[#92a18f]">
+                {t("home.featured.card1Desc")}
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl">
+              <div className="text-xs uppercase tracking-[0.18em] text-[#c49840]">
+                {t("home.featured.card2Meta")}
+              </div>
+              <h3 className="mt-4 text-2xl font-semibold text-white">
+                {t("home.featured.card2Title")}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-[#92a18f]">
+                {t("home.featured.card2Desc")}
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl sm:col-span-2">
+              <div className="text-xs uppercase tracking-[0.18em] text-[#c49840]">
+                {t("home.featured.card3Meta", "Private Events")}
+              </div>
+              <h3 className="mt-4 text-2xl font-semibold text-white">
+                {t("home.featured.card3Title")}
+              </h3>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#92a18f]">
+                {t("home.featured.card3Desc")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-8 md:py-20">
         <div className="mb-10 max-w-3xl">
           <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             {t("home.occasions.label")}
@@ -283,27 +372,24 @@ export default function HomePage() {
           <p className="mt-4 text-base leading-8 text-[#96a592]">
             {t(
               "home.occasions.subtitle",
-              "Explore catering solutions for weddings, business events, and private occasions.",
+              "Explore catering solutions for weddings, business events, festive dinners, and private occasions.",
             )}
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
           {occasionKeys.map((occasion) => (
             <div
               key={occasion.titleKey}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 transition hover:-translate-y-1 hover:border-[#c49840]/20 hover:bg-white/[0.055]"
+              className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl"
             >
-              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-                {t("home.occasions.label")}
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-white">
+              <h3 className="text-xl font-semibold text-white">
                 {t(occasion.titleKey)}
               </h3>
               <p className="mt-4 text-sm leading-7 text-[#92a18f]">
                 {t(occasion.descKey)}
               </p>
-              <div className="mt-8">
+              <div className="mt-6">
                 <Link
                   href="/request/new"
                   className="text-sm font-semibold text-[#c49840] transition hover:text-white"
@@ -317,32 +403,46 @@ export default function HomePage() {
       </section>
 
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 md:px-8">
-        <div className="rounded-[2.4rem] border border-white/10 bg-white/[0.045] px-8 py-12 text-center backdrop-blur-xl md:px-12 md:py-16">
-          <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-            {t("home.editorialCtaLabel")}
-          </div>
-          <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
-            {t("home.editorialCtaTitle")}
-          </h3>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#94a391]">
-            {t("home.editorialCtaSubtitle")}
-          </p>
+        <div className="overflow-hidden rounded-[2.4rem] border border-white/10 bg-white/[0.045] backdrop-blur-xl">
+          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="px-8 py-12 md:px-12 md:py-16">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                {t("home.editorialCtaLabel")}
+              </div>
+              <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
+                {t("home.editorialCtaTitle")}
+              </h3>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-[#94a391]">
+                {t("home.editorialCtaSubtitle")}
+              </p>
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="/request/new"
-              className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
-            >
-              {t("home.editorialCtaPrimary")}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="/request/new"
+                  className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
+                >
+                  {t("home.editorialCtaPrimary")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
 
-            <Link
-              href="/caterers"
-              className="inline-flex items-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-            >
-              {t("home.editorialCtaSecondary")}
-            </Link>
+                <Link
+                  href="/caterers"
+                  className="inline-flex items-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                >
+                  {t("home.editorialCtaSecondary")}
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative min-h-[320px] border-t border-white/10 lg:min-h-full lg:border-l lg:border-t-0">
+              <Image
+                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80"
+                alt={t("home.images.ctaAlt")}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(7,17,12,0.55),rgba(7,17,12,0.2))]" />
+            </div>
           </div>
         </div>
       </section>
