@@ -216,8 +216,6 @@
 
   "lang.de": "Deutsch",
   "lang.en": "English",
-  "lang.tr": "Türkçe",
-  "lang.ar": "العربية",
 
   "empty.bookings": "No bookings yet",
   "empty.bookingsDesc": "Booking requests will appear here once customers book.",
