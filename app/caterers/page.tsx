@@ -1,10 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo } from "react";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  ArrowRight,
+  MapPin,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  Star,
+} from "lucide-react";
+import { useT } from "@/lib/i18n/context";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 
-// --- DATA (Copied from your Caterers page) ---
 type CatererCard = {
   id: string;
   name: string;
@@ -16,240 +24,478 @@ type CatererCard = {
   guestRange: string;
   verified?: boolean;
   featured?: boolean;
+  rating?: number;
 };
 
 const sampleCaterers: CatererCard[] = [
   {
-    id: "berlin-bbq-house",
-    name: "Berlin BBQ House",
+    id: "maison-ember",
+    name: "Maison Ember",
     city: "Berlin",
-    cuisine: "BBQ & Grill",
-    description: "Authentic live grill catering for private parties, summer celebrations, and relaxed premium outdoor events.",
-    tags: ["BBQ", "Outdoor Events", "Private Parties"],
-    startingPrice: "from €29 p.p.",
-    guestRange: "40–180 guests",
+    cuisine: "Live Fire & Contemporary European",
+    description:
+      "Elegantes Live-Fire-Catering für private Feiern, gehobene Outdoor-Events und designorientierte Hospitality-Konzepte.",
+    tags: ["Live Fire", "Private Feiern", "Outdoor Hospitality"],
+    startingPrice: "ab 49 € p. P.",
+    guestRange: "40–180 Gäste",
     verified: true,
+    featured: true,
+    rating: 4.9,
   },
   {
-    id: "royal-events-catering",
-    name: "Royal Events Catering",
+    id: "atelier-royal-dining",
+    name: "Atelier Royal Dining",
     city: "Hamburg",
     cuisine: "Wedding & Fine Dining",
-    description: "Elegant full-service catering for weddings, formal receptions, and refined private celebrations.",
-    tags: ["Weddings", "Fine Dining", "Full Service"],
-    startingPrice: "from €49 p.p.",
-    guestRange: "50–250 guests",
+    description:
+      "Full-Service-Catering für Hochzeiten, elegante Dinner und anspruchsvolle Empfänge mit hochwertiger Ausführung.",
+    tags: ["Hochzeiten", "Fine Dining", "Full Service"],
+    startingPrice: "ab 69 € p. P.",
+    guestRange: "50–250 Gäste",
     verified: true,
     featured: true,
+    rating: 5.0,
   },
   {
-    id: "freshbite-catering",
-    name: "FreshBite Catering",
-    city: "Munich",
-    cuisine: "Corporate & Healthy Menus",
-    description: "Modern business catering with fresh seasonal menus for office lunches, team events, and brand activations.",
-    tags: ["Corporate", "Healthy Menus", "Business Events"],
-    startingPrice: "from €24 p.p.",
-    guestRange: "20–140 guests",
-  },
-  {
-    id: "atelier-table-berlin",
-    name: "Atelier Table Berlin",
+    id: "studio-table-berlin",
+    name: "Studio Table Berlin",
     city: "Berlin",
     cuisine: "Modern European",
-    description: "Curated premium menus for intimate dinners, private celebrations, and design-led event concepts.",
-    tags: ["Private Dining", "Modern European", "Curated Menus"],
-    startingPrice: "from €58 p.p.",
-    guestRange: "15–80 guests",
+    description:
+      "Kuratiertes Premium-Catering für intime Dinner, private Anlässe und designorientierte Eventformate.",
+    tags: ["Private Dining", "Modern European", "Kuratiert"],
+    startingPrice: "ab 58 € p. P.",
+    guestRange: "15–80 Gäste",
     featured: true,
+    rating: 4.8,
   },
   {
-    id: "green-plate-events",
-    name: "Green Plate Events",
-    city: "Cologne",
-    cuisine: "Vegetarian & Vegan",
-    description: "Plant-forward catering concepts with elegant presentation for conscious weddings and premium corporate events.",
-    tags: ["Vegetarian", "Vegan", "Sustainable"],
-    startingPrice: "from €31 p.p.",
-    guestRange: "30–160 guests",
+    id: "green-plate-collective",
+    name: "Green Plate Collective",
+    city: "Köln",
+    cuisine: "Vegetarisch & Vegan",
+    description:
+      "Pflanzenbasierte Catering-Konzepte mit gehobener Präsentation für moderne Corporate Events und stilvolle Feiern.",
+    tags: ["Vegetarisch", "Vegan", "Saisonal"],
+    startingPrice: "ab 36 € p. P.",
+    guestRange: "30–160 Gäste",
     verified: true,
+    rating: 4.7,
+  },
+  {
+    id: "nordic-boardroom-catering",
+    name: "Nordic Boardroom Catering",
+    city: "München",
+    cuisine: "Corporate & Executive Dining",
+    description:
+      "Professionelles Business-Catering für Board-Dinner, Team-Lunches und hochwertige Unternehmensveranstaltungen.",
+    tags: ["Corporate", "Business Dining", "Executive"],
+    startingPrice: "ab 42 € p. P.",
+    guestRange: "20–140 Gäste",
+    verified: true,
+    rating: 4.8,
   },
   {
     id: "levant-feast-studio",
     name: "Levant Feast Studio",
     city: "Frankfurt",
     cuisine: "Middle Eastern",
-    description: "Warm, abundant sharing menus and stylish event catering for family gatherings, receptions, and cultural celebrations.",
-    tags: ["Sharing Menus", "Middle Eastern", "Celebrations"],
-    startingPrice: "from €34 p.p.",
-    guestRange: "30–200 guests",
+    description:
+      "Warme Sharing-Menüs und stilvolle Event-Begleitung für Empfänge, Familienfeiern und kulturelle Anlässe.",
+    tags: ["Sharing Menüs", "Middle Eastern", "Celebrations"],
+    startingPrice: "ab 39 € p. P.",
+    guestRange: "30–200 Gäste",
+    rating: 4.6,
   },
 ];
 
-const quickFilters = ["Berlin", "Corporate", "Wedding", "Vegetarian", "Fine Dining", "Private Party"];
+export default function CaterersPage() {
+  const t = useT();
 
-// --- MAIN PAGE COMPONENT ---
-export default function HomePage() {
-  // Marketplace State
+  const quickFilters = [
+    "Berlin",
+    "Corporate",
+    "Hochzeit",
+    "Vegetarisch",
+    "Fine Dining",
+    "Private Feier",
+  ];
+
+  const [query, setQuery] = useState("");
   const [city, setCity] = useState("");
   const [eventType, setEventType] = useState("");
   const [cuisine, setCuisine] = useState("");
-  const [dietary, setDietary] = useState("");
+  const [specialRequest, setSpecialRequest] = useState("");
 
-  // Filter Logic
   function applyQuickFilter(value: string) {
     const lower = value.toLowerCase();
-    if (["berlin", "hamburg", "munich", "cologne", "frankfurt"].includes(lower)) { setCity(value); return; }
-    if (["corporate", "wedding", "private party"].includes(lower)) { setEventType(value); return; }
-    if (["vegetarian", "fine dining", "bbq"].includes(lower)) { setCuisine(value); return; }
+
+    if (
+      ["berlin", "hamburg", "münchen", "munich", "köln", "cologne", "frankfurt"].includes(
+        lower,
+      )
+    ) {
+      setCity(value);
+      return;
+    }
+
+    if (["corporate", "hochzeit", "wedding", "private feier"].includes(lower)) {
+      setEventType(value);
+      return;
+    }
+
+    if (["vegetarisch", "fine dining"].includes(lower)) {
+      setCuisine(value);
+    }
   }
 
   function clearFilters() {
-    setCity(""); setEventType(""); setCuisine(""); setDietary("");
+    setQuery("");
+    setCity("");
+    setEventType("");
+    setCuisine("");
+    setSpecialRequest("");
   }
 
   const filteredCaterers = useMemo(() => {
     return sampleCaterers.filter((caterer) => {
-      const haystack = [caterer.name, caterer.city, caterer.cuisine, caterer.description, ...caterer.tags].join(" ").toLowerCase();
-      const cityMatch = !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
-      const eventMatch = !eventType || haystack.includes(eventType.toLowerCase()) || caterer.tags.some((tag) => tag.toLowerCase().includes(eventType.toLowerCase()));
-      const cuisineMatch = !cuisine || caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()) || caterer.tags.some((tag) => tag.toLowerCase().includes(cuisine.toLowerCase()));
-      const dietaryMatch = !dietary || haystack.includes(dietary.toLowerCase()) || caterer.tags.some((tag) => tag.toLowerCase().includes(dietary.toLowerCase()));
-      return cityMatch && eventMatch && cuisineMatch && dietaryMatch;
+      const haystack = [
+        caterer.name,
+        caterer.city,
+        caterer.cuisine,
+        caterer.description,
+        ...caterer.tags,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      const queryMatch = !query.trim() || haystack.includes(query.trim().toLowerCase());
+      const cityMatch =
+        !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
+      const eventMatch =
+        !eventType ||
+        haystack.includes(eventType.toLowerCase()) ||
+        caterer.tags.some((tag) => tag.toLowerCase().includes(eventType.toLowerCase()));
+      const cuisineMatch =
+        !cuisine ||
+        haystack.includes(cuisine.toLowerCase()) ||
+        caterer.tags.some((tag) => tag.toLowerCase().includes(cuisine.toLowerCase()));
+      const specialMatch =
+        !specialRequest ||
+        haystack.includes(specialRequest.toLowerCase()) ||
+        caterer.tags.some((tag) =>
+          tag.toLowerCase().includes(specialRequest.toLowerCase()),
+        );
+
+      return queryMatch && cityMatch && eventMatch && cuisineMatch && specialMatch;
     });
-  }, [city, eventType, cuisine, dietary]);
+  }, [query, city, eventType, cuisine, specialRequest]);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#192b1a]">
-      {/* 1. DECORATIVE BACKGROUNDS */}
-      <div className="grain-overlay" />
-      <div className="absolute inset-0 opacity-30" style={{ background: "radial-gradient(circle at center, #2a4a2c 0%, transparent 70%)" }} />
-      <div className="absolute bottom-0 left-1/2 h-[500px] w-[800px] -translate-x-1/2 translate-y-1/2 rounded-full opacity-20 blur-[120px]" style={{ backgroundColor: "#c49840" }} />
+    <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
+      <div className="pointer-events-none fixed inset-0">
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            background:
+              "radial-gradient(circle at top center, rgba(196,152,64,0.15) 0%, transparent 28%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.16) 0%, transparent 18%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
+      </div>
 
-      {/* 2. HEADER */}
-      <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <div className="text-2xl font-bold text-[#e4d9c2] tracking-tighter">Speisely</div>
-        <nav className="hidden items-center gap-8 text-sm font-medium text-[#e4d9c2]/70 md:flex">
-          <Link href="/caterers" className="transition hover:text-[#c49840]">Browse Caterers</Link>
-          <Link href="/request/new" className="transition hover:text-[#c49840]">Plan Event</Link>
+      <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-8">
+        <Link href="/" className="flex items-center gap-3 text-[#eadfca]">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10 text-sm font-semibold">
+            S
+          </div>
+          <div className="text-xl font-semibold tracking-tight">Speisely</div>
+        </Link>
+
+        <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
+          <Link href="/caterers" className="text-[#c49840]">
+            {t("home.nav.browse", "Partner entdecken")}
+          </Link>
+          <Link href="/request/new" className="transition hover:text-[#c49840]">
+            {t("home.heroPlanCta", "Event planen")}
+          </Link>
+          <Link href="/about" className="transition hover:text-[#c49840]">
+            {t("home.nav.whySpeisely", "Über Speisely")}
+          </Link>
         </nav>
-        <Link href="/login" className="text-sm font-bold text-[#e4d9c2]">Login</Link>
+
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher />
+          <Link
+            href="/login"
+            className="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-[#eadfca] transition hover:border-[#c49840]/40 hover:text-[#c49840] md:inline-flex"
+          >
+            {t("home.nav.login", "Login")}
+          </Link>
+          <Link
+            href="/request/new"
+            className="rounded-full bg-[#c49840] px-5 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.02]"
+          >
+            {t("home.editorialCtaPrimary", "Event beschreiben")}
+          </Link>
+        </div>
       </header>
 
-      {/* 3. HERO SECTION (The Premium Look) */}
-      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-120px)] max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
-        <div className="order-2 text-left lg:order-1">
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#c49840]">
-            <Sparkles className="h-3.5 w-3.5" /> Digital Concierge
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-10 pt-14 md:px-8 md:pb-14 md:pt-20">
+        <div className="max-w-4xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            {t("home.trust.curated", "Kuratiertes Premium-Netzwerk")}
           </div>
-          <h1 className="text-5xl font-medium leading-[1.1] tracking-tight text-white sm:text-7xl">
-            Premium Catering, <br />
-            <span className="italic text-[#c49840]">Intelligently Matched.</span>
+
+          <h1 className="mt-8 text-4xl font-medium leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
+            Entdecken Sie Catering-Partner
+            <span className="mt-2 block italic text-[#c49840]">
+              für anspruchsvolle Events.
+            </span>
           </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#7a9470]">
-            Describe your vision in your own words. Our AI finds the perfect caterers for your weddings, corporate events, and celebrations.
+
+          <p className="mt-6 max-w-3xl text-lg leading-8 text-[#a4b29f]">
+            Erkunden Sie ausgewählte Catering-Partner für Hochzeiten, Corporate Events,
+            private Feiern und hochwertige Hospitality-Formate — oder beschreiben Sie Ihr
+            Event und lassen Sie Speisely intelligenter vermitteln.
           </p>
-          
-          {/* Quick Search Box */}
-          <div className="relative mt-10 w-full max-w-xl">
-            <div className="relative flex items-center rounded-[2rem] border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur-2xl">
+
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <Link
+              href="/request/new"
+              className="inline-flex items-center justify-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
+            >
+              {t("home.editorialCtaPrimary", "Event beschreiben")}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+
+            <button
+              onClick={clearFilters}
+              className="inline-flex items-center justify-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+            >
+              Filter zurücksetzen
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-8 md:px-8">
+        <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-5 backdrop-blur-xl md:p-6">
+          <div className="mb-5 flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-[#c49840]">
+            <SlidersHorizontal className="h-4 w-4" />
+            Filter & Auswahl
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3 xl:col-span-2">
+              <div className="mb-2 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
+                <Search className="h-3.5 w-3.5" />
+                Suche
+              </div>
               <input
                 type="text"
-                placeholder="e.g. Elegant wedding for 80 guests in Berlin..."
-                className="w-full bg-transparent px-6 py-4 text-lg text-white placeholder:text-white/30 focus:outline-none"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="z. B. Hochzeit, Fine Dining, vegan, Berlin..."
+                className="w-full bg-transparent text-white placeholder:text-white/30 focus:outline-none"
               />
-              <button className="flex h-14 w-14 items-center justify-center rounded-full bg-[#c49840] text-black transition hover:scale-105 flex-shrink-0">
-                <ArrowRight className="h-6 w-6" />
+            </div>
+
+            <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
+              <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
+                Stadt
+              </div>
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="z. B. Berlin"
+                className="w-full bg-transparent text-white placeholder:text-white/30 focus:outline-none"
+              />
+            </div>
+
+            <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
+              <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
+                Eventtyp
+              </div>
+              <select
+                value={eventType}
+                onChange={(e) => setEventType(e.target.value)}
+                className="w-full bg-transparent text-white focus:outline-none"
+              >
+                <option value="" className="bg-[#0d1711]">
+                  Alle Eventtypen
+                </option>
+                <option value="Hochzeit" className="bg-[#0d1711]">
+                  Hochzeit
+                </option>
+                <option value="Corporate" className="bg-[#0d1711]">
+                  Corporate
+                </option>
+                <option value="Private Feier" className="bg-[#0d1711]">
+                  Private Feier
+                </option>
+              </select>
+            </div>
+
+            <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3">
+              <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
+                Küche / Stil
+              </div>
+              <select
+                value={cuisine}
+                onChange={(e) => setCuisine(e.target.value)}
+                className="w-full bg-transparent text-white focus:outline-none"
+              >
+                <option value="" className="bg-[#0d1711]">
+                  Alle Richtungen
+                </option>
+                <option value="Fine Dining" className="bg-[#0d1711]">
+                  Fine Dining
+                </option>
+                <option value="Vegetarisch" className="bg-[#0d1711]">
+                  Vegetarisch
+                </option>
+                <option value="Modern European" className="bg-[#0d1711]">
+                  Modern European
+                </option>
+              </select>
+            </div>
+
+            <div className="rounded-[1.2rem] border border-white/10 bg-black/10 px-4 py-3 md:col-span-2 xl:col-span-5">
+              <div className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#8fa08d]">
+                Besondere Wünsche
+              </div>
+              <input
+                type="text"
+                value={specialRequest}
+                onChange={(e) => setSpecialRequest(e.target.value)}
+                placeholder="z. B. vegan, sharing, executive dining, plated service..."
+                className="w-full bg-transparent text-white placeholder:text-white/30 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {quickFilters.map((filter) => (
+              <button
+                key={filter}
+                onClick={() => applyQuickFilter(filter)}
+                className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-[#e7e0d3] transition hover:border-[#c49840]/40 hover:bg-[#c49840] hover:text-black"
+              >
+                {filter}
               </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative order-1 h-[450px] w-full lg:order-2 lg:h-[650px]">
-          <div className="absolute inset-0 overflow-hidden rounded-[3rem] border border-white/10 shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop"
-              alt="Luxury Catering"
-              className="h-full w-full object-cover"
-            />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 4. THE MARKETPLACE SECTION (The Real Functionality) */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 py-20">
-        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-10 md:px-8">
+        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <div className="text-sm font-medium uppercase tracking-widest text-[#c49840]">Marketplace</div>
-            <h2 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">Explore Premium Caterers</h2>
+            <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+              Partnerübersicht
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
+              {filteredCaterers.length} ausgewählte Partner
+            </h2>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-[#90a08d]">
+              Eine kuratierte Auswahl für Premium-Events, hochwertige Anlässe und
+              anspruchsvolle Hospitality-Erlebnisse.
+            </p>
           </div>
-          <Link href="/request/new" className="rounded-xl bg-[#c49840] px-6 py-3 font-semibold text-black transition hover:scale-105">
-            Describe your event
+
+          <Link
+            href="/request/new"
+            className="rounded-[1rem] border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+          >
+            Lieber intelligent matchen lassen
           </Link>
         </div>
 
-        {/* Filters Area */}
-        <div className="mb-10 grid gap-4 md:grid-cols-4">
-          <input type="text" value={city} onChange={(e) => setCity(e.target.value)} placeholder="City" className="rounded-xl border border-white/10 bg-white/5 p-3 text-white focus:outline-none" />
-          <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="rounded-xl border border-white/10 bg-[#192b1a] p-3 text-white">
-            <option value="">Event type</option>
-            <option value="Wedding">Wedding</option>
-            <option value="Corporate">Corporate</option>
-            <option value="Private Party">Private Party</option>
-          </select>
-          <select value={cuisine} onChange={(e) => setCuisine(e.target.value)} className="rounded-xl border border-white/10 bg-[#192b1a] p-3 text-white">
-            <option value="">Cuisine</option>
-            <option value="BBQ">BBQ</option>
-            <option value="Fine Dining">Fine Dining</option>
-            <option value="Vegetarian">Vegetarian</option>
-          </select>
-          <button onClick={clearFilters} className="text-sm text-[#7a9470] hover:text-white underline">Clear all filters</button>
-        </div>
-
-        {/* Quick Filter Tags */}
-        <div className="mb-12 flex flex-wrap gap-2">
-          {quickFilters.map((f) => (
-            <button key={f} onClick={() => applyQuickFilter(f)} className="rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white hover:bg-[#c49840] hover:text-black transition">
-              {f}
-            </button>
-          ))}
-        </div>
-
-        {/* THE GRID */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredCaterers.map((caterer) => (
-            <div key={caterer.id} className="group rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-xl font-bold text-white">{caterer.name}</h3>
-                  <p className="text-sm text-[#7a9470]">{caterer.city} • {caterer.cuisine}</p>
+            <div
+              key={caterer.id}
+              className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] transition duration-300 hover:-translate-y-1 hover:border-white/15 hover:bg-white/[0.06]"
+            >
+              <div className="relative border-b border-white/10 px-6 pb-5 pt-6">
+                <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(196,152,64,0.12),transparent_70%)]" />
+                <div className="relative flex items-start justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
+                      <MapPin className="h-3.5 w-3.5" />
+                      {caterer.city}
+                    </div>
+                    <h3 className="mt-3 text-2xl font-semibold text-white">{caterer.name}</h3>
+                    <p className="mt-2 text-sm text-[#9baa98]">{caterer.cuisine}</p>
+                  </div>
+
+                  {caterer.verified && (
+                    <span className="rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c49840]">
+                      Verified
+                    </span>
+                  )}
                 </div>
-                {caterer.verified && <span className="text-[10px] font-bold uppercase bg-[#c49840]/20 text-[#c49840] px-2 py-1 rounded">Verified</span>}
               </div>
-              <p className="mt-4 text-sm text-[#7a9470] line-clamp-2">{caterer.description}</p>
-              <div className="mt-6 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] uppercase text-[#7a9470]">Starting at</div>
-                  <div className="text-white font-semibold">{caterer.startingPrice}</div>
+
+              <div className="px-6 py-6">
+                <p className="text-sm leading-7 text-[#9faf9b]">{caterer.description}</p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {caterer.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-[#ddd5c6]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-                <Link href={`/caterers/${caterer.id}`} className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-black hover:bg-[#c49840] transition">
-                  View Profile
-                </Link>
+
+                <div className="mt-7 border-t border-white/10 pt-5">
+                  <div className="flex items-end justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-sm text-[#ddd5c6]">
+                        <Star className="h-4 w-4 fill-[#c49840] text-[#c49840]" />
+                        {caterer.rating ?? "4.8"}
+                      </div>
+                      <div className="mt-3 text-sm text-[#8ea18b]">{caterer.guestRange}</div>
+                      <div className="mt-1 text-lg font-semibold text-white">
+                        {caterer.startingPrice}
+                      </div>
+                    </div>
+
+                    <Link
+                      href={`/caterers/${caterer.id}`}
+                      className="rounded-[0.9rem] bg-[#c49840] px-4 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.03]"
+                    >
+                      Profil ansehen
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      </section>
 
-      {/* 5. CALL TO ACTION SECTION */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 py-20">
-        <div className="rounded-[2.5rem] bg-gradient-to-r from-[#2a4a2c] to-[#192b1a] p-12 text-center border border-white/10">
-          <h2 className="text-3xl font-bold text-white sm:text-4xl">Need a faster match?</h2>
-          <p className="mt-4 text-[#7a9470]">Describe your event and let Speisely guide the brief.</p>
-          <Link href="/request/new" className="mt-8 inline-block rounded-full bg-[#c49840] px-8 py-4 font-bold text-black transition hover:scale-105">
-            Start Guided Request
-          </Link>
-        </div>
+        {filteredCaterers.length === 0 && (
+          <div className="mt-10 rounded-[2rem] border border-white/10 bg-white/[0.04] p-10 text-center backdrop-blur-xl">
+            <h3 className="text-2xl font-semibold text-white">Keine Partner gefunden</h3>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[#92a18f]">
+              Passen Sie die Filter an oder beschreiben Sie Ihr Event direkt, damit
+              Speisely Sie intelligenter zum passenden Catering-Partner führen kann.
+            </p>
+            <Link
+              href="/request/new"
+              className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
+            >
+              Event beschreiben
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        )}
       </section>
     </main>
   );
