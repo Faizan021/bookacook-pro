@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { Sparkles, ArrowRight } from "lucide-react";
+// I have added 'Star' to this import line below
+import { Sparkles, ArrowRight, Star } from "lucide-react";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
-// I have fixed the "Rulebook" here by adding 'featured' and 'rating'
 type CatererCard = {
   id: string;
   name: string;
@@ -16,8 +16,8 @@ type CatererCard = {
   startingPrice: string;
   guestRange: string;
   verified?: boolean;
-  featured?: boolean; // <--- THIS WAS MISSING
-  rating: number;     // <--- THIS WAS MISSING
+  featured?: boolean;
+  rating: number;
 };
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
@@ -53,7 +53,7 @@ const sampleCaterers: CatererCard[] = [
     city: "Munich",
     cuisine: "Corporate & Healthy Menus",
     description: "Modern business catering with fresh seasonal menus for office lunches, team events, and brand activations.",
-    tags: ["Corporate", "Healthy Menus", "Business Events"],
+    tags: ["Corporate", "Healthy Menu", "Business Events"],
     startingPrice: "from €24 p.p.",
     guestRange: "20–140 guests",
     rating: 4.7
