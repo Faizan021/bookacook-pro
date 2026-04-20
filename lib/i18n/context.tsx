@@ -11,15 +11,15 @@ import {
 
 import de from "@/messages/de.json";
 import en from "@/messages/en.json";
-import ar from "@/messages/ar.json"; // Ensure this file exists in your messages folder!
+import ar from "@/messages/ar.json"; 
 
-// 1. ADD "ar" TO THE TYPE DEFINITION
+// 1. Define the allowed locales
 export type Locale = "de" | "en" | "ar"; 
 
 // This type allows for deeply nested objects in your JSON
 type NestedMessages = { [key: string]: any };
 
-// 2. ADD "ar" TO THE MESSAGES OBJECT
+// 2. Map locales to their imported JSON files
 const MESSAGES: Record<Locale, NestedMessages> = { 
   de, 
   en, 
@@ -107,7 +107,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }
 
   /**
-   * FIXED TRANSLATION FUNCTION
+   * TRANSLATION FUNCTION
    */
   function t(key: string, fallback?: string): string {
     const value = getNestedValue(MESSAGES[locale], key);
