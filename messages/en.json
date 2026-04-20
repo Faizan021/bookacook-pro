@@ -15,7 +15,6 @@
   "portal.caterer": "Caterer Portal",
   "portal.customer": "Customer Portal",
 
-
   "landing.title": "The Catering Management Platform",
   "landing.subtitle": "Streamline bookings, packages, availability, and payments — built for admins, caterers, and customers.",
   "landing.adminTitle": "Admin Dashboard",
@@ -537,6 +536,14 @@
   "home.occasions.christmasDesc": "Seasonal catering for festive dinners, company celebrations, end-of-year events, and elegant winter gatherings.",
   "home.occasions.ramadan": "Ramadan / Iftar",
   "home.occasions.ramadanDesc": "Event-ready options for community dinners, family gatherings, and special evenings.",
+  "home.occasions.summerParty": "Summer Party",
+  "home.occasions.summerPartyDesc": "Open-air BBQ, garden receptions, rooftop events, and outdoor company gatherings.",
+  "home.occasions.birthday": "Birthday",
+  "home.occasions.birthdayDesc": "Flexible catering for festive birthdays, private dinners, and larger celebrations.",
+  "home.occasions.graduation": "Graduation",
+  "home.occasions.graduationDesc": "Catering for graduation parties, academic ceremonies, and association events.",
+  "home.occasions.largeEvents": "Large Events",
+  "home.occasions.largeEventsDesc": "Scalable catering for fairs, festivals, public events, and high-capacity occasions.",
 
   "home.steps.label": "How it works",
   "home.steps.title": "A cleaner path from discovery to event planning",
@@ -569,14 +576,7 @@
   "home.heroPanel.tag1": "Weddings",
   "home.heroPanel.tag2": "Business Events",
   "home.heroPanel.tag3": "Private Occasions",
-"home.occasions.summerParty": "Summer Party",
-"home.occasions.summerPartyDesc": "Open-air BBQ, garden receptions, rooftop events, and outdoor company gatherings.",
-"home.occasions.birthday": "Birthday",
-"home.occasions.birthdayDesc": "Flexible catering for festive birthdays, private dinners, and larger celebrations.",
-"home.occasions.graduation": "Graduation",
-"home.occasions.graduationDesc": "Catering for graduation parties, academic ceremonies, and association events.",
-"home.occasions.largeEvents": "Large Events",
-"home.occasions.largeEventsDesc": "Scalable catering for fairs, festivals, public events, and high-capacity occasions.",
+  "home.heroSearchCta": "Start briefing",
 
   "home.principles.label": "How it works",
   "home.principles.title": "From event idea to a better shortlist",
@@ -597,7 +597,6 @@
   "home.editorialStepsSubtitle": "A simple request becomes a more structured catering brief — making discovery faster, clearer, and more relevant.",
 
   "home.editorialCtaLabel": "Start planning",
-  "home.editorialCtaPrimary": "Start briefing",
   "home.editorialCtaTitle": "Start with your event, not a directory.",
   "home.editorialCtaSubtitle": "Tell Speisely what you are planning and continue with a smarter catering request flow.",
   "home.editorialCtaPrimary": "Describe your event",
