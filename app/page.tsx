@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ArrowRight,
   BrainCircuit,
@@ -65,43 +64,35 @@ const trustKeys = [
 
 export default function HomePage() {
   const t = useT();
-  const router = useRouter();
   const [heroQuery, setHeroQuery] = useState("");
 
-  const aiTags = [
-    t("home.aiDemo.tagEvent"),
-    t("home.aiDemo.tagCity"),
-    t("home.aiDemo.tagGuests"),
-    t("home.aiDemo.tagDiet"),
-  ];
+  const aiTags = useMemo(
+    () => [
+      t("home.aiDemo.tagEvent"),
+      t("home.aiDemo.tagCity"),
+      t("home.aiDemo.tagGuests"),
+      t("home.aiDemo.tagDiet"),
+    ],
+    [t],
+  );
 
-  const featuredMatches = [
-    {
-      name: t("home.aiDemo.caterer1Name"),
-      meta: t("home.aiDemo.caterer1Meta"),
-    },
-    {
-      name: t("home.aiDemo.caterer2Name"),
-      meta: t("home.aiDemo.caterer2Meta"),
-    },
-  ];
+  const featuredMatches = useMemo(
+    () => [
+      {
+        name: t("home.aiDemo.caterer1Name"),
+        meta: t("home.aiDemo.caterer1Meta"),
+      },
+      {
+        name: t("home.aiDemo.caterer2Name"),
+        meta: t("home.aiDemo.caterer2Meta"),
+      },
+    ],
+    [t],
+  );
 
-  function handleHeroSearch() {
-    const trimmed = heroQuery.trim();
-    if (!trimmed) {
-      router.push("/request/new");
-      return;
-    }
-
-    router.push(`/request/new?q=${encodeURIComponent(trimmed)}`);
-  }
-
-  function handleHeroKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleHeroSearch();
-    }
-  }
+  const heroSearchHref = heroQuery.trim()
+    ? `/request/new?q=${encodeURIComponent(heroQuery.trim())}`
+    : "/request/new";
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
@@ -176,20 +167,18 @@ export default function HomePage() {
                     type="text"
                     value={heroQuery}
                     onChange={(e) => setHeroQuery(e.target.value)}
-                    onKeyDown={handleHeroKeyDown}
                     placeholder={t("home.editorialSearchPlaceholder")}
                     className="w-full bg-transparent text-[15px] text-white placeholder:text-white/30 focus:outline-none"
                   />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleHeroSearch}
+                <Link
+                  href={heroSearchHref}
                   className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-7 font-semibold text-black transition hover:scale-[1.02]"
                 >
-                  {t("home.editorialCtaPrimary")}
+                  {t("home.heroSearchCta", "Start briefing")}
                   <ArrowRight className="h-4 w-4" />
-                </button>
+                </Link>
 
                 <Link
                   href="/caterers"
