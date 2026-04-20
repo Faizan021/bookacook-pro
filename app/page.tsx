@@ -405,18 +405,6 @@ export default function HomePage() {
             </div>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#d7cfbf]">
-                {t("home.heroBenefit1")}
-              </span>
-              <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#d7cfbf]">
-                {t("home.heroBenefit2")}
-              </span>
-              <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-[#d7cfbf]">
-                {t("home.heroBenefit3")}
-              </span>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-2">
               {trustKeys.map((key) => (
                 <span
                   key={key}
@@ -606,10 +594,7 @@ export default function HomePage() {
             {t("home.editorialOccasionsTitle")}
           </h2>
           <p className="mt-4 text-base leading-8 text-[#96a592]">
-            {t(
-              "home.occasions.subtitle",
-              "Explore catering solutions for weddings, business events, festive dinners, and private occasions."
-            )}
+            {t("home.occasions.subtitle")}
           </p>
         </div>
 
