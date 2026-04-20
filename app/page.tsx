@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
-  Sparkles,
   ArrowRight,
-  CheckCircle2,
   BrainCircuit,
+  CheckCircle2,
+  Search,
   ShieldCheck,
+  Sparkles,
   Star,
 } from "lucide-react";
 
@@ -28,26 +29,26 @@ type CatererCard = {
 const sampleCaterers: CatererCard[] = [
   {
     id: "1",
-    name: "Berlin BBQ House",
+    name: "Maison Ember",
     city: "Berlin",
-    cuisine: "BBQ & Grill",
+    cuisine: "Live Fire & Contemporary European",
     description:
-      "Authentic live grill catering for premium outdoor events and private celebrations.",
-    tags: ["BBQ", "Outdoor Events", "Private Parties"],
-    startingPrice: "from €29 p.p.",
+      "Refined live-fire catering for elevated private celebrations, design-led receptions, and outdoor hospitality experiences.",
+    tags: ["Live Fire", "Private Celebrations", "Outdoor Hospitality"],
+    startingPrice: "from €49 p.p.",
     guestRange: "40–180 guests",
     verified: true,
     rating: 4.9,
   },
   {
     id: "2",
-    name: "Royal Events Catering",
+    name: "Atelier Royal Dining",
     city: "Hamburg",
     cuisine: "Wedding & Fine Dining",
     description:
-      "Elegant full-service catering for weddings, formal receptions, and refined private celebrations.",
+      "Elegant full-service catering for weddings, formal dinners, and premium receptions with polished hospitality execution.",
     tags: ["Weddings", "Fine Dining", "Full Service"],
-    startingPrice: "from €49 p.p.",
+    startingPrice: "from €69 p.p.",
     guestRange: "50–250 guests",
     verified: true,
     featured: true,
@@ -55,11 +56,11 @@ const sampleCaterers: CatererCard[] = [
   },
   {
     id: "3",
-    name: "Atelier Table Berlin",
+    name: "Studio Table Berlin",
     city: "Berlin",
     cuisine: "Modern European",
     description:
-      "Curated premium menus for intimate dinners, private celebrations, and design-led event concepts.",
+      "Curated premium menus for intimate dinners, executive gatherings, and private events with a strong editorial aesthetic.",
     tags: ["Private Dining", "Modern European", "Curated Menus"],
     startingPrice: "from €58 p.p.",
     guestRange: "15–80 guests",
@@ -69,6 +70,48 @@ const sampleCaterers: CatererCard[] = [
 ];
 
 const quickFilters = ["Berlin", "Corporate", "Wedding", "Vegetarian", "Fine Dining"];
+
+const intelligenceSignals = [
+  {
+    icon: BrainCircuit,
+    title: "Natural-language event capture",
+    description:
+      "Capture hospitality requirements the way clients naturally describe them, not through rigid forms.",
+  },
+  {
+    icon: Search,
+    title: "Semantic qualification engine",
+    description:
+      "Translate event intent into qualified catering matches based on style, scale, cuisine, and service expectations.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Curated premium supply",
+    description:
+      "Surface verified hospitality partners in a more trusted, design-led, and premium discovery experience.",
+  },
+];
+
+const processSteps = [
+  {
+    number: "01",
+    title: "Describe the event",
+    description:
+      "Share the event in natural language, including tone, guest count, cuisine direction, service format, and special requirements.",
+  },
+  {
+    number: "02",
+    title: "Interpret the intent",
+    description:
+      "Speisely structures the request semantically to understand hospitality fit beyond simple keyword matching.",
+  },
+  {
+    number: "03",
+    title: "Match with precision",
+    description:
+      "Receive curated catering partners aligned with event style, execution needs, and premium expectations.",
+  },
+];
 
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -100,10 +143,12 @@ export default function HomePage() {
 
       const cityMatch =
         !city.trim() || caterer.city.toLowerCase().includes(city.trim().toLowerCase());
+
       const eventMatch =
         !eventType ||
         haystack.includes(eventType.toLowerCase()) ||
         caterer.tags.some((tag) => tag.toLowerCase().includes(eventType.toLowerCase()));
+
       const cuisineMatch =
         !cuisine ||
         caterer.cuisine.toLowerCase().includes(cuisine.toLowerCase()) ||
@@ -114,28 +159,27 @@ export default function HomePage() {
   }, [city, eventType, cuisine]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#07110b] text-[#f6f1e8]">
-      {/* background */}
+    <main className="relative min-h-screen overflow-x-hidden bg-[#06110c] text-[#f6f1e8]">
       <div className="pointer-events-none fixed inset-0">
         <div
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0 opacity-60"
           style={{
             background:
-              "radial-gradient(circle at top center, rgba(196,152,64,0.14) 0%, transparent 35%), radial-gradient(circle at bottom left, rgba(74,108,78,0.18) 0%, transparent 30%)",
+              "radial-gradient(circle at top center, rgba(196,152,64,0.15) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(77,103,84,0.18) 0%, transparent 25%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 20%)",
           }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_30%,transparent_70%,rgba(255,255,255,0.02))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_25%,transparent_70%,rgba(255,255,255,0.02))]" />
+        <div className="absolute inset-0 opacity-[0.03] [background-image:radial-gradient(rgba(255,255,255,0.8)_0.5px,transparent_0.5px)] [background-size:18px_18px]" />
       </div>
 
-      {/* header */}
-      <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-        <div className="text-2xl font-semibold tracking-tight text-[#eadfca]">
+      <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-8">
+        <Link href="/" className="text-2xl font-semibold tracking-tight text-[#eadfca]">
           Speisely
-        </div>
+        </Link>
 
-        <nav className="hidden items-center gap-8 text-sm text-[#e4d9c2]/75 md:flex">
+        <nav className="hidden items-center gap-8 text-sm text-[#d6cfbf]/70 md:flex">
           <Link href="/caterers" className="transition hover:text-[#c49840]">
-            Browse Caterers
+            Selected Partners
           </Link>
           <Link href="/request/new" className="transition hover:text-[#c49840]">
             Plan Event
@@ -144,128 +188,165 @@ export default function HomePage() {
 
         <Link
           href="/login"
-          className="rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-[#eadfca] transition hover:border-[#c49840] hover:text-[#c49840]"
+          className="rounded-full border border-white/10 bg-white/[0.02] px-4 py-2 text-sm font-medium text-[#eadfca] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
         >
           Login
         </Link>
       </header>
 
-      {/* hero */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pt-16 pb-20 md:pt-24 md:pb-24">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#c49840]">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-14 pt-14 md:px-8 md:pb-20 md:pt-24">
+        <div className="mx-auto max-w-5xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             <Sparkles className="h-3.5 w-3.5" />
-            AI-powered premium catering marketplace
+            NLP-powered hospitality intelligence
           </div>
 
-          <h1 className="mt-8 text-5xl font-medium leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl">
-            Find the right caterer
-            <span className="block italic text-[#c49840]">with elegance, not effort.</span>
+          <h1 className="mt-8 text-5xl font-medium leading-[0.98] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[84px]">
+            From event intent to
+            <span className="mt-2 block italic text-[#c49840]">
+              exceptional catering matches.
+            </span>
           </h1>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-[#9aae97]">
-            Speisely helps customers describe their event in natural language and get
-            matched with curated caterers for weddings, corporate events, and private
-            celebrations.
+          <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-[#a5b3a0] md:text-xl">
+            Speisely is a natural-language platform for premium hospitality discovery.
+            We interpret event requirements in semantic detail and match them with
+            curated catering partners based on style, scale, cuisine, service format,
+            and guest expectations.
           </p>
 
-          {/* AI search */}
-          <div className="mx-auto mt-10 max-w-3xl rounded-[2rem] border border-white/10 bg-white/5 p-3 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+          <form className="mx-auto mt-12 max-w-4xl rounded-[2rem] border border-white/10 bg-white/[0.04] p-3 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
             <div className="flex flex-col gap-3 md:flex-row md:items-center">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Elegant wedding dinner for 80 guests in Berlin with vegetarian options..."
-                className="h-16 w-full bg-transparent px-5 text-base text-white placeholder:text-white/30 focus:outline-none"
-              />
+              <div className="flex h-16 flex-1 items-center rounded-[1.4rem] bg-black/10 px-5">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Private wedding in Berlin for 90 guests, elegant plated service, vegetarian-friendly, modern European menu..."
+                  className="w-full bg-transparent text-[15px] text-white placeholder:text-white/30 focus:outline-none"
+                />
+              </div>
+
               <Link
                 href="/request/new"
-                className="flex h-14 items-center justify-center gap-2 rounded-full bg-[#c49840] px-6 font-semibold text-black transition hover:scale-[1.02]"
+                className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-7 font-semibold text-black transition hover:scale-[1.02]"
               >
-                Start with AI
+                Start with Speisely AI
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-          </div>
+          </form>
 
-          {/* trust row */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-[#d7cfbf]">
-            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              Curated caterers
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3 text-sm text-[#d7cfbf]">
+            <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
+              Natural-language input
             </span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              Verified businesses
+            <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
+              Verified hospitality partners
             </span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              AI-guided requests
+            <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2">
+              Semantic event matching
             </span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              Premium event matching
-            </span>
-          </div>
-        </div>
-
-        {/* premium info cards */}
-        <div className="mt-16 grid gap-6 md:grid-cols-3">
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-            <BrainCircuit className="h-5 w-5 text-[#c49840]" />
-            <h3 className="mt-4 text-lg font-semibold text-white">AI event intake</h3>
-            <p className="mt-2 text-sm leading-6 text-[#8ea18b]">
-              Customers describe the event naturally instead of filling a cold, generic form.
-            </p>
-          </div>
-
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-            <ShieldCheck className="h-5 w-5 text-[#c49840]" />
-            <h3 className="mt-4 text-lg font-semibold text-white">Trusted marketplace</h3>
-            <p className="mt-2 text-sm leading-6 text-[#8ea18b]">
-              Showcase verified caterers, polished profiles, and premium service credibility.
-            </p>
-          </div>
-
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-            <CheckCircle2 className="h-5 w-5 text-[#c49840]" />
-            <h3 className="mt-4 text-lg font-semibold text-white">Better matching</h3>
-            <p className="mt-2 text-sm leading-6 text-[#8ea18b]">
-              Help users reach the right caterer faster based on event type, style, and budget.
-            </p>
           </div>
         </div>
       </section>
 
-      {/* marketplace */}
-      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24">
-        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-8 md:py-14">
+        <div className="grid gap-5 lg:grid-cols-3">
+          {intelligenceSignals.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.title}
+                className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl"
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/20 bg-[#c49840]/10">
+                  <Icon className="h-4.5 w-4.5 text-[#c49840]" />
+                </div>
+                <h3 className="mt-5 text-xl font-semibold text-white">{item.title}</h3>
+                <p className="mt-3 max-w-sm text-sm leading-7 text-[#92a18f]">
+                  {item.description}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-8 md:py-20">
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
-            <h2 className="text-3xl font-semibold text-white">Curated caterers</h2>
-            <p className="mt-2 text-[#8ea18b]">
-              Browse premium catering partners or start with AI-guided matching.
+            <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+              Platform intelligence
+            </div>
+            <h2 className="mt-4 text-3xl font-semibold leading-tight text-white md:text-5xl">
+              Designed to resolve the semantic gap in premium hospitality discovery.
+            </h2>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#9dac98]">
+              Traditional marketplaces rely on filters and fragmented browsing.
+              Speisely is built to understand what clients actually mean when they
+              describe an event, then map that intent to the right hospitality supply
+              with more precision and confidence.
+            </p>
+          </div>
+
+          <div className="rounded-[2.2rem] border border-white/10 bg-white/[0.04] p-4 backdrop-blur-xl">
+            <div className="grid gap-4 md:grid-cols-3">
+              {processSteps.map((step) => (
+                <div
+                  key={step.number}
+                  className="rounded-[1.6rem] border border-white/10 bg-black/10 p-5"
+                >
+                  <div className="text-sm font-medium tracking-[0.2em] text-[#c49840]">
+                    {step.number}
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-white">{step.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-[#8fa08d]">
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-6 md:px-8">
+        <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+              Selected partners
+            </div>
+            <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
+              Featured hospitality partners
+            </h2>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-[#8ea18b]">
+              Explore a refined set of catering partners or begin with a
+              natural-language request to receive a more qualified match.
             </p>
           </div>
 
           <Link
             href="/request/new"
-            className="rounded-xl bg-[#c49840] px-6 py-3 font-semibold text-black transition hover:scale-[1.02]"
+            className="rounded-[1rem] bg-[#c49840] px-6 py-3 font-semibold text-black transition hover:scale-[1.02]"
           >
             Describe your event
           </Link>
         </div>
 
-        {/* filters */}
         <div className="mb-8 flex flex-wrap gap-3">
           <select
             value={eventType}
             onChange={(e) => setEventType(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none"
+            className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none"
           >
-            <option value="" className="bg-[#0f1b13]">
+            <option value="" className="bg-[#0d1711]">
               All event types
             </option>
-            <option value="Wedding" className="bg-[#0f1b13]">
+            <option value="Wedding" className="bg-[#0d1711]">
               Wedding
             </option>
-            <option value="Corporate" className="bg-[#0f1b13]">
+            <option value="Corporate" className="bg-[#0d1711]">
               Corporate
             </option>
           </select>
@@ -273,15 +354,15 @@ export default function HomePage() {
           <select
             value={cuisine}
             onChange={(e) => setCuisine(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none"
+            className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none"
           >
-            <option value="" className="bg-[#0f1b13]">
+            <option value="" className="bg-[#0d1711]">
               All cuisines
             </option>
-            <option value="BBQ" className="bg-[#0f1b13]">
+            <option value="BBQ" className="bg-[#0d1711]">
               BBQ
             </option>
-            <option value="Fine Dining" className="bg-[#0f1b13]">
+            <option value="Fine Dining" className="bg-[#0d1711]">
               Fine Dining
             </option>
           </select>
@@ -291,7 +372,7 @@ export default function HomePage() {
               <button
                 key={f}
                 onClick={() => applyQuickFilter(f)}
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs text-white transition hover:border-[#c49840] hover:bg-[#c49840] hover:text-black"
+                className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-[#e7e0d3] transition hover:border-[#c49840]/40 hover:bg-[#c49840] hover:text-black"
               >
                 {f}
               </button>
@@ -299,68 +380,97 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* cards */}
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredCaterers.map((caterer) => (
             <div
               key={caterer.id}
-              className="group rounded-[2rem] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:bg-white/10"
+              className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] transition duration-300 hover:-translate-y-1 hover:border-white/15 hover:bg-white/[0.06]"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-semibold text-white">{caterer.name}</h3>
-                  <p className="mt-1 text-sm text-[#8ea18b]">
-                    {caterer.city} · {caterer.cuisine}
-                  </p>
-                </div>
-
-                {caterer.verified && (
-                  <span className="rounded-full bg-[#c49840]/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-[#c49840]">
-                    Verified
-                  </span>
-                )}
-              </div>
-
-              <p className="mt-4 text-sm leading-6 text-[#9aae97]">
-                {caterer.description}
-              </p>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                {caterer.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#d8d1c3]"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
-                <div>
-                  <div className="flex items-center gap-1 text-sm text-[#d8d1c3]">
-                    <Star className="h-4 w-4 fill-[#c49840] text-[#c49840]" />
-                    {caterer.rating}
+              <div className="relative border-b border-white/10 px-6 pb-5 pt-6">
+                <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(196,152,64,0.12),transparent_70%)]" />
+                <div className="relative flex items-start justify-between gap-4">
+                  <div>
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
+                      {caterer.city}
+                    </div>
+                    <h3 className="mt-2 text-2xl font-semibold text-white">{caterer.name}</h3>
+                    <p className="mt-2 text-sm text-[#9baa98]">{caterer.cuisine}</p>
                   </div>
-                  <div className="mt-2 text-sm text-[#8ea18b]">{caterer.guestRange}</div>
-                  <div className="mt-1 font-semibold text-white">{caterer.startingPrice}</div>
+
+                  {caterer.verified && (
+                    <span className="rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c49840]">
+                      Verified
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="px-6 py-6">
+                <p className="text-sm leading-7 text-[#9faf9b]">{caterer.description}</p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {caterer.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-[#ddd5c6]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
 
-                <Link
-                  href={`/caterers/${caterer.id}`}
-                  className="rounded-xl bg-[#c49840] px-4 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.03]"
-                >
-                  View profile
-                </Link>
+                <div className="mt-7 border-t border-white/10 pt-5">
+                  <div className="flex items-end justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-sm text-[#ddd5c6]">
+                        <Star className="h-4 w-4 fill-[#c49840] text-[#c49840]" />
+                        {caterer.rating}
+                      </div>
+                      <div className="mt-3 text-sm text-[#8ea18b]">{caterer.guestRange}</div>
+                      <div className="mt-1 text-lg font-semibold text-white">
+                        {caterer.startingPrice}
+                      </div>
+                    </div>
+
+                    <Link
+                      href={`/caterers/${caterer.id}`}
+                      className="rounded-[0.9rem] bg-[#c49840] px-4 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.03]"
+                    >
+                      View profile
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-20 rounded-[2.3rem] border border-white/10 bg-white/[0.04] px-8 py-10 text-center backdrop-blur-xl md:px-12 md:py-14">
+          <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+            Premium event planning
+          </div>
+          <h3 className="mt-4 text-3xl font-semibold text-white md:text-4xl">
+            Plan with precision. Book with confidence.
+          </h3>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-[#94a391]">
+            Describe your event once. Let Speisely translate it into a more refined,
+            qualified, and premium catering discovery experience.
+          </p>
+          <div className="mt-8">
+            <Link
+              href="/request/new"
+              className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
+            >
+              Start your request
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
       <footer className="relative z-10 border-t border-white/5 py-10 text-center">
         <p className="text-sm text-[#7f9380]">
-          © 2026 Speisely. Premium Catering Intelligence.
+          © 2026 Speisely. Natural-language hospitality intelligence.
         </p>
       </footer>
     </main>
