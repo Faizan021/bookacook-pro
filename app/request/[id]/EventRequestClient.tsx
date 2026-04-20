@@ -25,6 +25,7 @@ function formatEventType(value?: string) {
     corporate: "Corporate Event",
     private_party: "Private Party",
     ramadan: "Ramadan / Iftar",
+    christmas: "Christmas Dinner",
   };
 
   return map[value] ?? value;
@@ -127,13 +128,21 @@ export default function EventRequestClient({
   handleSave,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  async function onSubmit(formData: FormData) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setIsSubmitting(true);
+    setSubmitError("");
+
     try {
+      const formData = new FormData(event.currentTarget);
       await handleSave(formData);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving request:", error);
+      setSubmitError(
+        error?.message || "Could not save your request right now. Please try again."
+      );
       setIsSubmitting(false);
     }
   }
@@ -211,7 +220,7 @@ export default function EventRequestClient({
       <section className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-10 md:px-8">
         <div className="grid gap-8 xl:grid-cols-[1fr_380px]">
           <div className="space-y-8">
-            <form action={onSubmit} className="space-y-8">
+            <form onSubmit={onSubmit} className="space-y-8">
               <input type="hidden" name="request_id" value={request.id} />
 
               <div className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl md:p-8">
@@ -234,24 +243,13 @@ export default function EventRequestClient({
                       defaultValue={request.event_type || ""}
                       className="w-full rounded-[1.2rem] border border-white/10 bg-black/10 p-4 text-sm text-white outline-none focus:border-[#c49840]/35"
                     >
-                      <option value="" className="bg-[#0d1711]">
-                        Select type...
-                      </option>
-                      <option value="wedding" className="bg-[#0d1711]">
-                        Wedding
-                      </option>
-                      <option value="birthday" className="bg-[#0d1711]">
-                        Birthday
-                      </option>
-                      <option value="corporate" className="bg-[#0d1711]">
-                        Corporate Event
-                      </option>
-                      <option value="private_party" className="bg-[#0d1711]">
-                        Private Party
-                      </option>
-                      <option value="ramadan" className="bg-[#0d1711]">
-                        Ramadan / Iftar
-                      </option>
+                      <option value="" className="bg-[#0d1711]">Select type...</option>
+                      <option value="wedding" className="bg-[#0d1711]">Wedding</option>
+                      <option value="birthday" className="bg-[#0d1711]">Birthday</option>
+                      <option value="corporate" className="bg-[#0d1711]">Corporate Event</option>
+                      <option value="private_party" className="bg-[#0d1711]">Private Party</option>
+                      <option value="ramadan" className="bg-[#0d1711]">Ramadan / Iftar</option>
+                      <option value="christmas" className="bg-[#0d1711]">Christmas Dinner</option>
                     </select>
                   </div>
 
@@ -264,24 +262,12 @@ export default function EventRequestClient({
                       defaultValue={request.catering_type || ""}
                       className="w-full rounded-[1.2rem] border border-white/10 bg-black/10 p-4 text-sm text-white outline-none focus:border-[#c49840]/35"
                     >
-                      <option value="" className="bg-[#0d1711]">
-                        Select format...
-                      </option>
-                      <option value="buffet" className="bg-[#0d1711]">
-                        Buffet
-                      </option>
-                      <option value="finger_food" className="bg-[#0d1711]">
-                        Finger Food
-                      </option>
-                      <option value="plated" className="bg-[#0d1711]">
-                        Plated Menu
-                      </option>
-                      <option value="live_station" className="bg-[#0d1711]">
-                        Live Station
-                      </option>
-                      <option value="bbq" className="bg-[#0d1711]">
-                        BBQ
-                      </option>
+                      <option value="" className="bg-[#0d1711]">Select format...</option>
+                      <option value="buffet" className="bg-[#0d1711]">Buffet</option>
+                      <option value="finger_food" className="bg-[#0d1711]">Finger Food</option>
+                      <option value="plated" className="bg-[#0d1711]">Plated Menu</option>
+                      <option value="live_station" className="bg-[#0d1711]">Live Station</option>
+                      <option value="bbq" className="bg-[#0d1711]">BBQ</option>
                     </select>
                   </div>
 
@@ -408,6 +394,12 @@ export default function EventRequestClient({
                 </div>
               </div>
 
+              {submitError && (
+                <div className="rounded-[1.2rem] border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                  {submitError}
+                </div>
+              )}
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -518,4 +510,4 @@ export default function EventRequestClient({
       </section>
     </main>
   );
-}
+} check now all good or still issue please any hidden issue. you are senior dev so think deeply not quickly.
