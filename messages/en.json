@@ -707,5 +707,17 @@
 "footer.socialTitle": "Social",
 "footer.bottomRequest": "Request a quote",
 "footer.imprint": "Imprint",
-"footer.privacy": "Privacy"
+"footer.privacy": "Privacy",
+  "home.catererSection.label": "For Caterers",
+"home.catererSection.title": "Grow with better catering inquiries.",
+"home.catererSection.subtitle": "Speisely helps premium caterers receive clearer event requests, present packages professionally, and manage inquiries through one structured platform.",
+"home.catererSection.card1Title": "Better inquiries",
+"home.catererSection.card1Desc": "Receive more structured requests with clearer event details.",
+"home.catererSection.card2Title": "Premium presence",
+"home.catererSection.card2Desc": "Showcase packages, menus, and service strengths more professionally.",
+"home.catererSection.card3Title": "One platform",
+"home.catererSection.card3Desc": "Manage leads, packages, availability, and visibility in one place.",
+"home.catererSection.primaryCta": "For Caterers",
+"home.catererSection.secondaryCta": "Join Speisely",
+"home.images.catererAlt": "Professional catering team"
 }
