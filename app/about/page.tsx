@@ -75,6 +75,9 @@ export default function AboutPage() {
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
+          <Link href="/about" className="text-[#c49840]">
+  {t("nav.about")}
+</Link>
           <Link href="/caterers" className="transition hover:text-[#c49840]">
             {t("home.nav.browse")}
           </Link>
