@@ -36,6 +36,26 @@ const benefitKeys = [
   },
 ];
 
+function SocialButton({
+  href,
+  label,
+  short,
+}: {
+  href: string;
+  label: string;
+  short: string;
+}) {
+  return (
+    <a
+      href={href}
+      aria-label={label}
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-xs font-semibold text-[#d7cfbf] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+    >
+      {short}
+    </a>
+  );
+}
+
 export default function ForCaterersPage() {
   const t = useT();
 
@@ -63,9 +83,6 @@ export default function ForCaterersPage() {
         <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
           <Link href="/caterers" className="transition hover:text-[#c49840]">
             {t("home.nav.browse")}
-          </Link>
-          <Link href="/request/new" className="transition hover:text-[#c49840]">
-            {t("home.heroPlanCta")}
           </Link>
           <Link href="/for-caterers" className="text-[#c49840]">
             {t("home.nav.forCaterers")}
@@ -222,8 +239,97 @@ export default function ForCaterersPage() {
         </div>
       </section>
 
-      <footer className="relative z-10 border-t border-white/5 py-10 text-center">
-        <p className="text-sm text-[#7f9380]">{t("home.editorialFooterTagline")}</p>
+      <footer className="relative z-10 border-t border-[#c49840]/10 bg-[#0a120d]">
+        <div className="mx-auto max-w-7xl px-6 py-14 md:px-8">
+          <div className="grid gap-10 md:grid-cols-3">
+            <div>
+              <div className="flex items-center gap-3 text-[#eadfca]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10">
+                  <LogoMark size={18} color="#e8ddc8" />
+                </div>
+                <div>
+                  <div className="text-2xl font-semibold tracking-tight">Speisely</div>
+                  <div className="mt-1 text-sm text-[#c49840]">
+                    {t("footer.brandLine")}
+                  </div>
+                </div>
+              </div>
+
+              <p className="mt-6 max-w-md text-base leading-8 text-[#b7b0a2]">
+                {t("footer.description")}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-[#e8d9b8]">
+                {t("footer.customersTitle")}
+              </h3>
+              <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
+                <Link href="/request/new" className="transition hover:text-[#c49840]">
+                  {t("footer.customersLink1")}
+                </Link>
+                <Link href="/caterers" className="transition hover:text-[#c49840]">
+                  {t("footer.customersLink2")}
+                </Link>
+                <Link href="/about" className="transition hover:text-[#c49840]">
+                  {t("footer.customersLink3")}
+                </Link>
+              </div>
+
+              <h3 className="mt-8 text-xl font-semibold text-[#e8d9b8]">
+                {t("footer.caterersTitle")}
+              </h3>
+              <div className="mt-5 flex flex-col gap-3 text-[#cfc6b4]">
+                <Link href="/signup" className="transition hover:text-[#c49840]">
+                  {t("footer.caterersLink1")}
+                </Link>
+                <Link href="/login" className="transition hover:text-[#c49840]">
+                  {t("footer.caterersLink2")}
+                </Link>
+                <Link href="/for-caterers" className="transition hover:text-[#c49840]">
+                  {t("footer.caterersLink3")}
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-[#e8d9b8]">
+                {t("footer.contactTitle")}
+              </h3>
+              <div className="mt-5 space-y-3 text-[#cfc6b4]">
+                <p>info@speisely.de</p>
+                <p>{t("footer.country")}</p>
+              </div>
+
+              <div className="mt-8">
+                <h4 className="text-sm font-medium uppercase tracking-[0.2em] text-[#c49840]">
+                  {t("footer.socialTitle")}
+                </h4>
+                <div className="mt-4 flex items-center gap-3">
+                  <SocialButton href="#" label="Facebook" short="f" />
+                  <SocialButton href="#" label="Instagram" short="ig" />
+                  <SocialButton href="#" label="TikTok" short="tt" />
+                  <SocialButton href="#" label="LinkedIn" short="in" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col gap-4 border-t border-[#c49840]/10 pt-6 text-sm text-[#8f8777] md:flex-row md:items-center md:justify-between">
+            <p>© 2025 Speisely</p>
+            <div className="flex flex-wrap items-center gap-6">
+              <Link href="/impressum" className="transition hover:text-[#c49840]">
+                {t("footer.imprint")}
+              </Link>
+              <Link href="/datenschutz" className="transition hover:text-[#c49840]">
+                {t("footer.privacy")}
+              </Link>
+              <Link href="/signup" className="transition hover:text-[#c49840]">
+                {t("footer.bottomRequest")}
+              </Link>
+            </div>
+          </div>
+        </div>
       </footer>
     </main>
   );
