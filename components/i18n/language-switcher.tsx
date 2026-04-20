@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, type Locale } from "@/lib/i18n/context";
 
 const LOCALES: { code: Locale; label: string; name: string }[] = [
@@ -14,7 +14,8 @@ function ChevronIcon() {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 20 20"
       fill="currentColor"
-      className="h-3 w-3 text-muted-foreground"
+      className="h-3.5 w-3.5 text-white/60"
+      aria-hidden="true"
     >
       <path
         fillRule="evenodd"
@@ -50,34 +51,42 @@ export function LanguageSwitcher() {
         onClick={() => setOpen((o) => !o)}
         aria-label="Select language"
         aria-expanded={open}
-        className="flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-secondary"
+        className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
       >
         <span>{current.label}</span>
         <ChevronIcon />
       </button>
 
       {open && (
-        <div className="absolute end-0 top-full z-50 mt-2 min-w-[150px] overflow-hidden rounded-2xl border border-border bg-card py-1 shadow-lg">
-          {LOCALES.map((l) => (
-            <button
-              key={l.code}
-              type="button"
-              onClick={() => {
-                setLocale(l.code);
-                setOpen(false);
-              }}
-              className={`flex w-full items-center gap-2.5 px-3 py-2.5 text-sm transition ${
-                locale === l.code
-                  ? "bg-secondary font-semibold text-primary"
-                  : "text-foreground hover:bg-secondary"
-              }`}
-            >
-              <span className="w-6 text-xs font-bold text-muted-foreground">
-                {l.label}
-              </span>
-              <span>{l.name}</span>
-            </button>
-          ))}
+        <div className="absolute right-0 top-full z-50 mt-2 min-w-[160px] overflow-hidden rounded-2xl border border-white/10 bg-[#0c1610]/95 p-1 shadow-[0_20px_50px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+          {LOCALES.map((l) => {
+            const isActive = locale === l.code;
+
+            return (
+              <button
+                key={l.code}
+                type="button"
+                onClick={() => {
+                  setLocale(l.code);
+                  setOpen(false);
+                }}
+                className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
+                  isActive
+                    ? "bg-[#c49840]/12 text-[#c49840]"
+                    : "text-white/85 hover:bg-white/[0.04] hover:text-white"
+                }`}
+              >
+                <span
+                  className={`w-7 text-xs font-bold ${
+                    isActive ? "text-[#c49840]" : "text-white/45"
+                  }`}
+                >
+                  {l.label}
+                </span>
+                <span className={isActive ? "font-semibold" : ""}>{l.name}</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
