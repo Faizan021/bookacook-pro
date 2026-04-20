@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { LogoMark } from "@/components/ui/logo-mark";
 
 type CatererCard = {
   id: string;
@@ -193,7 +194,7 @@ export default function CaterersPage() {
 
       return queryMatch && cityMatch && eventMatch && cuisineMatch && specialMatch;
     });
-  }, [query, city, eventType, cuisine, specialRequest, sampleCaterers]);
+  }, [query, city, eventType, cuisine, specialRequest]);
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
@@ -210,18 +211,18 @@ export default function CaterersPage() {
 
       <header className="relative z-50 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-8">
         <Link href="/" className="flex items-center gap-3 text-[#eadfca]">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10 text-sm font-semibold">
-            S
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10">
+            <LogoMark size={18} color="#e8ddc8" />
           </div>
           <div className="text-xl font-semibold tracking-tight">Speisely</div>
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm text-[#d8d1c2]/75 md:flex">
           <Link href="/caterers" className="text-[#c49840]">
-            {t("home.nav.browse", "Partner entdecken")}
+            {t("home.nav.browse", "Caterer entdecken")}
           </Link>
-          <Link href="/request/new" className="transition hover:text-[#c49840]">
-            {t("home.heroPlanCta", "Event planen")}
+          <Link href="/for-caterers" className="transition hover:text-[#c49840]">
+            {t("home.nav.forCaterers", "Für Caterer")}
           </Link>
           <Link href="/about" className="transition hover:text-[#c49840]">
             {t("nav.about", "Über Speisely")}
@@ -234,7 +235,7 @@ export default function CaterersPage() {
             href="/login"
             className="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-[#eadfca] transition hover:border-[#c49840]/40 hover:text-[#c49840] md:inline-flex"
           >
-            {t("home.nav.login", "Login")}
+            {t("home.nav.login", "Anmelden")}
           </Link>
           <Link
             href="/request/new"
@@ -409,7 +410,8 @@ export default function CaterersPage() {
               {t("marketplace.resultsLabel", "Partnerübersicht")}
             </div>
             <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
-              {filteredCaterers.length} {t("marketplace.resultsCountSuffix", "ausgewählte Partner")}
+              {filteredCaterers.length}{" "}
+              {t("marketplace.resultsCountSuffix", "ausgewählte Partner")}
             </h2>
             <p className="mt-3 max-w-2xl text-base leading-7 text-[#90a08d]">
               {t(
@@ -441,7 +443,9 @@ export default function CaterersPage() {
                       <MapPin className="h-3.5 w-3.5" />
                       {caterer.city}
                     </div>
-                    <h3 className="mt-3 text-2xl font-semibold text-white">{caterer.name}</h3>
+                    <h3 className="mt-3 text-2xl font-semibold text-white">
+                      {caterer.name}
+                    </h3>
                     <p className="mt-2 text-sm text-[#9baa98]">{caterer.cuisine}</p>
                   </div>
 
