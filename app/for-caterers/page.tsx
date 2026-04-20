@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ShieldCheck, Sparkles, LayoutDashboard } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  LayoutDashboard,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { LogoMark } from "@/components/ui/logo-mark";
@@ -150,6 +156,7 @@ export default function ForCaterersPage() {
         <div className="grid gap-5 md:grid-cols-2">
           {benefitKeys.map((item) => {
             const Icon = item.icon;
+
             return (
               <div
                 key={item.title}
@@ -214,6 +221,10 @@ export default function ForCaterersPage() {
           </div>
         </div>
       </section>
+
+      <footer className="relative z-10 border-t border-white/5 py-10 text-center">
+        <p className="text-sm text-[#7f9380]">{t("home.editorialFooterTagline")}</p>
+      </footer>
     </main>
   );
 }
