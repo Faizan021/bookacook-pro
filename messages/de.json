@@ -706,5 +706,17 @@
 "footer.socialTitle": "Social Media",
 "footer.bottomRequest": "Angebot anfragen",
 "footer.imprint": "Impressum",
-"footer.privacy": "Datenschutz"
+"footer.privacy": "Datenschutz",
+  "home.catererSection.label": "Für Caterer",
+"home.catererSection.title": "Wachsen Sie mit besseren Catering-Anfragen.",
+"home.catererSection.subtitle": "Speisely hilft Premium-Caterern dabei, klarere Event-Anfragen zu erhalten, Pakete professionell zu präsentieren und Anfragen über eine strukturierte Plattform zu verwalten.",
+"home.catererSection.card1Title": "Bessere Anfragen",
+"home.catererSection.card1Desc": "Erhalten Sie strukturiertere Anfragen mit klareren Event-Details.",
+"home.catererSection.card2Title": "Premium-Präsenz",
+"home.catererSection.card2Desc": "Präsentieren Sie Pakete, Menüs und Service-Stärken professioneller.",
+"home.catererSection.card3Title": "Eine Plattform",
+"home.catererSection.card3Desc": "Verwalten Sie Leads, Pakete, Verfügbarkeit und Sichtbarkeit an einem Ort.",
+"home.catererSection.primaryCta": "Für Caterer",
+"home.catererSection.secondaryCta": "Speisely beitreten",
+"home.images.catererAlt": "Professionelles Catering-Team"
 }
