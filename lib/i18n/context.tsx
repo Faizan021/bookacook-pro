@@ -4,34 +4,27 @@ import {
   createContext,
   useContext,
   useEffect,
-  useState,
   useMemo,
+  useState,
   type ReactNode,
 } from "react";
 
 import de from "@/messages/de.json";
 import en from "@/messages/en.json";
-import ar from "@/messages/ar.json"; 
 
-// 1. Define the allowed locales
-export type Locale = "de" | "en" | "ar"; 
+export type Locale = "de" | "en";
 
-// This type allows for deeply nested objects in your JSON
 type NestedMessages = { [key: string]: any };
 
-// 2. Map locales to their imported JSON files
-const MESSAGES: Record<Locale, NestedMessages> = { 
-  de, 
-  en, 
-  ar 
+const MESSAGES: Record<Locale, NestedMessages> = {
+  de,
+  en,
 };
 
 const STORAGE_KEY = "speisely_lang";
 const LEGACY_STORAGE_KEY = "bookacook_lang";
 const DEFAULT_LOCALE: Locale = "de";
-
-// List of languages that should read from Right-to-Left (e.g., Arabic)
-const RTL_LOCALES: Locale[] = ["ar"]; 
+const RTL_LOCALES: Locale[] = [];
 
 type I18nContextType = {
   locale: Locale;
@@ -47,9 +40,6 @@ const I18nContext = createContext<I18nContextType>({
   isRTL: false,
 });
 
-/**
- * HELPER FUNCTION: Digs through a nested object using a dot-notation string.
- */
 function getNestedValue(obj: any, path: string): any {
   const keys = path.split(".");
   let current = obj;
@@ -61,6 +51,7 @@ function getNestedValue(obj: any, path: string): any {
       return undefined;
     }
   }
+
   return current;
 }
 
@@ -68,9 +59,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
   const [mounted, setMounted] = useState(false);
 
-  // 1. Handle initial language load from LocalStorage
   useEffect(() => {
     setMounted(true);
+
     try {
       const saved =
         (localStorage.getItem(STORAGE_KEY) as Locale | null) ||
@@ -86,18 +77,18 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // 2. Detect if current language is RTL (for Arabic support)
   const isRTL = useMemo(() => RTL_LOCALES.includes(locale), [locale]);
 
-  // 3. Update HTML attributes (lang and dir) when locale changes
   useEffect(() => {
     if (!mounted) return;
+
     document.documentElement.lang = locale;
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
   }, [locale, isRTL, mounted]);
 
   function setLocale(l: Locale) {
     setLocaleState(l);
+
     try {
       localStorage.setItem(STORAGE_KEY, l);
       localStorage.removeItem(LEGACY_STORAGE_KEY);
@@ -106,12 +97,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  /**
-   * TRANSLATION FUNCTION
-   */
   function t(key: string, fallback?: string): string {
     const value = getNestedValue(MESSAGES[locale], key);
-    
     if (value !== undefined) return String(value);
 
     const defaultValue = getNestedValue(MESSAGES[DEFAULT_LOCALE], key);
@@ -127,7 +114,6 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom hooks for easy usage
 export function useI18n() {
   return useContext(I18nContext);
 }
