@@ -569,7 +569,6 @@
   "home.heroPanel.tag1": "Weddings",
   "home.heroPanel.tag2": "Business Events",
   "home.heroPanel.tag3": "Private Occasions",
-  "home.heroSearchCta": "Start briefing",
 "home.occasions.summerParty": "Summer Party",
 "home.occasions.summerPartyDesc": "Open-air BBQ, garden receptions, rooftop events, and outdoor company gatherings.",
 "home.occasions.birthday": "Birthday",
@@ -577,7 +576,7 @@
 "home.occasions.graduation": "Graduation",
 "home.occasions.graduationDesc": "Catering for graduation parties, academic ceremonies, and association events.",
 "home.occasions.largeEvents": "Large Events",
-"home.occasions.largeEventsDesc": "Scalable catering for fairs, festivals, public events, and high-capacity occasions."
+"home.occasions.largeEventsDesc": "Scalable catering for fairs, festivals, public events, and high-capacity occasions.",
 
   "home.principles.label": "How it works",
   "home.principles.title": "From event idea to a better shortlist",
