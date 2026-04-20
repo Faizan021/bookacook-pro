@@ -1,7 +1,12 @@
 // app/page.tsx
 import Link from "next/link";
-<h1>TESTING THE CONNECTION</h1>
 import { Sparkles, ArrowRight } from "lucide-react";
+
+// --- IMPORTANT: YOU MUST IMPORT YOUR MISSING COMPONENTS HERE ---
+// Look in your /components folder and add them like this:
+// import CatererList from "@/components/CatererList"; 
+// import SearchSection from "@/components/SearchSection";
+// import Footer from "@/components/Footer";
 
 export default function HomePage() {
   return (
@@ -39,7 +44,7 @@ export default function HomePage() {
         </Link>
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION (The "Premium" part you just created) */}
       <section className="relative z-10 mx-auto grid min-h-[calc(100vh-120px)] max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2">
         <div className="order-2 text-left lg:order-1">
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-widest text-[#c49840]">
@@ -57,7 +62,6 @@ export default function HomePage() {
             caterers for your weddings, corporate events, and celebrations.
           </p>
 
-          {/* SEARCH INPUT BOX - Fixed width container to prevent squashing */}
           <div className="relative mt-10 w-full max-w-xl">
             <div className="relative flex items-center rounded-[2rem] border border-white/10 bg-white/5 p-2 shadow-2xl backdrop-blur-2xl">
               <input
@@ -80,7 +84,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* IMAGE CONTAINER */}
         <div className="relative order-1 h-[450px] w-full lg:order-2 lg:h-[650px]">
           <div className="absolute inset-0 overflow-hidden rounded-[3rem] border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.5)]">
             <img
@@ -91,7 +94,6 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-t from-[#192b1a] via-transparent to-transparent opacity-60" />
           </div>
 
-          {/* RATING BADGE */}
           <div className="absolute -bottom-8 -left-8 hidden rounded-2xl border border-white/10 bg-[#faf6ee]/90 p-6 shadow-2xl backdrop-blur-md md:block">
             <div className="text-2xl font-bold text-[#c49840]">4.9/5</div>
             <div className="text-[10px] uppercase tracking-widest text-black/60">
@@ -100,6 +102,13 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* --- STEP 2: ADD YOUR MISSING MARKETPLACE CONTENT HERE --- */}
+      
+      {/* Example: <CatererList /> */}
+      {/* Example: <Footer /> */}
+      
+      <div className="h-20" /> {/* Just a spacer for now */}
     </main>
   );
 }
