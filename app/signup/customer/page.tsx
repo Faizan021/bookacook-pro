@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
@@ -29,6 +30,8 @@ const EMPTY: FormFields = {
 
 export default function CustomerSignupPage() {
   const t = useT();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
 
   const [form, setForm] = useState<FormFields>(EMPTY);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -77,7 +80,7 @@ export default function CustomerSignupPage() {
     try {
       const supabase = createClient();
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: form.email.trim(),
         password: form.password,
         options: {
@@ -94,6 +97,21 @@ export default function CustomerSignupPage() {
 
       if (error) throw error;
 
+      if (!data.user) {
+        throw new Error("Signup failed. No user returned.");
+      }
+
+      const userIdentities = data.user.identities ?? [];
+      const emailAlreadyExists = userIdentities.length === 0;
+
+      if (emailAlreadyExists) {
+        setServerError(
+          "This email is already registered. Please sign in with your existing account."
+        );
+        setSubmitting(false);
+        return;
+      }
+
       setSuccess(true);
       setForm(EMPTY);
     } catch (err: unknown) {
@@ -104,6 +122,12 @@ export default function CustomerSignupPage() {
       setSubmitting(false);
     }
   }
+
+  const loginHref = next
+    ? `/login?next=${encodeURIComponent(next)}`
+    : "/login";
+
+  const successLoginHref = loginHref;
 
   const inputBase =
     "mt-1 w-full rounded-[1rem] border px-4 py-3 text-sm outline-none transition-all duration-200";
@@ -154,13 +178,13 @@ export default function CustomerSignupPage() {
             <p className="mt-3 text-sm leading-7 text-[#92a18f]">
               {t(
                 "auth.signupSuccessDesc",
-                "Your account has been created. You can now sign in and start planning your event with Speisely."
+                "Your account has been created. You can now sign in and continue planning your event with Speisely."
               )}
             </p>
 
             <div className="mt-8 space-y-3">
               <Link
-                href="/login"
+                href={successLoginHref}
                 className="block w-full rounded-[1rem] bg-[#c49840] px-4 py-3 text-center text-sm font-semibold text-black transition hover:scale-[1.01]"
               >
                 {t("auth.goToLogin")}
@@ -313,11 +337,11 @@ export default function CustomerSignupPage() {
                         className={errors.firstName ? inputErr : inputOk}
                         placeholder="Max"
                       />
-                      {errors.firstName && (
+                      {errors.firstName ? (
                         <p className="mt-1.5 text-xs font-medium text-red-400">
                           {errors.firstName}
                         </p>
-                      )}
+                      ) : null}
                     </div>
 
                     <div>
@@ -332,11 +356,11 @@ export default function CustomerSignupPage() {
                         className={errors.lastName ? inputErr : inputOk}
                         placeholder="Mustermann"
                       />
-                      {errors.lastName && (
+                      {errors.lastName ? (
                         <p className="mt-1.5 text-xs font-medium text-red-400">
                           {errors.lastName}
                         </p>
-                      )}
+                      ) : null}
                     </div>
                   </div>
 
@@ -354,11 +378,11 @@ export default function CustomerSignupPage() {
                         autoComplete="email"
                         placeholder="max@example.com"
                       />
-                      {errors.email && (
+                      {errors.email ? (
                         <p className="mt-1.5 text-xs font-medium text-red-400">
                           {errors.email}
                         </p>
-                      )}
+                      ) : null}
                     </div>
 
                     <div>
@@ -373,11 +397,11 @@ export default function CustomerSignupPage() {
                         className={errors.phone ? inputErr : inputOk}
                         placeholder="+49 30 12345678"
                       />
-                      {errors.phone && (
+                      {errors.phone ? (
                         <p className="mt-1.5 text-xs font-medium text-red-400">
                           {errors.phone}
                         </p>
-                      )}
+                      ) : null}
                     </div>
                   </div>
 
@@ -393,11 +417,11 @@ export default function CustomerSignupPage() {
                       className={errors.city ? inputErr : inputOk}
                       placeholder="Berlin"
                     />
-                    {errors.city && (
+                    {errors.city ? (
                       <p className="mt-1.5 text-xs font-medium text-red-400">
                         {errors.city}
                       </p>
-                    )}
+                    ) : null}
                   </div>
 
                   <div>
@@ -413,19 +437,19 @@ export default function CustomerSignupPage() {
                       autoComplete="new-password"
                       placeholder="••••••••"
                     />
-                    {errors.password && (
+                    {errors.password ? (
                       <p className="mt-1.5 text-xs font-medium text-red-400">
                         {errors.password}
                       </p>
-                    )}
+                    ) : null}
                   </div>
                 </div>
 
-                {serverError && (
+                {serverError ? (
                   <div className="mt-6 rounded-[1rem] border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
                     {serverError}
                   </div>
-                )}
+                ) : null}
 
                 <button
                   type="submit"
@@ -447,7 +471,7 @@ export default function CustomerSignupPage() {
                 <p className="mt-4 text-center text-sm text-white/60">
                   {t("auth.hasAccount")}{" "}
                   <Link
-                    href="/login"
+                    href={loginHref}
                     className="font-semibold text-[#c49840] transition hover:text-white"
                   >
                     {t("auth.goToLogin")}
