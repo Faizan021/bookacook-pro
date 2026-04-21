@@ -1,4 +1,3 @@
-// app/request/[id]/page.tsx
 import { notFound, redirect } from "next/navigation";
 import {
   getEventRequestById,
@@ -36,6 +35,16 @@ export default async function EventRequestPage({ params }: PageProps) {
     matches = [];
   }
 
+  // Auto-generate matches on first load if none exist yet
+  if (request && matches.length === 0) {
+    try {
+      await generateMatchesForEventRequest(id);
+      matches = await getMatchesForEventRequest(id);
+    } catch (error) {
+      console.error("Failed to auto-generate matches:", error);
+    }
+  }
+
   async function handleSave(formData: FormData) {
     "use server";
 
@@ -70,7 +79,7 @@ export default async function EventRequestPage({ params }: PageProps) {
     try {
       await generateMatchesForEventRequest(id);
     } catch (error) {
-      console.error("Failed to generate matches:", error);
+      console.error("Failed to generate matches after save:", error);
     }
 
     redirect(`/request/${id}`);
