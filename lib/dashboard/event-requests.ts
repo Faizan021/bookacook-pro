@@ -44,6 +44,250 @@ function removeUndefinedFields<T extends Record<string, unknown>>(obj: T) {
   );
 }
 
+function normalize(text?: string | null) {
+  return (text || "").toLowerCase();
+}
+
+function parseEventTypeFromQuery(query?: string | null) {
+  const text = normalize(query);
+
+  if (text.includes("wedding") || text.includes("hochzeit")) return "wedding";
+  if (
+    text.includes("corporate") ||
+    text.includes("office") ||
+    text.includes("business") ||
+    text.includes("firma") ||
+    text.includes("meeting") ||
+    text.includes("company")
+  ) {
+    return "corporate";
+  }
+  if (
+    text.includes("birthday") ||
+    text.includes("private party") ||
+    text.includes("private event") ||
+    text.includes("geburtstag") ||
+    text.includes("jubiläum")
+  ) {
+    return "birthday";
+  }
+  if (text.includes("ramadan") || text.includes("iftar")) return "ramadan";
+  if (
+    text.includes("christmas") ||
+    text.includes("weihnacht") ||
+    text.includes("holiday dinner")
+  ) {
+    return "christmas";
+  }
+  if (text.includes("private") || text.includes("dinner") || text.includes("party")) {
+    return "private_party";
+  }
+
+  return null;
+}
+
+function parseCateringTypeFromQuery(query?: string | null) {
+  const text = normalize(query);
+
+  if (text.includes("buffet")) return "buffet";
+  if (
+    text.includes("finger food") ||
+    text.includes("fingerfood") ||
+    text.includes("canap") ||
+    text.includes("snacks")
+  ) {
+    return "finger_food";
+  }
+  if (
+    text.includes("plated") ||
+    text.includes("sit down dinner") ||
+    text.includes("fine dining") ||
+    text.includes("course menu")
+  ) {
+    return "plated";
+  }
+  if (
+    text.includes("live station") ||
+    text.includes("live cooking") ||
+    text.includes("food station")
+  ) {
+    return "live_station";
+  }
+  if (text.includes("bbq") || text.includes("grill")) return "bbq";
+
+  return null;
+}
+
+function parseServiceStyleFromQuery(query?: string | null) {
+  const text = normalize(query);
+
+  if (text.includes("elegant")) return "elegant";
+  if (text.includes("casual")) return "casual";
+  if (text.includes("sharing")) return "sharing style";
+  if (text.includes("premium") || text.includes("luxury")) return "premium";
+  if (text.includes("fine dining")) return "fine dining";
+  if (text.includes("family style")) return "family style";
+
+  return null;
+}
+
+function parseCityFromQuery(query?: string | null) {
+  const text = normalize(query);
+
+  if (text.includes("berlin")) return "Berlin";
+  if (text.includes("hamburg")) return "Hamburg";
+  if (text.includes("munich") || text.includes("münchen")) return "Munich";
+  if (text.includes("frankfurt")) return "Frankfurt";
+  if (text.includes("cologne") || text.includes("köln")) return "Cologne";
+  if (text.includes("dortmund")) return "Dortmund";
+  if (text.includes("düsseldorf") || text.includes("duesseldorf")) return "Düsseldorf";
+
+  return null;
+}
+
+function parseGuestCountFromQuery(query?: string | null) {
+  const text = query || "";
+
+  const match =
+    text.match(/(\d+)\s*(guests|guest|people|persons)/i) ||
+    text.match(/(\d+)\s*(gäste)/i) ||
+    text.match(/for\s+(\d+)/i);
+
+  if (!match) return null;
+
+  const value = Number(match[1]);
+  return Number.isFinite(value) ? value : null;
+}
+
+function parseBudgetPerPersonFromQuery(query?: string | null) {
+  const text = query || "";
+
+  const match =
+    text.match(/€\s?(\d+)\s*(per person|pp|p\.p\.)/i) ||
+    text.match(/(\d+)\s?(€|eur|euros?)\s*(per person|pp|p\.p\.)/i) ||
+    text.match(/around\s*€\s?(\d+)\s*(per person|pp|p\.p\.)/i);
+
+  if (!match) return null;
+
+  const numericPart = match.find((part) => /^\d+$/.test(part));
+  const value = numericPart ? Number(numericPart) : NaN;
+
+  return Number.isFinite(value) ? value : null;
+}
+
+function parseBudgetTotalFromQuery(query?: string | null) {
+  const text = query || "";
+
+  const rangeMatch = text.match(/€\s?(\d+)\s?-\s?€?\s?(\d+)/i);
+  if (rangeMatch) {
+    const upper = Number(rangeMatch[2]);
+    return Number.isFinite(upper) ? upper : null;
+  }
+
+  const singleMatch =
+    text.match(/budget[^0-9]{0,10}(\d{3,6})/i) ||
+    text.match(/€\s?(\d{3,6})/i);
+
+  if (!singleMatch) return null;
+
+  const value = Number(singleMatch[1]);
+  return Number.isFinite(value) ? value : null;
+}
+
+function parseCuisinePreferencesFromQuery(query?: string | null) {
+  const text = normalize(query);
+  const values: string[] = [];
+
+  const cuisineMap: Array<[string, string]> = [
+    ["turkish", "Turkish"],
+    ["mediterranean", "Mediterranean"],
+    ["italian", "Italian"],
+    ["arabic", "Arabic"],
+    ["german", "German"],
+    ["bbq", "BBQ"],
+    ["barbecue", "BBQ"],
+    ["fine dining", "Fine Dining"],
+    ["vegan", "Vegan"],
+  ];
+
+  for (const [needle, label] of cuisineMap) {
+    if (text.includes(needle) && !values.includes(label)) {
+      values.push(label);
+    }
+  }
+
+  return values;
+}
+
+function parseDietaryRequirementsFromQuery(query?: string | null) {
+  const text = normalize(query);
+  const values: string[] = [];
+
+  const dietaryMap: Array<[string, string]> = [
+    ["vegetarian", "Vegetarian"],
+    ["vegetar", "Vegetarian"],
+    ["vegan", "Vegan"],
+    ["halal", "Halal"],
+    ["gluten", "Gluten-free"],
+    ["lactose", "Lactose-free"],
+    ["kosher", "Kosher"],
+  ];
+
+  for (const [needle, label] of dietaryMap) {
+    if (text.includes(needle) && !values.includes(label)) {
+      values.push(label);
+    }
+  }
+
+  return values;
+}
+
+function parseExtraServicesFromQuery(query?: string | null) {
+  const text = normalize(query);
+  const values: string[] = [];
+
+  const extrasMap: Array<[string, string]> = [
+    ["staff", "Staff"],
+    ["waitstaff", "Staff"],
+    ["servers", "Staff"],
+    ["tableware", "Tableware"],
+    ["plates", "Tableware"],
+    ["delivery", "Delivery"],
+    ["setup", "Setup"],
+    ["set up", "Setup"],
+    ["drinks", "Drinks"],
+    ["beverages", "Drinks"],
+    ["live cooking", "Live Cooking"],
+    ["live station", "Live Cooking"],
+  ];
+
+  for (const [needle, label] of extrasMap) {
+    if (text.includes(needle) && !values.includes(label)) {
+      values.push(label);
+    }
+  }
+
+  return values;
+}
+
+function deriveStructuredFieldsFromAiQuery(input?: CreateEventRequestDraftInput) {
+  const aiQuery = cleanString(input?.ai_query) ?? "";
+
+  return {
+    ai_query: aiQuery,
+    event_type: cleanString(input?.event_type) ?? parseEventTypeFromQuery(aiQuery),
+    catering_type: parseCateringTypeFromQuery(aiQuery),
+    service_style: parseServiceStyleFromQuery(aiQuery),
+    guest_count: parseGuestCountFromQuery(aiQuery),
+    city: parseCityFromQuery(aiQuery),
+    budget_total: parseBudgetTotalFromQuery(aiQuery),
+    budget_per_person: parseBudgetPerPersonFromQuery(aiQuery),
+    cuisine_preferences: parseCuisinePreferencesFromQuery(aiQuery),
+    dietary_requirements: parseDietaryRequirementsFromQuery(aiQuery),
+    extra_services: parseExtraServicesFromQuery(aiQuery),
+  };
+}
+
 export async function createEventRequestDraft(
   input?: CreateEventRequestDraftInput
 ) {
@@ -58,11 +302,22 @@ export async function createEventRequestDraft(
     throw new Error("Unauthorized");
   }
 
+  const structured = deriveStructuredFieldsFromAiQuery(input);
+
   const payload = {
     customer_id: user.id,
     status: "draft",
-    ai_query: cleanString(input?.ai_query) ?? "",
-    event_type: cleanString(input?.event_type),
+    ai_query: structured.ai_query,
+    event_type: structured.event_type,
+    catering_type: structured.catering_type,
+    service_style: structured.service_style,
+    guest_count: structured.guest_count,
+    city: structured.city,
+    budget_total: structured.budget_total,
+    budget_per_person: structured.budget_per_person,
+    cuisine_preferences: structured.cuisine_preferences,
+    dietary_requirements: structured.dietary_requirements,
+    extra_services: structured.extra_services,
     preferred_caterer_id: input?.preferred_caterer_id ?? null,
   };
 
