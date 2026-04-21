@@ -114,9 +114,15 @@ export function CatererOverviewDisplay({ data }: { data: CatererData }) {
 
       {!hasOrders && (
         <div className="rounded-[1.75rem] border border-dashed border-white/10 bg-white/[0.035] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl md:p-8">
-          <h2 className="text-2xl font-semibold text-white">
+          <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#c49840]">
+            <Sparkles className="h-3.5 w-3.5" />
+            Caterer setup
+          </div>
+
+          <h2 className="mt-3 text-2xl font-semibold text-white">
             No booking requests yet
           </h2>
+
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[#9faf9b]">
             Your caterer dashboard is ready. Once customers start discovering
             your services and sending requests, your pipeline, revenue, and
@@ -126,21 +132,22 @@ export function CatererOverviewDisplay({ data }: { data: CatererData }) {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/caterer/packages"
-              className="rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
             >
               Add Packages
+              <ArrowRight className="h-4 w-4" />
             </Link>
 
             <Link
               href="/caterer/bookings"
-              className="rounded-[1rem] border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+              className="inline-flex items-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
             >
               View Bookings
             </Link>
 
             <Link
               href="/caterer/verification"
-              className="rounded-[1rem] border border-white/10 bg-black/10 px-5 py-3 text-sm font-medium text-[#eadfca] transition hover:border-white/15 hover:bg-white/[0.03]"
+              className="inline-flex items-center rounded-[1rem] border border-white/10 bg-black/10 px-5 py-3 text-sm font-medium text-[#eadfca] transition hover:border-white/15 hover:bg-white/[0.03]"
             >
               Check Verification
             </Link>
@@ -204,7 +211,7 @@ export function CatererOverviewDisplay({ data }: { data: CatererData }) {
               <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-[1.25rem] border border-dashed border-white/10 bg-black/10 text-center">
                 <div className="max-w-sm px-6">
                   <p className="text-sm font-medium text-white">
-                    Your monthly sales view will appear here.
+                    Your monthly sales view will appear here
                   </p>
                   <p className="mt-2 text-sm text-[#92a18f]">
                     As bookings and payments move through Speisely, this area
