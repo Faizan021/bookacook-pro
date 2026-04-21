@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { RequestIntakePage } from "@/components/request/request-intake-page";
 
 export const metadata: Metadata = {
-  title: "Plan your event",
+  title: "Speisely Preview",
 };
 
 type SearchParams = Promise<{
