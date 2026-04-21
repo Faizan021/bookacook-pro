@@ -17,5 +17,9 @@ export async function createRequestDraftAction(
     preferred_caterer_id: input.preferred_caterer_id ?? null,
   });
 
-  return draft;
+  if (!draft?.id) {
+    throw new Error("Could not create request draft.");
+  }
+
+  return { id: draft.id };
 }
