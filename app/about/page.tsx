@@ -124,6 +124,7 @@ export default function AboutPage() {
         <div className="grid gap-5 lg:grid-cols-3">
           {valueCards.map((item) => {
             const Icon = item.icon;
+
             return (
               <div
                 key={item.titleKey}
@@ -194,6 +195,7 @@ export default function AboutPage() {
         <div className="grid gap-5 lg:grid-cols-3">
           {principles.map((item) => {
             const Icon = item.icon;
+
             return (
               <div
                 key={item.titleKey}
