@@ -1,4 +1,3 @@
-```tsx
 "use client";
 
 import { useState } from "react";
@@ -395,7 +394,7 @@ export default function HomePage() {
                   onClick={handleHeroSearch}
                   className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-8 font-semibold text-black transition hover:scale-[1.02] lg:flex-[0.75]"
                 >
-                  {t("home.heroSearchCta", "Start briefing")}
+                  {t("home.heroSearchCta")}
                   <ArrowRight className="h-4 w-4" />
                 </button>
 
@@ -437,7 +436,7 @@ export default function HomePage() {
             <div className="rounded-[2.3rem] border border-white/10 bg-white/[0.045] p-7 backdrop-blur-xl">
               <div className="flex items-start justify-between gap-4">
                 <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
-                  {t("home.aiDemo.requestLabel", "Your request")}
+                  {t("home.aiDemo.requestLabel")}
                 </div>
                 <span className="rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[#c49840]">
                   {t("home.heroPanel.badge")}
@@ -484,13 +483,10 @@ export default function HomePage() {
 
                   <div className="rounded-[1.2rem] border border-dashed border-[#c49840]/25 bg-[#c49840]/[0.04] px-4 py-3">
                     <div className="text-sm font-medium text-[#e6d8bd]">
-                      + {t("home.aiDemo.moreMatches", "More curated matches")}
+                      + {t("home.aiDemo.moreMatches")}
                     </div>
                     <div className="mt-1 text-xs text-[#9aaa96]">
-                      {t(
-                        "home.aiDemo.moreMatchesDesc",
-                        "Continue to your event brief to unlock a more tailored shortlist."
-                      )}
+                      {t("home.aiDemo.moreMatchesDesc")}
                     </div>
                   </div>
                 </div>
@@ -589,7 +585,7 @@ export default function HomePage() {
 
             <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl sm:col-span-2">
               <div className="text-xs uppercase tracking-[0.18em] text-[#c49840]">
-                {t("home.featured.card3Meta", "Private Events")}
+                {t("home.featured.card3Meta")}
               </div>
               <h3 className="mt-4 text-2xl font-semibold text-white">
                 {t("home.featured.card3Title")}
@@ -866,4 +862,3 @@ export default function HomePage() {
     </main>
   );
 }
-```
