@@ -277,7 +277,11 @@ export default function HomePage() {
   const router = useRouter();
   const [heroQuery, setHeroQuery] = useState("");
 
-  const fallbackQuery = t("home.aiDemo.request");
+  const fallbackQuery = t(
+    "home.aiDemo.request",
+    "Wedding for 80 guests in Berlin, mostly vegetarian, elegant, around €35 per person"
+  );
+
   const previewQuery = heroQuery.trim() || fallbackQuery;
   const parsedHero = parseHeroIntent(previewQuery);
 
@@ -364,7 +368,10 @@ export default function HomePage() {
             </div>
 
             <h1 className="mt-8 max-w-5xl text-5xl font-medium leading-[0.95] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[84px]">
-              {t("home.editorialHeroTitle")}
+              {t(
+                "home.editorialHeroTitle",
+                "Describe your event. Find the right catering partners."
+              )}
             </h1>
 
             <p className="mt-7 max-w-3xl text-lg leading-8 text-[#a5b3a0] md:text-xl">
@@ -491,6 +498,15 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={handleHeroSearch}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-[1.1rem] bg-[#c49840] px-5 py-3.5 font-semibold text-black transition hover:scale-[1.01]"
+              >
+                {t("home.heroSearchCta")}
+                <ArrowRight className="h-4 w-4" />
+              </button>
             </div>
           </div>
         </div>
