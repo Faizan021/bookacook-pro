@@ -92,9 +92,7 @@ export default function CustomerSignupPage() {
         },
       });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       setSuccess(true);
       setForm(EMPTY);
