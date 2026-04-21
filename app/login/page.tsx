@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
@@ -9,6 +10,8 @@ import { LogoMark } from "@/components/ui/logo-mark";
 
 export default function LoginPage() {
   const t = useT();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -68,6 +71,11 @@ export default function LoginPage() {
       if (!role) {
         setError("Login succeeded, but no user role was found.");
         setLoading(false);
+        return;
+      }
+
+      if (next) {
+        window.location.href = next;
         return;
       }
 
@@ -224,39 +232,14 @@ export default function LoginPage() {
                     disabled={loading}
                     className="inline-flex w-full items-center justify-center rounded-[1rem] bg-[#c49840] px-4 py-3 text-sm font-semibold text-black transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {loading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <svg
-                          className="h-4 w-4 animate-spin"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                          />
-                        </svg>
-                        {t("auth.login")}
-                      </span>
-                    ) : (
-                      t("auth.login")
-                    )}
+                    {loading ? t("auth.login") : t("auth.login")}
                   </button>
                 </form>
 
                 <p className="mt-5 text-center text-sm text-[#9faf9b]">
                   {t("auth.noAccount")}{" "}
                   <Link
-                    href="/signup"
+                    href={next ? `/signup/customer?next=${encodeURIComponent(next)}` : "/signup"}
                     className="font-semibold text-[#c49840] transition hover:text-[#eadfca]"
                   >
                     {t("auth.goToSignup")}
