@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useT } from "@/lib/i18n/context";
@@ -8,7 +9,7 @@ import { LogoMark } from "@/components/ui/logo-mark";
 type NavItem = {
   labelKey: string;
   href: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 };
 
 type SidebarProps = {
@@ -157,67 +158,79 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
     role === "admin"
       ? "portal.admin"
       : role === "caterer"
-      ? "portal.caterer"
-      : "portal.customer";
+        ? "portal.caterer"
+        : "portal.customer";
 
   return (
-    <aside className="flex h-full w-64 flex-shrink-0 flex-col border-e border-border/60 bg-card">
-      <div className="flex h-16 flex-shrink-0 items-center gap-3 px-5">
-        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-2xl border border-border bg-background text-primary shadow-sm">
-          <LogoMark className="h-5 w-5" />
-        </div>
-        <div className="flex flex-col">
-          <span className="text-base font-semibold tracking-tight text-foreground">Speisely</span>
-          <span className="text-[11px] text-muted-foreground">{t(portalKey)}</span>
+    <aside className="flex h-full w-64 flex-shrink-0 flex-col border-e border-white/10 bg-[#08120d] text-[#f6f1e8] shadow-[12px_0_40px_rgba(0,0,0,0.18)]">
+      <div className="border-b border-white/10 px-5 py-5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[1rem] border border-[#c49840]/20 bg-[#c49840]/10 text-[#c49840]">
+            <LogoMark size={18} color="#e8ddc8" />
+          </div>
+
+          <div className="min-w-0">
+            <div className="text-base font-semibold tracking-tight text-white">
+              Speisely
+            </div>
+            <div className="mt-0.5 text-[11px] uppercase tracking-[0.16em] text-[#8ea18b]">
+              {t(portalKey)}
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="px-4 pb-2 pt-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          {t(portalKey)}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8ea18b]">
+          Navigation
         </p>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-2">
+      <nav className="flex-1 space-y-1.5 overflow-y-auto px-3 py-2">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive =
+            pathname === item.href || (item.href !== basePath && pathname.startsWith(`${item.href}/`));
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-all rtl:flex-row-reverse ${
+              className={`group flex items-center gap-3 rounded-[1rem] px-3.5 py-3 text-sm font-medium transition-all rtl:flex-row-reverse ${
                 isActive
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  ? "border border-[#c49840]/20 bg-[#c49840]/12 text-white shadow-[0_10px_24px_rgba(0,0,0,0.16)]"
+                  : "border border-transparent text-[#aab7a6] hover:border-white/10 hover:bg-white/[0.04] hover:text-white"
               }`}
             >
               <span
                 className={`flex-shrink-0 ${
-                  isActive ? "text-primary-foreground" : "text-muted-foreground"
+                  isActive ? "text-[#c49840]" : "text-[#8ea18b] group-hover:text-[#c49840]"
                 }`}
               >
                 {item.icon}
               </span>
-              {t(item.labelKey)}
+              <span>{t(item.labelKey)}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="space-y-2 border-t border-border/60 p-3">
+      <div className="space-y-3 border-t border-white/10 p-3">
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs text-muted-foreground transition hover:bg-secondary hover:text-foreground rtl:flex-row-reverse"
+          className="flex items-center gap-2 rounded-[1rem] border border-transparent px-3 py-2.5 text-xs font-medium text-[#aab7a6] transition hover:border-white/10 hover:bg-white/[0.04] hover:text-white rtl:flex-row-reverse"
         >
           <ArrowLeftIcon />
           {t("nav.backToHome")}
         </Link>
 
         {isDemo && (
-          <div className="rounded-xl border border-border bg-background px-3 py-2">
-            <p className="text-xs font-semibold text-foreground">Demo</p>
-            <p className="text-[11px] text-muted-foreground">Sample data only</p>
+          <div className="rounded-[1rem] border border-[#c49840]/15 bg-[#c49840]/8 px-3 py-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c49840]">
+              Demo
+            </p>
+            <p className="mt-1 text-[11px] leading-5 text-[#cfc6b4]">
+              Sample data only
+            </p>
           </div>
         )}
       </div>
