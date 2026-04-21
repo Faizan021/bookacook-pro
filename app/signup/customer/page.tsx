@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
@@ -19,6 +18,10 @@ type FormFields = {
 
 type FormErrors = Partial<Record<keyof FormFields, string>>;
 
+type Props = {
+  next?: string;
+};
+
 const EMPTY: FormFields = {
   firstName: "",
   lastName: "",
@@ -28,10 +31,8 @@ const EMPTY: FormFields = {
   password: "",
 };
 
-export default function CustomerSignupPage() {
+export default function CustomerSignupPageClient({ next = "" }: Props) {
   const t = useT();
-  const searchParams = useSearchParams();
-  const next = searchParams.get("next");
 
   const [form, setForm] = useState<FormFields>(EMPTY);
   const [errors, setErrors] = useState<FormErrors>({});
