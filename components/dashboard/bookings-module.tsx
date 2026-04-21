@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CalendarRange, ClipboardList, ArrowRight } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 
 type BookingStatus = "confirmed" | "pending" | "completed" | "cancelled";
@@ -22,10 +23,10 @@ type BookingsModuleProps = {
 };
 
 const statusStyles: Record<BookingStatus, string> = {
-  confirmed: "bg-green-50 text-green-700",
-  pending: "bg-amber-50 text-amber-700",
-  completed: "bg-blue-50 text-blue-700",
-  cancelled: "bg-red-50 text-red-700",
+  confirmed: "border border-emerald-400/20 bg-emerald-400/10 text-emerald-300",
+  pending: "border border-amber-400/20 bg-amber-400/10 text-amber-300",
+  completed: "border border-sky-400/20 bg-sky-400/10 text-sky-300",
+  cancelled: "border border-red-400/20 bg-red-400/10 text-red-300",
 };
 
 function StatusBadge({ status }: { status: BookingStatus }) {
@@ -33,7 +34,7 @@ function StatusBadge({ status }: { status: BookingStatus }) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusStyles[status]}`}
+      className={`inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] ${statusStyles[status]}`}
     >
       {t(`status.${status}`)}
     </span>
@@ -44,52 +45,46 @@ function EmptyState({ role }: { role: "admin" | "caterer" | "customer" }) {
   const t = useT();
 
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-12 w-12 text-gray-200"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-        />
-      </svg>
+    <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#c49840]/15 bg-[#c49840]/10 text-[#c49840]">
+        <ClipboardList className="h-7 w-7" />
+      </div>
 
-      <p className="mt-4 text-base font-semibold text-gray-600">
+      <p className="mt-5 text-lg font-semibold text-white">
         {t("empty.bookings")}
       </p>
 
-      <p className="mt-1 text-sm text-gray-400">
+      <p className="mt-2 max-w-md text-sm leading-7 text-[#92a18f]">
         {t("empty.bookingsDesc")}
       </p>
 
       {role === "customer" && (
         <Link
           href="/caterers"
-          className="mt-6 rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
+          className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
         >
           {t("bookings.findCaterers")}
+          <ArrowRight className="h-4 w-4" />
         </Link>
       )}
 
       {role === "caterer" && (
         <Link
           href="/caterer/packages"
-          className="mt-6 rounded-xl bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-400"
+          className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
         >
           {t("bookings.addPackages")}
+          <ArrowRight className="h-4 w-4" />
         </Link>
       )}
     </div>
   );
 }
 
-export function BookingsModule({ role, bookings = [] }: BookingsModuleProps) {
+export function BookingsModule({
+  role,
+  bookings = [],
+}: BookingsModuleProps) {
   const t = useT();
   const data = bookings;
 
@@ -98,89 +93,111 @@ export function BookingsModule({ role, bookings = [] }: BookingsModuleProps) {
     role === "admin"
       ? t("bookings.adminSubtitle")
       : role === "caterer"
-      ? t("bookings.catererSubtitle")
-      : t("bookings.customerSubtitle");
+        ? t("bookings.catererSubtitle")
+        : t("bookings.customerSubtitle");
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-      <div className="border-b border-gray-100 px-6 py-4">
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-        <p className="mt-0.5 text-sm text-gray-500">{subtitle}</p>
+    <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.045] shadow-[0_24px_60px_rgba(0,0,0,0.20)] backdrop-blur-xl">
+      <div className="border-b border-white/10 px-6 py-5 md:px-8">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[#c49840]">
+              <CalendarRange className="h-3.5 w-3.5" />
+              {role === "customer" ? t("nav.myBookings") : t("nav.bookings")}
+            </div>
+
+            <h2 className="mt-3 text-2xl font-semibold text-white">{title}</h2>
+            <p className="mt-2 text-sm leading-7 text-[#92a18f]">{subtitle}</p>
+          </div>
+
+          <div className="hidden rounded-full border border-white/10 bg-black/10 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-[#8ea18b] md:inline-flex">
+            {data.length} {data.length === 1 ? "item" : "items"}
+          </div>
+        </div>
       </div>
 
       {data.length === 0 ? (
         <EmptyState role={role} />
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[860px] text-sm">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <tr className="border-b border-white/10 bg-black/10">
+                <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b] md:px-8">
                   {t("table.id")}
                 </th>
+
                 {role === "admin" && (
-                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                     {t("table.customer")}
                   </th>
                 )}
+
                 {role !== "customer" && (
-                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                     {role === "admin" ? t("table.caterer") : t("table.customer")}
                   </th>
                 )}
+
                 {role === "customer" && (
-                  <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                     {t("table.caterer")}
                   </th>
                 )}
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+
+                <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                   {t("table.event")}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                   {t("table.date")}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                   {t("table.guests")}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                   {t("table.amount")}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-semibold uppercase tracking-wider text-gray-500">
+                <th className="px-6 py-4 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
                   {t("table.status")}
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-white/10">
               {data.map((booking) => (
-                <tr key={booking.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-mono text-xs text-gray-500">
+                <tr
+                  key={booking.id}
+                  className="transition hover:bg-white/[0.03]"
+                >
+                  <td className="px-6 py-5 font-mono text-xs text-[#8ea18b] md:px-8">
                     {booking.id}
                   </td>
 
                   {role === "admin" && (
-                    <td className="px-6 py-4 font-medium text-gray-900">
-                      {booking.customer}
+                    <td className="px-6 py-5 font-medium text-white">
+                      {booking.customer || "—"}
                     </td>
                   )}
 
                   {role !== "customer" && (
-                    <td className="px-6 py-4 text-gray-700">
-                      {role === "admin" ? booking.caterer : booking.customer}
+                    <td className="px-6 py-5 text-[#ddd5c6]">
+                      {role === "admin" ? booking.caterer || "—" : booking.customer || "—"}
                     </td>
                   )}
 
                   {role === "customer" && (
-                    <td className="px-6 py-4 text-gray-700">{booking.caterer}</td>
+                    <td className="px-6 py-5 text-[#ddd5c6]">
+                      {booking.caterer || "—"}
+                    </td>
                   )}
 
-                  <td className="px-6 py-4 text-gray-900">{booking.event}</td>
-                  <td className="px-6 py-4 text-gray-600">{booking.date}</td>
-                  <td className="px-6 py-4 text-gray-600">{booking.guests}</td>
-                  <td className="px-6 py-4 font-semibold text-gray-900">
+                  <td className="px-6 py-5 text-white">{booking.event}</td>
+                  <td className="px-6 py-5 text-[#cfc6b4]">{booking.date}</td>
+                  <td className="px-6 py-5 text-[#cfc6b4]">{booking.guests}</td>
+                  <td className="px-6 py-5 font-semibold text-white">
                     {booking.amount}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-5">
                     <StatusBadge status={booking.status} />
                   </td>
                 </tr>
