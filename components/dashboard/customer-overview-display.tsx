@@ -1,12 +1,24 @@
 "use client";
 
 import Link from "next/link";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Heart,
+  Clock3,
+  CalendarRange,
+  Sparkles,
+} from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { SalesChart } from "@/components/dashboard/sales-chart";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
 
-type ActivityItem = { title: string; subtitle: string; amount?: string };
+type ActivityItem = {
+  title: string;
+  subtitle: string;
+  amount?: string;
+};
 
 type CustomerData = {
   totalOrders: number;
@@ -27,14 +39,39 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-sm">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+      <div className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl md:p-8">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#c49840]/20 bg-[#c49840]/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#c49840]">
+          <Sparkles className="h-3.5 w-3.5" />
+          {t("portal.customer")}
+        </div>
+
+        <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white md:text-4xl">
           {t("dashboard.customer.title")}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+
+        <p className="mt-3 max-w-2xl text-base leading-7 text-[#9faf9b]">
           {t("dashboard.customer.welcome")}
-          {data.userName ? `, ${data.userName}` : ""}
+          {data.userName ? `, ${data.userName}` : ""}.{" "}
+          Manage your requests, review your matches, and continue your event
+          planning journey with Speisely.
         </p>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            href="/request/new"
+            className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
+          >
+            {t("home.editorialCtaPrimary")}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+
+          <Link
+            href="/caterers"
+            className="inline-flex items-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+          >
+            {t("home.editorialCtaSecondary")}
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -42,52 +79,57 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
           title={t("metrics.totalOrdersMade")}
           value={data.totalOrders}
           subtitle={t("metrics.allBookingsMade")}
+          icon={<CalendarRange className="h-5 w-5" />}
         />
         <MetricCard
           title={t("metrics.completedOrders")}
           value={data.completedOrders}
           subtitle={t("metrics.successfullyCompleted")}
+          icon={<CheckCircle2 className="h-5 w-5" />}
         />
         <MetricCard
           title={t("metrics.pendingOrders")}
           value={data.pendingOrders}
           subtitle={t("metrics.waitingUpdate")}
+          icon={<Clock3 className="h-5 w-5" />}
         />
         <MetricCard
           title={t("metrics.favoriteCaterers")}
           value={data.favoriteCaterers}
           subtitle={t("metrics.savedByCust")}
+          icon={<Heart className="h-5 w-5" />}
         />
       </div>
 
       {!hasOrders && (
-        <div className="rounded-[1.75rem] border border-dashed border-border bg-card p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-foreground">
+        <div className="rounded-[1.75rem] border border-dashed border-white/10 bg-white/[0.035] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl md:p-8">
+          <h2 className="text-2xl font-semibold text-white">
             No event requests yet
           </h2>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Tell us about your event and Speisely will help you discover suitable
-            caterers for your occasion.
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-[#9faf9b]">
+            Tell Speisely what you are planning and we will help you turn your
+            event idea into a structured request and a more relevant shortlist
+            of catering partners.
           </p>
 
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/request/new"
-              className="rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+              className="rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
             >
               Plan an Event
             </Link>
 
             <Link
               href="/caterers"
-              className="rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-secondary"
+              className="rounded-[1rem] border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
             >
               Browse Caterers
             </Link>
 
             <Link
               href="/customer/bookings"
-              className="rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+              className="rounded-[1rem] border border-white/10 bg-black/10 px-5 py-3 text-sm font-medium text-[#eadfca] transition hover:border-white/15 hover:bg-white/[0.03]"
             >
               View My Requests
             </Link>
@@ -95,75 +137,61 @@ export function CustomerOverviewDisplay({ data }: { data: CustomerData }) {
         </div>
       )}
 
+      {hasOrders && (
+        <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#c49840]">
+                Active planning
+              </div>
+              <h2 className="mt-2 text-2xl font-semibold text-white">
+                Continue your customer journey
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-7 text-[#9faf9b]">
+                Review your existing requests, compare caterers, and move your
+                event planning forward from one place.
+              </p>
+            </div>
+
+            <Link
+              href="/customer/bookings"
+              className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
+            >
+              View active requests
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">
-          {hasHistory ? (
-            <SalesChart
-              title={t("chart.orderHistory")}
-              data={data.orderHistory}
-            />
-          ) : (
-            <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-sm">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">
-                    {t("chart.orderHistory")}
-                  </h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    No request history yet.
-                  </p>
-                </div>
-                <span className="rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
-                  Empty
-                </span>
-              </div>
-
-              <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-[1.25rem] border border-dashed border-border bg-secondary/35 text-center">
-                <div className="max-w-sm px-6">
-                  <p className="text-sm font-medium text-foreground">
-                    Your event request activity will appear here.
-                  </p>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Once you start planning events, you will be able to track
-                    your request history over time.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          <SalesChart
+            title={t("chart.orderHistory")}
+            data={data.orderHistory}
+            subtitle={t("chart.performance")}
+          />
         </div>
 
-        <div>
-          {hasRecentOrders ? (
-            <RecentActivity
-              title={t("activity.recentOrders")}
-              items={data.recentOrders}
-            />
-          ) : (
-            <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-sm">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">
-                    {t("activity.recentOrders")}
-                  </h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Latest updates and activity
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 rounded-[1.25rem] border border-dashed border-border bg-secondary/35 p-6 text-center">
-                <p className="text-sm font-medium text-foreground">
-                  No recent requests yet
-                </p>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  When you create your first event request, it will appear here.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
+        <RecentActivity
+          title={t("activity.recentOrders")}
+          items={data.recentOrders}
+        />
       </div>
+
+      {!hasHistory && hasOrders && (
+        <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-black/10 p-6 text-center text-sm text-[#92a18f]">
+          Your request history and booking activity will appear here as your
+          Speisely journey progresses.
+        </div>
+      )}
+
+      {!hasRecentOrders && hasOrders && (
+        <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-black/10 p-6 text-center text-sm text-[#92a18f]">
+          Recent customer activity will appear here once requests and booking
+          updates start moving through the platform.
+        </div>
+      )}
     </div>
   );
 }
