@@ -52,6 +52,7 @@ function parseEventTypeFromQuery(query?: string | null) {
   const text = normalize(query);
 
   if (text.includes("wedding") || text.includes("hochzeit")) return "wedding";
+
   if (
     text.includes("corporate") ||
     text.includes("office") ||
@@ -62,6 +63,7 @@ function parseEventTypeFromQuery(query?: string | null) {
   ) {
     return "corporate";
   }
+
   if (
     text.includes("birthday") ||
     text.includes("private party") ||
@@ -71,7 +73,9 @@ function parseEventTypeFromQuery(query?: string | null) {
   ) {
     return "birthday";
   }
+
   if (text.includes("ramadan") || text.includes("iftar")) return "ramadan";
+
   if (
     text.includes("christmas") ||
     text.includes("weihnacht") ||
@@ -79,7 +83,12 @@ function parseEventTypeFromQuery(query?: string | null) {
   ) {
     return "christmas";
   }
-  if (text.includes("private") || text.includes("dinner") || text.includes("party")) {
+
+  if (
+    text.includes("private") ||
+    text.includes("dinner") ||
+    text.includes("party")
+  ) {
     return "private_party";
   }
 
@@ -90,6 +99,7 @@ function parseCateringTypeFromQuery(query?: string | null) {
   const text = normalize(query);
 
   if (text.includes("buffet")) return "buffet";
+
   if (
     text.includes("finger food") ||
     text.includes("fingerfood") ||
@@ -98,6 +108,7 @@ function parseCateringTypeFromQuery(query?: string | null) {
   ) {
     return "finger_food";
   }
+
   if (
     text.includes("plated") ||
     text.includes("sit down dinner") ||
@@ -106,6 +117,7 @@ function parseCateringTypeFromQuery(query?: string | null) {
   ) {
     return "plated";
   }
+
   if (
     text.includes("live station") ||
     text.includes("live cooking") ||
@@ -113,6 +125,7 @@ function parseCateringTypeFromQuery(query?: string | null) {
   ) {
     return "live_station";
   }
+
   if (text.includes("bbq") || text.includes("grill")) return "bbq";
 
   return null;
@@ -140,7 +153,9 @@ function parseCityFromQuery(query?: string | null) {
   if (text.includes("frankfurt")) return "Frankfurt";
   if (text.includes("cologne") || text.includes("köln")) return "Cologne";
   if (text.includes("dortmund")) return "Dortmund";
-  if (text.includes("düsseldorf") || text.includes("duesseldorf")) return "Düsseldorf";
+  if (text.includes("düsseldorf") || text.includes("duesseldorf")) {
+    return "Düsseldorf";
+  }
 
   return null;
 }
@@ -307,10 +322,7 @@ export async function createEventRequestDraft(
   const payload = {
     customer_id: user.id,
     status: "draft",
-    ai_query: structured.ai_query,
     event_type: structured.event_type,
-    catering_type: structured.catering_type,
-    service_style: structured.service_style,
     guest_count: structured.guest_count,
     city: structured.city,
     budget_total: structured.budget_total,
@@ -318,7 +330,7 @@ export async function createEventRequestDraft(
     cuisine_preferences: structured.cuisine_preferences,
     dietary_requirements: structured.dietary_requirements,
     extra_services: structured.extra_services,
-    preferred_caterer_id: input?.preferred_caterer_id ?? null,
+    special_requests: structured.ai_query || null,
   };
 
   const { data, error } = await supabase
