@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { LogoMark } from "@/components/ui/logo-mark";
-import { createRequestDraftAction } from "@/app/request/new/actions";
 
 const occasionKeys = [
   {
@@ -276,10 +275,7 @@ function SocialButton({
 export default function HomePage() {
   const t = useT();
   const router = useRouter();
-
   const [heroQuery, setHeroQuery] = useState("");
-  const [startingBrief, setStartingBrief] = useState(false);
-  const [startError, setStartError] = useState("");
 
   const fallbackQuery = t(
     "home.aiDemo.request",
@@ -298,7 +294,7 @@ export default function HomePage() {
 
   const featuredMatches = getSuggestedMatches(parsedHero.event);
 
-  async function handleHeroSearch() {
+  function handleHeroSearch() {
     const q = heroQuery.trim();
 
     if (!q) {
@@ -306,28 +302,11 @@ export default function HomePage() {
       return;
     }
 
-    try {
-      setStartError("");
-      setStartingBrief(true);
-
-      const draft = await createRequestDraftAction({
-        ai_query: q,
-      });
-
-      router.push(`/request/${draft.id}`);
-    } catch (error) {
-      console.error(error);
-      setStartError(
-        "Speisely could not start your briefing right now. Please try again."
-      );
-    } finally {
-      setStartingBrief(false);
-    }
+    router.push(`/request/new?q=${encodeURIComponent(q)}`);
   }
 
   function handleExampleClick(value: string) {
     setHeroQuery(value);
-    setStartError("");
   }
 
   return (
@@ -405,14 +384,11 @@ export default function HomePage() {
                   <input
                     type="text"
                     value={heroQuery}
-                    onChange={(e) => {
-                      setHeroQuery(e.target.value);
-                      if (startError) setStartError("");
-                    }}
+                    onChange={(e) => setHeroQuery(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
-                        void handleHeroSearch();
+                        handleHeroSearch();
                       }
                     }}
                     placeholder={t("home.editorialSearchPlaceholder")}
@@ -422,11 +398,10 @@ export default function HomePage() {
 
                 <button
                   type="button"
-                  onClick={() => void handleHeroSearch()}
-                  disabled={startingBrief}
-                  className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-8 font-semibold text-black transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 lg:flex-[0.75]"
+                  onClick={handleHeroSearch}
+                  className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-8 font-semibold text-black transition hover:scale-[1.02] lg:flex-[0.75]"
                 >
-                  {startingBrief ? "Starting..." : t("home.heroSearchCta")}
+                  {t("home.heroSearchCta")}
                   <ArrowRight className="h-4 w-4" />
                 </button>
 
@@ -450,12 +425,6 @@ export default function HomePage() {
                   </button>
                 ))}
               </div>
-
-              {startError ? (
-                <div className="mt-3 rounded-[1rem] border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
-                  {startError}
-                </div>
-              ) : null}
             </div>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -532,11 +501,10 @@ export default function HomePage() {
 
               <button
                 type="button"
-                onClick={() => void handleHeroSearch()}
-                disabled={startingBrief}
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-[1.1rem] bg-[#c49840] px-5 py-3.5 font-semibold text-black transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={handleHeroSearch}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-[1.1rem] bg-[#c49840] px-5 py-3.5 font-semibold text-black transition hover:scale-[1.01]"
               >
-                {startingBrief ? "Starting..." : t("home.heroSearchCta")}
+                {t("home.heroSearchCta")}
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
