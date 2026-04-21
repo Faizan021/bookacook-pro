@@ -26,7 +26,7 @@ export function RecentActivity({ title, items }: RecentActivityProps) {
 
   return (
     <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-xl">
-      <div className="mb-5 flex items-start justify-between rtl:flex-row-reverse">
+      <div className="mb-5 flex items-start justify-between gap-4 rtl:flex-row-reverse">
         <div>
           <h3 className="text-lg font-semibold text-white">{title}</h3>
           <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#8ea18b]">
@@ -34,14 +34,20 @@ export function RecentActivity({ title, items }: RecentActivityProps) {
           </p>
         </div>
 
-        <button className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c49840] transition hover:text-[#eadfca]">
+        <button
+          type="button"
+          className="text-xs font-semibold uppercase tracking-[0.14em] text-[#c49840] transition hover:text-[#eadfca]"
+        >
           {t("activity.viewAll")}
         </button>
       </div>
 
       {items.length === 0 ? (
-        <div className="rounded-[1.25rem] border border-dashed border-white/10 bg-black/10 px-4 py-8 text-center text-sm text-[#92a18f]">
-          {t("activity.latest")}
+        <div className="rounded-[1.25rem] border border-dashed border-white/10 bg-black/10 px-4 py-8 text-center">
+          <p className="text-sm font-medium text-white">{t("activity.latest")}</p>
+          <p className="mt-2 text-sm text-[#92a18f]">
+            Activity updates will appear here as your dashboard becomes active.
+          </p>
         </div>
       ) : (
         <div className="space-y-2">
