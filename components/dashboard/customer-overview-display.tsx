@@ -5,10 +5,10 @@ import {
   ArrowRight,
   Building2,
   Receipt,
+  ShieldCheck,
   Sparkles,
   Users,
   Wallet,
-  ShieldCheck,
 } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { MetricCard } from "@/components/dashboard/metric-card";
