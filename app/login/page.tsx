@@ -8,7 +8,7 @@ import { useT } from "@/lib/i18n/context";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { LogoMark } from "@/components/ui/logo-mark";
 
-export default function LoginPage() {
+export default function LoginPageClient() {
   const t = useT();
   const searchParams = useSearchParams();
   const next = searchParams.get("next");
