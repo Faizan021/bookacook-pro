@@ -8,6 +8,7 @@ import {
   Sparkles,
   Users,
   Wallet,
+  ShieldCheck,
 } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import { MetricCard } from "@/components/dashboard/metric-card";
@@ -54,9 +55,9 @@ export function AdminOverviewDisplay({ data }: { data: AdminData }) {
 
         <p className="mt-3 max-w-2xl text-base leading-7 text-[#9faf9b]">
           {t("dashboard.admin.welcome")}
-          {data.userName ? `, ${data.userName}` : ""}. Monitor platform growth,
-          caterer quality, booking flow, and revenue performance from one
-          premium control layer.
+          {data.userName ? `, ${data.userName}` : ""}. Monitor caterer quality,
+          platform activity, booking performance, and marketplace revenue from one
+          premium admin control layer.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -114,7 +115,8 @@ export function AdminOverviewDisplay({ data }: { data: AdminData }) {
       <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#c49840]">
+            <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#c49840]">
+              <ShieldCheck className="h-3.5 w-3.5" />
               Platform focus
             </div>
             <h2 className="mt-2 text-2xl font-semibold text-white">
@@ -122,8 +124,8 @@ export function AdminOverviewDisplay({ data }: { data: AdminData }) {
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-[#9faf9b]">
               Speisely’s admin layer should help you review caterers, protect
-              marketplace quality, and monitor the commercial performance of the
-              platform without breaking the premium brand experience.
+              marketplace quality, and monitor platform performance without breaking
+              the premium brand experience.
             </p>
           </div>
 
@@ -165,7 +167,7 @@ export function AdminOverviewDisplay({ data }: { data: AdminData }) {
               <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-[1.25rem] border border-dashed border-white/10 bg-black/10 text-center">
                 <div className="max-w-sm px-6">
                   <p className="text-sm font-medium text-white">
-                    Revenue trend data will appear here.
+                    Revenue trend data will appear here
                   </p>
                   <p className="mt-2 text-sm text-[#92a18f]">
                     As platform bookings and payments grow, this admin view will
@@ -200,8 +202,7 @@ export function AdminOverviewDisplay({ data }: { data: AdminData }) {
                 No platform activity yet
               </p>
               <p className="mt-2 text-sm text-[#92a18f]">
-                Recent approvals, bookings, and payment updates will appear
-                here.
+                Recent approvals, bookings, and payment updates will appear here.
               </p>
             </div>
           </div>
