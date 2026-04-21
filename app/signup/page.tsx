@@ -14,9 +14,5 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
     redirect("/signup/caterer");
   }
 
-  if (role === "customer") {
-    redirect("/signup/customer");
-  }
-
   redirect("/signup/customer");
 }
