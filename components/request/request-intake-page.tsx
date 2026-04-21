@@ -326,6 +326,7 @@ export function RequestIntakePage({
   initialOccasion = "",
 }: Props) {
   const normalizedOccasion = normalizeOccasionValue(initialOccasion);
+
   const safeQuery =
     initialQuery.trim() ||
     "Wedding for 80 guests in Berlin, mostly vegetarian, elegant atmosphere, around €35 per person";
@@ -337,13 +338,14 @@ export function RequestIntakePage({
 
   const previewMatches = useMemo(() => getPreviewMatches(understood), [understood]);
 
+  const requestPreviewPath = `/request/new?q=${encodeURIComponent(safeQuery)}`;
+
   const caterersHref = `/caterers?q=${encodeURIComponent(
     safeQuery
   )}&city=${encodeURIComponent(understood.city === "To be confirmed" ? "" : understood.city)}`;
 
-  const signupHref = `/signup/customer?next=${encodeURIComponent(
-    `/request/new?q=${encodeURIComponent(safeQuery)}`
-  )}`;
+  const signupHref = `/signup/customer?next=${encodeURIComponent(requestPreviewPath)}`;
+  const loginHref = `/login?next=${encodeURIComponent(requestPreviewPath)}`;
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
@@ -481,7 +483,7 @@ export function RequestIntakePage({
               </Link>
 
               <Link
-                href="/login"
+                href={loginHref}
                 className="inline-flex items-center justify-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
               >
                 Sign in
