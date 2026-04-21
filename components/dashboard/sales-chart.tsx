@@ -37,7 +37,7 @@ function CustomTooltip({
       </p>
       <p className="mt-1 text-sm font-semibold text-white">
         {typeof value === "number" && value > 100
-          ? `€${value.toLocaleString()}`
+          ? `€${value.toLocaleString("de-DE")}`
           : value}
       </p>
     </div>
@@ -49,7 +49,7 @@ export function SalesChart({ title, data, subtitle }: SalesChartProps) {
 
   return (
     <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-xl">
-      <div className="mb-6 flex items-start justify-between rtl:flex-row-reverse">
+      <div className="mb-6 flex items-start justify-between gap-4 rtl:flex-row-reverse">
         <div>
           <h3 className="text-lg font-semibold text-white">{title}</h3>
           <p className="mt-1 text-xs uppercase tracking-[0.16em] text-[#8ea18b]">
@@ -64,7 +64,10 @@ export function SalesChart({ title, data, subtitle }: SalesChartProps) {
 
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 8, right: 8, left: -24, bottom: 0 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 8, right: 8, left: -24, bottom: 0 }}
+          >
             <defs>
               <linearGradient id="speiselyAreaGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#c49840" stopOpacity={0.35} />
