@@ -195,14 +195,14 @@ function MatchCard({ match, request }: { match: any; request: any }) {
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link
-            href={browseHref}
+            href={`/caterers/${caterer?.id}`}
             className="inline-flex items-center justify-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-white transition hover:border-[#c49840]/30 hover:text-[#c49840]"
           >
             Open profile
           </Link>
 
           <Link
-            href={browseHref}
+            href={`/caterers/${caterer?.id}`}
             className="inline-flex items-center justify-center gap-2 rounded-[1rem] bg-[#c49840] px-4 py-2.5 text-sm font-semibold text-black transition hover:scale-[1.02]"
           >
             Explore match
