@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { RequestIntakePage } from "@/components/request/request-intake-page";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Speisely Preview",
@@ -17,12 +18,18 @@ export default async function NewEventRequestPage({
   searchParams: SearchParams;
 }) {
   const resolvedSearchParams = await searchParams;
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <RequestIntakePage
       initialQuery={resolvedSearchParams.q ?? ""}
       initialOccasion={resolvedSearchParams.occasion ?? ""}
       initialCaterer={resolvedSearchParams.caterer ?? ""}
+      isLoggedIn={!!user}
     />
   );
 }
