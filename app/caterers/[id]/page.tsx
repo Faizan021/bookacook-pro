@@ -17,25 +17,27 @@ type CatererRow = {
   average_rating: number | null;
   verification_status: string | null;
   is_featured: boolean | null;
-  business_description: string | null;
-  service_area: string | null;
   phone: string | null;
-  website_url: string | null;
+  is_active: boolean | null;
 };
 
 type PackageRow = {
   id: string;
+  caterer_id: string;
   title: string | null;
   description: string | null;
+  summary: string | null;
   category: string | null;
+  status: string | null;
   price_amount: number | null;
   min_guests: number | null;
   max_guests: number | null;
-  dietary_options: string[] | null;
+  cuisine_type: string | null;
   event_types: string[] | null;
+  dietary_options: string[] | null;
+  service_area: string | null;
+  tags: string[] | null;
   is_published: boolean | null;
-  is_active: boolean | null;
-  status: string | null;
 };
 
 export async function generateMetadata({
@@ -140,6 +142,9 @@ function Chip({ children }: { children: React.ReactNode }) {
 }
 
 function PackageCard({ pkg }: { pkg: PackageRow }) {
+  const text =
+    pkg.description || pkg.summary || "Package details available on request.";
+
   return (
     <div className="rounded-[1.8rem] border border-white/10 bg-white/[0.045] p-6 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -147,12 +152,12 @@ function PackageCard({ pkg }: { pkg: PackageRow }) {
           <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
             {pkg.category || "Package"}
           </div>
+
           <h3 className="mt-2 text-xl font-semibold text-white">
             {pkg.title || "Untitled package"}
           </h3>
-          <p className="mt-3 text-sm leading-7 text-[#96a592]">
-            {pkg.description || "Package details available on request."}
-          </p>
+
+          <p className="mt-3 text-sm leading-7 text-[#96a592]">{text}</p>
         </div>
 
         <div className="rounded-[1.2rem] border border-[#c49840]/15 bg-[#c49840]/8 px-4 py-3 text-left md:min-w-[160px] md:text-right">
@@ -162,19 +167,29 @@ function PackageCard({ pkg }: { pkg: PackageRow }) {
           <div className="mt-1 text-xl font-semibold text-white">
             {formatPrice(pkg.price_amount)}
           </div>
-          <div className="mt-1 text-xs text-[#c49840]">per package / starting point</div>
+          <div className="mt-1 text-xs text-[#c49840]">starting point</div>
         </div>
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
         <Chip>{formatGuestRange(pkg.min_guests, pkg.max_guests)}</Chip>
-        {(pkg.event_types || []).slice(0, 3).map((item) => (
+        {pkg.cuisine_type ? <Chip>{pkg.cuisine_type}</Chip> : null}
+        {(pkg.event_types || []).slice(0, 2).map((item) => (
           <Chip key={item}>{item}</Chip>
         ))}
-        {(pkg.dietary_options || []).slice(0, 3).map((item) => (
+        {(pkg.dietary_options || []).slice(0, 2).map((item) => (
+          <Chip key={item}>{item}</Chip>
+        ))}
+        {(pkg.tags || []).slice(0, 2).map((item) => (
           <Chip key={item}>{item}</Chip>
         ))}
       </div>
+
+      {pkg.service_area ? (
+        <div className="mt-4 text-xs text-[#8ea18b]">
+          Service area: {pkg.service_area}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -183,12 +198,14 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data: caterer, error: catererError }, { data: packages, error: packagesError }] =
-    await Promise.all([
-      supabase
-        .from("caterers")
-        .select(
-          `
+  const [
+    { data: caterer, error: catererError },
+    { data: packages, error: packagesError },
+  ] = await Promise.all([
+    supabase
+      .from("caterers")
+      .select(
+        `
           id,
           business_name,
           city,
@@ -198,39 +215,39 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
           average_rating,
           verification_status,
           is_featured,
-          business_description,
-          service_area,
           phone,
-          website_url
+          is_active
         `
-        )
-        .eq("id", id)
-        .eq("is_active", true)
-        .maybeSingle<CatererRow>(),
-      supabase
-        .from("packages")
-        .select(
-          `
+      )
+      .eq("id", id)
+      .eq("is_active", true)
+      .maybeSingle<CatererRow>(),
+    supabase
+      .from("packages")
+      .select(
+        `
           id,
+          caterer_id,
           title,
           description,
+          summary,
           category,
+          status,
           price_amount,
           min_guests,
           max_guests,
-          dietary_options,
+          cuisine_type,
           event_types,
-          is_published,
-          is_active,
-          status
+          dietary_options,
+          service_area,
+          tags,
+          is_published
         `
-        )
-        .eq("caterer_id", id)
-        .eq("is_published", true)
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .returns<PackageRow[]>(),
-    ]);
+      )
+      .eq("caterer_id", id)
+      .eq("is_published", true)
+      .returns<PackageRow[]>(),
+  ]);
 
   if (catererError || !caterer) {
     notFound();
@@ -241,7 +258,9 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
   }
 
   const publishedPackages =
-    (packages || []).filter((pkg) => (pkg.status || "").toLowerCase() !== "draft") ?? [];
+    (packages || []).filter(
+      (pkg) => (pkg.status || "").toLowerCase() !== "draft"
+    ) ?? [];
 
   const pageTitle = caterer.business_name || "Caterer";
   const initials = pageTitle.charAt(0).toUpperCase() || "C";
@@ -310,12 +329,11 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
                     {caterer.average_rating ? (
                       <span>★ {Number(caterer.average_rating).toFixed(1)} rating</span>
                     ) : null}
-                    {caterer.service_area ? <span>Service area: {caterer.service_area}</span> : null}
                   </div>
 
                   <p className="mt-6 max-w-3xl text-lg leading-8 text-[#a4b29f]">
-                    {caterer.business_description ||
-                      "Premium catering partner on Speisely with curated packages and structured event service."}
+                    Premium catering partner on Speisely with curated packages and
+                    structured event service.
                   </p>
 
                   <div className="mt-6 flex flex-wrap gap-2">
@@ -347,17 +365,6 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
                   >
                     Browse more caterers
                   </Link>
-
-                  {caterer.website_url ? (
-                    <a
-                      href={caterer.website_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center rounded-[1rem] border border-white/10 bg-black/10 px-5 py-3.5 text-sm font-medium text-[#eadfca] transition hover:border-white/15 hover:bg-white/[0.03]"
-                    >
-                      Visit website
-                    </a>
-                  ) : null}
                 </div>
               </div>
             </div>
@@ -392,7 +399,7 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
               <SectionTitle
                 eyebrow="Overview"
                 title="At a glance"
-                description="A quick summary of this caterer’s positioning and public profile."
+                description="A quick summary of this caterer’s public profile."
               />
 
               <div className="mt-6 space-y-5">
@@ -423,15 +430,6 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
 
                 <div>
                   <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
-                    Service area
-                  </div>
-                  <div className="mt-1 text-sm font-medium text-white">
-                    {caterer.service_area || "On request"}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="text-[11px] uppercase tracking-[0.18em] text-[#8ea18b]">
                     Phone
                   </div>
                   <div className="mt-1 text-sm font-medium text-white">
@@ -443,8 +441,9 @@ export default async function CatererPublicPage({ params }: CatererPageProps) {
 
             <div className="rounded-[2rem] border border-[#c49840]/15 bg-[#c49840]/8 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.16)]">
               <p className="text-sm leading-8 text-[#e7dcc7]">
-                Speisely profiles are designed to help customers compare caterers faster,
-                understand package fit, and move into a more structured event request flow.
+                Speisely profiles are designed to help customers compare caterers
+                faster, understand package fit, and move into a more structured event
+                request flow.
               </p>
             </div>
           </aside>
