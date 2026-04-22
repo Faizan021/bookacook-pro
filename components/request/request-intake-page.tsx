@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,11 +13,13 @@ import {
   Star,
   Stars,
 } from "lucide-react";
+import { createRequestDraftAction } from "@/app/request/new/actions";
 
 type Props = {
   initialQuery?: string;
   initialOccasion?: string;
   initialCaterer?: string;
+  isLoggedIn?: boolean;
 };
 
 type ParsedIntent = {
@@ -324,9 +327,13 @@ function getPreviewMatches(intent: ParsedIntent): PreviewMatch[] {
 export function RequestIntakePage({
   initialQuery = "",
   initialOccasion = "",
+  isLoggedIn = false,
 }: Props) {
-  const normalizedOccasion = normalizeOccasionValue(initialOccasion);
+  const router = useRouter();
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
+  const normalizedOccasion = normalizeOccasionValue(initialOccasion);
   const safeQuery =
     initialQuery.trim() ||
     "Wedding for 80 guests in Berlin, mostly vegetarian, elegant atmosphere, around €35 per person";
@@ -338,14 +345,40 @@ export function RequestIntakePage({
 
   const previewMatches = useMemo(() => getPreviewMatches(understood), [understood]);
 
-  const requestPreviewPath = `/request/new?q=${encodeURIComponent(safeQuery)}`;
-
   const caterersHref = `/caterers?q=${encodeURIComponent(
     safeQuery
   )}&city=${encodeURIComponent(understood.city === "To be confirmed" ? "" : understood.city)}`;
 
-  const signupHref = `/signup/customer?next=${encodeURIComponent(requestPreviewPath)}`;
-  const loginHref = `/login?next=${encodeURIComponent(requestPreviewPath)}`;
+  const signupHref = `/signup/customer?next=${encodeURIComponent(
+    `/request/new?q=${encodeURIComponent(safeQuery)}`
+  )}`;
+
+  const loginHref = `/login?next=${encodeURIComponent(
+    `/request/new?q=${encodeURIComponent(safeQuery)}`
+  )}`;
+
+  async function handleContinueAsLoggedIn() {
+    try {
+      setSaving(true);
+      setSaveError("");
+
+      const result = await createRequestDraftAction({
+        ai_query: safeQuery,
+        event_type: normalizedOccasion || null,
+        preferred_caterer_id: null,
+      });
+
+      if (!result?.id) {
+        throw new Error("No draft id returned.");
+      }
+
+      router.push(`/request/${result.id}`);
+    } catch (error) {
+      console.error(error);
+      setSaveError("Could not save your request right now. Please try again.");
+      setSaving(false);
+    }
+  }
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
@@ -466,28 +499,48 @@ export function RequestIntakePage({
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 text-[#c49840]" />
                 <p className="text-sm leading-7 text-[#e7dcc7]">
-                  This is a preview shortlist. To save the request, contact caterers,
-                  and continue in your dashboard, the customer should create an account
-                  or sign in.
+                  {isLoggedIn
+                    ? "You are signed in. Save this request to continue into your structured customer flow and get real matches."
+                    : "This is a preview shortlist. To save the request, contact caterers, and continue in your dashboard, the customer should create an account or sign in."}
                 </p>
               </div>
             </div>
 
-            <div className="mt-6 flex flex-col gap-3">
-              <Link
-                href={signupHref}
-                className="inline-flex items-center justify-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 text-sm font-semibold text-black transition hover:scale-[1.02]"
-              >
-                Create account to continue
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+            {saveError ? (
+              <div className="mt-4 rounded-[1rem] border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
+                {saveError}
+              </div>
+            ) : null}
 
-              <Link
-                href={loginHref}
-                className="inline-flex items-center justify-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
-              >
-                Sign in
-              </Link>
+            <div className="mt-6 flex flex-col gap-3">
+              {isLoggedIn ? (
+                <button
+                  type="button"
+                  onClick={handleContinueAsLoggedIn}
+                  disabled={saving}
+                  className="inline-flex items-center justify-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 text-sm font-semibold text-black transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {saving ? "Saving request..." : "Continue to my request"}
+                  {!saving ? <ArrowRight className="h-4 w-4" /> : null}
+                </button>
+              ) : (
+                <>
+                  <Link
+                    href={signupHref}
+                    className="inline-flex items-center justify-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 text-sm font-semibold text-black transition hover:scale-[1.02]"
+                  >
+                    Create account to continue
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+
+                  <Link
+                    href={loginHref}
+                    className="inline-flex items-center justify-center rounded-[1rem] border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-semibold text-white transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                  >
+                    Sign in
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -546,11 +599,14 @@ export function RequestIntakePage({
 
               <div className="rounded-[1.35rem] border border-dashed border-[#c49840]/25 bg-[#c49840]/[0.04] p-4">
                 <p className="text-sm font-medium text-[#e6d8bd]">
-                  More suitable partners can appear after login and request saving.
+                  {isLoggedIn
+                    ? "Once saved, Speisely can continue to your request workspace and matching flow."
+                    : "More suitable partners can appear after login and request saving."}
                 </p>
                 <p className="mt-2 text-xs leading-6 text-[#9aaa96]">
-                  Once the request is saved to a customer account, Speisely can continue
-                  the structured matching flow and bring it into the dashboard.
+                  {isLoggedIn
+                    ? "Your structured event request can now be stored and continued inside the dashboard."
+                    : "Once the request is saved to a customer account, Speisely can continue the structured matching flow and bring it into the dashboard."}
                 </p>
               </div>
             </div>
