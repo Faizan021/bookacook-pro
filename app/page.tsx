@@ -53,25 +53,31 @@ const occasionCards = [
     titleKey: "home.occasions.wedding",
     descKey: "home.occasions.weddingDesc",
     href: "/request/new?occasion=wedding",
-    image: "/images/home-hero-catering.jpg",
+    image: "/images/speisely-wedding.png",
   },
   {
     titleKey: "home.occasions.corporate",
     descKey: "home.occasions.corporateDesc",
     href: "/request/new?occasion=corporate",
-    image: "/images/home-hero-catering.jpg",
+    image: "/images/speisely-business-event.jpg",
+  },
+  {
+    titleKey: "home.occasions.birthday",
+    descKey: "home.occasions.birthdayDesc",
+    href: "/request/new?occasion=birthday",
+    image: "/images/speisely-birthday.jpg",
   },
   {
     titleKey: "home.occasions.private",
     descKey: "home.occasions.privateDesc",
     href: "/request/new?occasion=private_party",
-    image: "/images/home-hero-catering.jpg",
+    image: "/images/speisely-private.png",
   },
   {
     titleKey: "home.occasions.ramadan",
     descKey: "home.occasions.ramadanDesc",
     href: "/request/new?occasion=ramadan",
-    image: "/images/home-hero-catering.jpg",
+    image: "/images/speisely-ramdan-iftar.jpg",
   },
 ];
 
@@ -180,6 +186,22 @@ function getSuggestedMatches(event: string) {
           meta: "Community Dining · Family Style",
           rating: "4.8",
           price: "from €23 p.p.",
+        },
+      ];
+    case "Birthday":
+    case "Private Party":
+      return [
+        {
+          name: "Private Table Events",
+          meta: "Celebrations · Family Style",
+          rating: "4.8",
+          price: "from €21 p.p.",
+        },
+        {
+          name: "Villa Catering",
+          meta: "Premium · Multi-cuisine",
+          rating: "4.9",
+          price: "from €31 p.p.",
         },
       ];
     case "Wedding":
@@ -291,7 +313,7 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/home-hero-catering.jpg"
+            src="/images/home-hero-catering.jpeg"
             alt="Premium catering event setup"
             fill
             priority
@@ -469,6 +491,44 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-20 md:px-8 md:py-24">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div>
+            <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+              Premium presentation
+            </div>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[#201a17] md:text-5xl">
+              Premium presentation matters as much as matching.
+            </h2>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#6f675f]">
+              Speisely should feel elevated and trustworthy from the first second:
+              refined visuals, curated caterers, and an intelligent request journey
+              that feels more premium than a generic directory.
+            </p>
+          </div>
+
+          <div className="relative overflow-hidden rounded-[2.4rem] shadow-[0_28px_80px_rgba(34,28,22,0.14)]">
+            <Image
+              src="/images/speisely-plated-dinner.png"
+              alt="Premium plated catering presentation"
+              width={1400}
+              height={950}
+              className="h-[460px] w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(25,19,14,0.36),rgba(25,19,14,0.05))]" />
+
+            <div className="absolute bottom-6 left-6 rounded-[1.3rem] border border-white/20 bg-[rgba(255,255,255,0.16)] px-4 py-3 backdrop-blur-md">
+              <div className="text-[11px] uppercase tracking-[0.18em] text-white/80">
+                Speisely style
+              </div>
+              <div className="mt-1 text-sm font-medium text-white">
+                Curated visuals + structured AI matching
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-8 md:px-8 md:py-12">
         <div className="mb-10 max-w-3xl">
           <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
             Anlässe
@@ -478,11 +538,11 @@ export default function HomePage() {
           </h2>
           <p className="mt-4 text-base leading-8 text-[#6f675f]">
             Entdecken Sie Catering-Lösungen für Hochzeiten, Business-Events,
-            private Dinner und festliche Anlässe.
+            Geburtstage, private Dinner und Ramadan / Iftar.
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
           {occasionCards.map((occasion) => (
             <div
               key={occasion.titleKey}
@@ -545,18 +605,21 @@ export default function HomePage() {
               cuisine: "Fine Dining",
               city: "Berlin",
               price: "From €35 / person",
+              image: "/images/speisely-wedding.png",
             },
             {
               name: "Noor Event Catering",
               cuisine: "Halal",
               city: "Berlin",
               price: "From €24 / person",
+              image: "/images/speisely-ramdan-iftar.jpg",
             },
             {
               name: "Bella Cucina Catering",
               cuisine: "Italian",
               city: "Munich",
               price: "From €28 / person",
+              image: "/images/speisely-plated-dinner.png",
             },
           ].map((item) => (
             <div
@@ -565,7 +628,7 @@ export default function HomePage() {
             >
               <div className="relative h-64">
                 <Image
-                  src="/images/home-hero-catering.jpg"
+                  src={item.image}
                   alt={item.name}
                   fill
                   className="object-cover"
@@ -606,6 +669,115 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-6 py-20 md:px-8 md:py-24">
+        <div className="overflow-hidden rounded-[2.4rem] border border-[#e5ddd2] bg-white">
+          <div className="grid gap-0 lg:grid-cols-[1fr_1fr]">
+            <div className="px-8 py-12 md:px-12 md:py-16">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#c49840]">
+                For caterers
+              </div>
+              <h3 className="mt-4 text-3xl font-semibold text-[#201a17] md:text-5xl">
+                Grow with better catering inquiries.
+              </h3>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-[#6f675f]">
+                Speisely helps premium caterers receive clearer event requests,
+                present packages professionally, and manage inquiries through one
+                structured platform.
+              </p>
+
+              <div className="mt-8 grid gap-5 sm:grid-cols-2">
+                <div className="rounded-[1.4rem] bg-[#faf7f2] p-5">
+                  <div className="text-sm font-semibold text-[#201a17]">Better inquiries</div>
+                  <p className="mt-2 text-sm leading-7 text-[#6f675f]">
+                    Receive more structured requests with clearer event details.
+                  </p>
+                </div>
+
+                <div className="rounded-[1.4rem] bg-[#faf7f2] p-5">
+                  <div className="text-sm font-semibold text-[#201a17]">Premium presence</div>
+                  <p className="mt-2 text-sm leading-7 text-[#6f675f]">
+                    Showcase packages, menus, and service strengths more professionally.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="/for-caterers"
+                  className="inline-flex items-center gap-2 rounded-[1rem] bg-[#2d4736] px-6 py-3.5 font-semibold text-white transition hover:opacity-90"
+                >
+                  {t("home.nav.forCaterers")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/signup?role=caterer"
+                  className="inline-flex items-center rounded-[1rem] border border-[#2d4736]/15 bg-[#faf7f2] px-6 py-3.5 font-semibold text-[#2d4736] transition hover:border-[#c49840]/40 hover:text-[#c49840]"
+                >
+                  Join Speisely
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative min-h-[360px] border-t border-[#e5ddd2] lg:min-h-full lg:border-l lg:border-t-0">
+              <Image
+                src="/images/caterer-team.jpeg"
+                alt="Professional catering team"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(20,15,12,0.18),rgba(20,15,12,0.06))]" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-24 pt-6 md:px-8">
+        <div className="overflow-hidden rounded-[2.4rem] border border-[#e5ddd2] bg-[#2d4736]">
+          <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="px-8 py-12 md:px-12 md:py-16">
+              <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-[#f0dfbf]">
+                Planning starts here
+              </div>
+              <h3 className="mt-4 text-3xl font-semibold text-white md:text-5xl">
+                Plan with intelligence, not just listings.
+              </h3>
+              <p className="mt-5 max-w-2xl text-base leading-8 text-[#d5ddd5]">
+                Tell us what you are planning and let Speisely turn it into a better,
+                more structured catering request.
+              </p>
+
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="/request/new"
+                  className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-6 py-3.5 font-semibold text-black transition hover:scale-[1.02]"
+                >
+                  {t("home.editorialCtaPrimary")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/caterers"
+                  className="inline-flex items-center rounded-[1rem] border border-white/15 bg-white/10 px-6 py-3.5 font-semibold text-white transition hover:border-[#f0dfbf]/40 hover:text-[#f0dfbf]"
+                >
+                  {t("home.editorialCtaSecondary")}
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative min-h-[320px] border-t border-white/10 lg:min-h-full lg:border-l lg:border-t-0">
+              <Image
+                src="/images/speisely-business-event.jpg"
+                alt="Business catering presentation"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(20,15,12,0.18),rgba(20,15,12,0.08))]" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer className="border-t border-[#ddd5ca] bg-[#f3eee6]">
         <div className="mx-auto max-w-7xl px-6 py-14 md:px-8">
           <div className="grid gap-10 md:grid-cols-3">
@@ -639,6 +811,19 @@ export default function HomePage() {
                 </Link>
                 <Link href="/about" className="transition hover:text-[#2d4736]">
                   Über Speisely
+                </Link>
+              </div>
+
+              <h3 className="mt-8 text-xl font-semibold text-[#201a17]">Für Caterer</h3>
+              <div className="mt-5 flex flex-col gap-3 text-[#6f675f]">
+                <Link href="/signup?role=caterer" className="transition hover:text-[#2d4736]">
+                  Jetzt beitreten
+                </Link>
+                <Link href="/login" className="transition hover:text-[#2d4736]">
+                  Login
+                </Link>
+                <Link href="/for-caterers" className="transition hover:text-[#2d4736]">
+                  Mehr erfahren
                 </Link>
               </div>
             </div>
