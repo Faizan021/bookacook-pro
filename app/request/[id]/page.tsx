@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import {
   getEventRequestById,
   updateEventRequest,
@@ -10,22 +10,22 @@ import {
 import EventRequestClient from "./EventRequestClient";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default async function EventRequestPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
 
-  let request = null;
+  let request: any = null;
   let matches: any[] = [];
 
   try {
     request = await getEventRequestById(id);
   } catch (error) {
     console.error("Failed to load event request:", error);
-    notFound();
+    redirect("/request/new");
   }
 
   try {
@@ -33,16 +33,6 @@ export default async function EventRequestPage({ params }: PageProps) {
   } catch (error) {
     console.error("Failed to load matches:", error);
     matches = [];
-  }
-
-  // Auto-generate matches on first load if none exist yet
-  if (request && matches.length === 0) {
-    try {
-      await generateMatchesForEventRequest(id);
-      matches = await getMatchesForEventRequest(id);
-    } catch (error) {
-      console.error("Failed to auto-generate matches:", error);
-    }
   }
 
   async function handleSave(formData: FormData) {
@@ -72,14 +62,16 @@ export default async function EventRequestPage({ params }: PageProps) {
       dietary_requirements: formData
         .getAll("dietary_requirements")
         .map((v) => String(v)),
-      extra_services: formData.getAll("extra_services").map((v) => String(v)),
+      extra_services: formData
+        .getAll("extra_services")
+        .map((v) => String(v)),
       status: "submitted",
     });
 
     try {
       await generateMatchesForEventRequest(id);
     } catch (error) {
-      console.error("Failed to generate matches after save:", error);
+      console.error("Failed to generate matches:", error);
     }
 
     redirect(`/request/${id}`);
