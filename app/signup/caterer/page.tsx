@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useT } from "@/lib/i18n/context";
-import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { createClient } from "@/lib/supabase/client";
+import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
+import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 
 type FormFields = {
   businessName: string;
@@ -28,12 +29,9 @@ const EMPTY: FormFields = {
   password: "",
 };
 
-// PREMIUM IMAGE URLS (Unsplash)
-const HERO_IMAGE_URL = "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1200&auto=format&fit=crop";
-const SUCCESS_IMAGE_URL = "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?q=80&w=1200&auto=format&fit=crop";
-
 export default function CatererSignupPage() {
   const t = useT();
+
   const [form, setForm] = useState<FormFields>(EMPTY);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -42,6 +40,7 @@ export default function CatererSignupPage() {
 
   function setField(field: keyof FormFields, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
+
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -52,12 +51,20 @@ export default function CatererSignupPage() {
 
     if (!form.businessName.trim()) e.businessName = t("validation.required");
     if (!form.contactPerson.trim()) e.contactPerson = t("validation.required");
+
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       e.email = t("validation.emailInvalid");
     }
+
     if (!form.phone.trim()) e.phone = t("validation.required");
     if (!form.businessAddress.trim()) e.businessAddress = t("validation.required");
-    if (!form.licenseNumber.trim()) e.licenseNumber = t("validation.licenseRequired");
+    if (!form.licenseNumber.trim()) {
+      e.licenseNumber = t(
+        "validation.licenseRequired",
+        "Bitte geben Sie eine Gewerbe- oder Registrierungsnummer an."
+      );
+    }
+
     if (!form.password || form.password.length < 8) {
       e.password = t("validation.passwordMin");
     }
@@ -79,7 +86,7 @@ export default function CatererSignupPage() {
     try {
       const supabase = createClient();
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: form.email.trim(),
         password: form.password,
         options: {
@@ -96,8 +103,10 @@ export default function CatererSignupPage() {
         },
       });
 
-      if (error) {
-        throw error;
+      if (error) throw error;
+
+      if (!data.user) {
+        throw new Error("Signup failed. No user returned.");
       }
 
       setSuccess(true);
@@ -111,332 +120,316 @@ export default function CatererSignupPage() {
     }
   }
 
-  // PREMIUM INPUT STYLES
   const inputBase =
-    "mt-1 w-full rounded-xl border px-4 py-2.5 text-sm outline-none transition-all duration-200";
-  const inputOk = `${inputBase} border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-white/30 focus:bg-white/10 focus:ring-4 focus:ring-white/5`;
-  const inputErr = `${inputBase} border-red-500/50 bg-red-500/10 text-red-200 placeholder:text-red-300/30 focus:border-red-500 focus:ring-4 focus:ring-red-500/10`;
+    "mt-2 w-full rounded-2xl border px-4 py-3 text-sm outline-none transition";
+  const inputOk = `${inputBase} border-[#e8dcc8] bg-[#faf6ee] text-[#173f35] placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/15`;
+  const inputErr = `${inputBase} border-red-300 bg-red-50 text-red-700 placeholder:text-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/10`;
 
-  // SUCCESS STATE UI
   if (success) {
     return (
-      <main className="min-h-screen bg-surface-dark text-white flex flex-col lg:flex-row">
-        <div className="absolute end-4 top-4 z-50">
-          <LanguageSwitcher />
-        </div>
+      <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
+        <SpeiselyHeader />
 
-        {/* Success Image (Desktop) */}
-        <div className="hidden lg:block lg:w-1/2 relative">
-          <img src={SUCCESS_IMAGE_URL} alt="Success" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
-        </div>
-
-        <div className="flex w-full items-center justify-center px-6 py-10 lg:w-1/2">
-          <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-card p-10 text-center shadow-2xl backdrop-blur-xl">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/20">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-[var(--accent-gold)]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+        <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1fr_0.9fr] lg:py-24">
+          <div>
+            <div className="inline-flex rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
+              {t("catererReg.pendingBadge", "Profil in Prüfung")}
             </div>
 
-            <h1 className="mt-6 text-2xl font-semibold tracking-tight text-white">
-              {t("catererReg.successTitle")}
+            <h1 className="mt-6 max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
+              {t("catererReg.successTitle", "Registrierung erfolgreich")}
             </h1>
 
-            <p className="mt-3 text-sm text-white/60">
-              {t("catererReg.successDesc")}
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+              {t(
+                "catererReg.successDesc",
+                "Ihr Caterer-Profil wurde angelegt. Speisely prüft Ihre Angaben, bevor Auszahlungen und vollständige Sichtbarkeit aktiviert werden."
+              )}
             </p>
 
-            <div className="mt-5 inline-flex items-center rounded-full bg-white/5 px-4 py-1.5 text-xs font-semibold text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
-              {t("catererReg.pendingBadge")}
-            </div>
-
-            <div className="mt-8 space-y-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/login"
-                className="block w-full rounded-xl px-4 py-3 text-center text-sm font-semibold text-black transition hover:brightness-110"
-                style={{ background: "var(--accent-gold)" }}
+                href="/login?next=/caterer"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27]"
               >
-                {t("auth.goToLogin")}
+                {t("auth.goToLogin", "Zur Anmeldung")}
               </Link>
 
               <Link
                 href="/"
-                className="block w-full rounded-xl border border-white/10 bg-white/5 py-3 text-center text-sm font-medium text-white transition hover:bg-white/10"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
               >
-                {t("nav.backToHome")}
+                {t("nav.backToHome", "Zur Startseite")}
               </Link>
             </div>
           </div>
-        </div>
+
+          <div className="overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
+            <DynamicUnsplashImage
+              section="premium"
+              className="h-[520px]"
+              sizes="(min-width: 1024px) 45vw, 100vw"
+            />
+          </div>
+        </section>
       </main>
     );
   }
 
-  // DEFAULT SIGNUP FORM UI
   return (
-    <main className="min-h-screen bg-surface-dark text-white">
-      <div className="absolute end-4 top-4 z-50">
-        <LanguageSwitcher />
-      </div>
+    <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
+      <SpeiselyHeader />
 
-      <div className="grid min-h-screen lg:grid-cols-2">
-        
-        {/* LEFT SIDE: IMAGE SECTION (Hidden on Mobile) */}
-        <div className="hidden lg:block relative overflow-hidden">
-          <img 
-            src={HERO_IMAGE_URL} 
-            alt="Catering Excellence" 
-            className="absolute inset-0 h-full w-full object-cover" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
-          
-          <div className="absolute bottom-16 left-16 max-w-md">
-            <h2 className="text-3xl font-semibold text-white leading-tight">
-              Elevate your catering business with Speisely.
-            </h2>
-            <p className="mt-4 text-white/60">
-              Join the most exclusive marketplace for professional catering services.
+      <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[0.95fr_1.05fr] lg:py-24">
+        <div>
+          <Link
+            href="/signup"
+            className="inline-flex rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm transition hover:bg-[#f4ead7]"
+          >
+            ← {t("signup.backToChooser", "Zurück zur Auswahl")}
+          </Link>
+
+          <div className="mt-10 inline-flex rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
+            {t("forCaterers.badge", "Für Premium-Caterer")}
+          </div>
+
+          <h1 className="mt-6 max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
+            {t(
+              "catererReg.title",
+              "Caterer-Konto erstellen"
+            )}
+          </h1>
+
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+            {t(
+              "catererReg.subtitle",
+              "Registrieren Sie Ihr Catering-Unternehmen, präsentieren Sie Pakete professionell und erhalten Sie strukturierte Event-Anfragen."
+            )}
+          </p>
+
+          <div className="mt-10 rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28a3c]">
+              {t("catererReg.licenseRequired", "Verifizierung erforderlich")}
             </p>
+            <p className="mt-3 text-sm leading-7 text-[#5c6f68]">
+              {t(
+                "catererReg.licenseHelp",
+                "Für Speisely benötigen Caterer eine Gewerbe-, Lizenz- oder Registrierungsnummer. Ohne diese Angabe ist keine Registrierung möglich."
+              )}
+            </p>
+          </div>
+
+          <div className="mt-8 overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
+            <DynamicUnsplashImage
+              section="premium"
+              className="h-80"
+              sizes="(min-width: 1024px) 45vw, 100vw"
+            />
           </div>
         </div>
 
-        {/* RIGHT SIDE: THE FORM */}
-        <div className="flex items-center justify-center px-6 py-12 lg:px-16 lg:py-12">
-          <div className="w-full max-w-xl">
+        <section className="mx-auto w-full max-w-xl">
+          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm">
             <div className="mb-8">
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-1.5 text-sm text-white/40 transition hover:text-white rtl:flex-row-reverse"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="h-4 w-4 rtl:rotate-180"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                {t("signup.backToChooser")}
-              </Link>
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+                {t("auth.signup", "Registrieren")}
+              </p>
+
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+                {t("catererReg.title", "Caterer-Konto erstellen")}
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
+                {t(
+                  "catererReg.formIntro",
+                  "Füllen Sie die Unternehmensdaten aus. Ihr Profil wird vor der vollständigen Freischaltung geprüft."
+                )}
+              </p>
             </div>
 
-            <div className="rounded-[2rem] border border-white/10 bg-card p-8 shadow-2xl backdrop-blur-md sm:p-10">
-              <div className="mb-8">
-                <h1 className="text-3xl font-semibold tracking-tight text-white">
-                  {t("catererReg.title")}
-                </h1>
-                <p className="mt-2 text-sm text-white/50">
-                  {t("catererReg.subtitle")}
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} noValidate>
-                <div className="space-y-6">
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("catererReg.businessName")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.businessName}
-                        onChange={(e) => setField("businessName", e.target.value)}
-                        className={errors.businessName ? inputErr : inputOk}
-                        placeholder="Berlin BBQ House GmbH"
-                      />
-                      {errors.businessName && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">
-                          {errors.businessName}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("catererReg.contactPerson")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.contactPerson}
-                        onChange={(e) => setField("contactPerson", e.target.value)}
-                        className={errors.contactPerson ? inputErr : inputOk}
-                        placeholder="Max Mustermann"
-                      />
-                      {errors.contactPerson && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">
-                          {errors.contactPerson}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("auth.email")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => setField("email", e.target.value)}
-                        className={errors.email ? inputErr : inputOk}
-                        placeholder="kontakt@berlincatering.de"
-                        autoComplete="email"
-                      />
-                      {errors.email && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.email}</p>
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                        {t("catererReg.phone")}
-                        <span className="ms-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        value={form.phone}
-                        onChange={(e) => setField("phone", e.target.value)}
-                        className={errors.phone ? inputErr : inputOk}
-                        placeholder="+49 30 12345678"
-                      />
-                      {errors.phone && (
-                        <p className="mt-1.5 text-xs text-red-400 font-medium">{errors.phone}</p>
-                      )}
-                    </div>
-                  </div>
-
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="space-y-5">
+                <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                      {t("catererReg.businessAddress")}
-                      <span className="ms-1 text-red-500">*</span>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("catererReg.businessName", "Unternehmensname")} *
                     </label>
-                    <textarea
-                      rows={2}
-                      value={form.businessAddress}
-                      onChange={(e) => setField("businessAddress", e.target.value)}
-                      className={`${errors.businessAddress ? inputErr : inputOk} resize-none`}
-                      placeholder="Musterstraße 1, 10115 Berlin"
-                    />
-                    {errors.businessAddress && (
-                      <p className="mt-1.5 text-xs text-red-400 font-medium">
-                        {errors.businessAddress}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors focus-within:border-white/20">
-                    <label className="flex items-center gap-2 text-sm font-semibold text-white rtl:flex-row-reverse">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-[var(--accent-gold)]"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 4.925-3.31 9.128-7.834 10.614a.75.75 0 01-.532 0C5.31 16.073 2 11.87 2 7c0-.682.057-1.35.166-2.001zm11.54 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      {t("catererReg.licenseNumber")}
-                      <span className="ms-auto rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--accent-gold)] ring-1 ring-[var(--accent-gold)]/20">
-                        {t("catererReg.licenseRequired")}
-                      </span>
-                    </label>
-
                     <input
                       type="text"
-                      value={form.licenseNumber}
-                      onChange={(e) => setField("licenseNumber", e.target.value)}
-                      className={errors.licenseNumber ? inputErr : inputOk}
-                      placeholder="z.B. HRB-123456 / IHK-2024-789"
+                      value={form.businessName}
+                      onChange={(e) => setField("businessName", e.target.value)}
+                      className={errors.businessName ? inputErr : inputOk}
+                      placeholder="Berlin Catering GmbH"
                     />
-
-                    <p className="mt-2 text-[11px] text-white/40 italic">
-                      {t("catererReg.licenseHelp")}
-                    </p>
-
-                    {errors.licenseNumber && (
-                      <p className="mt-2 text-xs font-semibold text-red-400">
-                        {errors.licenseNumber}
+                    {errors.businessName ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.businessName}
                       </p>
-                    )}
+                    ) : null}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-white/60">
-                      {t("auth.password")}
-                      <span className="ms-1 text-red-500">*</span>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("catererReg.contactPerson", "Ansprechperson")} *
                     </label>
                     <input
-                      type="password"
-                      value={form.password}
-                      onChange={(e) => setField("password", e.target.value)}
-                      className={errors.password ? inputErr : inputOk}
-                      autoComplete="new-password"
-                      placeholder="••••••••"
+                      type="text"
+                      value={form.contactPerson}
+                      onChange={(e) => setField("contactPerson", e.target.value)}
+                      className={errors.contactPerson ? inputErr : inputOk}
+                      placeholder="Max Mustermann"
                     />
-                    {errors.password && (
-                      <p className="mt-1.5 text-xs text-red-400 font-medium">
-                        {errors.password}
+                    {errors.contactPerson ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.contactPerson}
                       </p>
-                    )}
+                    ) : null}
                   </div>
                 </div>
 
-                {serverError && (
-                  <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                    {serverError}
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("auth.email", "E-Mail")} *
+                    </label>
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setField("email", e.target.value)}
+                      className={errors.email ? inputErr : inputOk}
+                      placeholder="kontakt@catering.de"
+                      autoComplete="email"
+                    />
+                    {errors.email ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.email}
+                      </p>
+                    ) : null}
                   </div>
+
+                  <div>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("catererReg.phone", "Telefon")} *
+                    </label>
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => setField("phone", e.target.value)}
+                      className={errors.phone ? inputErr : inputOk}
+                      placeholder="+49 30 12345678"
+                    />
+                    {errors.phone ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.phone}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-semibold text-[#173f35]">
+                    {t("catererReg.businessAddress", "Geschäftsadresse")} *
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={form.businessAddress}
+                    onChange={(e) => setField("businessAddress", e.target.value)}
+                    className={`${errors.businessAddress ? inputErr : inputOk} resize-none`}
+                    placeholder="Musterstraße 1, 10115 Berlin"
+                  />
+                  {errors.businessAddress ? (
+                    <p className="mt-1.5 text-xs font-medium text-red-600">
+                      {errors.businessAddress}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-5">
+                  <label className="flex items-center justify-between gap-3 text-sm font-semibold text-[#173f35]">
+                    <span>{t("catererReg.licenseNumber", "Gewerbe-/Registrierungsnummer")} *</span>
+                    <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#8a6d35]">
+                      {t("catererReg.licenseRequired", "Pflichtfeld")}
+                    </span>
+                  </label>
+
+                  <input
+                    type="text"
+                    value={form.licenseNumber}
+                    onChange={(e) => setField("licenseNumber", e.target.value)}
+                    className={errors.licenseNumber ? inputErr : inputOk}
+                    placeholder="z. B. HRB-123456 / IHK-2024-789"
+                  />
+
+                  <p className="mt-2 text-xs leading-6 text-[#5c6f68]">
+                    {t(
+                      "catererReg.licenseHelp",
+                      "Diese Angabe ist notwendig, damit Speisely Anbieter vor Auszahlung und Sichtbarkeit prüfen kann."
+                    )}
+                  </p>
+
+                  {errors.licenseNumber ? (
+                    <p className="mt-2 text-xs font-semibold text-red-600">
+                      {errors.licenseNumber}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div>
+                  <label className="text-sm font-semibold text-[#173f35]">
+                    {t("auth.password", "Passwort")} *
+                  </label>
+                  <input
+                    type="password"
+                    value={form.password}
+                    onChange={(e) => setField("password", e.target.value)}
+                    className={errors.password ? inputErr : inputOk}
+                    autoComplete="new-password"
+                    placeholder="••••••••"
+                  />
+                  {errors.password ? (
+                    <p className="mt-1.5 text-xs font-medium text-red-600">
+                      {errors.password}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+
+              {serverError ? (
+                <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {serverError}
+                </div>
+              ) : null}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="mt-8 w-full rounded-full bg-[#173f35] px-5 py-4 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {submitting
+                  ? t("catererReg.submitting", "Registrierung wird gesendet...")
+                  : t("catererReg.submit", "Caterer-Konto erstellen")}
+              </button>
+
+              <p className="mt-5 text-center text-xs leading-6 text-[#5c6f68]">
+                {t(
+                  "catererReg.termsNote",
+                  "Mit der Fortsetzung akzeptieren Sie die Speisely-Nutzungsbedingungen und Datenschutzrichtlinie."
                 )}
+              </p>
 
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="mt-8 w-full rounded-xl px-4 py-4 text-sm font-bold text-black shadow-lg shadow-black/20 transition hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
-                  style={{ background: "var(--accent-gold)" }}
+              <p className="mt-4 text-center text-sm text-[#5c6f68]">
+                {t("auth.hasAccount", "Bereits ein Konto?")}{" "}
+                <Link
+                  href="/login?next=/caterer"
+                  className="font-semibold text-[#173f35] underline-offset-4 hover:underline"
                 >
-                  {submitting ? t("catererReg.submitting") : t("catererReg.submit")}
-                </button>
-
-                <p className="mt-6 text-center text-xs text-white/40">
-                  {t("catererReg.termsNote")}
-                </p>
-
-                <p className="mt-4 text-center text-sm text-white/60">
-                  {t("auth.hasAccount")}{" "}
-                  <Link
-                    href="/login"
-                    className="font-semibold text-[var(--accent-gold)] transition hover:text-white"
-                  >
-                    {t("auth.goToLogin")}
-                  </Link>
-                </p>
-              </form>
-            </div>
+                  {t("auth.goToLogin", "Zur Anmeldung")}
+                </Link>
+              </p>
+            </form>
           </div>
-        </div>
-      </div>
+        </section>
+      </section>
     </main>
   );
 }
