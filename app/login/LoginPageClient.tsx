@@ -13,6 +13,7 @@ type Props = {
 
 export default function LoginPageClient({ next = "" }: Props) {
   const t = useT();
+  const isCatererLogin = next === "/caterer" || next.startsWith("/caterer/");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +41,7 @@ export default function LoginPageClient({ next = "" }: Props) {
       }
 
       if (!data.user) {
-        setError("Login failed. No user returned.");
+        setError(t("auth.loginNoUser", "Login failed. No user returned."));
         setLoading(false);
         return;
       }
@@ -70,7 +71,24 @@ export default function LoginPageClient({ next = "" }: Props) {
       }
 
       if (!role) {
-        setError("Login succeeded, but no user role was found.");
+        setError(
+          t(
+            "auth.noRoleFound",
+            "Login succeeded, but no user role was found."
+          )
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (isCatererLogin && role !== "caterer" && role !== "admin") {
+        await supabase.auth.signOut();
+        setError(
+          t(
+            "auth.catererAccountRequired",
+            "Please log in with a caterer account. This account is registered as a customer."
+          )
+        );
         setLoading(false);
         return;
       }
@@ -95,7 +113,7 @@ export default function LoginPageClient({ next = "" }: Props) {
         return;
       }
 
-      setError(`Unknown user role: ${role}`);
+      setError(t("auth.unknownRole", "Unknown user role.") + ` ${role}`);
       setLoading(false);
     } catch {
       setError(t("error.unexpected", "Unexpected error. Please try again."));
@@ -103,9 +121,32 @@ export default function LoginPageClient({ next = "" }: Props) {
     }
   }
 
-  const signupHref = next
-    ? `/signup/customer?next=${encodeURIComponent(next)}`
-    : "/signup";
+  const signupHref = isCatererLogin
+    ? `/signup/caterer`
+    : next
+      ? `/signup/customer?next=${encodeURIComponent(next)}`
+      : "/signup";
+
+  const introTitle = isCatererLogin
+    ? t("auth.catererLoginTitle", "Caterer login")
+    : t("auth.welcomeBack", "Welcome back");
+
+  const introDescription = isCatererLogin
+    ? t(
+        "auth.catererLoginIntro",
+        "Sign in to manage your catering profile, packages, requests, availability, and payments."
+      )
+    : t(
+        "auth.loginIntro",
+        "Sign in to continue your catering requests, saved caterers, and event planning."
+      );
+
+  const formSubtitle = isCatererLogin
+    ? t(
+        "auth.catererLoginSubtitle",
+        "Use your caterer account to access the caterer dashboard."
+      )
+    : t("auth.loginSubtitle", "Sign in with your Speisely account.");
 
   return (
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
@@ -114,18 +155,17 @@ export default function LoginPageClient({ next = "" }: Props) {
       <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
         <div className="hidden lg:block">
           <div className="mb-6 inline-flex rounded-full border border-[#e8dcc8] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
-            {t("auth.loginBadge", "Willkommen zurück")}
+            {isCatererLogin
+              ? t("auth.catererLoginBadge", "Caterer Portal")
+              : t("auth.loginBadge", "Welcome back")}
           </div>
 
           <h1 className="max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
-            {t("auth.welcomeBack", "Zurück zu Speisely.")}
+            {introTitle}
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
-            {t(
-              "auth.loginIntro",
-              "Melden Sie sich an, um Catering-Anfragen, gespeicherte Caterer und Ihre Eventplanung weiterzuführen."
-            )}
+            {introDescription}
           </p>
 
           <div className="mt-10 overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
@@ -141,25 +181,24 @@ export default function LoginPageClient({ next = "" }: Props) {
           <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm">
             <div className="mb-8">
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-                {t("auth.login", "Login")}
+                {isCatererLogin
+                  ? t("auth.catererLogin", "Caterer login")
+                  : t("auth.login", "Log In")}
               </p>
 
               <h2 className="mt-3 text-3xl font-semibold tracking-tight">
-                {t("auth.welcomeBack", "Willkommen zurück")}
+                {introTitle}
               </h2>
 
               <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
-                {t(
-                  "auth.loginSubtitle",
-                  "Melden Sie sich mit Ihrem Speisely-Konto an."
-                )}
+                {formSubtitle}
               </p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-[#173f35]">
-                  {t("auth.email", "E-Mail")}
+                  {t("auth.email", "Email address")}
                 </label>
 
                 <input
@@ -174,7 +213,7 @@ export default function LoginPageClient({ next = "" }: Props) {
 
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-[#173f35]">
-                  {t("auth.password", "Passwort")}
+                  {t("auth.password", "Password")}
                 </label>
 
                 <input
@@ -199,18 +238,20 @@ export default function LoginPageClient({ next = "" }: Props) {
                 className="inline-flex w-full items-center justify-center rounded-[1rem] bg-[#173f35] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading
-                  ? t("auth.loggingIn", "Wird angemeldet...")
-                  : t("auth.login", "Einloggen")}
+                  ? t("auth.loggingIn", "Logging in...")
+                  : t("auth.login", "Log In")}
               </button>
             </form>
 
             <p className="mt-5 text-center text-sm text-[#5c6f68]">
-              {t("auth.noAccount", "Noch kein Konto?")}{" "}
+              {t("auth.noAccount", "Don't have an account?")}{" "}
               <Link
                 href={signupHref}
                 className="font-semibold text-[#173f35] underline-offset-4 transition hover:underline"
               >
-                {t("auth.goToSignup", "Registrieren")}
+                {isCatererLogin
+                  ? t("auth.createCatererAccount", "Create caterer account")
+                  : t("auth.goToSignup", "Go to Sign Up")}
               </Link>
             </p>
           </div>
