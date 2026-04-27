@@ -189,7 +189,7 @@ export default function NewRequestPage() {
       const result = await createRequestDraftAction({
         ai_query: cleanQuery,
         event_type: null,
-        city: selectedLocation?.name ?? cleanLocation || null,
+        city: selectedLocation?.name ?? (cleanLocation || null),
         postal_code: selectedLocation?.postal_code ?? null,
         lat: selectedLocation?.lat ?? null,
         lng: selectedLocation?.lng ?? null,
