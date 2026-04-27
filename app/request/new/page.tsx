@@ -171,11 +171,25 @@ export default function NewRequestPage() {
     setSaveError(null);
     setSaving(true);
 
+    const cleanQuery = query.trim();
+    const cleanLocation = locationInput.trim();
+
+    if (!cleanQuery || cleanQuery.length < 10) {
+      setSaveError(
+        t(
+          "request.validation.query",
+          "Bitte beschreiben Sie Ihr Event etwas genauer."
+        )
+      );
+      setSaving(false);
+      return;
+    }
+
     try {
       const result = await createRequestDraftAction({
-        ai_query: query,
+        ai_query: cleanQuery,
         event_type: null,
-        city: selectedLocation?.name ?? locationInput ?? null,
+        city: selectedLocation?.name ?? cleanLocation || null,
         postal_code: selectedLocation?.postal_code ?? null,
         lat: selectedLocation?.lat ?? null,
         lng: selectedLocation?.lng ?? null,
@@ -230,7 +244,10 @@ export default function NewRequestPage() {
               <button
                 key={prompt.label}
                 type="button"
-                onClick={() => setQuery(prompt.query)}
+                onClick={() => {
+                  setQuery(prompt.query);
+                  setSaveError(null);
+                }}
                 className="rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
               >
                 {prompt.label}
@@ -245,7 +262,10 @@ export default function NewRequestPage() {
 
             <textarea
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setSaveError(null);
+              }}
               className="mt-3 min-h-44 w-full resize-none rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 outline-none transition focus:border-[#c9a45c]"
             />
 
@@ -259,6 +279,7 @@ export default function NewRequestPage() {
                 onChange={(event) => {
                   setLocationInput(event.target.value);
                   setSelectedLocation(null);
+                  setSaveError(null);
                 }}
                 placeholder={t(
                   "request.locationPlaceholder",
