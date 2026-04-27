@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
-import { LanguageSwitcher } from "@/components/i18n/language-switcher";
-import { LogoMark } from "@/components/ui/logo-mark";
+import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
+import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 
 type Props = {
   next?: string;
@@ -98,7 +98,7 @@ export default function LoginPageClient({ next = "" }: Props) {
       setError(`Unknown user role: ${role}`);
       setLoading(false);
     } catch {
-      setError(t("error.unexpected"));
+      setError(t("error.unexpected", "Unexpected error. Please try again."));
       setLoading(false);
     }
   }
@@ -108,153 +108,114 @@ export default function LoginPageClient({ next = "" }: Props) {
     : "/signup";
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
-      <div className="pointer-events-none fixed inset-0">
-        <div
-          className="absolute inset-0 opacity-70"
-          style={{
-            background:
-              "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
-          }}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
-      </div>
+    <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
+      <SpeiselyHeader />
 
-      <div className="relative z-10 flex min-h-screen flex-col">
-        <header className="border-b border-white/8 bg-[#09130e]/80 backdrop-blur-2xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-8">
-            <Link href="/" className="flex items-center gap-3 text-[#eadfca]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10">
-                <LogoMark size={18} color="#e8ddc8" />
-              </div>
-
-              <div className="flex flex-col">
-                <span className="text-xl font-semibold tracking-tight">Speisely</span>
-                <span className="text-xs text-[#9faf9b]">
-                  {t("home.brandTagline")}
-                </span>
-              </div>
-            </Link>
-
-            <LanguageSwitcher />
+      <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+        <div className="hidden lg:block">
+          <div className="mb-6 inline-flex rounded-full border border-[#e8dcc8] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
+            {t("auth.loginBadge", "Willkommen zurück")}
           </div>
-        </header>
 
-        <div className="mx-auto flex w-full max-w-7xl flex-1 items-center px-6 py-10 md:px-8 lg:py-16">
-          <div className="grid w-full gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <section className="hidden lg:block">
-              <div className="max-w-xl">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c49840]">
-                  {t("home.badge")}
-                </div>
+          <h1 className="max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
+            {t("auth.welcomeBack", "Zurück zu Speisely.")}
+          </h1>
 
-                <h1 className="mt-5 text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-white">
-                  {t("auth.welcomeBack")}
-                </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+            {t(
+              "auth.loginIntro",
+              "Melden Sie sich an, um Catering-Anfragen, gespeicherte Caterer und Ihre Eventplanung weiterzuführen."
+            )}
+          </p>
 
-                <p className="mt-5 text-base leading-8 text-[#9faf9b]">
-                  {t("home.editorialFooterTagline")}
-                </p>
-
-                <div className="mt-8 grid gap-4">
-                  <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-                    <div className="text-sm font-semibold text-white">
-                      {t("home.heroBenefit1")}
-                    </div>
-                    <p className="mt-2 text-sm leading-7 text-[#92a18f]">
-                      {t("home.editorialHeroSubtitle")}
-                    </p>
-                  </div>
-
-                  <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-                    <div className="text-sm font-semibold text-white">
-                      {t("home.heroBenefit2")}
-                    </div>
-                    <p className="mt-2 text-sm leading-7 text-[#92a18f]">
-                      {t("home.steps.step2Desc")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <section className="mx-auto w-full max-w-md">
-              <div className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl">
-                <div className="mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10 text-[#eadfca] lg:hidden">
-                      <LogoMark size={18} color="#e8ddc8" />
-                    </div>
-
-                    <div>
-                      <h2 className="text-3xl font-semibold tracking-tight text-white">
-                        {t("auth.welcomeBack")}
-                      </h2>
-                      <p className="mt-2 text-sm text-[#9faf9b]">
-                        {t("auth.login")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-[#eadfca]">
-                      {t("auth.email")}
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      autoComplete="email"
-                      className="w-full rounded-[1rem] border border-white/10 bg-black/10 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-[#c49840]/35 focus:ring-2 focus:ring-[#c49840]/10"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-1.5 block text-sm font-medium text-[#eadfca]">
-                      {t("auth.password")}
-                    </label>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      autoComplete="current-password"
-                      className="w-full rounded-[1rem] border border-white/10 bg-black/10 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-[#c49840]/35 focus:ring-2 focus:ring-[#c49840]/10"
-                    />
-                  </div>
-
-                  {error ? (
-                    <div className="rounded-[1rem] border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300">
-                      {error}
-                    </div>
-                  ) : null}
-
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="inline-flex w-full items-center justify-center rounded-[1rem] bg-[#c49840] px-4 py-3 text-sm font-semibold text-black transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {t("auth.login")}
-                  </button>
-                </form>
-
-                <p className="mt-5 text-center text-sm text-[#9faf9b]">
-                  {t("auth.noAccount")}{" "}
-                  <Link
-                    href={signupHref}
-                    className="font-semibold text-[#c49840] transition hover:text-[#eadfca]"
-                  >
-                    {t("auth.goToSignup")}
-                  </Link>
-                </p>
-              </div>
-            </section>
+          <div className="mt-10 overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
+            <DynamicUnsplashImage
+              section="premium"
+              className="h-[420px]"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
           </div>
         </div>
-      </div>
+
+        <section className="mx-auto w-full max-w-md">
+          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm">
+            <div className="mb-8">
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+                {t("auth.login", "Login")}
+              </p>
+
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+                {t("auth.welcomeBack", "Willkommen zurück")}
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
+                {t(
+                  "auth.loginSubtitle",
+                  "Melden Sie sich mit Ihrem Speisely-Konto an."
+                )}
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="mb-1.5 block text-sm font-semibold text-[#173f35]">
+                  {t("auth.email", "E-Mail")}
+                </label>
+
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                  className="w-full rounded-[1rem] border border-[#e8dcc8] bg-[#faf6ee] px-4 py-3 text-sm text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/15"
+                />
+              </div>
+
+              <div>
+                <label className="mb-1.5 block text-sm font-semibold text-[#173f35]">
+                  {t("auth.password", "Passwort")}
+                </label>
+
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                  className="w-full rounded-[1rem] border border-[#e8dcc8] bg-[#faf6ee] px-4 py-3 text-sm text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/15"
+                />
+              </div>
+
+              {error ? (
+                <div className="rounded-[1rem] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </div>
+              ) : null}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="inline-flex w-full items-center justify-center rounded-[1rem] bg-[#173f35] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading
+                  ? t("auth.loggingIn", "Wird angemeldet...")
+                  : t("auth.login", "Einloggen")}
+              </button>
+            </form>
+
+            <p className="mt-5 text-center text-sm text-[#5c6f68]">
+              {t("auth.noAccount", "Noch kein Konto?")}{" "}
+              <Link
+                href={signupHref}
+                className="font-semibold text-[#173f35] underline-offset-4 transition hover:underline"
+              >
+                {t("auth.goToSignup", "Registrieren")}
+              </Link>
+            </p>
+          </div>
+        </section>
+      </section>
     </main>
   );
 }
