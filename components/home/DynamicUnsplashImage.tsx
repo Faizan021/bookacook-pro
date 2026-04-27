@@ -11,7 +11,8 @@ type Section =
   | "corporate"
   | "birthday"
   | "private"
-  | "ramadan";
+  | "ramadan"
+  | "christmas";
 
 type ImageData = {
   url: string;
