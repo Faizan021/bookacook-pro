@@ -4,6 +4,10 @@ export type CreateEventRequestDraftInput = {
   ai_query?: string;
   event_type?: string | null;
   preferred_caterer_id?: string | null;
+  city?: string | null;
+  postal_code?: string | null;
+  lat?: string | number | null;
+  lng?: string | number | null;
 };
 
 export type UpdateEventRequestInput = {
@@ -15,6 +19,8 @@ export type UpdateEventRequestInput = {
   event_date?: string;
   city?: string;
   postal_code?: string;
+  lat?: string | number | null;
+  lng?: string | number | null;
   budget_total?: number;
   budget_per_person?: number;
   planning_stage?: string;
@@ -149,9 +155,9 @@ function parseCityFromQuery(query?: string | null) {
 
   if (text.includes("berlin")) return "Berlin";
   if (text.includes("hamburg")) return "Hamburg";
-  if (text.includes("munich") || text.includes("münchen")) return "Munich";
-  if (text.includes("frankfurt")) return "Frankfurt";
-  if (text.includes("cologne") || text.includes("köln")) return "Cologne";
+  if (text.includes("munich") || text.includes("münchen")) return "München";
+  if (text.includes("frankfurt")) return "Frankfurt am Main";
+  if (text.includes("cologne") || text.includes("köln")) return "Köln";
   if (text.includes("dortmund")) return "Dortmund";
   if (text.includes("düsseldorf") || text.includes("duesseldorf")) {
     return "Düsseldorf";
@@ -165,7 +171,7 @@ function parseGuestCountFromQuery(query?: string | null) {
 
   const match =
     text.match(/(\d+)\s*(guests|guest|people|persons)/i) ||
-    text.match(/(\d+)\s*(gäste)/i) ||
+    text.match(/(\d+)\s*(gäste|personen|mitarbeitende|mitarbeiter)/i) ||
     text.match(/for\s+(\d+)/i);
 
   if (!match) return null;
@@ -180,6 +186,7 @@ function parseBudgetPerPersonFromQuery(query?: string | null) {
   const match =
     text.match(/€\s?(\d+)\s*(per person|pp|p\.p\.)/i) ||
     text.match(/(\d+)\s?(€|eur|euros?)\s*(per person|pp|p\.p\.)/i) ||
+    text.match(/ca\.\s*€\s?(\d+)/i) ||
     text.match(/around\s*€\s?(\d+)\s*(per person|pp|p\.p\.)/i);
 
   if (!match) return null;
@@ -215,10 +222,15 @@ function parseCuisinePreferencesFromQuery(query?: string | null) {
 
   const cuisineMap: Array<[string, string]> = [
     ["turkish", "Turkish"],
+    ["türkisch", "Turkish"],
     ["mediterranean", "Mediterranean"],
+    ["mediterran", "Mediterranean"],
     ["italian", "Italian"],
+    ["italienisch", "Italian"],
     ["arabic", "Arabic"],
+    ["arabisch", "Arabic"],
     ["german", "German"],
+    ["deutsch", "German"],
     ["bbq", "BBQ"],
     ["barbecue", "BBQ"],
     ["fine dining", "Fine Dining"],
@@ -245,6 +257,7 @@ function parseDietaryRequirementsFromQuery(query?: string | null) {
     ["halal", "Halal"],
     ["gluten", "Gluten-free"],
     ["lactose", "Lactose-free"],
+    ["laktose", "Lactose-free"],
     ["kosher", "Kosher"],
   ];
 
@@ -263,14 +276,20 @@ function parseExtraServicesFromQuery(query?: string | null) {
 
   const extrasMap: Array<[string, string]> = [
     ["staff", "Staff"],
+    ["personal", "Staff"],
     ["waitstaff", "Staff"],
     ["servers", "Staff"],
+    ["servicekräfte", "Staff"],
     ["tableware", "Tableware"],
     ["plates", "Tableware"],
+    ["geschirr", "Tableware"],
     ["delivery", "Delivery"],
+    ["lieferung", "Delivery"],
     ["setup", "Setup"],
     ["set up", "Setup"],
+    ["aufbau", "Setup"],
     ["drinks", "Drinks"],
+    ["getränke", "Drinks"],
     ["beverages", "Drinks"],
     ["live cooking", "Live Cooking"],
     ["live station", "Live Cooking"],
@@ -285,6 +304,12 @@ function parseExtraServicesFromQuery(query?: string | null) {
   return values;
 }
 
+function normalizeCoordinate(value?: string | number | null) {
+  if (value == null || value === "") return null;
+  const numberValue = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(numberValue) ? numberValue : null;
+}
+
 function deriveStructuredFieldsFromAiQuery(input?: CreateEventRequestDraftInput) {
   const aiQuery = cleanString(input?.ai_query) ?? "";
 
@@ -294,7 +319,11 @@ function deriveStructuredFieldsFromAiQuery(input?: CreateEventRequestDraftInput)
     catering_type: parseCateringTypeFromQuery(aiQuery),
     service_style: parseServiceStyleFromQuery(aiQuery),
     guest_count: parseGuestCountFromQuery(aiQuery),
-    city: parseCityFromQuery(aiQuery),
+    city: cleanString(input?.city) ?? parseCityFromQuery(aiQuery),
+    postal_code: cleanString(input?.postal_code),
+    lat: normalizeCoordinate(input?.lat),
+    lng: normalizeCoordinate(input?.lng),
+    preferred_caterer_id: input?.preferred_caterer_id ?? null,
     budget_total: parseBudgetTotalFromQuery(aiQuery),
     budget_per_person: parseBudgetPerPersonFromQuery(aiQuery),
     cuisine_preferences: parseCuisinePreferencesFromQuery(aiQuery),
@@ -322,9 +351,16 @@ export async function createEventRequestDraft(
   const payload = {
     customer_id: user.id,
     status: "draft",
+    ai_query: structured.ai_query || null,
     event_type: structured.event_type,
+    catering_type: structured.catering_type,
+    service_style: structured.service_style,
     guest_count: structured.guest_count,
     city: structured.city,
+    postal_code: structured.postal_code,
+    lat: structured.lat,
+    lng: structured.lng,
+    preferred_caterer_id: structured.preferred_caterer_id,
     budget_total: structured.budget_total,
     budget_per_person: structured.budget_per_person,
     cuisine_preferences: structured.cuisine_preferences,
@@ -370,6 +406,8 @@ export async function updateEventRequest(
     event_date: cleanString(updates.event_date),
     city: cleanString(updates.city),
     postal_code: cleanString(updates.postal_code),
+    lat: normalizeCoordinate(updates.lat),
+    lng: normalizeCoordinate(updates.lng),
     budget_total: updates.budget_total,
     budget_per_person: updates.budget_per_person,
     planning_stage: cleanString(updates.planning_stage),
