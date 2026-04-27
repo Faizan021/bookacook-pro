@@ -8,24 +8,19 @@ import { useT } from "@/lib/i18n/context";
 const occasionCards = [
   {
     titleKey: "home.occasions.wedding.title",
-    titleFallback: "Hochzeiten",
+    titleFallback: "Hochzeit",
     descKey: "home.occasions.wedding.desc",
     descFallback: "Elegantes Catering für intime Feiern und große Hochzeiten.",
     section: "wedding" as const,
+    href: "/request/new?occasion=wedding",
   },
   {
     titleKey: "home.occasions.corporate.title",
-    titleFallback: "Firmenevents",
+    titleFallback: "Business Lunch",
     descKey: "home.occasions.corporate.desc",
     descFallback: "Premium-Catering für Meetings, Launches, Offsites und Empfänge.",
     section: "corporate" as const,
-  },
-  {
-    titleKey: "home.occasions.christmas.title",
-    titleFallback: "Weihnachtsfeiern",
-    descKey: "home.occasions.christmas.desc",
-    descFallback: "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
-    section: "christmas" as const,
+    href: "/request/new?occasion=corporate",
   },
   {
     titleKey: "home.occasions.private.title",
@@ -33,27 +28,50 @@ const occasionCards = [
     descKey: "home.occasions.private.desc",
     descFallback: "Kuratiertes Catering für Geburtstage, Familienfeiern und private Dinner.",
     section: "private" as const,
+    href: "/request/new?occasion=private",
+  },
+  {
+    titleKey: "home.occasions.ramadan.title",
+    titleFallback: "Ramadan Iftar",
+    descKey: "home.occasions.ramadan.desc",
+    descFallback: "Stilvolles Iftar-Catering für Familien, Unternehmen und Communities.",
+    section: "ramadan" as const,
+    href: "/request/new?occasion=ramadan",
+  },
+  {
+    titleKey: "home.occasions.christmas.title",
+    titleFallback: "Weihnachtsfeier",
+    descKey: "home.occasions.christmas.desc",
+    descFallback: "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
+    section: "christmas" as const,
+    href: "/request/new?occasion=christmas",
   },
 ];
 
-const caterers = [
+const featuredCaterers = [
   {
     name: "Maison Verde Catering",
     type: "Modern European",
     location: "Berlin",
     price: "ab €38 p.P.",
+    tag: "Corporate & Private",
+    imageSection: "premium" as const,
   },
   {
     name: "Gold Table Events",
     type: "Wedding & Private Dining",
     location: "Berlin",
     price: "ab €52 p.P.",
+    tag: "Wedding Specialist",
+    imageSection: "wedding" as const,
   },
   {
     name: "Urban Feast Studio",
     type: "Corporate Catering",
     location: "Berlin",
     price: "ab €29 p.P.",
+    tag: "Business Catering",
+    imageSection: "corporate" as const,
   },
 ];
 
@@ -61,11 +79,11 @@ export default function Home() {
   const t = useT();
 
   const chips = [
-    t("home.hero.chipWedding", "Hochzeit"),
-    t("home.hero.chipCorporate", "Business Lunch"),
-    t("home.hero.chipPrivate", "Private Dinner"),
-    t("home.hero.chipRamadan", "Ramadan Iftar"),
-    t("home.hero.chipChristmas", "Weihnachtsfeier"),
+    { label: t("home.hero.chipWedding", "Hochzeit"), href: "/request/new?occasion=wedding" },
+    { label: t("home.hero.chipCorporate", "Business Lunch"), href: "/request/new?occasion=corporate" },
+    { label: t("home.hero.chipPrivate", "Private Dinner"), href: "/request/new?occasion=private" },
+    { label: t("home.hero.chipRamadan", "Ramadan Iftar"), href: "/request/new?occasion=ramadan" },
+    { label: t("home.hero.chipChristmas", "Weihnachtsfeier"), href: "/request/new?occasion=christmas" },
   ];
 
   return (
@@ -80,22 +98,16 @@ export default function Home() {
           imageClassName="scale-105"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/90 via-[#102f28]/65 to-[#102f28]/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/90 via-[#102f28]/70 to-[#102f28]/20" />
 
         <div className="relative mx-auto grid min-h-[760px] max-w-7xl items-center px-6 py-24">
           <div className="max-w-3xl text-white">
             <div className="mb-6 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">
-              {t(
-                "home.hero.badge",
-                "KI-gestützter Catering-Marktplatz für Premium-Events"
-              )}
+              {t("home.hero.badge", "KI-gestützter Catering-Marktplatz für Premium-Events")}
             </div>
 
             <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
-              {t(
-                "home.hero.title",
-                "Beschreiben Sie Ihr Event. Speisely findet passende Caterer."
-              )}
+              {t("home.hero.title", "Beschreiben Sie Ihr Event. Speisely findet passende Caterer.")}
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
@@ -116,7 +128,7 @@ export default function Home() {
 
               <Link
                 href="/request/new"
-                className="mt-3 inline-flex min-h-14 items-center justify-center rounded-2xl bg-[#c9a45c] px-7 font-semibold text-[#173f35] md:mt-0"
+                className="mt-3 inline-flex min-h-14 items-center justify-center rounded-2xl bg-[#c9a45c] px-7 font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0"
               >
                 {t("home.hero.cta", "Caterer finden")}
               </Link>
@@ -124,12 +136,13 @@ export default function Home() {
 
             <div className="mt-5 flex flex-wrap gap-3 text-sm">
               {chips.map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded-full border border-white/20 bg-white/10 px-4 py-2 font-medium text-white/90 backdrop-blur"
+                <Link
+                  key={chip.label}
+                  href={chip.href}
+                  className="rounded-full border border-white/25 bg-white/10 px-4 py-2 font-medium text-white/90 backdrop-blur transition hover:border-[#d7b66d] hover:bg-[#d7b66d] hover:text-[#102f28]"
                 >
-                  {chip}
-                </span>
+                  {chip.label}
+                </Link>
               ))}
             </div>
           </div>
@@ -141,29 +154,20 @@ export default function Home() {
           {[
             {
               title: t("home.steps.describe.title", "1. Beschreiben"),
-              text: t(
-                "home.steps.describe.text",
-                "Beschreiben Sie Ihr Event in natürlicher Sprache."
-              ),
+              text: t("home.steps.describe.text", "Beschreiben Sie Ihr Event in natürlicher Sprache."),
             },
             {
               title: t("home.steps.structure.title", "2. Strukturieren"),
-              text: t(
-                "home.steps.structure.text",
-                "Die KI erkennt Eventtyp, Gästezahl, Ort, Budget und Wünsche."
-              ),
+              text: t("home.steps.structure.text", "Die KI erkennt Eventtyp, Gästezahl, Ort, Budget und Wünsche."),
             },
             {
               title: t("home.steps.match.title", "3. Matchen"),
-              text: t(
-                "home.steps.match.text",
-                "Sie erhalten passende Caterer statt einer unübersichtlichen Liste."
-              ),
+              text: t("home.steps.match.text", "Sie erhalten passende Caterer statt einer unübersichtlichen Liste."),
             },
           ].map((item) => (
             <div
               key={item.title}
-              className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm"
+              className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <h3 className="text-xl font-semibold">{item.title}</h3>
               <p className="mt-4 leading-7 text-[#5c6f68]">{item.text}</p>
@@ -172,7 +176,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#173f35] py-24 text-white">
+      <section className="bg-[#07130f] py-24 text-white">
         <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 md:grid-cols-2">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
@@ -180,10 +184,7 @@ export default function Home() {
             </p>
 
             <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              {t(
-                "home.premium.title",
-                "Catering ist emotional. Die Buchung sollte hochwertig wirken."
-              )}
+              {t("home.premium.title", "Catering ist emotional. Die Buchung sollte hochwertig wirken.")}
             </h2>
 
             <p className="mt-6 text-lg leading-8 text-white/75">
@@ -210,10 +211,7 @@ export default function Home() {
             </p>
 
             <h2 className="mt-3 text-4xl font-semibold tracking-tight">
-              {t(
-                "home.occasions.title",
-                "Für Events, die Menschen wirklich planen"
-              )}
+              {t("home.occasions.title", "Für Events, die Menschen wirklich planen")}
             </h2>
           </div>
 
@@ -222,86 +220,156 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
           {occasionCards.map((card) => (
-            <div
+            <Link
               key={card.titleKey}
-              className="overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm"
+              href={card.href}
+              className="group overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
               <DynamicUnsplashImage
                 section={card.section}
-                className="h-64"
-                sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                className="h-56"
+                imageClassName="transition duration-500 group-hover:scale-110"
+                sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
               />
 
-              <div className="p-7">
-                <h3 className="text-2xl font-semibold">
+              <div className="p-6">
+                <h3 className="text-xl font-semibold">
                   {t(card.titleKey, card.titleFallback)}
                 </h3>
-                <p className="mt-3 leading-7 text-[#5c6f68]">
+                <p className="mt-3 text-sm leading-6 text-[#5c6f68]">
                   {t(card.descKey, card.descFallback)}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-24">
-        <div className="rounded-[2.5rem] bg-white p-8 shadow-sm md:p-12">
-          <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+        <div className="overflow-hidden rounded-[2.5rem] bg-white shadow-sm ring-1 ring-[#eadfce]">
+          <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
+            <div className="bg-[#07130f] p-8 text-white md:p-12">
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
                 {t("home.caterers.label", "Kuratierte Caterer")}
               </p>
 
-              <h2 className="mt-3 text-4xl font-semibold tracking-tight">
-                {t(
-                  "home.caterers.title",
-                  "Ein Marktplatz, der ausgewählt wirkt — nicht überfüllt."
-                )}
+              <h2 className="mt-4 text-4xl font-semibold tracking-tight">
+                {t("home.caterers.title", "Ein Marktplatz, der ausgewählt wirkt — nicht überfüllt.")}
               </h2>
+
+              <p className="mt-5 leading-8 text-white/70">
+                {t(
+                  "home.caterers.text",
+                  "Entdecken Sie geprüfte Catering-Partner mit klaren Paketen, hochwertigen Bildern und passenden Event-Spezialisierungen."
+                )}
+              </p>
+
+              <Link
+                href="/caterers"
+                className="mt-8 inline-flex rounded-full bg-[#d7a83f] px-6 py-3 font-semibold text-black transition hover:bg-[#e3b955]"
+              >
+                {t("home.caterers.cta", "Caterer ansehen")} →
+              </Link>
             </div>
 
-            <Link href="/caterers" className="font-semibold text-[#173f35]">
-              {t("home.caterers.cta", "Caterer ansehen")} →
-            </Link>
-          </div>
+            <div className="grid gap-5 bg-[#faf6ee] p-6 md:grid-cols-3 md:p-8">
+              {featuredCaterers.map((caterer) => (
+                <Link
+                  key={caterer.name}
+                  href="/caterers"
+                  className="group overflow-hidden rounded-[1.75rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <DynamicUnsplashImage
+                    section={caterer.imageSection}
+                    className="h-44"
+                    imageClassName="transition duration-500 group-hover:scale-110"
+                    sizes="(min-width: 768px) 25vw, 100vw"
+                  />
 
-          <div className="grid gap-5 md:grid-cols-3">
-            {caterers.map((caterer) => (
-              <div
-                key={caterer.name}
-                className="rounded-[1.5rem] border border-[#eadfce] bg-[#faf6ee] p-6"
-              >
-                <div className="mb-8 h-10 w-10 rounded-full bg-[#173f35]" />
-                <h3 className="text-xl font-semibold">{caterer.name}</h3>
-                <p className="mt-2 text-[#5c6f68]">{caterer.type}</p>
+                  <div className="p-5">
+                    <div className="mb-4 inline-flex rounded-full bg-[#f4ead7] px-3 py-1 text-xs font-semibold text-[#8a6d35]">
+                      {caterer.tag}
+                    </div>
 
-                <div className="mt-6 flex justify-between text-sm">
-                  <span>{caterer.location}</span>
-                  <span className="font-semibold">{caterer.price}</span>
-                </div>
-              </div>
-            ))}
+                    <h3 className="text-lg font-semibold">{caterer.name}</h3>
+                    <p className="mt-2 text-sm text-[#5c6f68]">{caterer.type}</p>
+
+                    <div className="mt-5 flex justify-between text-sm">
+                      <span>{caterer.location}</span>
+                      <span className="font-semibold">{caterer.price}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 pb-24 md:grid-cols-2">
+        <DynamicUnsplashImage
+          section="caterer"
+          className="h-[460px] rounded-[2rem] shadow-sm"
+          sizes="(min-width: 768px) 50vw, 100vw"
+        />
+
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+            {t("home.forCaterers.label", "Für Caterer")}
+          </p>
+
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight">
+            {t("home.forCaterers.title", "Erhalten Sie bessere Anfragen, nicht nur zufällige Leads.")}
+          </h2>
+
+          <p className="mt-6 text-lg leading-8 text-[#5c6f68]">
+            {t(
+              "home.forCaterers.text",
+              "Speisely hilft Caterern, strukturierte Anfragen mit Eventdetails, Budget, Gästezahl und Service-Erwartungen zu erhalten."
+            )}
+          </p>
+
+          <Link
+            href="/caterer"
+            className="mt-8 inline-flex rounded-full bg-[#173f35] px-6 py-3 font-semibold text-white"
+          >
+            {t("home.forCaterers.cta", "Als Caterer beitreten")}
+          </Link>
+        </div>
+      </section>
+
+      <section className="px-6 pb-24">
+        <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-[#07130f] px-8 py-16 text-center text-white md:px-16">
+          <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
+            {t("home.final.title", "Planen Sie Ihr nächstes Catering mit KI-Unterstützung.")}
+          </h2>
+
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/70">
+            {t(
+              "home.final.text",
+              "Starten Sie mit einer einfachen Beschreibung. Speisely macht daraus ein klares Briefing und führt Sie zum passenden Caterer."
+            )}
+          </p>
+
+          <Link
+            href="/request/new"
+            className="mt-8 inline-flex rounded-full bg-[#d7a83f] px-8 py-4 font-semibold text-black"
+          >
+            {t("home.final.cta", "Event beschreiben")}
+          </Link>
         </div>
       </section>
 
       <footer className="border-t border-[#eadfce] px-6 py-10">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-[#5c6f68] md:flex-row">
-          <p>
-            © 2026 Speisely.{" "}
-            {t(
-              "footer.tagline",
-              "Premium KI-gestützter Catering-Marktplatz."
-            )}
-          </p>
+          <p>© 2026 Speisely. {t("footer.tagline", "Premium KI-gestützter Catering-Marktplatz.")}</p>
 
           <div className="flex gap-6">
-            <Link href="/caterers">{t("nav.caterers", "Caterer")}</Link>
-            <Link href="/request/new">{t("nav.planEvent", "Event planen")}</Link>
+            <Link href="/caterers">{t("nav.discoverCaterers", "Caterer entdecken")}</Link>
             <Link href="/caterer">{t("nav.forCaterers", "Für Caterer")}</Link>
+            <Link href="/about">{t("nav.about", "Über Speisely")}</Link>
           </div>
         </div>
       </footer>
