@@ -35,6 +35,7 @@ export function parseHeroIntent(input: string) {
   
   const diet = text.includes("vegan") ? "Vegan" 
              : text.includes("vegetar") ? "Vegetarian" 
+             : text.includes("halal") ? "Halal"
              : "Preferred menu";
 
   return { event, city, guests, diet };
