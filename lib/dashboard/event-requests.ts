@@ -41,7 +41,7 @@ function cleanString(value?: string | null) {
 
 function cleanStringArray(values?: string[] | null) {
   if (!values) return [];
-  return values.map((v) => v.trim()).filter(Boolean);
+  return values.map((value) => value.trim()).filter(Boolean);
 }
 
 function removeUndefinedFields<T extends Record<string, unknown>>(obj: T) {
@@ -159,9 +159,12 @@ function parseCityFromQuery(query?: string | null) {
   if (text.includes("frankfurt")) return "Frankfurt am Main";
   if (text.includes("cologne") || text.includes("köln")) return "Köln";
   if (text.includes("dortmund")) return "Dortmund";
+
   if (text.includes("düsseldorf") || text.includes("duesseldorf")) {
     return "Düsseldorf";
   }
+
+  if (text.includes("paderborn")) return "Paderborn";
 
   return null;
 }
@@ -172,7 +175,8 @@ function parseGuestCountFromQuery(query?: string | null) {
   const match =
     text.match(/(\d+)\s*(guests|guest|people|persons)/i) ||
     text.match(/(\d+)\s*(gäste|personen|mitarbeitende|mitarbeiter)/i) ||
-    text.match(/for\s+(\d+)/i);
+    text.match(/for\s+(\d+)/i) ||
+    text.match(/für\s+(\d+)/i);
 
   if (!match) return null;
 
@@ -184,8 +188,8 @@ function parseBudgetPerPersonFromQuery(query?: string | null) {
   const text = query || "";
 
   const match =
-    text.match(/€\s?(\d+)\s*(per person|pp|p\.p\.)/i) ||
-    text.match(/(\d+)\s?(€|eur|euros?)\s*(per person|pp|p\.p\.)/i) ||
+    text.match(/€\s?(\d+)\s*(per person|pp|p\.p\.|pro person)/i) ||
+    text.match(/(\d+)\s?(€|eur|euros?)\s*(per person|pp|p\.p\.|pro person)/i) ||
     text.match(/ca\.\s*€\s?(\d+)/i) ||
     text.match(/around\s*€\s?(\d+)\s*(per person|pp|p\.p\.)/i);
 
@@ -306,7 +310,9 @@ function parseExtraServicesFromQuery(query?: string | null) {
 
 function normalizeCoordinate(value?: string | number | null) {
   if (value == null || value === "") return null;
+
   const numberValue = typeof value === "number" ? value : Number(value);
+
   return Number.isFinite(numberValue) ? numberValue : null;
 }
 
