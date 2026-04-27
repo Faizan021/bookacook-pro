@@ -1,4 +1,3 @@
-
 import { createClient } from "@/lib/supabase/server";
 
 type EventRequestRow = {
@@ -73,19 +72,28 @@ function normalizeArray(values: string[] | null | undefined) {
   return (values || []).map((value) => normalize(value)).filter(Boolean);
 }
 
-function intersects(a: string[] | null | undefined, b: string[] | null | undefined) {
+function intersects(
+  a: string[] | null | undefined,
+  b: string[] | null | undefined
+) {
   const setA = new Set(normalizeArray(a));
   const setB = normalizeArray(b);
   return setB.some((item) => setA.has(item));
 }
 
-function includesValue(values: string[] | null | undefined, target: string | null | undefined) {
+function includesValue(
+  values: string[] | null | undefined,
+  target: string | null | undefined
+) {
   const normalizedTarget = normalize(target);
   if (!normalizedTarget) return false;
   return normalizeArray(values).includes(normalizedTarget);
 }
 
-function textIncludes(text: string | null | undefined, target: string | null | undefined) {
+function textIncludes(
+  text: string | null | undefined,
+  target: string | null | undefined
+) {
   const a = normalize(text);
   const b = normalize(target);
   if (!a || !b) return false;
@@ -176,7 +184,10 @@ function scoreCaterer(
   }
 
   const activePackages = packages.filter(
-    (pkg) => pkg.is_active && pkg.is_published && normalize(pkg.status || "published") !== "draft"
+    (pkg) =>
+      pkg.is_active &&
+      pkg.is_published &&
+      normalize(pkg.status || "published") !== "draft"
   );
 
   if (!activePackages.length) {
@@ -185,32 +196,32 @@ function scoreCaterer(
 
   if (textIncludes(caterer.city, request.city)) {
     score += 20;
-    reasons.push(`Located in or near ${request.city}`);
+    reasons.push(`In oder nahe ${request.city}`);
   }
 
   if (intersects(caterer.cuisine_types, request.cuisine_preferences)) {
     score += 15;
-    reasons.push("Caterer cuisine types match your preferences");
+    reasons.push("Küchenrichtung passt zu Ihren Wünschen");
   }
 
   if (normalize(caterer.verification_status) === "verified") {
     score += 10;
-    reasons.push("Verified caterer");
+    reasons.push("Verifizierter Caterer");
   }
 
   if (caterer.payout_enabled) {
     score += 5;
-    reasons.push("Payout-ready caterer");
+    reasons.push("Auszahlungsbereit");
   }
 
   if ((caterer.average_rating || 0) >= 4.5) {
     score += 5;
-    reasons.push("Strong average rating");
+    reasons.push("Sehr gute Bewertung");
   }
 
   if (caterer.is_featured) {
     score += 3;
-    reasons.push("Featured caterer");
+    reasons.push("Empfohlener Caterer");
   }
 
   let bestPackageScore = 0;
@@ -222,37 +233,37 @@ function scoreCaterer(
 
     if (packageSupportsEventType(pkg, request)) {
       packageScore += 20;
-      packageReasons.push("Supports your event type");
+      packageReasons.push("Passt zu Ihrem Eventtyp");
     }
 
     if (packageSupportsCateringType(pkg, request)) {
       packageScore += 15;
-      packageReasons.push("Matches your catering style");
+      packageReasons.push("Passt zum gewünschten Catering-Stil");
     }
 
     if (packageSupportsCuisine(pkg, request)) {
       packageScore += 15;
-      packageReasons.push("Includes requested cuisine preferences");
+      packageReasons.push("Enthält gewünschte Küchenrichtung");
     }
 
     if (packageSupportsDietary(pkg, request)) {
       packageScore += 10;
-      packageReasons.push("Supports dietary requirements");
+      packageReasons.push("Unterstützt Ernährungsanforderungen");
     }
 
     if (packageSupportsExtras(pkg, request)) {
       packageScore += 8;
-      packageReasons.push("Includes requested extra services");
+      packageReasons.push("Enthält gewünschte Zusatzleistungen");
     }
 
     if (packageSupportsGuestCount(pkg, request)) {
       packageScore += 12;
-      packageReasons.push("Fits your guest count");
+      packageReasons.push("Passt zur Gästeanzahl");
     }
 
     if (packageSupportsLocation(pkg, request)) {
       packageScore += 8;
-      packageReasons.push("Covers your event location");
+      packageReasons.push("Deckt Ihren Veranstaltungsort ab");
     }
 
     if (
@@ -261,9 +272,10 @@ function scoreCaterer(
       request.guest_count != null
     ) {
       const estimatedTotal = pkg.price_amount * request.guest_count;
+
       if (estimatedTotal <= request.budget_total * 1.15) {
         packageScore += 10;
-        packageReasons.push("Likely within or near your budget");
+        packageReasons.push("Voraussichtlich im Budgetrahmen");
       }
     }
 
@@ -312,7 +324,9 @@ export async function generateMatchesForEventRequest(eventRequestId: string) {
 
   const { data: caterers, error: caterersError } = await supabase
     .from("caterers")
-    .select("id, business_name, city, cuisine_types, verification_status, is_active, is_featured, average_rating, payout_enabled")
+    .select(
+      "id, business_name, city, cuisine_types, verification_status, is_active, is_featured, average_rating, payout_enabled"
+    )
     .eq("is_active", true)
     .returns<CatererRow[]>();
 
@@ -320,7 +334,7 @@ export async function generateMatchesForEventRequest(eventRequestId: string) {
     throw new Error(caterersError.message);
   }
 
-  const catererIds = (caterers || []).map((c) => c.id);
+  const catererIds = (caterers || []).map((caterer) => caterer.id);
 
   if (!catererIds.length) {
     await supabase
@@ -354,7 +368,9 @@ export async function generateMatchesForEventRequest(eventRequestId: string) {
   }
 
   const matches = (caterers || [])
-    .map((caterer) => scoreCaterer(request, caterer, packagesByCaterer.get(caterer.id) || []))
+    .map((caterer) =>
+      scoreCaterer(request, caterer, packagesByCaterer.get(caterer.id) || [])
+    )
     .filter((match): match is GeneratedMatch => Boolean(match))
     .sort((a, b) => b.match_score - a.match_score)
     .slice(0, 6);
@@ -404,7 +420,8 @@ export async function getMatchesForEventRequest(eventRequestId: string) {
 
   const { data, error } = await supabase
     .from("event_request_matches")
-    .select(`
+    .select(
+      `
       id,
       match_score,
       match_reasons,
@@ -420,7 +437,8 @@ export async function getMatchesForEventRequest(eventRequestId: string) {
         verification_status,
         is_featured
       )
-    `)
+    `
+    )
     .eq("event_request_id", eventRequestId)
     .order("match_score", { ascending: false });
 
