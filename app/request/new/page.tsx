@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
 import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 import { useT } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
+import { createRequestDraftAction } from "./actions";
 
 type GermanLocation = {
   id: string;
@@ -47,6 +49,7 @@ const occasionPrompts = [
 
 export default function NewRequestPage() {
   const t = useT();
+  const router = useRouter();
 
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
@@ -54,6 +57,8 @@ export default function NewRequestPage() {
     useState<GermanLocation | null>(null);
   const [locationResults, setLocationResults] = useState<GermanLocation[]>([]);
   const [locationLoading, setLocationLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     const term = locationInput.trim();
@@ -68,13 +73,22 @@ export default function NewRequestPage() {
 
       try {
         const supabase = createClient();
+        const isPostalCode = /^\d+$/.test(term);
 
-        const { data, error } = await supabase
+        let locationQuery = supabase
           .from("german_locations")
           .select("id,name,postal_code,state,lat,lng,type")
-          .or(`name.ilike.%${term}%,postal_code.ilike.%${term}%`)
-          .order("name", { ascending: true })
           .limit(8);
+
+        if (isPostalCode) {
+          locationQuery = locationQuery.ilike("postal_code", `${term}%`);
+        } else {
+          locationQuery = locationQuery.ilike("name", `%${term}%`);
+        }
+
+        const { data, error } = await locationQuery.order("name", {
+          ascending: true,
+        });
 
         if (error) {
           console.error("Location search failed:", error.message);
@@ -116,7 +130,10 @@ export default function NewRequestPage() {
           ? `${selectedLocation.postal_code ?? ""} ${selectedLocation.name}`.trim()
           : locationInput || t("request.open", "Noch offen"),
       ],
-      [t("request.brief.guests", "Gäste"), query.match(/\d+/)?.[0] || t("request.open", "Noch offen")],
+      [
+        t("request.brief.guests", "Gäste"),
+        query.match(/\d+/)?.[0] || t("request.open", "Noch offen"),
+      ],
       [
         t("request.brief.budget", "Budget"),
         query.includes("€")
@@ -148,6 +165,33 @@ export default function NewRequestPage() {
       `${location.postal_code ? `${location.postal_code} ` : ""}${location.name}`
     );
     setLocationResults([]);
+  }
+
+  async function handleSaveRequest() {
+    setSaveError(null);
+    setSaving(true);
+
+    try {
+      const result = await createRequestDraftAction({
+        ai_query: query,
+        event_type: null,
+        city: selectedLocation?.name ?? locationInput ?? null,
+        postal_code: selectedLocation?.postal_code ?? null,
+        lat: selectedLocation?.lat ?? null,
+        lng: selectedLocation?.lng ?? null,
+      });
+
+      router.push(`/request/${result.id}`);
+    } catch (error) {
+      console.error(error);
+      setSaveError(
+        t(
+          "request.saveError",
+          "Die Anfrage konnte nicht gespeichert werden. Bitte melden Sie sich an oder versuchen Sie es erneut."
+        )
+      );
+      setSaving(false);
+    }
   }
 
   return (
@@ -236,7 +280,8 @@ export default function NewRequestPage() {
                         {location.postal_code} {location.name}
                       </div>
                       <div className="text-sm text-[#5c6f68]">
-                        {location.state} · {location.type ?? "location"}
+                        {location.state ?? "Deutschland"} ·{" "}
+                        {location.type ?? "location"}
                       </div>
                     </button>
                   ))}
@@ -250,13 +295,23 @@ export default function NewRequestPage() {
               )}
             </div>
 
+            {saveError ? (
+              <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+                {saveError}
+              </div>
+            ) : null}
+
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/customer"
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27]"
+              <button
+                type="button"
+                onClick={handleSaveRequest}
+                disabled={saving}
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {t("request.continue", "Anfrage speichern und fortfahren")}
-              </Link>
+                {saving
+                  ? t("request.saving", "Anfrage wird gespeichert...")
+                  : t("request.continue", "Anfrage speichern und fortfahren")}
+              </button>
 
               <Link
                 href="/caterers"
