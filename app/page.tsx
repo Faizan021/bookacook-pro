@@ -1,5 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
+import { useT, useIsRTL } from "@/lib/i18n/context";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { LogoLockup } from "@/components/ui/logo-mark";
 
 const occasionCards = [
   {
