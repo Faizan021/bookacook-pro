@@ -79,11 +79,26 @@ export default function Home() {
   const t = useT();
 
   const chips = [
-    { label: t("home.hero.chipWedding", "Hochzeit"), href: "/request/new?occasion=wedding" },
-    { label: t("home.hero.chipCorporate", "Business Lunch"), href: "/request/new?occasion=corporate" },
-    { label: t("home.hero.chipPrivate", "Private Dinner"), href: "/request/new?occasion=private" },
-    { label: t("home.hero.chipRamadan", "Ramadan Iftar"), href: "/request/new?occasion=ramadan" },
-    { label: t("home.hero.chipChristmas", "Weihnachtsfeier"), href: "/request/new?occasion=christmas" },
+    {
+      label: t("home.hero.chipWedding", "Hochzeit"),
+      href: "/request/new?occasion=wedding",
+    },
+    {
+      label: t("home.hero.chipCorporate", "Business Lunch"),
+      href: "/request/new?occasion=corporate",
+    },
+    {
+      label: t("home.hero.chipPrivate", "Private Dinner"),
+      href: "/request/new?occasion=private",
+    },
+    {
+      label: t("home.hero.chipRamadan", "Ramadan Iftar"),
+      href: "/request/new?occasion=ramadan",
+    },
+    {
+      label: t("home.hero.chipChristmas", "Weihnachtsfeier"),
+      href: "/request/new?occasion=christmas",
+    },
   ];
 
   return (
@@ -103,11 +118,17 @@ export default function Home() {
         <div className="relative mx-auto grid min-h-[760px] max-w-7xl items-center px-6 py-24">
           <div className="max-w-3xl text-white">
             <div className="mb-6 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">
-              {t("home.hero.badge", "KI-gestützter Catering-Marktplatz für Premium-Events")}
+              {t(
+                "home.hero.badge",
+                "KI-gestützter Catering-Marktplatz für Premium-Events"
+              )}
             </div>
 
             <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
-              {t("home.hero.title", "Beschreiben Sie Ihr Event. Speisely findet passende Caterer.")}
+              {t(
+                "home.hero.title",
+                "Beschreiben Sie Ihr Event. Speisely findet passende Caterer."
+              )}
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
@@ -154,15 +175,24 @@ export default function Home() {
           {[
             {
               title: t("home.steps.describe.title", "1. Beschreiben"),
-              text: t("home.steps.describe.text", "Beschreiben Sie Ihr Event in natürlicher Sprache."),
+              text: t(
+                "home.steps.describe.text",
+                "Beschreiben Sie Ihr Event in natürlicher Sprache."
+              ),
             },
             {
               title: t("home.steps.structure.title", "2. Strukturieren"),
-              text: t("home.steps.structure.text", "Die KI erkennt Eventtyp, Gästezahl, Ort, Budget und Wünsche."),
+              text: t(
+                "home.steps.structure.text",
+                "Die KI erkennt Eventtyp, Gästezahl, Ort, Budget und Wünsche."
+              ),
             },
             {
               title: t("home.steps.match.title", "3. Matchen"),
-              text: t("home.steps.match.text", "Sie erhalten passende Caterer statt einer unübersichtlichen Liste."),
+              text: t(
+                "home.steps.match.text",
+                "Sie erhalten passende Caterer statt einer unübersichtlichen Liste."
+              ),
             },
           ].map((item) => (
             <div
@@ -176,18 +206,21 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#07130f] py-24 text-white">
+      <section className="bg-[#faf6ee] py-24 text-[#16372f]">
         <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 md:grid-cols-2">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
+            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
               {t("home.premium.label", "Premium-Präsentation")}
             </p>
 
             <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-              {t("home.premium.title", "Catering ist emotional. Die Buchung sollte hochwertig wirken.")}
+              {t(
+                "home.premium.title",
+                "Catering ist emotional. Die Buchung sollte hochwertig wirken."
+              )}
             </h2>
 
-            <p className="mt-6 text-lg leading-8 text-white/75">
+            <p className="mt-6 text-lg leading-8 text-[#5c6f68]">
               {t(
                 "home.premium.text",
                 "Speisely kombiniert elegante Präsentation mit klarer Marketplace-Logik: Pakete, strukturierte Anfragen, verifizierte Caterer und eine geführte Customer Journey."
@@ -197,7 +230,7 @@ export default function Home() {
 
           <DynamicUnsplashImage
             section="premium"
-            className="h-[480px] rounded-[2rem] shadow-2xl"
+            className="h-[480px] rounded-[2rem] shadow-sm"
             sizes="(min-width: 768px) 50vw, 100vw"
           />
         </div>
@@ -211,7 +244,10 @@ export default function Home() {
             </p>
 
             <h2 className="mt-3 text-4xl font-semibold tracking-tight">
-              {t("home.occasions.title", "Für Events, die Menschen wirklich planen")}
+              {t(
+                "home.occasions.title",
+                "Für Events, die Menschen wirklich planen"
+              )}
             </h2>
           </div>
 
@@ -250,16 +286,19 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-6 pb-24">
         <div className="overflow-hidden rounded-[2.5rem] bg-white shadow-sm ring-1 ring-[#eadfce]">
           <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="bg-[#07130f] p-8 text-white md:p-12">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
+            <div className="bg-white p-8 text-[#16372f] md:p-12">
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
                 {t("home.caterers.label", "Kuratierte Caterer")}
               </p>
 
               <h2 className="mt-4 text-4xl font-semibold tracking-tight">
-                {t("home.caterers.title", "Ein Marktplatz, der ausgewählt wirkt — nicht überfüllt.")}
+                {t(
+                  "home.caterers.title",
+                  "Ein Marktplatz, der ausgewählt wirkt — nicht überfüllt."
+                )}
               </h2>
 
-              <p className="mt-5 leading-8 text-white/70">
+              <p className="mt-5 leading-8 text-[#5c6f68]">
                 {t(
                   "home.caterers.text",
                   "Entdecken Sie geprüfte Catering-Partner mit klaren Paketen, hochwertigen Bildern und passenden Event-Spezialisierungen."
@@ -268,7 +307,7 @@ export default function Home() {
 
               <Link
                 href="/caterers"
-                className="mt-8 inline-flex rounded-full bg-[#d7a83f] px-6 py-3 font-semibold text-black transition hover:bg-[#e3b955]"
+                className="mt-8 inline-flex rounded-full bg-[#173f35] px-6 py-3 font-semibold text-white transition hover:bg-[#0f2f27]"
               >
                 {t("home.caterers.cta", "Caterer ansehen")} →
               </Link>
@@ -294,7 +333,9 @@ export default function Home() {
                     </div>
 
                     <h3 className="text-lg font-semibold">{caterer.name}</h3>
-                    <p className="mt-2 text-sm text-[#5c6f68]">{caterer.type}</p>
+                    <p className="mt-2 text-sm text-[#5c6f68]">
+                      {caterer.type}
+                    </p>
 
                     <div className="mt-5 flex justify-between text-sm">
                       <span>{caterer.location}</span>
@@ -321,7 +362,10 @@ export default function Home() {
           </p>
 
           <h2 className="mt-4 text-4xl font-semibold tracking-tight">
-            {t("home.forCaterers.title", "Erhalten Sie bessere Anfragen, nicht nur zufällige Leads.")}
+            {t(
+              "home.forCaterers.title",
+              "Erhalten Sie bessere Anfragen, nicht nur zufällige Leads."
+            )}
           </h2>
 
           <p className="mt-6 text-lg leading-8 text-[#5c6f68]">
@@ -332,8 +376,8 @@ export default function Home() {
           </p>
 
           <Link
-            href="/caterer"
-            className="mt-8 inline-flex rounded-full bg-[#173f35] px-6 py-3 font-semibold text-white"
+            href="/for-caterers"
+            className="mt-8 inline-flex rounded-full bg-[#173f35] px-6 py-3 font-semibold text-white transition hover:bg-[#0f2f27]"
           >
             {t("home.forCaterers.cta", "Als Caterer beitreten")}
           </Link>
@@ -341,12 +385,15 @@ export default function Home() {
       </section>
 
       <section className="px-6 pb-24">
-        <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-[#07130f] px-8 py-16 text-center text-white md:px-16">
+        <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-[#173f35] px-8 py-16 text-center text-white md:px-16">
           <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
-            {t("home.final.title", "Planen Sie Ihr nächstes Catering mit KI-Unterstützung.")}
+            {t(
+              "home.final.title",
+              "Planen Sie Ihr nächstes Catering mit KI-Unterstützung."
+            )}
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/70">
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/75">
             {t(
               "home.final.text",
               "Starten Sie mit einer einfachen Beschreibung. Speisely macht daraus ein klares Briefing und führt Sie zum passenden Caterer."
@@ -355,7 +402,7 @@ export default function Home() {
 
           <Link
             href="/request/new"
-            className="mt-8 inline-flex rounded-full bg-[#d7a83f] px-8 py-4 font-semibold text-black"
+            className="mt-8 inline-flex rounded-full bg-[#d7b66d] px-8 py-4 font-semibold text-[#173f35]"
           >
             {t("home.final.cta", "Event beschreiben")}
           </Link>
@@ -364,11 +411,18 @@ export default function Home() {
 
       <footer className="border-t border-[#eadfce] px-6 py-10">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-[#5c6f68] md:flex-row">
-          <p>© 2026 Speisely. {t("footer.tagline", "Premium KI-gestützter Catering-Marktplatz.")}</p>
+          <p>
+            © 2026 Speisely.{" "}
+            {t("footer.tagline", "Premium KI-gestützter Catering-Marktplatz.")}
+          </p>
 
           <div className="flex gap-6">
-            <Link href="/caterers">{t("nav.discoverCaterers", "Caterer entdecken")}</Link>
-            <Link href="/caterer">{t("nav.forCaterers", "Für Caterer")}</Link>
+            <Link href="/caterers">
+              {t("nav.discoverCaterers", "Caterer entdecken")}
+            </Link>
+            <Link href="/for-caterers">
+              {t("nav.forCaterers", "Für Caterer")}
+            </Link>
             <Link href="/about">{t("nav.about", "Über Speisely")}</Link>
           </div>
         </div>
