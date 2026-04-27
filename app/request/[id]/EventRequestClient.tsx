@@ -237,7 +237,7 @@ export default function EventRequestClient({
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto max-w-7xl px-6 py-14 lg:py-20">
+      <section className="mx-auto max-w-7xl px-6 pt-24 pb-14 lg:pt-28 lg:pb-20">
         <Link
           href="/request/new"
           className="inline-flex items-center gap-2 rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm transition hover:bg-[#f4ead7]"
