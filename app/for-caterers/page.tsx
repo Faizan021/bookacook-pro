@@ -65,14 +65,14 @@ export default function ForCaterersPage() {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="/signup"
+              href="/signup/caterer"
               className="rounded-full bg-[#173f35] px-7 py-4 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27]"
             >
               {t("forCaterers.heroCta", "Speisely beitreten")} →
             </Link>
 
             <Link
-              href="/login"
+              href="/login?next=/caterer"
               className="rounded-full border border-[#d8ccb9] bg-white px-7 py-4 font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
             >
               {t("forCaterers.secondaryCta", "Caterer-Login")}
@@ -149,7 +149,7 @@ export default function ForCaterersPage() {
           </p>
 
           <Link
-            href="/signup"
+            href="/signup/caterer"
             className="mt-8 inline-flex rounded-full bg-[#173f35] px-7 py-4 font-semibold text-white"
           >
             {t("forCaterers.finalCta", "Jetzt beitreten")} →
