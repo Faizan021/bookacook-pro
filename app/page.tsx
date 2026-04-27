@@ -2,9 +2,35 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
 import { useT } from "@/lib/i18n/context";
+
+const images = {
+  hero:
+    "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=85",
+  premium:
+    "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=1400&q=85",
+  forCaterers:
+    "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1400&q=85",
+
+  wedding:
+    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=85",
+  corporate:
+    "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=85",
+  private:
+    "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=900&q=85",
+  ramadan:
+    "https://images.unsplash.com/photo-1543353071-10c8ba85a904?auto=format&fit=crop&w=900&q=85",
+  christmas:
+    "https://images.unsplash.com/photo-1481930916222-5ec4696fc0f2?auto=format&fit=crop&w=900&q=85",
+
+  maison:
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=85",
+  gold:
+    "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=900&q=85",
+  urban:
+    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=85",
+};
 
 const occasionCards = [
   {
@@ -12,7 +38,8 @@ const occasionCards = [
     titleFallback: "Hochzeit",
     descKey: "home.occasions.wedding.desc",
     descFallback: "Elegantes Catering für intime Feiern und große Hochzeiten.",
-    section: "wedding" as const,
+    image: images.wedding,
+    alt: "Elegant wedding catering table",
     href: "/request/new?occasion=wedding",
   },
   {
@@ -21,7 +48,8 @@ const occasionCards = [
     descKey: "home.occasions.corporate.desc",
     descFallback:
       "Premium-Catering für Meetings, Launches, Offsites und Empfänge.",
-    section: "corporate" as const,
+    image: images.corporate,
+    alt: "Corporate event catering space",
     href: "/request/new?occasion=corporate",
   },
   {
@@ -30,7 +58,8 @@ const occasionCards = [
     descKey: "home.occasions.private.desc",
     descFallback:
       "Kuratiertes Catering für Geburtstage, Familienfeiern und private Dinner.",
-    section: "private" as const,
+    image: images.private,
+    alt: "Private dinner table",
     href: "/request/new?occasion=private",
   },
   {
@@ -39,7 +68,8 @@ const occasionCards = [
     descKey: "home.occasions.ramadan.desc",
     descFallback:
       "Stilvolles Iftar-Catering für Familien, Unternehmen und Communities.",
-    section: "ramadan" as const,
+    image: images.ramadan,
+    alt: "Iftar dinner table",
     href: "/request/new?occasion=ramadan",
   },
   {
@@ -48,7 +78,8 @@ const occasionCards = [
     descKey: "home.occasions.christmas.desc",
     descFallback:
       "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
-    section: "christmas" as const,
+    image: images.christmas,
+    alt: "Christmas dinner table",
     href: "/request/new?occasion=christmas",
   },
 ];
@@ -60,8 +91,7 @@ const featuredCaterers = [
     location: "Berlin",
     price: "ab €38 p.P.",
     tag: "Corporate & Private",
-    image:
-      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=85",
+    image: images.maison,
     alt: "Modern European plated food",
   },
   {
@@ -70,9 +100,8 @@ const featuredCaterers = [
     location: "Berlin",
     price: "ab €52 p.P.",
     tag: "Wedding Specialist",
-    image:
-      "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=900&q=85",
-    alt: "Elegant wedding catering food",
+    image: images.gold,
+    alt: "Elegant catered food",
   },
   {
     name: "Urban Feast Studio",
@@ -80,8 +109,7 @@ const featuredCaterers = [
     location: "Berlin",
     price: "ab €29 p.P.",
     tag: "Business Catering",
-    image:
-      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=85",
+    image: images.urban,
     alt: "Corporate catering food",
   },
 ];
@@ -117,13 +145,14 @@ export default function Home() {
       <SpeiselyHeader />
 
       <section className="relative overflow-hidden">
-        <DynamicUnsplashImage
-          section="hero"
+        <Image
+          src={images.hero}
+          alt="Premium catering event table"
+          fill
           priority
-          className="absolute inset-0 h-full w-full"
-          imageClassName="scale-105"
+          sizes="100vw"
+          className="object-cover scale-105"
         />
-
         <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/90 via-[#102f28]/70 to-[#102f28]/20" />
 
         <div className="relative mx-auto grid min-h-[760px] max-w-7xl items-center px-6 py-24">
@@ -239,11 +268,15 @@ export default function Home() {
             </p>
           </div>
 
-          <DynamicUnsplashImage
-            section="premium"
-            className="h-[480px] rounded-[2rem] shadow-sm"
-            sizes="(min-width: 768px) 50vw, 100vw"
-          />
+          <div className="relative h-[480px] overflow-hidden rounded-[2rem] shadow-sm">
+            <Image
+              src={images.premium}
+              alt="Fine dining plated food"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
 
@@ -274,12 +307,15 @@ export default function Home() {
               href={card.href}
               className="group overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
-              <DynamicUnsplashImage
-                section={card.section}
-                className="h-56"
-                imageClassName="transition duration-500 group-hover:scale-110"
-                sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
-              />
+              <div className="relative h-56 overflow-hidden">
+                <Image
+                  src={card.image}
+                  alt={card.alt}
+                  fill
+                  sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition duration-500 group-hover:scale-110"
+                />
+              </div>
 
               <div className="p-6">
                 <h3 className="text-xl font-semibold">
@@ -366,7 +402,7 @@ export default function Home() {
       <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 pb-24 md:grid-cols-2">
         <div className="relative h-[460px] overflow-hidden rounded-[2rem] shadow-sm">
           <Image
-            src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1400&q=85"
+            src={images.forCaterers}
             alt="Professional caterer preparing food"
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
