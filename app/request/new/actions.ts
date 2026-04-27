@@ -6,15 +6,21 @@ type CreateRequestDraftInput = {
   ai_query?: string;
   event_type?: string | null;
   preferred_caterer_id?: string | null;
+  city?: string | null;
+  postal_code?: string | null;
+  lat?: string | number | null;
+  lng?: string | number | null;
 };
 
-export async function createRequestDraftAction(
-  input: CreateRequestDraftInput
-) {
+export async function createRequestDraftAction(input: CreateRequestDraftInput) {
   const draft = await createEventRequestDraft({
     ai_query: input.ai_query ?? "",
     event_type: input.event_type ?? null,
     preferred_caterer_id: input.preferred_caterer_id ?? null,
+    city: input.city ?? null,
+    postal_code: input.postal_code ?? null,
+    lat: input.lat ?? null,
+    lng: input.lng ?? null,
   });
 
   if (!draft?.id) {
