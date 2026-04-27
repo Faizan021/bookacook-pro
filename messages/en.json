@@ -807,5 +807,24 @@
 "home.final.text": "Start with a simple description. Speisely turns it into a clear brief and guides you to the right caterer.",
 "home.final.cta": "Describe event",
 
-"footer.tagline": "Premium AI-assisted catering marketplace."
+"footer.tagline": "Premium AI-assisted catering marketplace.",
+"marketplace.heroTitle": "Discover catering partners for exceptional events.",
+"marketplace.heroSubtitle": "Explore selected caterers for weddings, corporate events, private celebrations, and premium hospitality formats.",
+"marketplace.heroImageAlt": "Premium private catering event table",
+"marketplace.resultsCount": "6 selected partners",
+"marketplace.styleBuffet": "Buffet",
+"marketplace.styleHalal": "Halal",
+
+"about.primaryCta": "Describe event",
+"about.secondaryCta": "Discover caterers",
+"about.heroImageAlt": "Premium catering food presentation",
+"about.directionLabel": "Our direction",
+"about.directionTitle": "Speisely is not a generic directory. It is a guided path from event idea to the right catering solution.",
+"about.trustImageAlt": "Professional catering kitchen preparation",
+"about.whyText": "Event catering requires context: budget, guest count, cuisine, service style, location, and atmosphere all need to fit together. Speisely makes this information visible early and helps customers make better decisions.",
+
+"forCaterers.leadsLabel": "Better qualified inquiries",
+"forCaterers.leadsTitle": "Fewer random leads. More suitable events.",
+"forCaterers.leadsText": "Customers describe their event with budget, guest count, location, style, and special requirements. Speisely structures this information before caterers are contacted.",
+"forCaterers.finalCta": "Join now"
 }
