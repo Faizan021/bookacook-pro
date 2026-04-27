@@ -1,8 +1,15 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
+
+const images = {
+  hero:
+    "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1400&q=85",
+  leads:
+    "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1400&q=85",
+};
 
 export default function ForCaterersPage() {
   return (
@@ -42,11 +49,16 @@ export default function ForCaterersPage() {
           </div>
         </div>
 
-        <DynamicUnsplashImage
-          section="caterer"
-          className="h-[560px] rounded-[2.5rem] shadow-sm"
-          sizes="(min-width: 768px) 50vw, 100vw"
-        />
+        <div className="relative h-[560px] overflow-hidden rounded-[2.5rem] shadow-sm">
+          <Image
+            src={images.hero}
+            alt="Professional caterer preparing food"
+            fill
+            priority
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-24">
@@ -86,11 +98,15 @@ export default function ForCaterersPage() {
       </section>
 
       <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 pb-24 md:grid-cols-2">
-        <DynamicUnsplashImage
-          section="premium"
-          className="h-[460px] rounded-[2.5rem] shadow-sm"
-          sizes="(min-width: 768px) 50vw, 100vw"
-        />
+        <div className="relative h-[460px] overflow-hidden rounded-[2.5rem] shadow-sm">
+          <Image
+            src={images.leads}
+            alt="Catering team serving event food"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
 
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
