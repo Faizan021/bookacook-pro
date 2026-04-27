@@ -1,36 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
 import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 import { useT } from "@/lib/i18n/context";
+import { createClient } from "@/lib/supabase/client";
+
+type GermanLocation = {
+  id: string;
+  name: string;
+  postal_code: string | null;
+  state: string | null;
+  lat: string | number | null;
+  lng: string | number | null;
+  type: string | null;
+};
 
 const occasionPrompts = [
   {
     label: "Hochzeit",
     query:
-      "Hochzeit für 80 Gäste in Berlin, vegetarisch, elegantes Buffet, ca. €45 pro Person",
+      "Hochzeit für 80 Gäste, vegetarisch, elegantes Buffet, ca. €45 pro Person",
   },
   {
     label: "Business Lunch",
     query:
-      "Business Lunch für 45 Personen in Berlin Mitte, modern, vegetarische Optionen, ca. €30 pro Person",
+      "Business Lunch für 45 Personen, modern, vegetarische Optionen, ca. €30 pro Person",
   },
   {
     label: "Private Dinner",
     query:
-      "Private Dinner für 20 Gäste in Berlin, Fine Dining, mediterran, ca. €70 pro Person",
+      "Private Dinner für 20 Gäste, Fine Dining, mediterran, ca. €70 pro Person",
   },
   {
     label: "Ramadan Iftar",
     query:
-      "Ramadan Iftar für 60 Gäste in Berlin, halal, Buffet, warme Speisen und Desserts",
+      "Ramadan Iftar für 60 Gäste, halal, Buffet, warme Speisen und Desserts",
   },
   {
     label: "Weihnachtsfeier",
     query:
-      "Weihnachtsfeier für 100 Mitarbeitende in Berlin, festliches Buffet, Getränke und Dessert",
+      "Weihnachtsfeier für 100 Mitarbeitende, festliches Buffet, Getränke und Dessert",
   },
 ];
 
@@ -38,18 +49,106 @@ export default function NewRequestPage() {
   const t = useT();
 
   const [query, setQuery] = useState(occasionPrompts[0].query);
+  const [locationInput, setLocationInput] = useState("Berlin");
+  const [selectedLocation, setSelectedLocation] =
+    useState<GermanLocation | null>(null);
+  const [locationResults, setLocationResults] = useState<GermanLocation[]>([]);
+  const [locationLoading, setLocationLoading] = useState(false);
 
-  const briefingItems = useMemo(
-    () => [
-      ["Event", query.toLowerCase().includes("business") ? "Business Lunch" : query.toLowerCase().includes("weihnacht") ? "Weihnachtsfeier" : query.toLowerCase().includes("iftar") ? "Ramadan Iftar" : query.toLowerCase().includes("private") ? "Private Dinner" : "Hochzeit"],
-      ["Ort", query.toLowerCase().includes("berlin") ? "Berlin" : "Noch offen"],
-      ["Gäste", query.match(/\d+/)?.[0] || "Noch offen"],
-      ["Budget", query.includes("€") ? query.match(/€\s?\d+/)?.[0] || "Noch offen" : "Noch offen"],
-      ["Ernährung", query.toLowerCase().includes("vegetar") ? "Vegetarisch" : query.toLowerCase().includes("halal") ? "Halal" : "Noch offen"],
-      ["Stil", query.toLowerCase().includes("fine") ? "Fine Dining" : query.toLowerCase().includes("buffet") ? "Buffet" : "Elegant"],
-    ],
-    [query]
-  );
+  useEffect(() => {
+    const term = locationInput.trim();
+
+    if (term.length < 2) {
+      setLocationResults([]);
+      return;
+    }
+
+    const timeout = window.setTimeout(async () => {
+      setLocationLoading(true);
+
+      try {
+        const supabase = createClient();
+
+        const { data, error } = await supabase
+          .from("german_locations")
+          .select("id,name,postal_code,state,lat,lng,type")
+          .or(`name.ilike.%${term}%,postal_code.ilike.%${term}%`)
+          .order("name", { ascending: true })
+          .limit(8);
+
+        if (error) {
+          console.error("Location search failed:", error.message);
+          setLocationResults([]);
+          return;
+        }
+
+        setLocationResults(data ?? []);
+      } catch (error) {
+        console.error("Location search failed:", error);
+        setLocationResults([]);
+      } finally {
+        setLocationLoading(false);
+      }
+    }, 250);
+
+    return () => window.clearTimeout(timeout);
+  }, [locationInput]);
+
+  const briefingItems = useMemo(() => {
+    const lower = query.toLowerCase();
+
+    return [
+      [
+        t("request.brief.event", "Event"),
+        lower.includes("business")
+          ? "Business Lunch"
+          : lower.includes("weihnacht")
+            ? "Weihnachtsfeier"
+            : lower.includes("iftar")
+              ? "Ramadan Iftar"
+              : lower.includes("private")
+                ? "Private Dinner"
+                : "Hochzeit",
+      ],
+      [
+        t("request.brief.location", "Ort"),
+        selectedLocation
+          ? `${selectedLocation.postal_code ?? ""} ${selectedLocation.name}`.trim()
+          : locationInput || t("request.open", "Noch offen"),
+      ],
+      [t("request.brief.guests", "Gäste"), query.match(/\d+/)?.[0] || t("request.open", "Noch offen")],
+      [
+        t("request.brief.budget", "Budget"),
+        query.includes("€")
+          ? query.match(/€\s?\d+/)?.[0] || t("request.open", "Noch offen")
+          : t("request.open", "Noch offen"),
+      ],
+      [
+        t("request.brief.diet", "Ernährung"),
+        lower.includes("vegetar")
+          ? "Vegetarisch"
+          : lower.includes("halal")
+            ? "Halal"
+            : t("request.open", "Noch offen"),
+      ],
+      [
+        t("request.brief.style", "Stil"),
+        lower.includes("fine")
+          ? "Fine Dining"
+          : lower.includes("buffet")
+            ? "Buffet"
+            : "Elegant",
+      ],
+    ];
+  }, [query, locationInput, selectedLocation, t]);
+
+  function selectLocation(location: GermanLocation) {
+    setSelectedLocation(location);
+    setLocationInput(
+      `${location.postal_code ? `${location.postal_code} ` : ""}${location.name}`
+    );
+    setLocationResults([]);
+  }
 
   return (
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
@@ -69,7 +168,10 @@ export default function NewRequestPage() {
           </div>
 
           <h1 className="mt-6 text-5xl font-semibold tracking-tight md:text-7xl">
-            {t("request.title", "Beschreiben Sie Ihr Event. Speisely strukturiert den Rest.")}
+            {t(
+              "request.title",
+              "Beschreiben Sie Ihr Event. Speisely strukturiert den Rest."
+            )}
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
@@ -102,6 +204,51 @@ export default function NewRequestPage() {
               onChange={(event) => setQuery(event.target.value)}
               className="mt-3 min-h-44 w-full resize-none rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 outline-none transition focus:border-[#c9a45c]"
             />
+
+            <div className="relative mt-5">
+              <label className="text-sm font-semibold text-[#173f35]">
+                {t("request.locationLabel", "Ort oder Postleitzahl")}
+              </label>
+
+              <input
+                value={locationInput}
+                onChange={(event) => {
+                  setLocationInput(event.target.value);
+                  setSelectedLocation(null);
+                }}
+                placeholder={t(
+                  "request.locationPlaceholder",
+                  "z. B. Berlin, 10115, Paderborn..."
+                )}
+                className="mt-3 w-full rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none transition focus:border-[#c9a45c]"
+              />
+
+              {locationResults.length > 0 && (
+                <div className="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-[#eadfce] bg-white p-2 shadow-xl">
+                  {locationResults.map((location) => (
+                    <button
+                      key={location.id}
+                      type="button"
+                      onClick={() => selectLocation(location)}
+                      className="w-full rounded-xl px-4 py-3 text-left transition hover:bg-[#faf6ee]"
+                    >
+                      <div className="font-semibold text-[#173f35]">
+                        {location.postal_code} {location.name}
+                      </div>
+                      <div className="text-sm text-[#5c6f68]">
+                        {location.state} · {location.type ?? "location"}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {locationLoading && (
+                <p className="mt-2 text-sm text-[#5c6f68]">
+                  {t("request.locationSearching", "Suche Orte...")}
+                </p>
+              )}
+            </div>
 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -167,7 +314,8 @@ export default function NewRequestPage() {
                     <div>
                       <h3 className="font-semibold">{name}</h3>
                       <p className="mt-1 text-sm text-[#5c6f68]">
-                        Berlin · Premium Catering · Verifiziert
+                        {selectedLocation?.name ?? "Berlin"} · Premium Catering ·{" "}
+                        {t("marketplace.verified", "Verifiziert")}
                       </p>
                     </div>
                     <span className="font-semibold text-[#b28a3c]">
