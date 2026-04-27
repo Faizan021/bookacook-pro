@@ -754,5 +754,23 @@
 "home.catererSection.card3Desc": "Verwalten Sie Leads, Pakete, Verfügbarkeit und Sichtbarkeit an einem Ort.",
 "home.catererSection.primaryCta": "Für Caterer",
 "home.catererSection.secondaryCta": "Speisely beitreten",
-"home.images.catererAlt": "Professionelles Catering-Team"
+"home.images.catererAlt": "Professionelles Catering-Team",
+"marketplace.heroTitle": "Entdecken Sie Catering-Partner für anspruchsvolle Events.",
+"marketplace.heroSubtitle": "Erkunden Sie ausgewählte Caterer für Hochzeiten, Corporate Events, private Feiern und hochwertige Hospitality-Formate.",
+"marketplace.heroImageAlt": "Premium-Catering-Event-Tisch",
+"marketplace.resultsCount": "6 ausgewählte Partner",
+"marketplace.styleBuffet": "Buffet",
+"marketplace.styleHalal": "Halal",
+"about.primaryCta": "Event beschreiben",
+"about.secondaryCta": "Caterer entdecken",
+"about.heroImageAlt": "Premium-Catering-Präsentation",
+"about.directionLabel": "Unsere Richtung",
+"about.directionTitle": "Speisely ist kein generisches Verzeichnis. Es ist ein geführter Weg vom Eventwunsch zur passenden Catering-Lösung.",
+"about.trustImageAlt": "Professionelle Catering-Vorbereitung in der Küche",
+"about.whyText": "Event-Catering ist beratungsintensiv: Budget, Gästezahl, Küche, Serviceart, Location und Atmosphäre müssen zusammenpassen. Speisely macht diese Informationen früh sichtbar und hilft Kunden, bessere Entscheidungen zu treffen.",
+
+"forCaterers.leadsLabel": "Besser qualifizierte Anfragen",
+"forCaterers.leadsTitle": "Weniger zufällige Leads. Mehr passende Events.",
+"forCaterers.leadsText": "Kunden beschreiben ihr Event mit Budget, Gästezahl, Ort, Stil und besonderen Anforderungen. Speisely strukturiert diese Informationen, bevor Caterer kontaktiert werden.",
+"forCaterers.finalCta": "Jetzt beitreten"
 }
