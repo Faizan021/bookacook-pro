@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
+import { useT } from "@/lib/i18n/context";
 
 const images = {
   hero:
@@ -79,6 +80,16 @@ const caterers = [
 ];
 
 export default function CaterersPage() {
+  const t = useT();
+
+  const chips = [
+    t("marketplace.quick.berlin", "Berlin"),
+    t("marketplace.quick.wedding", "Hochzeit"),
+    t("marketplace.quick.corporate", "Corporate"),
+    t("marketplace.quick.vegetarian", "Vegetarisch"),
+    t("marketplace.quick.fineDining", "Fine Dining"),
+  ];
+
   return (
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
       <SpeiselyHeader />
@@ -86,44 +97,50 @@ export default function CaterersPage() {
       <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 md:grid-cols-2 md:py-24">
         <div>
           <div className="mb-6 inline-flex rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
-            Kuratierte Premium-Partner
+            {t("marketplace.badge", "Kuratierte Premium-Partner")}
           </div>
 
           <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
-            Entdecken Sie Catering-Partner für anspruchsvolle Events.
+            {t(
+              "marketplace.heroTitle",
+              "Entdecken Sie Catering-Partner für anspruchsvolle Events."
+            )}
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
-            Erkunden Sie ausgewählte Caterer für Hochzeiten, Corporate Events,
-            private Feiern und hochwertige Hospitality-Formate.
+            {t(
+              "marketplace.heroSubtitle",
+              "Erkunden Sie ausgewählte Caterer für Hochzeiten, Corporate Events, private Feiern und hochwertige Hospitality-Formate."
+            )}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            {["Berlin", "Hochzeit", "Corporate", "Vegetarisch", "Fine Dining"].map(
-              (chip) => (
-                <Link
-                  key={chip}
-                  href={`/request/new?occasion=${encodeURIComponent(chip)}`}
-                  className="rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
-                >
-                  {chip}
-                </Link>
-              )
-            )}
+            {chips.map((chip) => (
+              <Link
+                key={chip}
+                href={`/request/new?occasion=${encodeURIComponent(chip)}`}
+                className="rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
+              >
+                {chip}
+              </Link>
+            ))}
           </div>
 
           <Link
             href="/request/new"
             className="mt-8 inline-flex rounded-full bg-[#173f35] px-7 py-4 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27]"
           >
-            Lieber intelligent matchen lassen →
+            {t("marketplace.smartMatchCta", "Lieber intelligent matchen lassen")} →
           </Link>
         </div>
 
         <div className="relative h-[560px] overflow-hidden rounded-[2.5rem] shadow-sm">
           <Image
             src={images.hero}
-            alt="Premium private catering event table"
+            alt={t(
+              "marketplace.heroImageAlt",
+              "Premium private catering event table"
+            )}
             fill
             priority
             sizes="(min-width: 768px) 50vw, 100vw"
@@ -135,46 +152,49 @@ export default function CaterersPage() {
       <section className="mx-auto max-w-7xl px-6 pb-24">
         <div className="rounded-[2.5rem] border border-[#eadfce] bg-white p-6 shadow-sm md:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-            Filter & Auswahl
+            {t("marketplace.filtersTitle", "Filter & Auswahl")}
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-4">
             <input
-              placeholder="z. B. Hochzeit, vegan, Berlin..."
+              placeholder={t(
+                "marketplace.searchPlaceholder",
+                "z. B. Hochzeit, vegan, Berlin..."
+              )}
               className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]"
             />
 
             <input
-              placeholder="Stadt"
+              placeholder={t("marketplace.cityPlaceholder", "Stadt")}
               className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]"
             />
 
             <select className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]">
-              <option>Alle Eventtypen</option>
-              <option>Hochzeit</option>
-              <option>Corporate</option>
-              <option>Private Feier</option>
-              <option>Weihnachtsfeier</option>
-              <option>Ramadan Iftar</option>
+              <option>{t("marketplace.allEventTypes", "Alle Eventtypen")}</option>
+              <option>{t("marketplace.eventWedding", "Hochzeit")}</option>
+              <option>{t("marketplace.eventCorporate", "Corporate")}</option>
+              <option>{t("marketplace.eventPrivate", "Private Feier")}</option>
+              <option>{t("home.occasions.christmas", "Weihnachtsfeier")}</option>
+              <option>{t("home.occasions.ramadan", "Ramadan Iftar")}</option>
             </select>
 
             <select className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]">
-              <option>Alle Richtungen</option>
-              <option>Fine Dining</option>
-              <option>Buffet</option>
-              <option>Vegetarisch</option>
-              <option>Halal</option>
+              <option>{t("marketplace.allStyles", "Alle Richtungen")}</option>
+              <option>{t("marketplace.styleFineDining", "Fine Dining")}</option>
+              <option>{t("marketplace.styleBuffet", "Buffet")}</option>
+              <option>{t("marketplace.styleVegetarian", "Vegetarisch")}</option>
+              <option>{t("marketplace.styleHalal", "Halal")}</option>
             </select>
           </div>
         </div>
 
         <div className="mt-14">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-            Partnerübersicht
+            {t("marketplace.resultsLabel", "Partnerübersicht")}
           </p>
 
           <h2 className="mt-3 text-4xl font-semibold tracking-tight">
-            6 ausgewählte Partner
+            {t("marketplace.resultsCount", "6 ausgewählte Partner")}
           </h2>
         </div>
 
