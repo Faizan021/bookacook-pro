@@ -14,13 +14,13 @@ type Section =
 const SECTION_QUERIES: Record<Section, string> = {
   hero: "luxury catering event elegant table fine dining",
   premium: "fine dining plated food elegant restaurant",
-  caterer: "professional chef catering kitchen team",
+  caterer: "catering team event service hospitality",
   wedding: "wedding reception table flowers elegant dinner",
   corporate: "corporate event catering conference buffet",
   birthday: "birthday dinner party table celebration",
   private: "private dinner party elegant table",
   ramadan: "iftar dinner table ramadan food",
-  christmas: "christmas dinner table festive catering",
+  christmas: "festive christmas dinner table holiday party",
 };
 
 const FALLBACK_IMAGES: Record<Section, { url: string; alt: string }> = {
@@ -33,8 +33,8 @@ const FALLBACK_IMAGES: Record<Section, { url: string; alt: string }> = {
     alt: "Fine dining food presentation",
   },
   caterer: {
-    url: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1600&q=85",
-    alt: "Professional chef preparing food",
+    url: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1600&q=85",
+    alt: "Professional catering team planning an event",
   },
   wedding: {
     url: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=85",
@@ -57,8 +57,8 @@ const FALLBACK_IMAGES: Record<Section, { url: string; alt: string }> = {
     alt: "Shared dinner table",
   },
   christmas: {
-    url: "https://images.unsplash.com/photo-1543934638-0cf8f8f9b6d1?auto=format&fit=crop&w=1200&q=85",
-    alt: "Christmas dinner table",
+    url: "https://images.unsplash.com/photo-1481930916222-5ec4696fc0f2?auto=format&fit=crop&w=1200&q=85",
+    alt: "Festive Christmas dinner table",
   },
 };
 
@@ -69,6 +69,14 @@ function isSection(value: string | null): value is Section {
 export async function GET(request: NextRequest) {
   const sectionParam = request.nextUrl.searchParams.get("section");
   const section: Section = isSection(sectionParam) ? sectionParam : "hero";
+
+  if (section === "christmas") {
+    return NextResponse.json({
+      section,
+      source: "fixed-fallback",
+      ...FALLBACK_IMAGES.christmas,
+    });
+  }
 
   const accessKey = process.env.UNSPLASH_ACCESS_KEY;
 
