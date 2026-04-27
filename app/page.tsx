@@ -19,7 +19,8 @@ const occasionCards = [
     titleKey: "home.occasions.corporate.title",
     titleFallback: "Business Lunch",
     descKey: "home.occasions.corporate.desc",
-    descFallback: "Premium-Catering für Meetings, Launches, Offsites und Empfänge.",
+    descFallback:
+      "Premium-Catering für Meetings, Launches, Offsites und Empfänge.",
     section: "corporate" as const,
     href: "/request/new?occasion=corporate",
   },
@@ -27,7 +28,8 @@ const occasionCards = [
     titleKey: "home.occasions.private.title",
     titleFallback: "Private Dinner",
     descKey: "home.occasions.private.desc",
-    descFallback: "Kuratiertes Catering für Geburtstage, Familienfeiern und private Dinner.",
+    descFallback:
+      "Kuratiertes Catering für Geburtstage, Familienfeiern und private Dinner.",
     section: "private" as const,
     href: "/request/new?occasion=private",
   },
@@ -35,7 +37,8 @@ const occasionCards = [
     titleKey: "home.occasions.ramadan.title",
     titleFallback: "Ramadan Iftar",
     descKey: "home.occasions.ramadan.desc",
-    descFallback: "Stilvolles Iftar-Catering für Familien, Unternehmen und Communities.",
+    descFallback:
+      "Stilvolles Iftar-Catering für Familien, Unternehmen und Communities.",
     section: "ramadan" as const,
     href: "/request/new?occasion=ramadan",
   },
@@ -43,7 +46,8 @@ const occasionCards = [
     titleKey: "home.occasions.christmas.title",
     titleFallback: "Weihnachtsfeier",
     descKey: "home.occasions.christmas.desc",
-    descFallback: "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
+    descFallback:
+      "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
     section: "christmas" as const,
     href: "/request/new?occasion=christmas",
   },
@@ -360,11 +364,15 @@ export default function Home() {
       </section>
 
       <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 pb-24 md:grid-cols-2">
-        <DynamicUnsplashImage
-          section="caterer-inquiries"
-          className="h-[460px] rounded-[2rem] shadow-sm"
-          sizes="(min-width: 768px) 50vw, 100vw"
-        />
+        <div className="relative h-[460px] overflow-hidden rounded-[2rem] shadow-sm">
+          <Image
+            src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1400&q=85"
+            alt="Professional caterer preparing food"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
 
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
