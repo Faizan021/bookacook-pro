@@ -1,8 +1,25 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
+
+const images = {
+  hero:
+    "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1400&q=85",
+  maison:
+    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1000&q=85",
+  gold:
+    "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1000&q=85",
+  urban:
+    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1000&q=85",
+  iftar:
+    "https://images.unsplash.com/photo-1543353071-10c8ba85a904?auto=format&fit=crop&w=1000&q=85",
+  christmas:
+    "https://images.unsplash.com/photo-1481930916222-5ec4696fc0f2?auto=format&fit=crop&w=1000&q=85",
+  fineDining:
+    "https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=1000&q=85",
+};
 
 const caterers = [
   {
@@ -10,48 +27,54 @@ const caterers = [
     type: "Modern European",
     location: "Berlin",
     price: "ab €38 p.P.",
-    section: "premium" as const,
     tag: "Corporate & Private",
+    image: images.maison,
+    alt: "Modern European plated food",
   },
   {
     name: "Gold Table Events",
     type: "Wedding & Private Dining",
     location: "Berlin",
     price: "ab €52 p.P.",
-    section: "wedding" as const,
     tag: "Wedding Specialist",
+    image: images.gold,
+    alt: "Elegant catered wedding food",
   },
   {
     name: "Urban Feast Studio",
     type: "Corporate Catering",
     location: "Berlin",
     price: "ab €29 p.P.",
-    section: "corporate" as const,
     tag: "Business Catering",
+    image: images.urban,
+    alt: "Corporate catering food",
   },
   {
     name: "Royal Iftar Kitchen",
     type: "Ramadan & Family Events",
     location: "Berlin",
     price: "ab €34 p.P.",
-    section: "ramadan" as const,
     tag: "Iftar Catering",
+    image: images.iftar,
+    alt: "Iftar dinner table",
   },
   {
     name: "Winter Table Catering",
     type: "Christmas & Seasonal Events",
     location: "Berlin",
     price: "ab €42 p.P.",
-    section: "christmas" as const,
     tag: "Christmas Events",
+    image: images.christmas,
+    alt: "Festive Christmas dinner table",
   },
   {
     name: "Atelier Royal Dining",
     type: "Fine Dining & Private Chef",
     location: "Berlin",
     price: "ab €59 p.P.",
-    section: "private" as const,
     tag: "Fine Dining",
+    image: images.fineDining,
+    alt: "Fine dining plated dish",
   },
 ];
 
@@ -97,13 +120,16 @@ export default function CaterersPage() {
           </Link>
         </div>
 
-        <DynamicUnsplashImage
-          section="premium"
-          priority
-          className="h-[560px] rounded-[2.5rem] shadow-sm"
-          imageClassName="scale-105"
-          sizes="(min-width: 768px) 50vw, 100vw"
-        />
+        <div className="relative h-[560px] overflow-hidden rounded-[2.5rem] shadow-sm">
+          <Image
+            src={images.hero}
+            alt="Premium private catering event table"
+            fill
+            priority
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-24">
@@ -142,16 +168,14 @@ export default function CaterersPage() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-              Partnerübersicht
-            </p>
+        <div className="mt-14">
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+            Partnerübersicht
+          </p>
 
-            <h2 className="mt-3 text-4xl font-semibold tracking-tight">
-              6 ausgewählte Partner
-            </h2>
-          </div>
+          <h2 className="mt-3 text-4xl font-semibold tracking-tight">
+            6 ausgewählte Partner
+          </h2>
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -161,12 +185,15 @@ export default function CaterersPage() {
               href="/request/new"
               className="group overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
-              <DynamicUnsplashImage
-                section={caterer.section}
-                className="h-60"
-                imageClassName="transition duration-500 group-hover:scale-110"
-                sizes="(min-width: 1024px) 33vw, 100vw"
-              />
+              <div className="relative h-60 overflow-hidden">
+                <Image
+                  src={caterer.image}
+                  alt={caterer.alt}
+                  fill
+                  sizes="(min-width: 1024px) 33vw, 100vw"
+                  className="object-cover transition duration-500 group-hover:scale-110"
+                />
+              </div>
 
               <div className="p-6">
                 <div className="mb-4 inline-flex rounded-full bg-[#f4ead7] px-3 py-1 text-xs font-semibold text-[#8a6d35]">
@@ -174,7 +201,6 @@ export default function CaterersPage() {
                 </div>
 
                 <h3 className="text-2xl font-semibold">{caterer.name}</h3>
-
                 <p className="mt-2 text-[#5c6f68]">{caterer.type}</p>
 
                 <div className="mt-6 flex justify-between text-sm">
