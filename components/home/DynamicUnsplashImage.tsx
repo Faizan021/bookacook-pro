@@ -12,7 +12,11 @@ type Section =
   | "birthday"
   | "private"
   | "ramadan"
-  | "christmas";
+  | "christmas"
+  | "modern-european"
+  | "wedding-dining"
+  | "corporate-food"
+  | "caterer-inquiries";
 
 type ImageData = {
   url: string;
