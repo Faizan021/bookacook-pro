@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
@@ -55,7 +56,9 @@ const featuredCaterers = [
     location: "Berlin",
     price: "ab €38 p.P.",
     tag: "Corporate & Private",
-    imageSection: "premium" as const,
+    image:
+      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=85",
+    alt: "Modern European plated food",
   },
   {
     name: "Gold Table Events",
@@ -63,7 +66,9 @@ const featuredCaterers = [
     location: "Berlin",
     price: "ab €52 p.P.",
     tag: "Wedding Specialist",
-    imageSection: "wedding" as const,
+    image:
+      "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=900&q=85",
+    alt: "Elegant wedding catering food",
   },
   {
     name: "Urban Feast Studio",
@@ -71,7 +76,9 @@ const featuredCaterers = [
     location: "Berlin",
     price: "ab €29 p.P.",
     tag: "Business Catering",
-    imageSection: "corporate" as const,
+    image:
+      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=85",
+    alt: "Corporate catering food",
   },
 ];
 
@@ -320,12 +327,15 @@ export default function Home() {
                   href="/caterers"
                   className="group overflow-hidden rounded-[1.75rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <DynamicUnsplashImage
-                    section={caterer.imageSection}
-                    className="h-44"
-                    imageClassName="transition duration-500 group-hover:scale-110"
-                    sizes="(min-width: 768px) 25vw, 100vw"
-                  />
+                  <div className="relative h-44 overflow-hidden">
+                    <Image
+                      src={caterer.image}
+                      alt={caterer.alt}
+                      fill
+                      sizes="(min-width: 768px) 25vw, 100vw"
+                      className="object-cover transition duration-500 group-hover:scale-110"
+                    />
+                  </div>
 
                   <div className="p-5">
                     <div className="mb-4 inline-flex rounded-full bg-[#f4ead7] px-3 py-1 text-xs font-semibold text-[#8a6d35]">
@@ -351,7 +361,7 @@ export default function Home() {
 
       <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 pb-24 md:grid-cols-2">
         <DynamicUnsplashImage
-          section="caterer"
+          section="caterer-inquiries"
           className="h-[460px] rounded-[2rem] shadow-sm"
           sizes="(min-width: 768px) 50vw, 100vw"
         />
