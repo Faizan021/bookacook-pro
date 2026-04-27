@@ -20,7 +20,7 @@ export function SpeiselyHeader() {
             {t("nav.discoverCaterers", "Caterer entdecken")}
           </Link>
 
-          <Link href="/caterer" className="text-[#49645c] hover:text-[#173f35]">
+          <Link href="/for-caterers" className="text-[#49645c] hover:text-[#173f35]">
             {t("nav.forCaterers", "Für Caterer")}
           </Link>
 
