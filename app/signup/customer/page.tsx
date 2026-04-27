@@ -4,8 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
-import { LanguageSwitcher } from "@/components/i18n/language-switcher";
-import { LogoMark } from "@/components/ui/logo-mark";
+import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
 
 type FormFields = {
   firstName: string;
@@ -42,6 +41,7 @@ export default function CustomerSignupPageClient({ next = "" }: Props) {
 
   function setField(field: keyof FormFields, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
+
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -107,7 +107,10 @@ export default function CustomerSignupPageClient({ next = "" }: Props) {
 
       if (emailAlreadyExists) {
         setServerError(
-          "This email is already registered. Please sign in with your existing account."
+          t(
+            "auth.emailExists",
+            "Diese E-Mail ist bereits registriert. Bitte melden Sie sich mit Ihrem bestehenden Konto an."
+          )
         );
         setSubmitting(false);
         return;
@@ -128,361 +131,287 @@ export default function CustomerSignupPageClient({ next = "" }: Props) {
     ? `/login?next=${encodeURIComponent(next)}`
     : "/login";
 
-  const successLoginHref = loginHref;
-
   const inputBase =
-    "mt-1 w-full rounded-[1rem] border px-4 py-3 text-sm outline-none transition-all duration-200";
-  const inputOk = `${inputBase} border-white/10 bg-black/10 text-white placeholder:text-white/30 focus:border-[#c49840]/35 focus:ring-2 focus:ring-[#c49840]/10`;
-  const inputErr = `${inputBase} border-red-500/40 bg-red-500/10 text-red-200 placeholder:text-red-300/30 focus:border-red-500 focus:ring-2 focus:ring-red-500/10`;
+    "mt-2 w-full rounded-2xl border px-4 py-3 text-sm outline-none transition";
+  const inputOk = `${inputBase} border-[#e8dcc8] bg-[#faf6ee] text-[#173f35] placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/15`;
+  const inputErr = `${inputBase} border-red-300 bg-red-50 text-red-700 placeholder:text-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/10`;
 
   if (success) {
     return (
-      <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
-        <div className="pointer-events-none fixed inset-0">
-          <div
-            className="absolute inset-0 opacity-70"
-            style={{
-              background:
-                "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
-            }}
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
-        </div>
+      <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
+        <SpeiselyHeader />
 
-        <div className="absolute right-4 top-4 z-50">
-          <LanguageSwitcher />
-        </div>
-
-        <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-12">
-          <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-white/[0.045] p-10 text-center shadow-[0_24px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-[#c49840]/20 bg-[#c49840]/10">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-[#c49840]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+        <section className="mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl items-center justify-center px-6 py-16">
+          <div className="w-full max-w-md rounded-[2rem] border border-[#eadfce] bg-white p-8 text-center shadow-sm">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#173f35] text-white">
+              ✓
             </div>
 
-            <h1 className="mt-6 text-2xl font-semibold tracking-tight text-white">
-              {t("auth.signupSuccessTitle", "Account created successfully")}
+            <h1 className="mt-6 text-3xl font-semibold tracking-tight">
+              {t(
+                "auth.signupSuccessTitle",
+                "Konto erfolgreich erstellt"
+              )}
             </h1>
 
-            <p className="mt-3 text-sm leading-7 text-[#92a18f]">
+            <p className="mt-3 text-sm leading-7 text-[#5c6f68]">
               {t(
                 "auth.signupSuccessDesc",
-                "Your account has been created. You can now sign in and continue planning your event with Speisely."
+                "Ihr Konto wurde erstellt. Sie können sich jetzt anmelden und mit Ihrer Eventplanung fortfahren."
               )}
             </p>
 
             <div className="mt-8 space-y-3">
               <Link
-                href={successLoginHref}
-                className="block w-full rounded-[1rem] bg-[#c49840] px-4 py-3 text-center text-sm font-semibold text-black transition hover:scale-[1.01]"
+                href={loginHref}
+                className="block w-full rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27]"
               >
-                {t("auth.goToLogin")}
+                {t("auth.goToLogin", "Zur Anmeldung")}
               </Link>
 
               <Link
                 href="/"
-                className="block w-full rounded-[1rem] border border-white/10 bg-white/[0.03] py-3 text-center text-sm font-medium text-white transition hover:border-[#c49840]/30 hover:text-[#c49840]"
+                className="block w-full rounded-full border border-[#d8ccb9] bg-white px-5 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#f4ead7]"
               >
-                {t("nav.backToHome")}
+                {t("nav.backToHome", "Zur Startseite")}
               </Link>
             </div>
           </div>
-        </div>
+        </section>
       </main>
     );
   }
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-[#07110c] text-[#f6f1e8]">
-      <div className="pointer-events-none fixed inset-0">
-        <div
-          className="absolute inset-0 opacity-70"
-          style={{
-            background:
-              "radial-gradient(circle at top center, rgba(196,152,64,0.16) 0%, transparent 30%), radial-gradient(circle at 15% 85%, rgba(72,101,82,0.18) 0%, transparent 24%), radial-gradient(circle at 85% 30%, rgba(40,60,48,0.18) 0%, transparent 18%)",
-          }}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent_22%,transparent_72%,rgba(255,255,255,0.02))]" />
-      </div>
+    <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
+      <SpeiselyHeader />
 
-      <div className="absolute right-4 top-4 z-50">
-        <LanguageSwitcher />
-      </div>
+      <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+        <div>
+          <Link
+            href="/signup"
+            className="inline-flex rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm transition hover:bg-[#f4ead7]"
+          >
+            ← {t("signup.backToChooser", "Zurück zur Auswahl")}
+          </Link>
 
-      <div className="relative z-10 grid min-h-screen lg:grid-cols-2">
-        <div className="hidden lg:flex lg:flex-col lg:justify-between lg:border-r lg:border-white/8 lg:bg-[#09130e]/60 lg:px-12 lg:py-12">
-          <div>
-            <Link href="/" className="flex items-center gap-3 text-[#eadfca]">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10">
-                <LogoMark size={18} color="#e8ddc8" />
-              </div>
-              <div className="text-xl font-semibold tracking-tight">Speisely</div>
-            </Link>
+          <div className="mt-10 inline-flex rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
+            {t("home.badge", "KI-gestützte Catering-Suche")}
           </div>
 
-          <div className="max-w-xl">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#c49840]">
-              {t("home.badge")}
+          <h1 className="mt-6 max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
+            {t("customerReg.title", "Kundenkonto erstellen")}
+          </h1>
+
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+            {t(
+              "customerReg.leftDesc",
+              "Speichern Sie Event-Anfragen, entdecken Sie Premium-Caterer und führen Sie Ihre Planung im persönlichen Dashboard fort."
+            )}
+          </p>
+
+          <div className="mt-10 grid gap-4">
+            <div className="rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm">
+              <h3 className="font-semibold text-[#173f35]">
+                {t("customerReg.benefit1Title", "Event-Anfragen speichern")}
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
+                {t(
+                  "customerReg.benefit1Desc",
+                  "Starten Sie mit einer kurzen Idee und verfeinern Sie Ihr Catering-Briefing später weiter."
+                )}
+              </p>
             </div>
 
-            <h1 className="mt-5 text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-white">
-              {t("customerReg.title", "Create your customer account")}
-            </h1>
-
-            <p className="mt-5 text-base leading-8 text-[#9faf9b]">
-              {t(
-                "customerReg.leftDesc",
-                "Join Speisely to save your event requests, discover premium caterers, and continue planning from your personal dashboard."
-              )}
-            </p>
-
-            <div className="mt-8 grid gap-4">
-              <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-                <div className="text-sm font-semibold text-white">
-                  {t("customerReg.benefit1Title", "Save your event requests")}
-                </div>
-                <p className="mt-2 text-sm leading-7 text-[#92a18f]">
-                  {t(
-                    "customerReg.benefit1Desc",
-                    "Start with a simple idea and continue refining your catering brief later."
-                  )}
-                </p>
-              </div>
-
-              <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-                <div className="text-sm font-semibold text-white">
-                  {t("customerReg.benefit2Title", "Connect with the right caterers")}
-                </div>
-                <p className="mt-2 text-sm leading-7 text-[#92a18f]">
-                  {t(
-                    "customerReg.benefit2Desc",
-                    "Compare curated partners, review your shortlist, and manage requests in one place."
-                  )}
-                </p>
-              </div>
+            <div className="rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm">
+              <h3 className="font-semibold text-[#173f35]">
+                {t(
+                  "customerReg.benefit2Title",
+                  "Mit passenden Caterern verbinden"
+                )}
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
+                {t(
+                  "customerReg.benefit2Desc",
+                  "Vergleichen Sie kuratierte Partner, prüfen Sie Matches und verwalten Sie Ihre Anfragen an einem Ort."
+                )}
+              </p>
             </div>
           </div>
-
-          <div />
         </div>
 
-        <div className="flex items-center justify-center px-6 py-12 lg:px-16">
-          <div className="w-full max-w-xl">
+        <section className="mx-auto w-full max-w-xl">
+          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm">
             <div className="mb-8">
-              <Link
-                href="/signup"
-                className="inline-flex items-center gap-1.5 text-sm text-white/40 transition hover:text-white"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="h-4 w-4"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                {t("signup.backToChooser", "Back")}
-              </Link>
+              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+                {t("auth.signup", "Registrieren")}
+              </p>
+
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+                {t("customerReg.title", "Kundenkonto erstellen")}
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
+                {t(
+                  "customerReg.subtitle",
+                  "Erstellen Sie Ihr Konto, um Anfragen zu speichern und Ihre Eventplanung fortzuführen."
+                )}
+              </p>
             </div>
 
-            <div className="rounded-[2rem] border border-white/10 bg-white/[0.045] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-10">
-              <div className="mb-8">
-                <div className="flex items-center gap-3 lg:hidden">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c49840]/25 bg-[#c49840]/10">
-                    <LogoMark size={18} color="#e8ddc8" />
-                  </div>
-                  <div className="text-xl font-semibold tracking-tight text-[#eadfca]">
-                    Speisely
-                  </div>
-                </div>
-
-                <h1 className="mt-5 text-3xl font-semibold tracking-tight text-white lg:mt-0">
-                  {t("customerReg.title", "Create your customer account")}
-                </h1>
-                <p className="mt-2 text-sm text-[#9faf9b]">
-                  {t(
-                    "customerReg.subtitle",
-                    "Set up your account to save requests and continue your event planning journey."
-                  )}
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} noValidate>
-                <div className="space-y-6">
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
-                        {t("auth.firstName", "First name")}
-                        <span className="ml-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.firstName}
-                        onChange={(e) => setField("firstName", e.target.value)}
-                        className={errors.firstName ? inputErr : inputOk}
-                        placeholder="Max"
-                      />
-                      {errors.firstName ? (
-                        <p className="mt-1.5 text-xs font-medium text-red-400">
-                          {errors.firstName}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
-                        {t("auth.lastName", "Last name")}
-                        <span className="ml-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={form.lastName}
-                        onChange={(e) => setField("lastName", e.target.value)}
-                        className={errors.lastName ? inputErr : inputOk}
-                        placeholder="Mustermann"
-                      />
-                      {errors.lastName ? (
-                        <p className="mt-1.5 text-xs font-medium text-red-400">
-                          {errors.lastName}
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
-                        {t("auth.email")}
-                        <span className="ml-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => setField("email", e.target.value)}
-                        className={errors.email ? inputErr : inputOk}
-                        autoComplete="email"
-                        placeholder="max@example.com"
-                      />
-                      {errors.email ? (
-                        <p className="mt-1.5 text-xs font-medium text-red-400">
-                          {errors.email}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
-                        {t("customerReg.phone", "Phone")}
-                        <span className="ml-1 text-red-500">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        value={form.phone}
-                        onChange={(e) => setField("phone", e.target.value)}
-                        className={errors.phone ? inputErr : inputOk}
-                        placeholder="+49 30 12345678"
-                      />
-                      {errors.phone ? (
-                        <p className="mt-1.5 text-xs font-medium text-red-400">
-                          {errors.phone}
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="space-y-5">
+                <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
-                      {t("customerReg.city", "City")}
-                      <span className="ml-1 text-red-500">*</span>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("auth.firstName", "Vorname")} *
                     </label>
                     <input
                       type="text"
-                      value={form.city}
-                      onChange={(e) => setField("city", e.target.value)}
-                      className={errors.city ? inputErr : inputOk}
-                      placeholder="Berlin"
+                      value={form.firstName}
+                      onChange={(e) => setField("firstName", e.target.value)}
+                      className={errors.firstName ? inputErr : inputOk}
+                      placeholder="Max"
                     />
-                    {errors.city ? (
-                      <p className="mt-1.5 text-xs font-medium text-red-400">
-                        {errors.city}
+                    {errors.firstName ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.firstName}
                       </p>
                     ) : null}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-[0.16em] text-white/60">
-                      {t("auth.password")}
-                      <span className="ml-1 text-red-500">*</span>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("auth.lastName", "Nachname")} *
                     </label>
                     <input
-                      type="password"
-                      value={form.password}
-                      onChange={(e) => setField("password", e.target.value)}
-                      className={errors.password ? inputErr : inputOk}
-                      autoComplete="new-password"
-                      placeholder="••••••••"
+                      type="text"
+                      value={form.lastName}
+                      onChange={(e) => setField("lastName", e.target.value)}
+                      className={errors.lastName ? inputErr : inputOk}
+                      placeholder="Mustermann"
                     />
-                    {errors.password ? (
-                      <p className="mt-1.5 text-xs font-medium text-red-400">
-                        {errors.password}
+                    {errors.lastName ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.lastName}
                       </p>
                     ) : null}
                   </div>
                 </div>
 
-                {serverError ? (
-                  <div className="mt-6 rounded-[1rem] border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                    {serverError}
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("auth.email", "E-Mail")} *
+                    </label>
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setField("email", e.target.value)}
+                      className={errors.email ? inputErr : inputOk}
+                      autoComplete="email"
+                      placeholder="max@example.com"
+                    />
+                    {errors.email ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.email}
+                      </p>
+                    ) : null}
                   </div>
-                ) : null}
 
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="mt-8 w-full rounded-[1rem] bg-[#c49840] px-4 py-4 text-sm font-bold text-black shadow-lg shadow-black/20 transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-50"
+                  <div>
+                    <label className="text-sm font-semibold text-[#173f35]">
+                      {t("customerReg.phone", "Telefon")} *
+                    </label>
+                    <input
+                      type="tel"
+                      value={form.phone}
+                      onChange={(e) => setField("phone", e.target.value)}
+                      className={errors.phone ? inputErr : inputOk}
+                      placeholder="+49 30 12345678"
+                    />
+                    {errors.phone ? (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">
+                        {errors.phone}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-semibold text-[#173f35]">
+                    {t("customerReg.city", "Stadt")} *
+                  </label>
+                  <input
+                    type="text"
+                    value={form.city}
+                    onChange={(e) => setField("city", e.target.value)}
+                    className={errors.city ? inputErr : inputOk}
+                    placeholder="Berlin"
+                  />
+                  {errors.city ? (
+                    <p className="mt-1.5 text-xs font-medium text-red-600">
+                      {errors.city}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div>
+                  <label className="text-sm font-semibold text-[#173f35]">
+                    {t("auth.password", "Passwort")} *
+                  </label>
+                  <input
+                    type="password"
+                    value={form.password}
+                    onChange={(e) => setField("password", e.target.value)}
+                    className={errors.password ? inputErr : inputOk}
+                    autoComplete="new-password"
+                    placeholder="••••••••"
+                  />
+                  {errors.password ? (
+                    <p className="mt-1.5 text-xs font-medium text-red-600">
+                      {errors.password}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+
+              {serverError ? (
+                <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {serverError}
+                </div>
+              ) : null}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="mt-8 w-full rounded-full bg-[#173f35] px-5 py-4 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {submitting
+                  ? t("customerReg.submitting", "Konto wird erstellt...")
+                  : t("customerReg.submit", "Konto erstellen")}
+              </button>
+
+              <p className="mt-5 text-center text-xs leading-6 text-[#5c6f68]">
+                {t(
+                  "customerReg.termsNote",
+                  "Mit der Fortsetzung akzeptieren Sie die Speisely-Nutzungsbedingungen und Datenschutzrichtlinie."
+                )}
+              </p>
+
+              <p className="mt-4 text-center text-sm text-[#5c6f68]">
+                {t("auth.hasAccount", "Bereits ein Konto?")}{" "}
+                <Link
+                  href={loginHref}
+                  className="font-semibold text-[#173f35] underline-offset-4 hover:underline"
                 >
-                  {submitting
-                    ? t("customerReg.submitting", "Creating account...")
-                    : t("customerReg.submit", "Create account")}
-                </button>
-
-                <p className="mt-6 text-center text-xs text-white/40">
-                  {t(
-                    "customerReg.termsNote",
-                    "By continuing, you agree to Speisely’s terms and privacy policy."
-                  )}
-                </p>
-
-                <p className="mt-4 text-center text-sm text-white/60">
-                  {t("auth.hasAccount")}{" "}
-                  <Link
-                    href={loginHref}
-                    className="font-semibold text-[#c49840] transition hover:text-white"
-                  >
-                    {t("auth.goToLogin")}
-                  </Link>
-                </p>
-              </form>
-            </div>
+                  {t("auth.goToLogin", "Zur Anmeldung")}
+                </Link>
+              </p>
+            </form>
           </div>
-        </div>
-      </div>
+        </section>
+      </section>
     </main>
   );
 }
