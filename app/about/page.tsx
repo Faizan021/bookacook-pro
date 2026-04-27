@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
+import { useT } from "@/lib/i18n/context";
 
 const images = {
   hero:
@@ -12,6 +13,32 @@ const images = {
 };
 
 export default function AboutPage() {
+  const t = useT();
+
+  const values = [
+    {
+      title: t("about.value1Title", "KI-gestützte Entdeckung"),
+      text: t(
+        "about.value1Desc",
+        "Speisely verwandelt natürliche Event-Anfragen in ein klares Catering-Briefing."
+      ),
+    },
+    {
+      title: t("about.value2Title", "Kuratiert und hochwertig"),
+      text: t(
+        "about.value2Desc",
+        "Wir setzen auf ein selektiveres, vertrauenswürdigeres Catering-Erlebnis."
+      ),
+    },
+    {
+      title: t("about.value3Title", "Besser für beide Seiten"),
+      text: t(
+        "about.value3Desc",
+        "Kunden erhalten Orientierung, Caterer erhalten klarere und passendere Anfragen."
+      ),
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
       <SpeiselyHeader />
@@ -19,18 +46,21 @@ export default function AboutPage() {
       <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 md:grid-cols-2 md:py-24">
         <div>
           <div className="mb-6 inline-flex rounded-full border border-[#e8dcc8] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
-            Über Speisely
+            {t("about.badge", "Über Speisely")}
           </div>
 
           <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
-            Catering-Suche soll sich nicht wie ein altes Branchenbuch anfühlen.
+            {t(
+              "about.heroTitle",
+              "Catering-Suche soll sich nicht wie ein altes Branchenbuch anfühlen."
+            )}
           </h1>
 
           <p className="mt-6 text-lg leading-8 text-[#5c6f68]">
-            Speisely verbindet Premium-Präsentation mit KI-gestützter
-            Eventplanung. Kunden beschreiben ihr Event in natürlicher Sprache,
-            Speisely strukturiert daraus ein klares Briefing und verbindet sie
-            mit passenden Catering-Partnern.
+            {t(
+              "about.heroSubtitle",
+              "Speisely verbindet Premium-Präsentation mit KI-gestützter Eventplanung. Kunden beschreiben ihr Event in natürlicher Sprache, Speisely strukturiert daraus ein klares Briefing und verbindet sie mit passenden Catering-Partnern."
+            )}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
@@ -38,14 +68,14 @@ export default function AboutPage() {
               href="/request/new"
               className="rounded-full bg-[#173f35] px-7 py-4 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27]"
             >
-              Event beschreiben →
+              {t("about.primaryCta", "Event beschreiben")} →
             </Link>
 
             <Link
               href="/caterers"
               className="rounded-full border border-[#d8ccb9] bg-white px-7 py-4 font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
             >
-              Caterer entdecken
+              {t("about.secondaryCta", "Caterer entdecken")}
             </Link>
           </div>
         </div>
@@ -53,7 +83,7 @@ export default function AboutPage() {
         <div className="relative h-[560px] overflow-hidden rounded-[2.5rem] shadow-sm">
           <Image
             src={images.hero}
-            alt="Premium catering food presentation"
+            alt={t("about.heroImageAlt", "Premium catering food presentation")}
             fill
             priority
             sizes="(min-width: 768px) 50vw, 100vw"
@@ -65,29 +95,18 @@ export default function AboutPage() {
       <section className="mx-auto max-w-7xl px-6 pb-24">
         <div className="rounded-[2.5rem] border border-[#eadfce] bg-white p-8 shadow-sm md:p-12">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-            Unsere Richtung
+            {t("about.directionLabel", "Unsere Richtung")}
           </p>
 
           <h2 className="mt-3 max-w-4xl text-4xl font-semibold tracking-tight md:text-5xl">
-            Speisely ist kein generisches Verzeichnis. Es ist ein geführter Weg
-            vom Eventwunsch zur passenden Catering-Lösung.
+            {t(
+              "about.directionTitle",
+              "Speisely ist kein generisches Verzeichnis. Es ist ein geführter Weg vom Eventwunsch zur passenden Catering-Lösung."
+            )}
           </h2>
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                title: "KI-gestützte Entdeckung",
-                text: "Speisely verwandelt natürliche Event-Anfragen in ein klares Catering-Briefing.",
-              },
-              {
-                title: "Kuratiert und hochwertig",
-                text: "Wir setzen auf ein selektiveres, vertrauenswürdigeres Catering-Erlebnis.",
-              },
-              {
-                title: "Besser für beide Seiten",
-                text: "Kunden erhalten Orientierung, Caterer erhalten klarere und passendere Anfragen.",
-              },
-            ].map((item) => (
+            {values.map((item) => (
               <div
                 key={item.title}
                 className="rounded-[2rem] border border-[#eadfce] bg-[#faf6ee] p-8"
@@ -105,7 +124,10 @@ export default function AboutPage() {
         <div className="relative h-[460px] overflow-hidden rounded-[2.5rem] shadow-sm">
           <Image
             src={images.trust}
-            alt="Professional catering kitchen preparation"
+            alt={t(
+              "about.trustImageAlt",
+              "Professional catering kitchen preparation"
+            )}
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
             className="object-cover"
@@ -114,18 +136,21 @@ export default function AboutPage() {
 
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-            Warum Speisely
+            {t("about.whyLabel", "Warum Speisely")}
           </p>
 
           <h2 className="mt-4 text-4xl font-semibold tracking-tight">
-            Weil Catering mehr Vertrauen braucht als eine einfache Liste.
+            {t(
+              "about.whyTitle",
+              "Weil Catering mehr Vertrauen braucht als eine einfache Liste."
+            )}
           </h2>
 
           <p className="mt-6 text-lg leading-8 text-[#5c6f68]">
-            Event-Catering ist beratungsintensiv: Budget, Gästezahl, Küche,
-            Serviceart, Location und Atmosphäre müssen zusammenpassen. Speisely
-            macht diese Informationen früh sichtbar und hilft Kunden, bessere
-            Entscheidungen zu treffen.
+            {t(
+              "about.whyText",
+              "Event-Catering ist beratungsintensiv: Budget, Gästezahl, Küche, Serviceart, Location und Atmosphäre müssen zusammenpassen. Speisely macht diese Informationen früh sichtbar und hilft Kunden, bessere Entscheidungen zu treffen."
+            )}
           </p>
         </div>
       </section>
