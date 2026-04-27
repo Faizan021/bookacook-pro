@@ -1,205 +1,299 @@
-"use client";
-
-import { useMemo, useState } from "react";
-import Image from "next/image"; // Keep this for static images if you have any
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  ArrowRight,
-  BrainCircuit,
-  CheckCircle2,
-  ShieldCheck,
-  Sparkles,
-  Star,
-  MapPin,
-} from "lucide-react";
-
-import { useT } from "@/lib/i18n/context";
-import { parseHeroIntent } from "@/lib/parser";
-import { LanguageSwitcher } from "@/components/i18n/language-switcher";
-import { LogoMark } from "@/components/ui/logo-mark";
-
-// --- DYNAMIC IMAGE ENGINE ---
-// We use a different URL format that works better with standard <img> tags
-const getImg = (keyword: string) => `https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1200&q=80&sig=${Math.random()}`;
-// Note: For a truly "automatic" search via keyword, we use the source redirect:
-const getDynamicUrl = (keyword: string) => `https://source.unsplash.com/featured/?${keyword}&sig=${Math.random()}`;
+import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 
 const occasionCards = [
-  { titleKey: "home.occasions.wedding", href: "/request/new?occasion=wedding", imgKey: "wedding-catering" },
-  { titleKey: "home.occasions.corporate", href: "/request/new?occasion=corporate", imgKey: "business-lunch" },
-  { titleKey: "home.occasions.birthday", href: "/request/new?occasion=birthday", imgKey: "birthday-party-food" },
-  { titleKey: "home.occasions.private", href: "/request/new?occasion=private_party", imgKey: "fine-dining" },
-  { titleKey: "home.occasions.ramadan", href: "/request/new?occasion=ramadan", imgKey: "middle-eastern-spices" },
+  {
+    title: "Weddings",
+    description: "Elegant catering for intimate ceremonies and larger celebrations.",
+    section: "wedding" as const,
+  },
+  {
+    title: "Corporate events",
+    description: "Premium catering for meetings, launches, offsites and receptions.",
+    section: "corporate" as const,
+  },
+  {
+    title: "Private dinners",
+    description: "Curated chefs and menus for birthdays, family events and home dining.",
+    section: "private" as const,
+  },
 ];
 
-export default function HomePage() {
-  const t = useT();
-  const router = useRouter();
-  const [heroQuery, setHeroQuery] = useState("");
+const caterers = [
+  {
+    name: "Maison Verde Catering",
+    type: "Modern European",
+    location: "Berlin",
+    price: "from €38 p.p.",
+  },
+  {
+    name: "Gold Table Events",
+    type: "Wedding & private dining",
+    location: "Berlin",
+    price: "from €52 p.p.",
+  },
+  {
+    name: "Urban Feast Studio",
+    type: "Corporate catering",
+    location: "Berlin",
+    price: "from €29 p.p.",
+  },
+];
 
-  const intent = useMemo(() => 
-    parseHeroIntent(heroQuery || t("home.aiDemo.request")), 
-    [heroQuery, t]
-  );
-
-  const handleSearch = (e?: React.FormEvent) => {
-    e?.preventDefault();
-    const q = heroQuery.trim();
-    router.push(q ? `/request/new?q=${encodeURIComponent(q)}` : "/request/new");
-  };
-
+export default function Home() {
   return (
-    <main className="min-h-screen bg-[#f5f1ea] text-[#201a17]">
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 border-b border-[#ddd4c8] bg-[#f5f1ea]/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
-          <Link href="/" className="flex items-center gap-3 text-[#2d4736]">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#2d4736]/15 bg-[#2d4736]/5">
-              <LogoMark size={18} color="#2d4736" />
-            </div>
-            <div className="text-xl font-semibold tracking-tight">Speisely</div>
+    <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
+      <header className="sticky top-0 z-50 border-b border-[#e8dcc8] bg-[#faf6ee]/85 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <Link href="/" className="text-xl font-semibold tracking-tight">
+            Speisely
           </Link>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-[#6f675f]">
-            <Link href="/caterers" className="hover:text-[#2d4736]">Browse</Link>
-            <Link href="/for-caterers" className="hover:text-[#2d4736]">For Caterers</Link>
-            <Link href="/about" className="hover:text-[#2d4736]">About</Link>
+
+          <nav className="hidden items-center gap-8 text-sm text-[#49645c] md:flex">
+            <Link href="/caterers">Caterers</Link>
+            <Link href="/request/new">Plan event</Link>
+            <Link href="/caterer">For caterers</Link>
           </nav>
-          <div className="flex items-center gap-3">
-            <LanguageSwitcher />
-            <Link href="/request/new" className="rounded-full bg-[#2d4736] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90">
-              {t("home.editorialCtaPrimary")}
-            </Link>
-          </div>
+
+          <Link
+            href="/request/new"
+            className="rounded-full bg-[#173f35] px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-[#0f2f27]"
+          >
+            Start request
+          </Link>
         </div>
       </header>
 
-      {/* HERO SECTION - Changed to <img> to fix "No Image" */}
-      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={getDynamicUrl("luxury-catering-event")}
-            alt="Premium Event"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#f5f1ea]" />
-        </div>
+      <section className="relative overflow-hidden">
+        <DynamicUnsplashImage
+          section="hero"
+          priority
+          className="absolute inset-0 h-full w-full"
+          imageClassName="scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/90 via-[#102f28]/65 to-[#102f28]/20" />
 
-        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[#f2dfbf] backdrop-blur-sm">
-            <Sparkles className="h-3.5 w-3.5" />
-            {t("home.badge")}
-          </div>
-          <h1 className="mt-8 text-5xl font-semibold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl">
-            {t("home.editorialHeroTitle")}
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-[#efe5da] md:text-xl">
-            {t("home.editorialHeroSubtitle")}
-          </p>
-          <form onSubmit={handleSearch} className="mx-auto mt-10 max-w-4xl rounded-[2rem] border border-white/15 bg-white/10 p-3 shadow-2xl backdrop-blur-xl">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-              <div className="flex h-16 flex-[1.9] items-center rounded-[1.35rem] bg-white px-5">
-                <input
-                  type="text"
-                  value={heroQuery}
-                  onChange={(e) => setHeroQuery(e.target.value)}
-                  placeholder={t("home.editorialSearchPlaceholder")}
-                  className="w-full bg-transparent text-[15px] text-[#201a17] placeholder:text-[#8a8076] focus:outline-none"
-                />
-              </div>
-              <button type="submit" className="flex h-16 items-center justify-center gap-2 rounded-[1.3rem] bg-[#c49840] px-8 font-semibold text-white transition hover:scale-[1.02] lg:flex-[0.75]">
-                {t("home.heroSearchCta")}
-                <ArrowRight className="h-4 w-4" />
-              </button>
+        <div className="relative mx-auto grid min-h-[760px] max-w-7xl items-center px-6 py-24">
+          <div className="max-w-3xl text-white">
+            <div className="mb-6 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm backdrop-blur">
+              AI-assisted catering marketplace for premium events
             </div>
-          </form>
-        </div>
-      </section>
 
-      {/* INTELLIGENCE CARD */}
-      <section className="relative z-20 mx-auto -mt-20 max-w-7xl px-6">
-        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-[2.5rem] border border-[#e3dbd0] bg-white p-8 md:p-12 shadow-xl">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#c49840]">
-              <BrainCircuit className="h-4 w-4" />
-              AI-Guided Matching
-            </div>
-            <h2 className="mt-4 text-3xl font-semibold text-[#201a17] md:text-4xl">
-              Speisely understands your event before you browse.
-            </h2>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {[intent.event, intent.city, intent.guests, intent.diet].map((tag) => (
-                <span key={tag} className="rounded-full border border-[#ddd4c8] bg-[#faf7f2] px-4 py-2 text-sm font-medium text-[#3f3833]">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="grid gap-4">
-            <div className="flex items-center gap-4 rounded-[2rem] border border-[#e3dbd0] bg-white p-6 shadow-md">
-              <ShieldCheck className="h-8 w-8 text-[#c49840]" />
-              <div>
-                <div className="font-bold text-[#201a17]">Curated Partners</div>
-                <div className="text-sm text-[#6f675f]">Only the highest rated caterers.</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 rounded-[2rem] border border-[#e3dbd0] bg-white p-6 shadow-md">
-              <CheckCircle2 className="h-8 w-8 text-[#c49840]" />
-              <div>
-                <div className="font-bold text-[#201a17]">Smart Briefing</div>
-                <div className="text-sm text-[#6f675f]">Structured requests, better results.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+            <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
+              Describe your event. Speisely finds the right caterers.
+            </h1>
 
-      {/* OCCASIONS SECTION - Changed to <img> to fix "No Image" */}
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <div className="mb-12">
-          <h2 className="text-3xl font-semibold md:text-4xl">Start with your occasion</h2>
-          <p className="mt-4 text-[#6f675f]">Discover tailored solutions for every moment.</p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-          {occasionCards.map((occ) => (
-            <Link key={occ.titleKey} href={occ.href} className="group relative h-80 overflow-hidden rounded-[2rem] shadow-lg">
-              <img 
-                src={getDynamicUrl(occ.imgKey)} 
-                alt="occasion" 
-                className="w-full h-full object-cover transition duration-500 group-hover:scale-110" 
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
+              From weddings to corporate dinners, Speisely turns your event idea
+              into a structured catering brief and matches you with curated
+              caterers.
+            </p>
+
+            <div className="mt-8 rounded-3xl bg-white p-3 shadow-2xl md:flex">
+              <input
+                className="min-h-14 flex-1 rounded-2xl px-5 text-base text-[#173f35] outline-none placeholder:text-[#8a9a94]"
+                placeholder="Example: Wedding for 80 guests in Berlin, elegant buffet, €45 per person..."
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-6 left-6">
-                <h3 className="text-xl font-bold text-white">{t(occ.titleKey)}</h3>
-                <span className="text-sm text-[#f0dfbf] opacity-0 transition-opacity group-hover:opacity-100">Start request →</span>
-              </div>
-            </Link>
+              <Link
+                href="/request/new"
+                className="mt-3 inline-flex min-h-14 items-center justify-center rounded-2xl bg-[#c9a45c] px-7 font-medium text-[#173f35] md:mt-0"
+              >
+                Match caterers
+              </Link>
+            </div>
+
+            <div className="mt-5 flex flex-wrap gap-3 text-sm">
+              {["Wedding", "Corporate lunch", "Private dinner", "Ramadan iftar"].map(
+                (chip) => (
+                  <span
+                    key={chip}
+                    className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white/90 backdrop-blur"
+                  >
+                    {chip}
+                  </span>
+                )
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="grid gap-12 md:grid-cols-3">
+          {[
+            {
+              title: "1. Describe",
+              text: "Tell Speisely what you need in natural language.",
+            },
+            {
+              title: "2. Structure",
+              text: "AI converts your idea into event type, guest count, location, budget and preferences.",
+            },
+            {
+              title: "3. Match",
+              text: "You receive curated caterers instead of browsing a generic directory.",
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm"
+            >
+              <h3 className="text-xl font-semibold">{item.title}</h3>
+              <p className="mt-4 leading-7 text-[#5c6f68]">{item.text}</p>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-[#ddd5ca] bg-[#f3eee6] py-16">
-        <div className="mx-auto max-w-7xl px-6 text-center md:text-left">
-          <div className="grid gap-12 md:grid-cols-3">
-            <div>
-              <div className="text-2xl font-bold text-[#2d4736]">Speisely</div>
-              <p className="mt-4 text-[#6f675f]">The intelligent marketplace for premium catering.</p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Links</h4>
-              <div className="flex flex-col gap-2 text-[#6f675f]">
-                <Link href="/caterers">Caterers</Link>
-                <Link href="/about">About Us</Link>
+      <section className="bg-[#173f35] py-24 text-white">
+        <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 md:grid-cols-2">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#d7b66d]">
+              Premium presentation
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+              Catering decisions are emotional. The experience should feel premium.
+            </h2>
+            <p className="mt-6 text-lg leading-8 text-white/75">
+              Speisely combines elegant presentation with practical marketplace
+              logic: clear packages, structured requests, verified caterers and a
+              guided customer journey.
+            </p>
+          </div>
+
+          <DynamicUnsplashImage
+            section="premium"
+            className="h-[480px] rounded-[2rem] shadow-2xl"
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#b28a3c]">
+              Occasions
+            </p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight">
+              Built for the events people actually plan
+            </h2>
+          </div>
+          <Link href="/request/new" className="font-medium text-[#173f35]">
+            Start with AI matching →
+          </Link>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          {occasionCards.map((card) => (
+            <div
+              key={card.title}
+              className="overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm"
+            >
+              <DynamicUnsplashImage
+                section={card.section}
+                className="h-64"
+                sizes="(min-width: 768px) 33vw, 100vw"
+              />
+              <div className="p-7">
+                <h3 className="text-2xl font-semibold">{card.title}</h3>
+                <p className="mt-3 leading-7 text-[#5c6f68]">
+                  {card.description}
+                </p>
               </div>
             </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-24">
+        <div className="rounded-[2.5rem] bg-white p-8 shadow-sm md:p-12">
+          <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
-              <h4 className="font-bold mb-4">Contact</h4>
-              <p className="text-[#6f675f]">info@speisely.de</p>
+              <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#b28a3c]">
+                Curated caterers
+              </p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-tight">
+                A marketplace that feels selected, not crowded
+              </h2>
             </div>
+            <Link href="/caterers" className="font-medium text-[#173f35]">
+              Browse caterers →
+            </Link>
           </div>
-          <div className="mt-12 pt-8 border-t border-[#ddd5ca] text-sm text-[#8f8777]">
-            © 2025 Speisely. All rights reserved.
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {caterers.map((caterer) => (
+              <div
+                key={caterer.name}
+                className="rounded-[1.5rem] border border-[#eadfce] bg-[#faf6ee] p-6"
+              >
+                <div className="mb-8 h-10 w-10 rounded-full bg-[#173f35]" />
+                <h3 className="text-xl font-semibold">{caterer.name}</h3>
+                <p className="mt-2 text-[#5c6f68]">{caterer.type}</p>
+                <div className="mt-6 flex justify-between text-sm">
+                  <span>{caterer.location}</span>
+                  <span className="font-medium">{caterer.price}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 pb-24 md:grid-cols-2">
+        <DynamicUnsplashImage
+          section="caterer"
+          className="h-[460px] rounded-[2rem] shadow-sm"
+          sizes="(min-width: 768px) 50vw, 100vw"
+        />
+
+        <div>
+          <p className="text-sm font-medium uppercase tracking-[0.25em] text-[#b28a3c]">
+            For caterers
+          </p>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight">
+            Receive better inquiries, not random leads.
+          </h2>
+          <p className="mt-6 text-lg leading-8 text-[#5c6f68]">
+            Speisely helps caterers get structured requests with event details,
+            budget, guest count, dietary needs and service expectations already
+            clarified.
+          </p>
+          <Link
+            href="/caterer"
+            className="mt-8 inline-flex rounded-full bg-[#173f35] px-6 py-3 font-medium text-white"
+          >
+            Join as caterer
+          </Link>
+        </div>
+      </section>
+
+      <section className="px-6 pb-24">
+        <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-[#173f35] px-8 py-16 text-center text-white md:px-16">
+          <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
+            Plan your next catered event with AI guidance.
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/75">
+            Start with a simple description. Speisely turns it into a clear brief
+            and helps you move toward the right caterer.
+          </p>
+          <Link
+            href="/request/new"
+            className="mt-8 inline-flex rounded-full bg-[#d7b66d] px-8 py-4 font-medium text-[#173f35]"
+          >
+            Start your request
+          </Link>
+        </div>
+      </section>
+
+      <footer className="border-t border-[#eadfce] px-6 py-10">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-[#5c6f68] md:flex-row">
+          <p>© 2026 Speisely. Premium AI-assisted catering marketplace.</p>
+          <div className="flex gap-6">
+            <Link href="/caterers">Caterers</Link>
+            <Link href="/request/new">Plan event</Link>
+            <Link href="/caterer">For caterers</Link>
           </div>
         </div>
       </footer>
