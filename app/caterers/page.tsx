@@ -60,47 +60,53 @@ export default function CaterersPage() {
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="relative overflow-hidden">
+      <section className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-20 md:grid-cols-2 md:py-24">
+        <div>
+          <div className="mb-6 inline-flex rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
+            Kuratierte Premium-Partner
+          </div>
+
+          <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
+            Entdecken Sie Catering-Partner für anspruchsvolle Events.
+          </h1>
+
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+            Erkunden Sie ausgewählte Caterer für Hochzeiten, Corporate Events,
+            private Feiern und hochwertige Hospitality-Formate.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            {["Berlin", "Hochzeit", "Corporate", "Vegetarisch", "Fine Dining"].map(
+              (chip) => (
+                <Link
+                  key={chip}
+                  href={`/request/new?occasion=${encodeURIComponent(chip)}`}
+                  className="rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
+                >
+                  {chip}
+                </Link>
+              )
+            )}
+          </div>
+
+          <Link
+            href="/request/new"
+            className="mt-8 inline-flex rounded-full bg-[#173f35] px-7 py-4 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27]"
+          >
+            Lieber intelligent matchen lassen →
+          </Link>
+        </div>
+
         <DynamicUnsplashImage
           section="premium"
           priority
-          className="absolute inset-0 h-full w-full"
+          className="h-[560px] rounded-[2.5rem] shadow-sm"
           imageClassName="scale-105"
+          sizes="(min-width: 768px) 50vw, 100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/90 via-[#102f28]/65 to-[#102f28]/15" />
-
-        <div className="relative mx-auto max-w-7xl px-6 py-28 text-white">
-          <div className="max-w-4xl">
-            <div className="mb-6 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur">
-              Kuratierte Premium-Partner
-            </div>
-
-            <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
-              Entdecken Sie Catering-Partner für anspruchsvolle Events.
-            </h1>
-
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
-              Erkunden Sie ausgewählte Caterer für Hochzeiten, Corporate Events,
-              private Feiern und hochwertige Hospitality-Formate.
-            </p>
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              {["Berlin", "Hochzeit", "Corporate", "Vegetarisch", "Fine Dining"].map(
-                (chip) => (
-                  <span
-                    key={chip}
-                    className="rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-medium backdrop-blur"
-                  >
-                    {chip}
-                  </span>
-                )
-              )}
-            </div>
-          </div>
-        </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16">
+      <section className="mx-auto max-w-7xl px-6 pb-24">
         <div className="rounded-[2.5rem] border border-[#eadfce] bg-white p-6 shadow-sm md:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
             Filter & Auswahl
@@ -111,21 +117,27 @@ export default function CaterersPage() {
               placeholder="z. B. Hochzeit, vegan, Berlin..."
               className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]"
             />
+
             <input
               placeholder="Stadt"
               className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]"
             />
+
             <select className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]">
               <option>Alle Eventtypen</option>
               <option>Hochzeit</option>
               <option>Corporate</option>
               <option>Private Feier</option>
+              <option>Weihnachtsfeier</option>
+              <option>Ramadan Iftar</option>
             </select>
+
             <select className="rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none focus:border-[#c9a45c]">
               <option>Alle Richtungen</option>
               <option>Fine Dining</option>
               <option>Buffet</option>
               <option>Vegetarisch</option>
+              <option>Halal</option>
             </select>
           </div>
         </div>
@@ -135,17 +147,11 @@ export default function CaterersPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
               Partnerübersicht
             </p>
+
             <h2 className="mt-3 text-4xl font-semibold tracking-tight">
               6 ausgewählte Partner
             </h2>
           </div>
-
-          <Link
-            href="/request/new"
-            className="inline-flex rounded-full bg-[#173f35] px-6 py-3 font-semibold text-white"
-          >
-            Lieber intelligent matchen lassen →
-          </Link>
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -168,6 +174,7 @@ export default function CaterersPage() {
                 </div>
 
                 <h3 className="text-2xl font-semibold">{caterer.name}</h3>
+
                 <p className="mt-2 text-[#5c6f68]">{caterer.type}</p>
 
                 <div className="mt-6 flex justify-between text-sm">
