@@ -202,6 +202,10 @@
   "caterers.subtitle": "Anträge prüfen und registrierte Caterer verwalten",
 
   "auth.email": "E-Mail-Adresse",
+  "auth.loginBadge": "Willkommen zurück",
+"auth.loginIntro": "Melden Sie sich an, um Catering-Anfragen, gespeicherte Caterer und Ihre Eventplanung weiterzuführen.",
+"auth.loginSubtitle": "Melden Sie sich mit Ihrem Speisely-Konto an.",
+"auth.loggingIn": "Wird angemeldet...",
   "auth.password": "Passwort",
   "auth.login": "Anmelden",
   "auth.signup": "Registrieren",
