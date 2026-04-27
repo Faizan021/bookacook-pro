@@ -186,6 +186,17 @@ export default function NewRequestPage() {
     }
 
     try {
+      const supabase = createClient();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.push("/login?next=/request/new");
+        return;
+      }
+
       const result = await createRequestDraftAction({
         ai_query: cleanQuery,
         event_type: null,
@@ -198,10 +209,18 @@ export default function NewRequestPage() {
       router.push(`/request/${result.id}`);
     } catch (error) {
       console.error(error);
+
+      const message = error instanceof Error ? error.message : "";
+
+      if (message === "Unauthorized") {
+        router.push("/login?next=/request/new");
+        return;
+      }
+
       setSaveError(
         t(
           "request.saveError",
-          "Die Anfrage konnte nicht gespeichert werden. Bitte melden Sie sich an oder versuchen Sie es erneut."
+          "Die Anfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
         )
       );
       setSaving(false);
