@@ -8,7 +8,8 @@ type Section =
   | "corporate"
   | "birthday"
   | "private"
-  | "ramadan";
+  | "ramadan"
+  | "christmas";
 
 const SECTION_QUERIES: Record<Section, string> = {
   hero: "premium catering event table elegant dinner",
@@ -19,6 +20,7 @@ const SECTION_QUERIES: Record<Section, string> = {
   birthday: "birthday dinner table elegant",
   private: "private dinner party table",
   ramadan: "iftar dinner table elegant",
+  christmas: "elegant christmas dinner table catering",
 };
 
 const FALLBACK_IMAGES: Record<Section, { url: string; alt: string }> = {
@@ -53,6 +55,10 @@ const FALLBACK_IMAGES: Record<Section, { url: string; alt: string }> = {
   ramadan: {
     url: "https://images.unsplash.com/photo-1543353071-10c8ba85a904?auto=format&fit=crop&w=1200&q=85",
     alt: "Elegant shared dinner table",
+  },
+  christmas: {
+    url: "https://images.unsplash.com/photo-1543934638-0cf8f8f9b6d1?auto=format&fit=crop&w=1200&q=85",
+    alt: "Elegant Christmas dinner table",
   },
 };
 
@@ -117,10 +123,6 @@ export async function GET(request: NextRequest) {
       source: "unsplash",
       url: image.urls.regular,
       alt: image.alt_description || image.description || FALLBACK_IMAGES[section].alt,
-      credit: {
-        name: image.user?.name,
-        link: image.user?.links?.html,
-      },
     });
   } catch {
     return NextResponse.json({
