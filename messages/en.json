@@ -754,5 +754,58 @@
 "home.catererSection.card3Desc": "Manage leads, packages, availability, and visibility in one place.",
 "home.catererSection.primaryCta": "For Caterers",
 "home.catererSection.secondaryCta": "Join Speisely",
-"home.images.catererAlt": "Professional catering team"
+"home.images.catererAlt": "Professional catering team",
+"nav.discoverCaterers": "Discover caterers",
+"nav.forCaterers": "For caterers",
+"nav.describeEvent": "Describe event",
+
+"home.hero.badge": "AI-assisted catering marketplace for premium events",
+"home.hero.title": "Describe your event. Speisely finds the right caterers.",
+"home.hero.description": "From weddings to corporate events, Speisely turns your idea into a structured catering brief and finds curated caterers.",
+"home.hero.placeholder": "Example: Wedding for 80 guests in Berlin, elegant buffet, €45 p.p.",
+"home.hero.cta": "Find caterers",
+"home.hero.chipWedding": "Wedding",
+"home.hero.chipCorporate": "Business Lunch",
+"home.hero.chipPrivate": "Private Dinner",
+"home.hero.chipRamadan": "Ramadan Iftar",
+"home.hero.chipChristmas": "Christmas party",
+
+"home.steps.describe.title": "1. Describe",
+"home.steps.describe.text": "Describe your event in natural language.",
+"home.steps.structure.title": "2. Structure",
+"home.steps.structure.text": "AI detects event type, guest count, location, budget and preferences.",
+"home.steps.match.title": "3. Match",
+"home.steps.match.text": "You receive suitable caterers instead of browsing an overwhelming list.",
+
+"home.premium.label": "Premium presentation",
+"home.premium.title": "Catering is emotional. The booking experience should feel premium.",
+"home.premium.text": "Speisely combines elegant presentation with clear marketplace logic: packages, structured requests, verified caterers and a guided customer journey.",
+
+"home.occasions.wedding.title": "Wedding",
+"home.occasions.wedding.desc": "Elegant catering for intimate celebrations and large weddings.",
+"home.occasions.corporate.title": "Business Lunch",
+"home.occasions.corporate.desc": "Premium catering for meetings, launches, offsites and receptions.",
+"home.occasions.private.title": "Private Dinner",
+"home.occasions.private.desc": "Curated catering for birthdays, family celebrations and private dinners.",
+"home.occasions.ramadan.title": "Ramadan Iftar",
+"home.occasions.ramadan.desc": "Elegant iftar catering for families, companies and communities.",
+"home.occasions.christmas.title": "Christmas party",
+"home.occasions.christmas.desc": "Festive catering for company celebrations, family dinners and winter events.",
+"home.occasions.cta": "Start with AI matching",
+
+"home.caterers.label": "Curated caterers",
+"home.caterers.title": "A marketplace that feels selected — not crowded.",
+"home.caterers.text": "Discover verified catering partners with clear packages, premium images and suitable event specializations.",
+"home.caterers.cta": "View caterers",
+
+"home.forCaterers.label": "For caterers",
+"home.forCaterers.title": "Receive better inquiries, not random leads.",
+"home.forCaterers.text": "Speisely helps caterers receive structured requests with event details, budget, guest count and service expectations.",
+"home.forCaterers.cta": "Join as caterer",
+
+"home.final.title": "Plan your next catering event with AI guidance.",
+"home.final.text": "Start with a simple description. Speisely turns it into a clear brief and guides you to the right caterer.",
+"home.final.cta": "Describe event",
+
+"footer.tagline": "Premium AI-assisted catering marketplace."
 }
