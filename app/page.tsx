@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
+import Image from "next/image"; // Keep this for static images if you have any
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -14,14 +14,16 @@ import {
   MapPin,
 } from "lucide-react";
 
-// Library imports
 import { useT } from "@/lib/i18n/context";
 import { parseHeroIntent } from "@/lib/parser";
 import { LanguageSwitcher } from "@/components/i18n/language-switcher";
 import { LogoMark } from "@/components/ui/logo-mark";
 
 // --- DYNAMIC IMAGE ENGINE ---
-const getImg = (keyword: string) => `https://source.unsplash.com/featured/?${keyword}&sig=${Math.random()}`;
+// We use a different URL format that works better with standard <img> tags
+const getImg = (keyword: string) => `https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1200&q=80&sig=${Math.random()}`;
+// Note: For a truly "automatic" search via keyword, we use the source redirect:
+const getDynamicUrl = (keyword: string) => `https://source.unsplash.com/featured/?${keyword}&sig=${Math.random()}`;
 
 const occasionCards = [
   { titleKey: "home.occasions.wedding", href: "/request/new?occasion=wedding", imgKey: "wedding-catering" },
@@ -72,17 +74,14 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* HERO SECTION - Fixed Gradient & Dynamic Image */}
+      {/* HERO SECTION - Changed to <img> to fix "No Image" */}
       <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <Image
-            src={getImg("luxury-catering-event")}
+          <img
+            src={getDynamicUrl("luxury-catering-event")}
             alt="Premium Event"
-            fill
-            priority
-            className="object-cover"
+            className="w-full h-full object-cover"
           />
-          {/* The magic gradient that blends the image into the cream background */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#f5f1ea]" />
         </div>
 
@@ -91,15 +90,12 @@ export default function HomePage() {
             <Sparkles className="h-3.5 w-3.5" />
             {t("home.badge")}
           </div>
-
           <h1 className="mt-8 text-5xl font-semibold leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl">
             {t("home.editorialHeroTitle")}
           </h1>
-
           <p className="mx-auto mt-6 max-w-2xl text-lg text-[#efe5da] md:text-xl">
             {t("home.editorialHeroSubtitle")}
           </p>
-
           <form onSubmit={handleSearch} className="mx-auto mt-10 max-w-4xl rounded-[2rem] border border-white/15 bg-white/10 p-3 shadow-2xl backdrop-blur-xl">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
               <div className="flex h-16 flex-[1.9] items-center rounded-[1.35rem] bg-white px-5">
@@ -120,7 +116,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* INTELLIGENCE CARD - Floating effect */}
+      {/* INTELLIGENCE CARD */}
       <section className="relative z-20 mx-auto -mt-20 max-w-7xl px-6">
         <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-[2.5rem] border border-[#e3dbd0] bg-white p-8 md:p-12 shadow-xl">
@@ -139,7 +135,6 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-
           <div className="grid gap-4">
             <div className="flex items-center gap-4 rounded-[2rem] border border-[#e3dbd0] bg-white p-6 shadow-md">
               <ShieldCheck className="h-8 w-8 text-[#c49840]" />
@@ -159,7 +154,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* OCCASIONS SECTION */}
+      {/* OCCASIONS SECTION - Changed to <img> to fix "No Image" */}
       <section className="mx-auto max-w-7xl px-6 py-24">
         <div className="mb-12">
           <h2 className="text-3xl font-semibold md:text-4xl">Start with your occasion</h2>
@@ -168,7 +163,11 @@ export default function HomePage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
           {occasionCards.map((occ) => (
             <Link key={occ.titleKey} href={occ.href} className="group relative h-80 overflow-hidden rounded-[2rem] shadow-lg">
-              <Image src={getImg(occ.imgKey)} alt="occasion" fill className="object-cover transition duration-500 group-hover:scale-110" />
+              <img 
+                src={getDynamicUrl(occ.imgKey)} 
+                alt="occasion" 
+                className="w-full h-full object-cover transition duration-500 group-hover:scale-110" 
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="absolute bottom-6 left-6">
                 <h3 className="text-xl font-bold text-white">{t(occ.titleKey)}</h3>
