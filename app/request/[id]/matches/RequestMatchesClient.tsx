@@ -71,13 +71,13 @@ export default function RequestMatchesClient({
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#173f35]/15 transition hover:-translate-y-0.5 hover:bg-[#12342c]"
               >
                 <WandSparkles className="h-4 w-4 text-[#d8b76a]" />
-                {tr("request.details.regenerateMatches", "Regenerate matches")}
+                {tr("request.details.regenerateMatches", "Generate matches")}
               </button>
             </form>
           </div>
         </div>
 
-        <div className="mt-10 rounded-[2.25rem] border border-[#eadfce] bg-white/75 p-6 shadow-[0_24px_80px_rgba(23,63,53,0.08)] md:p-8">
+        <div className="mt-10 rounded-[2.25rem] border border-[#eadfce] bg-white/80 p-6 shadow-[0_24px_80px_rgba(23,63,53,0.08)] backdrop-blur md:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#b28a3c]">
             {tr("request.details.matchesLabel", "Caterer matches")}
           </p>
@@ -85,14 +85,22 @@ export default function RequestMatchesClient({
           <h1 className="premium-heading mt-3 max-w-3xl text-5xl leading-[0.95] text-[#173f35] md:text-6xl">
             {hasMatches
               ? tr("request.details.matchesReady", "Your suggested caterers")
-              : tr("request.details.matchesEmptyTitle", "Matching is being prepared")}
+              : tr(
+                  "request.details.matchesEmptyTitle",
+                  "Your matches are being prepared"
+                )}
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-7 text-[#173f35]/70">
-            {tr(
-              "request.details.matchesSubtitle",
-              "These results are based on your event brief, location, guest count, budget and preferences."
-            )}
+            {hasMatches
+              ? tr(
+                  "request.details.matchesSubtitle",
+                  "These results are based on your event brief, location, guest count, budget and preferences."
+                )
+              : tr(
+                  "request.details.matchesPreparingSubtitle",
+                  "Speisely is preparing curated caterer recommendations from your event brief. You can generate matches again or explore the marketplace."
+                )}
           </p>
         </div>
 
@@ -101,6 +109,7 @@ export default function RequestMatchesClient({
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {matches.map((match: any, index: number) => {
                 const caterer = match?.caterer || match?.caterers || match;
+
                 const name =
                   caterer?.business_name ||
                   caterer?.name ||
@@ -191,7 +200,7 @@ export default function RequestMatchesClient({
               })}
             </div>
           ) : (
-            <div className="rounded-[2rem] border border-dashed border-[#d9c8ae] bg-white/75 p-8 text-center shadow-[0_18px_60px_rgba(23,63,53,0.06)]">
+            <div className="rounded-[2rem] border border-dashed border-[#d9c8ae] bg-white/80 p-8 text-center shadow-[0_18px_60px_rgba(23,63,53,0.06)]">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-[#173f35]">
                 <Sparkles className="h-7 w-7 text-[#d8b76a]" />
               </div>
@@ -206,7 +215,7 @@ export default function RequestMatchesClient({
               <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#173f35]/65">
                 {tr(
                   "request.details.emptyText",
-                  "We are preparing curated caterer recommendations. You can improve your event details or browse the marketplace now."
+                  "Speisely is preparing curated caterer recommendations from your event brief. Generate matches again or explore the marketplace while the matching logic improves."
                 )}
               </p>
 
