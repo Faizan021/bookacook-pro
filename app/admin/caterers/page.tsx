@@ -77,7 +77,7 @@ function statusBadge(status?: string | null) {
 
 function formatStatus(status?: string | null) {
   const map: Record<string, string> = {
-    approved: "approved",
+    approved: "Approved",
     pending: "Pending",
     under_review: "Under review",
     rejected: "Rejected",
