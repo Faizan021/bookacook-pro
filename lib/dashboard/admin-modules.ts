@@ -20,6 +20,7 @@ export type AdminPaymentSummary = {
   gmv: string;
   commissionTotal: string;
   heldFunds: string;
+  eligibleForRelease: string;
   releasedTotal: string;
   blockedPayouts: string;
 };
