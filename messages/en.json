@@ -894,7 +894,6 @@
 "auth.requestLoginSubtitle": "Continue your AI catering search with a customer account.",
 "auth.continueRequest": "Continue event request",
 "auth.customerAccountRequired": "Please log in with a customer account to continue your event request.",
-,
 "request.details.noOriginalPrompt": "No original prompt found. You can refine your details below.",
 "request.details.flexibleBudget": "Flexible budget",
 "request.details.eventType": "Event",
