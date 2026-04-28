@@ -179,9 +179,7 @@ function scoreCaterer(
   let score = 0;
   const reasons: MatchReason[] = [];
 
-  if (!caterer.is_active) {
-    return null;
-  }
+  if (!caterer.is_active) return null;
 
   const activePackages = packages.filter(
     (pkg) =>
@@ -190,9 +188,7 @@ function scoreCaterer(
       normalize(pkg.status || "published") !== "draft"
   );
 
-  if (!activePackages.length) {
-    return null;
-  }
+  if (!activePackages.length) return null;
 
   if (textIncludes(caterer.city, request.city)) {
     score += 20;
@@ -204,9 +200,9 @@ function scoreCaterer(
     reasons.push("Küchenrichtung passt zu Ihren Wünschen");
   }
 
-  if (normalize(caterer.verification_status) === "verified") {
+  if (normalize(caterer.verification_status) === "approved") {
     score += 10;
-    reasons.push("Verifizierter Caterer");
+    reasons.push("Geprüfter Caterer");
   }
 
   if (caterer.payout_enabled) {
@@ -288,9 +284,7 @@ function scoreCaterer(
   score += bestPackageScore;
   reasons.push(...bestPackageReasons);
 
-  if (score <= 0) {
-    return null;
-  }
+  if (score <= 0) return null;
 
   return {
     caterer_id: caterer.id,
@@ -328,6 +322,8 @@ export async function generateMatchesForEventRequest(eventRequestId: string) {
       "id, business_name, city, cuisine_types, verification_status, is_active, is_featured, average_rating, payout_enabled"
     )
     .eq("is_active", true)
+    .eq("verification_status", "approved")
+    .eq("payout_enabled", true)
     .returns<CatererRow[]>();
 
   if (caterersError) {
@@ -384,9 +380,7 @@ export async function generateMatchesForEventRequest(eventRequestId: string) {
     throw new Error(deleteError.message);
   }
 
-  if (!matches.length) {
-    return [];
-  }
+  if (!matches.length) return [];
 
   const rows = matches.map((match) => ({
     event_request_id: eventRequestId,
