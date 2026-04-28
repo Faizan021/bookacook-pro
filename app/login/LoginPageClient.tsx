@@ -241,6 +241,15 @@ export default function LoginPageClient({ next = "" }: Props) {
                   : t("auth.goToSignup", "Go to Sign Up")}
               </Link>
             </p>
+
+            <div className="mt-4 text-center">
+              <Link
+                href="/admin-login"
+                className="text-xs font-medium text-[#8a6d35] underline-offset-4 transition hover:text-[#173f35] hover:underline"
+              >
+                Login as admin
+              </Link>
+            </div>
           </div>
         </section>
       </section>
