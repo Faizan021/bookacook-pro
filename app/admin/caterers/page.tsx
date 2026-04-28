@@ -18,54 +18,60 @@ type CatererRow = {
 async function updateCatererVerification(formData: FormData) {
   "use server";
 
-  const id = String(formData.get("id") || "");
-  const status = String(formData.get("status") || "pending");
+  try {
+    const id = String(formData.get("id") || "");
+    const status = String(formData.get("status") || "pending");
 
-  if (!id) return;
+    if (!id) return;
 
-  const supabase = await createClient();
+    const supabase = await createClient();
 
-  const updates =
-    status === "verified"
-      ? {
-          verification_status: "verified",
-          payout_enabled: true,
-          is_active: true,
-        }
-      : status === "rejected"
+    const updates =
+      status === "verified"
         ? {
-            verification_status: "rejected",
-            payout_enabled: false,
-            is_active: false,
+            verification_status: "verified",
+            payout_enabled: true,
+            is_active: true,
           }
-        : status === "suspended"
+        : status === "rejected"
           ? {
-              verification_status: "suspended",
+              verification_status: "rejected",
               payout_enabled: false,
               is_active: false,
             }
-          : {
-              verification_status: "under_review",
-              payout_enabled: false,
-              is_active: false,
-            };
+          : status === "suspended"
+            ? {
+                verification_status: "suspended",
+                payout_enabled: false,
+                is_active: false,
+              }
+            : {
+                verification_status: "under_review",
+                payout_enabled: false,
+                is_active: false,
+              };
 
-  const { error } = await supabase.from("caterers").update(updates).eq("id", id);
+    const { error } = await supabase
+      .from("caterers")
+      .update(updates)
+      .eq("id", id);
 
-  if (error) {
-    throw new Error(error.message);
+    if (error) {
+      console.error("Caterer verification update failed:", error.message);
+      return;
+    }
+
+    revalidatePath("/admin/caterers");
+    revalidatePath("/admin");
+  } catch (err) {
+    console.error("Caterer verification server action crashed:", err);
   }
-
-  revalidatePath("/admin/caterers");
-  revalidatePath("/admin");
 }
 
 function statusBadge(status?: string | null) {
   if (status === "verified") return "bg-green-100 text-green-700 border-green-200";
-  if (status === "rejected" || status === "suspended")
-    return "bg-red-100 text-red-700 border-red-200";
-  if (status === "under_review")
-    return "bg-blue-100 text-blue-700 border-blue-200";
+  if (status === "rejected" || status === "suspended") return "bg-red-100 text-red-700 border-red-200";
+  if (status === "under_review") return "bg-blue-100 text-blue-700 border-blue-200";
   return "bg-orange-100 text-orange-700 border-orange-200";
 }
 
