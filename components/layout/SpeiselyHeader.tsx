@@ -40,27 +40,29 @@ export function SpeiselyHeader() {
               {t("nav.login", "Login")}
             </button>
 
-            <div className="invisible absolute right-0 z-50 mt-3 w-56 rounded-2xl border border-[#eadfce] bg-white p-2 opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100">
-              <Link
-                href="/login"
-                className="block rounded-xl px-4 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#faf6ee]"
-              >
-                {t("nav.loginCustomer", "Login as customer")}
-              </Link>
+            <div className="absolute right-0 top-full z-50 hidden w-60 pt-2 group-hover:block">
+              <div className="rounded-2xl border border-[#eadfce] bg-white p-2 shadow-xl">
+                <Link
+                  href="/login"
+                  className="block rounded-xl px-4 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#faf6ee]"
+                >
+                  {t("nav.loginCustomer", "Login as customer")}
+                </Link>
 
-              <Link
-                href="/login?next=/caterer"
-                className="block rounded-xl px-4 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#faf6ee]"
-              >
-                {t("nav.loginCaterer", "Login as caterer")}
-              </Link>
+                <Link
+                  href="/login?next=/caterer"
+                  className="block rounded-xl px-4 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#faf6ee]"
+                >
+                  {t("nav.loginCaterer", "Login as caterer")}
+                </Link>
 
-              <Link
-                href="/admin-login"
-                className="block rounded-xl px-4 py-3 text-sm font-semibold text-[#8a6d35] transition hover:bg-[#faf6ee]"
-              >
-                {t("nav.loginAdmin", "Login as admin")}
-              </Link>
+                <Link
+                  href="/admin-login"
+                  className="block rounded-xl px-4 py-3 text-sm font-semibold text-[#8a6d35] transition hover:bg-[#faf6ee]"
+                >
+                  {t("nav.loginAdmin", "Login as admin")}
+                </Link>
+              </div>
             </div>
           </div>
 
