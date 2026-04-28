@@ -125,7 +125,7 @@ export default function Home() {
     const query = heroQuery.trim();
 
     if (query.length > 0) {
-      router.push(`/request/new?query=${encodeURIComponent(query)}`);
+      router.push(`/request/new?query=${encodeURIComponent(query)}&start=1`);
       return;
     }
 
