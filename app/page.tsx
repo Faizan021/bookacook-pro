@@ -42,7 +42,7 @@ const occasionCards = [
     descFallback: "Elegantes Catering für intime Feiern und große Hochzeiten.",
     image: images.wedding,
     alt: "Elegant wedding catering table",
-    href: "/request/new?occasion=wedding&start=1",
+    href: "/request/new?occasion=wedding",
   },
   {
     titleKey: "home.occasions.corporate.title",
@@ -52,7 +52,7 @@ const occasionCards = [
       "Premium-Catering für Meetings, Launches, Offsites und Empfänge.",
     image: images.corporate,
     alt: "Corporate event catering space",
-    href: "/request/new?occasion=corporate&start=1",
+    href: "/request/new?occasion=corporate",
   },
   {
     titleKey: "home.occasions.private.title",
@@ -62,7 +62,7 @@ const occasionCards = [
       "Kuratiertes Catering für Geburtstage, Familienfeiern und private Dinner.",
     image: images.private,
     alt: "Private dinner table",
-    href: "/request/new?occasion=private&start=1",
+    href: "/request/new?occasion=private",
   },
   {
     titleKey: "home.occasions.ramadan.title",
@@ -72,7 +72,7 @@ const occasionCards = [
       "Stilvolles Iftar-Catering für Familien, Unternehmen und Communities.",
     image: images.ramadan,
     alt: "Iftar dinner table",
-    href: "/request/new?occasion=ramadan&start=1",
+    href: "/request/new?occasion=ramadan",
   },
   {
     titleKey: "home.occasions.christmas.title",
@@ -82,7 +82,7 @@ const occasionCards = [
       "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
     image: images.christmas,
     alt: "Christmas dinner table",
-    href: "/request/new?occasion=christmas&start=1",
+    href: "/request/new?occasion=christmas",
   },
 ];
 
@@ -135,23 +135,23 @@ export default function Home() {
   const chips = [
     {
       label: t("home.hero.chipWedding", "Hochzeit"),
-      href: "/request/new?occasion=wedding&start=1",
+      href: "/request/new?occasion=wedding",
     },
     {
       label: t("home.hero.chipCorporate", "Business Lunch"),
-      href: "/request/new?occasion=corporate&start=1",
+      href: "/request/new?occasion=corporate",
     },
     {
       label: t("home.hero.chipPrivate", "Private Dinner"),
-      href: "/request/new?occasion=private&start=1",
+      href: "/request/new?occasion=private",
     },
     {
       label: t("home.hero.chipRamadan", "Ramadan Iftar"),
-      href: "/request/new?occasion=ramadan&start=1",
+      href: "/request/new?occasion=ramadan",
     },
     {
       label: t("home.hero.chipChristmas", "Weihnachtsfeier"),
-      href: "/request/new?occasion=christmas&start=1",
+      href: "/request/new?occasion=christmas",
     },
   ];
 
@@ -316,10 +316,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <Link
-            href="/request/new"
-            className="font-semibold text-[#173f35]"
-          >
+          <Link href="/request/new" className="font-semibold text-[#173f35]">
             {t("home.occasions.cta", "Mit KI-Matching starten")} →
           </Link>
         </div>
