@@ -9,7 +9,7 @@ import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
 export default function AdminLoginPage() {
   const t = useT();
 
-  const [email, setEmail] = useState("ahmad_faizan12@hotmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
