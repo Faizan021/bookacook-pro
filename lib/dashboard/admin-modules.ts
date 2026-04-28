@@ -100,12 +100,14 @@ export async function getAdminCaterersList(): Promise<AdminCatererRecord[]> {
 }
 
 export async function getAdminPaymentsSummary(): Promise<AdminPaymentSummary> {
-  const supabase = await createClient();
-  const ZERO: AdminPaymentSummary = {
-    gmv: "€0,00", commissionTotal: "€0,00",
-    heldFunds: "€0,00", releasedTotal: "€0,00", blockedPayouts: "€0,00",
-  };
-
+ const ZERO: AdminPaymentSummary = {
+  gmv: "€0,00",
+  commissionTotal: "€0,00",
+  heldFunds: "€0,00",
+  eligibleForRelease: "€0,00",
+  releasedTotal: "€0,00",
+  blockedPayouts: "€0,00",
+};
   try {
     const [paymentsRes, caterersRes] = await Promise.all([
       supabase
