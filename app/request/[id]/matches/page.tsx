@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { getEventRequestById } from "@/lib/dashboard/event-requests";
 import {
   generateMatchesForEventRequest,
@@ -35,6 +36,8 @@ export default async function RequestMatchesPage({ params }: PageProps) {
 
     try {
       await generateMatchesForEventRequest(id);
+      revalidatePath(`/request/${id}/matches`);
+      revalidatePath(`/request/${id}`);
     } catch (error) {
       console.error("Failed to regenerate matches:", error);
     }
