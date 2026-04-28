@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
@@ -27,6 +27,8 @@ type GermanLocation = {
   lng: string | number | null;
   type: string | null;
 };
+
+const PENDING_REQUEST_KEY = "speisely_pending_request";
 
 const occasionPrompts = [
   {
@@ -58,6 +60,7 @@ const occasionPrompts = [
 export default function NewRequestPage() {
   const t = useT();
   const router = useRouter();
+  const restoredRef = useRef(false);
 
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
@@ -67,6 +70,71 @@ export default function NewRequestPage() {
   const [locationLoading, setLocationLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  async function createDraftFromValues(input: {
+    cleanQuery: string;
+    cleanLocation: string;
+    selectedLocation: GermanLocation | null;
+  }) {
+    const result = await createRequestDraftAction({
+      ai_query: input.cleanQuery,
+      event_type: null,
+      city: input.selectedLocation?.name ?? (input.cleanLocation || null),
+      postal_code: input.selectedLocation?.postal_code ?? null,
+      lat: input.selectedLocation?.lat ?? null,
+      lng: input.selectedLocation?.lng ?? null,
+    });
+
+    try {
+      localStorage.removeItem(PENDING_REQUEST_KEY);
+    } catch {}
+
+    router.push(`/request/${result.id}`);
+  }
+
+  useEffect(() => {
+    if (restoredRef.current) return;
+    restoredRef.current = true;
+
+    async function restorePendingRequest() {
+      try {
+        const raw = localStorage.getItem(PENDING_REQUEST_KEY);
+        if (!raw) return;
+
+        const pending = JSON.parse(raw) as {
+          query?: string;
+          locationInput?: string;
+          selectedLocation?: GermanLocation | null;
+        };
+
+        if (pending.query) setQuery(pending.query);
+        if (pending.locationInput) setLocationInput(pending.locationInput);
+        if (pending.selectedLocation) setSelectedLocation(pending.selectedLocation);
+
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user || !pending.query || pending.query.trim().length < 10) return;
+
+        setSaving(true);
+        await createDraftFromValues({
+          cleanQuery: pending.query.trim(),
+          cleanLocation: (pending.locationInput || "").trim(),
+          selectedLocation: pending.selectedLocation ?? null,
+        });
+      } catch (error) {
+        console.error("Failed to restore pending request:", error);
+        try {
+          localStorage.removeItem(PENDING_REQUEST_KEY);
+        } catch {}
+        setSaving(false);
+      }
+    }
+
+    restorePendingRequest();
+  }, []);
 
   useEffect(() => {
     const term = locationInput.trim();
@@ -210,26 +278,39 @@ export default function NewRequestPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
+        localStorage.setItem(
+          PENDING_REQUEST_KEY,
+          JSON.stringify({
+            query: cleanQuery,
+            locationInput: cleanLocation,
+            selectedLocation,
+          })
+        );
+
         router.push("/login?next=/request/new");
         return;
       }
 
-      const result = await createRequestDraftAction({
-        ai_query: cleanQuery,
-        event_type: null,
-        city: selectedLocation?.name ?? (cleanLocation || null),
-        postal_code: selectedLocation?.postal_code ?? null,
-        lat: selectedLocation?.lat ?? null,
-        lng: selectedLocation?.lng ?? null,
+      await createDraftFromValues({
+        cleanQuery,
+        cleanLocation,
+        selectedLocation,
       });
-
-      router.push(`/request/${result.id}`);
     } catch (error) {
       console.error(error);
 
       const message = error instanceof Error ? error.message : "";
 
       if (message === "Unauthorized") {
+        localStorage.setItem(
+          PENDING_REQUEST_KEY,
+          JSON.stringify({
+            query: cleanQuery,
+            locationInput: cleanLocation,
+            selectedLocation,
+          })
+        );
+
         router.push("/login?next=/request/new");
         return;
       }
@@ -264,9 +345,9 @@ export default function NewRequestPage() {
             </span>
           </div>
 
-          <h1 className="mt-10 max-w-4xl text-[3.25rem] font-semibold leading-[0.95] tracking-[-0.055em] text-[#123b32] md:text-[5.4rem]">
+          <h1 className="premium-heading mt-10 max-w-4xl text-[3.25rem] leading-[0.95] text-[#123b32] md:text-[5.4rem]">
             {t("request.title", "Describe your event once.")}
-            <span className="block pt-2 italic font-medium tracking-[-0.06em] text-[#b28a3c]">
+            <span className="block pt-2 italic font-medium text-[#b28a3c]">
               {t("request.titleAccent", "Speisely builds the brief.")}
             </span>
           </h1>
@@ -399,7 +480,7 @@ export default function NewRequestPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#b28a3c]">
                   {t("request.previewLabel", "AI preview")}
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#173f35]">
+                <h2 className="premium-heading mt-2 text-3xl text-[#173f35]">
                   {t("request.previewTitle", "What Speisely understood")}
                 </h2>
               </div>
@@ -447,7 +528,7 @@ export default function NewRequestPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#d6b25e]">
               {t("request.flowLabel", "Next")}
             </p>
-            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em]">
+            <h3 className="premium-heading mt-3 text-3xl text-white">
               {t("request.flowTitle", "Review brief → see matches")}
             </h3>
             <p className="mt-3 text-sm leading-7 text-white/75">
