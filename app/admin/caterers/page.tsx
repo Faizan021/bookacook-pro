@@ -5,7 +5,6 @@ import { createClient } from "@/lib/supabase/server";
 type CatererRow = {
   id: string;
   business_name: string | null;
-  contact_person: string | null;
   phone: string | null;
   business_address: string | null;
   license_number: string | null;
@@ -58,21 +57,15 @@ async function updateCatererVerification(formData: FormData) {
   }
 
   revalidatePath("/admin/caterers");
+  revalidatePath("/admin");
 }
 
 function statusBadge(status?: string | null) {
-  if (status === "verified") {
-    return "bg-green-100 text-green-700 border-green-200";
-  }
-
-  if (status === "rejected" || status === "suspended") {
+  if (status === "verified") return "bg-green-100 text-green-700 border-green-200";
+  if (status === "rejected" || status === "suspended")
     return "bg-red-100 text-red-700 border-red-200";
-  }
-
-  if (status === "under_review") {
+  if (status === "under_review")
     return "bg-blue-100 text-blue-700 border-blue-200";
-  }
-
   return "bg-orange-100 text-orange-700 border-orange-200";
 }
 
@@ -97,7 +90,6 @@ export default async function AdminCaterersPage() {
       `
       id,
       business_name,
-      contact_person,
       phone,
       business_address,
       license_number,
@@ -113,12 +105,10 @@ export default async function AdminCaterersPage() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-[#faf6ee] p-6 text-[#16372f]">
-        <div className="mx-auto max-w-6xl rounded-2xl border border-red-200 bg-red-50 p-6 text-red-700">
-          <h1 className="text-xl font-bold">Could not load caterers</h1>
-          <p className="mt-2 text-sm">{error.message}</p>
-        </div>
-      </main>
+      <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <h1 className="text-xl font-bold">Could not load caterers</h1>
+        <p className="mt-2 text-sm">{error.message}</p>
+      </div>
     );
   }
 
@@ -130,149 +120,152 @@ export default async function AdminCaterersPage() {
   ).length;
 
   return (
-    <main className="min-h-screen bg-[#faf6ee] p-6 text-[#16372f]">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-              Admin / Caterers
-            </p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">
-              Caterer verification
-            </h1>
-            <p className="mt-2 text-[#5c6f68]">
-              Review new caterer registrations, check license details, and approve
-              marketplace visibility.
-            </p>
-          </div>
+    <div className="space-y-8 text-[#16372f]">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+            Admin / Caterers
+          </p>
 
-          <div className="rounded-2xl border border-[#eadfce] bg-white px-5 py-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6d35]">
-              Pending review
-            </p>
-            <p className="mt-1 text-3xl font-semibold">{pendingCount}</p>
-          </div>
+          <h1 className="mt-2 text-4xl font-semibold tracking-tight text-[#173f35]">
+            Caterer verification
+          </h1>
+
+          <p className="mt-2 text-[#5c6f68]">
+            Review new caterer registrations, check license details, and approve
+            marketplace visibility.
+          </p>
         </div>
 
-        {!caterers || caterers.length === 0 ? (
-          <div className="rounded-[2rem] border border-dashed border-[#d8ccb9] bg-white p-10 text-center shadow-sm">
-            <h2 className="text-2xl font-semibold">No caterers yet</h2>
-            <p className="mt-2 text-sm text-[#5c6f68]">
-              New caterer signup requests will appear here.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-6 lg:grid-cols-2">
-            {caterers.map((caterer) => (
-              <div
-                key={caterer.id}
-                className="rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm"
-              >
-                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-                  <div>
-                    <h2 className="text-2xl font-semibold tracking-tight">
-                      {caterer.business_name || "Unnamed caterer"}
-                    </h2>
+        <div className="rounded-2xl border border-[#eadfce] bg-white px-5 py-4 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6d35]">
+            Pending review
+          </p>
+          <p className="mt-1 text-3xl font-semibold text-[#173f35]">
+            {pendingCount}
+          </p>
+        </div>
+      </div>
 
-                    <p className="mt-1 text-sm text-[#5c6f68]">
-                      {caterer.city || "City not set"} ·{" "}
-                      {caterer.contact_person || "No contact person"}
-                    </p>
-                  </div>
+      {!caterers || caterers.length === 0 ? (
+        <div className="rounded-[2rem] border border-dashed border-[#d8ccb9] bg-white p-10 text-center shadow-sm">
+          <h2 className="text-2xl font-semibold text-[#173f35]">
+            No caterers yet
+          </h2>
+          <p className="mt-2 text-sm text-[#5c6f68]">
+            New caterer signup requests will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          {caterers.map((caterer) => (
+            <div
+              key={caterer.id}
+              className="rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm"
+            >
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+                <div>
+                  <h2 className="text-2xl font-semibold tracking-tight text-[#173f35]">
+                    {caterer.business_name || "Unnamed caterer"}
+                  </h2>
 
-                  <span
-                    className={`inline-flex w-fit rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] ${statusBadge(
-                      caterer.verification_status
-                    )}`}
-                  >
-                    {formatStatus(caterer.verification_status)}
-                  </span>
+                  <p className="mt-1 text-sm text-[#5c6f68]">
+                    {caterer.city || "City not set"}
+                  </p>
                 </div>
 
-                <div className="mt-6 grid gap-4 rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-4 text-sm sm:grid-cols-2">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
-                      Phone
-                    </p>
-                    <p className="mt-1 font-medium">
-                      {caterer.phone || "Not provided"}
-                    </p>
-                  </div>
+                <span
+                  className={`inline-flex w-fit rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] ${statusBadge(
+                    caterer.verification_status
+                  )}`}
+                >
+                  {formatStatus(caterer.verification_status)}
+                </span>
+              </div>
 
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
-                      License / Registration
-                    </p>
-                    <p className="mt-1 font-medium">
-                      {caterer.license_number || "Missing"}
-                    </p>
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
-                      Business address
-                    </p>
-                    <p className="mt-1 font-medium">
-                      {caterer.business_address || "Not provided"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
-                      Active
-                    </p>
-                    <p className="mt-1 font-medium">
-                      {caterer.is_active ? "Yes" : "No"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
-                      Payout enabled
-                    </p>
-                    <p className="mt-1 font-medium">
-                      {caterer.payout_enabled ? "Yes" : "No"}
-                    </p>
-                  </div>
+              <div className="mt-6 grid gap-4 rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-4 text-sm sm:grid-cols-2">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
+                    Phone
+                  </p>
+                  <p className="mt-1 font-medium text-[#173f35]">
+                    {caterer.phone || "Not provided"}
+                  </p>
                 </div>
 
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                  <form action={updateCatererVerification}>
-                    <input type="hidden" name="id" value={caterer.id} />
-                    <input type="hidden" name="status" value="under_review" />
-                    <button className="w-full rounded-full border border-[#d8ccb9] bg-white px-5 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#f4ead7] sm:w-auto">
-                      Mark under review
-                    </button>
-                  </form>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
+                    License / Registration
+                  </p>
+                  <p className="mt-1 font-medium text-[#173f35]">
+                    {caterer.license_number || "Missing"}
+                  </p>
+                </div>
 
-                  <form action={updateCatererVerification}>
-                    <input type="hidden" name="id" value={caterer.id} />
-                    <input type="hidden" name="status" value="verified" />
-                    <button className="w-full rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27] sm:w-auto">
-                      Verify
-                    </button>
-                  </form>
+                <div className="sm:col-span-2">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
+                    Business address
+                  </p>
+                  <p className="mt-1 font-medium text-[#173f35]">
+                    {caterer.business_address || "Not provided"}
+                  </p>
+                </div>
 
-                  <form action={updateCatererVerification}>
-                    <input type="hidden" name="id" value={caterer.id} />
-                    <input type="hidden" name="status" value="rejected" />
-                    <button className="w-full rounded-full border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 sm:w-auto">
-                      Reject
-                    </button>
-                  </form>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
+                    Active
+                  </p>
+                  <p className="mt-1 font-medium text-[#173f35]">
+                    {caterer.is_active ? "Yes" : "No"}
+                  </p>
+                </div>
 
-                  <Link
-                    href={`/caterers/${caterer.id}`}
-                    className="inline-flex items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-5 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#f4ead7]"
-                  >
-                    View public profile
-                  </Link>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
+                    Payout enabled
+                  </p>
+                  <p className="mt-1 font-medium text-[#173f35]">
+                    {caterer.payout_enabled ? "Yes" : "No"}
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </main>
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <form action={updateCatererVerification}>
+                  <input type="hidden" name="id" value={caterer.id} />
+                  <input type="hidden" name="status" value="under_review" />
+                  <button className="w-full rounded-full border border-[#d8ccb9] bg-white px-5 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#f4ead7] sm:w-auto">
+                    Mark under review
+                  </button>
+                </form>
+
+                <form action={updateCatererVerification}>
+                  <input type="hidden" name="id" value={caterer.id} />
+                  <input type="hidden" name="status" value="verified" />
+                  <button className="w-full rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27] sm:w-auto">
+                    Verify
+                  </button>
+                </form>
+
+                <form action={updateCatererVerification}>
+                  <input type="hidden" name="id" value={caterer.id} />
+                  <input type="hidden" name="status" value="rejected" />
+                  <button className="w-full rounded-full border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 sm:w-auto">
+                    Reject
+                  </button>
+                </form>
+
+                <Link
+                  href={`/caterers/${caterer.id}`}
+                  className="inline-flex items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-5 py-3 text-sm font-semibold text-[#173f35] transition hover:bg-[#f4ead7]"
+                >
+                  View public profile
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
