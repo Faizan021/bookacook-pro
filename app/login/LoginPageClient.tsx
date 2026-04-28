@@ -11,11 +11,21 @@ type Props = {
   next?: string;
 };
 
+function safeNextPath(value?: string) {
+  if (!value) return "";
+  if (!value.startsWith("/")) return "";
+  if (value.startsWith("//")) return "";
+  return value;
+}
+
 export default function LoginPageClient({ next = "" }: Props) {
   const t = useT();
+  const safeNext = safeNextPath(next);
 
-  const isCatererLogin = next === "/caterer" || next.startsWith("/caterer/");
-  const isRequestLogin = next === "/request/new" || next.startsWith("/request/");
+  const isCatererLogin =
+    safeNext === "/caterer" || safeNext.startsWith("/caterer/");
+  const isRequestLogin =
+    safeNext === "/request/new" || safeNext.startsWith("/request/");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -94,28 +104,22 @@ export default function LoginPageClient({ next = "" }: Props) {
         return;
       }
 
-      if (next) {
-        window.location.href = next;
+      if (safeNext) {
+        window.location.assign(safeNext);
         return;
       }
 
       if (role === "admin") {
-        window.location.href = "/admin";
+        window.location.assign("/admin");
         return;
       }
 
       if (role === "caterer") {
-        window.location.href = "/caterer";
+        window.location.assign("/caterer");
         return;
       }
 
-      if (role === "customer") {
-        window.location.href = "/customer";
-        return;
-      }
-
-      setError(t("auth.unknownRole", "Unknown user role.") + ` ${role}`);
-      setLoading(false);
+      window.location.assign("/customer");
     } catch {
       setError(t("error.unexpected", "Unexpected error. Please try again."));
       setLoading(false);
@@ -124,9 +128,15 @@ export default function LoginPageClient({ next = "" }: Props) {
 
   const signupHref = isCatererLogin
     ? "/signup/caterer"
-    : next
-      ? `/signup/customer?next=${encodeURIComponent(next)}`
+    : safeNext
+      ? `/signup/customer?next=${encodeURIComponent(safeNext)}`
       : "/signup";
+
+  const badgeText = isCatererLogin
+    ? t("auth.catererLoginBadge", "Caterer Portal")
+    : isRequestLogin
+      ? t("auth.requestLoginBadge", "AI event request")
+      : t("auth.loginBadge", "Welcome back");
 
   const introTitle = isCatererLogin
     ? t("auth.catererLoginTitle", "Caterer login")
@@ -142,30 +152,20 @@ export default function LoginPageClient({ next = "" }: Props) {
     : isRequestLogin
       ? t(
           "auth.requestLoginIntro",
-          "Log in to save your catering request, keep your AI-generated event brief, and continue to suitable caterer matches."
+          "Your event brief is already prepared. Log in to save it and continue to your catering matches."
         )
       : t(
           "auth.loginIntro",
           "Sign in to continue your catering requests, saved caterers, and event planning."
         );
 
-  const formSubtitle = isCatererLogin
-    ? t(
-        "auth.catererLoginSubtitle",
-        "Use your caterer account to access the caterer dashboard."
-      )
+  const buttonText = loading
+    ? isRequestLogin
+      ? t("auth.preparingRequest", "Continuing your AI brief...")
+      : t("auth.loggingIn", "Logging in...")
     : isRequestLogin
-      ? t(
-          "auth.requestLoginSubtitle",
-          "Continue your AI catering search with a customer account."
-        )
-      : t("auth.loginSubtitle", "Sign in with your Speisely account.");
-
-  const badgeText = isCatererLogin
-    ? t("auth.catererLoginBadge", "Caterer Portal")
-    : isRequestLogin
-      ? t("auth.requestLoginBadge", "AI event request")
-      : t("auth.loginBadge", "Welcome back");
+      ? t("auth.continueRequest", "Continue event request")
+      : t("auth.login", "Log In");
 
   return (
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
@@ -177,13 +177,27 @@ export default function LoginPageClient({ next = "" }: Props) {
             {badgeText}
           </div>
 
-          <h1 className="max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
+          <h1 className="premium-heading max-w-2xl text-6xl leading-[0.95] text-[#173f35] md:text-7xl">
             {introTitle}
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
             {introDescription}
           </p>
+
+          {isRequestLogin ? (
+            <div className="mt-8 rounded-[2rem] border border-[#eadfce] bg-white/85 p-6 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+                {t("auth.requestSavedLabel", "Your request is waiting")}
+              </p>
+              <p className="mt-3 text-sm leading-7 text-[#5c6f68]">
+                {t(
+                  "auth.requestSavedText",
+                  "After login, Speisely will return you to your AI request and continue the brief automatically."
+                )}
+              </p>
+            </div>
+          ) : null}
 
           <div className="mt-10 overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
             <DynamicUnsplashImage
@@ -195,18 +209,18 @@ export default function LoginPageClient({ next = "" }: Props) {
         </div>
 
         <section className="mx-auto w-full max-w-md">
-          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm">
+          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
             <div className="mb-8">
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
                 {badgeText}
               </p>
 
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+              <h2 className="premium-heading mt-3 text-4xl leading-[0.95] text-[#173f35]">
                 {introTitle}
               </h2>
 
-              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
-                {formSubtitle}
+              <p className="mt-3 text-sm leading-6 text-[#5c6f68]">
+                {introDescription}
               </p>
             </div>
 
@@ -252,11 +266,7 @@ export default function LoginPageClient({ next = "" }: Props) {
                 disabled={loading}
                 className="inline-flex w-full items-center justify-center rounded-[1rem] bg-[#173f35] px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading
-                  ? t("auth.loggingIn", "Logging in...")
-                  : isRequestLogin
-                    ? t("auth.continueRequest", "Continue event request")
-                    : t("auth.login", "Log In")}
+                {buttonText}
               </button>
             </form>
 
@@ -277,7 +287,7 @@ export default function LoginPageClient({ next = "" }: Props) {
                 href="/admin-login"
                 className="text-xs font-medium text-[#8a6d35] underline-offset-4 transition hover:text-[#173f35] hover:underline"
               >
-                Login as admin
+                {t("nav.loginAdmin", "Login as admin")}
               </Link>
             </div>
           </div>
