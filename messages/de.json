@@ -840,7 +840,6 @@
 "auth.requestLoginSubtitle": "Setzen Sie Ihre KI-Catering-Suche mit einem Kundenkonto fort.",
 "auth.continueRequest": "Event-Anfrage fortsetzen",
 "auth.customerAccountRequired": "Bitte melden Sie sich mit einem Kundenkonto an, um Ihre Event-Anfrage fortzusetzen.",
-  ,
 "request.details.noOriginalPrompt": "Keine ursprüngliche Anfrage gespeichert. Sie können die Details unten verbessern.",
 "request.details.flexibleBudget": "Flexibles Budget",
 "request.details.eventType": "Event",
