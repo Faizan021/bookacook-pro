@@ -133,7 +133,9 @@ export default function NewRequestPage() {
       try {
         const raw = localStorage.getItem(PENDING_REQUEST_KEY);
 
-        if (raw) {
+        if (shouldStart && urlQuery) {
+          localStorage.removeItem(PENDING_REQUEST_KEY);
+        } else if (raw) {
           const pending = JSON.parse(raw) as {
             query?: string;
             locationInput?: string;
@@ -457,30 +459,32 @@ export default function NewRequestPage() {
               </button>
             ))}
           </div>
-{saving ? (
-  <div className="mt-9 rounded-[2rem] border border-[#eadfce] bg-white/90 p-6 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
-    <div className="flex items-start gap-4">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#173f35] text-[#d6b25e]">
-        <Sparkles className="h-5 w-5 animate-pulse" />
-      </div>
 
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-          {t("request.autoStartLabel", "AI concierge")}
-        </p>
-        <h2 className="premium-heading mt-2 text-3xl text-[#173f35]">
-          {t("request.autoStartTitle", "Building your catering brief")}
-        </h2>
-        <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
-          {t(
-            "request.autoStartText",
-            "Speisely is turning your event idea into a structured request and preparing the next step."
-          )}
-        </p>
-      </div>
-    </div>
-  </div>
-) : null}
+          {saving ? (
+            <div className="mt-9 rounded-[2rem] border border-[#eadfce] bg-white/90 p-6 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#173f35] text-[#d6b25e]">
+                  <Sparkles className="h-5 w-5 animate-pulse" />
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+                    {t("request.autoStartLabel", "AI concierge")}
+                  </p>
+                  <h2 className="premium-heading mt-2 text-3xl text-[#173f35]">
+                    {t("request.autoStartTitle", "Building your catering brief")}
+                  </h2>
+                  <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
+                    {t(
+                      "request.autoStartText",
+                      "Speisely is turning your event idea into a structured request and preparing the next step."
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <div className="mt-9 rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
             <label className="text-sm font-semibold text-[#173f35]">
               {t("request.inputLabel", "Event description")}
