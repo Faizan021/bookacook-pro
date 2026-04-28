@@ -3,6 +3,15 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  ArrowRight,
+  CheckCircle2,
+  MapPin,
+  Search,
+  Sparkles,
+  Users,
+  Wallet,
+} from "lucide-react";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
 import { DynamicUnsplashImage } from "@/components/home/DynamicUnsplashImage";
 import { useT } from "@/lib/i18n/context";
@@ -21,29 +30,24 @@ type GermanLocation = {
 
 const occasionPrompts = [
   {
-    label: "Hochzeit",
+    label: "Wedding",
     query:
-      "Hochzeit für 80 Gäste, vegetarisch, elegantes Buffet, ca. €45 pro Person",
+      "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
   },
   {
-    label: "Business Lunch",
+    label: "Business lunch",
     query:
-      "Business Lunch für 45 Personen, modern, vegetarische Optionen, ca. €30 pro Person",
+      "Business lunch for 45 people in Berlin, modern buffet, vegetarian options, about €30 per person",
   },
   {
-    label: "Private Dinner",
+    label: "Private dinner",
     query:
-      "Private Dinner für 20 Gäste, Fine Dining, mediterran, ca. €70 pro Person",
+      "Private dinner for 20 guests in Berlin, fine dining, Mediterranean, about €70 per person",
   },
   {
     label: "Ramadan Iftar",
     query:
-      "Ramadan Iftar für 60 Gäste, halal, Buffet, warme Speisen und Desserts",
-  },
-  {
-    label: "Weihnachtsfeier",
-    query:
-      "Weihnachtsfeier für 100 Mitarbeitende, festliches Buffet, Getränke und Dessert",
+      "Ramadan Iftar for 60 guests in Berlin, halal buffet, warm dishes and desserts",
   },
 ];
 
@@ -110,52 +114,66 @@ export default function NewRequestPage() {
 
   const briefingItems = useMemo(() => {
     const lower = query.toLowerCase();
+    const guestMatch = query.match(/(\d+)\s?(guests|people|personen|gäste)?/i);
+    const budgetMatch = query.match(/€\s?\d+/);
+
+    const event = lower.includes("business")
+      ? t("event.businessLunch", "Business lunch")
+      : lower.includes("weihnacht") || lower.includes("christmas")
+        ? t("event.christmas", "Christmas party")
+        : lower.includes("iftar")
+          ? t("event.ramadan", "Ramadan / Iftar")
+          : lower.includes("private")
+            ? t("event.privateDinner", "Private dinner")
+            : t("event.wedding", "Wedding");
+
+    const diet = lower.includes("vegetar")
+      ? t("diet.vegetarian", "Vegetarian")
+      : lower.includes("halal")
+        ? t("diet.halal", "Halal")
+        : t("common.open", "Open");
+
+    const style = lower.includes("fine")
+      ? "Fine dining"
+      : lower.includes("buffet")
+        ? "Buffet"
+        : lower.includes("bbq")
+          ? "BBQ"
+          : t("request.aiStyle", "AI will infer");
 
     return [
-      [
-        t("request.brief.event", "Event"),
-        lower.includes("business")
-          ? "Business Lunch"
-          : lower.includes("weihnacht")
-            ? "Weihnachtsfeier"
-            : lower.includes("iftar")
-              ? "Ramadan Iftar"
-              : lower.includes("private")
-                ? "Private Dinner"
-                : "Hochzeit",
-      ],
-      [
-        t("request.brief.location", "Ort"),
-        selectedLocation
+      {
+        label: t("request.brief.event", "Event"),
+        value: event,
+        icon: <Sparkles className="h-4 w-4" />,
+      },
+      {
+        label: t("request.brief.location", "Location"),
+        value: selectedLocation
           ? `${selectedLocation.postal_code ?? ""} ${selectedLocation.name}`.trim()
-          : locationInput || t("request.open", "Noch offen"),
-      ],
-      [
-        t("request.brief.guests", "Gäste"),
-        query.match(/\d+/)?.[0] || t("request.open", "Noch offen"),
-      ],
-      [
-        t("request.brief.budget", "Budget"),
-        query.includes("€")
-          ? query.match(/€\s?\d+/)?.[0] || t("request.open", "Noch offen")
-          : t("request.open", "Noch offen"),
-      ],
-      [
-        t("request.brief.diet", "Ernährung"),
-        lower.includes("vegetar")
-          ? "Vegetarisch"
-          : lower.includes("halal")
-            ? "Halal"
-            : t("request.open", "Noch offen"),
-      ],
-      [
-        t("request.brief.style", "Stil"),
-        lower.includes("fine")
-          ? "Fine Dining"
-          : lower.includes("buffet")
-            ? "Buffet"
-            : "Elegant",
-      ],
+          : locationInput || t("common.open", "Open"),
+        icon: <MapPin className="h-4 w-4" />,
+      },
+      {
+        label: t("request.brief.guests", "Guests"),
+        value: guestMatch?.[1] || t("common.open", "Open"),
+        icon: <Users className="h-4 w-4" />,
+      },
+      {
+        label: t("request.brief.budget", "Budget"),
+        value: budgetMatch?.[0] || t("request.flexibleBudget", "Flexible"),
+        icon: <Wallet className="h-4 w-4" />,
+      },
+      {
+        label: t("request.brief.diet", "Diet"),
+        value: diet,
+        icon: <CheckCircle2 className="h-4 w-4" />,
+      },
+      {
+        label: t("request.brief.style", "Style"),
+        value: style,
+        icon: <Search className="h-4 w-4" />,
+      },
     ];
   }, [query, locationInput, selectedLocation, t]);
 
@@ -176,10 +194,7 @@ export default function NewRequestPage() {
 
     if (!cleanQuery || cleanQuery.length < 10) {
       setSaveError(
-        t(
-          "request.validation.query",
-          "Bitte beschreiben Sie Ihr Event etwas genauer."
-        )
+        t("request.validation.query", "Please describe your event a bit more.")
       );
       setSaving(false);
       return;
@@ -220,7 +235,7 @@ export default function NewRequestPage() {
       setSaveError(
         t(
           "request.saveError",
-          "Die Anfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+          "The request could not be saved. Please try again."
         )
       );
       setSaving(false);
@@ -231,30 +246,31 @@ export default function NewRequestPage() {
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto grid max-w-7xl items-start gap-14 px-6 py-16 lg:grid-cols-[1.03fr_0.97fr] lg:py-24">
+      <section className="mx-auto grid max-w-7xl items-start gap-10 px-6 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
         <div>
           <Link
             href="/"
-            className="mb-8 inline-flex rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm transition hover:bg-[#f4ead7]"
+            className="mb-6 inline-flex rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm transition hover:bg-[#f4ead7]"
           >
-            ← {t("request.back", "Zurück zur Startseite")}
+            ← {t("request.backHome", "Back to homepage")}
           </Link>
 
-          <div className="inline-flex rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
-            {t("request.label", "KI-gestützte Catering-Suche")}
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
+            <Sparkles className="h-4 w-4" />
+            {t("request.label", "AI catering concierge")}
           </div>
 
-          <h1 className="mt-6 text-5xl font-semibold tracking-tight md:text-7xl">
-            {t(
-              "request.title",
-              "Beschreiben Sie Ihr Event. Speisely strukturiert den Rest."
-            )}
+          <h1 className="mt-6 max-w-4xl text-5xl font-semibold tracking-tight md:text-7xl">
+            {t("request.title", "Describe your event once.")}
+            <span className="block italic text-[#b28a3c]">
+              {t("request.titleAccent", "Speisely builds the brief.")}
+            </span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
             {t(
               "request.description",
-              "Starten Sie mit natürlicher Sprache. Speisely erkennt Anlass, Gästezahl, Ort, Budget, Stil und Anforderungen — und führt Sie zu passenden Caterern."
+              "Use natural language. Speisely detects event type, guests, location, budget, dietary needs and catering style before matching you with caterers."
             )}
           </p>
 
@@ -274,9 +290,9 @@ export default function NewRequestPage() {
             ))}
           </div>
 
-          <div className="mt-10 rounded-[2rem] border border-[#eadfce] bg-white p-5 shadow-sm">
+          <div className="mt-8 rounded-[2rem] border border-[#eadfce] bg-white p-5 shadow-sm">
             <label className="text-sm font-semibold text-[#173f35]">
-              {t("request.inputLabel", "Ihre Eventbeschreibung")}
+              {t("request.inputLabel", "Event description")}
             </label>
 
             <textarea
@@ -285,12 +301,12 @@ export default function NewRequestPage() {
                 setQuery(event.target.value);
                 setSaveError(null);
               }}
-              className="mt-3 min-h-44 w-full resize-none rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 outline-none transition focus:border-[#c9a45c]"
+              className="mt-3 min-h-36 w-full resize-none rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 outline-none transition focus:border-[#c9a45c]"
             />
 
             <div className="relative mt-5">
               <label className="text-sm font-semibold text-[#173f35]">
-                {t("request.locationLabel", "Ort oder Postleitzahl")}
+                {t("request.locationLabel", "City or postal code")}
               </label>
 
               <input
@@ -302,7 +318,7 @@ export default function NewRequestPage() {
                 }}
                 placeholder={t(
                   "request.locationPlaceholder",
-                  "z. B. Berlin, 10115, Paderborn..."
+                  "e.g. Berlin, 10115, Paderborn..."
                 )}
                 className="mt-3 w-full rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none transition focus:border-[#c9a45c]"
               />
@@ -320,7 +336,7 @@ export default function NewRequestPage() {
                         {location.postal_code} {location.name}
                       </div>
                       <div className="text-sm text-[#5c6f68]">
-                        {location.state ?? "Deutschland"} ·{" "}
+                        {location.state ?? "Germany"} ·{" "}
                         {location.type ?? "location"}
                       </div>
                     </button>
@@ -330,7 +346,7 @@ export default function NewRequestPage() {
 
               {locationLoading && (
                 <p className="mt-2 text-sm text-[#5c6f68]">
-                  {t("request.locationSearching", "Suche Orte...")}
+                  {t("request.locationSearching", "Searching locations...")}
                 </p>
               )}
             </div>
@@ -346,87 +362,94 @@ export default function NewRequestPage() {
                 type="button"
                 onClick={handleSaveRequest}
                 disabled={saving}
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving
-                  ? t("request.saving", "Anfrage wird gespeichert...")
-                  : t("request.continue", "Anfrage speichern und fortfahren")}
+                  ? t("request.saving", "Creating your AI brief...")
+                  : t("request.continue", "Continue to AI brief")}
+                <ArrowRight className="h-4 w-4" />
               </button>
 
               <Link
                 href="/caterers"
                 className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
               >
-                {t("request.browse", "Caterer ansehen")}
+                {t("request.browse", "Browse caterers")}
               </Link>
             </div>
           </div>
         </div>
 
         <div className="space-y-6">
-          <DynamicUnsplashImage
-            section="premium"
-            className="h-80 rounded-[2.5rem] shadow-sm"
-            sizes="(min-width: 1024px) 45vw, 100vw"
-          />
-
-          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-              {t("request.previewLabel", "Event-Briefing Vorschau")}
-            </p>
-
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {briefingItems.map(([label, value]) => (
-                <div
-                  key={label}
-                  className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-4"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6d35]">
-                    {label}
-                  </p>
-                  <p className="mt-2 font-semibold">{value}</p>
-                </div>
-              ))}
-            </div>
+          <div className="overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
+            <DynamicUnsplashImage
+              section="premium"
+              className="h-72"
+              sizes="(min-width: 1024px) 45vw, 100vw"
+            />
           </div>
 
           <div className="rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-              {t("request.matchesLabel", "Passende Caterer")}
-            </p>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+                  {t("request.previewLabel", "AI preview")}
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold text-[#173f35]">
+                  {t("request.previewTitle", "What Speisely understood")}
+                </h2>
+              </div>
 
-            <div className="mt-6 space-y-4">
-              {[
-                "Berliner Genussküche",
-                "Grüne Tafel Events",
-                "Atelier Royal Dining",
-              ].map((name, index) => (
+              <Sparkles className="h-6 w-6 text-[#b28a3c]" />
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {briefingItems.map((item) => (
                 <div
-                  key={name}
-                  className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-4 transition hover:bg-[#f4ead7]"
+                  key={item.label}
+                  className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-4"
                 >
-                  <div className="flex justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 text-[#b28a3c]">{item.icon}</div>
                     <div>
-                      <h3 className="font-semibold">{name}</h3>
-                      <p className="mt-1 text-sm text-[#5c6f68]">
-                        {selectedLocation?.name ?? "Berlin"} · Premium Catering ·{" "}
-                        {t("marketplace.verified", "Verifiziert")}
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6d35]">
+                        {item.label}
+                      </p>
+                      <p className="mt-2 font-semibold text-[#173f35]">
+                        {item.value}
                       </p>
                     </div>
-                    <span className="font-semibold text-[#b28a3c]">
-                      {(4.9 - index * 0.1).toFixed(1)}
-                    </span>
                   </div>
                 </div>
               ))}
             </div>
 
-            <Link
-              href="/caterers"
-              className="mt-5 inline-flex rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white"
-            >
-              {t("request.viewMatches", "Alle passenden Caterer ansehen")} →
-            </Link>
+            <div className="mt-6 rounded-2xl border border-dashed border-[#d8ccb9] bg-[#faf6ee] p-4">
+              <p className="text-sm font-semibold text-[#173f35]">
+                {t("request.aiNoteTitle", "AI matching starts after this step")}
+              </p>
+              <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
+                {t(
+                  "request.aiNote",
+                  "You will review a compact event brief next. No repeated long form — only key details and suggested caterers."
+                )}
+              </p>
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-[#eadfce] bg-[#173f35] p-6 text-white shadow-sm">
+            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d6b25e]">
+              {t("request.flowLabel", "Next")}
+            </p>
+            <h3 className="mt-3 text-2xl font-semibold">
+              {t("request.flowTitle", "Review brief → see matches")}
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-white/75">
+              {t(
+                "request.flowText",
+                "Speisely turns your message into a structured request and prepares caterer matching."
+              )}
+            </p>
           </div>
         </div>
       </section>
