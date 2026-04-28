@@ -880,5 +880,19 @@
 "request.details.emptyHeading": "Ihre KI-Matches erscheinen hier.",
 "request.details.emptyText": "Wir bereiten kuratierte Caterer-Empfehlungen vor. Sie können Ihre Event-Details verbessern oder direkt den Marktplatz ansehen.",
 "request.details.improveBrief": "Briefing verbessern",
-"request.details.exploreCaterers": "Caterer entdecken"
+"request.details.exploreCaterers": "Caterer entdecken",
+  "request.details.backToBrief": "Zurück zum Briefing",
+"request.details.regenerateMatches": "Matches neu erstellen",
+"request.details.matchesSubtitle": "Diese Ergebnisse basieren auf Ihrem Event-Briefing, Ort, Gästezahl, Budget und Präferenzen.",
+"request.edit.title": "Verfeinern Sie Ihr Catering-Briefing.",
+"request.edit.subtitle": "Ergänzen Sie nur die Details, die Speisely helfen, bessere Caterer zu finden.",
+"request.edit.eventDate": "Eventdatum",
+"request.edit.eventType": "Eventtyp",
+"request.edit.cateringType": "Catering-Art",
+"request.edit.budgetPerPerson": "Budget pro Person",
+"request.edit.cuisines": "Küchenpräferenzen",
+"request.edit.dietary": "Ernährungsanforderungen",
+"request.edit.extras": "Zusatzleistungen",
+"request.edit.cancel": "Abbrechen",
+"request.edit.saveAndMatch": "Speichern und Matches ansehen"
 }
