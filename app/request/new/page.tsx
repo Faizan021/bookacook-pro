@@ -91,10 +91,19 @@ export default function NewRequestPage() {
 
     router.push(`/request/${result.id}`);
   }
+  
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const incomingQuery = params.get("query");
 
-  useEffect(() => {
-    if (restoredRef.current) return;
-    restoredRef.current = true;
+  if (incomingQuery && incomingQuery.trim().length > 0) {
+    setQuery(incomingQuery.trim());
+  }
+}, []);
+
+useEffect(() => {
+  if (restoredRef.current) return;
+  restoredRef.current = true;
 
     async function restorePendingRequest() {
       try {
