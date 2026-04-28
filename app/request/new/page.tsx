@@ -32,35 +32,53 @@ const PENDING_REQUEST_KEY = "speisely_pending_request";
 
 const occasionPrompts = [
   {
+    id: "wedding",
     labelKey: "event.wedding",
     fallback: "Wedding",
     query:
       "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
   },
   {
+    id: "corporate",
     labelKey: "event.businessLunch",
     fallback: "Business lunch",
     query:
       "Business lunch for 45 people in Berlin, modern buffet, vegetarian options, about €30 per person",
   },
   {
+    id: "private",
     labelKey: "event.privateDinner",
     fallback: "Private dinner",
     query:
       "Private dinner for 20 guests in Berlin, fine dining, Mediterranean, about €70 per person",
   },
   {
+    id: "ramadan",
     labelKey: "event.ramadan",
     fallback: "Ramadan Iftar",
     query:
       "Ramadan Iftar for 60 guests in Berlin, halal buffet, warm dishes and desserts",
   },
+  {
+    id: "christmas",
+    labelKey: "event.christmas",
+    fallback: "Christmas party",
+    query:
+      "Christmas party for 70 guests in Berlin, festive buffet, warm dishes, desserts and drinks",
+  },
 ];
+
+function getPromptByOccasion(occasion: string | null) {
+  if (!occasion) return null;
+  return occasionPrompts.find((prompt) => prompt.id === occasion)?.query ?? null;
+}
 
 export default function NewRequestPage() {
   const t = useT();
   const router = useRouter();
-  const restoredRef = useRef(false);
+
+  const bootedRef = useRef(false);
+  const autoStartedRef = useRef(false);
 
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
@@ -91,59 +109,113 @@ export default function NewRequestPage() {
 
     router.push(`/request/${result.id}`);
   }
-  
-useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const incomingQuery = params.get("query");
 
-  if (incomingQuery && incomingQuery.trim().length > 0) {
-    setQuery(incomingQuery.trim());
-  }
-}, []);
+  useEffect(() => {
+    if (bootedRef.current) return;
+    bootedRef.current = true;
 
-useEffect(() => {
-  if (restoredRef.current) return;
-  restoredRef.current = true;
+    async function bootRequestPage() {
+      const params = new URLSearchParams(window.location.search);
+      const incomingQuery = params.get("query");
+      const incomingOccasion = params.get("occasion");
+      const shouldStart = params.get("start") === "1";
 
-    async function restorePendingRequest() {
+      const occasionQuery = getPromptByOccasion(incomingOccasion);
+      const urlQuery =
+        incomingQuery && incomingQuery.trim().length > 0
+          ? incomingQuery.trim()
+          : occasionQuery;
+
+      if (urlQuery) {
+        setQuery(urlQuery);
+      }
+
       try {
         const raw = localStorage.getItem(PENDING_REQUEST_KEY);
-        if (!raw) return;
 
-        const pending = JSON.parse(raw) as {
-          query?: string;
-          locationInput?: string;
-          selectedLocation?: GermanLocation | null;
-        };
+        if (raw) {
+          const pending = JSON.parse(raw) as {
+            query?: string;
+            locationInput?: string;
+            selectedLocation?: GermanLocation | null;
+          };
 
-        if (pending.query) setQuery(pending.query);
-        if (pending.locationInput) setLocationInput(pending.locationInput);
-        if (pending.selectedLocation) setSelectedLocation(pending.selectedLocation);
+          if (pending.query) setQuery(pending.query);
+          if (pending.locationInput) setLocationInput(pending.locationInput);
+          if (pending.selectedLocation) {
+            setSelectedLocation(pending.selectedLocation);
+          }
 
-        const supabase = createClient();
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
+          const supabase = createClient();
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
 
-        if (!user || !pending.query || pending.query.trim().length < 10) return;
+          if (user && pending.query && pending.query.trim().length >= 10) {
+            autoStartedRef.current = true;
+            setSaving(true);
 
-        setSaving(true);
-        await createDraftFromValues({
-          cleanQuery: pending.query.trim(),
-          cleanLocation: (pending.locationInput || "").trim(),
-          selectedLocation: pending.selectedLocation ?? null,
-        });
+            await createDraftFromValues({
+              cleanQuery: pending.query.trim(),
+              cleanLocation: (pending.locationInput || "Berlin").trim(),
+              selectedLocation: pending.selectedLocation ?? null,
+            });
+          }
+
+          return;
+        }
       } catch (error) {
         console.error("Failed to restore pending request:", error);
         try {
           localStorage.removeItem(PENDING_REQUEST_KEY);
         } catch {}
+      }
+
+      if (!shouldStart || !urlQuery || autoStartedRef.current) return;
+
+      autoStartedRef.current = true;
+      setSaving(true);
+
+      try {
+        const supabase = createClient();
+
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+          localStorage.setItem(
+            PENDING_REQUEST_KEY,
+            JSON.stringify({
+              query: urlQuery,
+              locationInput: "Berlin",
+              selectedLocation: null,
+            })
+          );
+
+          router.push("/login?next=/request/new");
+          return;
+        }
+
+        await createDraftFromValues({
+          cleanQuery: urlQuery,
+          cleanLocation: "Berlin",
+          selectedLocation: null,
+        });
+      } catch (error) {
+        console.error("Failed to auto-start request:", error);
+        setSaveError(
+          t(
+            "request.saveError",
+            "The request could not be saved. Please try again."
+          )
+        );
         setSaving(false);
       }
     }
 
-    restorePendingRequest();
-  }, []);
+    bootRequestPage();
+  }, [router, t]);
 
   useEffect(() => {
     const term = locationInput.trim();
@@ -200,11 +272,13 @@ useEffect(() => {
       ? t("event.businessLunch", "Business lunch")
       : lower.includes("weihnacht") || lower.includes("christmas")
         ? t("event.christmas", "Christmas party")
-        : lower.includes("iftar")
+        : lower.includes("iftar") || lower.includes("ramadan")
           ? t("event.ramadan", "Ramadan / Iftar")
-          : lower.includes("private")
-            ? t("event.privateDinner", "Private dinner")
-            : t("event.wedding", "Wedding");
+          : lower.includes("birthday")
+            ? t("event.birthday", "Birthday")
+            : lower.includes("private")
+              ? t("event.privateDinner", "Private dinner")
+              : t("event.wedding", "Wedding");
 
     const diet = lower.includes("vegetar")
       ? t("diet.vegetarian", "Vegetarian")
@@ -371,7 +445,7 @@ useEffect(() => {
           <div className="mt-8 flex flex-wrap gap-3">
             {occasionPrompts.map((prompt) => (
               <button
-                key={prompt.query}
+                key={prompt.id}
                 type="button"
                 onClick={() => {
                   setQuery(prompt.query);
