@@ -414,8 +414,8 @@ export default function NewRequestPage() {
     <main className="min-h-screen bg-[#fbf7ef] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-12 lg:grid-cols-[1fr_0.92fr] lg:py-18">
-        <div className="pt-4 lg:pt-10">
+      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-6 lg:grid-cols-[1fr_0.92fr] lg:py-8">
+        <div className="pt-2">
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/"
@@ -430,21 +430,21 @@ export default function NewRequestPage() {
             </span>
           </div>
 
-          <h1 className="premium-heading mt-10 max-w-4xl text-[3.25rem] leading-[0.95] text-[#123b32] md:text-[5.4rem]">
+          <h1 className="premium-heading mt-6 max-w-4xl text-[2.8rem] leading-[0.95] text-[#123b32] md:text-[4.3rem]">
             {t("request.title", "Describe your event once.")}
             <span className="block pt-2 italic font-medium text-[#b28a3c]">
               {t("request.titleAccent", "Speisely builds the brief.")}
             </span>
           </h1>
 
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#5c6f68]">
             {t(
               "request.description",
               "Use natural language. Speisely detects event type, guests, location, budget, dietary needs and catering style before matching you with caterers."
             )}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2">
             {occasionPrompts.map((prompt) => (
               <button
                 key={prompt.id}
@@ -461,7 +461,7 @@ export default function NewRequestPage() {
           </div>
 
           {saving ? (
-            <div className="mt-9 rounded-[2rem] border border-[#eadfce] bg-white/90 p-6 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
+            <div className="mt-6 rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#173f35] text-[#d6b25e]">
                   <Sparkles className="h-5 w-5 animate-pulse" />
@@ -485,7 +485,7 @@ export default function NewRequestPage() {
             </div>
           ) : null}
 
-          <div className="mt-9 rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
+          <div className="mt-6 rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
             <label className="text-sm font-semibold text-[#173f35]">
               {t("request.inputLabel", "Event description")}
             </label>
@@ -496,10 +496,10 @@ export default function NewRequestPage() {
                 setQuery(event.target.value);
                 setSaveError(null);
               }}
-              className="mt-3 min-h-32 w-full resize-none rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
+              className="mt-3 min-h-24 w-full resize-none rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
             />
 
-            <div className="relative mt-5">
+            <div className="relative mt-4">
               <label className="text-sm font-semibold text-[#173f35]">
                 {t("request.locationLabel", "City or postal code")}
               </label>
@@ -515,7 +515,7 @@ export default function NewRequestPage() {
                   "request.locationPlaceholder",
                   "e.g. Berlin, 10115, Paderborn..."
                 )}
-                className="mt-3 w-full rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
+                className="mt-3 w-full rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] px-5 py-3.5 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
               />
 
               {locationResults.length > 0 && (
@@ -547,12 +547,12 @@ export default function NewRequestPage() {
             </div>
 
             {saveError ? (
-              <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+              <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
                 {saveError}
               </div>
             ) : null}
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
                 onClick={handleSaveRequest}
@@ -575,22 +575,22 @@ export default function NewRequestPage() {
           </div>
         </div>
 
-        <aside className="space-y-6 lg:sticky lg:top-28">
-          <div className="overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
+        <aside className="space-y-5 lg:sticky lg:top-24">
+          <div className="overflow-hidden rounded-[2.25rem] border border-[#eadfce] bg-white shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
             <DynamicUnsplashImage
               section="premium"
-              className="h-72"
+              className="h-56"
               sizes="(min-width: 1024px) 45vw, 100vw"
             />
           </div>
 
-          <div className="rounded-[2rem] border border-[#eadfce] bg-white/90 p-6 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
+          <div className="rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#b28a3c]">
                   {t("request.previewLabel", "AI preview")}
                 </p>
-                <h2 className="premium-heading mt-2 text-3xl text-[#173f35]">
+                <h2 className="premium-heading mt-2 text-2xl text-[#173f35]">
                   {t("request.previewTitle", "What Speisely understood")}
                 </h2>
               </div>
@@ -600,11 +600,11 @@ export default function NewRequestPage() {
               </div>
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {briefingItems.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-[1.35rem] border border-[#eadfce] bg-[#fbf7ef] p-4 transition hover:bg-[#f8efe1]"
+                  className="rounded-[1.25rem] border border-[#eadfce] bg-[#fbf7ef] p-3.5 transition hover:bg-[#f8efe1]"
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 text-[#b28a3c]">{item.icon}</div>
@@ -612,7 +612,7 @@ export default function NewRequestPage() {
                       <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8a6d35]">
                         {item.label}
                       </p>
-                      <p className="mt-1.5 text-[15px] font-semibold leading-6 text-[#173f35]">
+                      <p className="mt-1 text-sm font-semibold leading-6 text-[#173f35]">
                         {item.value}
                       </p>
                     </div>
@@ -621,11 +621,11 @@ export default function NewRequestPage() {
               ))}
             </div>
 
-            <div className="mt-6 rounded-[1.35rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-4">
+            <div className="mt-5 rounded-[1.25rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-4">
               <p className="text-sm font-semibold text-[#173f35]">
                 {t("request.aiNoteTitle", "AI matching starts after this step")}
               </p>
-              <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
+              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
                 {t(
                   "request.aiNote",
                   "You will review a compact event brief next. No repeated long form — only key details and suggested caterers."
@@ -634,14 +634,14 @@ export default function NewRequestPage() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] bg-[#173f35] p-6 text-white shadow-[0_22px_70px_rgba(23,63,53,0.18)]">
+          <div className="rounded-[2rem] bg-[#173f35] p-5 text-white shadow-[0_22px_70px_rgba(23,63,53,0.18)]">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#d6b25e]">
               {t("request.flowLabel", "Next")}
             </p>
-            <h3 className="premium-heading mt-3 text-3xl text-white">
+            <h3 className="premium-heading mt-2 text-2xl text-white">
               {t("request.flowTitle", "Review brief → see matches")}
             </h3>
-            <p className="mt-3 text-sm leading-7 text-white/75">
+            <p className="mt-2 text-sm leading-6 text-white/75">
               {t(
                 "request.flowText",
                 "Speisely turns your message into a structured request and prepares caterer matching."
