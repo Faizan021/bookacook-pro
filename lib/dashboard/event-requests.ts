@@ -34,7 +34,9 @@ export type UpdateEventRequestInput = {
 };
 
 function cleanString(value?: string | null) {
-  if (value == null) return null;
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+
   const trimmed = value.trim();
   return trimmed === "" ? null : trimmed;
 }
@@ -309,7 +311,8 @@ function parseExtraServicesFromQuery(query?: string | null) {
 }
 
 function normalizeCoordinate(value?: string | number | null) {
-  if (value == null || value === "") return null;
+  if (value === undefined) return undefined;
+  if (value === null || value === "") return null;
 
   const numberValue = typeof value === "number" ? value : Number(value);
 
