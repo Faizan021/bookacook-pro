@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #192b1a;
-  --surface-dark: #192b1a;
-  --accent-gold: #c49840;
-  --text-muted: #7a9470;
+  --background: #fbf7ef;
+  --foreground: #173f35;
+  --cream: #fbf7ef;
+  --cream-soft: #faf6ee;
+  --forest: #173f35;
+  --forest-dark: #102f28;
+  --gold: #b28a3c;
+  --border-soft: #eadfce;
+  --muted: #5c6f68;
 }
 
 html,
@@ -16,8 +21,39 @@ body {
 
 body {
   min-height: 100vh;
-  color: white;
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+h1,
+h2,
+.display-heading {
+  font-family: var(--font-heading), Georgia, serif;
+  letter-spacing: -0.045em;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.premium-heading {
+  font-family: var(--font-heading), Georgia, serif;
+  letter-spacing: -0.055em;
+  font-weight: 600;
+}
+
+.ui-text {
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(178, 138, 60, 0.22);
+  color: var(--forest);
 }
 
 .grain-overlay {
@@ -25,6 +61,6 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
