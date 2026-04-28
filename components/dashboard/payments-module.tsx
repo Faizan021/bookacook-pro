@@ -1,6 +1,6 @@
 "use client";
 
-import { Wallet, Landmark, Receipt } from "lucide-react";
+import { Landmark, Receipt, ShieldAlert, Wallet } from "lucide-react";
 import { useT } from "@/lib/i18n/context";
 import type {
   ExtendedPayment,
@@ -21,6 +21,7 @@ type PaymentsModuleProps = {
   payments?: Payment[];
   extendedPayments?: ExtendedPayment[];
   extendedTotals?: ExtendedPaymentTotals;
+  isPayoutBlocked?: boolean;
   adminSummary?: AdminPaymentSummary;
 };
 
@@ -30,12 +31,23 @@ const STATUS_STYLE: Record<string, string> = {
   refunded: "bg-[#faf6ee] text-[#5c6f68] border border-[#eadfce]",
 };
 
+function formatEur(n: number): string {
+  return `€${n.toLocaleString("de-DE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
 export function PaymentsModule({
   role,
   payments = [],
+  extendedPayments = [],
+  extendedTotals,
+  isPayoutBlocked = false,
   adminSummary,
 }: PaymentsModuleProps) {
   const t = useT();
+  const useExtended = role === "caterer";
 
   return (
     <div className="space-y-6 text-[#16372f]">
@@ -46,9 +58,7 @@ export function PaymentsModule({
         </div>
 
         <h2 className="mt-3 text-2xl font-semibold text-[#173f35]">
-          {role === "admin"
-            ? "Admin payments overview"
-            : "Payments overview"}
+          {role === "admin" ? "Admin payments overview" : "Payments overview"}
         </h2>
 
         <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
@@ -57,6 +67,18 @@ export function PaymentsModule({
             : "Monitor payments and payout activity."}
         </p>
       </div>
+
+      {role === "caterer" && isPayoutBlocked ? (
+        <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-5 text-amber-800">
+          <div className="flex items-start gap-3">
+            <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0" />
+            <p className="text-sm leading-7">
+              Payouts are currently blocked until your caterer profile is
+              verified by Speisely admin.
+            </p>
+          </div>
+        </div>
+      ) : null}
 
       {role === "admin" && adminSummary && (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -70,13 +92,30 @@ export function PaymentsModule({
             label="Eligible for release"
             value={adminSummary.eligibleForRelease}
           />
-          <SummaryCard label="Released to caterers" value={adminSummary.releasedTotal} />
+          <SummaryCard
+            label="Released to caterers"
+            value={adminSummary.releasedTotal}
+          />
           <SummaryCard
             label="Blocked payouts / disputes"
             value={adminSummary.blockedPayouts}
           />
         </div>
       )}
+
+      {role === "caterer" && extendedTotals ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <SummaryCard label="Gross bookings" value={extendedTotals.grossTotal} />
+          <SummaryCard
+            label="Speisely commission 10%"
+            value={extendedTotals.commissionTotal}
+          />
+          <SummaryCard label="Net payout" value={extendedTotals.netTotal} />
+          <SummaryCard label="Held funds" value={extendedTotals.heldTotal} />
+          <SummaryCard label="Released" value={extendedTotals.releasedTotal} />
+          <SummaryCard label="Remaining" value={extendedTotals.remainingTotal} />
+        </div>
+      ) : null}
 
       <div className="overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm">
         <div className="border-b border-[#eadfce] px-6 py-5">
@@ -98,21 +137,64 @@ export function PaymentsModule({
           ) : null}
         </div>
 
-        {payments.length === 0 ? (
-          <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#eadfce] bg-[#faf6ee]">
-              <Receipt className="h-7 w-7 text-[#9a7432]" />
+        {useExtended ? (
+          extendedPayments.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[1100px] text-sm">
+                <thead>
+                  <tr className="border-b border-[#eadfce] bg-[#faf6ee]">
+                    <Th>ID</Th>
+                    <Th>Description</Th>
+                    <Th>Date</Th>
+                    <Th>Gross</Th>
+                    <Th>Commission</Th>
+                    <Th>Net payout</Th>
+                    <Th>Held</Th>
+                    <Th>Released</Th>
+                    <Th>Status</Th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-[#eadfce]">
+                  {extendedPayments.map((p) => (
+                    <tr key={p.id} className="transition hover:bg-[#faf6ee]">
+                      <td className="px-6 py-4 font-mono text-xs text-[#8a6d35]">
+                        {p.id}
+                      </td>
+                      <td className="px-6 py-4 font-medium text-[#173f35]">
+                        {p.description}
+                      </td>
+                      <td className="px-6 py-4 text-[#5c6f68]">{p.date}</td>
+                      <td className="px-6 py-4 font-semibold text-[#173f35]">
+                        {formatEur(p.grossAmount)}
+                      </td>
+                      <td className="px-6 py-4 font-semibold text-red-700">
+                        −{formatEur(p.commissionAmount)}
+                      </td>
+                      <td className="px-6 py-4 font-semibold text-emerald-700">
+                        {formatEur(p.netPayout)}
+                      </td>
+                      <td className="px-6 py-4 text-amber-700">
+                        {formatEur(p.heldAmount)}
+                      </td>
+                      <td className="px-6 py-4 text-emerald-700">
+                        {formatEur(p.releasedAmount)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex rounded-full border border-[#eadfce] bg-[#faf6ee] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#5c6f68]">
+                          {String(p.payoutStatus).replaceAll("_", " ")}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-
-            <p className="mt-4 text-lg font-semibold text-[#173f35]">
-              No payments yet
-            </p>
-
-            <p className="mt-2 max-w-md text-sm leading-7 text-[#5c6f68]">
-              Payments will appear here once customers pay for bookings and
-              payout status is tracked by Speisely.
-            </p>
-          </div>
+          )
+        ) : payments.length === 0 ? (
+          <EmptyState />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] text-sm">
@@ -132,17 +214,13 @@ export function PaymentsModule({
                     <td className="px-6 py-4 font-mono text-xs text-[#8a6d35]">
                       {p.id}
                     </td>
-
                     <td className="px-6 py-4 font-medium text-[#173f35]">
                       {p.description}
                     </td>
-
                     <td className="px-6 py-4 text-[#5c6f68]">{p.date}</td>
-
                     <td className="px-6 py-4 font-semibold text-[#173f35]">
                       {p.amount}
                     </td>
-
                     <td className="px-6 py-4">
                       <span
                         className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] ${
@@ -160,6 +238,25 @@ export function PaymentsModule({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#eadfce] bg-[#faf6ee]">
+        <Receipt className="h-7 w-7 text-[#9a7432]" />
+      </div>
+
+      <p className="mt-4 text-lg font-semibold text-[#173f35]">
+        No payments yet
+      </p>
+
+      <p className="mt-2 max-w-md text-sm leading-7 text-[#5c6f68]">
+        Payments will appear here once customers pay for bookings and payout
+        status is tracked by Speisely.
+      </p>
     </div>
   );
 }
