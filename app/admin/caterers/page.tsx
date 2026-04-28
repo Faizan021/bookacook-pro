@@ -56,10 +56,10 @@ async function updateCatererVerification(formData: FormData) {
       .update(updates)
       .eq("id", id);
 
-    if (error) {
-      console.error("Caterer verification update failed:", error.message);
-      return;
-    }
+   if (error) {
+  console.error("CATERER VERIFY ERROR:", JSON.stringify(error, null, 2));
+  return;
+}
 
     revalidatePath("/admin/caterers");
     revalidatePath("/admin");
