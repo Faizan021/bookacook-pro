@@ -28,23 +28,42 @@ export default async function EventRequestPage({ params }: PageProps) {
     redirect("/request/new");
   }
 
+  if (!request?.id) {
+    redirect("/request/new");
+  }
+
   try {
     matches = await getMatchesForEventRequest(id);
   } catch (error) {
-    console.error("Failed to load matches:", error);
+    console.error("Failed to load existing matches:", error);
     matches = [];
+  }
+
+  if (!matches.length && request?.status !== "draft") {
+    try {
+      await generateMatchesForEventRequest(id);
+      matches = await getMatchesForEventRequest(id);
+    } catch (error) {
+      console.error("Failed to generate matches:", error);
+      matches = [];
+    }
   }
 
   async function handleSave(formData: FormData) {
     "use server";
 
-    const guest_count = formData.get("guest_count")
-      ? Number(formData.get("guest_count"))
-      : undefined;
+    const guestCountValue = formData.get("guest_count");
+    const budgetTotalValue = formData.get("budget_total");
 
-    const budget_total = formData.get("budget_total")
-      ? Number(formData.get("budget_total"))
-      : undefined;
+    const guest_count =
+      guestCountValue && String(guestCountValue).trim() !== ""
+        ? Number(guestCountValue)
+        : undefined;
+
+    const budget_total =
+      budgetTotalValue && String(budgetTotalValue).trim() !== ""
+        ? Number(budgetTotalValue)
+        : undefined;
 
     await updateEventRequest(id, {
       event_type: (formData.get("event_type") as string) || undefined,
@@ -55,16 +74,20 @@ export default async function EventRequestPage({ params }: PageProps) {
       service_style: (formData.get("service_style") as string) || undefined,
       event_date: (formData.get("event_date") as string) || undefined,
       budget_total,
-      special_requests: (formData.get("special_requests") as string) || undefined,
+      special_requests:
+        (formData.get("special_requests") as string) || undefined,
       cuisine_preferences: formData
         .getAll("cuisine_preferences")
-        .map((v) => String(v)),
+        .map((value) => String(value))
+        .filter(Boolean),
       dietary_requirements: formData
         .getAll("dietary_requirements")
-        .map((v) => String(v)),
+        .map((value) => String(value))
+        .filter(Boolean),
       extra_services: formData
         .getAll("extra_services")
-        .map((v) => String(v)),
+        .map((value) => String(value))
+        .filter(Boolean),
       status: "submitted",
     });
 
