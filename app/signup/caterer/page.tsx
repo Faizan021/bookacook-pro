@@ -58,6 +58,7 @@ export default function CatererSignupPage() {
 
     if (!form.phone.trim()) e.phone = t("validation.required");
     if (!form.businessAddress.trim()) e.businessAddress = t("validation.required");
+
     if (!form.licenseNumber.trim()) {
       e.licenseNumber = t(
         "validation.licenseRequired",
@@ -107,6 +108,22 @@ export default function CatererSignupPage() {
 
       if (!data.user) {
         throw new Error("Signup failed. No user returned.");
+      }
+
+      const { error: catererError } = await supabase.from("caterers").insert({
+        user_id: data.user.id,
+        business_name: form.businessName.trim(),
+        phone: form.phone.trim(),
+        business_address: form.businessAddress.trim(),
+        license_number: form.licenseNumber.trim(),
+        verification_status: "pending",
+        payout_enabled: false,
+        is_active: false,
+        city: "",
+      });
+
+      if (catererError) {
+        throw catererError;
       }
 
       setSuccess(true);
@@ -194,10 +211,7 @@ export default function CatererSignupPage() {
           </div>
 
           <h1 className="mt-6 max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
-            {t(
-              "catererReg.title",
-              "Caterer-Konto erstellen"
-            )}
+            {t("catererReg.title", "Caterer-Konto erstellen")}
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
@@ -211,6 +225,7 @@ export default function CatererSignupPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28a3c]">
               {t("catererReg.licenseRequired", "Verifizierung erforderlich")}
             </p>
+
             <p className="mt-3 text-sm leading-7 text-[#5c6f68]">
               {t(
                 "catererReg.licenseHelp",
@@ -254,6 +269,7 @@ export default function CatererSignupPage() {
                     <label className="text-sm font-semibold text-[#173f35]">
                       {t("catererReg.businessName", "Unternehmensname")} *
                     </label>
+
                     <input
                       type="text"
                       value={form.businessName}
@@ -261,6 +277,7 @@ export default function CatererSignupPage() {
                       className={errors.businessName ? inputErr : inputOk}
                       placeholder="Berlin Catering GmbH"
                     />
+
                     {errors.businessName ? (
                       <p className="mt-1.5 text-xs font-medium text-red-600">
                         {errors.businessName}
@@ -272,6 +289,7 @@ export default function CatererSignupPage() {
                     <label className="text-sm font-semibold text-[#173f35]">
                       {t("catererReg.contactPerson", "Ansprechperson")} *
                     </label>
+
                     <input
                       type="text"
                       value={form.contactPerson}
@@ -279,6 +297,7 @@ export default function CatererSignupPage() {
                       className={errors.contactPerson ? inputErr : inputOk}
                       placeholder="Max Mustermann"
                     />
+
                     {errors.contactPerson ? (
                       <p className="mt-1.5 text-xs font-medium text-red-600">
                         {errors.contactPerson}
@@ -292,6 +311,7 @@ export default function CatererSignupPage() {
                     <label className="text-sm font-semibold text-[#173f35]">
                       {t("auth.email", "E-Mail")} *
                     </label>
+
                     <input
                       type="email"
                       value={form.email}
@@ -300,6 +320,7 @@ export default function CatererSignupPage() {
                       placeholder="kontakt@catering.de"
                       autoComplete="email"
                     />
+
                     {errors.email ? (
                       <p className="mt-1.5 text-xs font-medium text-red-600">
                         {errors.email}
@@ -311,6 +332,7 @@ export default function CatererSignupPage() {
                     <label className="text-sm font-semibold text-[#173f35]">
                       {t("catererReg.phone", "Telefon")} *
                     </label>
+
                     <input
                       type="tel"
                       value={form.phone}
@@ -318,6 +340,7 @@ export default function CatererSignupPage() {
                       className={errors.phone ? inputErr : inputOk}
                       placeholder="+49 30 12345678"
                     />
+
                     {errors.phone ? (
                       <p className="mt-1.5 text-xs font-medium text-red-600">
                         {errors.phone}
@@ -330,6 +353,7 @@ export default function CatererSignupPage() {
                   <label className="text-sm font-semibold text-[#173f35]">
                     {t("catererReg.businessAddress", "Geschäftsadresse")} *
                   </label>
+
                   <textarea
                     rows={2}
                     value={form.businessAddress}
@@ -337,6 +361,7 @@ export default function CatererSignupPage() {
                     className={`${errors.businessAddress ? inputErr : inputOk} resize-none`}
                     placeholder="Musterstraße 1, 10115 Berlin"
                   />
+
                   {errors.businessAddress ? (
                     <p className="mt-1.5 text-xs font-medium text-red-600">
                       {errors.businessAddress}
@@ -346,7 +371,14 @@ export default function CatererSignupPage() {
 
                 <div className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-5">
                   <label className="flex items-center justify-between gap-3 text-sm font-semibold text-[#173f35]">
-                    <span>{t("catererReg.licenseNumber", "Gewerbe-/Registrierungsnummer")} *</span>
+                    <span>
+                      {t(
+                        "catererReg.licenseNumber",
+                        "Gewerbe-/Registrierungsnummer"
+                      )}{" "}
+                      *
+                    </span>
+
                     <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#8a6d35]">
                       {t("catererReg.licenseRequired", "Pflichtfeld")}
                     </span>
@@ -378,6 +410,7 @@ export default function CatererSignupPage() {
                   <label className="text-sm font-semibold text-[#173f35]">
                     {t("auth.password", "Passwort")} *
                   </label>
+
                   <input
                     type="password"
                     value={form.password}
@@ -386,6 +419,7 @@ export default function CatererSignupPage() {
                     autoComplete="new-password"
                     placeholder="••••••••"
                   />
+
                   {errors.password ? (
                     <p className="mt-1.5 text-xs font-medium text-red-600">
                       {errors.password}
