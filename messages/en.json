@@ -934,5 +934,19 @@
 "request.details.emptyHeading": "Your AI matches will appear here.",
 "request.details.emptyText": "We are preparing curated caterer recommendations. You can refine your event details or explore the marketplace directly.",
 "request.details.improveBrief": "Improve brief",
-"request.details.exploreCaterers": "Explore caterers"  
+"request.details.exploreCaterers": "Explore caterers",
+  "request.details.backToBrief": "Back to brief",
+"request.details.regenerateMatches": "Regenerate matches",
+"request.details.matchesSubtitle": "These results are based on your event brief, location, guest count, budget and preferences.",
+"request.edit.title": "Refine your catering brief.",
+"request.edit.subtitle": "Add only the details that help Speisely match you with better caterers.",
+"request.edit.eventDate": "Event date",
+"request.edit.eventType": "Event type",
+"request.edit.cateringType": "Catering type",
+"request.edit.budgetPerPerson": "Budget per person",
+"request.edit.cuisines": "Cuisine preferences",
+"request.edit.dietary": "Dietary requirements",
+"request.edit.extras": "Extra services",
+"request.edit.cancel": "Cancel",
+"request.edit.saveAndMatch": "Save and view matches"
 }
