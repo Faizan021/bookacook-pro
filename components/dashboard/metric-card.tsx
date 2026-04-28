@@ -18,22 +18,22 @@ export function MetricCard({
   trendUp = true,
 }: MetricCardProps) {
   return (
-    <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-[#c49840]/20 hover:bg-white/[0.06]">
+    <div className="rounded-[1.75rem] border border-[#eadfce] bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#c99a3d]/40 hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         {icon ? (
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[1rem] border border-[#c49840]/15 bg-[#c49840]/10 text-[#c49840]">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[1rem] border border-[#d6b25e]/30 bg-[#faf6ee] text-[#9a7432]">
             {icon}
           </div>
         ) : (
-          <div className="h-11 w-11 shrink-0 rounded-[1rem] border border-white/8 bg-black/10" />
+          <div className="h-11 w-11 shrink-0 rounded-[1rem] border border-[#eadfce] bg-[#faf6ee]" />
         )}
 
         {trend ? (
           <span
             className={`inline-flex shrink-0 items-center rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${
               trendUp
-                ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"
-                : "border-red-400/20 bg-red-400/10 text-red-300"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border-red-200 bg-red-50 text-red-700"
             }`}
           >
             {trendUp ? "↑" : "↓"} {trend}
@@ -42,14 +42,16 @@ export function MetricCard({
       </div>
 
       <div className="mt-5">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8ea18b]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8a6d35]">
           {title}
         </p>
-        <p className="mt-2 text-3xl font-semibold tracking-tight text-white">
+
+        <p className="mt-2 text-3xl font-semibold tracking-tight text-[#173f35]">
           {value}
         </p>
+
         {subtitle ? (
-          <p className="mt-2 text-sm leading-6 text-[#9faf9b]">{subtitle}</p>
+          <p className="mt-2 text-sm leading-6 text-[#5c6f68]">{subtitle}</p>
         ) : null}
       </div>
     </div>
