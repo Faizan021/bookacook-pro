@@ -46,36 +46,23 @@ export default function LoginPageClient({ next = "" }: Props) {
         return;
       }
 
-      const meta = data.user.user_metadata ?? {};
-      const appMeta = data.user.app_metadata ?? {};
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
 
-      let role: string | null =
-        (meta.role as string | undefined) ||
-        (appMeta.role as string | undefined) ||
-        null;
-
-      if (!role) {
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", data.user.id)
-          .maybeSingle();
-
-        if (profileError) {
-          setError(profileError.message);
-          setLoading(false);
-          return;
-        }
-
-        role = profile?.role ?? null;
+      if (profileError) {
+        setError(profileError.message);
+        setLoading(false);
+        return;
       }
+
+      const role = profile?.role ?? null;
 
       if (!role) {
         setError(
-          t(
-            "auth.noRoleFound",
-            "Login succeeded, but no user role was found."
-          )
+          t("auth.noRoleFound", "Login succeeded, but no user role was found.")
         );
         setLoading(false);
         return;
@@ -122,7 +109,7 @@ export default function LoginPageClient({ next = "" }: Props) {
   }
 
   const signupHref = isCatererLogin
-    ? `/signup/caterer`
+    ? "/signup/caterer"
     : next
       ? `/signup/customer?next=${encodeURIComponent(next)}`
       : "/signup";
