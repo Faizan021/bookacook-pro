@@ -13,7 +13,9 @@ type Props = {
 
 export default function LoginPageClient({ next = "" }: Props) {
   const t = useT();
+
   const isCatererLogin = next === "/caterer" || next.startsWith("/caterer/");
+  const isRequestLogin = next === "/request/new" || next.startsWith("/request/");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -80,6 +82,18 @@ export default function LoginPageClient({ next = "" }: Props) {
         return;
       }
 
+      if (isRequestLogin && role !== "customer" && role !== "admin") {
+        await supabase.auth.signOut();
+        setError(
+          t(
+            "auth.customerAccountRequired",
+            "Please log in with a customer account to continue your event request."
+          )
+        );
+        setLoading(false);
+        return;
+      }
+
       if (next) {
         window.location.href = next;
         return;
@@ -116,24 +130,42 @@ export default function LoginPageClient({ next = "" }: Props) {
 
   const introTitle = isCatererLogin
     ? t("auth.catererLoginTitle", "Caterer login")
-    : t("auth.welcomeBack", "Welcome back");
+    : isRequestLogin
+      ? t("auth.requestLoginTitle", "Save your AI event brief")
+      : t("auth.welcomeBack", "Welcome back");
 
   const introDescription = isCatererLogin
     ? t(
         "auth.catererLoginIntro",
         "Sign in to manage your catering profile, packages, requests, availability, and payments."
       )
-    : t(
-        "auth.loginIntro",
-        "Sign in to continue your catering requests, saved caterers, and event planning."
-      );
+    : isRequestLogin
+      ? t(
+          "auth.requestLoginIntro",
+          "Log in to save your catering request, keep your AI-generated event brief, and continue to suitable caterer matches."
+        )
+      : t(
+          "auth.loginIntro",
+          "Sign in to continue your catering requests, saved caterers, and event planning."
+        );
 
   const formSubtitle = isCatererLogin
     ? t(
         "auth.catererLoginSubtitle",
         "Use your caterer account to access the caterer dashboard."
       )
-    : t("auth.loginSubtitle", "Sign in with your Speisely account.");
+    : isRequestLogin
+      ? t(
+          "auth.requestLoginSubtitle",
+          "Continue your AI catering search with a customer account."
+        )
+      : t("auth.loginSubtitle", "Sign in with your Speisely account.");
+
+  const badgeText = isCatererLogin
+    ? t("auth.catererLoginBadge", "Caterer Portal")
+    : isRequestLogin
+      ? t("auth.requestLoginBadge", "AI event request")
+      : t("auth.loginBadge", "Welcome back");
 
   return (
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
@@ -142,9 +174,7 @@ export default function LoginPageClient({ next = "" }: Props) {
       <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
         <div className="hidden lg:block">
           <div className="mb-6 inline-flex rounded-full border border-[#e8dcc8] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
-            {isCatererLogin
-              ? t("auth.catererLoginBadge", "Caterer Portal")
-              : t("auth.loginBadge", "Welcome back")}
+            {badgeText}
           </div>
 
           <h1 className="max-w-2xl text-5xl font-semibold tracking-tight md:text-7xl">
@@ -168,9 +198,7 @@ export default function LoginPageClient({ next = "" }: Props) {
           <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-sm">
             <div className="mb-8">
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-                {isCatererLogin
-                  ? t("auth.catererLogin", "Caterer login")
-                  : t("auth.login", "Log In")}
+                {badgeText}
               </p>
 
               <h2 className="mt-3 text-3xl font-semibold tracking-tight">
@@ -226,7 +254,9 @@ export default function LoginPageClient({ next = "" }: Props) {
               >
                 {loading
                   ? t("auth.loggingIn", "Logging in...")
-                  : t("auth.login", "Log In")}
+                  : isRequestLogin
+                    ? t("auth.continueRequest", "Continue event request")
+                    : t("auth.login", "Log In")}
               </button>
             </form>
 
