@@ -27,9 +27,9 @@ async function updateCatererVerification(formData: FormData) {
     const supabase = await createClient();
 
     const updates =
-      status === "verified"
+      status === "approved"
         ? {
-            verification_status: "verified",
+            verification_status: "approved",
             payout_enabled: true,
             is_active: true,
           }
@@ -69,7 +69,7 @@ async function updateCatererVerification(formData: FormData) {
 }
 
 function statusBadge(status?: string | null) {
-  if (status === "verified") return "bg-green-100 text-green-700 border-green-200";
+  if (status === "approved") return "bg-green-100 text-green-700 border-green-200";
   if (status === "rejected" || status === "suspended") return "bg-red-100 text-red-700 border-red-200";
   if (status === "under_review") return "bg-blue-100 text-blue-700 border-blue-200";
   return "bg-orange-100 text-orange-700 border-orange-200";
@@ -77,7 +77,7 @@ function statusBadge(status?: string | null) {
 
 function formatStatus(status?: string | null) {
   const map: Record<string, string> = {
-    verified: "Verified",
+    approved: "approved",
     pending: "Pending",
     under_review: "Under review",
     rejected: "Rejected",
@@ -247,7 +247,7 @@ export default async function AdminCaterersPage() {
 
                 <form action={updateCatererVerification}>
                   <input type="hidden" name="id" value={caterer.id} />
-                  <input type="hidden" name="status" value="verified" />
+                  <input type="hidden" name="status" value="approved" />
                   <button className="w-full rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27] sm:w-auto">
                     Verify
                   </button>
