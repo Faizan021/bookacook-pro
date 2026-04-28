@@ -6,11 +6,16 @@ import { AdminOverviewDisplay } from "@/components/dashboard/admin-overview-disp
 export default async function AdminPage() {
   const { user, profile } = await getUserProfile();
 
-  if (!user) redirect("/login");
-  if (!profile) redirect("/");
+  if (!user) {
+    redirect("/admin-login");
+  }
+
+  if (!profile) {
+    redirect("/admin-login");
+  }
 
   if (profile.role !== "admin") {
-    redirect("/dashboard");
+    redirect("/");
   }
 
   const dashboardData = await getAdminDashboardData();
