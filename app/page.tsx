@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
 import { useT } from "@/lib/i18n/context";
 
@@ -116,6 +118,19 @@ const featuredCaterers = [
 
 export default function Home() {
   const t = useT();
+  const router = useRouter();
+  const [heroQuery, setHeroQuery] = useState("");
+
+  function startRequest() {
+    const query = heroQuery.trim();
+
+    if (query.length > 0) {
+      router.push(`/request/new?query=${encodeURIComponent(query)}`);
+      return;
+    }
+
+    router.push("/request/new");
+  }
 
   const chips = [
     {
@@ -164,7 +179,7 @@ export default function Home() {
               )}
             </div>
 
-            <h1 className="text-5xl font-semibold tracking-tight md:text-7xl">
+            <h1 className="premium-heading text-5xl leading-[0.95] md:text-7xl">
               {t(
                 "home.hero.title",
                 "Beschreiben Sie Ihr Event. Speisely findet passende Caterer."
@@ -180,6 +195,11 @@ export default function Home() {
 
             <div className="mt-8 rounded-3xl bg-white p-3 shadow-2xl md:flex">
               <input
+                value={heroQuery}
+                onChange={(event) => setHeroQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") startRequest();
+                }}
                 className="min-h-14 flex-1 rounded-2xl px-5 text-base text-[#173f35] outline-none placeholder:text-[#8a9a94]"
                 placeholder={t(
                   "home.hero.placeholder",
@@ -187,12 +207,13 @@ export default function Home() {
                 )}
               />
 
-              <Link
-                href="/request/new"
+              <button
+                type="button"
+                onClick={startRequest}
                 className="mt-3 inline-flex min-h-14 items-center justify-center rounded-2xl bg-[#c9a45c] px-7 font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0"
               >
                 {t("home.hero.cta", "Caterer finden")}
-              </Link>
+              </button>
             </div>
 
             <div className="mt-5 flex flex-wrap gap-3 text-sm">
@@ -253,7 +274,7 @@ export default function Home() {
               {t("home.premium.label", "Premium-Präsentation")}
             </p>
 
-            <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+            <h2 className="premium-heading mt-4 text-5xl leading-[0.95] md:text-6xl">
               {t(
                 "home.premium.title",
                 "Catering ist emotional. Die Buchung sollte hochwertig wirken."
@@ -287,7 +308,7 @@ export default function Home() {
               {t("home.occasions.label", "Anlässe")}
             </p>
 
-            <h2 className="mt-3 text-4xl font-semibold tracking-tight">
+            <h2 className="premium-heading mt-3 text-5xl leading-[0.95]">
               {t(
                 "home.occasions.title",
                 "Für Events, die Menschen wirklich planen"
@@ -338,7 +359,7 @@ export default function Home() {
                 {t("home.caterers.label", "Kuratierte Caterer")}
               </p>
 
-              <h2 className="mt-4 text-4xl font-semibold tracking-tight">
+              <h2 className="premium-heading mt-4 text-5xl leading-[0.95]">
                 {t(
                   "home.caterers.title",
                   "Ein Marktplatz, der ausgewählt wirkt — nicht überfüllt."
@@ -415,7 +436,7 @@ export default function Home() {
             {t("home.forCaterers.label", "Für Caterer")}
           </p>
 
-          <h2 className="mt-4 text-4xl font-semibold tracking-tight">
+          <h2 className="premium-heading mt-4 text-5xl leading-[0.95]">
             {t(
               "home.forCaterers.title",
               "Erhalten Sie bessere Anfragen, nicht nur zufällige Leads."
@@ -440,7 +461,7 @@ export default function Home() {
 
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-7xl rounded-[2.5rem] bg-[#173f35] px-8 py-16 text-center text-white md:px-16">
-          <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
+          <h2 className="premium-heading text-5xl leading-[0.95] md:text-6xl">
             {t(
               "home.final.title",
               "Planen Sie Ihr nächstes Catering mit KI-Unterstützung."
