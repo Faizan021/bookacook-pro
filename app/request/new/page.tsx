@@ -30,22 +30,26 @@ type GermanLocation = {
 
 const occasionPrompts = [
   {
-    label: "Wedding",
+    labelKey: "event.wedding",
+    fallback: "Wedding",
     query:
       "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
   },
   {
-    label: "Business lunch",
+    labelKey: "event.businessLunch",
+    fallback: "Business lunch",
     query:
       "Business lunch for 45 people in Berlin, modern buffet, vegetarian options, about €30 per person",
   },
   {
-    label: "Private dinner",
+    labelKey: "event.privateDinner",
+    fallback: "Private dinner",
     query:
       "Private dinner for 20 guests in Berlin, fine dining, Mediterranean, about €70 per person",
   },
   {
-    label: "Ramadan Iftar",
+    labelKey: "event.ramadan",
+    fallback: "Ramadan Iftar",
     query:
       "Ramadan Iftar for 60 guests in Berlin, halal buffet, warm dishes and desserts",
   },
@@ -84,11 +88,9 @@ export default function NewRequestPage() {
           .select("id,name,postal_code,state,lat,lng,type")
           .limit(8);
 
-        if (isPostalCode) {
-          locationQuery = locationQuery.ilike("postal_code", `${term}%`);
-        } else {
-          locationQuery = locationQuery.ilike("name", `%${term}%`);
-        }
+        locationQuery = isPostalCode
+          ? locationQuery.ilike("postal_code", `${term}%`)
+          : locationQuery.ilike("name", `%${term}%`);
 
         const { data, error } = await locationQuery.order("name", {
           ascending: true,
@@ -243,31 +245,33 @@ export default function NewRequestPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
+    <main className="min-h-screen bg-[#fbf7ef] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto grid max-w-7xl items-start gap-10 px-6 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
-        <div>
-          <Link
-            href="/"
-            className="mb-6 inline-flex rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm transition hover:bg-[#f4ead7]"
-          >
-            ← {t("request.backHome", "Back to homepage")}
-          </Link>
+      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-12 lg:grid-cols-[1fr_0.92fr] lg:py-18">
+        <div className="pt-4 lg:pt-10">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/"
+              className="inline-flex rounded-full border border-[#e5d8c5] bg-white/80 px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm backdrop-blur transition hover:bg-white"
+            >
+              ← {t("request.backHome", "Back to homepage")}
+            </Link>
 
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#eadfce] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
-            <Sparkles className="h-4 w-4" />
-            {t("request.label", "AI catering concierge")}
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#eadfce] bg-white/80 px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm backdrop-blur">
+              <Sparkles className="h-4 w-4" />
+              {t("request.label", "AI catering concierge")}
+            </span>
           </div>
 
-          <h1 className="mt-6 max-w-4xl text-5xl font-semibold tracking-tight md:text-7xl">
+          <h1 className="mt-10 max-w-4xl text-[3.25rem] font-semibold leading-[0.95] tracking-[-0.055em] text-[#123b32] md:text-[5.4rem]">
             {t("request.title", "Describe your event once.")}
-            <span className="block italic text-[#b28a3c]">
+            <span className="block pt-2 italic font-medium tracking-[-0.06em] text-[#b28a3c]">
               {t("request.titleAccent", "Speisely builds the brief.")}
             </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+          <p className="mt-7 max-w-2xl text-lg leading-8 text-[#5c6f68]">
             {t(
               "request.description",
               "Use natural language. Speisely detects event type, guests, location, budget, dietary needs and catering style before matching you with caterers."
@@ -277,20 +281,20 @@ export default function NewRequestPage() {
           <div className="mt-8 flex flex-wrap gap-3">
             {occasionPrompts.map((prompt) => (
               <button
-                key={prompt.label}
+                key={prompt.query}
                 type="button"
                 onClick={() => {
                   setQuery(prompt.query);
                   setSaveError(null);
                 }}
-                className="rounded-full border border-[#d8ccb9] bg-white px-4 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
+                className="rounded-full border border-[#e5d8c5] bg-white/85 px-4 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
               >
-                {prompt.label}
+                {t(prompt.labelKey, prompt.fallback)}
               </button>
             ))}
           </div>
 
-          <div className="mt-8 rounded-[2rem] border border-[#eadfce] bg-white p-5 shadow-sm">
+          <div className="mt-9 rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
             <label className="text-sm font-semibold text-[#173f35]">
               {t("request.inputLabel", "Event description")}
             </label>
@@ -301,7 +305,7 @@ export default function NewRequestPage() {
                 setQuery(event.target.value);
                 setSaveError(null);
               }}
-              className="mt-3 min-h-36 w-full resize-none rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 outline-none transition focus:border-[#c9a45c]"
+              className="mt-3 min-h-32 w-full resize-none rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
             />
 
             <div className="relative mt-5">
@@ -320,11 +324,11 @@ export default function NewRequestPage() {
                   "request.locationPlaceholder",
                   "e.g. Berlin, 10115, Paderborn..."
                 )}
-                className="mt-3 w-full rounded-2xl border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 outline-none transition focus:border-[#c9a45c]"
+                className="mt-3 w-full rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
               />
 
               {locationResults.length > 0 && (
-                <div className="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-[#eadfce] bg-white p-2 shadow-xl">
+                <div className="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-[1.35rem] border border-[#eadfce] bg-white p-2 shadow-2xl">
                   {locationResults.map((location) => (
                     <button
                       key={location.id}
@@ -357,12 +361,12 @@ export default function NewRequestPage() {
               </div>
             ) : null}
 
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
                 onClick={handleSaveRequest}
                 disabled={saving}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving
                   ? t("request.saving", "Creating your AI brief...")
@@ -372,7 +376,7 @@ export default function NewRequestPage() {
 
               <Link
                 href="/caterers"
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35] shadow-sm transition hover:bg-[#f4ead7]"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f4ead7]"
               >
                 {t("request.browse", "Browse caterers")}
               </Link>
@@ -380,8 +384,8 @@ export default function NewRequestPage() {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
+        <aside className="space-y-6 lg:sticky lg:top-28">
+          <div className="overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
             <DynamicUnsplashImage
               section="premium"
               className="h-72"
@@ -389,33 +393,35 @@ export default function NewRequestPage() {
             />
           </div>
 
-          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-6 shadow-sm">
-            <div className="flex items-center justify-between gap-4">
+          <div className="rounded-[2rem] border border-[#eadfce] bg-white/90 p-6 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#b28a3c]">
                   {t("request.previewLabel", "AI preview")}
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-[#173f35]">
+                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-[#173f35]">
                   {t("request.previewTitle", "What Speisely understood")}
                 </h2>
               </div>
 
-              <Sparkles className="h-6 w-6 text-[#b28a3c]" />
+              <div className="rounded-full bg-[#f4ead7] p-2 text-[#b28a3c]">
+                <Sparkles className="h-5 w-5" />
+              </div>
             </div>
 
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {briefingItems.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-4"
+                  className="rounded-[1.35rem] border border-[#eadfce] bg-[#fbf7ef] p-4 transition hover:bg-[#f8efe1]"
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 text-[#b28a3c]">{item.icon}</div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a6d35]">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8a6d35]">
                         {item.label}
                       </p>
-                      <p className="mt-2 font-semibold text-[#173f35]">
+                      <p className="mt-1.5 text-[15px] font-semibold leading-6 text-[#173f35]">
                         {item.value}
                       </p>
                     </div>
@@ -424,7 +430,7 @@ export default function NewRequestPage() {
               ))}
             </div>
 
-            <div className="mt-6 rounded-2xl border border-dashed border-[#d8ccb9] bg-[#faf6ee] p-4">
+            <div className="mt-6 rounded-[1.35rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-4">
               <p className="text-sm font-semibold text-[#173f35]">
                 {t("request.aiNoteTitle", "AI matching starts after this step")}
               </p>
@@ -437,11 +443,11 @@ export default function NewRequestPage() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-[#eadfce] bg-[#173f35] p-6 text-white shadow-sm">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d6b25e]">
+          <div className="rounded-[2rem] bg-[#173f35] p-6 text-white shadow-[0_22px_70px_rgba(23,63,53,0.18)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#d6b25e]">
               {t("request.flowLabel", "Next")}
             </p>
-            <h3 className="mt-3 text-2xl font-semibold">
+            <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em]">
               {t("request.flowTitle", "Review brief → see matches")}
             </h3>
             <p className="mt-3 text-sm leading-7 text-white/75">
@@ -451,7 +457,7 @@ export default function NewRequestPage() {
               )}
             </p>
           </div>
-        </div>
+        </aside>
       </section>
     </main>
   );
