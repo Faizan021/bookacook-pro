@@ -34,37 +34,37 @@ const occasionPrompts = [
   {
     id: "wedding",
     labelKey: "event.wedding",
-    fallback: "Wedding",
+    fallback: "Hochzeit",
     query:
-      "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
+      "Hochzeit für 80 Gäste in Berlin, vegetarisch, elegantes Buffet, ca. €45 pro Person",
   },
   {
     id: "corporate",
     labelKey: "event.businessLunch",
-    fallback: "Business lunch",
+    fallback: "Business Lunch",
     query:
-      "Business lunch for 45 people in Berlin, modern buffet, vegetarian options, about €30 per person",
+      "Business Lunch für 45 Personen in Berlin, modernes Buffet, vegetarische Optionen, ca. €30 pro Person",
   },
   {
     id: "private",
     labelKey: "event.privateDinner",
-    fallback: "Private dinner",
+    fallback: "Private Dinner",
     query:
-      "Private dinner for 20 guests in Berlin, fine dining, Mediterranean, about €70 per person",
+      "Private Dinner für 20 Gäste in Berlin, Fine Dining, mediterran, ca. €70 pro Person",
   },
   {
     id: "ramadan",
     labelKey: "event.ramadan",
     fallback: "Ramadan Iftar",
     query:
-      "Ramadan Iftar for 60 guests in Berlin, halal buffet, warm dishes and desserts",
+      "Ramadan Iftar für 60 Gäste in Berlin, halal Buffet, warme Speisen und Desserts",
   },
   {
     id: "christmas",
     labelKey: "event.christmas",
-    fallback: "Christmas party",
+    fallback: "Weihnachtsfeier",
     query:
-      "Christmas party for 70 guests in Berlin, festive buffet, warm dishes, desserts and drinks",
+      "Weihnachtsfeier für 70 Gäste in Berlin, festliches Buffet, warme Speisen, Desserts und Getränke",
   },
 ];
 
@@ -113,6 +113,18 @@ function extractCityFromQuery(query?: string | null) {
   return "";
 }
 
+function shouldShowBootingImmediately() {
+  if (typeof window === "undefined") return true;
+
+  const params = new URLSearchParams(window.location.search);
+  const hasStart = params.get("start") === "1";
+  const hasQuery = Boolean(params.get("query")?.trim());
+  const hasOccasion = Boolean(params.get("occasion")?.trim());
+  const hasPending = Boolean(window.localStorage.getItem(PENDING_REQUEST_KEY));
+
+  return hasPending || (hasStart && (hasQuery || hasOccasion));
+}
+
 export default function NewRequestPage() {
   const t = useT();
   const router = useRouter();
@@ -120,7 +132,7 @@ export default function NewRequestPage() {
   const bootedRef = useRef(false);
   const creatingRef = useRef(false);
 
-  const [booting, setBooting] = useState(true);
+  const [booting, setBooting] = useState(shouldShowBootingImmediately);
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
   const [selectedLocation, setSelectedLocation] =
@@ -143,7 +155,7 @@ export default function NewRequestPage() {
     setStatusText(
       t(
         "request.autoStartText",
-        "Speisely is turning your event idea into a structured request."
+        "Speisely verwandelt Ihre Event-Idee in ein strukturiertes Catering-Briefing."
       )
     );
 
@@ -179,6 +191,8 @@ export default function NewRequestPage() {
         const rawPending = localStorage.getItem(PENDING_REQUEST_KEY);
 
         if (rawPending) {
+          setBooting(true);
+
           const pending = JSON.parse(rawPending) as {
             query?: string;
             locationInput?: string;
@@ -226,6 +240,14 @@ export default function NewRequestPage() {
         return;
       }
 
+      setBooting(true);
+      setStatusText(
+        t(
+          "request.autoStartChecking",
+          "Speisely prüft Ihre Anmeldung und bereitet das KI-Briefing vor."
+        )
+      );
+
       try {
         const supabase = createClient();
         const {
@@ -261,7 +283,7 @@ export default function NewRequestPage() {
         setSaveError(
           t(
             "request.saveError",
-            "The request could not be saved. Please try again."
+            "Die Anfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
           )
         );
       }
@@ -287,39 +309,40 @@ export default function NewRequestPage() {
     return [
       {
         label: t("request.brief.event", "Event"),
-        value: lower.includes("wedding") || lower.includes("hochzeit")
-          ? t("event.wedding", "Wedding")
-          : lower.includes("business") || lower.includes("corporate")
-            ? t("event.businessLunch", "Business lunch")
-            : lower.includes("ramadan") || lower.includes("iftar")
-              ? t("event.ramadan", "Ramadan / Iftar")
-              : t("request.aiStyle", "AI will infer"),
+        value:
+          lower.includes("wedding") || lower.includes("hochzeit")
+            ? t("event.wedding", "Hochzeit")
+            : lower.includes("business") || lower.includes("corporate")
+              ? t("event.businessLunch", "Business Lunch")
+              : lower.includes("ramadan") || lower.includes("iftar")
+                ? t("event.ramadan", "Ramadan / Iftar")
+                : t("request.aiStyle", "KI erkennt es"),
         icon: <Sparkles className="h-4 w-4" />,
       },
       {
-        label: t("request.brief.location", "Location"),
-        value: shownLocation || t("common.open", "Open"),
+        label: t("request.brief.location", "Ort"),
+        value: shownLocation || t("common.open", "Offen"),
         icon: <MapPin className="h-4 w-4" />,
       },
       {
-        label: t("request.brief.guests", "Guests"),
-        value: guestMatch?.[1] || t("common.open", "Open"),
+        label: t("request.brief.guests", "Gäste"),
+        value: guestMatch?.[1] || t("common.open", "Offen"),
         icon: <Users className="h-4 w-4" />,
       },
       {
         label: t("request.brief.budget", "Budget"),
-        value: budgetMatch?.[0] || t("request.flexibleBudget", "Flexible"),
+        value: budgetMatch?.[0] || t("request.flexibleBudget", "Flexibel"),
         icon: <Wallet className="h-4 w-4" />,
       },
       {
-        label: t("request.brief.style", "Style"),
+        label: t("request.brief.style", "Stil"),
         value: lower.includes("buffet")
           ? "Buffet"
           : lower.includes("fine")
-            ? "Fine dining"
+            ? "Fine Dining"
             : lower.includes("modern")
               ? "Modern"
-              : t("request.aiStyle", "AI will infer"),
+              : t("request.aiStyle", "KI erkennt es"),
         icon: <Search className="h-4 w-4" />,
       },
     ];
@@ -335,7 +358,7 @@ export default function NewRequestPage() {
 
     if (!cleanQuery || cleanQuery.length < 10) {
       setSaveError(
-        t("request.validation.query", "Please describe your event a bit more.")
+        t("request.validation.query", "Bitte beschreiben Sie Ihr Event etwas genauer.")
       );
       setSaving(false);
       return;
@@ -348,6 +371,8 @@ export default function NewRequestPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
+        setBooting(true);
+
         localStorage.setItem(
           PENDING_REQUEST_KEY,
           JSON.stringify({
@@ -372,7 +397,7 @@ export default function NewRequestPage() {
       setSaveError(
         t(
           "request.saveError",
-          "The request could not be saved. Please try again."
+          "Die Anfrage konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
         )
       );
       setSaving(false);
@@ -383,6 +408,7 @@ export default function NewRequestPage() {
     return (
       <main className="min-h-screen bg-[#fbf7ef] text-[#173f35]">
         <SpeiselyHeader />
+
         <section className="mx-auto flex min-h-[72vh] max-w-4xl items-center justify-center px-6">
           <div className="rounded-[2.2rem] border border-[#eadfce] bg-white/90 p-8 text-center shadow-[0_24px_80px_rgba(23,63,53,0.10)]">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#173f35] text-[#d8b76a]">
@@ -390,26 +416,26 @@ export default function NewRequestPage() {
             </div>
 
             <p className="mt-5 text-xs font-bold uppercase tracking-[0.28em] text-[#b28a3c]">
-              {t("request.autoStartLabel", "AI concierge")}
+              {t("request.autoStartLabel", "KI-Concierge")}
             </p>
 
             <h1 className="premium-heading mt-2 text-3xl text-[#173f35] md:text-4xl">
-              {t("request.autoStartTitle", "Building your catering brief")}
+              {t("request.autoStartTitle", "Ihr Catering-Briefing wird erstellt")}
             </h1>
 
             <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#5c6f68]">
               {statusText ||
                 t(
                   "request.autoStartText",
-                  "Speisely is turning your event idea into a structured request."
+                  "Speisely verwandelt Ihre Event-Idee in ein strukturiertes Catering-Briefing."
                 )}
             </p>
 
             <div className="mt-6 grid gap-2 text-left sm:grid-cols-3">
               {[
-                t("request.loadingStep1", "Understanding event"),
-                t("request.loadingStep2", "Detecting location"),
-                t("request.loadingStep3", "Preparing brief"),
+                t("request.loadingStep1", "Event verstehen"),
+                t("request.loadingStep2", "Ort erkennen"),
+                t("request.loadingStep3", "Briefing vorbereiten"),
               ].map((item) => (
                 <div
                   key={item}
@@ -436,20 +462,20 @@ export default function NewRequestPage() {
             href="/"
             className="inline-flex rounded-full border border-[#e5d8c5] bg-white/80 px-4 py-2 text-sm font-semibold text-[#49645c]"
           >
-            ← {t("request.backHome", "Back to homepage")}
+            ← {t("request.backHome", "Zurück zur Startseite")}
           </Link>
 
           <h1 className="premium-heading mt-5 max-w-4xl text-[2.35rem] leading-[0.98] text-[#123b32] md:text-[3.15rem]">
-            {t("request.title", "Describe your event once.")}
+            {t("request.title", "Beschreiben Sie Ihr Event einmal.")}
             <span className="block pt-1 italic font-medium text-[#b28a3c]">
-              {t("request.titleAccent", "Speisely builds the brief.")}
+              {t("request.titleAccent", "Speisely erstellt das Briefing.")}
             </span>
           </h1>
 
           <p className="mt-4 max-w-2xl text-[15px] leading-6 text-[#5c6f68]">
             {t(
               "request.description",
-              "Use natural language. Speisely detects event type, guests, location, budget, dietary needs and catering style."
+              "Nutzen Sie natürliche Sprache. Speisely erkennt Eventtyp, Gästezahl, Ort, Budget, Ernährungswünsche und Catering-Stil."
             )}
           </p>
 
@@ -472,7 +498,7 @@ export default function NewRequestPage() {
 
           <div className="mt-4 rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)]">
             <label className="text-sm font-semibold text-[#173f35]">
-              {t("request.inputLabel", "Event description")}
+              {t("request.inputLabel", "Eventbeschreibung")}
             </label>
 
             <textarea
@@ -480,8 +506,10 @@ export default function NewRequestPage() {
               onChange={(event) => {
                 const value = event.target.value;
                 setQuery(value);
+
                 const city = extractCityFromQuery(value);
                 if (city) setLocationInput(city);
+
                 setSaveError(null);
               }}
               className="mt-2 min-h-24 w-full resize-none rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] p-4 text-[15px] leading-6 text-[#173f35] outline-none"
@@ -489,7 +517,7 @@ export default function NewRequestPage() {
 
             <div className="mt-3">
               <label className="text-sm font-semibold text-[#173f35]">
-                {t("request.locationLabel", "City or postal code")}
+                {t("request.locationLabel", "Stadt oder Postleitzahl")}
               </label>
 
               <input
@@ -517,8 +545,8 @@ export default function NewRequestPage() {
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white disabled:opacity-60"
               >
                 {saving
-                  ? t("request.saving", "Speisely is preparing your AI brief...")
-                  : t("request.continue", "Continue to AI brief")}
+                  ? t("request.saving", "Speisely bereitet Ihr KI-Briefing vor...")
+                  : t("request.continue", "Weiter zum KI-Briefing")}
                 <ArrowRight className="h-4 w-4" />
               </button>
 
@@ -526,7 +554,7 @@ export default function NewRequestPage() {
                 href="/caterers"
                 className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35]"
               >
-                {t("request.browse", "Browse caterers")}
+                {t("request.browse", "Caterer ansehen")}
               </Link>
             </div>
           </div>
@@ -543,10 +571,11 @@ export default function NewRequestPage() {
 
           <div className="rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-              {t("request.previewLabel", "AI preview")}
+              {t("request.previewLabel", "KI-Vorschau")}
             </p>
+
             <h2 className="premium-heading mt-1 text-xl text-[#173f35]">
-              {t("request.previewTitle", "What Speisely understood")}
+              {t("request.previewTitle", "Was Speisely verstanden hat")}
             </h2>
 
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
