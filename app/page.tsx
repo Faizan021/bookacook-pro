@@ -89,61 +89,126 @@ const occasionCards = [
     href: "/request/new?occasion=christmas&start=1",
   },
 ];
+function extractCityFromText(query: string) {
+  const text = query.trim();
+  const lower = text.toLowerCase();
 
+  const knownCities: Array<[string, string]> = [
+    ["berlin", "Berlin"],
+    ["hamburg", "Hamburg"],
+    ["münchen", "München"],
+    ["munich", "München"],
+    ["frankfurt am main", "Frankfurt am Main"],
+    ["frankfurt", "Frankfurt am Main"],
+    ["köln", "Köln"],
+    ["cologne", "Köln"],
+    ["düsseldorf", "Düsseldorf"],
+    ["duesseldorf", "Düsseldorf"],
+    ["dresden", "Dresden"],
+    ["leipzig", "Leipzig"],
+    ["stuttgart", "Stuttgart"],
+    ["essen", "Essen"],
+    ["dortmund", "Dortmund"],
+    ["paderborn", "Paderborn"],
+    ["bonn", "Bonn"],
+    ["bremen", "Bremen"],
+    ["hannover", "Hannover"],
+    ["nürnberg", "Nürnberg"],
+    ["nuremberg", "Nürnberg"],
+    ["bochum", "Bochum"],
+    ["duisburg", "Duisburg"],
+    ["wuppertal", "Wuppertal"],
+    ["bielefeld", "Bielefeld"],
+    ["münster", "Münster"],
+    ["karlsruhe", "Karlsruhe"],
+    ["mannheim", "Mannheim"],
+    ["augsburg", "Augsburg"],
+    ["mainz", "Mainz"],
+    ["kiel", "Kiel"],
+    ["aachen", "Aachen"],
+    ["mülheim", "Mülheim"],
+  ];
+
+  for (const [needle, label] of knownCities) {
+    if (lower.includes(needle)) return label;
+  }
+
+  const cityMatch =
+    text.match(/\b(?:in|at|near|bei|around|um)\s+([A-ZÄÖÜ][a-zA-ZäöüÄÖÜß\-\s]{2,35})/);
+
+  if (cityMatch?.[1]) {
+    const cleaned = cityMatch[1]
+      .replace(/[,.;].*$/, "")
+      .replace(
+        /\b(fine|dining|dinning|buffet|elegant|elegantes|vegetarian|vegan|halal|modern|birthday|party|wedding|hochzeit|business|lunch|dinner|ramadan|iftar).*$/i,
+        ""
+      )
+      .trim();
+
+    if (cleaned.length >= 2) return cleaned;
+  }
+
+  return "Ort offen";
+}
 function extractPreview(query: string) {
   const lower = query.toLowerCase();
 
   const guestMatch =
-    query.match(/(\d+)\s?(gäste|personen|guests|people|persons)/i) ||
+    query.match(/(\d+)\s?(gäste|gast|personen|person|guests|guest|people|persons|pax)/i) ||
     query.match(/für\s+(\d+)/i) ||
     query.match(/for\s+(\d+)/i);
 
   const budgetMatch =
     query.match(/€\s?\d+/) ||
-    query.match(/\d+\s?(€|eur|euros?)\s?(p\.p\.|pp|pro person|per person)?/i);
-
-  const city =
-    lower.includes("frankfurt")
-      ? "Frankfurt"
-      : lower.includes("berlin")
-        ? "Berlin"
-        : lower.includes("münchen") || lower.includes("munich")
-          ? "München"
-          : lower.includes("hamburg")
-            ? "Hamburg"
-            : lower.includes("köln") || lower.includes("cologne")
-              ? "Köln"
-              : lower.includes("düsseldorf") || lower.includes("duesseldorf")
-                ? "Düsseldorf"
-                : "Ort offen";
+    query.match(/\d+\s?(€|eur|euro|euros?)\s?(p\.p\.|pp|pro person|per person)?/i);
 
   const event =
-    lower.includes("business") || lower.includes("lunch")
+    lower.includes("business") ||
+    lower.includes("corporate") ||
+    lower.includes("office") ||
+    lower.includes("firma") ||
+    lower.includes("lunch")
       ? "Business Event"
       : lower.includes("hochzeit") || lower.includes("wedding")
         ? "Hochzeit"
-        : lower.includes("ramadan") || lower.includes("iftar")
-          ? "Ramadan Iftar"
-          : lower.includes("private") || lower.includes("dinner")
-            ? "Private Dinner"
-            : lower.includes("weihnacht") || lower.includes("christmas")
-              ? "Weihnachtsfeier"
-              : "Event erkannt";
+        : lower.includes("birthday") ||
+            lower.includes("geburtstag") ||
+            lower.includes("party")
+          ? "Geburtstag / Party"
+          : lower.includes("ramadan") || lower.includes("iftar")
+            ? "Ramadan Iftar"
+            : lower.includes("private") || lower.includes("dinner")
+              ? "Private Dinner"
+              : lower.includes("weihnacht") || lower.includes("christmas")
+                ? "Weihnachtsfeier"
+                : "Event erkannt";
 
   const style =
-    lower.includes("buffet")
-      ? "Buffet"
-      : lower.includes("fine")
-        ? "Fine Dining"
-        : lower.includes("finger")
+    lower.includes("fine dining") ||
+    lower.includes("fine dinning") ||
+    lower.includes("fine")
+      ? "Fine Dining"
+      : lower.includes("buffet")
+        ? "Buffet"
+        : lower.includes("finger food") || lower.includes("fingerfood")
           ? "Fingerfood"
           : lower.includes("bbq") || lower.includes("grill")
             ? "BBQ"
-            : "Stil offen";
+            : lower.includes("elegant") || lower.includes("elegantes")
+              ? "Elegant"
+              : lower.includes("modern")
+                ? "Modern"
+                : lower.includes("halal")
+                  ? "Halal Catering"
+                  : lower.includes("vegetar")
+                    ? "Vegetarisch"
+                    : lower.includes("vegan")
+                      ? "Vegan"
+                      : "Stil offen";
 
   return {
     event,
-    city,
+    city: extractCityFromText(query),
     guests: guestMatch?.[1] || "offen",
     budget: budgetMatch?.[0] || "flexibel",
     style,
@@ -404,7 +469,7 @@ export default function Home() {
           </div>
 
           <Link
-            href="/request/new"
+            href="/request/new?start=1"
             className="inline-flex items-center gap-2 font-semibold text-[#173f35]"
           >
             Mit KI-Matching starten <ArrowRight className="h-4 w-4" />
@@ -498,7 +563,7 @@ export default function Home() {
           </p>
 
           <Link
-            href="/request/new"
+            href="/request/new?start=1"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#d7b66d] px-8 py-4 font-semibold text-[#173f35] transition hover:bg-[#e3c57c]"
           >
             Jetzt KI-Matching starten
