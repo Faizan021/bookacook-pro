@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -75,94 +76,94 @@ function getPromptByOccasion(occasion: string | null) {
 function extractCityFromQuery(query?: string | null) {
   const text = (query || "").toLowerCase();
 
-if (text.includes("berlin")) return "Berlin";
-if (text.includes("hamburg")) return "Hamburg";
-if (text.includes("munich") || text.includes("münchen")) return "München";
-if (text.includes("frankfurt")) return "Frankfurt am Main";
-if (text.includes("cologne") || text.includes("köln")) return "Köln";
-if (text.includes("düsseldorf") || text.includes("duesseldorf")) return "Düsseldorf";
-if (text.includes("dresden")) return "Dresden";
-if (text.includes("leipzig")) return "Leipzig";
-if (text.includes("stuttgart")) return "Stuttgart";
-if (text.includes("dortmund")) return "Dortmund";
-if (text.includes("essen")) return "Essen";
-if (text.includes("bremen")) return "Bremen";
-if (text.includes("hannover")) return "Hannover";
-if (text.includes("nürnberg") || text.includes("nuremberg")) return "Nürnberg";
-if (text.includes("duisburg")) return "Duisburg";
-if (text.includes("bochum")) return "Bochum";
-if (text.includes("wuppertal")) return "Wuppertal";
-if (text.includes("bielefeld")) return "Bielefeld";
-if (text.includes("bonn")) return "Bonn";
-if (text.includes("münster") || text.includes("muenster")) return "Münster";
-if (text.includes("karlsruhe")) return "Karlsruhe";
-if (text.includes("mannheim")) return "Mannheim";
-if (text.includes("augsburg")) return "Augsburg";
-if (text.includes("wiesbaden")) return "Wiesbaden";
-if (text.includes("gelsenkirchen")) return "Gelsenkirchen";
-if (text.includes("mönchengladbach") || text.includes("moenchengladbach") || text.includes("munchengladbach")) return "Mönchengladbach";
-if (text.includes("braunschweig")) return "Braunschweig";
-if (text.includes("chemnitz")) return "Chemnitz";
-if (text.includes("kiel")) return "Kiel";
-if (text.includes("aachen")) return "Aachen";
-if (text.includes("halle")) return "Halle";
-if (text.includes("magdeburg")) return "Magdeburg";
-if (text.includes("freiburg")) return "Freiburg";
-if (text.includes("krefeld")) return "Krefeld";
-if (text.includes("lübeck") || text.includes("luebeck")) return "Lübeck";
-if (text.includes("oberhausen")) return "Oberhausen";
-if (text.includes("erfurt")) return "Erfurt";
-if (text.includes("mainz")) return "Mainz";
-if (text.includes("rostock")) return "Rostock";
-if (text.includes("kassel")) return "Kassel";
-if (text.includes("hagen")) return "Hagen";
-if (text.includes("hamm")) return "Hamm";
-if (text.includes("saarbrücken") || text.includes("saarbruecken")) return "Saarbrücken";
-if (text.includes("mülheim") || text.includes("muelheim")) return "Mülheim";
-if (text.includes("potsdam")) return "Potsdam";
-if (text.includes("ludwigshafen")) return "Ludwigshafen";
-if (text.includes("oldenburg")) return "Oldenburg";
-if (text.includes("leverkusen")) return "Leverkusen";
-if (text.includes("osnabrück") || text.includes("osnabrueck")) return "Osnabrück";
-if (text.includes("solingen")) return "Solingen";
-if (text.includes("heidelberg")) return "Heidelberg";
-if (text.includes("herne")) return "Herne";
-if (text.includes("neuss")) return "Neuss";
-if (text.includes("darmstadt")) return "Darmstadt";
-if (text.includes("paderborn")) return "Paderborn";
-if (text.includes("regensburg")) return "Regensburg";
-if (text.includes("ingolstadt")) return "Ingolstadt";
-if (text.includes("würzburg") || text.includes("wuerzburg")) return "Würzburg";
-if (text.includes("fürth") || text.includes("fuerth")) return "Fürth";
-if (text.includes("wolfsburg")) return "Wolfsburg";
-if (text.includes("offenbach")) return "Offenbach";
-if (text.includes("ulm")) return "Ulm";
-if (text.includes("heilbronn")) return "Heilbronn";
-if (text.includes("pforzheim")) return "Pforzheim";
-if (text.includes("göttingen") || text.includes("goettingen")) return "Göttingen";
-if (text.includes("bottrop")) return "Bottrop";
-if (text.includes("trier")) return "Trier";
-if (text.includes("recklinghausen")) return "Recklinghausen";
-if (text.includes("reutlingen")) return "Reutlingen";
-if (text.includes("bremerhaven")) return "Bremerhaven";
-if (text.includes("koblenz")) return "Koblenz";
-if (text.includes("bergisch gladbach")) return "Bergisch Gladbach";
-if (text.includes("jena")) return "Jena";
-if (text.includes("remscheid")) return "Remscheid";
-if (text.includes("erlangen")) return "Erlangen";
-if (text.includes("moers")) return "Moers";
-if (text.includes("siegen")) return "Siegen";
-if (text.includes("hildesheim")) return "Hildesheim";
-if (text.includes("salzgitter")) return "Salzgitter";
-if (text.includes("cottbus")) return "Cottbus";
+  const cities: Array<[string[], string]> = [
+    [["berlin"], "Berlin"],
+    [["hamburg"], "Hamburg"],
+    [["munich", "münchen", "muenchen"], "München"],
+    [["frankfurt am main", "frankfurt"], "Frankfurt am Main"],
+    [["cologne", "köln", "koeln"], "Köln"],
+    [["düsseldorf", "duesseldorf"], "Düsseldorf"],
+    [["dresden"], "Dresden"],
+    [["leipzig"], "Leipzig"],
+    [["stuttgart"], "Stuttgart"],
+    [["dortmund"], "Dortmund"],
+    [["essen"], "Essen"],
+    [["bremen"], "Bremen"],
+    [["hannover"], "Hannover"],
+    [["nürnberg", "nuremberg", "nuernberg"], "Nürnberg"],
+    [["duisburg"], "Duisburg"],
+    [["bochum"], "Bochum"],
+    [["wuppertal"], "Wuppertal"],
+    [["bielefeld"], "Bielefeld"],
+    [["bonn"], "Bonn"],
+    [["münster", "muenster"], "Münster"],
+    [["karlsruhe"], "Karlsruhe"],
+    [["mannheim"], "Mannheim"],
+    [["augsburg"], "Augsburg"],
+    [["wiesbaden"], "Wiesbaden"],
+    [["gelsenkirchen"], "Gelsenkirchen"],
+    [["mönchengladbach", "moenchengladbach", "munchengladbach"], "Mönchengladbach"],
+    [["braunschweig"], "Braunschweig"],
+    [["chemnitz"], "Chemnitz"],
+    [["kiel"], "Kiel"],
+    [["aachen"], "Aachen"],
+    [["halle"], "Halle"],
+    [["magdeburg"], "Magdeburg"],
+    [["freiburg"], "Freiburg"],
+    [["krefeld"], "Krefeld"],
+    [["lübeck", "luebeck"], "Lübeck"],
+    [["oberhausen"], "Oberhausen"],
+    [["erfurt"], "Erfurt"],
+    [["mainz"], "Mainz"],
+    [["rostock"], "Rostock"],
+    [["kassel"], "Kassel"],
+    [["hagen"], "Hagen"],
+    [["hamm"], "Hamm"],
+    [["saarbrücken", "saarbruecken"], "Saarbrücken"],
+    [["mülheim", "muelheim"], "Mülheim"],
+    [["potsdam"], "Potsdam"],
+    [["ludwigshafen"], "Ludwigshafen"],
+    [["oldenburg"], "Oldenburg"],
+    [["leverkusen"], "Leverkusen"],
+    [["osnabrück", "osnabrueck"], "Osnabrück"],
+    [["solingen"], "Solingen"],
+    [["heidelberg"], "Heidelberg"],
+    [["herne"], "Herne"],
+    [["neuss"], "Neuss"],
+    [["darmstadt"], "Darmstadt"],
+    [["paderborn"], "Paderborn"],
+    [["regensburg"], "Regensburg"],
+    [["ingolstadt"], "Ingolstadt"],
+    [["würzburg", "wuerzburg"], "Würzburg"],
+    [["fürth", "fuerth"], "Fürth"],
+    [["wolfsburg"], "Wolfsburg"],
+    [["offenbach"], "Offenbach"],
+    [["ulm"], "Ulm"],
+    [["heilbronn"], "Heilbronn"],
+    [["pforzheim"], "Pforzheim"],
+    [["göttingen", "goettingen"], "Göttingen"],
+    [["bottrop"], "Bottrop"],
+    [["trier"], "Trier"],
+    [["recklinghausen"], "Recklinghausen"],
+    [["reutlingen"], "Reutlingen"],
+    [["bremerhaven"], "Bremerhaven"],
+    [["koblenz"], "Koblenz"],
+    [["bergisch gladbach"], "Bergisch Gladbach"],
+    [["jena"], "Jena"],
+    [["remscheid"], "Remscheid"],
+    [["erlangen"], "Erlangen"],
+    [["moers"], "Moers"],
+    [["siegen"], "Siegen"],
+    [["hildesheim"], "Hildesheim"],
+    [["salzgitter"], "Salzgitter"],
+    [["cottbus"], "Cottbus"],
+  ];
+
+  for (const [needles, city] of cities) {
+    if (needles.some((needle) => text.includes(needle))) return city;
+  }
 
   return "";
-}
-
-function detectAutoStartFromUrl() {
-  if (typeof window === "undefined") return false;
-  const params = new URLSearchParams(window.location.search);
-  return params.get("start") === "1";
 }
 
 export default function NewRequestPage() {
@@ -173,8 +174,6 @@ export default function NewRequestPage() {
   const creatingRef = useRef(false);
 
   const [booting, setBooting] = useState(true);
-  const [isAutoStart, setIsAutoStart] = useState(false);
-
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
   const [selectedLocation, setSelectedLocation] =
@@ -182,9 +181,7 @@ export default function NewRequestPage() {
 
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [statusText, setStatusText] = useState(
-    "Speisely is reading your event details."
-  );
+  const [statusText, setStatusText] = useState("");
 
   async function createDraftFromValues(input: {
     cleanQuery: string;
@@ -195,7 +192,7 @@ export default function NewRequestPage() {
     creatingRef.current = true;
 
     setSaving(true);
-    setStatusText("You are logged in. Speisely is creating your AI brief...");
+    setStatusText(t("request.autoStartText", "Speisely is turning your event idea into a structured request."));
 
     const result = await createRequestDraftAction({
       ai_query: input.cleanQuery,
@@ -210,12 +207,10 @@ export default function NewRequestPage() {
       localStorage.removeItem(PENDING_REQUEST_KEY);
     } catch {}
 
-    router.push(`/request/${result.id}`);
+    router.replace(`/request/${result.id}`);
   }
 
   useEffect(() => {
-    setIsAutoStart(detectAutoStartFromUrl());
-
     if (bootedRef.current) return;
     bootedRef.current = true;
 
@@ -226,7 +221,6 @@ export default function NewRequestPage() {
       const shouldStart = params.get("start") === "1";
 
       const occasionQuery = getPromptByOccasion(incomingOccasion);
-
       const urlQuery =
         incomingQuery && incomingQuery.trim().length > 0
           ? incomingQuery.trim()
@@ -244,14 +238,13 @@ export default function NewRequestPage() {
 
           const pendingQuery = pending.query || "";
           const pendingCity =
-            pending.locationInput || extractCityFromQuery(pendingQuery) || "Berlin";
+            pending.locationInput ||
+            extractCityFromQuery(pendingQuery) ||
+            "Berlin";
 
           if (pendingQuery) setQuery(pendingQuery);
           setLocationInput(pendingCity);
-
-          if (pending.selectedLocation) {
-            setSelectedLocation(pending.selectedLocation);
-          }
+          if (pending.selectedLocation) setSelectedLocation(pending.selectedLocation);
 
           const supabase = createClient();
           const {
@@ -260,7 +253,12 @@ export default function NewRequestPage() {
 
           if (user && pendingQuery.trim().length >= 10) {
             setSaving(true);
-            setStatusText(`Logged in as ${user.email}. Creating your AI brief...`);
+            setStatusText(
+              t(
+                "request.autoStartText",
+                "Speisely is turning your event idea into a structured request."
+              )
+            );
 
             await createDraftFromValues({
               cleanQuery: pendingQuery.trim(),
@@ -275,7 +273,6 @@ export default function NewRequestPage() {
         }
       } catch (error) {
         console.error("Failed to restore pending request:", error);
-
         try {
           localStorage.removeItem(PENDING_REQUEST_KEY);
         } catch {}
@@ -293,7 +290,12 @@ export default function NewRequestPage() {
       }
 
       setSaving(true);
-      setStatusText("Checking your login and preparing the AI brief...");
+      setStatusText(
+        t(
+          "request.autoStartText",
+          "Speisely is turning your event idea into a structured request."
+        )
+      );
 
       try {
         const supabase = createClient();
@@ -316,8 +318,6 @@ export default function NewRequestPage() {
           router.replace("/login?next=/request/new");
           return;
         }
-
-        setStatusText(`Logged in as ${user.email}. Creating your AI brief...`);
 
         await createDraftFromValues({
           cleanQuery: urlQuery,
@@ -348,21 +348,21 @@ export default function NewRequestPage() {
     const shownLocation = selectedLocation?.name || cityFromQuery || locationInput;
 
     const guestMatch =
-      query.match(/(\d+)\s?(guests|guest|people|persons|personen|gäste)/i) ||
+      query.match(/(\d+)\s?(guests|guest|people|persons|personen|gäste|gast|pax)/i) ||
       query.match(/for\s+(\d+)/i) ||
       query.match(/für\s+(\d+)/i);
 
     const budgetMatch =
       query.match(/€\s?\d+/) ||
-      query.match(/\d+\s?(€|eur|euros?)\s?(p\.p\.|pp|per person|pro person)?/i);
+      query.match(/\d+\s?(€|eur|euro|euros?)\s?(p\.p\.|pp|per person|pro person)?/i);
 
-    const event = lower.includes("business")
+    const event = lower.includes("business") || lower.includes("corporate") || lower.includes("lunch")
       ? t("event.businessLunch", "Business lunch")
       : lower.includes("weihnacht") || lower.includes("christmas")
         ? t("event.christmas", "Christmas party")
         : lower.includes("iftar") || lower.includes("ramadan")
           ? t("event.ramadan", "Ramadan / Iftar")
-          : lower.includes("birthday") || lower.includes("geburtstag")
+          : lower.includes("birthday") || lower.includes("geburtstag") || lower.includes("party")
             ? t("event.birthday", "Birthday")
             : lower.includes("private")
               ? t("event.privateDinner", "Private dinner")
@@ -378,7 +378,7 @@ export default function NewRequestPage() {
           ? t("diet.halal", "Halal")
           : t("common.open", "Open");
 
-    const style = lower.includes("fine")
+    const style = lower.includes("fine dining") || lower.includes("fine dinning") || lower.includes("fine")
       ? "Fine dining"
       : lower.includes("buffet")
         ? "Buffet"
@@ -386,7 +386,11 @@ export default function NewRequestPage() {
           ? "BBQ"
           : lower.includes("finger")
             ? "Finger food"
-            : t("request.aiStyle", "AI will infer");
+            : lower.includes("elegant") || lower.includes("elegantes")
+              ? "Elegant"
+              : lower.includes("modern")
+                ? "Modern"
+                : t("request.aiStyle", "AI will infer");
 
     return [
       {
@@ -454,11 +458,16 @@ export default function NewRequestPage() {
           })
         );
 
-        router.push("/login?next=/request/new");
+        router.replace("/login?next=/request/new");
         return;
       }
 
-      setStatusText(`Logged in as ${user.email}. Creating your AI brief...`);
+      setStatusText(
+        t(
+          "request.autoStartText",
+          "Speisely is turning your event idea into a structured request."
+        )
+      );
 
       await createDraftFromValues({
         cleanQuery,
@@ -467,7 +476,6 @@ export default function NewRequestPage() {
       });
     } catch (error) {
       console.error(error);
-
       creatingRef.current = false;
 
       const message = error instanceof Error ? error.message : "";
@@ -482,7 +490,7 @@ export default function NewRequestPage() {
           })
         );
 
-        router.push("/login?next=/request/new");
+        router.replace("/login?next=/request/new");
         return;
       }
 
@@ -511,30 +519,35 @@ export default function NewRequestPage() {
               </div>
 
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.28em] text-[#b28a3c]">
-                KI-Catering-Concierge
+                {t("request.autoStartLabel", "AI concierge")}
               </p>
 
               <h1 className="premium-heading mt-2 text-3xl text-[#173f35] md:text-4xl">
-                Speisely prüft Ihre Anfrage
+                {t("request.autoStartTitle", "Building your catering brief")}
               </h1>
 
               <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#5c6f68]">
-                Wir lesen Ihre Eventbeschreibung, prüfen den Login und bereiten
-                das KI-Briefing vor.
+                {statusText ||
+                  t(
+                    "request.autoStartText",
+                    "Speisely is turning your event idea into a structured request."
+                  )}
               </p>
 
               <div className="mt-6 grid gap-2 text-left sm:grid-cols-3">
-                {["Event verstehen", "Ort erkennen", "Briefing vorbereiten"].map(
-                  (item) => (
-                    <div
-                      key={item}
-                      className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-3 text-sm font-semibold text-[#173f35]"
-                    >
-                      <CheckCircle2 className="mb-2 h-4 w-4 text-[#b28a3c]" />
-                      {item}
-                    </div>
-                  )
-                )}
+                {[
+                  t("request.loadingStep1", "Understanding event"),
+                  t("request.loadingStep2", "Detecting location"),
+                  t("request.loadingStep3", "Preparing brief"),
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-3 text-sm font-semibold text-[#173f35]"
+                  >
+                    <CheckCircle2 className="mb-2 h-4 w-4 text-[#b28a3c]" />
+                    {item}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -670,7 +683,7 @@ export default function NewRequestPage() {
               >
                 {saving
                   ? t("request.saving", "Speisely is preparing your AI brief...")
-                  : "KI-Briefing erstellen"}
+                  : t("request.continue", "Continue to AI brief")}
                 <ArrowRight className="h-4 w-4" />
               </button>
 
@@ -732,11 +745,13 @@ export default function NewRequestPage() {
 
             <div className="mt-4 rounded-[1.05rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-3">
               <p className="text-sm font-semibold text-[#173f35]">
-                KI analysiert Ihre Anfrage
+                {t("request.aiNoteTitle", "AI matching starts after this step")}
               </p>
               <p className="mt-1 text-sm leading-6 text-[#5c6f68]">
-                Speisely erkennt Ort, Gästezahl, Eventtyp und bereitet daraus ein
-                kompaktes Catering-Briefing vor.
+                {t(
+                  "request.aiNote",
+                  "You will review a compact event brief next."
+                )}
               </p>
             </div>
           </div>
@@ -746,11 +761,13 @@ export default function NewRequestPage() {
               {t("request.flowLabel", "Next")}
             </p>
             <h3 className="premium-heading mt-1 text-xl text-white">
-              Briefing prüfen → KI-Matches finden
+              {t("request.flowTitle", "Review brief → see matches")}
             </h3>
             <p className="mt-1 text-sm leading-6 text-white/75">
-              Speisely vergleicht passende Caterer nach Ort, Gästezahl,
-              Catering-Stil und Budget.
+              {t(
+                "request.flowText",
+                "Speisely prepares your structured request and caterer matching."
+              )}
             </p>
           </div>
         </aside>
