@@ -103,60 +103,7 @@ function extractCityFromQuery(query?: string | null) {
     [["mannheim"], "Mannheim"],
     [["augsburg"], "Augsburg"],
     [["wiesbaden"], "Wiesbaden"],
-    [["gelsenkirchen"], "Gelsenkirchen"],
-    [["braunschweig"], "Braunschweig"],
-    [["chemnitz"], "Chemnitz"],
-    [["kiel"], "Kiel"],
-    [["aachen"], "Aachen"],
-    [["halle"], "Halle"],
-    [["magdeburg"], "Magdeburg"],
-    [["freiburg"], "Freiburg"],
-    [["krefeld"], "Krefeld"],
-    [["lübeck", "luebeck"], "Lübeck"],
-    [["oberhausen"], "Oberhausen"],
-    [["erfurt"], "Erfurt"],
-    [["mainz"], "Mainz"],
-    [["rostock"], "Rostock"],
-    [["kassel"], "Kassel"],
-    [["hagen"], "Hagen"],
-    [["hamm"], "Hamm"],
-    [["saarbrücken", "saarbruecken"], "Saarbrücken"],
-    [["mülheim", "muelheim"], "Mülheim"],
-    [["potsdam"], "Potsdam"],
-    [["ludwigshafen"], "Ludwigshafen"],
-    [["oldenburg"], "Oldenburg"],
-    [["leverkusen"], "Leverkusen"],
-    [["osnabrück", "osnabrueck"], "Osnabrück"],
-    [["solingen"], "Solingen"],
-    [["heidelberg"], "Heidelberg"],
-    [["herne"], "Herne"],
-    [["neuss"], "Neuss"],
-    [["darmstadt"], "Darmstadt"],
     [["paderborn"], "Paderborn"],
-    [["regensburg"], "Regensburg"],
-    [["ingolstadt"], "Ingolstadt"],
-    [["würzburg", "wuerzburg"], "Würzburg"],
-    [["fürth", "fuerth"], "Fürth"],
-    [["wolfsburg"], "Wolfsburg"],
-    [["offenbach"], "Offenbach"],
-    [["ulm"], "Ulm"],
-    [["heilbronn"], "Heilbronn"],
-    [["pforzheim"], "Pforzheim"],
-    [["göttingen", "goettingen"], "Göttingen"],
-    [["bottrop"], "Bottrop"],
-    [["trier"], "Trier"],
-    [["recklinghausen"], "Recklinghausen"],
-    [["reutlingen"], "Reutlingen"],
-    [["bremerhaven"], "Bremerhaven"],
-    [["koblenz"], "Koblenz"],
-    [["jena"], "Jena"],
-    [["remscheid"], "Remscheid"],
-    [["erlangen"], "Erlangen"],
-    [["moers"], "Moers"],
-    [["siegen"], "Siegen"],
-    [["hildesheim"], "Hildesheim"],
-    [["salzgitter"], "Salzgitter"],
-    [["cottbus"], "Cottbus"],
   ];
 
   for (const [needles, city] of cities) {
@@ -173,17 +120,7 @@ export default function NewRequestPage() {
   const bootedRef = useRef(false);
   const creatingRef = useRef(false);
 
-  const [booting, setBooting] = useState(() => {
-    if (typeof window === "undefined") return true;
-
-    const params = new URLSearchParams(window.location.search);
-    const hasQuery = Boolean(params.get("query")?.trim());
-    const shouldAutoStart = params.get("start") === "1" && hasQuery;
-    const hasPendingRequest = Boolean(localStorage.getItem(PENDING_REQUEST_KEY));
-
-    return shouldAutoStart || hasPendingRequest;
-  });
-
+  const [booting, setBooting] = useState(true);
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
   const [selectedLocation, setSelectedLocation] =
@@ -232,23 +169,16 @@ export default function NewRequestPage() {
 
     async function bootRequestPage() {
       const params = new URLSearchParams(window.location.search);
-      const incomingQuery = params.get("query");
+      const incomingQuery = params.get("query")?.trim() || "";
       const incomingOccasion = params.get("occasion");
-
-      const hasIncomingQuery =
-        incomingQuery !== null && incomingQuery.trim().length > 0;
-
-      const shouldStart = params.get("start") === "1" && hasIncomingQuery;
-
       const occasionQuery = getPromptByOccasion(incomingOccasion);
-      const urlQuery = hasIncomingQuery ? incomingQuery!.trim() : occasionQuery;
+      const urlQuery = incomingQuery || occasionQuery || "";
+      const shouldStart = params.get("start") === "1";
 
       try {
         const rawPending = localStorage.getItem(PENDING_REQUEST_KEY);
 
         if (rawPending) {
-          setBooting(true);
-
           const pending = JSON.parse(rawPending) as {
             query?: string;
             locationInput?: string;
@@ -260,10 +190,6 @@ export default function NewRequestPage() {
             pending.locationInput ||
             extractCityFromQuery(pendingQuery) ||
             "Berlin";
-
-          if (pendingQuery) setQuery(pendingQuery);
-          setLocationInput(pendingCity);
-          if (pending.selectedLocation) setSelectedLocation(pending.selectedLocation);
 
           const supabase = createClient();
           const {
@@ -279,14 +205,14 @@ export default function NewRequestPage() {
             return;
           }
 
+          setQuery(pendingQuery || occasionPrompts[0].query);
+          setLocationInput(pendingCity);
+          setSelectedLocation(pending.selectedLocation ?? null);
           setBooting(false);
           return;
         }
-      } catch (error) {
-        console.error("Failed to restore pending request:", error);
-        try {
-          localStorage.removeItem(PENDING_REQUEST_KEY);
-        } catch {}
+      } catch {
+        localStorage.removeItem(PENDING_REQUEST_KEY);
       }
 
       if (urlQuery) {
@@ -299,15 +225,6 @@ export default function NewRequestPage() {
         setBooting(false);
         return;
       }
-
-      setBooting(true);
-      setSaving(true);
-      setStatusText(
-        t(
-          "request.autoStartText",
-          "Speisely is turning your event idea into a structured request."
-        )
-      );
 
       try {
         const supabase = createClient();
@@ -355,7 +272,6 @@ export default function NewRequestPage() {
 
   const briefingItems = useMemo(() => {
     const lower = query.toLowerCase();
-
     const cityFromQuery = extractCityFromQuery(query);
     const shownLocation = selectedLocation?.name || cityFromQuery || locationInput;
 
@@ -368,54 +284,16 @@ export default function NewRequestPage() {
       query.match(/€\s?\d+/) ||
       query.match(/\d+\s?(€|eur|euro|euros?)\s?(p\.p\.|pp|per person|pro person)?/i);
 
-    const event =
-      lower.includes("business") ||
-      lower.includes("corporate") ||
-      lower.includes("lunch")
-        ? t("event.businessLunch", "Business lunch")
-        : lower.includes("weihnacht") || lower.includes("christmas")
-          ? t("event.christmas", "Christmas party")
-          : lower.includes("iftar") || lower.includes("ramadan")
-            ? t("event.ramadan", "Ramadan / Iftar")
-            : lower.includes("birthday") ||
-                lower.includes("geburtstag") ||
-                lower.includes("party")
-              ? t("event.birthday", "Birthday")
-              : lower.includes("private")
-                ? t("event.privateDinner", "Private dinner")
-                : lower.includes("wedding") || lower.includes("hochzeit")
-                  ? t("event.wedding", "Wedding")
-                  : t("request.aiStyle", "AI will infer");
-
-    const diet = lower.includes("vegetar")
-      ? t("diet.vegetarian", "Vegetarian")
-      : lower.includes("vegan")
-        ? t("diet.vegan", "Vegan")
-        : lower.includes("halal")
-          ? t("diet.halal", "Halal")
-          : t("common.open", "Open");
-
-    const style =
-      lower.includes("fine dining") ||
-      lower.includes("fine dinning") ||
-      lower.includes("fine")
-        ? "Fine dining"
-        : lower.includes("buffet")
-          ? "Buffet"
-          : lower.includes("bbq") || lower.includes("grill")
-            ? "BBQ"
-            : lower.includes("finger")
-              ? "Finger food"
-              : lower.includes("elegant") || lower.includes("elegantes")
-                ? "Elegant"
-                : lower.includes("modern")
-                  ? "Modern"
-                  : t("request.aiStyle", "AI will infer");
-
     return [
       {
         label: t("request.brief.event", "Event"),
-        value: event,
+        value: lower.includes("wedding") || lower.includes("hochzeit")
+          ? t("event.wedding", "Wedding")
+          : lower.includes("business") || lower.includes("corporate")
+            ? t("event.businessLunch", "Business lunch")
+            : lower.includes("ramadan") || lower.includes("iftar")
+              ? t("event.ramadan", "Ramadan / Iftar")
+              : t("request.aiStyle", "AI will infer"),
         icon: <Sparkles className="h-4 w-4" />,
       },
       {
@@ -434,13 +312,14 @@ export default function NewRequestPage() {
         icon: <Wallet className="h-4 w-4" />,
       },
       {
-        label: t("request.brief.diet", "Diet"),
-        value: diet,
-        icon: <CheckCircle2 className="h-4 w-4" />,
-      },
-      {
         label: t("request.brief.style", "Style"),
-        value: style,
+        value: lower.includes("buffet")
+          ? "Buffet"
+          : lower.includes("fine")
+            ? "Fine dining"
+            : lower.includes("modern")
+              ? "Modern"
+              : t("request.aiStyle", "AI will infer"),
         icon: <Search className="h-4 w-4" />,
       },
     ];
@@ -505,43 +384,41 @@ export default function NewRequestPage() {
       <main className="min-h-screen bg-[#fbf7ef] text-[#173f35]">
         <SpeiselyHeader />
         <section className="mx-auto flex min-h-[72vh] max-w-4xl items-center justify-center px-6">
-          <div className="relative overflow-hidden rounded-[2.2rem] border border-[#eadfce] bg-white/90 p-8 text-center shadow-[0_24px_80px_rgba(23,63,53,0.10)]">
-            <div className="relative">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#173f35] text-[#d8b76a]">
-                <Sparkles className="h-7 w-7 animate-pulse" />
-              </div>
+          <div className="rounded-[2.2rem] border border-[#eadfce] bg-white/90 p-8 text-center shadow-[0_24px_80px_rgba(23,63,53,0.10)]">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#173f35] text-[#d8b76a]">
+              <Sparkles className="h-7 w-7 animate-pulse" />
+            </div>
 
-              <p className="mt-5 text-xs font-bold uppercase tracking-[0.28em] text-[#b28a3c]">
-                {t("request.autoStartLabel", "AI concierge")}
-              </p>
+            <p className="mt-5 text-xs font-bold uppercase tracking-[0.28em] text-[#b28a3c]">
+              {t("request.autoStartLabel", "AI concierge")}
+            </p>
 
-              <h1 className="premium-heading mt-2 text-3xl text-[#173f35] md:text-4xl">
-                {t("request.autoStartTitle", "Building your catering brief")}
-              </h1>
+            <h1 className="premium-heading mt-2 text-3xl text-[#173f35] md:text-4xl">
+              {t("request.autoStartTitle", "Building your catering brief")}
+            </h1>
 
-              <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#5c6f68]">
-                {statusText ||
-                  t(
-                    "request.autoStartText",
-                    "Speisely is turning your event idea into a structured request."
-                  )}
-              </p>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#5c6f68]">
+              {statusText ||
+                t(
+                  "request.autoStartText",
+                  "Speisely is turning your event idea into a structured request."
+                )}
+            </p>
 
-              <div className="mt-6 grid gap-2 text-left sm:grid-cols-3">
-                {[
-                  t("request.loadingStep1", "Understanding event"),
-                  t("request.loadingStep2", "Detecting location"),
-                  t("request.loadingStep3", "Preparing brief"),
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-3 text-sm font-semibold text-[#173f35]"
-                  >
-                    <CheckCircle2 className="mb-2 h-4 w-4 text-[#b28a3c]" />
-                    {item}
-                  </div>
-                ))}
-              </div>
+            <div className="mt-6 grid gap-2 text-left sm:grid-cols-3">
+              {[
+                t("request.loadingStep1", "Understanding event"),
+                t("request.loadingStep2", "Detecting location"),
+                t("request.loadingStep3", "Preparing brief"),
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-3 text-sm font-semibold text-[#173f35]"
+                >
+                  <CheckCircle2 className="mb-2 h-4 w-4 text-[#b28a3c]" />
+                  {item}
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -553,23 +430,16 @@ export default function NewRequestPage() {
     <main className="min-h-screen bg-[#fbf7ef] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto grid max-w-7xl gap-6 px-5 py-5 lg:grid-cols-[1fr_0.85fr] lg:gap-7 lg:py-4">
-        <div className="pt-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href="/"
-              className="inline-flex rounded-full border border-[#e5d8c5] bg-white/80 px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm backdrop-blur transition hover:bg-white"
-            >
-              ← {t("request.backHome", "Back to homepage")}
-            </Link>
+      <section className="mx-auto grid max-w-7xl gap-6 px-5 py-5 lg:grid-cols-[1fr_0.85fr]">
+        <div>
+          <Link
+            href="/"
+            className="inline-flex rounded-full border border-[#e5d8c5] bg-white/80 px-4 py-2 text-sm font-semibold text-[#49645c]"
+          >
+            ← {t("request.backHome", "Back to homepage")}
+          </Link>
 
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#eadfce] bg-white/80 px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm backdrop-blur">
-              <Sparkles className="h-4 w-4" />
-              {t("request.label", "AI catering concierge")}
-            </span>
-          </div>
-
-          <h1 className="premium-heading mt-5 max-w-4xl text-[2.35rem] leading-[0.98] text-[#123b32] md:text-[3.15rem] xl:text-[3.45rem]">
+          <h1 className="premium-heading mt-5 max-w-4xl text-[2.35rem] leading-[0.98] text-[#123b32] md:text-[3.15rem]">
             {t("request.title", "Describe your event once.")}
             <span className="block pt-1 italic font-medium text-[#b28a3c]">
               {t("request.titleAccent", "Speisely builds the brief.")}
@@ -593,14 +463,14 @@ export default function NewRequestPage() {
                   setLocationInput(extractCityFromQuery(prompt.query) || "Berlin");
                   setSaveError(null);
                 }}
-                className="rounded-full border border-[#e5d8c5] bg-white/85 px-3.5 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
+                className="rounded-full border border-[#e5d8c5] bg-white/85 px-3.5 py-2 text-sm font-semibold text-[#173f35]"
               >
                 {t(prompt.labelKey, prompt.fallback)}
               </button>
             ))}
           </div>
 
-          <div className="mt-4 rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)] backdrop-blur">
+          <div className="mt-4 rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)]">
             <label className="text-sm font-semibold text-[#173f35]">
               {t("request.inputLabel", "Event description")}
             </label>
@@ -610,13 +480,11 @@ export default function NewRequestPage() {
               onChange={(event) => {
                 const value = event.target.value;
                 setQuery(value);
-
                 const city = extractCityFromQuery(value);
                 if (city) setLocationInput(city);
-
                 setSaveError(null);
               }}
-              className="mt-2 min-h-24 w-full resize-none rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] p-4 text-[15px] leading-6 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
+              className="mt-2 min-h-24 w-full resize-none rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] p-4 text-[15px] leading-6 text-[#173f35] outline-none"
             />
 
             <div className="mt-3">
@@ -631,11 +499,7 @@ export default function NewRequestPage() {
                   setSelectedLocation(null);
                   setSaveError(null);
                 }}
-                placeholder={t(
-                  "request.locationPlaceholder",
-                  "e.g. Berlin, 10115, Paderborn..."
-                )}
-                className="mt-2 w-full rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] px-4 py-3.5 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
+                className="mt-2 w-full rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] px-4 py-3.5 text-[#173f35] outline-none"
               />
             </div>
 
@@ -650,7 +514,7 @@ export default function NewRequestPage() {
                 type="button"
                 onClick={handleSaveRequest}
                 disabled={saving}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white disabled:opacity-60"
               >
                 {saving
                   ? t("request.saving", "Speisely is preparing your AI brief...")
@@ -660,7 +524,7 @@ export default function NewRequestPage() {
 
               <Link
                 href="/caterers"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f4ead7]"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35]"
               >
                 {t("request.browse", "Browse caterers")}
               </Link>
@@ -669,7 +533,7 @@ export default function NewRequestPage() {
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-20">
-          <div className="overflow-hidden rounded-[1.8rem] border border-[#eadfce] bg-white shadow-[0_18px_50px_rgba(35,28,18,0.08)]">
+          <div className="overflow-hidden rounded-[1.8rem] border border-[#eadfce] bg-white">
             <DynamicUnsplashImage
               section="premium"
               className="h-40 lg:h-44"
@@ -677,7 +541,7 @@ export default function NewRequestPage() {
             />
           </div>
 
-          <div className="rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)] backdrop-blur">
+          <div className="rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
               {t("request.previewLabel", "AI preview")}
             </p>
@@ -705,21 +569,6 @@ export default function NewRequestPage() {
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="rounded-[1.8rem] bg-[#173f35] p-4 text-white shadow-[0_18px_50px_rgba(23,63,53,0.18)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b25e]">
-              {t("request.flowLabel", "Next")}
-            </p>
-            <h3 className="premium-heading mt-1 text-xl text-white">
-              {t("request.flowTitle", "Review brief → see matches")}
-            </h3>
-            <p className="mt-1 text-sm leading-6 text-white/75">
-              {t(
-                "request.flowText",
-                "Speisely prepares your structured request and caterer matching."
-              )}
-            </p>
           </div>
         </aside>
       </section>
