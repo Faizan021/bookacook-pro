@@ -603,18 +603,22 @@ export default function Home() {
               className="group overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="relative h-52 overflow-hidden">
-                <Image
-                  src={card.image}
-                  alt={card.alt}
-                  fill
-                  sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
-                  className="object-cover transition duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#102f28]/60 to-transparent" />
-                <div className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#173f35]">
-                  {t("home.aiHero.aiStart", "AI start")}
-                </div>
-              </div>
+  <Image
+    src={card.image}
+    alt={card.alt}
+    fill
+    sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
+    className="object-cover transition duration-500 group-hover:scale-110"
+  />
+  <div className="absolute inset-0 bg-gradient-to-t from-[#102f28]/60 to-transparent" />
+
+  <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#173f35]/0 transition duration-300 group-hover:bg-[#173f35]/35">
+    <div className="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-[#173f35] opacity-0 shadow-sm transition duration-300 group-hover:opacity-100">
+      {t("home.aiHero.startWithAi", "Start with AI")}
+      <ArrowRight className="h-3.5 w-3.5" />
+    </div>
+  </div>
+</div>
 
               <div className="p-5">
                 <h3 className="text-lg font-semibold">
