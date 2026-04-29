@@ -982,5 +982,8 @@
 "home.aiHero.budget": "Budget",
 "home.aiHero.style": "Style",
 "home.aiHero.nextStep": "Next step",
-"home.aiHero.nextStepText": "Speisely turns these details into a brief and starts matching afterwards."
+"home.aiHero.nextStepText": "Speisely turns these details into a brief and starts matching afterwards.",
+  "request.autoStartLabel": "AI concierge",
+"request.autoStartTitle": "Building your catering brief",
+"request.autoStartText": "Speisely is turning your event idea into a structured request."
 }
