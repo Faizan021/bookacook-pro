@@ -53,7 +53,7 @@ export default function LoginPageClient({ next = "" }: Props) {
       }
 
       if (!data.user) {
-        setError(t("auth.loginNoUser", "Login failed. No user returned."));
+        setError(t("auth.loginNoUser", "Login fehlgeschlagen. Kein Nutzer gefunden."));
         setLoading(false);
         return;
       }
@@ -74,7 +74,7 @@ export default function LoginPageClient({ next = "" }: Props) {
 
       if (!role) {
         setError(
-          t("auth.noRoleFound", "Login succeeded, but no user role was found.")
+          t("auth.noRoleFound", "Login erfolgreich, aber keine Nutzerrolle gefunden.")
         );
         setLoading(false);
         return;
@@ -85,7 +85,7 @@ export default function LoginPageClient({ next = "" }: Props) {
         setError(
           t(
             "auth.catererAccountRequired",
-            "Please log in with a caterer account. This account is registered as a customer."
+            "Bitte melden Sie sich mit einem Caterer-Konto an. Dieses Konto ist als Kunde registriert."
           )
         );
         setLoading(false);
@@ -97,7 +97,7 @@ export default function LoginPageClient({ next = "" }: Props) {
         setError(
           t(
             "auth.customerAccountRequired",
-            "Please log in with a customer account to continue your event request."
+            "Bitte melden Sie sich mit einem Kundenkonto an, um Ihre Event-Anfrage fortzusetzen."
           )
         );
         setLoading(false);
@@ -121,7 +121,7 @@ export default function LoginPageClient({ next = "" }: Props) {
 
       window.location.assign("/customer");
     } catch {
-      setError(t("error.unexpected", "Unexpected error. Please try again."));
+      setError(t("error.unexpected", "Unerwarteter Fehler. Bitte versuchen Sie es erneut."));
       setLoading(false);
     }
   }
@@ -135,37 +135,37 @@ export default function LoginPageClient({ next = "" }: Props) {
   const badgeText = isCatererLogin
     ? t("auth.catererLoginBadge", "Caterer Portal")
     : isRequestLogin
-      ? t("auth.requestLoginBadge", "AI event request")
-      : t("auth.loginBadge", "Welcome back");
+      ? t("auth.requestLoginBadge", "KI-Event-Anfrage")
+      : t("auth.loginBadge", "Willkommen zurück");
 
   const introTitle = isCatererLogin
-    ? t("auth.catererLoginTitle", "Caterer login")
+    ? t("auth.catererLoginTitle", "Caterer Login")
     : isRequestLogin
-      ? t("auth.requestLoginTitle", "Save your AI event brief")
-      : t("auth.welcomeBack", "Welcome back");
+      ? t("auth.requestLoginTitle", "Speichern Sie Ihr KI-Event-Briefing")
+      : t("auth.welcomeBack", "Willkommen zurück");
 
   const introDescription = isCatererLogin
     ? t(
         "auth.catererLoginIntro",
-        "Sign in to manage your catering profile, packages, requests, availability, and payments."
+        "Melden Sie sich an, um Ihr Catering-Profil, Pakete, Anfragen, Verfügbarkeit und Zahlungen zu verwalten."
       )
     : isRequestLogin
       ? t(
           "auth.requestLoginIntro",
-          "Your event brief is already prepared. Log in to save it and continue to your catering matches."
+          "Melden Sie sich an, um Ihre Catering-Anfrage zu speichern. Ihr KI-Briefing wird danach automatisch fortgesetzt."
         )
       : t(
           "auth.loginIntro",
-          "Sign in to continue your catering requests, saved caterers, and event planning."
+          "Melden Sie sich an, um Ihre Catering-Anfragen, gespeicherten Caterer und Eventplanung fortzusetzen."
         );
 
   const buttonText = loading
     ? isRequestLogin
-      ? t("auth.preparingRequest", "Continuing your AI brief...")
-      : t("auth.loggingIn", "Logging in...")
+      ? t("auth.preparingRequest", "KI-Briefing wird fortgesetzt...")
+      : t("auth.loggingIn", "Login läuft...")
     : isRequestLogin
-      ? t("auth.continueRequest", "Continue event request")
-      : t("auth.login", "Log In");
+      ? t("auth.continueRequest", "Event-Anfrage fortsetzen")
+      : t("auth.login", "Einloggen");
 
   return (
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
@@ -189,12 +189,12 @@ export default function LoginPageClient({ next = "" }: Props) {
           {isRequestLogin ? (
             <div className="mt-5 rounded-[1.5rem] border border-[#eadfce] bg-white/85 p-5 shadow-sm">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28a3c]">
-                {t("auth.requestSavedLabel", "Your request is waiting")}
+                {t("auth.requestSavedLabel", "Ihre Anfrage wartet")}
               </p>
               <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
                 {t(
                   "auth.requestSavedText",
-                  "After login, Speisely will return you to your AI request and continue the brief automatically."
+                  "Nach dem Login erstellt Speisely automatisch Ihr KI-Briefing und führt Sie zur Zusammenfassung."
                 )}
               </p>
             </div>
@@ -228,7 +228,7 @@ export default function LoginPageClient({ next = "" }: Props) {
             <form onSubmit={handleLogin} className="space-y-3.5">
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-[#173f35]">
-                  {t("auth.email", "Email address")}
+                  {t("auth.email", "E-Mail-Adresse")}
                 </label>
 
                 <input
@@ -243,7 +243,7 @@ export default function LoginPageClient({ next = "" }: Props) {
 
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-[#173f35]">
-                  {t("auth.password", "Password")}
+                  {t("auth.password", "Passwort")}
                 </label>
 
                 <input
@@ -272,14 +272,14 @@ export default function LoginPageClient({ next = "" }: Props) {
             </form>
 
             <p className="mt-4 text-center text-sm text-[#5c6f68]">
-              {t("auth.noAccount", "Don't have an account?")}{" "}
+              {t("auth.noAccount", "Noch kein Konto?")}{" "}
               <Link
                 href={signupHref}
                 className="font-semibold text-[#173f35] underline-offset-4 transition hover:underline"
               >
                 {isCatererLogin
-                  ? t("auth.createCatererAccount", "Create caterer account")
-                  : t("auth.goToSignup", "Go to Sign Up")}
+                  ? t("auth.createCatererAccount", "Caterer-Konto erstellen")
+                  : t("auth.goToSignup", "Zur Registrierung")}
               </Link>
             </p>
 
@@ -288,7 +288,7 @@ export default function LoginPageClient({ next = "" }: Props) {
                 href="/admin-login"
                 className="text-xs font-medium text-[#8a6d35] underline-offset-4 transition hover:text-[#173f35] hover:underline"
               >
-                {t("nav.loginAdmin", "Login as admin")}
+                {t("nav.loginAdmin", "Als Admin einloggen")}
               </Link>
             </div>
           </div>
