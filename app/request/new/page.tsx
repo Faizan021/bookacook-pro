@@ -90,12 +90,21 @@ function extractCityFromQuery(query?: string | null) {
   return "";
 }
 
+function detectAutoStartFromUrl() {
+  if (typeof window === "undefined") return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.get("start") === "1";
+}
+
 export default function NewRequestPage() {
   const t = useT();
   const router = useRouter();
 
   const bootedRef = useRef(false);
   const creatingRef = useRef(false);
+
+  const [booting, setBooting] = useState(true);
+  const [isAutoStart, setIsAutoStart] = useState(false);
 
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
@@ -116,6 +125,7 @@ export default function NewRequestPage() {
     if (creatingRef.current) return;
     creatingRef.current = true;
 
+    setSaving(true);
     setStatusText("You are logged in. Speisely is creating your AI brief...");
 
     const result = await createRequestDraftAction({
@@ -135,6 +145,8 @@ export default function NewRequestPage() {
   }
 
   useEffect(() => {
+    setIsAutoStart(detectAutoStartFromUrl());
+
     if (bootedRef.current) return;
     bootedRef.current = true;
 
@@ -186,8 +198,10 @@ export default function NewRequestPage() {
               cleanLocation: pendingCity.trim(),
               selectedLocation: pending.selectedLocation ?? null,
             });
+            return;
           }
 
+          setBooting(false);
           return;
         }
       } catch (error) {
@@ -200,12 +214,14 @@ export default function NewRequestPage() {
 
       if (urlQuery) {
         const cityFromQuery = extractCityFromQuery(urlQuery) || "Berlin";
-
         setQuery(urlQuery);
         setLocationInput(cityFromQuery);
       }
 
-      if (!shouldStart || !urlQuery) return;
+      if (!shouldStart || !urlQuery) {
+        setBooting(false);
+        return;
+      }
 
       setSaving(true);
       setStatusText("Checking your login and preparing the AI brief...");
@@ -228,7 +244,7 @@ export default function NewRequestPage() {
             })
           );
 
-          router.push("/login?next=/request/new");
+          router.replace("/login?next=/request/new");
           return;
         }
 
@@ -249,6 +265,7 @@ export default function NewRequestPage() {
           )
         );
         setSaving(false);
+        setBooting(false);
       }
     }
 
@@ -410,6 +427,53 @@ export default function NewRequestPage() {
     }
   }
 
+  if (booting && isAutoStart) {
+    return (
+      <main className="min-h-screen bg-[#fbf7ef] text-[#173f35]">
+        <SpeiselyHeader />
+        <section className="mx-auto flex min-h-[72vh] max-w-4xl items-center justify-center px-6">
+          <div className="relative overflow-hidden rounded-[2.2rem] border border-[#eadfce] bg-white/90 p-8 text-center shadow-[0_24px_80px_rgba(23,63,53,0.10)]">
+            <div className="absolute left-[-20%] top-[-30%] h-72 w-72 rounded-full bg-[#b28a3c]/10 blur-3xl" />
+            <div className="absolute right-[-20%] bottom-[-30%] h-72 w-72 rounded-full bg-[#173f35]/10 blur-3xl" />
+
+            <div className="relative">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#173f35] text-[#d8b76a]">
+                <Sparkles className="h-7 w-7 animate-pulse" />
+              </div>
+
+              <p className="mt-5 text-xs font-bold uppercase tracking-[0.28em] text-[#b28a3c]">
+                KI-Catering-Concierge
+              </p>
+
+              <h1 className="premium-heading mt-2 text-3xl text-[#173f35] md:text-4xl">
+                Speisely prüft Ihre Anfrage
+              </h1>
+
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#5c6f68]">
+                Wir lesen Ihre Eventbeschreibung, prüfen den Login und bereiten
+                das KI-Briefing vor.
+              </p>
+
+              <div className="mt-6 grid gap-2 text-left sm:grid-cols-3">
+                {["Event verstehen", "Ort erkennen", "Briefing vorbereiten"].map(
+                  (item) => (
+                    <div
+                      key={item}
+                      className="rounded-2xl border border-[#eadfce] bg-[#faf6ee] p-3 text-sm font-semibold text-[#173f35]"
+                    >
+                      <CheckCircle2 className="mb-2 h-4 w-4 text-[#b28a3c]" />
+                      {item}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#fbf7ef] text-[#16372f]">
       <SpeiselyHeader />
@@ -537,7 +601,7 @@ export default function NewRequestPage() {
               >
                 {saving
                   ? t("request.saving", "Speisely is preparing your AI brief...")
-                  : t("request.continue", "Continue to AI brief")}
+                  : "KI-Briefing erstellen"}
                 <ArrowRight className="h-4 w-4" />
               </button>
 
@@ -599,13 +663,11 @@ export default function NewRequestPage() {
 
             <div className="mt-4 rounded-[1.05rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-3">
               <p className="text-sm font-semibold text-[#173f35]">
-                {t("request.aiNoteTitle", "AI matching starts after this step")}
+                KI analysiert Ihre Anfrage
               </p>
               <p className="mt-1 text-sm leading-6 text-[#5c6f68]">
-                {t(
-                  "request.aiNote",
-                  "You will review a compact event brief next."
-                )}
+                Speisely erkennt Ort, Gästezahl, Eventtyp und bereitet daraus ein
+                kompaktes Catering-Briefing vor.
               </p>
             </div>
           </div>
@@ -615,13 +677,11 @@ export default function NewRequestPage() {
               {t("request.flowLabel", "Next")}
             </p>
             <h3 className="premium-heading mt-1 text-xl text-white">
-              {t("request.flowTitle", "Review brief → see matches")}
+              Briefing prüfen → KI-Matches finden
             </h3>
             <p className="mt-1 text-sm leading-6 text-white/75">
-              {t(
-                "request.flowText",
-                "Speisely prepares your structured request and caterer matching."
-              )}
+              Speisely vergleicht passende Caterer nach Ort, Gästezahl,
+              Catering-Stil und Budget.
             </p>
           </div>
         </aside>
