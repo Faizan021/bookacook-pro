@@ -128,65 +128,7 @@ function extractCityFromText(query: string) {
     ["mannheim", "Mannheim"],
     ["augsburg", "Augsburg"],
     ["wiesbaden", "Wiesbaden"],
-    ["gelsenkirchen", "Gelsenkirchen"],
-    ["braunschweig", "Braunschweig"],
-    ["chemnitz", "Chemnitz"],
-    ["halle", "Halle"],
-    ["magdeburg", "Magdeburg"],
-    ["freiburg", "Freiburg"],
-    ["krefeld", "Krefeld"],
-    ["lübeck", "Lübeck"],
-    ["luebeck", "Lübeck"],
-    ["oberhausen", "Oberhausen"],
-    ["erfurt", "Erfurt"],
-    ["mainz", "Mainz"],
-    ["rostock", "Rostock"],
-    ["kassel", "Kassel"],
-    ["hagen", "Hagen"],
-    ["hamm", "Hamm"],
-    ["saarbrücken", "Saarbrücken"],
-    ["saarbruecken", "Saarbrücken"],
-    ["mülheim", "Mülheim"],
-    ["muelheim", "Mülheim"],
-    ["potsdam", "Potsdam"],
-    ["ludwigshafen", "Ludwigshafen"],
-    ["oldenburg", "Oldenburg"],
-    ["leverkusen", "Leverkusen"],
-    ["osnabrück", "Osnabrück"],
-    ["osnabrueck", "Osnabrück"],
-    ["solingen", "Solingen"],
-    ["heidelberg", "Heidelberg"],
-    ["herne", "Herne"],
-    ["neuss", "Neuss"],
-    ["darmstadt", "Darmstadt"],
     ["paderborn", "Paderborn"],
-    ["regensburg", "Regensburg"],
-    ["ingolstadt", "Ingolstadt"],
-    ["würzburg", "Würzburg"],
-    ["wuerzburg", "Würzburg"],
-    ["fürth", "Fürth"],
-    ["fuerth", "Fürth"],
-    ["wolfsburg", "Wolfsburg"],
-    ["offenbach", "Offenbach"],
-    ["ulm", "Ulm"],
-    ["heilbronn", "Heilbronn"],
-    ["pforzheim", "Pforzheim"],
-    ["göttingen", "Göttingen"],
-    ["goettingen", "Göttingen"],
-    ["bottrop", "Bottrop"],
-    ["trier", "Trier"],
-    ["recklinghausen", "Recklinghausen"],
-    ["reutlingen", "Reutlingen"],
-    ["bremerhaven", "Bremerhaven"],
-    ["koblenz", "Koblenz"],
-    ["jena", "Jena"],
-    ["remscheid", "Remscheid"],
-    ["erlangen", "Erlangen"],
-    ["moers", "Moers"],
-    ["siegen", "Siegen"],
-    ["hildesheim", "Hildesheim"],
-    ["salzgitter", "Salzgitter"],
-    ["cottbus", "Cottbus"],
   ];
 
   for (const [needle, label] of knownCities) {
@@ -372,17 +314,17 @@ export default function Home() {
           className="object-cover scale-105"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/95 via-[#102f28]/78 to-[#102f28]/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/95 via-[#102f28]/82 to-[#102f28]/45" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(215,182,109,0.22),transparent_32%),radial-gradient(circle_at_85%_35%,rgba(255,255,255,0.14),transparent_28%)]" />
 
-        <div className="relative mx-auto grid min-h-[680px] max-w-7xl items-center gap-8 px-6 py-14 lg:grid-cols-[1fr_0.78fr] xl:min-h-[720px]">
+        <div className="relative mx-auto grid min-h-[calc(100vh-88px)] max-w-7xl items-center gap-8 px-5 py-10 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:py-12 xl:min-h-[690px]">
           <div className="max-w-4xl text-white">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-white/85 backdrop-blur">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85 backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-[#d7b66d]" />
               {t("home.aiHero.badge", "KI-Concierge aktiv")}
             </div>
 
-            <h1 className=className="premium-heading text-4xl leading-[0.98] sm:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="premium-heading text-[clamp(2.7rem,5.8vw,5.6rem)] leading-[0.94]">
               {t("home.aiHero.titleLine1", "Beschreiben Sie Ihr Event.")}
               <span className="block text-[#d7b66d]">
                 {t(
@@ -392,21 +334,21 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
+            <p className="mt-5 max-w-2xl text-base leading-7 text-white/85 md:text-lg md:leading-8">
               {t(
                 "home.aiHero.subtitle",
                 "Kein Suchen. Keine unübersichtlichen Listen. Speisely versteht Ihr Event und findet passende Caterer nach Ort, Gästezahl, Budget, Stil und Ernährungswünschen."
               )}
             </p>
 
-            <div className="mt-8 rounded-[2rem] border border-white/20 bg-white p-3 shadow-2xl md:flex">
+            <div className="mt-7 max-w-3xl rounded-[1.65rem] border border-white/20 bg-white p-2.5 shadow-2xl md:flex">
               <input
                 value={heroQuery}
                 onChange={(event) => setHeroQuery(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") startRequest();
                 }}
-                className="min-h-14 flex-1 rounded-2xl px-5 text-base text-[#173f35] outline-none placeholder:text-[#8a9a94]"
+                className="min-h-13 w-full flex-1 rounded-2xl px-4 text-[15px] leading-6 text-[#173f35] outline-none placeholder:text-[#8a9a94] md:px-5"
                 placeholder={t(
                   "home.aiHero.placeholder",
                   "z. B. Hochzeit für 80 Gäste in Berlin, Buffet, €45 p.P."
@@ -416,7 +358,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={startRequest}
-                className="mt-3 inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[#c9a45c] px-7 font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0"
+                className="mt-3 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-2xl bg-[#c9a45c] px-6 text-sm font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0 md:w-auto"
               >
                 {t("home.aiHero.cta", "KI-Briefing erstellen")}
                 <ArrowRight className="h-4 w-4" />
@@ -430,7 +372,7 @@ export default function Home() {
               )}
             </p>
 
-            <div className="mt-5 flex flex-wrap gap-3 text-sm">
+            <div className="mt-5 flex flex-wrap gap-2.5 text-sm">
               {chips.map((chip) => (
                 <Link
                   key={chip.label}
@@ -443,23 +385,23 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="hidden rounded-[2rem] border border-white/20 bg-white/12 p-5 text-white shadow-2xl backdrop-blur-xl lg:block">
-            <div className="flex items-center justify-between">
+          <aside className="hidden rounded-[1.75rem] border border-white/20 bg-white/12 p-4 text-white shadow-2xl backdrop-blur-xl lg:block xl:p-5">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#d7b66d]">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#d7b66d]">
                   {t("home.aiHero.previewLabel", "Live KI-Preview")}
                 </p>
-                <h2 className="premium-heading mt-2 text-3xl text-white">
+                <h2 className="premium-heading mt-2 text-[clamp(1.55rem,2.2vw,2.25rem)] leading-tight text-white">
                   {t("home.aiHero.previewTitle", "Was Speisely versteht")}
                 </h2>
               </div>
 
               <div className="rounded-2xl bg-white/10 p-3 text-[#d7b66d]">
-                <Sparkles className="h-6 w-6" />
+                <Sparkles className="h-5 w-5" />
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3">
+            <div className="mt-4 grid gap-2.5">
               {[
                 {
                   icon: Sparkles,
@@ -494,21 +436,23 @@ export default function Home() {
                 return (
                   <div
                     key={item.label}
-                    className="rounded-[1.25rem] border border-white/15 bg-white/10 p-4"
+                    className="rounded-[1.15rem] border border-white/15 bg-white/10 p-3.5"
                   >
                     <div className="flex items-center gap-3">
-                      <Icon className="h-4 w-4 text-[#d7b66d]" />
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/50">
+                      <Icon className="h-4 w-4 shrink-0 text-[#d7b66d]" />
+                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/50">
                         {item.label}
                       </p>
                     </div>
-                    <p className="mt-2 text-lg font-semibold">{item.value}</p>
+                    <p className="mt-1.5 text-base font-semibold leading-6">
+                      {item.value}
+                    </p>
                   </div>
                 );
               })}
             </div>
 
-            <div className="mt-5 rounded-[1.25rem] border border-[#d7b66d]/30 bg-[#d7b66d]/15 p-4">
+            <div className="mt-4 rounded-[1.15rem] border border-[#d7b66d]/30 bg-[#d7b66d]/15 p-4">
               <p className="text-sm font-semibold text-[#ffe2a0]">
                 {t("home.aiHero.nextStepTitle", "Nächster Schritt")}
               </p>
@@ -523,13 +467,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20">
-        <div className="mb-10 max-w-3xl">
+      <section className="mx-auto max-w-7xl px-5 py-14 sm:px-6 lg:py-18">
+        <div className="mb-8 max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
             {t("home.aiHero.stepsLabel", "So funktioniert Speisely")}
           </p>
 
-          <h2 className="premium-heading mt-3 text-5xl leading-[0.95]">
+          <h2 className="premium-heading mt-3 text-[clamp(2.25rem,4.5vw,4.4rem)] leading-[0.95]">
             {t(
               "home.aiHero.stepsTitle",
               "Ein KI-Flow statt langer Catering-Suche."
@@ -537,7 +481,7 @@ export default function Home() {
           </h2>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-3">
           {[
             {
               icon: Sparkles,
@@ -569,28 +513,28 @@ export default function Home() {
             return (
               <div
                 key={item.title}
-                className="rounded-[2rem] border border-[#eadfce] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                className="rounded-[1.75rem] border border-[#eadfce] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#173f35] text-[#d7b66d]">
                   <Icon className="h-5 w-5" />
                 </div>
 
                 <h3 className="text-xl font-semibold">{item.title}</h3>
-                <p className="mt-4 leading-7 text-[#5c6f68]">{item.text}</p>
+                <p className="mt-3 leading-7 text-[#5c6f68]">{item.text}</p>
               </div>
             );
           })}
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-20">
-        <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+      <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 lg:pb-20">
+        <div className="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
               {t("home.occasions.label", "Anlässe")}
             </p>
 
-            <h2 className="premium-heading mt-3 text-5xl leading-[0.95]">
+            <h2 className="premium-heading mt-3 max-w-4xl text-[clamp(2.25rem,4.5vw,4.4rem)] leading-[0.95]">
               {t(
                 "home.aiHero.occasionsTitle",
                 "Starten Sie mit einem Event — Speisely macht daraus ein Briefing."
@@ -607,19 +551,19 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {occasionCards.map((card) => (
             <Link
               key={card.titleKey}
               href={card.href}
-              className="group overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+              className="group overflow-hidden rounded-[1.75rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="relative h-52 overflow-hidden">
+              <div className="relative h-44 overflow-hidden lg:h-48">
                 <Image
                   src={card.image}
                   alt={card.alt}
                   fill
-                  sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
+                  sizes="(min-width: 1024px) 20vw, (min-width: 640px) 50vw, 100vw"
                   className="object-cover transition duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#102f28]/60 to-transparent" />
@@ -645,14 +589,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-20">
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-[2.3rem] bg-[#173f35] p-8 text-white shadow-[0_24px_80px_rgba(23,63,53,0.16)] md:p-10">
+      <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-6 lg:pb-20">
+        <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-[2rem] bg-[#173f35] p-7 text-white shadow-[0_24px_80px_rgba(23,63,53,0.16)] md:p-9">
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
               {t("home.why.label", "Warum Speisely")}
             </p>
 
-            <h2 className="premium-heading mt-4 text-5xl leading-[0.95]">
+            <h2 className="premium-heading mt-4 text-[clamp(2.25rem,4.5vw,4.4rem)] leading-[0.95]">
               {t("home.aiHero.whyTitle", "Nicht suchen. Passend matchen.")}
             </h2>
 
@@ -679,7 +623,7 @@ export default function Home() {
             ].map((item) => (
               <div
                 key={item}
-                className="rounded-[1.6rem] border border-[#eadfce] bg-white p-6 shadow-sm"
+                className="rounded-[1.5rem] border border-[#eadfce] bg-white p-6 shadow-sm"
               >
                 <CheckCircle2 className="h-5 w-5 text-[#b28a3c]" />
                 <p className="mt-4 font-semibold text-[#173f35]">{item}</p>
@@ -689,20 +633,20 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-6 pb-24">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-[#173f35] px-8 py-16 text-center text-white shadow-[0_24px_80px_rgba(23,63,53,0.18)] md:px-16">
+      <section className="px-5 pb-20 sm:px-6 lg:pb-24">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#173f35] px-6 py-12 text-center text-white shadow-[0_24px_80px_rgba(23,63,53,0.18)] md:px-12 md:py-14">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
             {t("home.aiHero.finalLabel", "Speisely KI-Concierge")}
           </p>
 
-          <h2 className="premium-heading mx-auto mt-4 max-w-4xl text-5xl leading-[0.95] md:text-6xl">
+          <h2 className="premium-heading mx-auto mt-4 max-w-4xl text-[clamp(2.3rem,5vw,5rem)] leading-[0.95]">
             {t(
               "home.final.title",
               "Planen Sie Ihr nächstes Catering-Event mit KI-Unterstützung."
             )}
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/75">
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/75 md:text-lg">
             {t(
               "home.final.text",
               "Starten Sie mit einer einfachen Beschreibung. Speisely verwandelt sie in ein klares Briefing und führt Sie zum passenden Caterer."
@@ -719,14 +663,14 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-[#eadfce] px-6 py-8">
+      <footer className="border-t border-[#eadfce] px-5 py-8 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-[#5c6f68] md:flex-row">
           <p>
             © 2026 Speisely.{" "}
             {t("footer.tagline", "Premium KI-gestützter Catering-Marktplatz.")}
           </p>
 
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-5 md:gap-6">
             <Link href="/caterers">
               {t("nav.discoverCaterers", "Caterer entdecken")}
             </Link>
