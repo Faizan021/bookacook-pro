@@ -1000,5 +1000,17 @@
 "home.aiHero.point2": "Matching nach Ort, Budget und Gästezahl",
 "home.aiHero.point3": "Bessere Anfragen für Caterer",
 "home.aiHero.point4": "Später: sichere Buchung und Plattform-Zahlung",
-"home.aiHero.finalLabel": "Speisely AI Concierge"
+"home.aiHero.finalLabel": "Speisely AI Concierge", 
+  "home.aiHero.startWithAi": "Mit KI starten",
+"home.occasions.cta": "Mit KI-Matching starten",
+"home.occasions.wedding.title": "Hochzeit",
+"home.occasions.wedding.desc": "Elegantes Catering für kleine Feiern und große Hochzeiten.",
+"home.occasions.corporate.title": "Business Lunch",
+"home.occasions.corporate.desc": "Premium Catering für Meetings, Offsites und Firmenevents.",
+"home.occasions.private.title": "Privates Dinner",
+"home.occasions.private.desc": "Individuelles Catering für Geburtstage, Familienfeiern und private Dinner.",
+"home.occasions.ramadan.title": "Ramadan Iftar",
+"home.occasions.ramadan.desc": "Elegantes Iftar-Catering für Familien, Unternehmen und Communities.",
+"home.occasions.christmas.title": "Weihnachtsfeier",
+"home.occasions.christmas.desc": "Festliches Catering für Firmenfeiern, Familienessen und Winterevents."
 }
