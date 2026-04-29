@@ -24,6 +24,10 @@ export default async function RequestMatchesPage({ params }: PageProps) {
     redirect("/request/new");
   }
 
+  if (!request?.id) {
+    redirect("/request/new");
+  }
+
   try {
     matches = await getMatchesForEventRequest(id);
   } catch (error) {
