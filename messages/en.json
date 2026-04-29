@@ -985,5 +985,20 @@
 "home.aiHero.nextStepText": "Speisely turns these details into a brief and starts matching afterwards.",
   "request.autoStartLabel": "AI concierge",
 "request.autoStartTitle": "Building your catering brief",
-"request.autoStartText": "Speisely is turning your event idea into a structured request."
+"request.autoStartText": "Speisely is turning your event idea into a structured request.",
+  "home.aiHero.badge": "AI concierge active",
+"home.aiHero.titleLine1": "Describe your event.",
+"home.aiHero.titleLine2": "Speisely instantly builds your catering brief.",
+"home.aiHero.subtitle": "No searching. No overwhelming lists. Speisely understands your event and finds suitable caterers by location, guest count, budget, style, and dietary needs.",
+"home.aiHero.cta": "Create AI brief",
+"home.aiHero.helper": "AI detects automatically: occasion · guests · location · budget · catering style",
+"home.aiPreview.label": "Live AI preview",
+"home.aiPreview.title": "What Speisely understands",
+"home.aiPreview.event": "Occasion",
+"home.aiPreview.guests": "Guests",
+"home.aiPreview.location": "Location",
+"home.aiPreview.budget": "Budget",
+"home.aiPreview.style": "Style",
+"home.aiPreview.nextTitle": "Next step",
+"home.aiPreview.nextText": "Speisely turns these details into a brief and then starts matching."
 }
