@@ -55,7 +55,7 @@ export default function RequestMatchesClient({
             className="inline-flex items-center gap-2 rounded-full border border-[#eadfce] bg-white/80 px-4 py-2 text-sm font-semibold text-[#173f35]/75 shadow-sm transition hover:bg-white"
           >
             <ArrowLeft className="h-4 w-4" />
-            {tr("request.matches.backToBrief", "Back to brief")}
+            {tr("request.matches.backToBrief", "Zurück zum Briefing")}
           </Link>
 
           <div className="flex flex-wrap gap-3">
@@ -63,7 +63,7 @@ export default function RequestMatchesClient({
               href={`/request/${request.id}/edit`}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-[#eadfce] bg-white px-5 py-3 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#faf6ee]"
             >
-              {tr("request.matches.improveDetails", "Improve details")}
+              {tr("request.matches.improveDetails", "Details verbessern")}
             </Link>
 
             <form action={regenerateMatches}>
@@ -72,7 +72,7 @@ export default function RequestMatchesClient({
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#173f35]/15 transition hover:-translate-y-0.5 hover:bg-[#12342c]"
               >
                 <WandSparkles className="h-4 w-4 text-[#d8b76a]" />
-                {tr("request.matches.generateMatches", "Generate AI matches")}
+                {tr("request.matches.generateMatches", "KI-Matches generieren")}
               </button>
             </form>
           </div>
@@ -80,24 +80,24 @@ export default function RequestMatchesClient({
 
         <div className="mt-8 rounded-[2.25rem] border border-[#eadfce] bg-white/85 p-6 shadow-[0_24px_80px_rgba(23,63,53,0.08)] backdrop-blur md:p-8">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#b28a3c]">
-            {tr("request.matches.label", "AI caterer matches")}
+            {tr("request.matches.label", "KI-Caterer-Matches")}
           </p>
 
           <h1 className="premium-heading mt-3 max-w-3xl text-5xl leading-[0.95] text-[#173f35] md:text-6xl">
             {hasMatches
-              ? tr("request.matches.readyTitle", "Your suggested caterers")
-              : tr("request.matches.emptyTitle", "Your AI matches are almost ready")}
+              ? tr("request.matches.readyTitle", "Ihre passenden Caterer")
+              : tr("request.matches.emptyTitle", "Ihre KI-Matches sind fast bereit")}
           </h1>
 
           <p className="mt-5 max-w-2xl text-base leading-7 text-[#173f35]/70">
             {hasMatches
               ? tr(
                   "request.matches.readySubtitle",
-                  "These recommendations are based on your event brief, location, guest count, budget and preferences."
+                  "Diese Empfehlungen basieren auf Ihrem Event-Briefing, Ort, Gästezahl, Budget und Ihren Wünschen."
                 )
               : tr(
                   "request.matches.emptySubtitle",
-                  "Speisely has created your event brief. Generate AI matches to find suitable caterers, or explore the marketplace directly."
+                  "Speisely hat Ihr Event-Briefing erstellt. Generieren Sie jetzt KI-Matches, um passende Caterer zu finden."
                 )}
           </p>
         </div>
@@ -141,9 +141,9 @@ export default function RequestMatchesClient({
                         {score
                           ? `${Math.round(Number(score))}% ${tr(
                               "request.matches.match",
-                              "match"
+                              "Match"
                             )}`
-                          : tr("request.matches.aiMatch", "AI match")}
+                          : tr("request.matches.aiMatch", "KI-Match")}
                       </div>
                     </div>
 
@@ -155,26 +155,26 @@ export default function RequestMatchesClient({
                       {caterer?.description ||
                         tr(
                           "request.matches.matchDescription",
-                          "A potential catering partner for your event brief."
+                          "Ein möglicher Catering-Partner für Ihr Event-Briefing."
                         )}
                     </p>
 
                     <div className="mt-5 flex flex-wrap gap-2">
-                      {city && (
+                      {city ? (
                         <span className="inline-flex items-center gap-1 rounded-full bg-[#faf6ee] px-3 py-1 text-xs font-semibold text-[#173f35]/70">
                           <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" />
                           {city}
                         </span>
-                      )}
+                      ) : null}
 
-                      {caterer?.is_featured && (
+                      {caterer?.is_featured ? (
                         <span className="rounded-full bg-[#b28a3c]/10 px-3 py-1 text-xs font-semibold text-[#8b6a25]">
-                          {tr("request.matches.featured", "Featured")}
+                          {tr("request.matches.featured", "Empfohlen")}
                         </span>
-                      )}
+                      ) : null}
                     </div>
 
-                    {reasons.length > 0 && (
+                    {reasons.length > 0 ? (
                       <div className="mt-5 space-y-2">
                         {reasons.slice(0, 3).map((reason: string) => (
                           <div
@@ -185,7 +185,7 @@ export default function RequestMatchesClient({
                           </div>
                         ))}
                       </div>
-                    )}
+                    ) : null}
 
                     <div className="mt-6">
                       <Link
@@ -194,7 +194,7 @@ export default function RequestMatchesClient({
                         }
                         className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition group-hover:bg-[#12342c]"
                       >
-                        {tr("request.matches.viewCaterer", "View caterer")}
+                        {tr("request.matches.viewCaterer", "Caterer ansehen")}
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                     </div>
@@ -209,20 +209,20 @@ export default function RequestMatchesClient({
               </div>
 
               <p className="mt-6 text-xs font-semibold uppercase tracking-[0.24em] text-[#b28a3c]">
-                {tr("request.matches.aiWorking", "AI matching")}
+                {tr("request.matches.aiWorking", "KI-Matching")}
               </p>
 
               <h2 className="premium-heading mt-2 text-4xl text-[#173f35]">
                 {tr(
                   "request.matches.emptyHeading",
-                  "Your AI matches will appear here."
+                  "Ihre KI-Matches erscheinen hier."
                 )}
               </h2>
 
               <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#173f35]/65">
                 {tr(
                   "request.matches.emptyText",
-                  "Generate matches from your event brief, or explore caterers while Speisely prepares stronger recommendations."
+                  "Generieren Sie passende Caterer aus Ihrem Event-Briefing oder sehen Sie sich direkt den Marktplatz an."
                 )}
               </p>
 
@@ -233,7 +233,7 @@ export default function RequestMatchesClient({
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#173f35]/15 transition hover:-translate-y-0.5 hover:bg-[#12342c]"
                   >
                     <WandSparkles className="h-4 w-4 text-[#d8b76a]" />
-                    {tr("request.matches.generateMatches", "Generate AI matches")}
+                    {tr("request.matches.generateMatches", "KI-Matches generieren")}
                   </button>
                 </form>
 
@@ -241,7 +241,7 @@ export default function RequestMatchesClient({
                   href={buildBrowseHref(request)}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-[#eadfce] bg-white px-6 py-3 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#faf6ee]"
                 >
-                  {tr("request.matches.exploreCaterers", "Explore caterers")}
+                  {tr("request.matches.exploreCaterers", "Caterer ansehen")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
