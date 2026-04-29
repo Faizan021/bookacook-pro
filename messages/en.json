@@ -1054,5 +1054,7 @@
 "home.aiHero.point2": "Matching by location, budget and guest count",
 "home.aiHero.point3": "Better inquiries for caterers",
 "home.aiHero.point4": "Later: secure booking and platform payment",
-"home.aiHero.finalLabel": "Speisely AI Concierge"
+"home.aiHero.finalLabel": "Speisely AI Concierge",
+ "home.aiHero.startWithAi": "Start with AI",
+  "home.aiHero.finalLabel": "Speisely AI Concierge",
 }
