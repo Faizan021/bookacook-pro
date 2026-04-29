@@ -931,5 +931,20 @@
 "home.aiHero.nextStepText": "Speisely wandelt diese Angaben in ein Briefing um und startet danach das Matching.",
   "request.autoStartLabel": "KI-Concierge",
 "request.autoStartTitle": "Ihr Catering-Briefing wird erstellt",
-"request.autoStartText": "Speisely verwandelt Ihre Event-Idee in eine strukturierte Anfrage."
+"request.autoStartText": "Speisely verwandelt Ihre Event-Idee in eine strukturierte Anfrage.",
+  "home.aiHero.badge": "KI-Concierge aktiv",
+"home.aiHero.titleLine1": "Beschreiben Sie Ihr Event.",
+"home.aiHero.titleLine2": "Speisely erstellt sofort Ihr Catering-Briefing.",
+"home.aiHero.subtitle": "Kein Suchen. Keine unübersichtlichen Listen. Speisely versteht Ihr Event und findet passende Caterer nach Ort, Gästezahl, Budget, Stil und Ernährungswünschen.",
+"home.aiHero.cta": "KI-Briefing erstellen",
+"home.aiHero.helper": "KI erkennt automatisch: Anlass · Gäste · Ort · Budget · Catering-Stil",
+"home.aiPreview.label": "Live KI-Preview",
+"home.aiPreview.title": "Was Speisely versteht",
+"home.aiPreview.event": "Anlass",
+"home.aiPreview.guests": "Gäste",
+"home.aiPreview.location": "Ort",
+"home.aiPreview.budget": "Budget",
+"home.aiPreview.style": "Stil",
+"home.aiPreview.nextTitle": "Nächster Schritt",
+"home.aiPreview.nextText": "Speisely wandelt diese Angaben in ein Briefing um und startet danach das Matching."
 }
