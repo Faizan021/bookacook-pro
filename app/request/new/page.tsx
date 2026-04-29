@@ -177,10 +177,11 @@ export default function NewRequestPage() {
     if (typeof window === "undefined") return true;
 
     const params = new URLSearchParams(window.location.search);
-    const hasAutoStart = params.get("start") === "1";
+    const hasQuery = Boolean(params.get("query")?.trim());
+    const shouldAutoStart = params.get("start") === "1" && hasQuery;
     const hasPendingRequest = Boolean(localStorage.getItem(PENDING_REQUEST_KEY));
 
-    return hasAutoStart || hasPendingRequest;
+    return shouldAutoStart || hasPendingRequest;
   });
 
   const [query, setQuery] = useState(occasionPrompts[0].query);
@@ -233,13 +234,14 @@ export default function NewRequestPage() {
       const params = new URLSearchParams(window.location.search);
       const incomingQuery = params.get("query");
       const incomingOccasion = params.get("occasion");
-      const shouldStart = params.get("start") === "1";
+
+      const hasIncomingQuery =
+        incomingQuery !== null && incomingQuery.trim().length > 0;
+
+      const shouldStart = params.get("start") === "1" && hasIncomingQuery;
 
       const occasionQuery = getPromptByOccasion(incomingOccasion);
-      const urlQuery =
-        incomingQuery && incomingQuery.trim().length > 0
-          ? incomingQuery.trim()
-          : occasionQuery;
+      const urlQuery = hasIncomingQuery ? incomingQuery!.trim() : occasionQuery;
 
       try {
         const rawPending = localStorage.getItem(PENDING_REQUEST_KEY);
@@ -338,28 +340,13 @@ export default function NewRequestPage() {
         console.error("Failed to auto-start request:", error);
         creatingRef.current = false;
         setSaving(false);
-
-        if (shouldStart) {
-          localStorage.setItem(
-            PENDING_REQUEST_KEY,
-            JSON.stringify({
-              query: urlQuery,
-              locationInput: extractCityFromQuery(urlQuery) || "Berlin",
-              selectedLocation: null,
-            })
-          );
-
-          router.replace("/login?next=/request/new");
-          return;
-        }
-
+        setBooting(false);
         setSaveError(
           t(
             "request.saveError",
             "The request could not be saved. Please try again."
           )
         );
-        setBooting(false);
       }
     }
 
@@ -491,7 +478,6 @@ export default function NewRequestPage() {
           })
         );
 
-        setBooting(true);
         router.replace("/login?next=/request/new");
         return;
       }
@@ -504,24 +490,6 @@ export default function NewRequestPage() {
     } catch (error) {
       console.error(error);
       creatingRef.current = false;
-
-      const message = error instanceof Error ? error.message : "";
-
-      if (message === "Unauthorized") {
-        localStorage.setItem(
-          PENDING_REQUEST_KEY,
-          JSON.stringify({
-            query: cleanQuery,
-            locationInput: cleanLocation,
-            selectedLocation,
-          })
-        );
-
-        setBooting(true);
-        router.replace("/login?next=/request/new");
-        return;
-      }
-
       setSaveError(
         t(
           "request.saveError",
@@ -538,9 +506,6 @@ export default function NewRequestPage() {
         <SpeiselyHeader />
         <section className="mx-auto flex min-h-[72vh] max-w-4xl items-center justify-center px-6">
           <div className="relative overflow-hidden rounded-[2.2rem] border border-[#eadfce] bg-white/90 p-8 text-center shadow-[0_24px_80px_rgba(23,63,53,0.10)]">
-            <div className="absolute left-[-20%] top-[-30%] h-72 w-72 rounded-full bg-[#b28a3c]/10 blur-3xl" />
-            <div className="absolute right-[-20%] bottom-[-30%] h-72 w-72 rounded-full bg-[#173f35]/10 blur-3xl" />
-
             <div className="relative">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#173f35] text-[#d8b76a]">
                 <Sparkles className="h-7 w-7 animate-pulse" />
@@ -635,28 +600,6 @@ export default function NewRequestPage() {
             ))}
           </div>
 
-          {saving ? (
-            <div className="mt-4 rounded-[1.6rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)]">
-              <div className="flex items-start gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#173f35] text-[#d6b25e]">
-                  <Sparkles className="h-5 w-5 animate-pulse" />
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-                    {t("request.autoStartLabel", "AI concierge")}
-                  </p>
-                  <h2 className="premium-heading mt-1 text-xl text-[#173f35]">
-                    {t("request.autoStartTitle", "Building your catering brief")}
-                  </h2>
-                  <p className="mt-1 text-sm leading-6 text-[#5c6f68]">
-                    {statusText}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : null}
-
           <div className="mt-4 rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)] backdrop-blur">
             <label className="text-sm font-semibold text-[#173f35]">
               {t("request.inputLabel", "Event description")}
@@ -735,26 +678,18 @@ export default function NewRequestPage() {
           </div>
 
           <div className="rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)] backdrop-blur">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-                  {t("request.previewLabel", "AI preview")}
-                </p>
-                <h2 className="premium-heading mt-1 text-xl text-[#173f35]">
-                  {t("request.previewTitle", "What Speisely understood")}
-                </h2>
-              </div>
-
-              <div className="rounded-full bg-[#f4ead7] p-2 text-[#b28a3c]">
-                <Sparkles className="h-5 w-5" />
-              </div>
-            </div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+              {t("request.previewLabel", "AI preview")}
+            </p>
+            <h2 className="premium-heading mt-1 text-xl text-[#173f35]">
+              {t("request.previewTitle", "What Speisely understood")}
+            </h2>
 
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               {briefingItems.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-[1.05rem] border border-[#eadfce] bg-[#fbf7ef] p-3 transition hover:bg-[#f8efe1]"
+                  className="rounded-[1.05rem] border border-[#eadfce] bg-[#fbf7ef] p-3"
                 >
                   <div className="flex items-start gap-2.5">
                     <div className="mt-0.5 text-[#b28a3c]">{item.icon}</div>
@@ -769,18 +704,6 @@ export default function NewRequestPage() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            <div className="mt-4 rounded-[1.05rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-3">
-              <p className="text-sm font-semibold text-[#173f35]">
-                {t("request.aiNoteTitle", "AI matching starts after this step")}
-              </p>
-              <p className="mt-1 text-sm leading-6 text-[#5c6f68]">
-                {t(
-                  "request.aiNote",
-                  "You will review a compact event brief next."
-                )}
-              </p>
             </div>
           </div>
 
