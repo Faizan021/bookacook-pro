@@ -78,14 +78,13 @@ export default function NewRequestPage() {
   const router = useRouter();
 
   const bootedRef = useRef(false);
-  const autoStartedRef = useRef(false);
+  const creatingRef = useRef(false);
 
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
   const [selectedLocation, setSelectedLocation] =
     useState<GermanLocation | null>(null);
-  const [locationResults, setLocationResults] = useState<GermanLocation[]>([]);
-  const [locationLoading, setLocationLoading] = useState(false);
+
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -94,10 +93,13 @@ export default function NewRequestPage() {
     cleanLocation: string;
     selectedLocation: GermanLocation | null;
   }) {
+    if (creatingRef.current) return;
+    creatingRef.current = true;
+
     const result = await createRequestDraftAction({
       ai_query: input.cleanQuery,
       event_type: null,
-      city: input.selectedLocation?.name ?? (input.cleanLocation || null),
+      city: input.selectedLocation?.name ?? input.cleanLocation ?? null,
       postal_code: input.selectedLocation?.postal_code ?? null,
       lat: input.selectedLocation?.lat ?? null,
       lng: input.selectedLocation?.lng ?? null,
@@ -121,20 +123,17 @@ export default function NewRequestPage() {
       const shouldStart = params.get("start") === "1";
 
       const occasionQuery = getPromptByOccasion(incomingOccasion);
+
       const urlQuery =
         incomingQuery && incomingQuery.trim().length > 0
           ? incomingQuery.trim()
           : occasionQuery;
 
-      if (urlQuery) setQuery(urlQuery);
-
       try {
-        const raw = localStorage.getItem(PENDING_REQUEST_KEY);
+        const rawPending = localStorage.getItem(PENDING_REQUEST_KEY);
 
-        if (shouldStart && urlQuery) {
-          localStorage.removeItem(PENDING_REQUEST_KEY);
-        } else if (raw) {
-          const pending = JSON.parse(raw) as {
+        if (rawPending) {
+          const pending = JSON.parse(rawPending) as {
             query?: string;
             locationInput?: string;
             selectedLocation?: GermanLocation | null;
@@ -142,7 +141,9 @@ export default function NewRequestPage() {
 
           if (pending.query) setQuery(pending.query);
           if (pending.locationInput) setLocationInput(pending.locationInput);
-          if (pending.selectedLocation) setSelectedLocation(pending.selectedLocation);
+          if (pending.selectedLocation) {
+            setSelectedLocation(pending.selectedLocation);
+          }
 
           const supabase = createClient();
           const {
@@ -150,7 +151,6 @@ export default function NewRequestPage() {
           } = await supabase.auth.getUser();
 
           if (user && pending.query && pending.query.trim().length >= 10) {
-            autoStartedRef.current = true;
             setSaving(true);
 
             await createDraftFromValues({
@@ -164,14 +164,18 @@ export default function NewRequestPage() {
         }
       } catch (error) {
         console.error("Failed to restore pending request:", error);
+
         try {
           localStorage.removeItem(PENDING_REQUEST_KEY);
         } catch {}
       }
 
-      if (!shouldStart || !urlQuery || autoStartedRef.current) return;
+      if (urlQuery) {
+        setQuery(urlQuery);
+      }
 
-      autoStartedRef.current = true;
+      if (!shouldStart || !urlQuery) return;
+
       setSaving(true);
 
       try {
@@ -201,8 +205,12 @@ export default function NewRequestPage() {
         });
       } catch (error) {
         console.error("Failed to auto-start request:", error);
+        creatingRef.current = false;
         setSaveError(
-          t("request.saveError", "The request could not be saved. Please try again.")
+          t(
+            "request.saveError",
+            "The request could not be saved. Please try again."
+          )
         );
         setSaving(false);
       }
@@ -211,56 +219,17 @@ export default function NewRequestPage() {
     bootRequestPage();
   }, [router, t]);
 
-  useEffect(() => {
-    const term = locationInput.trim();
-
-    if (term.length < 2) {
-      setLocationResults([]);
-      return;
-    }
-
-    const timeout = window.setTimeout(async () => {
-      setLocationLoading(true);
-
-      try {
-        const supabase = createClient();
-        const isPostalCode = /^\d+$/.test(term);
-
-        let locationQuery = supabase
-          .from("german_locations")
-          .select("id,name,postal_code,state,lat,lng,type")
-          .limit(8);
-
-        locationQuery = isPostalCode
-          ? locationQuery.ilike("postal_code", `${term}%`)
-          : locationQuery.ilike("name", `%${term}%`);
-
-        const { data, error } = await locationQuery.order("name", {
-          ascending: true,
-        });
-
-        if (error) {
-          console.error("Location search failed:", error.message);
-          setLocationResults([]);
-          return;
-        }
-
-        setLocationResults(data ?? []);
-      } catch (error) {
-        console.error("Location search failed:", error);
-        setLocationResults([]);
-      } finally {
-        setLocationLoading(false);
-      }
-    }, 250);
-
-    return () => window.clearTimeout(timeout);
-  }, [locationInput]);
-
   const briefingItems = useMemo(() => {
     const lower = query.toLowerCase();
-    const guestMatch = query.match(/(\d+)\s?(guests|people|personen|gäste)?/i);
-    const budgetMatch = query.match(/€\s?\d+/);
+
+    const guestMatch =
+      query.match(/(\d+)\s?(guests|guest|people|persons|personen|gäste)/i) ||
+      query.match(/for\s+(\d+)/i) ||
+      query.match(/für\s+(\d+)/i);
+
+    const budgetMatch =
+      query.match(/€\s?\d+/) ||
+      query.match(/\d+\s?(€|eur|euros?)\s?(p\.p\.|pp|per person|pro person)?/i);
 
     const event = lower.includes("business")
       ? t("event.businessLunch", "Business lunch")
@@ -268,25 +237,31 @@ export default function NewRequestPage() {
         ? t("event.christmas", "Christmas party")
         : lower.includes("iftar") || lower.includes("ramadan")
           ? t("event.ramadan", "Ramadan / Iftar")
-          : lower.includes("birthday")
+          : lower.includes("birthday") || lower.includes("geburtstag")
             ? t("event.birthday", "Birthday")
             : lower.includes("private")
               ? t("event.privateDinner", "Private dinner")
-              : t("event.wedding", "Wedding");
+              : lower.includes("wedding") || lower.includes("hochzeit")
+                ? t("event.wedding", "Wedding")
+                : t("request.aiStyle", "AI will infer");
 
     const diet = lower.includes("vegetar")
       ? t("diet.vegetarian", "Vegetarian")
-      : lower.includes("halal")
-        ? t("diet.halal", "Halal")
-        : t("common.open", "Open");
+      : lower.includes("vegan")
+        ? t("diet.vegan", "Vegan")
+        : lower.includes("halal")
+          ? t("diet.halal", "Halal")
+          : t("common.open", "Open");
 
     const style = lower.includes("fine")
       ? "Fine dining"
       : lower.includes("buffet")
         ? "Buffet"
-        : lower.includes("bbq")
+        : lower.includes("bbq") || lower.includes("grill")
           ? "BBQ"
-          : t("request.aiStyle", "AI will infer");
+          : lower.includes("finger")
+            ? "Finger food"
+            : t("request.aiStyle", "AI will infer");
 
     return [
       {
@@ -296,9 +271,10 @@ export default function NewRequestPage() {
       },
       {
         label: t("request.brief.location", "Location"),
-        value: selectedLocation
-          ? `${selectedLocation.postal_code ?? ""} ${selectedLocation.name}`.trim()
-          : locationInput || t("common.open", "Open"),
+        value:
+          selectedLocation?.name ||
+          locationInput ||
+          t("common.open", "Open"),
         icon: <MapPin className="h-4 w-4" />,
       },
       {
@@ -324,20 +300,12 @@ export default function NewRequestPage() {
     ];
   }, [query, locationInput, selectedLocation, t]);
 
-  function selectLocation(location: GermanLocation) {
-    setSelectedLocation(location);
-    setLocationInput(
-      `${location.postal_code ? `${location.postal_code} ` : ""}${location.name}`
-    );
-    setLocationResults([]);
-  }
-
   async function handleSaveRequest() {
     setSaveError(null);
     setSaving(true);
 
     const cleanQuery = query.trim();
-    const cleanLocation = locationInput.trim();
+    const cleanLocation = locationInput.trim() || "Berlin";
 
     if (!cleanQuery || cleanQuery.length < 10) {
       setSaveError(
@@ -375,6 +343,8 @@ export default function NewRequestPage() {
     } catch (error) {
       console.error(error);
 
+      creatingRef.current = false;
+
       const message = error instanceof Error ? error.message : "";
 
       if (message === "Unauthorized") {
@@ -392,7 +362,10 @@ export default function NewRequestPage() {
       }
 
       setSaveError(
-        t("request.saveError", "The request could not be saved. Please try again.")
+        t(
+          "request.saveError",
+          "The request could not be saved. Please try again."
+        )
       );
       setSaving(false);
     }
@@ -402,9 +375,9 @@ export default function NewRequestPage() {
     <main className="min-h-screen bg-[#fbf7ef] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[1fr_0.92fr] lg:py-5">
-        <div className="pt-2 lg:pt-4">
-          <div className="flex flex-wrap items-center gap-3">
+      <section className="mx-auto grid max-w-7xl gap-6 px-5 py-5 lg:grid-cols-[1fr_0.85fr] lg:gap-7 lg:py-4">
+        <div className="pt-1">
+          <div className="flex flex-wrap items-center gap-2">
             <Link
               href="/"
               className="inline-flex rounded-full border border-[#e5d8c5] bg-white/80 px-4 py-2 text-sm font-semibold text-[#49645c] shadow-sm backdrop-blur transition hover:bg-white"
@@ -418,21 +391,21 @@ export default function NewRequestPage() {
             </span>
           </div>
 
-          <h1 className="premium-heading mt-7 max-w-4xl text-[3rem] leading-[0.95] text-[#123b32] md:text-[3.8rem]">
+          <h1 className="premium-heading mt-5 max-w-4xl text-[2.35rem] leading-[0.98] text-[#123b32] md:text-[3.15rem] xl:text-[3.45rem]">
             {t("request.title", "Describe your event once.")}
-            <span className="block pt-2 italic font-medium text-[#b28a3c]">
+            <span className="block pt-1 italic font-medium text-[#b28a3c]">
               {t("request.titleAccent", "Speisely builds the brief.")}
             </span>
           </h1>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[#5c6f68]">
+          <p className="mt-4 max-w-2xl text-[15px] leading-6 text-[#5c6f68]">
             {t(
               "request.description",
               "Use natural language. Speisely detects event type, guests, location, budget, dietary needs and catering style."
             )}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-4 flex flex-wrap gap-2">
             {occasionPrompts.map((prompt) => (
               <button
                 key={prompt.id}
@@ -441,7 +414,7 @@ export default function NewRequestPage() {
                   setQuery(prompt.query);
                   setSaveError(null);
                 }}
-                className="rounded-full border border-[#e5d8c5] bg-white/85 px-4 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
+                className="rounded-full border border-[#e5d8c5] bg-white/85 px-3.5 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
               >
                 {t(prompt.labelKey, prompt.fallback)}
               </button>
@@ -449,9 +422,9 @@ export default function NewRequestPage() {
           </div>
 
           {saving ? (
-            <div className="mt-6 rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#173f35] text-[#d6b25e]">
+            <div className="mt-4 rounded-[1.6rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)]">
+              <div className="flex items-start gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#173f35] text-[#d6b25e]">
                   <Sparkles className="h-5 w-5 animate-pulse" />
                 </div>
 
@@ -459,10 +432,10 @@ export default function NewRequestPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
                     {t("request.autoStartLabel", "AI concierge")}
                   </p>
-                  <h2 className="premium-heading mt-2 text-2xl text-[#173f35]">
+                  <h2 className="premium-heading mt-1 text-xl text-[#173f35]">
                     {t("request.autoStartTitle", "Building your catering brief")}
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
+                  <p className="mt-1 text-sm leading-6 text-[#5c6f68]">
                     {t(
                       "request.autoStartText",
                       "Speisely is turning your event idea into a structured request."
@@ -473,7 +446,7 @@ export default function NewRequestPage() {
             </div>
           ) : null}
 
-          <div className="mt-6 rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
+          <div className="mt-4 rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)] backdrop-blur">
             <label className="text-sm font-semibold text-[#173f35]">
               {t("request.inputLabel", "Event description")}
             </label>
@@ -484,10 +457,10 @@ export default function NewRequestPage() {
                 setQuery(event.target.value);
                 setSaveError(null);
               }}
-              className="mt-3 min-h-24 w-full resize-none rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] p-5 text-base leading-7 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
+              className="mt-2 min-h-24 w-full resize-none rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] p-4 text-[15px] leading-6 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
             />
 
-            <div className="relative mt-4">
+            <div className="mt-3">
               <label className="text-sm font-semibold text-[#173f35]">
                 {t("request.locationLabel", "City or postal code")}
               </label>
@@ -503,49 +476,22 @@ export default function NewRequestPage() {
                   "request.locationPlaceholder",
                   "e.g. Berlin, 10115, Paderborn..."
                 )}
-                className="mt-3 w-full rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
+                className="mt-2 w-full rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] px-4 py-3.5 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
               />
-
-              {locationResults.length > 0 && (
-                <div className="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-[1.35rem] border border-[#eadfce] bg-white p-2 shadow-2xl">
-                  {locationResults.map((location) => (
-                    <button
-                      key={location.id}
-                      type="button"
-                      onClick={() => selectLocation(location)}
-                      className="w-full rounded-xl px-4 py-3 text-left transition hover:bg-[#faf6ee]"
-                    >
-                      <div className="font-semibold text-[#173f35]">
-                        {location.postal_code} {location.name}
-                      </div>
-                      <div className="text-sm text-[#5c6f68]">
-                        {location.state ?? "Germany"} ·{" "}
-                        {location.type ?? "location"}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {locationLoading && (
-                <p className="mt-2 text-sm text-[#5c6f68]">
-                  {t("request.locationSearching", "Searching locations...")}
-                </p>
-              )}
             </div>
 
             {saveError ? (
-              <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+              <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
                 {saveError}
               </div>
             ) : null}
 
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
               <button
                 type="button"
                 onClick={handleSaveRequest}
                 disabled={saving}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#0f2f27] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {saving
                   ? t("request.saving", "Speisely is preparing your AI brief...")
@@ -555,7 +501,7 @@ export default function NewRequestPage() {
 
               <Link
                 href="/caterers"
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f4ead7]"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[#d8ccb9] bg-white px-6 font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f4ead7]"
               >
                 {t("request.browse", "Browse caterers")}
               </Link>
@@ -563,22 +509,22 @@ export default function NewRequestPage() {
           </div>
         </div>
 
-        <aside className="space-y-5 lg:sticky lg:top-24">
-          <div className="overflow-hidden rounded-[2.2rem] border border-[#eadfce] bg-white shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
+        <aside className="space-y-4 lg:sticky lg:top-20">
+          <div className="overflow-hidden rounded-[1.8rem] border border-[#eadfce] bg-white shadow-[0_18px_50px_rgba(35,28,18,0.08)]">
             <DynamicUnsplashImage
               section="premium"
-              className="h-48"
-              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="h-40 lg:h-44"
+              sizes="(min-width: 1024px) 40vw, 100vw"
             />
           </div>
 
-          <div className="rounded-[2rem] border border-[#eadfce] bg-white/90 p-5 shadow-[0_22px_70px_rgba(35,28,18,0.08)] backdrop-blur">
+          <div className="rounded-[1.8rem] border border-[#eadfce] bg-white/90 p-4 shadow-[0_18px_50px_rgba(35,28,18,0.08)] backdrop-blur">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#b28a3c]">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
                   {t("request.previewLabel", "AI preview")}
                 </p>
-                <h2 className="premium-heading mt-2 text-2xl text-[#173f35]">
+                <h2 className="premium-heading mt-1 text-xl text-[#173f35]">
                   {t("request.previewTitle", "What Speisely understood")}
                 </h2>
               </div>
@@ -588,19 +534,19 @@ export default function NewRequestPage() {
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
               {briefingItems.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-[1.2rem] border border-[#eadfce] bg-[#fbf7ef] p-3 transition hover:bg-[#f8efe1]"
+                  className="rounded-[1.05rem] border border-[#eadfce] bg-[#fbf7ef] p-3 transition hover:bg-[#f8efe1]"
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-2.5">
                     <div className="mt-0.5 text-[#b28a3c]">{item.icon}</div>
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8a6d35]">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8a6d35]">
                         {item.label}
                       </p>
-                      <p className="mt-1 text-[14px] font-semibold leading-6 text-[#173f35]">
+                      <p className="mt-1 text-[13px] font-semibold leading-5 text-[#173f35]">
                         {item.value}
                       </p>
                     </div>
@@ -609,11 +555,11 @@ export default function NewRequestPage() {
               ))}
             </div>
 
-            <div className="mt-5 rounded-[1.2rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-4">
+            <div className="mt-4 rounded-[1.05rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-3">
               <p className="text-sm font-semibold text-[#173f35]">
                 {t("request.aiNoteTitle", "AI matching starts after this step")}
               </p>
-              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
+              <p className="mt-1 text-sm leading-6 text-[#5c6f68]">
                 {t(
                   "request.aiNote",
                   "You will review a compact event brief next."
@@ -622,14 +568,14 @@ export default function NewRequestPage() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] bg-[#173f35] p-5 text-white shadow-[0_22px_70px_rgba(23,63,53,0.18)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#d6b25e]">
+          <div className="rounded-[1.8rem] bg-[#173f35] p-4 text-white shadow-[0_18px_50px_rgba(23,63,53,0.18)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d6b25e]">
               {t("request.flowLabel", "Next")}
             </p>
-            <h3 className="premium-heading mt-2 text-2xl text-white">
+            <h3 className="premium-heading mt-1 text-xl text-white">
               {t("request.flowTitle", "Review brief → see matches")}
             </h3>
-            <p className="mt-2 text-sm leading-6 text-white/75">
+            <p className="mt-1 text-sm leading-6 text-white/75">
               {t(
                 "request.flowText",
                 "Speisely prepares your structured request and caterer matching."
