@@ -255,7 +255,7 @@ export default function RequestOverviewClient({ request }: Props) {
                   href={`/request/${request.id}/matches`}
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-[#173f35] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#173f35]/15 transition hover:-translate-y-0.5 hover:bg-[#12342c]"
                 >
-                  KI-Matches finden
+                  {tr("request.details.viewMatches", "KI-Matches ansehen")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
 
