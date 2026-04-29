@@ -86,15 +86,15 @@ export default function RequestOverviewClient({ request }: Props) {
     request?.special_requests ||
     tr(
       "request.details.noOriginalPrompt",
-      "No original prompt was saved. You can improve the details below."
+      "Es wurde keine ursprüngliche Anfrage gespeichert. Sie können die Details unten verbessern."
     );
 
   const budget =
     request?.budget_total || request?.budget_per_person
       ? request?.budget_total
         ? formatMoney(request.budget_total)
-        : `${formatMoney(request.budget_per_person)} p.p.`
-      : tr("request.details.flexibleBudget", "Flexible budget");
+        : `${formatMoney(request.budget_per_person)} p.P.`
+      : tr("request.details.flexibleBudget", "Flexibles Budget");
 
   const confidence = useMemo(() => calculateConfidence(request), [request]);
   const missingQuestions = useMemo(() => getMissingQuestions(request), [request]);
@@ -112,19 +112,19 @@ export default function RequestOverviewClient({ request }: Props) {
         label:
           request?.event_type ||
           request?.catering_type ||
-          tr("request.details.eventType", "Event type open"),
+          tr("request.details.eventType", "Eventtyp offen"),
       },
       {
         icon: Users,
         label: request?.guest_count
-          ? `${request.guest_count} ${tr("request.details.guests", "guests")}`
-          : tr("request.details.guestCountMissing", "Guest count open"),
+          ? `${request.guest_count} ${tr("request.details.guests", "Gäste")}`
+          : tr("request.details.guestCountMissing", "Gästezahl offen"),
       },
       {
         icon: MapPin,
         label: request?.city
           ? `${request.city}${request?.postal_code ? `, ${request.postal_code}` : ""}`
-          : tr("request.details.locationMissing", "Location open"),
+          : tr("request.details.locationMissing", "Ort offen"),
       },
       {
         icon: Wallet,
@@ -147,7 +147,7 @@ export default function RequestOverviewClient({ request }: Props) {
             className="inline-flex items-center gap-2 rounded-full border border-[#eadfce] bg-white/70 px-4 py-2 text-sm font-semibold text-[#173f35]/75 shadow-sm transition hover:bg-white"
           >
             <ArrowLeft className="h-4 w-4" />
-            {tr("request.details.backToDashboard", "Back to dashboard")}
+            {tr("request.details.backToDashboard", "Zurück zum Dashboard")}
           </Link>
 
           <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_0.82fr]">
@@ -155,7 +155,7 @@ export default function RequestOverviewClient({ request }: Props) {
               <div className="flex flex-wrap items-center gap-3">
                 <div className="inline-flex items-center gap-2 rounded-full bg-[#173f35] px-4 py-2 text-sm font-semibold text-[#fbf7ef]">
                   <Sparkles className="h-4 w-4 text-[#d8b76a]" />
-                  {tr("request.details.aiUnderstood", "AI understood your event")}
+                  {tr("request.details.aiUnderstood", "KI hat Ihr Event verstanden")}
                 </div>
 
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#eadfce] bg-[#faf6ee] px-4 py-2 text-sm font-semibold text-[#8a6d35]">
@@ -164,17 +164,19 @@ export default function RequestOverviewClient({ request }: Props) {
               </div>
 
               <h1 className="premium-heading mt-5 max-w-3xl text-4xl leading-[0.95] text-[#173f35] sm:text-5xl lg:text-[3.7rem]">
-                {tr("request.details.title", "Your AI catering brief is ready.")}
+                {tr("request.details.title", "Ihr KI-Catering-Briefing ist bereit.")}
               </h1>
 
               <p className="mt-4 max-w-2xl text-base leading-7 text-[#173f35]/70">
-                Speisely hat Ihre Anfrage analysiert, wichtige Eventdetails erkannt
-                und bereitet passende Caterer-Matches vor.
+                {tr(
+                  "request.details.subtitle",
+                  "Speisely hat Ihre Anfrage analysiert, wichtige Eventdetails erkannt und bereitet passende Caterer-Matches vor."
+                )}
               </p>
 
               <div className="mt-6 rounded-[1.5rem] border border-[#eadfce] bg-[#faf6ee] p-5">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#b28a3c]">
-                  {tr("request.details.originalPrompt", "Original prompt")}
+                  {tr("request.details.originalPrompt", "Ursprüngliche Anfrage")}
                 </p>
                 <p className="text-base leading-7 text-[#173f35]">
                   “{originalPrompt}”
@@ -184,6 +186,7 @@ export default function RequestOverviewClient({ request }: Props) {
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 {chips.map((chip, index) => {
                   const Icon = chip.icon;
+
                   return (
                     <div
                       key={`${chip.label}-${index}`}
@@ -209,11 +212,12 @@ export default function RequestOverviewClient({ request }: Props) {
                 })}
               </div>
 
-              {preferences.length > 0 && (
+              {preferences.length > 0 ? (
                 <div className="mt-5">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#b28a3c]">
-                    Erkannte Wünsche
+                    {tr("request.details.detectedPreferences", "Erkannte Wünsche")}
                   </p>
+
                   <div className="flex flex-wrap gap-2">
                     {preferences.slice(0, 8).map((item) => (
                       <span
@@ -225,14 +229,15 @@ export default function RequestOverviewClient({ request }: Props) {
                     ))}
                   </div>
                 </div>
-              )}
+              ) : null}
 
               <div className="mt-6 rounded-[1.5rem] border border-dashed border-[#d8ccb9] bg-white/70 p-5">
                 <div className="flex items-start gap-3">
                   <HelpCircle className="mt-1 h-5 w-5 text-[#b28a3c]" />
+
                   <div>
                     <p className="font-semibold text-[#173f35]">
-                      Speisely würde noch fragen:
+                      {tr("request.details.followupTitle", "Speisely würde noch fragen:")}
                     </p>
 
                     {missingQuestions.length > 0 ? (
@@ -243,7 +248,10 @@ export default function RequestOverviewClient({ request }: Props) {
                       </ul>
                     ) : (
                       <p className="mt-2 text-sm leading-6 text-[#173f35]/70">
-                        Ihr Briefing ist stark genug für erste Caterer-Matches.
+                        {tr(
+                          "request.details.strongEnough",
+                          "Ihr Briefing ist stark genug für erste Caterer-Matches."
+                        )}
                       </p>
                     )}
                   </div>
@@ -264,7 +272,7 @@ export default function RequestOverviewClient({ request }: Props) {
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-[#eadfce] bg-white px-6 py-3 text-sm font-semibold text-[#173f35] shadow-sm transition hover:bg-[#faf6ee]"
                 >
                   <WandSparkles className="h-4 w-4 text-[#b28a3c]" />
-                  Details verbessern
+                  {tr("request.details.improveDetails", "Details verbessern")}
                 </Link>
               </div>
             </div>
@@ -273,10 +281,10 @@ export default function RequestOverviewClient({ request }: Props) {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium text-white/60">
-                    KI-Zusammenfassung
+                    {tr("request.details.summaryLabel", "KI-Zusammenfassung")}
                   </p>
                   <h2 className="premium-heading mt-1 text-3xl text-white">
-                    {request?.city || tr("request.details.germany", "Germany")}
+                    {request?.city || tr("request.details.germany", "Deutschland")}
                   </h2>
                 </div>
 
@@ -287,21 +295,25 @@ export default function RequestOverviewClient({ request }: Props) {
 
               <div className="mt-6 rounded-3xl bg-white/10 p-5">
                 <p className="text-xs uppercase tracking-[0.18em] text-white/45">
-                  AI confidence
+                  {tr("request.details.confidenceLabel", "KI-Verständnis")}
                 </p>
+
                 <div className="mt-3 h-2 rounded-full bg-white/15">
                   <div
                     className="h-2 rounded-full bg-[#d8b76a]"
                     style={{ width: `${confidence}%` }}
                   />
                 </div>
-                <p className="mt-3 text-sm font-semibold">{confidence}% understood</p>
+
+                <p className="mt-3 text-sm font-semibold">
+                  {confidence}% {tr("request.details.understood", "verstanden")}
+                </p>
               </div>
 
               <div className="mt-4 space-y-4">
                 <div className="rounded-3xl bg-white/10 p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-white/45">
-                    Status
+                    {tr("request.details.status", "Status")}
                   </p>
                   <p className="mt-1 text-sm font-semibold">
                     {request?.status || "draft"}
@@ -310,22 +322,24 @@ export default function RequestOverviewClient({ request }: Props) {
 
                 <div className="rounded-3xl bg-white/10 p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-white/45">
-                    Am besten für
+                    {tr("request.details.bestFor", "Am besten für")}
                   </p>
                   <p className="mt-1 text-sm font-semibold">
                     {request?.service_style ||
                       request?.catering_type ||
-                      tr("request.details.customCatering", "Custom catering")}
+                      tr("request.details.customCatering", "Individuelles Catering")}
                   </p>
                 </div>
 
                 <div className="rounded-3xl bg-white/10 p-4">
                   <p className="text-xs uppercase tracking-[0.18em] text-white/45">
-                    Nächster Schritt
+                    {tr("request.details.nextStep", "Nächster Schritt")}
                   </p>
                   <p className="mt-1 text-sm leading-6 text-white/85">
-                    Speisely vergleicht jetzt Caterer nach Ort, Gästezahl,
-                    Catering-Stil, Budget und Ernährungswünschen.
+                    {tr(
+                      "request.details.nextStepText",
+                      "Speisely vergleicht Caterer nach Ort, Gästezahl, Catering-Stil, Budget und Ernährungswünschen."
+                    )}
                   </p>
                 </div>
               </div>
