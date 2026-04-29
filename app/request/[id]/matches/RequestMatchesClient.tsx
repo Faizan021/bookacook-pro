@@ -26,7 +26,8 @@ function buildBrowseHref(request: any) {
     params.set("q", request.special_requests || request.ai_query);
   }
 
-  return `/caterers?${params.toString()}`;
+  const queryString = params.toString();
+  return queryString ? `/caterers?${queryString}` : "/caterers";
 }
 
 export default function RequestMatchesClient({
