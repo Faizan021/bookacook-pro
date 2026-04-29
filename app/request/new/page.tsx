@@ -496,7 +496,7 @@ export default function NewRequestPage() {
     }
   }
 
-  if (booting && isAutoStart) {
+  if (booting) {
     return (
       <main className="min-h-screen bg-[#fbf7ef] text-[#173f35]">
         <SpeiselyHeader />
