@@ -41,47 +41,50 @@ const examples = [
 const occasionCards = [
   {
     titleKey: "home.occasions.wedding.title",
-    titleFallback: "Wedding",
+    titleFallback: "Hochzeit",
     descKey: "home.occasions.wedding.desc",
-    descFallback: "Elegant catering for intimate celebrations and large weddings.",
+    descFallback: "Elegantes Catering für kleine Feiern und große Hochzeiten.",
     image: images.wedding,
-    alt: "Elegant wedding catering table",
+    alt: "Eleganter Hochzeitstisch mit Catering",
     href: "/request/new?occasion=wedding&start=1",
   },
   {
     titleKey: "home.occasions.corporate.title",
     titleFallback: "Business Lunch",
     descKey: "home.occasions.corporate.desc",
-    descFallback: "Premium catering for meetings, launches, offsites and receptions.",
+    descFallback: "Premium Catering für Meetings, Offsites und Firmenevents.",
     image: images.corporate,
-    alt: "Corporate event catering space",
+    alt: "Business Event Catering",
     href: "/request/new?occasion=corporate&start=1",
   },
   {
     titleKey: "home.occasions.private.title",
-    titleFallback: "Private Dinner",
+    titleFallback: "Privates Dinner",
     descKey: "home.occasions.private.desc",
-    descFallback: "Curated catering for birthdays, family celebrations and private dinners.",
+    descFallback:
+      "Individuelles Catering für Geburtstage, Familienfeiern und private Dinner.",
     image: images.private,
-    alt: "Private dinner table",
+    alt: "Privates Dinner mit Catering",
     href: "/request/new?occasion=private&start=1",
   },
   {
     titleKey: "home.occasions.ramadan.title",
     titleFallback: "Ramadan Iftar",
     descKey: "home.occasions.ramadan.desc",
-    descFallback: "Elegant iftar catering for families, companies and communities.",
+    descFallback:
+      "Elegantes Iftar-Catering für Familien, Unternehmen und Communities.",
     image: images.ramadan,
-    alt: "Iftar dinner table",
+    alt: "Iftar Dinner Tisch",
     href: "/request/new?occasion=ramadan&start=1",
   },
   {
     titleKey: "home.occasions.christmas.title",
-    titleFallback: "Christmas party",
+    titleFallback: "Weihnachtsfeier",
     descKey: "home.occasions.christmas.desc",
-    descFallback: "Festive catering for company celebrations, family dinners and winter events.",
+    descFallback:
+      "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
     image: images.christmas,
-    alt: "Christmas dinner table",
+    alt: "Weihnachtlicher Catering-Tisch",
     href: "/request/new?occasion=christmas&start=1",
   },
 ];
@@ -213,13 +216,17 @@ function extractPreview(query: string) {
   const lower = query.toLowerCase();
 
   const guestMatch =
-    query.match(/(\d+)\s?(gäste|gast|personen|person|guests|guest|people|persons|pax)/i) ||
+    query.match(
+      /(\d+)\s?(gäste|gast|personen|person|guests|guest|people|persons|pax)/i
+    ) ||
     query.match(/für\s+(\d+)/i) ||
     query.match(/for\s+(\d+)/i);
 
   const budgetMatch =
     query.match(/€\s?\d+/) ||
-    query.match(/\d+\s?(€|eur|euro|euros?)\s?(p\.p\.|pp|pro person|per person)?/i);
+    query.match(
+      /\d+\s?(€|eur|euro|euros?)\s?(p\.p\.|pp|pro person|per person)?/i
+    );
 
   const eventKey =
     lower.includes("business") ||
@@ -283,26 +290,26 @@ export default function Home() {
 
   const eventLabel =
     aiPreview.eventKey === "business"
-      ? t("home.aiHero.event.business", "Business event")
+      ? t("home.aiHero.event.business", "Business Event")
       : aiPreview.eventKey === "wedding"
-        ? t("home.aiHero.event.wedding", "Wedding")
+        ? t("home.aiHero.event.wedding", "Hochzeit")
         : aiPreview.eventKey === "birthday"
-          ? t("home.aiHero.event.birthday", "Birthday / Party")
+          ? t("home.aiHero.event.birthday", "Geburtstag / Party")
           : aiPreview.eventKey === "ramadan"
             ? t("home.aiHero.event.ramadan", "Ramadan Iftar")
             : aiPreview.eventKey === "private"
-              ? t("home.aiHero.event.private", "Private dinner")
+              ? t("home.aiHero.event.private", "Privates Dinner")
               : aiPreview.eventKey === "christmas"
-                ? t("home.aiHero.event.christmas", "Christmas party")
-                : t("home.aiHero.event.unknown", "Event detected");
+                ? t("home.aiHero.event.christmas", "Weihnachtsfeier")
+                : t("home.aiHero.event.unknown", "Event erkannt");
 
   const styleLabel =
     aiPreview.styleKey === "fineDining"
-      ? t("home.aiHero.style.fineDining", "Fine dining")
+      ? t("home.aiHero.style.fineDining", "Fine Dining")
       : aiPreview.styleKey === "buffet"
         ? t("home.aiHero.style.buffet", "Buffet")
         : aiPreview.styleKey === "fingerfood"
-          ? t("home.aiHero.style.fingerfood", "Finger food")
+          ? t("home.aiHero.style.fingerfood", "Fingerfood")
           : aiPreview.styleKey === "bbq"
             ? t("home.aiHero.style.bbq", "BBQ")
             : aiPreview.styleKey === "elegant"
@@ -310,12 +317,12 @@ export default function Home() {
               : aiPreview.styleKey === "modern"
                 ? t("home.aiHero.style.modern", "Modern")
                 : aiPreview.styleKey === "halal"
-                  ? t("home.aiHero.style.halal", "Halal catering")
+                  ? t("home.aiHero.style.halal", "Halal Catering")
                   : aiPreview.styleKey === "vegetarian"
-                    ? t("home.aiHero.style.vegetarian", "Vegetarian")
+                    ? t("home.aiHero.style.vegetarian", "Vegetarisch")
                     : aiPreview.styleKey === "vegan"
                       ? t("home.aiHero.style.vegan", "Vegan")
-                      : t("home.aiHero.style.open", "Style open");
+                      : t("home.aiHero.style.open", "Stil offen");
 
   function startRequest() {
     const query = heroQuery.trim();
@@ -330,7 +337,7 @@ export default function Home() {
 
   const chips = [
     {
-      label: t("home.hero.chipWedding", "Wedding"),
+      label: t("home.hero.chipWedding", "Hochzeit"),
       href: "/request/new?occasion=wedding&start=1",
     },
     {
@@ -338,7 +345,7 @@ export default function Home() {
       href: "/request/new?occasion=corporate&start=1",
     },
     {
-      label: t("home.hero.chipPrivate", "Private Dinner"),
+      label: t("home.hero.chipPrivate", "Privates Dinner"),
       href: "/request/new?occasion=private&start=1",
     },
     {
@@ -346,7 +353,7 @@ export default function Home() {
       href: "/request/new?occasion=ramadan&start=1",
     },
     {
-      label: t("home.hero.chipChristmas", "Christmas party"),
+      label: t("home.hero.chipChristmas", "Weihnachtsfeier"),
       href: "/request/new?occasion=christmas&start=1",
     },
   ];
@@ -358,7 +365,7 @@ export default function Home() {
       <section className="relative overflow-hidden">
         <Image
           src={images.hero}
-          alt={t("home.aiHero.heroAlt", "Premium catering event table")}
+          alt={t("home.aiHero.heroAlt", "Premium Catering Event Tisch")}
           fill
           priority
           sizes="100vw"
@@ -372,15 +379,15 @@ export default function Home() {
           <div className="max-w-4xl text-white">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-white/85 backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-[#d7b66d]" />
-              {t("home.aiHero.badge", "AI concierge active")}
+              {t("home.aiHero.badge", "KI-Concierge aktiv")}
             </div>
 
             <h1 className="premium-heading text-5xl leading-[0.95] md:text-7xl">
-              {t("home.aiHero.titleLine1", "Describe your event.")}
+              {t("home.aiHero.titleLine1", "Beschreiben Sie Ihr Event.")}
               <span className="block text-[#d7b66d]">
                 {t(
                   "home.aiHero.titleLine2",
-                  "Speisely instantly builds your catering brief."
+                  "Speisely erstellt sofort Ihr Catering-Briefing."
                 )}
               </span>
             </h1>
@@ -388,7 +395,7 @@ export default function Home() {
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
               {t(
                 "home.aiHero.subtitle",
-                "No searching. No overwhelming lists. Speisely understands your event and finds suitable caterers by location, guest count, budget, style and dietary needs."
+                "Kein Suchen. Keine unübersichtlichen Listen. Speisely versteht Ihr Event und findet passende Caterer nach Ort, Gästezahl, Budget, Stil und Ernährungswünschen."
               )}
             </p>
 
@@ -402,7 +409,7 @@ export default function Home() {
                 className="min-h-14 flex-1 rounded-2xl px-5 text-base text-[#173f35] outline-none placeholder:text-[#8a9a94]"
                 placeholder={t(
                   "home.aiHero.placeholder",
-                  "e.g. Wedding for 80 guests in Berlin, buffet, €45 p.p."
+                  "z. B. Hochzeit für 80 Gäste in Berlin, Buffet, €45 p.P."
                 )}
               />
 
@@ -411,7 +418,7 @@ export default function Home() {
                 onClick={startRequest}
                 className="mt-3 inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[#c9a45c] px-7 font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0"
               >
-                {t("home.aiHero.cta", "Create AI brief")}
+                {t("home.aiHero.cta", "KI-Briefing erstellen")}
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -419,7 +426,7 @@ export default function Home() {
             <p className="mt-3 text-sm text-white/75">
               {t(
                 "home.aiHero.autoDetect",
-                "AI detects automatically: occasion · guests · location · budget · catering style"
+                "KI erkennt automatisch: Anlass · Gäste · Ort · Budget · Catering-Stil"
               )}
             </p>
 
@@ -440,10 +447,10 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#d7b66d]">
-                  {t("home.aiHero.previewLabel", "Live AI preview")}
+                  {t("home.aiHero.previewLabel", "Live KI-Preview")}
                 </p>
                 <h2 className="premium-heading mt-2 text-3xl text-white">
-                  {t("home.aiHero.previewTitle", "What Speisely understands")}
+                  {t("home.aiHero.previewTitle", "Was Speisely versteht")}
                 </h2>
               </div>
 
@@ -456,27 +463,29 @@ export default function Home() {
               {[
                 {
                   icon: Sparkles,
-                  label: t("home.aiHero.label.event", "Occasion"),
+                  label: t("home.aiHero.label.event", "Anlass"),
                   value: eventLabel,
                 },
                 {
                   icon: Users,
-                  label: t("home.aiHero.label.guests", "Guests"),
-                  value: aiPreview.guests || t("home.aiHero.value.open", "Open"),
+                  label: t("home.aiHero.label.guests", "Gäste"),
+                  value: aiPreview.guests || t("home.aiHero.value.open", "Offen"),
                 },
                 {
                   icon: MapPin,
-                  label: t("home.aiHero.label.city", "Location"),
-                  value: aiPreview.city || t("home.aiHero.city.open", "Location open"),
+                  label: t("home.aiHero.label.city", "Ort"),
+                  value: aiPreview.city || t("home.aiHero.city.open", "Ort offen"),
                 },
                 {
                   icon: Wallet,
                   label: t("home.aiHero.label.budget", "Budget"),
-                  value: aiPreview.budget || t("home.aiHero.budget.flexible", "Flexible"),
+                  value:
+                    aiPreview.budget ||
+                    t("home.aiHero.budget.flexible", "Flexibel"),
                 },
                 {
                   icon: WandSparkles,
-                  label: t("home.aiHero.label.style", "Style"),
+                  label: t("home.aiHero.label.style", "Stil"),
                   value: styleLabel,
                 },
               ].map((item) => {
@@ -501,12 +510,12 @@ export default function Home() {
 
             <div className="mt-5 rounded-[1.25rem] border border-[#d7b66d]/30 bg-[#d7b66d]/15 p-4">
               <p className="text-sm font-semibold text-[#ffe2a0]">
-                {t("home.aiHero.nextStepTitle", "Next step")}
+                {t("home.aiHero.nextStepTitle", "Nächster Schritt")}
               </p>
               <p className="mt-1 text-sm leading-6 text-white/75">
                 {t(
                   "home.aiHero.nextStepText",
-                  "Speisely turns these details into a brief and then starts matching."
+                  "Speisely verwandelt diese Angaben in ein Briefing. Danach entscheiden Sie, ob Sie KI-Matches ansehen möchten."
                 )}
               </p>
             </div>
@@ -517,11 +526,14 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-10 max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-            {t("home.aiHero.stepsLabel", "How Speisely works")}
+            {t("home.aiHero.stepsLabel", "So funktioniert Speisely")}
           </p>
 
           <h2 className="premium-heading mt-3 text-5xl leading-[0.95]">
-            {t("home.aiHero.stepsTitle", "An AI flow instead of a long catering search.")}
+            {t(
+              "home.aiHero.stepsTitle",
+              "Ein KI-Flow statt langer Catering-Suche."
+            )}
           </h2>
         </div>
 
@@ -529,26 +541,26 @@ export default function Home() {
           {[
             {
               icon: Sparkles,
-              title: t("home.aiHero.step1Title", "1. Describe"),
+              title: t("home.aiHero.step1Title", "1. Beschreiben"),
               text: t(
                 "home.aiHero.step1Text",
-                "Describe your event in natural language — like in a chat."
+                "Beschreiben Sie Ihr Event in natürlicher Sprache — wie in einem Chat."
               ),
             },
             {
               icon: CheckCircle2,
-              title: t("home.aiHero.step2Title", "2. AI understands"),
+              title: t("home.aiHero.step2Title", "2. KI versteht"),
               text: t(
                 "home.aiHero.step2Text",
-                "Speisely detects occasion, guest count, location, budget, style and preferences."
+                "Speisely erkennt Anlass, Gästezahl, Ort, Budget, Stil und Wünsche."
               ),
             },
             {
               icon: ArrowRight,
-              title: t("home.aiHero.step3Title", "3. AI matching"),
+              title: t("home.aiHero.step3Title", "3. KI-Matching"),
               text: t(
                 "home.aiHero.step3Text",
-                "You receive suitable caterers instead of an overwhelming list."
+                "Sie erhalten passende Caterer statt einer unübersichtlichen Liste."
               ),
             },
           ].map((item) => {
@@ -575,13 +587,13 @@ export default function Home() {
         <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-              {t("home.occasions.label", "Occasions")}
+              {t("home.occasions.label", "Anlässe")}
             </p>
 
             <h2 className="premium-heading mt-3 text-5xl leading-[0.95]">
               {t(
                 "home.aiHero.occasionsTitle",
-                "Start with an event — Speisely turns it into a brief."
+                "Starten Sie mit einem Event — Speisely macht daraus ein Briefing."
               )}
             </h2>
           </div>
@@ -590,7 +602,7 @@ export default function Home() {
             href="/request/new?start=1"
             className="inline-flex items-center gap-2 font-semibold text-[#173f35]"
           >
-            {t("home.occasions.cta", "Start with AI matching")}{" "}
+            {t("home.occasions.cta", "Mit KI-Matching starten")}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -603,22 +615,22 @@ export default function Home() {
               className="group overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
             >
               <div className="relative h-52 overflow-hidden">
-  <Image
-    src={card.image}
-    alt={card.alt}
-    fill
-    sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
-    className="object-cover transition duration-500 group-hover:scale-110"
-  />
-  <div className="absolute inset-0 bg-gradient-to-t from-[#102f28]/60 to-transparent" />
+                <Image
+                  src={card.image}
+                  alt={card.alt}
+                  fill
+                  sizes="(min-width: 1024px) 20vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover transition duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#102f28]/60 to-transparent" />
 
-  <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#173f35]/0 transition duration-300 group-hover:bg-[#173f35]/35">
-    <div className="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-[#173f35] opacity-0 shadow-sm transition duration-300 group-hover:opacity-100">
-      {t("home.aiHero.startWithAi", "Start with AI")}
-      <ArrowRight className="h-3.5 w-3.5" />
-    </div>
-  </div>
-</div>
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#173f35]/0 transition duration-300 group-hover:bg-[#173f35]/35">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-[#173f35] opacity-0 shadow-sm transition duration-300 group-hover:opacity-100">
+                    {t("home.aiHero.startWithAi", "Mit KI starten")}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </div>
+                </div>
+              </div>
 
               <div className="p-5">
                 <h3 className="text-lg font-semibold">
@@ -637,27 +649,33 @@ export default function Home() {
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-[2.3rem] bg-[#173f35] p-8 text-white shadow-[0_24px_80px_rgba(23,63,53,0.16)] md:p-10">
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
-              {t("home.why.label", "Why Speisely")}
+              {t("home.why.label", "Warum Speisely")}
             </p>
 
             <h2 className="premium-heading mt-4 text-5xl leading-[0.95]">
-              {t("home.aiHero.whyTitle", "Stop searching. Start matching.")}
+              {t("home.aiHero.whyTitle", "Nicht suchen. Passend matchen.")}
             </h2>
 
             <p className="mt-5 leading-8 text-white/75">
               {t(
                 "home.aiHero.whyText",
-                "Classic marketplaces show lists. Speisely first creates a structured event brief and uses it as the basis for suitable caterer matching."
+                "Klassische Marktplätze zeigen Listen. Speisely erstellt zuerst ein strukturiertes Event-Briefing und nutzt es als Grundlage für passende Caterer-Matches."
               )}
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             {[
-              t("home.aiHero.point1", "AI brief from natural language"),
-              t("home.aiHero.point2", "Matching by location, budget and guest count"),
-              t("home.aiHero.point3", "Better inquiries for caterers"),
-              t("home.aiHero.point4", "Later: secure booking and platform payment"),
+              t("home.aiHero.point1", "KI-Briefing aus natürlicher Sprache"),
+              t(
+                "home.aiHero.point2",
+                "Matching nach Ort, Budget und Gästezahl"
+              ),
+              t("home.aiHero.point3", "Bessere Anfragen für Caterer"),
+              t(
+                "home.aiHero.point4",
+                "Später: sichere Buchung und Plattform-Zahlung"
+              ),
             ].map((item) => (
               <div
                 key={item}
@@ -674,17 +692,20 @@ export default function Home() {
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-[#173f35] px-8 py-16 text-center text-white shadow-[0_24px_80px_rgba(23,63,53,0.18)] md:px-16">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
-            {t("home.aiHero.finalLabel", "Speisely AI Concierge")}
+            {t("home.aiHero.finalLabel", "Speisely KI-Concierge")}
           </p>
 
           <h2 className="premium-heading mx-auto mt-4 max-w-4xl text-5xl leading-[0.95] md:text-6xl">
-            {t("home.final.title", "Plan your next catering event with AI guidance.")}
+            {t(
+              "home.final.title",
+              "Planen Sie Ihr nächstes Catering-Event mit KI-Unterstützung."
+            )}
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/75">
             {t(
               "home.final.text",
-              "Start with a simple description. Speisely turns it into a clear brief and guides you to the right caterer."
+              "Starten Sie mit einer einfachen Beschreibung. Speisely verwandelt sie in ein klares Briefing und führt Sie zum passenden Caterer."
             )}
           </p>
 
@@ -692,7 +713,7 @@ export default function Home() {
             href="/request/new?start=1"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#d7b66d] px-8 py-4 font-semibold text-[#173f35] transition hover:bg-[#e3c57c]"
           >
-            {t("home.final.cta", "Describe event")}
+            {t("home.final.cta", "Event beschreiben")}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -702,17 +723,17 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-[#5c6f68] md:flex-row">
           <p>
             © 2026 Speisely.{" "}
-            {t("footer.tagline", "Premium AI-assisted catering marketplace.")}
+            {t("footer.tagline", "Premium KI-gestützter Catering-Marktplatz.")}
           </p>
 
           <div className="flex gap-6">
             <Link href="/caterers">
-              {t("nav.discoverCaterers", "Discover caterers")}
+              {t("nav.discoverCaterers", "Caterer entdecken")}
             </Link>
             <Link href="/for-caterers">
-              {t("nav.forCaterers", "For caterers")}
+              {t("nav.forCaterers", "Für Caterer")}
             </Link>
-            <Link href="/about">{t("nav.about", "About Speisely")}</Link>
+            <Link href="/about">{t("nav.about", "Über Speisely")}</Link>
           </div>
         </div>
       </footer>
