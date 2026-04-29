@@ -77,10 +77,12 @@ function extractCityFromQuery(query?: string | null) {
   const text = (query || "").toLowerCase();
 
   const cities: Array<[string[], string]> = [
+    [["frankfurt am main", "frankfurt"], "Frankfurt am Main"],
+    [["mönchengladbach", "moenchengladbach", "munchengladbach"], "Mönchengladbach"],
+    [["bergisch gladbach"], "Bergisch Gladbach"],
     [["berlin"], "Berlin"],
     [["hamburg"], "Hamburg"],
     [["munich", "münchen", "muenchen"], "München"],
-    [["frankfurt am main", "frankfurt"], "Frankfurt am Main"],
     [["cologne", "köln", "koeln"], "Köln"],
     [["düsseldorf", "duesseldorf"], "Düsseldorf"],
     [["dresden"], "Dresden"],
@@ -102,7 +104,6 @@ function extractCityFromQuery(query?: string | null) {
     [["augsburg"], "Augsburg"],
     [["wiesbaden"], "Wiesbaden"],
     [["gelsenkirchen"], "Gelsenkirchen"],
-    [["mönchengladbach", "moenchengladbach", "munchengladbach"], "Mönchengladbach"],
     [["braunschweig"], "Braunschweig"],
     [["chemnitz"], "Chemnitz"],
     [["kiel"], "Kiel"],
@@ -148,7 +149,6 @@ function extractCityFromQuery(query?: string | null) {
     [["reutlingen"], "Reutlingen"],
     [["bremerhaven"], "Bremerhaven"],
     [["koblenz"], "Koblenz"],
-    [["bergisch gladbach"], "Bergisch Gladbach"],
     [["jena"], "Jena"],
     [["remscheid"], "Remscheid"],
     [["erlangen"], "Erlangen"],
@@ -173,7 +173,16 @@ export default function NewRequestPage() {
   const bootedRef = useRef(false);
   const creatingRef = useRef(false);
 
-  const [booting, setBooting] = useState(true);
+  const [booting, setBooting] = useState(() => {
+    if (typeof window === "undefined") return true;
+
+    const params = new URLSearchParams(window.location.search);
+    const hasAutoStart = params.get("start") === "1";
+    const hasPendingRequest = Boolean(localStorage.getItem(PENDING_REQUEST_KEY));
+
+    return hasAutoStart || hasPendingRequest;
+  });
+
   const [query, setQuery] = useState(occasionPrompts[0].query);
   const [locationInput, setLocationInput] = useState("Berlin");
   const [selectedLocation, setSelectedLocation] =
@@ -191,8 +200,14 @@ export default function NewRequestPage() {
     if (creatingRef.current) return;
     creatingRef.current = true;
 
+    setBooting(true);
     setSaving(true);
-    setStatusText(t("request.autoStartText", "Speisely is turning your event idea into a structured request."));
+    setStatusText(
+      t(
+        "request.autoStartText",
+        "Speisely is turning your event idea into a structured request."
+      )
+    );
 
     const result = await createRequestDraftAction({
       ai_query: input.cleanQuery,
@@ -230,6 +245,8 @@ export default function NewRequestPage() {
         const rawPending = localStorage.getItem(PENDING_REQUEST_KEY);
 
         if (rawPending) {
+          setBooting(true);
+
           const pending = JSON.parse(rawPending) as {
             query?: string;
             locationInput?: string;
@@ -252,14 +269,6 @@ export default function NewRequestPage() {
           } = await supabase.auth.getUser();
 
           if (user && pendingQuery.trim().length >= 10) {
-            setSaving(true);
-            setStatusText(
-              t(
-                "request.autoStartText",
-                "Speisely is turning your event idea into a structured request."
-              )
-            );
-
             await createDraftFromValues({
               cleanQuery: pendingQuery.trim(),
               cleanLocation: pendingCity.trim(),
@@ -289,6 +298,7 @@ export default function NewRequestPage() {
         return;
       }
 
+      setBooting(true);
       setSaving(true);
       setStatusText(
         t(
@@ -327,13 +337,28 @@ export default function NewRequestPage() {
       } catch (error) {
         console.error("Failed to auto-start request:", error);
         creatingRef.current = false;
+        setSaving(false);
+
+        if (shouldStart) {
+          localStorage.setItem(
+            PENDING_REQUEST_KEY,
+            JSON.stringify({
+              query: urlQuery,
+              locationInput: extractCityFromQuery(urlQuery) || "Berlin",
+              selectedLocation: null,
+            })
+          );
+
+          router.replace("/login?next=/request/new");
+          return;
+        }
+
         setSaveError(
           t(
             "request.saveError",
             "The request could not be saved. Please try again."
           )
         );
-        setSaving(false);
         setBooting(false);
       }
     }
@@ -356,19 +381,24 @@ export default function NewRequestPage() {
       query.match(/€\s?\d+/) ||
       query.match(/\d+\s?(€|eur|euro|euros?)\s?(p\.p\.|pp|per person|pro person)?/i);
 
-    const event = lower.includes("business") || lower.includes("corporate") || lower.includes("lunch")
-      ? t("event.businessLunch", "Business lunch")
-      : lower.includes("weihnacht") || lower.includes("christmas")
-        ? t("event.christmas", "Christmas party")
-        : lower.includes("iftar") || lower.includes("ramadan")
-          ? t("event.ramadan", "Ramadan / Iftar")
-          : lower.includes("birthday") || lower.includes("geburtstag") || lower.includes("party")
-            ? t("event.birthday", "Birthday")
-            : lower.includes("private")
-              ? t("event.privateDinner", "Private dinner")
-              : lower.includes("wedding") || lower.includes("hochzeit")
-                ? t("event.wedding", "Wedding")
-                : t("request.aiStyle", "AI will infer");
+    const event =
+      lower.includes("business") ||
+      lower.includes("corporate") ||
+      lower.includes("lunch")
+        ? t("event.businessLunch", "Business lunch")
+        : lower.includes("weihnacht") || lower.includes("christmas")
+          ? t("event.christmas", "Christmas party")
+          : lower.includes("iftar") || lower.includes("ramadan")
+            ? t("event.ramadan", "Ramadan / Iftar")
+            : lower.includes("birthday") ||
+                lower.includes("geburtstag") ||
+                lower.includes("party")
+              ? t("event.birthday", "Birthday")
+              : lower.includes("private")
+                ? t("event.privateDinner", "Private dinner")
+                : lower.includes("wedding") || lower.includes("hochzeit")
+                  ? t("event.wedding", "Wedding")
+                  : t("request.aiStyle", "AI will infer");
 
     const diet = lower.includes("vegetar")
       ? t("diet.vegetarian", "Vegetarian")
@@ -378,19 +408,22 @@ export default function NewRequestPage() {
           ? t("diet.halal", "Halal")
           : t("common.open", "Open");
 
-    const style = lower.includes("fine dining") || lower.includes("fine dinning") || lower.includes("fine")
-      ? "Fine dining"
-      : lower.includes("buffet")
-        ? "Buffet"
-        : lower.includes("bbq") || lower.includes("grill")
-          ? "BBQ"
-          : lower.includes("finger")
-            ? "Finger food"
-            : lower.includes("elegant") || lower.includes("elegantes")
-              ? "Elegant"
-              : lower.includes("modern")
-                ? "Modern"
-                : t("request.aiStyle", "AI will infer");
+    const style =
+      lower.includes("fine dining") ||
+      lower.includes("fine dinning") ||
+      lower.includes("fine")
+        ? "Fine dining"
+        : lower.includes("buffet")
+          ? "Buffet"
+          : lower.includes("bbq") || lower.includes("grill")
+            ? "BBQ"
+            : lower.includes("finger")
+              ? "Finger food"
+              : lower.includes("elegant") || lower.includes("elegantes")
+                ? "Elegant"
+                : lower.includes("modern")
+                  ? "Modern"
+                  : t("request.aiStyle", "AI will infer");
 
     return [
       {
@@ -458,16 +491,10 @@ export default function NewRequestPage() {
           })
         );
 
+        setBooting(true);
         router.replace("/login?next=/request/new");
         return;
       }
-
-      setStatusText(
-        t(
-          "request.autoStartText",
-          "Speisely is turning your event idea into a structured request."
-        )
-      );
 
       await createDraftFromValues({
         cleanQuery,
@@ -490,6 +517,7 @@ export default function NewRequestPage() {
           })
         );
 
+        setBooting(true);
         router.replace("/login?next=/request/new");
         return;
       }
