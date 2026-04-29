@@ -73,6 +73,23 @@ function getPromptByOccasion(occasion: string | null) {
   return occasionPrompts.find((prompt) => prompt.id === occasion)?.query ?? null;
 }
 
+function extractCityFromQuery(query?: string | null) {
+  const text = (query || "").toLowerCase();
+
+  if (text.includes("frankfurt")) return "Frankfurt am Main";
+  if (text.includes("berlin")) return "Berlin";
+  if (text.includes("hamburg")) return "Hamburg";
+  if (text.includes("munich") || text.includes("münchen")) return "München";
+  if (text.includes("cologne") || text.includes("köln")) return "Köln";
+  if (text.includes("düsseldorf") || text.includes("duesseldorf")) return "Düsseldorf";
+  if (text.includes("paderborn")) return "Paderborn";
+  if (text.includes("dortmund")) return "Dortmund";
+  if (text.includes("essen")) return "Essen";
+  if (text.includes("stuttgart")) return "Stuttgart";
+
+  return "";
+}
+
 export default function NewRequestPage() {
   const t = useT();
   const router = useRouter();
@@ -87,6 +104,9 @@ export default function NewRequestPage() {
 
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [statusText, setStatusText] = useState(
+    "Speisely is reading your event details."
+  );
 
   async function createDraftFromValues(input: {
     cleanQuery: string;
@@ -95,6 +115,8 @@ export default function NewRequestPage() {
   }) {
     if (creatingRef.current) return;
     creatingRef.current = true;
+
+    setStatusText("You are logged in. Speisely is creating your AI brief...");
 
     const result = await createRequestDraftAction({
       ai_query: input.cleanQuery,
@@ -139,8 +161,13 @@ export default function NewRequestPage() {
             selectedLocation?: GermanLocation | null;
           };
 
-          if (pending.query) setQuery(pending.query);
-          if (pending.locationInput) setLocationInput(pending.locationInput);
+          const pendingQuery = pending.query || "";
+          const pendingCity =
+            pending.locationInput || extractCityFromQuery(pendingQuery) || "Berlin";
+
+          if (pendingQuery) setQuery(pendingQuery);
+          setLocationInput(pendingCity);
+
           if (pending.selectedLocation) {
             setSelectedLocation(pending.selectedLocation);
           }
@@ -150,12 +177,13 @@ export default function NewRequestPage() {
             data: { user },
           } = await supabase.auth.getUser();
 
-          if (user && pending.query && pending.query.trim().length >= 10) {
+          if (user && pendingQuery.trim().length >= 10) {
             setSaving(true);
+            setStatusText(`Logged in as ${user.email}. Creating your AI brief...`);
 
             await createDraftFromValues({
-              cleanQuery: pending.query.trim(),
-              cleanLocation: (pending.locationInput || "Berlin").trim(),
+              cleanQuery: pendingQuery.trim(),
+              cleanLocation: pendingCity.trim(),
               selectedLocation: pending.selectedLocation ?? null,
             });
           }
@@ -171,12 +199,16 @@ export default function NewRequestPage() {
       }
 
       if (urlQuery) {
+        const cityFromQuery = extractCityFromQuery(urlQuery) || "Berlin";
+
         setQuery(urlQuery);
+        setLocationInput(cityFromQuery);
       }
 
       if (!shouldStart || !urlQuery) return;
 
       setSaving(true);
+      setStatusText("Checking your login and preparing the AI brief...");
 
       try {
         const supabase = createClient();
@@ -184,12 +216,14 @@ export default function NewRequestPage() {
           data: { user },
         } = await supabase.auth.getUser();
 
+        const cityFromQuery = extractCityFromQuery(urlQuery) || "Berlin";
+
         if (!user) {
           localStorage.setItem(
             PENDING_REQUEST_KEY,
             JSON.stringify({
               query: urlQuery,
-              locationInput: "Berlin",
+              locationInput: cityFromQuery,
               selectedLocation: null,
             })
           );
@@ -198,9 +232,11 @@ export default function NewRequestPage() {
           return;
         }
 
+        setStatusText(`Logged in as ${user.email}. Creating your AI brief...`);
+
         await createDraftFromValues({
           cleanQuery: urlQuery,
-          cleanLocation: "Berlin",
+          cleanLocation: cityFromQuery,
           selectedLocation: null,
         });
       } catch (error) {
@@ -221,6 +257,9 @@ export default function NewRequestPage() {
 
   const briefingItems = useMemo(() => {
     const lower = query.toLowerCase();
+
+    const cityFromQuery = extractCityFromQuery(query);
+    const shownLocation = selectedLocation?.name || cityFromQuery || locationInput;
 
     const guestMatch =
       query.match(/(\d+)\s?(guests|guest|people|persons|personen|gäste)/i) ||
@@ -271,10 +310,7 @@ export default function NewRequestPage() {
       },
       {
         label: t("request.brief.location", "Location"),
-        value:
-          selectedLocation?.name ||
-          locationInput ||
-          t("common.open", "Open"),
+        value: shownLocation || t("common.open", "Open"),
         icon: <MapPin className="h-4 w-4" />,
       },
       {
@@ -305,7 +341,8 @@ export default function NewRequestPage() {
     setSaving(true);
 
     const cleanQuery = query.trim();
-    const cleanLocation = locationInput.trim() || "Berlin";
+    const cityFromQuery = extractCityFromQuery(cleanQuery);
+    const cleanLocation = cityFromQuery || locationInput.trim() || "Berlin";
 
     if (!cleanQuery || cleanQuery.length < 10) {
       setSaveError(
@@ -334,6 +371,8 @@ export default function NewRequestPage() {
         router.push("/login?next=/request/new");
         return;
       }
+
+      setStatusText(`Logged in as ${user.email}. Creating your AI brief...`);
 
       await createDraftFromValues({
         cleanQuery,
@@ -412,6 +451,7 @@ export default function NewRequestPage() {
                 type="button"
                 onClick={() => {
                   setQuery(prompt.query);
+                  setLocationInput(extractCityFromQuery(prompt.query) || "Berlin");
                   setSaveError(null);
                 }}
                 className="rounded-full border border-[#e5d8c5] bg-white/85 px-3.5 py-2 text-sm font-semibold text-[#173f35] shadow-sm transition hover:-translate-y-0.5 hover:bg-white"
@@ -436,10 +476,7 @@ export default function NewRequestPage() {
                     {t("request.autoStartTitle", "Building your catering brief")}
                   </h2>
                   <p className="mt-1 text-sm leading-6 text-[#5c6f68]">
-                    {t(
-                      "request.autoStartText",
-                      "Speisely is turning your event idea into a structured request."
-                    )}
+                    {statusText}
                   </p>
                 </div>
               </div>
@@ -454,7 +491,12 @@ export default function NewRequestPage() {
             <textarea
               value={query}
               onChange={(event) => {
-                setQuery(event.target.value);
+                const value = event.target.value;
+                setQuery(value);
+
+                const city = extractCityFromQuery(value);
+                if (city) setLocationInput(city);
+
                 setSaveError(null);
               }}
               className="mt-2 min-h-24 w-full resize-none rounded-[1.2rem] border border-[#e8dcc8] bg-[#faf6ee] p-4 text-[15px] leading-6 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
