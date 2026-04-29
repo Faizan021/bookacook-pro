@@ -912,5 +912,21 @@
 "request.matches.aiWorking": "KI-Matching",
 "request.matches.emptyHeading": "Ihre KI-Matches erscheinen hier.",
 "request.matches.emptyText": "Erstellen Sie Matches aus Ihrem Event-Briefing oder entdecken Sie Caterer, während Speisely bessere Empfehlungen vorbereitet.",
-"request.matches.exploreCaterers": "Caterer entdecken"
+"request.matches.exploreCaterers": "Caterer entdecken",
+"home.aiHero.badge": "KI-Concierge aktiv",
+"home.aiHero.titleLine1": "Beschreiben Sie Ihr Event.",
+"home.aiHero.titleLine2": "Speisely erstellt sofort Ihr Catering-Briefing.",
+"home.aiHero.subtitle": "Kein Suchen. Keine unübersichtlichen Listen. Speisely versteht Ihr Event und findet passende Caterer nach Ort, Gästezahl, Budget, Stil und Ernährungswünschen.",
+"home.aiHero.inputPlaceholder": "z. B. Hochzeit für 80 Gäste in Berlin, Buffet, €45 p.P.",
+"home.aiHero.button": "KI-Briefing erstellen",
+"home.aiHero.detects": "KI erkennt automatisch: Anlass · Gäste · Ort · Budget · Catering-Stil",
+"home.aiHero.previewLabel": "Live KI-Preview",
+"home.aiHero.previewTitle": "Was Speisely versteht",
+"home.aiHero.event": "Anlass",
+"home.aiHero.guests": "Gäste",
+"home.aiHero.location": "Ort",
+"home.aiHero.budget": "Budget",
+"home.aiHero.style": "Stil",
+"home.aiHero.nextStep": "Nächster Schritt",
+"home.aiHero.nextStepText": "Speisely wandelt diese Angaben in ein Briefing um und startet danach das Matching."
 }
