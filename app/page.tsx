@@ -317,14 +317,14 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#102f28]/95 via-[#102f28]/82 to-[#102f28]/45" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(215,182,109,0.22),transparent_32%),radial-gradient(circle_at_85%_35%,rgba(255,255,255,0.14),transparent_28%)]" />
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-88px)] max-w-7xl items-center gap-8 px-5 py-10 sm:px-6 lg:grid-cols-[1fr_0.82fr] lg:py-12 xl:min-h-[690px]">
+        <div className="relative mx-auto grid min-h-[calc(100vh-88px)] max-w-7xl items-center gap-8 px-5 py-10 sm:px-6 lg:grid-cols-[0.95fr_0.78fr] lg:py-10 xl:min-h-[690px]">
           <div className="max-w-4xl text-white">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85 backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-[#d7b66d]" />
               {t("home.aiHero.badge", "KI-Concierge aktiv")}
             </div>
 
-            <h1 className="premium-heading text-[clamp(2.7rem,5.8vw,5.6rem)] leading-[0.94]">
+            <h1 className="premium-heading text-[clamp(2.6rem,4.7vw,5.4rem)] leading-[0.94]">
               {t("home.aiHero.titleLine1", "Beschreiben Sie Ihr Event.")}
               <span className="block text-[#d7b66d]">
                 {t(
@@ -348,7 +348,7 @@ export default function Home() {
                 onKeyDown={(event) => {
                   if (event.key === "Enter") startRequest();
                 }}
-                className="min-h-13 w-full flex-1 rounded-2xl px-4 text-[15px] leading-6 text-[#173f35] outline-none placeholder:text-[#8a9a94] md:px-5"
+                className="min-h-[52px] w-full flex-1 rounded-2xl px-4 text-[15px] leading-6 text-[#173f35] outline-none placeholder:text-[#8a9a94] md:px-5"
                 placeholder={t(
                   "home.aiHero.placeholder",
                   "z. B. Hochzeit für 80 Gäste in Berlin, Buffet, €45 p.P."
@@ -358,7 +358,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={startRequest}
-                className="mt-3 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-2xl bg-[#c9a45c] px-6 text-sm font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0 md:w-auto"
+                className="mt-3 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-[#c9a45c] px-6 text-sm font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0 md:w-auto"
               >
                 {t("home.aiHero.cta", "KI-Briefing erstellen")}
                 <ArrowRight className="h-4 w-4" />
@@ -385,7 +385,7 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="hidden rounded-[1.75rem] border border-white/20 bg-white/12 p-4 text-white shadow-2xl backdrop-blur-xl lg:block xl:p-5">
+          <aside className="hidden max-w-[520px] justify-self-end rounded-[1.75rem] border border-white/20 bg-white/12 p-4 text-white shadow-2xl backdrop-blur-xl lg:block xl:max-w-[560px] xl:p-5">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#d7b66d]">
@@ -436,7 +436,7 @@ export default function Home() {
                 return (
                   <div
                     key={item.label}
-                    className="rounded-[1.15rem] border border-white/15 bg-white/10 p-3.5"
+                    className="rounded-[1.15rem] border border-white/15 bg-white/15 p-3"
                   >
                     <div className="flex items-center gap-3">
                       <Icon className="h-4 w-4 shrink-0 text-[#d7b66d]" />
