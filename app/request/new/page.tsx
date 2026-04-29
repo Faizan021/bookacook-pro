@@ -126,9 +126,7 @@ export default function NewRequestPage() {
           ? incomingQuery.trim()
           : occasionQuery;
 
-      if (urlQuery) {
-        setQuery(urlQuery);
-      }
+      if (urlQuery) setQuery(urlQuery);
 
       try {
         const raw = localStorage.getItem(PENDING_REQUEST_KEY);
@@ -144,9 +142,7 @@ export default function NewRequestPage() {
 
           if (pending.query) setQuery(pending.query);
           if (pending.locationInput) setLocationInput(pending.locationInput);
-          if (pending.selectedLocation) {
-            setSelectedLocation(pending.selectedLocation);
-          }
+          if (pending.selectedLocation) setSelectedLocation(pending.selectedLocation);
 
           const supabase = createClient();
           const {
@@ -180,7 +176,6 @@ export default function NewRequestPage() {
 
       try {
         const supabase = createClient();
-
         const {
           data: { user },
         } = await supabase.auth.getUser();
@@ -207,10 +202,7 @@ export default function NewRequestPage() {
       } catch (error) {
         console.error("Failed to auto-start request:", error);
         setSaveError(
-          t(
-            "request.saveError",
-            "The request could not be saved. Please try again."
-          )
+          t("request.saveError", "The request could not be saved. Please try again.")
         );
         setSaving(false);
       }
@@ -357,7 +349,6 @@ export default function NewRequestPage() {
 
     try {
       const supabase = createClient();
-
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -401,10 +392,7 @@ export default function NewRequestPage() {
       }
 
       setSaveError(
-        t(
-          "request.saveError",
-          "The request could not be saved. Please try again."
-        )
+        t("request.saveError", "The request could not be saved. Please try again.")
       );
       setSaving(false);
     }
@@ -414,8 +402,8 @@ export default function NewRequestPage() {
     <main className="min-h-screen bg-[#fbf7ef] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-6 lg:grid-cols-[1fr_0.92fr] lg:py-8">
-        <div className="pt-2">
+      <section className="mx-auto grid max-w-7xl gap-8 px-6 py-8 lg:grid-cols-[1fr_0.92fr] lg:py-5">
+        <div className="pt-2 lg:pt-4">
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/"
@@ -430,7 +418,7 @@ export default function NewRequestPage() {
             </span>
           </div>
 
-          <h1 className="premium-heading mt-6 max-w-4xl text-[2.8rem] leading-[0.95] text-[#123b32] md:text-[4.3rem]">
+          <h1 className="premium-heading mt-7 max-w-4xl text-[3rem] leading-[0.95] text-[#123b32] md:text-[3.8rem]">
             {t("request.title", "Describe your event once.")}
             <span className="block pt-2 italic font-medium text-[#b28a3c]">
               {t("request.titleAccent", "Speisely builds the brief.")}
@@ -440,11 +428,11 @@ export default function NewRequestPage() {
           <p className="mt-5 max-w-2xl text-base leading-7 text-[#5c6f68]">
             {t(
               "request.description",
-              "Use natural language. Speisely detects event type, guests, location, budget, dietary needs and catering style before matching you with caterers."
+              "Use natural language. Speisely detects event type, guests, location, budget, dietary needs and catering style."
             )}
           </p>
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-6 flex flex-wrap gap-3">
             {occasionPrompts.map((prompt) => (
               <button
                 key={prompt.id}
@@ -471,13 +459,13 @@ export default function NewRequestPage() {
                   <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
                     {t("request.autoStartLabel", "AI concierge")}
                   </p>
-                  <h2 className="premium-heading mt-2 text-3xl text-[#173f35]">
+                  <h2 className="premium-heading mt-2 text-2xl text-[#173f35]">
                     {t("request.autoStartTitle", "Building your catering brief")}
                   </h2>
-                  <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
+                  <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
                     {t(
                       "request.autoStartText",
-                      "Speisely is turning your event idea into a structured request and preparing the next step."
+                      "Speisely is turning your event idea into a structured request."
                     )}
                   </p>
                 </div>
@@ -515,7 +503,7 @@ export default function NewRequestPage() {
                   "request.locationPlaceholder",
                   "e.g. Berlin, 10115, Paderborn..."
                 )}
-                className="mt-3 w-full rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] px-5 py-3.5 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
+                className="mt-3 w-full rounded-[1.35rem] border border-[#e8dcc8] bg-[#faf6ee] px-5 py-4 text-[#173f35] outline-none transition placeholder:text-[#8a9a94] focus:border-[#c9a45c] focus:ring-4 focus:ring-[#c9a45c]/10"
               />
 
               {locationResults.length > 0 && (
@@ -547,7 +535,7 @@ export default function NewRequestPage() {
             </div>
 
             {saveError ? (
-              <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+              <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
                 {saveError}
               </div>
             ) : null}
@@ -576,10 +564,10 @@ export default function NewRequestPage() {
         </div>
 
         <aside className="space-y-5 lg:sticky lg:top-24">
-          <div className="overflow-hidden rounded-[2.25rem] border border-[#eadfce] bg-white shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
+          <div className="overflow-hidden rounded-[2.2rem] border border-[#eadfce] bg-white shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
             <DynamicUnsplashImage
               section="premium"
-              className="h-56"
+              className="h-48"
               sizes="(min-width: 1024px) 45vw, 100vw"
             />
           </div>
@@ -604,7 +592,7 @@ export default function NewRequestPage() {
               {briefingItems.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-[1.25rem] border border-[#eadfce] bg-[#fbf7ef] p-3.5 transition hover:bg-[#f8efe1]"
+                  className="rounded-[1.2rem] border border-[#eadfce] bg-[#fbf7ef] p-3 transition hover:bg-[#f8efe1]"
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 text-[#b28a3c]">{item.icon}</div>
@@ -612,7 +600,7 @@ export default function NewRequestPage() {
                       <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#8a6d35]">
                         {item.label}
                       </p>
-                      <p className="mt-1 text-sm font-semibold leading-6 text-[#173f35]">
+                      <p className="mt-1 text-[14px] font-semibold leading-6 text-[#173f35]">
                         {item.value}
                       </p>
                     </div>
@@ -621,14 +609,14 @@ export default function NewRequestPage() {
               ))}
             </div>
 
-            <div className="mt-5 rounded-[1.25rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-4">
+            <div className="mt-5 rounded-[1.2rem] border border-dashed border-[#d8ccb9] bg-[#fbf7ef] p-4">
               <p className="text-sm font-semibold text-[#173f35]">
                 {t("request.aiNoteTitle", "AI matching starts after this step")}
               </p>
               <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
                 {t(
                   "request.aiNote",
-                  "You will review a compact event brief next. No repeated long form — only key details and suggested caterers."
+                  "You will review a compact event brief next."
                 )}
               </p>
             </div>
@@ -644,7 +632,7 @@ export default function NewRequestPage() {
             <p className="mt-2 text-sm leading-6 text-white/75">
               {t(
                 "request.flowText",
-                "Speisely turns your message into a structured request and prepares caterer matching."
+                "Speisely prepares your structured request and caterer matching."
               )}
             </p>
           </div>
