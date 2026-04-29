@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useT } from "@/lib/i18n/context";
 import { SpeiselyHeader } from "@/components/layout/SpeiselyHeader";
@@ -34,7 +35,6 @@ export default function LoginPageClient({ next = "" }: Props) {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-
     setError(null);
     setLoading(true);
 
@@ -171,26 +171,27 @@ export default function LoginPageClient({ next = "" }: Props) {
     <main className="min-h-screen bg-[#faf6ee] text-[#16372f]">
       <SpeiselyHeader />
 
-      <section className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+      <section className="mx-auto grid min-h-[calc(100vh-76px)] max-w-6xl items-center gap-8 px-5 py-6 lg:grid-cols-[0.95fr_0.85fr] lg:py-7">
         <div className="hidden lg:block">
-          <div className="mb-6 inline-flex rounded-full border border-[#e8dcc8] bg-white px-4 py-2 text-sm font-semibold text-[#8a6d35] shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#e8dcc8] bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#8a6d35] shadow-sm">
+            <Sparkles className="h-4 w-4" />
             {badgeText}
           </div>
 
-          <h1 className="premium-heading max-w-2xl text-6xl leading-[0.95] text-[#173f35] md:text-7xl">
+          <h1 className="premium-heading mt-5 max-w-2xl text-[3.4rem] leading-[0.95] text-[#173f35]">
             {introTitle}
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5c6f68]">
+          <p className="mt-4 max-w-xl text-[15px] leading-7 text-[#5c6f68]">
             {introDescription}
           </p>
 
           {isRequestLogin ? (
-            <div className="mt-8 rounded-[2rem] border border-[#eadfce] bg-white/85 p-6 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+            <div className="mt-5 rounded-[1.5rem] border border-[#eadfce] bg-white/85 p-5 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28a3c]">
                 {t("auth.requestSavedLabel", "Your request is waiting")}
               </p>
-              <p className="mt-3 text-sm leading-7 text-[#5c6f68]">
+              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
                 {t(
                   "auth.requestSavedText",
                   "After login, Speisely will return you to your AI request and continue the brief automatically."
@@ -199,32 +200,32 @@ export default function LoginPageClient({ next = "" }: Props) {
             </div>
           ) : null}
 
-          <div className="mt-10 overflow-hidden rounded-[2.5rem] border border-[#eadfce] bg-white shadow-sm">
+          <div className="mt-5 overflow-hidden rounded-[2rem] border border-[#eadfce] bg-white shadow-sm">
             <DynamicUnsplashImage
               section="premium"
-              className="h-[420px]"
-              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="h-[250px]"
+              sizes="(min-width: 1024px) 45vw, 100vw"
             />
           </div>
         </div>
 
         <section className="mx-auto w-full max-w-md">
-          <div className="rounded-[2rem] border border-[#eadfce] bg-white p-8 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
-            <div className="mb-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
+          <div className="rounded-[1.8rem] border border-[#eadfce] bg-white p-6 shadow-[0_22px_70px_rgba(35,28,18,0.08)]">
+            <div className="mb-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#b28a3c]">
                 {badgeText}
               </p>
 
-              <h2 className="premium-heading mt-3 text-4xl leading-[0.95] text-[#173f35]">
+              <h2 className="premium-heading mt-2 text-[2.1rem] leading-[0.98] text-[#173f35]">
                 {introTitle}
               </h2>
 
-              <p className="mt-3 text-sm leading-6 text-[#5c6f68]">
+              <p className="mt-2 text-sm leading-6 text-[#5c6f68]">
                 {introDescription}
               </p>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-3.5">
               <div>
                 <label className="mb-1.5 block text-sm font-semibold text-[#173f35]">
                   {t("auth.email", "Email address")}
@@ -270,7 +271,7 @@ export default function LoginPageClient({ next = "" }: Props) {
               </button>
             </form>
 
-            <p className="mt-5 text-center text-sm text-[#5c6f68]">
+            <p className="mt-4 text-center text-sm text-[#5c6f68]">
               {t("auth.noAccount", "Don't have an account?")}{" "}
               <Link
                 href={signupHref}
@@ -282,7 +283,7 @@ export default function LoginPageClient({ next = "" }: Props) {
               </Link>
             </p>
 
-            <div className="mt-4 text-center">
+            <div className="mt-3 text-center">
               <Link
                 href="/admin-login"
                 className="text-xs font-medium text-[#8a6d35] underline-offset-4 transition hover:text-[#173f35] hover:underline"
