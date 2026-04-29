@@ -41,9 +41,9 @@ const examples = [
 const occasionCards = [
   {
     titleKey: "home.occasions.wedding.title",
-    titleFallback: "Hochzeit",
+    titleFallback: "Wedding",
     descKey: "home.occasions.wedding.desc",
-    descFallback: "Elegantes Catering für intime Feiern und große Hochzeiten.",
+    descFallback: "Elegant catering for intimate celebrations and large weddings.",
     image: images.wedding,
     alt: "Elegant wedding catering table",
     href: "/request/new?occasion=wedding&start=1",
@@ -52,8 +52,7 @@ const occasionCards = [
     titleKey: "home.occasions.corporate.title",
     titleFallback: "Business Lunch",
     descKey: "home.occasions.corporate.desc",
-    descFallback:
-      "Premium-Catering für Meetings, Launches, Offsites und Empfänge.",
+    descFallback: "Premium catering for meetings, launches, offsites and receptions.",
     image: images.corporate,
     alt: "Corporate event catering space",
     href: "/request/new?occasion=corporate&start=1",
@@ -62,8 +61,7 @@ const occasionCards = [
     titleKey: "home.occasions.private.title",
     titleFallback: "Private Dinner",
     descKey: "home.occasions.private.desc",
-    descFallback:
-      "Kuratiertes Catering für Geburtstage, Familienfeiern und private Dinner.",
+    descFallback: "Curated catering for birthdays, family celebrations and private dinners.",
     image: images.private,
     alt: "Private dinner table",
     href: "/request/new?occasion=private&start=1",
@@ -72,102 +70,135 @@ const occasionCards = [
     titleKey: "home.occasions.ramadan.title",
     titleFallback: "Ramadan Iftar",
     descKey: "home.occasions.ramadan.desc",
-    descFallback:
-      "Stilvolles Iftar-Catering für Familien, Unternehmen und Communities.",
+    descFallback: "Elegant iftar catering for families, companies and communities.",
     image: images.ramadan,
     alt: "Iftar dinner table",
     href: "/request/new?occasion=ramadan&start=1",
   },
   {
     titleKey: "home.occasions.christmas.title",
-    titleFallback: "Weihnachtsfeier",
+    titleFallback: "Christmas party",
     descKey: "home.occasions.christmas.desc",
-    descFallback:
-      "Festliches Catering für Firmenfeiern, Familienessen und Winterevents.",
+    descFallback: "Festive catering for company celebrations, family dinners and winter events.",
     image: images.christmas,
     alt: "Christmas dinner table",
     href: "/request/new?occasion=christmas&start=1",
   },
 ];
+
 function extractCityFromText(query: string) {
   const text = query.trim();
   const lower = text.toLowerCase();
 
   const knownCities: Array<[string, string]> = [
+    ["frankfurt am main", "Frankfurt am Main"],
+    ["bergisch gladbach", "Bergisch Gladbach"],
     ["mönchengladbach", "Mönchengladbach"],
-["moenchengladbach", "Mönchengladbach"],
-["munchengladbach", "Mönchengladbach"],
-["wiesbaden", "Wiesbaden"],
-["gelsenkirchen", "Gelsenkirchen"],
-["braunschweig", "Braunschweig"],
-["chemnitz", "Chemnitz"],
-["halle", "Halle"],
-["magdeburg", "Magdeburg"],
-["freiburg", "Freiburg"],
-["krefeld", "Krefeld"],
-["lübeck", "Lübeck"],
-["luebeck", "Lübeck"],
-["oberhausen", "Oberhausen"],
-["erfurt", "Erfurt"],
-["rostock", "Rostock"],
-["kassel", "Kassel"],
-["hagen", "Hagen"],
-["hamm", "Hamm"],
-["saarbrücken", "Saarbrücken"],
-["saarbruecken", "Saarbrücken"],
-["potsdam", "Potsdam"],
-["ludwigshafen", "Ludwigshafen"],
-["oldenburg", "Oldenburg"],
-["leverkusen", "Leverkusen"],
-["osnabrück", "Osnabrück"],
-["osnabrueck", "Osnabrück"],
-["solingen", "Solingen"],
-["heidelberg", "Heidelberg"],
-["herne", "Herne"],
-["neuss", "Neuss"],
-["darmstadt", "Darmstadt"],
-["regensburg", "Regensburg"],
-["ingolstadt", "Ingolstadt"],
-["würzburg", "Würzburg"],
-["wuerzburg", "Würzburg"],
-["fürth", "Fürth"],
-["fuerth", "Fürth"],
-["wolfsburg", "Wolfsburg"],
-["offenbach", "Offenbach"],
-["ulm", "Ulm"],
-["heilbronn", "Heilbronn"],
-["pforzheim", "Pforzheim"],
-["göttingen", "Göttingen"],
-["goettingen", "Göttingen"],
-["bottrop", "Bottrop"],
-["trier", "Trier"],
-["recklinghausen", "Recklinghausen"],
-["reutlingen", "Reutlingen"],
-["bremerhaven", "Bremerhaven"],
-["koblenz", "Koblenz"],
-["bergisch gladbach", "Bergisch Gladbach"],
-["jena", "Jena"],
-["remscheid", "Remscheid"],
-["erlangen", "Erlangen"],
-["moers", "Moers"],
-["siegen", "Siegen"],
-["hildesheim", "Hildesheim"],
-["salzgitter", "Salzgitter"],
-["cottbus", "Cottbus"],
+    ["moenchengladbach", "Mönchengladbach"],
+    ["munchengladbach", "Mönchengladbach"],
+    ["berlin", "Berlin"],
+    ["hamburg", "Hamburg"],
+    ["münchen", "München"],
+    ["munich", "München"],
+    ["frankfurt", "Frankfurt am Main"],
+    ["köln", "Köln"],
+    ["cologne", "Köln"],
+    ["düsseldorf", "Düsseldorf"],
+    ["duesseldorf", "Düsseldorf"],
+    ["dresden", "Dresden"],
+    ["leipzig", "Leipzig"],
+    ["stuttgart", "Stuttgart"],
+    ["dortmund", "Dortmund"],
+    ["essen", "Essen"],
+    ["bremen", "Bremen"],
+    ["hannover", "Hannover"],
+    ["nürnberg", "Nürnberg"],
+    ["nuremberg", "Nürnberg"],
+    ["duisburg", "Duisburg"],
+    ["bochum", "Bochum"],
+    ["wuppertal", "Wuppertal"],
+    ["bielefeld", "Bielefeld"],
+    ["bonn", "Bonn"],
+    ["münster", "Münster"],
+    ["muenster", "Münster"],
+    ["karlsruhe", "Karlsruhe"],
+    ["mannheim", "Mannheim"],
+    ["augsburg", "Augsburg"],
+    ["wiesbaden", "Wiesbaden"],
+    ["gelsenkirchen", "Gelsenkirchen"],
+    ["braunschweig", "Braunschweig"],
+    ["chemnitz", "Chemnitz"],
+    ["halle", "Halle"],
+    ["magdeburg", "Magdeburg"],
+    ["freiburg", "Freiburg"],
+    ["krefeld", "Krefeld"],
+    ["lübeck", "Lübeck"],
+    ["luebeck", "Lübeck"],
+    ["oberhausen", "Oberhausen"],
+    ["erfurt", "Erfurt"],
+    ["mainz", "Mainz"],
+    ["rostock", "Rostock"],
+    ["kassel", "Kassel"],
+    ["hagen", "Hagen"],
+    ["hamm", "Hamm"],
+    ["saarbrücken", "Saarbrücken"],
+    ["saarbruecken", "Saarbrücken"],
+    ["mülheim", "Mülheim"],
+    ["muelheim", "Mülheim"],
+    ["potsdam", "Potsdam"],
+    ["ludwigshafen", "Ludwigshafen"],
+    ["oldenburg", "Oldenburg"],
+    ["leverkusen", "Leverkusen"],
+    ["osnabrück", "Osnabrück"],
+    ["osnabrueck", "Osnabrück"],
+    ["solingen", "Solingen"],
+    ["heidelberg", "Heidelberg"],
+    ["herne", "Herne"],
+    ["neuss", "Neuss"],
+    ["darmstadt", "Darmstadt"],
+    ["paderborn", "Paderborn"],
+    ["regensburg", "Regensburg"],
+    ["ingolstadt", "Ingolstadt"],
+    ["würzburg", "Würzburg"],
+    ["wuerzburg", "Würzburg"],
+    ["fürth", "Fürth"],
+    ["fuerth", "Fürth"],
+    ["wolfsburg", "Wolfsburg"],
+    ["offenbach", "Offenbach"],
+    ["ulm", "Ulm"],
+    ["heilbronn", "Heilbronn"],
+    ["pforzheim", "Pforzheim"],
+    ["göttingen", "Göttingen"],
+    ["goettingen", "Göttingen"],
+    ["bottrop", "Bottrop"],
+    ["trier", "Trier"],
+    ["recklinghausen", "Recklinghausen"],
+    ["reutlingen", "Reutlingen"],
+    ["bremerhaven", "Bremerhaven"],
+    ["koblenz", "Koblenz"],
+    ["jena", "Jena"],
+    ["remscheid", "Remscheid"],
+    ["erlangen", "Erlangen"],
+    ["moers", "Moers"],
+    ["siegen", "Siegen"],
+    ["hildesheim", "Hildesheim"],
+    ["salzgitter", "Salzgitter"],
+    ["cottbus", "Cottbus"],
   ];
 
   for (const [needle, label] of knownCities) {
     if (lower.includes(needle)) return label;
   }
 
-  const cityMatch =
-    text.match(/\b(?:in|at|near|bei|around|um)\s+([A-ZÄÖÜ][a-zA-ZäöüÄÖÜß\-\s]{2,35})/);
+  const cityMatch = text.match(
+    /\b(?:in|at|near|bei|around|um)\s+([A-ZÄÖÜ][a-zA-ZäöüÄÖÜß\-\s]{2,35})/
+  );
 
   if (cityMatch?.[1]) {
     const cleaned = cityMatch[1]
       .replace(/[,.;].*$/, "")
       .replace(
-        /\b(fine|dining|dinning|buffet|elegant|elegantes|vegetarian|vegan|halal|modern|birthday|party|wedding|hochzeit|business|lunch|dinner|ramadan|iftar).*$/i,
+        /\b(fine|dining|dinning|buffet|elegant|elegantes|vegetarian|vegetarisch|vegan|halal|modern|birthday|party|wedding|hochzeit|business|lunch|dinner|ramadan|iftar).*$/i,
         ""
       )
       .trim();
@@ -175,8 +206,9 @@ function extractCityFromText(query: string) {
     if (cleaned.length >= 2) return cleaned;
   }
 
-  return "Ort offen";
+  return "";
 }
+
 function extractPreview(query: string) {
   const lower = query.toLowerCase();
 
@@ -189,56 +221,56 @@ function extractPreview(query: string) {
     query.match(/€\s?\d+/) ||
     query.match(/\d+\s?(€|eur|euro|euros?)\s?(p\.p\.|pp|pro person|per person)?/i);
 
-  const event =
+  const eventKey =
     lower.includes("business") ||
     lower.includes("corporate") ||
     lower.includes("office") ||
     lower.includes("firma") ||
     lower.includes("lunch")
-      ? "Business Event"
+      ? "business"
       : lower.includes("hochzeit") || lower.includes("wedding")
-        ? "Hochzeit"
+        ? "wedding"
         : lower.includes("birthday") ||
             lower.includes("geburtstag") ||
             lower.includes("party")
-          ? "Geburtstag / Party"
+          ? "birthday"
           : lower.includes("ramadan") || lower.includes("iftar")
-            ? "Ramadan Iftar"
+            ? "ramadan"
             : lower.includes("private") || lower.includes("dinner")
-              ? "Private Dinner"
+              ? "private"
               : lower.includes("weihnacht") || lower.includes("christmas")
-                ? "Weihnachtsfeier"
-                : "Event erkannt";
+                ? "christmas"
+                : "unknown";
 
-  const style =
+  const styleKey =
     lower.includes("fine dining") ||
     lower.includes("fine dinning") ||
     lower.includes("fine")
-      ? "Fine Dining"
+      ? "fineDining"
       : lower.includes("buffet")
-        ? "Buffet"
+        ? "buffet"
         : lower.includes("finger food") || lower.includes("fingerfood")
-          ? "Fingerfood"
+          ? "fingerfood"
           : lower.includes("bbq") || lower.includes("grill")
-            ? "BBQ"
+            ? "bbq"
             : lower.includes("elegant") || lower.includes("elegantes")
-              ? "Elegant"
+              ? "elegant"
               : lower.includes("modern")
-                ? "Modern"
+                ? "modern"
                 : lower.includes("halal")
-                  ? "Halal Catering"
+                  ? "halal"
                   : lower.includes("vegetar")
-                    ? "Vegetarisch"
+                    ? "vegetarian"
                     : lower.includes("vegan")
-                      ? "Vegan"
-                      : "Stil offen";
+                      ? "vegan"
+                      : "open";
 
   return {
-    event,
+    eventKey,
     city: extractCityFromText(query),
-    guests: guestMatch?.[1] || "offen",
-    budget: budgetMatch?.[0] || "flexibel",
-    style,
+    guests: guestMatch?.[1] || "",
+    budget: budgetMatch?.[0] || "",
+    styleKey,
   };
 }
 
@@ -248,6 +280,42 @@ export default function Home() {
   const [heroQuery, setHeroQuery] = useState(examples[0]);
 
   const aiPreview = useMemo(() => extractPreview(heroQuery), [heroQuery]);
+
+  const eventLabel =
+    aiPreview.eventKey === "business"
+      ? t("home.aiHero.event.business", "Business event")
+      : aiPreview.eventKey === "wedding"
+        ? t("home.aiHero.event.wedding", "Wedding")
+        : aiPreview.eventKey === "birthday"
+          ? t("home.aiHero.event.birthday", "Birthday / Party")
+          : aiPreview.eventKey === "ramadan"
+            ? t("home.aiHero.event.ramadan", "Ramadan Iftar")
+            : aiPreview.eventKey === "private"
+              ? t("home.aiHero.event.private", "Private dinner")
+              : aiPreview.eventKey === "christmas"
+                ? t("home.aiHero.event.christmas", "Christmas party")
+                : t("home.aiHero.event.unknown", "Event detected");
+
+  const styleLabel =
+    aiPreview.styleKey === "fineDining"
+      ? t("home.aiHero.style.fineDining", "Fine dining")
+      : aiPreview.styleKey === "buffet"
+        ? t("home.aiHero.style.buffet", "Buffet")
+        : aiPreview.styleKey === "fingerfood"
+          ? t("home.aiHero.style.fingerfood", "Finger food")
+          : aiPreview.styleKey === "bbq"
+            ? t("home.aiHero.style.bbq", "BBQ")
+            : aiPreview.styleKey === "elegant"
+              ? t("home.aiHero.style.elegant", "Elegant")
+              : aiPreview.styleKey === "modern"
+                ? t("home.aiHero.style.modern", "Modern")
+                : aiPreview.styleKey === "halal"
+                  ? t("home.aiHero.style.halal", "Halal catering")
+                  : aiPreview.styleKey === "vegetarian"
+                    ? t("home.aiHero.style.vegetarian", "Vegetarian")
+                    : aiPreview.styleKey === "vegan"
+                      ? t("home.aiHero.style.vegan", "Vegan")
+                      : t("home.aiHero.style.open", "Style open");
 
   function startRequest() {
     const query = heroQuery.trim();
@@ -262,7 +330,7 @@ export default function Home() {
 
   const chips = [
     {
-      label: t("home.hero.chipWedding", "Hochzeit"),
+      label: t("home.hero.chipWedding", "Wedding"),
       href: "/request/new?occasion=wedding&start=1",
     },
     {
@@ -278,7 +346,7 @@ export default function Home() {
       href: "/request/new?occasion=ramadan&start=1",
     },
     {
-      label: t("home.hero.chipChristmas", "Weihnachtsfeier"),
+      label: t("home.hero.chipChristmas", "Christmas party"),
       href: "/request/new?occasion=christmas&start=1",
     },
   ];
@@ -290,7 +358,7 @@ export default function Home() {
       <section className="relative overflow-hidden">
         <Image
           src={images.hero}
-          alt="Premium catering event table"
+          alt={t("home.aiHero.heroAlt", "Premium catering event table")}
           fill
           priority
           sizes="100vw"
@@ -304,20 +372,24 @@ export default function Home() {
           <div className="max-w-4xl text-white">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-white/85 backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-[#d7b66d]" />
-              {t("home.aiHero.badge", "KI-Concierge aktiv")}
+              {t("home.aiHero.badge", "AI concierge active")}
             </div>
 
             <h1 className="premium-heading text-5xl leading-[0.95] md:text-7xl">
-              Beschreiben Sie Ihr Event.
+              {t("home.aiHero.titleLine1", "Describe your event.")}
               <span className="block text-[#d7b66d]">
-                Speisely erstellt sofort Ihr Catering-Briefing.
+                {t(
+                  "home.aiHero.titleLine2",
+                  "Speisely instantly builds your catering brief."
+                )}
               </span>
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
-              Kein Suchen. Keine unübersichtlichen Listen. Speisely versteht Ihr
-              Event und findet passende Caterer nach Ort, Gästezahl, Budget,
-              Stil und Ernährungswünschen.
+              {t(
+                "home.aiHero.subtitle",
+                "No searching. No overwhelming lists. Speisely understands your event and finds suitable caterers by location, guest count, budget, style and dietary needs."
+              )}
             </p>
 
             <div className="mt-8 rounded-[2rem] border border-white/20 bg-white p-3 shadow-2xl md:flex">
@@ -328,7 +400,10 @@ export default function Home() {
                   if (event.key === "Enter") startRequest();
                 }}
                 className="min-h-14 flex-1 rounded-2xl px-5 text-base text-[#173f35] outline-none placeholder:text-[#8a9a94]"
-                placeholder="z.B. Hochzeit für 80 Gäste in Berlin, Buffet, €45 p.P."
+                placeholder={t(
+                  "home.aiHero.placeholder",
+                  "e.g. Wedding for 80 guests in Berlin, buffet, €45 p.p."
+                )}
               />
 
               <button
@@ -336,14 +411,16 @@ export default function Home() {
                 onClick={startRequest}
                 className="mt-3 inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-[#c9a45c] px-7 font-semibold text-[#173f35] transition hover:bg-[#d7b66d] md:mt-0"
               >
-                KI-Briefing erstellen
+                {t("home.aiHero.cta", "Create AI brief")}
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
 
             <p className="mt-3 text-sm text-white/75">
-              KI erkennt automatisch: Anlass · Gäste · Ort · Budget ·
-              Catering-Stil
+              {t(
+                "home.aiHero.autoDetect",
+                "AI detects automatically: occasion · guests · location · budget · catering style"
+              )}
             </p>
 
             <div className="mt-5 flex flex-wrap gap-3 text-sm">
@@ -363,10 +440,10 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#d7b66d]">
-                  Live KI-Preview
+                  {t("home.aiHero.previewLabel", "Live AI preview")}
                 </p>
                 <h2 className="premium-heading mt-2 text-3xl text-white">
-                  Was Speisely versteht
+                  {t("home.aiHero.previewTitle", "What Speisely understands")}
                 </h2>
               </div>
 
@@ -379,28 +456,28 @@ export default function Home() {
               {[
                 {
                   icon: Sparkles,
-                  label: "Anlass",
-                  value: aiPreview.event,
+                  label: t("home.aiHero.label.event", "Occasion"),
+                  value: eventLabel,
                 },
                 {
                   icon: Users,
-                  label: "Gäste",
-                  value: aiPreview.guests,
+                  label: t("home.aiHero.label.guests", "Guests"),
+                  value: aiPreview.guests || t("home.aiHero.value.open", "Open"),
                 },
                 {
                   icon: MapPin,
-                  label: "Ort",
-                  value: aiPreview.city,
+                  label: t("home.aiHero.label.city", "Location"),
+                  value: aiPreview.city || t("home.aiHero.city.open", "Location open"),
                 },
                 {
                   icon: Wallet,
-                  label: "Budget",
-                  value: aiPreview.budget,
+                  label: t("home.aiHero.label.budget", "Budget"),
+                  value: aiPreview.budget || t("home.aiHero.budget.flexible", "Flexible"),
                 },
                 {
                   icon: WandSparkles,
-                  label: "Stil",
-                  value: aiPreview.style,
+                  label: t("home.aiHero.label.style", "Style"),
+                  value: styleLabel,
                 },
               ].map((item) => {
                 const Icon = item.icon;
@@ -424,11 +501,13 @@ export default function Home() {
 
             <div className="mt-5 rounded-[1.25rem] border border-[#d7b66d]/30 bg-[#d7b66d]/15 p-4">
               <p className="text-sm font-semibold text-[#ffe2a0]">
-                Nächster Schritt
+                {t("home.aiHero.nextStepTitle", "Next step")}
               </p>
               <p className="mt-1 text-sm leading-6 text-white/75">
-                Speisely wandelt diese Angaben in ein Briefing um und startet
-                danach das Matching.
+                {t(
+                  "home.aiHero.nextStepText",
+                  "Speisely turns these details into a brief and then starts matching."
+                )}
               </p>
             </div>
           </aside>
@@ -438,11 +517,11 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-10 max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-            So funktioniert Speisely
+            {t("home.aiHero.stepsLabel", "How Speisely works")}
           </p>
 
           <h2 className="premium-heading mt-3 text-5xl leading-[0.95]">
-            Ein AI-Flow statt langer Catering-Suche.
+            {t("home.aiHero.stepsTitle", "An AI flow instead of a long catering search.")}
           </h2>
         </div>
 
@@ -450,18 +529,27 @@ export default function Home() {
           {[
             {
               icon: Sparkles,
-              title: "1. Beschreiben",
-              text: "Sie beschreiben Ihr Event in natürlicher Sprache — wie in einem Chat.",
+              title: t("home.aiHero.step1Title", "1. Describe"),
+              text: t(
+                "home.aiHero.step1Text",
+                "Describe your event in natural language — like in a chat."
+              ),
             },
             {
               icon: CheckCircle2,
-              title: "2. KI versteht",
-              text: "Speisely erkennt Anlass, Gästezahl, Ort, Budget, Stil und Wünsche.",
+              title: t("home.aiHero.step2Title", "2. AI understands"),
+              text: t(
+                "home.aiHero.step2Text",
+                "Speisely detects occasion, guest count, location, budget, style and preferences."
+              ),
             },
             {
               icon: ArrowRight,
-              title: "3. KI-Matching",
-              text: "Sie erhalten passende Caterer statt einer unübersichtlichen Liste.",
+              title: t("home.aiHero.step3Title", "3. AI matching"),
+              text: t(
+                "home.aiHero.step3Text",
+                "You receive suitable caterers instead of an overwhelming list."
+              ),
             },
           ].map((item) => {
             const Icon = item.icon;
@@ -487,11 +575,14 @@ export default function Home() {
         <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#b28a3c]">
-              Anlässe
+              {t("home.occasions.label", "Occasions")}
             </p>
 
             <h2 className="premium-heading mt-3 text-5xl leading-[0.95]">
-              Starten Sie mit einem Event — Speisely macht daraus ein Briefing.
+              {t(
+                "home.aiHero.occasionsTitle",
+                "Start with an event — Speisely turns it into a brief."
+              )}
             </h2>
           </div>
 
@@ -499,7 +590,8 @@ export default function Home() {
             href="/request/new?start=1"
             className="inline-flex items-center gap-2 font-semibold text-[#173f35]"
           >
-            Mit KI-Matching starten <ArrowRight className="h-4 w-4" />
+            {t("home.occasions.cta", "Start with AI matching")}{" "}
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
@@ -520,7 +612,7 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#102f28]/60 to-transparent" />
                 <div className="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#173f35]">
-                  KI-Start
+                  {t("home.aiHero.aiStart", "AI start")}
                 </div>
               </div>
 
@@ -541,26 +633,27 @@ export default function Home() {
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-[2.3rem] bg-[#173f35] p-8 text-white shadow-[0_24px_80px_rgba(23,63,53,0.16)] md:p-10">
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
-              Warum Speisely
+              {t("home.why.label", "Why Speisely")}
             </p>
 
             <h2 className="premium-heading mt-4 text-5xl leading-[0.95]">
-              Nicht mehr suchen. Besser matchen.
+              {t("home.aiHero.whyTitle", "Stop searching. Start matching.")}
             </h2>
 
             <p className="mt-5 leading-8 text-white/75">
-              Klassische Marktplätze zeigen Listen. Speisely erstellt zuerst ein
-              strukturiertes Event-Briefing und nutzt es als Grundlage für
-              passende Caterer.
+              {t(
+                "home.aiHero.whyText",
+                "Classic marketplaces show lists. Speisely first creates a structured event brief and uses it as the basis for suitable caterer matching."
+              )}
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
             {[
-              "AI-Briefing aus natürlicher Sprache",
-              "Matching nach Ort, Budget und Gästezahl",
-              "Bessere Anfragen für Caterer",
-              "Später: sichere Buchung und Plattform-Zahlung",
+              t("home.aiHero.point1", "AI brief from natural language"),
+              t("home.aiHero.point2", "Matching by location, budget and guest count"),
+              t("home.aiHero.point3", "Better inquiries for caterers"),
+              t("home.aiHero.point4", "Later: secure booking and platform payment"),
             ].map((item) => (
               <div
                 key={item}
@@ -577,23 +670,25 @@ export default function Home() {
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] bg-[#173f35] px-8 py-16 text-center text-white shadow-[0_24px_80px_rgba(23,63,53,0.18)] md:px-16">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d7b66d]">
-            Speisely AI Concierge
+            {t("home.aiHero.finalLabel", "Speisely AI Concierge")}
           </p>
 
           <h2 className="premium-heading mx-auto mt-4 max-w-4xl text-5xl leading-[0.95] md:text-6xl">
-            Planen Sie Ihr nächstes Catering mit KI-Unterstützung.
+            {t("home.final.title", "Plan your next catering event with AI guidance.")}
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/75">
-            Starten Sie mit einer einfachen Beschreibung. Speisely macht daraus
-            ein klares Briefing und führt Sie zum passenden Caterer.
+            {t(
+              "home.final.text",
+              "Start with a simple description. Speisely turns it into a clear brief and guides you to the right caterer."
+            )}
           </p>
 
           <Link
             href="/request/new?start=1"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#d7b66d] px-8 py-4 font-semibold text-[#173f35] transition hover:bg-[#e3c57c]"
           >
-            Jetzt KI-Matching starten
+            {t("home.final.cta", "Describe event")}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -601,16 +696,19 @@ export default function Home() {
 
       <footer className="border-t border-[#eadfce] px-6 py-8">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-4 text-sm text-[#5c6f68] md:flex-row">
-          <p>© 2026 Speisely. Premium KI-gestützter Catering-Marktplatz.</p>
+          <p>
+            © 2026 Speisely.{" "}
+            {t("footer.tagline", "Premium AI-assisted catering marketplace.")}
+          </p>
 
           <div className="flex gap-6">
             <Link href="/caterers">
-              {t("nav.discoverCaterers", "Caterer entdecken")}
+              {t("nav.discoverCaterers", "Discover caterers")}
             </Link>
             <Link href="/for-caterers">
-              {t("nav.forCaterers", "Für Caterer")}
+              {t("nav.forCaterers", "For caterers")}
             </Link>
-            <Link href="/about">{t("nav.about", "Über Speisely")}</Link>
+            <Link href="/about">{t("nav.about", "About Speisely")}</Link>
           </div>
         </div>
       </footer>
