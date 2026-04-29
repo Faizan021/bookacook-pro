@@ -928,5 +928,8 @@
 "home.aiHero.budget": "Budget",
 "home.aiHero.style": "Stil",
 "home.aiHero.nextStep": "Nächster Schritt",
-"home.aiHero.nextStepText": "Speisely wandelt diese Angaben in ein Briefing um und startet danach das Matching."
+"home.aiHero.nextStepText": "Speisely wandelt diese Angaben in ein Briefing um und startet danach das Matching.",
+  "request.autoStartLabel": "KI-Concierge",
+"request.autoStartTitle": "Ihr Catering-Briefing wird erstellt",
+"request.autoStartText": "Speisely verwandelt Ihre Event-Idee in eine strukturierte Anfrage."
 }
