@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Cormorant_Garamond, Geist } from "next/font/google";
 import { I18nProvider } from "@/lib/i18n/context";
+import { Providers } from "@/components/providers";
 
 const heading = Cormorant_Garamond({
   subsets: ["latin"],
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="de" className={`${heading.variable} ${body.variable}`}>
       <body className="bg-[#fbf7ef] text-[#173f35] antialiased">
-        <I18nProvider>{children}</I18nProvider>
+        <I18nProvider>
+          <Providers>{children}</Providers>
+        </I18nProvider>
       </body>
     </html>
   );
