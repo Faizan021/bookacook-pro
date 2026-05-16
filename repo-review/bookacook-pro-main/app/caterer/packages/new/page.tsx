@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getUserProfile } from "@/lib/auth/get-user-profile";
 import { PackageWizard } from "@/components/packages/package-wizard";
 
-export const metadata = { title: "Neues Paket – BookaCook Pro" };
+export const metadata = { title: "Neues Paket – Speisely" };
 
 export default async function NewPackagePage() {
   const { user } = await getUserProfile();

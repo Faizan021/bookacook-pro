@@ -22,7 +22,7 @@ const MESSAGES: Record<Locale, Messages> = {
 };
 
 const STORAGE_KEY = "speisely_lang";
-const LEGACY_STORAGE_KEY = "bookacook_lang";
+const LEGACY_STORAGE_KEY = "speisely_lang";
 const DEFAULT_LOCALE: Locale = "de";
 const RTL_LOCALES: Locale[] = [];
 
