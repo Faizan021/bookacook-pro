@@ -1,0 +1,121 @@
+Next phase: implement caterer verification review + payout eligibility in the dashboard.
+
+Context:
+- Caterer multilingual dashboard modules are already functional
+- Dedicated caterer signup flow is already implemented
+- Caterers cannot register without a required license / registration number
+- Customer signup is separate and simpler
+- German is the default language
+- EN, TR, and AR already exist
+- Arabic RTL must continue to work
+
+Now build the next dashboard-first phase.
+
+Requirements:
+
+1. Caterer verification status module
+Add a verification status section to the caterer dashboard that shows:
+- business name
+- contact person
+- phone
+- business address
+- license / registration number
+- current verification status
+
+Support these statuses:
+- pending
+- under_review
+- verified
+- rejected
+- suspended
+
+Also show:
+- payout enabled or blocked
+- a warning/info banner when verification is pending, rejected, or suspended
+
+2. Admin verification review module
+Add an admin dashboard module/page where admins can review caterers.
+Show:
+- business name
+- contact person
+- email
+- phone
+- business address
+- license / registration number
+- verification status
+- created date if available
+
+Add admin actions:
+- mark as under_review
+- verify
+- reject
+- suspend
+
+3. Payout eligibility logic
+Implement payout gating rules:
+- caterers are not payout-eligible unless verification status = verified
+- if not verified, payouts remain blocked
+- caterer dashboard should clearly show this
+- admin dashboard should clearly show which payouts are blocked because of verification
+
+4. Payment architecture preparation
+Update the payment/payout layer so it supports:
+- gross booking amount
+- 10% platform commission
+- net payout
+- funds held by platform
+- released amount
+- remaining held amount
+
+Support these statuses:
+- pending_payment
+- funds_held
+- partially_released
+- payout_pending
+- payout_released
+- refunded
+- partially_refunded
+- cancelled
+- disputed
+
+5. Caterer payments view
+Update the caterer payments module to show:
+- gross amount
+- Bookacook commission (10%)
+- net payout
+- held amount
+- released amount
+- remaining amount
+- payout status
+- blocked payout message when caterer is not verified
+
+6. Admin payments view
+Update the admin payments module to show:
+- total GMV
+- total 10% commission
+- total held funds
+- total partially released
+- total released
+- blocked payouts for unverified caterers
+
+7. Translations
+Translate all new UI text across:
+- DE
+- EN
+- TR
+- AR
+
+Keep Arabic RTL support fully working.
+
+8. Constraints
+- Do not rebuild the app
+- Keep demo dashboards unchanged
+- Make minimal schema/code changes only if needed
+- If real data is missing, show a clean translated empty state
+
+9. Output required
+Tell me exactly:
+- which files changed
+- which schema fields/tables changed
+- which admin actions were added
+- what the next recommended step is
