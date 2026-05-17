@@ -7,6 +7,7 @@ import { RestaurantHero } from "@/components/restaurant/RestaurantHero";
 import { RestaurantMenu } from "@/components/restaurant/RestaurantMenu";
 import { RestaurantCart } from "@/components/restaurant/RestaurantCart";
 import { RestaurantTrustPanel } from "@/components/restaurant/RestaurantTrustPanel";
+import { restaurants } from "@/data/restaurants";
 
 type PageProps = {
   params: {
