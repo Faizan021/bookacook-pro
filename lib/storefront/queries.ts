@@ -1,59 +1,69 @@
-import { createClient } from "@/lib/supabase/server";
-import type { StorefrontData } from "@/lib/storefront/types";
+import { createClient } from '@/lib/supabase/server';
+import { StorefrontSettings, ProductCategory, Product, Order, OrderItem } from './types';
 
-export async function getStorefrontBySlug(slug: string): Promise<StorefrontData | null> {
+export interface OrderWithItems extends Order {
+  items: (OrderItem & { product?: Product })[];
+}
+
+export async function getFullStorefrontData(slug: string) {
   const supabase = await createClient();
-  const cleanSlug = slug.trim().toLowerCase();
-
-  const { data: storefront, error: storefrontError } = await supabase
-    .from("storefront_settings")
-    .select("*")
-    .eq("slug", cleanSlug)
-    .eq("status", "published")
+  
+  const { data, error } = await supabase
+    .from('storefront_settings')
+    .select(`
+      *,
+      caterers:caterer_id (
+        id,
+        business_name,
+        logo_url,
+        phone,
+        city
+      )
+    `)
+    .eq('slug', slug)
+    .eq('is_active', true)
     .maybeSingle();
+  
+  if (error) throw new Error(`Failed to fetch storefront: ${error.message}`);
+  if (!data) return null;
 
-  if (storefrontError) {
-    console.error("Storefront load failed:", storefrontError.message);
-    throw new Error(storefrontError.message);
-  }
+  const storefront = data as StorefrontSettings;
+  const caterer = data.caterers;
 
-  if (!storefront) return null;
-
-  const [{ data: caterer, error: catererError }, { data: categories, error: categoriesError }, { data: products, error: productsError }] =
-    await Promise.all([
-      supabase
-        .from("caterers")
-        .select(
-          "id,business_name,city,phone,cuisine_types,average_rating,verification_status,storefront_enabled,storefront_status,accepts_direct_orders,accepts_catering_requests"
-        )
-        .eq("id", storefront.caterer_id)
-        .maybeSingle(),
-      supabase
-        .from("product_categories")
-        .select("*")
-        .eq("caterer_id", storefront.caterer_id)
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true })
-        .order("name_de", { ascending: true }),
-      supabase
-        .from("products")
-        .select("*")
-        .eq("caterer_id", storefront.caterer_id)
-        .eq("service_type", "instant")
-        .eq("is_active", true)
-        .order("sort_order", { ascending: true })
-        .order("name_de", { ascending: true }),
-    ]);
-
-  if (catererError) throw new Error(catererError.message);
-  if (categoriesError) throw new Error(categoriesError.message);
-  if (productsError) throw new Error(productsError.message);
-  if (!caterer) return null;
+  const [categoriesResult, productsResult] = await Promise.all([
+    supabase.from('product_categories').select('*').eq('caterer_id', storefront.caterer_id).eq('is_active', true).order('display_order', { ascending: true }),
+    supabase.from('products').select('*').eq('caterer_id', storefront.caterer_id).eq('is_available', true).eq('service_type', 'instant').order('display_order', { ascending: true })
+  ]);
 
   return {
     storefront,
     caterer,
-    categories: categories || [],
-    products: products || [],
-  } as StorefrontData;
+    categories: (categoriesResult.data || []) as ProductCategory[],
+    products: (productsResult.data || []) as Product[]
+  };
+}
+
+export async function getOrderById(orderId: string) {
+  const supabase = await createClient();
+  
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .maybeSingle();
+  
+  if (orderError) throw new Error(`Failed to fetch order: ${orderError.message}`);
+  if (!order) return null;
+  
+  const { data: items, error: itemsError } = await supabase
+    .from('order_items')
+    .select(`*, product:product_id (*)`)
+    .eq('order_id', orderId);
+  
+  if (itemsError) throw new Error(`Failed to fetch order items: ${itemsError.message}`);
+  
+  return {
+    ...order,
+    items: items || []
+  } as OrderWithItems;
 }

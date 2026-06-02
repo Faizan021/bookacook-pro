@@ -1,77 +1,101 @@
-export type StorefrontSettings = {
+export interface StorefrontSettings {
   id: string;
   caterer_id: string;
   slug: string;
-  display_name: string;
-  headline: string | null;
+  is_active: boolean;
+  min_order_amount: number;
+  delivery_fee: number;
+  estimated_prep_time_minutes: number;
+  accepts_pickup: boolean;
+  accepts_delivery: boolean;
   description: string | null;
-  logo_url: string | null;
-  hero_image_url: string | null;
-  phone: string | null;
-  email: string | null;
-  address: string | null;
-  city: string | null;
-  postal_code: string | null;
-  pickup_enabled: boolean;
-  delivery_enabled: boolean;
-  catering_cta_enabled: boolean;
-  minimum_order_amount: number | null;
-  delivery_fee: number | null;
-  opening_hours: Record<string, unknown> | null;
-  status: string;
-};
+  banner_image_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
-export type StorefrontCaterer = {
-  id: string;
-  business_name: string | null;
-  city: string | null;
-  phone: string | null;
-  cuisine_types: string[] | null;
-  average_rating: number | null;
-  verification_status: string | null;
-  storefront_enabled: boolean | null;
-  storefront_status: string | null;
-  accepts_direct_orders: boolean | null;
-  accepts_catering_requests: boolean | null;
-};
-
-export type StorefrontCategory = {
+export interface ProductCategory {
   id: string;
   caterer_id: string;
-  name_de: string;
-  name_en: string | null;
-  description_de: string | null;
-  description_en: string | null;
-  sort_order: number | null;
-  is_active: boolean | null;
-};
+  name: string;
+  description: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
-export type StorefrontProduct = {
+export interface Product {
   id: string;
   caterer_id: string;
-  category_id: string | null;
-  name_de: string;
-  name_en: string | null;
-  description_de: string | null;
-  description_en: string | null;
-  service_type: "instant" | "catering";
-  price_type: "fixed" | "per_person" | "quote_based";
-  price: number | null;
-  min_guests: number | null;
-  max_guests: number | null;
+  category_id: string;
+  name: string;
+  description: string | null;
+  service_type: 'instant' | 'catering';
+  price: number;
   image_url: string | null;
-  cuisine_tags: string[] | null;
-  dietary_tags: string[] | null;
-  allergen_tags: string[] | null;
-  available_for_pickup: boolean | null;
-  available_for_delivery: boolean | null;
-  is_active: boolean | null;
-  sort_order: number | null;
-};
+  is_available: boolean;
+  allergen_info: string | null;
+  preparation_time_minutes: number | null;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
 
-export type StorefrontData = {
+export interface Order {
+  id: string;
+  caterer_id: string;
+  customer_id: string | null;
+  source_type: 'direct_storefront' | 'storefront_catering' | 'speisely_marketplace' | 'admin_created';
+  order_status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'picked_up' | 'delivered' | 'cancelled';
+  service_type: 'pickup' | 'delivery';
+  total_amount: number;
+  delivery_fee: number;
+  notes: string | null;
+  customer_name: string | null;
+  customer_email: string | null;
+  customer_phone: string | null;
+  delivery_address: string | null;
+  estimated_ready_time: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderItem {
+  id: string;
+  order_id: string;
+  product_id: string;
+  quantity: number;
+  unit_price: number;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+  notes?: string;
+}
+
+export interface CartSummary {
+  items: CartItem[];
+  subtotal: number;
+  deliveryFee: number;
+  total: number;
+  totalPeople: number;
+  serviceType: 'pickup' | 'delivery';
+  estimatedReadyTime: number;
+}
+
+export interface StorefrontData {
   storefront: StorefrontSettings;
-  caterer: StorefrontCaterer;
-  categories: StorefrontCategory[];
-  products: StorefrontProduct[];
-};
+  caterer: {
+    id: string;
+    business_name: string | null;
+    logo_url: string | null;
+    phone: string | null;
+    city: string | null;
+  };
+  categories: ProductCategory[];
+  products: Product[];
+}
