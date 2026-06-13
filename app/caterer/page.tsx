@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CatererOverviewDisplay } from "@/components/dashboard/caterer-overview-display";
+import { DashboardShell } from "@/components/dashboard/shell";
 
-export default async function CatererOverviewPage() {
-  const supabase = createClient();
+export default async function CatererDashboardPage() {
+  const supabase = await createClient();
 
   const {
     data: { user },
