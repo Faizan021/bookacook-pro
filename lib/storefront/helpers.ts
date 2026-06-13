@@ -1,4 +1,4 @@
-import { CartSummary, Order } from './types';
+import { CartSummary, Order, CartItem } from './types';
 
 export function calculateCartSummary(
   items: CartItem[],

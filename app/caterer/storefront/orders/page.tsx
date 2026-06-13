@@ -3,10 +3,11 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { formatCurrency } from '@/lib/storefront/helpers';
+import { Order } from '@/lib/storefront/types';
 
 // We fetch directly in component since this is a client component and getOrdersForCaterer was not exported in queries.ts yet
 export default function StorefrontOrdersDashboardPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
