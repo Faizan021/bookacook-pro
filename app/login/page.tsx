@@ -30,6 +30,8 @@ export default async function LoginPage({
       redirect(next);
     } else if (profile?.role === "caterer") {
       redirect("/caterer");
+    } else if (profile?.role === "restaurant") {
+      redirect("/restaurant");
     } else if (profile?.role === "admin") {
       redirect("/admin");
     } else {

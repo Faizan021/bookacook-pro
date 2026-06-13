@@ -14,7 +14,7 @@ type NavItem = {
 };
 
 type SidebarProps = {
-  role: "admin" | "caterer" | "customer";
+  role: "admin" | "caterer" | "customer" | "restaurant";
   basePath: string;
   isDemo?: boolean;
   isDark?: boolean;
@@ -187,6 +187,25 @@ function getNavItems(role: string, basePath: string): NavItem[] {
     ];
   }
 
+  if (role === "restaurant") {
+    return [
+      overview,
+      {
+        labelKey: "nav.menu",
+        fallback: "Menü",
+        href: `${basePath}/menu`,
+        icon: <BoxIcon />,
+      },
+      {
+        labelKey: "nav.liveOrders",
+        fallback: "Bestellungen",
+        href: `${basePath}/orders`,
+        icon: <CalendarIcon />,
+      },
+      settings,
+    ];
+  }
+
   return [
     overview,
     {
@@ -209,7 +228,9 @@ export function Sidebar({ role, basePath, isDemo = false, isDark = false }: Side
       ? "portal.admin"
       : role === "caterer"
         ? "portal.caterer"
-        : "portal.customer";
+        : role === "restaurant"
+          ? "portal.restaurant"
+          : "portal.customer";
 
   const bgClass = isDark ? "bg-[#050a08]" : "bg-white";
   const borderClass = isDark ? "border-white/5" : "border-[#e8dcc8]";

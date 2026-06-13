@@ -8,7 +8,7 @@ import { LogoLockup } from "@/components/ui/logo-mark";
 import { useT, useIsRTL } from "@/lib/i18n/context";
 
 type DashboardShellProps = {
-  role: "admin" | "caterer" | "customer";
+  role: "admin" | "caterer" | "customer" | "restaurant";
   basePath: string;
   isDemo?: boolean;
   children: ReactNode;
@@ -37,14 +37,18 @@ export function DashboardShell({
       ? "breadcrumb.adminDashboard"
       : role === "caterer"
         ? "breadcrumb.catererDashboard"
-        : "breadcrumb.customerDashboard";
+        : role === "restaurant"
+          ? "breadcrumb.restaurantDashboard"
+          : "breadcrumb.customerDashboard";
 
   const portalKey =
     role === "admin"
       ? "portal.admin"
       : role === "caterer"
         ? "portal.caterer"
-        : "portal.customer";
+        : role === "restaurant"
+          ? "portal.restaurant"
+          : "portal.customer";
 
   return (
     <div
