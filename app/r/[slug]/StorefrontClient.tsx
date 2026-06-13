@@ -16,12 +16,9 @@ type CartLine = {
   quantity: number;
 };
 
-function formatMoney(value?: number | null) {
-  return `€${Number(value || 0).toLocaleString("de-DE", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
+import { formatCurrency } from '@/lib/storefront/helpers';
+
+const formatMoney = (value?: number | null) => formatCurrency(value || 0);
 
 function productDescription(product: StorefrontProduct) {
   return product.description_de || product.description_en || "Direkt bestellbar über Speisely.";
@@ -129,14 +126,18 @@ export function StorefrontClient({ data }: Props) {
           })),
         });
 
-        setSuccessOrderId(result.order_id);
-        clearCart();
-        setCustomerName("");
-        setCustomerPhone("");
-        setCustomerEmail("");
-        setDeliveryAddress("");
-        setRequestedTime("");
-        setNotes("");
+        if (result.success) {
+          setSuccessOrderId(result.order_id);
+          clearCart();
+          setCustomerName("");
+          setCustomerPhone("");
+          setCustomerEmail("");
+          setDeliveryAddress("");
+          setRequestedTime("");
+          setNotes("");
+        } else {
+          setError(result.error || 'Bestellung konnte nicht gespeichert werden.');
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Bestellung konnte nicht gespeichert werden.");
       }

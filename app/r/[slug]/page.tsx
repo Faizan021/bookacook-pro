@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getFullStorefrontData } from '@/lib/storefront/queries';
-import { StorefrontPageClient } from './page-client';
+import { StorefrontClient } from './StorefrontClient';
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -34,7 +34,7 @@ export default async function StorefrontPage({ params }: Props) {
       notFound();
     }
     
-    return <StorefrontPageClient initialData={data} slug={slug} />;
+    return <StorefrontClient data={data} />;
   } catch (error) {
     console.error("Error fetching storefront:", error);
     return (

@@ -77,7 +77,7 @@ export default function StorefrontOrdersDashboardPage() {
                       {order.order_status}
                     </span>
                   </td>
-                  <td className="p-4">{new Date(order.created_at).toLocaleDateString('de-DE')}</td>
+                  <td className="p-4" suppressHydrationWarning>{new Date(order.created_at).toLocaleDateString('de-DE')}</td>
                 </tr>
               ))}
             </tbody>

@@ -10,18 +10,19 @@ export const storefrontOrderSchema = z.object({
     product_id: z.string().uuid('Invalid product ID'),
     quantity: z.number().int().positive('Quantity must be greater than 0')
   })).min(1, 'Order must contain at least one item'),
-  customerName: z.string().min(1, 'Name is required'),
-  customerEmail: z.string().email('Invalid email address format'),
-  customerPhone: z.string().min(6, 'Valid phone number is required'),
-  serviceType: z.enum(['pickup', 'delivery']),
-  deliveryAddress: z.string().optional(),
+  customer_name: z.string().min(1, 'Name is required'),
+  customer_email: z.string().email('Invalid email address format').optional().or(z.literal('')),
+  customer_phone: z.string().min(6, 'Valid phone number is required'),
+  fulfillment_type: z.enum(['pickup', 'delivery']),
+  delivery_address: z.string().optional(),
+  requested_time: z.string().optional(),
   notes: z.string().optional()
 }).refine(data => {
-  if (data.serviceType === 'delivery') {
-    return !!data.deliveryAddress && data.deliveryAddress.trim().length >= 5;
+  if (data.fulfillment_type === 'delivery') {
+    return !!data.delivery_address && data.delivery_address.trim().length >= 5;
   }
   return true;
 }, {
   message: 'Valid delivery address is required for delivery orders',
-  path: ['deliveryAddress']
+  path: ['delivery_address']
 });

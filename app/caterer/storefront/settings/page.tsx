@@ -59,9 +59,9 @@ export default function StorefrontSettingsPage() {
 
     const result = await updateStorefrontSettings(storefrontId, {
       is_active: isActive,
-      min_order_amount: parseFloat(minOrder),
-      delivery_fee: parseFloat(deliveryFee),
-      estimated_prep_time_minutes: prepTime,
+      min_order_amount: parseFloat(minOrder) || 0,
+      delivery_fee: parseFloat(deliveryFee) || 0,
+      estimated_prep_time_minutes: prepTime || 30,
       description: description || null,
     });
 
@@ -108,7 +108,10 @@ export default function StorefrontSettingsPage() {
 
         <div>
           <label className="block text-sm font-medium text-[#173f35] mb-1">Zubereitungszeit (Minuten)</label>
-          <input type="number" value={prepTime} onChange={e => setPrepTime(parseInt(e.target.value))} className="w-full border border-[#e8ddd1] rounded p-2" required />
+          <input type="number" value={prepTime} onChange={e => {
+            const val = parseInt(e.target.value);
+            setPrepTime(isNaN(val) ? 0 : val);
+          }} className="w-full border border-[#e8ddd1] rounded p-2" required />
         </div>
 
         <div>

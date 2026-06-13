@@ -264,7 +264,119 @@ CREATE TABLE IF NOT EXISTS public.quotes (
 
 CREATE INDEX IF NOT EXISTS idx_quotes_brief_id ON public.quotes(brief_id);
 CREATE INDEX IF NOT EXISTS idx_quotes_caterer_id ON public.quotes(caterer_id);
-CREATE INDEX IF NOT EXISTS idx_quotes_status ON public.quotes(status);
+CREATE INDEX IF NOT EXISTS idx_payouts_status ON public.payouts(status);
+
+-- ============================================================================
+-- ROW LEVEL SECURITY (RLS) POLICIES
+-- ============================================================================
+
+-- 1. storefront_settings
+ALTER TABLE public.storefront_settings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Storefront settings are viewable by public if active."
+  ON public.storefront_settings FOR SELECT
+  USING (status = 'published' OR caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+CREATE POLICY "Caterers can insert their own settings."
+  ON public.storefront_settings FOR INSERT
+  WITH CHECK (caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+CREATE POLICY "Caterers can update their own settings."
+  ON public.storefront_settings FOR UPDATE
+  USING (caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+-- 2. product_categories
+ALTER TABLE public.product_categories ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Categories are viewable by public."
+  ON public.product_categories FOR SELECT
+  USING (true);
+
+CREATE POLICY "Caterers can manage their own categories."
+  ON public.product_categories FOR ALL
+  USING (caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+-- 3. products
+ALTER TABLE public.products ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Products are viewable by public."
+  ON public.products FOR SELECT
+  USING (true);
+
+CREATE POLICY "Caterers can manage their own products."
+  ON public.products FOR ALL
+  USING (caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+-- 4. orders
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public can insert orders."
+  ON public.orders FOR INSERT
+  WITH CHECK (true);
+
+CREATE POLICY "Users can view their own orders or caterers their incoming orders."
+  ON public.orders FOR SELECT
+  USING (customer_id = auth.uid() OR caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+CREATE POLICY "Caterers can update their incoming orders."
+  ON public.orders FOR UPDATE
+  USING (caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+CREATE POLICY "Only caterers can delete their own incoming orders."
+  ON public.orders FOR DELETE
+  USING (caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid()));
+
+-- 5. order_items
+ALTER TABLE public.order_items ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public can insert order items."
+  ON public.order_items FOR INSERT
+  WITH CHECK (true);
+
+CREATE POLICY "Users can view their own order items or caterers their incoming order items."
+  ON public.order_items FOR SELECT
+  USING (order_id IN (SELECT id FROM public.orders WHERE customer_id = auth.uid() OR caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid())));
+
+CREATE POLICY "Caterers can update their incoming order items."
+  ON public.order_items FOR UPDATE
+  USING (order_id IN (SELECT id FROM public.orders WHERE caterer_id IN (SELECT id FROM public.caterers WHERE user_id = auth.uid())));
+
+-- ============================================================================
+-- TRIGGERS
+-- ============================================================================
+
+-- Function to auto-update the updated_at timestamp
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger for storefront_settings
+DROP TRIGGER IF EXISTS set_storefront_settings_updated_at ON public.storefront_settings;
+CREATE TRIGGER set_storefront_settings_updated_at
+BEFORE UPDATE ON public.storefront_settings
+FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+-- Trigger for product_categories
+DROP TRIGGER IF EXISTS set_product_categories_updated_at ON public.product_categories;
+CREATE TRIGGER set_product_categories_updated_at
+BEFORE UPDATE ON public.product_categories
+FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+-- Trigger for products
+DROP TRIGGER IF EXISTS set_products_updated_at ON public.products;
+CREATE TRIGGER set_products_updated_at
+BEFORE UPDATE ON public.products
+FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+-- Trigger for orders
+DROP TRIGGER IF EXISTS set_orders_updated_at ON public.orders;
+CREATE TRIGGER set_orders_updated_at
+BEFORE UPDATE ON public.orders
+FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 CREATE TABLE IF NOT EXISTS public.quote_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

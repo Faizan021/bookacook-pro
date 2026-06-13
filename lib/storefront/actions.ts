@@ -54,7 +54,7 @@ export async function createStorefrontOrder(payload: unknown) {
       throw new Error(`Order subtotal (€${calculatedSubtotal.toFixed(2)}) is below the minimum order amount (€${settings.min_order_amount.toFixed(2)}).`);
     }
     
-    const deliveryFee = validatedData.serviceType === 'delivery' ? settings.delivery_fee : 0;
+    const deliveryFee = validatedData.fulfillment_type === 'delivery' ? settings.delivery_fee : 0;
     const finalTotalAmount = calculatedSubtotal + deliveryFee;
     
     // 5. Securely Insert Order
@@ -67,14 +67,15 @@ export async function createStorefrontOrder(payload: unknown) {
         customer_id: user?.id || null,
         source_type: 'direct_storefront',
         order_status: 'pending',
-        service_type: validatedData.serviceType,
+        service_type: validatedData.fulfillment_type,
         total_amount: finalTotalAmount, // Server calculated
         delivery_fee: deliveryFee,      // Server calculated
         notes: validatedData.notes || null,
-        customer_name: validatedData.customerName,
-        customer_email: validatedData.customerEmail,
-        customer_phone: validatedData.customerPhone,
-        delivery_address: validatedData.deliveryAddress || null
+        customer_name: validatedData.customer_name,
+        customer_email: validatedData.customer_email || null,
+        customer_phone: validatedData.customer_phone,
+        delivery_address: validatedData.delivery_address || null,
+        requested_time: validatedData.requested_time || null
       })
       .select()
       .single();
