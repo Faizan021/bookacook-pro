@@ -82,7 +82,8 @@ CREATE TRIGGER trg_packages_updated_at
 ALTER TABLE public.packages ENABLE ROW LEVEL SECURITY;
 
 -- Caterers can CRUD their own packages
-CREATE POLICY IF NOT EXISTS "Caterers manage own packages"
+DROP POLICY IF EXISTS "Caterers manage own packages" ON public.packages;
+CREATE POLICY "Caterers manage own packages"
   ON public.packages
   FOR ALL
   USING (
@@ -92,13 +93,15 @@ CREATE POLICY IF NOT EXISTS "Caterers manage own packages"
   );
 
 -- Anyone can read active packages (for public website)
-CREATE POLICY IF NOT EXISTS "Public read active packages"
+DROP POLICY IF EXISTS "Public read active packages" ON public.packages;
+CREATE POLICY "Public read active packages"
   ON public.packages
   FOR SELECT
   USING (status = 'active');
 
 -- Admins can read all packages
-CREATE POLICY IF NOT EXISTS "Admins read all packages"
+DROP POLICY IF EXISTS "Admins read all packages" ON public.packages;
+CREATE POLICY "Admins read all packages"
   ON public.packages
   FOR SELECT
   USING (
