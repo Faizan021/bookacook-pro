@@ -17,6 +17,7 @@ type SidebarProps = {
   role: "admin" | "caterer" | "customer";
   basePath: string;
   isDemo?: boolean;
+  isDark?: boolean;
 };
 
 function HomeIcon() {
@@ -96,7 +97,7 @@ function SettingsIcon() {
     <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
       <path
         fillRule="evenodd"
-        d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.192.96a6.97 6.97 0 011.384.573l.815-.544a1 1 0 011.265.125l1.67 1.67a1 1 0 01.125 1.265l-.544.815c.23.438.421.9.573 1.384l.96.192a1 1 0 01.804.98v2.36a1 1 0 01-.804.98l-.96.192a6.97 6.97 0 01-.573 1.384l.544.815a1 1 0 01-.125 1.265l-1.67 1.67a1 1 0 01-1.265.125l-.815-.544a6.97 6.97 0 01-1.384.573l-.192.96a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.192-.96a6.97 6.97 0 01-1.384-.573l-.815.544a1 1 0 01-1.265-.125l-1.67-1.67a1 1 0 01-.125-1.265l.544-.815a6.97 6.97 0 01-.573-1.384l-.96-.192A1 1 0 011 11.18V8.82a1 1 0 01.804-.98l.96-.192a6.97 6.97 0 01.573-1.384l-.544-.815a1 1 0 01.125-1.265l1.67-1.67a1 1 0 011.265-.125l.815.544c.438-.23.9-.421 1.384-.573l.192-.96zM10 13a3 3 0 100-6 3 3 0 000 6z"
+        d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.192.96a6.97 6.97 0 011.384.573l.815-.544a1 1 0 011.265.125l1.67 1.67a1 1 0 01.125 1.265l-.544.815c.23.438.421.9.573 1.384l.96.192a1 1 0 01.804.98v2.36a1 1 0 01-.804.98l-.96.192a6.97 6.97 0 01-.573 1.384l.544.815a1 1 0 01-.125 1.265l-1.67-1.67a1 1 0 01-1.265.125l-.815-.544a6.97 6.97 0 01-1.384.573l-.192.96a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.192-.96a6.97 6.97 0 01-1.384-.573l-.815.544a1 1 0 01-1.265-.125l-1.67-1.67a1 1 0 01-.125-1.265l.544-.815a6.97 6.97 0 01-.573-1.384l-.96-.192A1 1 0 011 11.18V8.82a1 1 0 01.804-.98l.96-.192a6.97 6.97 0 01.573-1.384l-.544-.815a1 1 0 01.125-1.265l1.67-1.67a1 1 0 011.265-.125l.815.544c.438-.23.9-.421 1.384-.573l.192-.96zM10 13a3 3 0 100-6 3 3 0 000 6z"
         clipRule="evenodd"
       />
     </svg>
@@ -198,7 +199,7 @@ function getNavItems(role: string, basePath: string): NavItem[] {
   ];
 }
 
-export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
+export function Sidebar({ role, basePath, isDemo = false, isDark = false }: SidebarProps) {
   const pathname = usePathname();
   const t = useT();
   const navItems = getNavItems(role, basePath);
@@ -210,20 +211,29 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
         ? "portal.caterer"
         : "portal.customer";
 
+  const bgClass = isDark ? "bg-[#050a08]" : "bg-white";
+  const borderClass = isDark ? "border-white/5" : "border-[#e8dcc8]";
+  const textClass = isDark ? "text-[#9faf9b]" : "text-[#5c6f68]";
+  const activeBgClass = isDark ? "bg-[#c49840]/20 border-[#c49840]/40 text-[#c49840]" : "bg-[#173f35] border-[#d8ccb9] text-white";
+  const activeIconClass = isDark ? "text-[#c49840]" : "text-[#d7b66d]";
+  const hoverClass = isDark ? "hover:border-white/10 hover:bg-white/5 hover:text-white" : "hover:border-[#eadfce] hover:bg-[#faf6ee] hover:text-[#173f35]";
+  const portalBadgeBg = isDark ? "bg-[#c49840]/10 border border-[#c49840]/20" : "bg-[#faf6ee]";
+  const portalBadgeText = isDark ? "text-[#c49840]" : "text-[#8a6d35]";
+
   return (
-    <aside className="flex h-full w-64 flex-shrink-0 flex-col border-e border-[#e8dcc8] bg-white text-[#16372f] shadow-[12px_0_40px_rgba(31,61,51,0.06)]">
-      <div className="border-b border-[#e8dcc8] px-5 py-5">
-        <Link href="/" className="block">
+    <aside className={`flex h-full w-64 flex-shrink-0 flex-col border-e ${borderClass} ${bgClass} shadow-[12px_0_40px_rgba(31,61,51,0.06)]`}>
+      <div className={`border-b ${borderClass} px-5 py-5`}>
+        <Link href="/" className={`block ${isDark ? "brightness-0 invert opacity-90" : ""}`}>
           <LogoLockup />
         </Link>
 
-        <div className="mt-3 inline-flex rounded-full bg-[#faf6ee] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
+        <div className={`mt-3 inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] ${portalBadgeBg} ${portalBadgeText}`}>
           {t(portalKey)}
         </div>
       </div>
 
       <div className="px-4 pb-2 pt-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8a6d35]">
+        <p className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${portalBadgeText}`}>
           Navigation
         </p>
       </div>
@@ -240,40 +250,38 @@ export function Sidebar({ role, basePath, isDemo = false }: SidebarProps) {
               href={item.href}
               className={[
                 "group flex items-center gap-3 rounded-[1rem] px-3.5 py-3 text-sm font-semibold transition-all rtl:flex-row-reverse",
-                isActive
-                  ? "border border-[#d8ccb9] bg-[#173f35] text-white shadow-sm"
-                  : "border border-transparent text-[#5c6f68] hover:border-[#eadfce] hover:bg-[#faf6ee] hover:text-[#173f35]",
+                isActive ? `${activeBgClass} shadow-sm` : `border border-transparent ${textClass} ${hoverClass}`,
               ].join(" ")}
             >
               <span
                 className={[
                   "flex-shrink-0",
-                  isActive ? "text-[#d7b66d]" : "text-[#8a6d35]",
+                  isActive ? activeIconClass : portalBadgeText,
                 ].join(" ")}
               >
                 {item.icon}
               </span>
-              <span>{t(item.labelKey, item.fallback)}</span>
+              <span className={isActive && isDark ? "text-white" : ""}>{t(item.labelKey, item.fallback)}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="space-y-3 border-t border-[#e8dcc8] p-3">
+      <div className={`space-y-3 border-t ${borderClass} p-3`}>
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-[1rem] border border-transparent px-3 py-2.5 text-xs font-semibold text-[#5c6f68] transition hover:border-[#eadfce] hover:bg-[#faf6ee] hover:text-[#173f35] rtl:flex-row-reverse"
+          className={`flex items-center gap-2 rounded-[1rem] border border-transparent px-3 py-2.5 text-xs font-semibold ${textClass} transition ${hoverClass} rtl:flex-row-reverse`}
         >
           <ArrowLeftIcon />
           {t("nav.backToHome", "Zurück zur Startseite")}
         </Link>
 
         {isDemo && (
-          <div className="rounded-[1rem] border border-[#eadfce] bg-[#faf6ee] px-3 py-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8a6d35]">
+          <div className={`rounded-[1rem] border ${isDark ? "border-[#c49840]/20 bg-[#c49840]/5" : "border-[#eadfce] bg-[#faf6ee]"} px-3 py-3`}>
+            <p className={`text-xs font-semibold uppercase tracking-[0.14em] ${portalBadgeText}`}>
               Demo
             </p>
-            <p className="mt-1 text-[11px] leading-5 text-[#5c6f68]">
+            <p className={`mt-1 text-[11px] leading-5 ${textClass}`}>
               Sample data only
             </p>
           </div>
