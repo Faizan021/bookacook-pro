@@ -9,6 +9,12 @@ ALTER TABLE public.caterers
 ALTER TABLE public.caterers
   DROP CONSTRAINT IF EXISTS caterers_verification_status_check;
 
+-- Sanitize existing rows to prevent constraint violations
+UPDATE public.caterers
+SET verification_status = 'pending'
+WHERE verification_status NOT IN ('pending', 'under_review', 'verified', 'rejected', 'suspended')
+   OR verification_status IS NULL;
+
 ALTER TABLE public.caterers
   ADD CONSTRAINT caterers_verification_status_check
     CHECK (verification_status IN ('pending', 'under_review', 'verified', 'rejected', 'suspended'));
