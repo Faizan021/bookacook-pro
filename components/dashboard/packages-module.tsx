@@ -118,9 +118,9 @@ const demoPackages: CateringPackage[] = [
 ];
 
 const statusStyles: Record<PackageStatus, string> = {
-  active: "border border-emerald-400/20 bg-emerald-400/10 text-emerald-300",
-  draft: "border border-white/10 bg-white/[0.05] text-[#cfc6b4]",
-  paused: "border border-amber-400/20 bg-amber-400/10 text-amber-300",
+  active: "border border-emerald-200 bg-emerald-50 text-emerald-700",
+  draft: "border border-[#eadfce] bg-white text-[#5c6f68]",
+  paused: "border border-amber-200 bg-amber-50 text-amber-700",
 };
 
 const EVENT_LABELS: Record<string, string> = {
@@ -174,14 +174,14 @@ export function PackagesModule({
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4 rtl:flex-row-reverse">
         <div>
-          <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#c49840]">
+          <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#b28a3c]">
             <Package2 className="h-3.5 w-3.5" />
             {t("packages.title")}
           </div>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
+          <h2 className="premium-heading mt-2 text-2xl font-semibold text-[#173f35]">
             {t("packages.title")}
           </h2>
-          <p className="mt-2 text-sm leading-7 text-[#92a18f]">
+          <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
             {t("packages.subtitle")}
           </p>
         </div>
@@ -189,7 +189,7 @@ export function PackagesModule({
         {isEditable ? (
           <Link
             href="/caterer/packages/new"
-            className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 rounded-[1rem] bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27]"
           >
             {t("btn.newPackage")}
             <ArrowRight className="h-4 w-4" />
@@ -197,7 +197,7 @@ export function PackagesModule({
         ) : (
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 rounded-[1rem] bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27]"
           >
             {t("btn.newPackage")}
             <ArrowRight className="h-4 w-4" />
@@ -206,23 +206,23 @@ export function PackagesModule({
       </div>
 
       {isEmpty ? (
-        <div className="rounded-[1.75rem] border border-dashed border-white/10 bg-white/[0.04] p-16 shadow-[0_18px_50px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+        <div className="rounded-[1.75rem] border border-[#eadfce] bg-white p-16 shadow-sm">
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#c49840]/15 bg-[#c49840]/10 text-[#c49840]">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#eadfce] bg-[#faf6ee] text-[#b28a3c]">
               <Sparkles className="h-7 w-7" />
             </div>
 
-            <p className="mt-5 text-lg font-semibold text-white">
+            <p className="premium-heading mt-5 text-lg font-semibold text-[#173f35]">
               {t("empty.packages")}
             </p>
-            <p className="mt-2 text-sm leading-7 text-[#92a18f]">
+            <p className="mt-2 text-sm leading-7 text-[#5c6f68]">
               {t("empty.packagesDesc")}
             </p>
 
             {isEditable ? (
               <Link
                 href="/caterer/packages/new"
-                className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
+                className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27]"
               >
                 {t("pkg.addFirst")}
                 <ArrowRight className="h-4 w-4" />
@@ -230,7 +230,7 @@ export function PackagesModule({
             ) : (
               <button
                 type="button"
-                className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#c49840] px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]"
+                className="mt-6 inline-flex items-center gap-2 rounded-[1rem] bg-[#173f35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0f2f27]"
               >
                 {t("pkg.addFirst")}
                 <ArrowRight className="h-4 w-4" />
@@ -243,14 +243,14 @@ export function PackagesModule({
           {data.map((pkg) => (
             <div
               key={pkg.id}
-              className="rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-[#c49840]/20 hover:bg-white/[0.06]"
+              className="group rounded-[1.75rem] border border-[#eadfce] bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-[#c9a45c]/40 hover:shadow-md"
             >
               <div className="flex items-start justify-between gap-3 rtl:flex-row-reverse">
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8ea18b]">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8a6d35]">
                     {pkg.category}
                   </p>
-                  <h3 className="mt-2 truncate text-lg font-semibold text-white">
+                  <h3 className="premium-heading mt-2 truncate text-lg font-semibold text-[#173f35]">
                     {pkg.name}
                   </h3>
                 </div>
@@ -262,7 +262,7 @@ export function PackagesModule({
                 </span>
               </div>
 
-              <p className="mt-3 line-clamp-3 text-sm leading-7 text-[#92a18f]">
+              <p className="mt-3 line-clamp-3 text-sm leading-7 text-[#5c6f68]">
                 {pkg.description}
               </p>
 
@@ -271,7 +271,7 @@ export function PackagesModule({
                   {pkg.eventTypes.slice(0, 3).map((ev) => (
                     <span
                       key={ev}
-                      className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-[11px] text-[#ddd5c6]"
+                      className="rounded-full border border-[#eadfce] bg-[#faf6ee] px-3 py-1 text-[11px] font-medium text-[#5c6f68]"
                     >
                       {EVENT_LABELS[ev] ?? ev}
                     </span>
@@ -279,23 +279,23 @@ export function PackagesModule({
                 </div>
               )}
 
-              <div className="mt-5 border-t border-white/10 pt-5">
+              <div className="mt-5 border-t border-[#eadfce] pt-5">
                 <div className="flex items-end justify-between gap-4 rtl:flex-row-reverse">
                   <div>
-                    <p className="text-3xl font-semibold tracking-tight text-white">
+                    <p className="premium-heading text-3xl font-semibold tracking-tight text-[#173f35]">
                       €
                       {Number(pkg.pricePerPerson).toLocaleString("de-DE", {
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 2,
                       })}
                     </p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#8ea18b]">
+                    <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#8a6d35]">
                       {t("packages.perPerson")}
                     </p>
                   </div>
 
                   <div className="text-end rtl:text-start">
-                    <p className="text-sm font-medium text-[#eadfca]">
+                    <p className="text-sm font-medium text-[#5c6f68]">
                       {pkg.minGuests}–{pkg.maxGuests} {t("packages.guests")}
                     </p>
                   </div>
@@ -306,7 +306,7 @@ export function PackagesModule({
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link
                     href={`/caterer/packages/${pkg.id}/edit`}
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white transition hover:border-[#c49840]/30 hover:text-[#c49840]"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-[#eadfce] bg-[#faf6ee] px-3 py-2.5 text-xs font-semibold text-[#173f35] transition hover:border-[#c9a45c]/40 hover:bg-white"
                   >
                     <Pencil className="h-3.5 w-3.5" />
                     {t("btn.edit")}
@@ -316,19 +316,19 @@ export function PackagesModule({
                     type="button"
                     onClick={() => handleDuplicate(pkg.id)}
                     disabled={duplicating === pkg.id}
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white transition hover:border-[#c49840]/30 hover:text-[#c49840] disabled:opacity-50"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-[#eadfce] bg-[#faf6ee] px-3 py-2.5 text-xs font-semibold text-[#173f35] transition hover:border-[#c9a45c]/40 hover:bg-white disabled:opacity-50"
                   >
                     <Copy className="h-3.5 w-3.5" />
                     {duplicating === pkg.id ? "…" : t("pkg.duplicate")}
                   </button>
 
                   {confirmDelete === pkg.id ? (
-                    <div className="flex w-full gap-2">
+                    <div className="flex w-full gap-2 mt-2">
                       <button
                         type="button"
                         onClick={() => handleDelete(pkg.id)}
                         disabled={deleting === pkg.id}
-                        className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-red-400/20 bg-red-400/10 px-3 py-2.5 text-xs font-medium text-red-300 transition hover:bg-red-400/15 disabled:opacity-50"
+                        className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-red-200 bg-red-50 px-3 py-2.5 text-xs font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-50"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                         {deleting === pkg.id ? "…" : t("pkg.delete")}
@@ -337,7 +337,7 @@ export function PackagesModule({
                       <button
                         type="button"
                         onClick={() => setConfirmDelete(null)}
-                        className="inline-flex flex-1 items-center justify-center rounded-[0.95rem] border border-white/10 bg-black/10 px-3 py-2.5 text-xs font-medium text-[#eadfca] transition hover:bg-white/[0.03]"
+                        className="inline-flex flex-1 items-center justify-center rounded-[0.95rem] border border-[#eadfce] bg-white px-3 py-2.5 text-xs font-semibold text-[#5c6f68] transition hover:bg-[#faf6ee]"
                       >
                         {t("btn.cancel", "Cancel")}
                       </button>
@@ -346,7 +346,7 @@ export function PackagesModule({
                     <button
                       type="button"
                       onClick={() => setConfirmDelete(pkg.id)}
-                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-red-400/20 bg-red-400/10 px-3 py-2.5 text-xs font-medium text-red-300 transition hover:bg-red-400/15"
+                      className="inline-flex w-full mt-2 items-center justify-center gap-2 rounded-[0.95rem] border border-red-100 bg-white px-3 py-2.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       {t("pkg.delete")}
@@ -357,7 +357,7 @@ export function PackagesModule({
                 <div className="mt-4 flex gap-2">
                   <button
                     type="button"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white transition hover:border-[#c49840]/30 hover:text-[#c49840]"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-[#eadfce] bg-[#faf6ee] px-3 py-2.5 text-xs font-semibold text-[#173f35] transition hover:border-[#c9a45c]/40 hover:bg-white"
                   >
                     <Pencil className="h-3.5 w-3.5" />
                     {t("btn.edit")}
@@ -365,7 +365,7 @@ export function PackagesModule({
 
                   <button
                     type="button"
-                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs font-medium text-white transition hover:border-[#c49840]/30 hover:text-[#c49840]"
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-[0.95rem] border border-[#eadfce] bg-[#faf6ee] px-3 py-2.5 text-xs font-semibold text-[#173f35] transition hover:border-[#c9a45c]/40 hover:bg-white"
                   >
                     <Eye className="h-3.5 w-3.5" />
                     {t("btn.preview")}

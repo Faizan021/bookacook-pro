@@ -23,7 +23,7 @@ export function DashboardShell({
   const t = useT();
   const isRTL = useIsRTL();
 
-  const isDark = role === "caterer";
+  const isDark = false; // Reverted back to light theme per user request
 
   const bgClass = isDark ? "bg-[#0a1410]" : "bg-[#faf6ee]";
   const textClass = isDark ? "text-[#eadfca]" : "text-[#16372f]";
