@@ -3,7 +3,7 @@ export interface Dish {
   name: string;
   price: number;
   description: string;
-  category: string;
+  category?: string;
   isAiFavorite?: boolean;
 }
 
