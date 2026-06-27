@@ -192,10 +192,10 @@ export const disconnectStripe = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
-    // 1. Fetch restaurant ID
+    // 1. Fetch restaurant details
     const { data: rest, error: fetchError } = await supabase
       .from("restaurants")
-      .select("id")
+      .select("id, accepts_cash, accepts_paypal, is_published")
       .eq("owner_id", userId)
       .maybeSingle();
 
@@ -214,13 +214,14 @@ export const disconnectStripe = createServerFn({ method: "POST" })
     }
 
     // 3. Update the restaurant status
+    const hasAlternative = !!((rest as any).accepts_cash || (rest as any).accepts_paypal);
     const { error: updateError } = await supabase
       .from("restaurants")
       .update({
         stripe_user_id: null, // Keep for fallback compatibility until Step 2 drop
         stripe_connect_status: "deauthorized",
         stripe_connected_at: null,
-        is_published: false, // storefront is paused when Stripe is disconnected
+        is_published: hasAlternative ? rest.is_published : false,
       })
       .eq("owner_id", userId);
 

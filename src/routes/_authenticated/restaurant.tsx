@@ -625,13 +625,13 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
   const stripeConnected = kpis.stripeConnectStatus === "connected";
   const subActive = kpis.subscriptionStatus === "active";
   const published = kpis.isPublished;
+  const hasPaymentMethod = stripeConnected || kpis.acceptsCash || kpis.acceptsPaypal;
 
   const getStepStatus = (stepId: number) => {
     if (stepId === 1) {
-      return stripeConnected ? "completed" : "current";
+      return hasPaymentMethod ? "completed" : "current";
     }
     if (stepId === 2) {
-      if (!stripeConnected) return "upcoming";
       return subActive ? "completed" : "current";
     }
     if (stepId === 3) {
@@ -644,13 +644,13 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
   const steps = [
     {
       id: 1,
-      title: tt("Stripe-Zahlungen verbinden", "Connect Stripe Payments"),
+      title: tt("Zahlungsmethoden einrichten", "Set up Payment Methods"),
       description: tt(
-        "Verbinden Sie Stripe, um Online-Zahlungen direkt zu erhalten.",
-        "Connect your Stripe account to receive online orders directly."
+        "Verbinden Sie Stripe oder aktivieren Sie Barzahlung/PayPal, um Bestellungen anzunehmen.",
+        "Connect Stripe or enable Cash/PayPal in profile settings to accept payments."
       ),
-      actionLabel: tt("Stripe verbinden", "Connect Stripe"),
-      actionHash: "billing",
+      actionLabel: tt("Zahlungsmethoden einrichten", "Set up Payment Methods"),
+      actionHash: "profile",
     },
     {
       id: 2,
@@ -661,7 +661,6 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
       ),
       actionLabel: tt("Plan abonnieren", "Subscribe to Plan"),
       actionHash: "billing",
-      disabledText: tt("Erfordert Stripe-Verbindung", "Requires Stripe connection"),
     },
     {
       id: 3,
@@ -676,7 +675,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
     },
   ];
 
-  const allCompleted = stripeConnected && subActive && published;
+  const allCompleted = hasPaymentMethod && subActive && published;
 
   return (
     <div className="surface-card p-6 border-l-4 border-l-forest shadow-sm space-y-6 mb-6">
@@ -1784,12 +1783,6 @@ function BillingSection() {
           🚀 {tt("Speisely-Abonnement", "Speisely Subscription")}
         </h3>
 
-        {!isStripeConnected ? (
-          <div className="bg-stone-50 dark:bg-stone-900/20 p-5 rounded-lg border border-border text-center text-sm text-muted-foreground">
-            {tt("Bitte verbinden Sie zuerst Stripe, um Ihr Abonnement zu verwalten.", 
-               "Please connect Stripe first to manage your subscription plan.")}
-          </div>
-        ) : (
           <div className="space-y-6">
             {/* Lapsed states / Active State Banners */}
             {subStatus === "past_due" && (
@@ -1906,7 +1899,6 @@ function BillingSection() {
               </div>
             </div>
           </div>
-        )}
       </div>
     </section>
   );

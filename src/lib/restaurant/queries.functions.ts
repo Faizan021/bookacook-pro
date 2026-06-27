@@ -146,6 +146,8 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
       subscriptionStatus: restaurant.subscription_status,
       isPublished: restaurant.is_published,
       slug: restaurant.slug,
+      acceptsCash: (restaurant as any).accepts_cash,
+      acceptsPaypal: (restaurant as any).accepts_paypal,
     };
   });
 
