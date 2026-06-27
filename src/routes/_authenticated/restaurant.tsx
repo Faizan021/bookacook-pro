@@ -1656,7 +1656,7 @@ function BillingSection() {
     trackEvent("stripe_connect_clicked");
     setLoading(true);
     try {
-      const res = await getConnectUrl({ slug: restaurant.slug, origin: window.location.origin });
+      const res = await getConnectUrl({ data: { slug: restaurant.slug, origin: window.location.origin } });
       if (res?.url) {
         window.location.href = res.url;
       }
