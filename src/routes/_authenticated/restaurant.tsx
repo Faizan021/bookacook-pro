@@ -941,6 +941,8 @@ function OverviewSection() {
 }
 
 function BusinessProfileSection() {
+  const { t, lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const qc = useQueryClient();
   const fetchProducts = useServerFn(getRestaurantProducts);
   const q = useSuspenseQuery({ 
