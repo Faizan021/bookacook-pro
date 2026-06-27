@@ -30,7 +30,7 @@ export const getPublicPlannerProfile = createServerFn({ method: "GET" })
   });
 
 export const submitPublicPlannerBrief = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator(
     (input: {
       plannerId: string;

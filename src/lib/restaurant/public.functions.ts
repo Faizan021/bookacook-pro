@@ -28,7 +28,7 @@ export const createTableReservation = createServerFn({ method: "POST" })
       locale: z.string().optional(),
     }).parse(input)
   )
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { userId } = context;

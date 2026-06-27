@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const acceptProposal = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .validator((input: { briefId: string }) =>
     z.object({ briefId: z.string().uuid() }).parse(input)
   )
@@ -97,7 +97,7 @@ export const acceptProposal = createServerFn({ method: "POST" })
   });
 
 export const getBookingDetails = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .validator((input: { bookingId: string }) =>
     z.object({ bookingId: z.string().uuid() }).parse(input)
   )
@@ -159,7 +159,7 @@ export const getBookingDetails = createServerFn({ method: "GET" })
   });
 
 export const startDepositCheckout = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .validator((input: { bookingId: string; origin: string }) =>
     z.object({ bookingId: z.string().uuid(), origin: z.string() }).parse(input)
   )

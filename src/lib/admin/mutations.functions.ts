@@ -17,7 +17,7 @@ async function verifyAdmin(supabaseAdmin: any, userId: string) {
 
 export const updateUserRole = createServerFn({ method: "POST" })
   .validator((d: { targetUserId: string; newRole: string }) => d)
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context, data: { targetUserId, newRole } }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -58,7 +58,7 @@ export const updateUserRole = createServerFn({ method: "POST" })
 
 export const toggleListingPublish = createServerFn({ method: "POST" })
   .validator((d: { listingType: string; listingId: string; isPublished: boolean }) => d)
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context, data: { listingType, listingId, isPublished } }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

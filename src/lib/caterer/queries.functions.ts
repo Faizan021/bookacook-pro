@@ -65,7 +65,7 @@ export const updateCatererBriefStatus = createServerFn({ method: "POST" })
   });
 
 export const updateBriefMilestones = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator((input: { briefId: string; milestones: any[] }) =>
     z
       .object({

@@ -16,7 +16,7 @@ async function verifyAdmin(supabaseAdmin: any, userId: string) {
 }
 
 export const getAdminOverview = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -115,7 +115,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
   });
 
 export const getAdminUsers = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -148,7 +148,7 @@ export const getAdminUsers = createServerFn({ method: "GET" })
   });
 
 export const getAdminListings = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -231,7 +231,7 @@ export const getAdminListings = createServerFn({ method: "GET" })
   });
 
 export const getAdminOrders = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

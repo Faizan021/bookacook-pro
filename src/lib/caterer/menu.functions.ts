@@ -167,7 +167,7 @@ export const getPublicCatererList = createServerFn({ method: "GET" })
   });
 
 export const submitCateringBrief = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator(
     (input: {
       catererId: string;
@@ -235,7 +235,7 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
   });
 
 export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator(
     (input: {
       catererSlug: string;

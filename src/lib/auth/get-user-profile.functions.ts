@@ -14,7 +14,7 @@ const SELF_HEALABLE_ROLES: UserRole[] = [
 ];
 
 export const getUserProfile = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 

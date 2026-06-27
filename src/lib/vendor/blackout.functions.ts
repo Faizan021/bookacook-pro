@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 // Gets blackout dates for the logged-in vendor
 export const getMyBlackoutDates = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .validator((input: { vendorType: "caterer" | "planner" }) => z.object({ vendorType: z.enum(["caterer", "planner"]) }).parse(input))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
@@ -30,7 +30,7 @@ export const getMyBlackoutDates = createServerFn({ method: "GET" })
   });
 
 export const addBlackoutDate = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator((input: { vendorType: "caterer" | "planner"; date: string; reason?: string }) =>
     z.object({
       vendorType: z.enum(["caterer", "planner"]),
@@ -64,7 +64,7 @@ export const addBlackoutDate = createServerFn({ method: "POST" })
   });
 
 export const removeBlackoutDate = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator((input: { blackoutId: string }) =>
     z.object({ blackoutId: z.string().uuid() }).parse(input)
   )

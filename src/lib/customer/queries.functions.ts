@@ -43,7 +43,7 @@ export type UnifiedActivityItem =
     };
 
 export const getCustomerUnifiedActivity = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 

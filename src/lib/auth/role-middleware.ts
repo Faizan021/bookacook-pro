@@ -23,7 +23,7 @@ const SELF_HEALABLE_ROLES: UserRole[] = [
 
 export const requireRole = (role: UserRole) =>
   createMiddleware({ type: "function" })
-    .middleware([requireSupabaseAuth])
+    .middleware([requireSupabaseAuth()])
     .server(async ({ next, context }) => {
       const { supabase, userId } = context as any;
 

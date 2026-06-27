@@ -10,7 +10,7 @@ export const createPromoCode = createServerFn()
     promote_on_storefront: boolean;
     vertical: "restaurants" | "caterers" | "planners";
   }) => d)
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     
@@ -66,7 +66,7 @@ export const createPromoCode = createServerFn()
 
 export const togglePromoCode = createServerFn()
   .validator((d: { id: string; is_active: boolean }) => d)
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     

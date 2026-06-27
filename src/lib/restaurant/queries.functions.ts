@@ -214,7 +214,7 @@ export const getRestaurantActivityFeed = createServerFn({ method: "GET" })
   });
 
 export const getRestaurantReservations = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
     const restaurant = await resolveOwnedRestaurant(supabase, userId);
@@ -229,7 +229,7 @@ export const getRestaurantReservations = createServerFn({ method: "GET" })
   });
 
 export const updateReservationStatus = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator((input: { reservationId: string; status: "pending" | "confirmed" | "declined" | "approved" | "rejected" | "cancelled" | "completed" | "no_show" }) =>
     z.object({
       reservationId: z.string().uuid(),

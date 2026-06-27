@@ -70,7 +70,7 @@ async function requireBriefParticipant(
 // Requires: authenticated user who is customer, caterer, or planner on the brief
 // ---------------------------------------------------------------------------
 export const getBriefMessages = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator(z.object({ briefId: z.string().uuid() }))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
@@ -109,7 +109,7 @@ export const getBriefMessages = createServerFn({ method: "GET" })
 // Fixed: was missing the ownership check present in getBriefMessages (M-2 in audit)
 // ---------------------------------------------------------------------------
 export const sendBriefMessage = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator(
     z.object({
       briefId: z.string().uuid(),

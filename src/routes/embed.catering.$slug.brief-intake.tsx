@@ -15,7 +15,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { UnifiedCustomerFields } from "@/components/UnifiedCustomerFields";
 
 export const submitPublicCateringBrief = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireSupabaseAuth()])
   .inputValidator(
     (input: {
       catererId: string;
