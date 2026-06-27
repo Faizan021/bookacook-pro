@@ -191,19 +191,43 @@ export const disconnectStripe = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
-    const { error } = await supabase
+
+    // 1. Fetch restaurant ID
+    const { data: rest, error: fetchError } = await supabase
+      .from("restaurants")
+      .select("id")
+      .eq("owner_id", userId)
+      .maybeSingle();
+
+    if (fetchError || !rest) {
+      throw new Error(fetchError?.message || "Restaurant not found");
+    }
+
+    // 2. Delete the private Stripe account entry
+    const { error: deleteError } = await supabase
+      .from("restaurant_stripe_accounts")
+      .delete()
+      .eq("restaurant_id", rest.id);
+
+    if (deleteError) {
+      throw new Error("Failed to delete Stripe account entry: " + deleteError.message);
+    }
+
+    // 3. Update the restaurant status
+    const { error: updateError } = await supabase
       .from("restaurants")
       .update({
-        stripe_user_id: null,
+        stripe_user_id: null, // Keep for fallback compatibility until Step 2 drop
         stripe_connect_status: "deauthorized",
         stripe_connected_at: null,
         is_published: false, // storefront is paused when Stripe is disconnected
       })
       .eq("owner_id", userId);
 
-    if (error) throw new Error(error.message);
+    if (updateError) throw new Error(updateError.message);
     return { ok: true };
   });
+
 
 export const startStarterSubscription = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])

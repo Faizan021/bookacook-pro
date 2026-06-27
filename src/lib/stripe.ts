@@ -205,3 +205,36 @@ export async function createDepositCheckoutSession(
 
   return { url: session.url };
 }
+
+export async function createStorefrontCheckoutSession(
+  restaurantStripeUserId: string,
+  amountCents: number,
+  restaurantName: string,
+  successUrl: string,
+  cancelUrl: string
+) {
+  const stripe = getStripe();
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'eur',
+          product_data: {
+            name: `Order from ${restaurantName}`,
+          },
+          unit_amount: amountCents,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+  }, {
+    stripeAccount: restaurantStripeUserId, // Direct Charge model: money goes directly to restaurant, fees paid by restaurant
+  });
+
+  return session;
+}
+

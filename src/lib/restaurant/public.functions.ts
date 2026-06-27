@@ -112,3 +112,67 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return { restaurant: rest };
   });
+
+export const startStorefrontCheckout = createServerFn({ method: "POST" })
+  .inputValidator((input: {
+    restaurantId: string;
+    amountCents: number;
+    origin: string;
+    slug: string;
+  }) =>
+    z.object({
+      restaurantId: z.string().uuid(),
+      amountCents: z.number().int().min(50).max(100000000), // Stripe min limit 50 cents
+      origin: z.string(),
+      slug: z.string(),
+    }).parse(input)
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // 1. Fetch restaurant name
+    const { data: rest, error: restErr } = await supabaseAdmin
+      .from("restaurants")
+      .select("name")
+      .eq("id", data.restaurantId)
+      .single();
+
+    if (restErr || !rest) throw new Error("Restaurant not found");
+
+    // 2. Fetch secure stripe_user_id from the new private secure table
+    const { data: stripeAcc, error: stripeErr } = await supabaseAdmin
+      .from("restaurant_stripe_accounts")
+      .select("stripe_user_id")
+      .eq("restaurant_id", data.restaurantId)
+      .maybeSingle();
+
+    // Fallback: If not found in private table, try public table (during 2-step migration fallback)
+    let stripeUserId = stripeAcc?.stripe_user_id;
+    if (!stripeUserId && !stripeErr) {
+      const { data: fallbackRest } = await supabaseAdmin
+        .from("restaurants")
+        .select("stripe_user_id")
+        .eq("id", data.restaurantId)
+        .single();
+      stripeUserId = fallbackRest?.stripe_user_id ?? undefined;
+    }
+
+    if (!stripeUserId) {
+      throw new Error("This restaurant has not configured card payments yet.");
+    }
+
+    const { createStorefrontCheckoutSession } = await import("@/lib/stripe");
+    const successUrl = `${data.origin}/restaurant/${data.slug}?order_success=true`;
+    const cancelUrl = `${data.origin}/restaurant/${data.slug}?order_cancel=true`;
+
+    const session = await createStorefrontCheckoutSession(
+      stripeUserId,
+      data.amountCents,
+      rest.name,
+      successUrl,
+      cancelUrl
+    );
+
+    return { url: session.url };
+  });
+

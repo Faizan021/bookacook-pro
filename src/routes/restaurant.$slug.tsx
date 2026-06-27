@@ -16,7 +16,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { createTableReservation, getRestaurantBySlug } from "@/lib/restaurant/public.functions";
+import { createTableReservation, getRestaurantBySlug, startStorefrontCheckout } from "@/lib/restaurant/public.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { UnifiedCustomerFields } from "@/components/UnifiedCustomerFields";
 import { recordPageView } from "@/lib/vendor/analytics.functions";
@@ -137,6 +137,8 @@ function RestaurantPage() {
   const [scheduleTime, setScheduleTime] = useState("");
 
   const recordView = useServerFn(recordPageView);
+  const checkoutFn = useServerFn(startStorefrontCheckout);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     if (restaurant?.id) {
@@ -554,8 +556,8 @@ function RestaurantPage() {
           )}
 
           <button
-            onClick={() => {
-              if (isGated) return;
+            onClick={async () => {
+              if (isGated || checkoutLoading) return;
               if (!selectedPayment) {
                 alert(t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."));
                 return;
@@ -565,18 +567,43 @@ function RestaurantPage() {
                   ? paymentMethods.paypalLink
                   : `https://paypal.me/${paymentMethods.paypalLink.replace(/^paypal\.me\//i, "")}/${finalTotal.toFixed(2)}EUR`;
                 window.open(link, "_blank");
+                alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
+                if (isMobile) setMobileCartOpen(false);
+              } else if (selectedPayment === "stripe") {
+                setCheckoutLoading(true);
+                try {
+                  const res = await checkoutFn({
+                    restaurantId: dbRestaurant?.id ?? "",
+                    amountCents: Math.round(finalTotal * 100),
+                    origin: window.location.origin,
+                    slug: slug,
+                  });
+                  if (res?.url) {
+                    window.location.href = res.url;
+                  } else {
+                    alert(t("Fehler beim Erstellen der Zahlungssitzung.", "Failed to create checkout session."));
+                  }
+                } catch (err: any) {
+                  alert(t("Fehler: ", "Error: ") + (err.message || err));
+                } finally {
+                  setCheckoutLoading(false);
+                }
+              } else {
+                // Cash
+                alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
+                if (isMobile) setMobileCartOpen(false);
               }
-              alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
-              if (isMobile) setMobileCartOpen(false);
             }}
-            disabled={isGated}
+            disabled={isGated || checkoutLoading}
             className={`mt-5 w-full rounded-full py-3 font-semibold shadow-md transition ${
-              isGated
+              (isGated || checkoutLoading)
                 ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
                 : "bg-[#22C55E] hover:bg-[#22C55E]/90 text-white cursor-pointer"
             }`}
           >
-            {t("Zur Kasse", "Go to checkout")} · €{finalTotal.toFixed(2)}
+            {checkoutLoading 
+              ? t("Wird geladen...", "Loading...") 
+              : `${t("Zur Kasse", "Go to checkout")} · €${finalTotal.toFixed(2)}`}
           </button>
         </>
       )}

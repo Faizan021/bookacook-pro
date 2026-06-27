@@ -118,18 +118,33 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
           }
 
           // ── Persist the connected account ID ────────────────────────────────
+          // Write to the private secure table
           const { error: dbError } = await supabaseAdmin
-            .from("restaurants")
-            .update({
+            .from("restaurant_stripe_accounts")
+            .upsert({
+              restaurant_id: restaurant.id,
               stripe_user_id: stripeUserId,
-              stripe_connect_status: "connected",
               stripe_connected_at: new Date().toISOString(),
-            })
-            .eq("id", restaurant.id); // Use the DB primary key, not the slug
+            }, { onConflict: "restaurant_id" });
 
           if (dbError) {
             throw dbError;
           }
+
+          // Keep restaurant metadata synced in public record (two-step migration fallback)
+          const { error: statusError } = await supabaseAdmin
+            .from("restaurants")
+            .update({
+              stripe_user_id: stripeUserId, // Keep for fallback compatibility until Step 2 drop
+              stripe_connect_status: "connected",
+              stripe_connected_at: new Date().toISOString(),
+            })
+            .eq("id", restaurant.id);
+
+          if (statusError) {
+            throw statusError;
+          }
+
 
           console.log(
             `[Stripe Connect] Account ${stripeUserId} connected for restaurant slug=${slug} id=${restaurant.id}`
