@@ -1,0 +1,86 @@
+import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
+// Helper to verify admin role
+async function verifyAdmin(supabaseAdmin: any, userId: string) {
+  const { data: roleRecord, error } = await supabaseAdmin
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+
+  if (error || !roleRecord) {
+    throw new Error("Unauthorized: Administrator access required");
+  }
+}
+
+export const updateUserRole = createServerFn({ method: "POST" })
+  .validator((d: { targetUserId: string; newRole: string }) => d)
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data: { targetUserId, newRole } }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    // 1. Update profiles.role
+    const { error: profileError } = await supabaseAdmin
+      .from("profiles")
+      .update({ role: newRole })
+      .eq("id", targetUserId);
+
+    if (profileError) throw new Error("Failed to update profile role: " + profileError.message);
+
+    // 2. Sync user_roles table
+    // Delete existing roles
+    const { error: deleteRolesError } = await supabaseAdmin
+      .from("user_roles")
+      .delete()
+      .eq("user_id", targetUserId);
+
+    if (deleteRolesError) throw new Error("Failed to clean old user roles: " + deleteRolesError.message);
+
+    // Only insert if it is a valid app_role enum
+    const validAppRoles = ["customer", "restaurant_owner", "caterer", "planner", "admin"];
+    if (validAppRoles.includes(newRole)) {
+      const { error: insertRoleError } = await supabaseAdmin
+        .from("user_roles")
+        .insert({
+          user_id: targetUserId,
+          role: newRole
+        });
+      if (insertRoleError) throw new Error("Failed to insert new role mapping: " + insertRoleError.message);
+    }
+
+    return { success: true };
+  });
+
+export const toggleListingPublish = createServerFn({ method: "POST" })
+  .validator((d: { listingType: string; listingId: string; isPublished: boolean }) => d)
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context, data: { listingType, listingId, isPublished } }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    if (listingType === 'restaurant') {
+      const { error } = await supabaseAdmin
+        .from("restaurants")
+        .update({ is_published: isPublished })
+        .eq("id", listingId);
+
+      if (error) throw new Error("Failed to toggle restaurant publish state: " + error.message);
+    } else if (listingType === 'caterer') {
+      // For caterers, publishing status is in storefront_settings
+      const { error } = await supabaseAdmin
+        .from("storefront_settings")
+        .update({ status: isPublished ? 'published' : 'draft' })
+        .eq("caterer_id", listingId);
+
+      if (error) throw new Error("Failed to toggle caterer publish state: " + error.message);
+    }
+
+    return { success: true };
+  });

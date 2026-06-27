@@ -1,0 +1,154 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Fraunces", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 14px);
+  --radius-3xl: calc(var(--radius) + 22px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-cream: var(--cream);
+  --color-cream-foreground: var(--cream-foreground);
+  --color-mint: var(--mint);
+  --color-forest: var(--forest);
+  --color-gold: var(--gold);
+  --color-brand-orange: var(--brand-orange);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Speisely palette */
+  --mint: oklch(0.93 0.05 152);
+  --forest: oklch(0.27 0.06 152);
+  --cream: oklch(0.96 0.04 92);
+  --cream-foreground: oklch(0.27 0.06 152);
+  --gold: oklch(0.68 0.09 92);
+  --brand-orange: oklch(0.64 0.22 47);
+
+  --background: var(--mint);
+  --foreground: var(--forest);
+
+  --card: var(--cream);
+  --card-foreground: var(--forest);
+  --popover: var(--cream);
+  --popover-foreground: var(--forest);
+
+  --primary: var(--forest);
+  --primary-foreground: oklch(0.97 0.02 92);
+  --secondary: var(--cream);
+  --secondary-foreground: var(--forest);
+
+  --muted: oklch(0.9 0.04 152);
+  --muted-foreground: oklch(0.42 0.05 152);
+  --accent: var(--cream);
+  --accent-foreground: var(--forest);
+
+  --destructive: oklch(0.55 0.22 27);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --border: oklch(0.85 0.05 152);
+  --input: oklch(0.9 0.04 152);
+  --ring: var(--forest);
+}
+
+.dark {
+  --background: var(--forest);
+  --foreground: oklch(0.97 0.02 92);
+  --card: oklch(0.32 0.05 152);
+  --card-foreground: oklch(0.97 0.02 92);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .bg-mint-dotted {
+    background-color: var(--color-background);
+    background-image: radial-gradient(oklch(0.85 0.06 152 / 0.12) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .surface-card {
+    background-color: var(--color-cream);
+    color: var(--color-cream-foreground);
+    border-radius: 1.5rem;
+    box-shadow: 0 2px 0 oklch(0.85 0.05 152), 0 24px 40px -28px oklch(0.27 0.06 152 / 0.25);
+  }
+
+  /* Custom storefront animations */
+  @keyframes pulse-once {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+
+  .pulse-btn {
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .group:hover .pulse-btn {
+    animation: pulse-once 0.4s ease-in-out;
+  }
+
+  /* Hero gradient background animation */
+  @keyframes gradient-drift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .hero-gradient-bg {
+    background: linear-gradient(
+      135deg,
+      oklch(0.96 0.04 92) 0%,
+      oklch(0.93 0.05 152) 30%,
+      oklch(0.96 0.04 92) 55%,
+      oklch(0.95 0.03 110) 75%,
+      oklch(0.96 0.04 92) 100%
+    );
+    background-size: 300% 300%;
+    animation: gradient-drift 12s ease infinite;
+  }
+}
+
