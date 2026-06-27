@@ -102,7 +102,7 @@ function RestaurantPage() {
     // Only gate ordering if NO payment method is available at all
     const hasStripe = dbRestaurant.stripe_connect_status === "connected";
     const hasCash = (dbRestaurant as any).accepts_cash === true;
-    const hasPaypal = (dbRestaurant as any).accepts_paypal === true;
+    const hasPaypal = (dbRestaurant as any).accepts_paypal === true && !!(dbRestaurant as any).paypal_email;
     return !hasStripe && !hasCash && !hasPaypal;
   }, [dbRestaurant]);
   const restaurant = useMemo(() => {
@@ -127,7 +127,7 @@ function RestaurantPage() {
   // Derive which payment methods this restaurant supports
   const paymentMethods = useMemo(() => ({
     cash: (dbRestaurant as any)?.accepts_cash === true,
-    paypal: (dbRestaurant as any)?.accepts_paypal === true,
+    paypal: (dbRestaurant as any)?.accepts_paypal === true && !!(dbRestaurant as any)?.paypal_email,
     paypalLink: (dbRestaurant as any)?.paypal_email || "",
     stripe: dbRestaurant?.stripe_connect_status === "connected",
   }), [dbRestaurant]);
