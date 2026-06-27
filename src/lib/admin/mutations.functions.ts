@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 // Helper to verify admin role
 async function verifyAdmin(supabaseAdmin: any, userId: string) {

@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireRole } from "@/lib/auth/role-middleware";
+import { requireRole, requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 const ORDER_STATUSES = [
   "pending",

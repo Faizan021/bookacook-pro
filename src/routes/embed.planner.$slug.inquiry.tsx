@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar, Users, MapPin, Sparkles, CheckCircle2, Loader2 } from "lucide-react";
-import { optionalSupabaseAuth, requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { optionalSupabaseAuth, requireSupabaseAuth } from "@/lib/auth/role-middleware";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useServerFn } from "@tanstack/react-start";
 import { UnifiedCustomerFields } from "@/components/UnifiedCustomerFields";

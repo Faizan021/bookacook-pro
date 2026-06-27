@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { optionalSupabaseAuth, requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { optionalSupabaseAuth, requireSupabaseAuth } from "@/lib/auth/role-middleware";
 import { requireRole } from "@/lib/auth/role-middleware";
 
 async function resolveOwnedCaterer(supabase: any, userId: string) {

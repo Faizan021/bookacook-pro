@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth/role-middleware";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 export const BRIEF_STATUSES = [
   "draft",

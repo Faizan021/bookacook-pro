@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 // ---------------------------------------------------------------------------
 // Contact info masking — strips emails and phone numbers from message bodies

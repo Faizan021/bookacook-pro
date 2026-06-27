@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 // Gets blackout dates for the logged-in vendor
 export const getMyBlackoutDates = createServerFn({ method: "GET" })
