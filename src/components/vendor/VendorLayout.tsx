@@ -93,10 +93,11 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
               // Actually, since we are wrapping the existing Tabs, we can just render the Sidebar buttons 
               // and let the parent control the active tab via state or hash.
               
-              // We'll pass the `id` to the URL hash so the parent can read it.
-              const cleanHash = (location.hash || "").replace("#", "");
-              let isActive = cleanHash === item.id || (!cleanHash && item.id === "overview");
-              if (item.id === "settings-general" && cleanHash.startsWith("settings-") && cleanHash !== "settings-billing") {
+              // We'll pass the `id` to the URL search param or hash so the parent can read it.
+              const searchParams = new URLSearchParams(location.search);
+              const cleanTab = searchParams.get("tab") || (location.hash || "").replace("#", "");
+              let isActive = cleanTab === item.id || (!cleanTab && item.id === "overview");
+              if (item.id === "settings-general" && cleanTab.startsWith("settings-") && cleanTab !== "settings-billing") {
                 isActive = true;
               }
               
@@ -104,7 +105,7 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
                 <Link
                   key={item.id}
                   to="."
-                  hash={item.id}
+                  search={{ tab: item.id }}
                   className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                     isActive
                       ? "bg-forest text-cream shadow-md"

@@ -103,7 +103,7 @@ const STATUS_STYLES: Record<OrderStatus, string> = {
 };
 
 function formatPrice(cents: number) {
-  return `â‚¬${(cents / 100).toFixed(2)}`;
+  return `€${(cents / 100).toFixed(2)}`;
 }
 
 // Shell removed in favor of VendorLayout
@@ -656,8 +656,8 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
       id: 2,
       title: tt("Starter-Paket aktivieren", "Activate Starter Plan"),
       description: tt(
-        "Abonnieren Sie das â‚¬34.99/Monat Starter-Paket fÃ¼r 0% Provision.",
-        "Subscribe to the â‚¬34.99/month Starter Plan for 0% order commission."
+        "Abonnieren Sie das €34.99/Monat Starter-Paket für 0% Provision.",
+        "Subscribe to the €34.99/month Starter Plan for 0% order commission."
       ),
       actionLabel: tt("Plan abonnieren", "Subscribe to Plan"),
       actionHash: "billing",
@@ -682,7 +682,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-display font-bold text-xl text-forest flex items-center gap-2">
-            ðŸš€ {tt("Storefront-Einrichtung", "Storefront Setup Checklist")}
+            🚀 {tt("Storefront-Einrichtung", "Storefront Setup Checklist")}
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
             {allCompleted 
@@ -724,7 +724,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
                       ? "bg-forest text-cream shadow-md" 
                       : "bg-stone-200 text-stone-400"
                   }`}>
-                    {isCompleted ? "âœ“" : step.id}
+                    {isCompleted ? "✓" : step.id}
                   </span>
                   
                   {isCurrent && (
@@ -747,7 +747,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
               <div className="mt-5">
                 {isCompleted ? (
                   <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold py-2">
-                    <span className="text-sm">âœ“</span> {tt("Abgeschlossen", "Completed")}
+                    <span className="text-sm">✓</span> {tt("Abgeschlossen", "Completed")}
                   </div>
                 ) : isCurrent ? (
                   <Button 
@@ -880,7 +880,7 @@ function OverviewSection() {
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
             <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ“ˆ</span> Revenue today</p>
-            <p className="text-3xl font-bold font-display text-forest">â‚¬{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
+            <p className="text-3xl font-bold font-display text-forest">€{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
             <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ“…</span> Reservations today</p>
@@ -1032,7 +1032,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="restaurant-address">{tt("GeschÃ¤ftsadresse", "Business Address")}</Label>
+            <Label htmlFor="restaurant-address">{tt("Geschäftsadresse", "Business Address")}</Label>
             <Input id="restaurant-address" value={address} onChange={(e) => setAddress(e.target.value)} />
           </div>
 
@@ -1052,30 +1052,46 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>{tt("Logo Bild", "Logo Image")}</Label>
-              <div className="relative border border-dashed border-[#e2e8e4] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] overflow-hidden">
+              <div 
+                onClick={() => !uploading && logoRef.current?.click()}
+                className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
+              >
                 {logoPreview ? (
-                  <img src={logoPreview} className="object-cover w-full h-full rounded-xl" alt="Logo" />
+                  <>
+                    <img src={logoPreview} className="object-cover w-full h-full rounded-xl" alt="Logo" />
+                    <div className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-xs font-semibold rounded-2xl">
+                      {tt("Bild ändern", "Change Image")}
+                    </div>
+                  </>
                 ) : (
-                  <span className="text-2xl">ðŸ“¸</span>
+                  <div className="text-center space-y-1">
+                    <span className="text-2xl block">📸</span>
+                    <span className="text-[10px] font-semibold text-forest/70 block">{tt("Bild wählen", "Choose Logo")}</span>
+                  </div>
                 )}
-                <Button type="button" size="sm" variant="ghost" className="absolute inset-0 bg-black/40 text-white opacity-0 hover:opacity-100 transition rounded-2xl text-[10px]" onClick={() => logoRef.current?.click()} disabled={uploading}>
-                  {tt("Bild wÃ¤hlen", "Choose Logo")}
-                </Button>
                 <input ref={logoRef} type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImage(e.target.files[0], "logo")} />
               </div>
             </div>
 
             <div className="space-y-2">
               <Label>{tt("Banner Bild", "Banner Image")}</Label>
-              <div className="relative border border-dashed border-[#e2e8e4] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] overflow-hidden">
+              <div 
+                onClick={() => !uploading && bannerRef.current?.click()}
+                className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
+              >
                 {bannerPreview ? (
-                  <img src={bannerPreview} className="object-cover w-full h-full rounded-xl" alt="Banner" />
+                  <>
+                    <img src={bannerPreview} className="object-cover w-full h-full rounded-xl" alt="Banner" />
+                    <div className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-xs font-semibold rounded-2xl">
+                      {tt("Bild ändern", "Change Image")}
+                    </div>
+                  </>
                 ) : (
-                  <span className="text-2xl">ðŸ–¼ï¸</span>
+                  <div className="text-center space-y-1">
+                    <span className="text-2xl block">🖼️</span>
+                    <span className="text-[10px] font-semibold text-forest/70 block">{tt("Bild wählen", "Choose Banner")}</span>
+                  </div>
                 )}
-                <Button type="button" size="sm" variant="ghost" className="absolute inset-0 bg-black/40 text-white opacity-0 hover:opacity-100 transition rounded-2xl text-[10px]" onClick={() => bannerRef.current?.click()} disabled={uploading}>
-                  {tt("Bild wÃ¤hlen", "Choose Banner")}
-                </Button>
                 <input ref={bannerRef} type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImage(e.target.files[0], "banner")} />
               </div>
             </div>
@@ -1182,11 +1198,11 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
                   <Input id="delivery-radius" type="number" min="0" step="0.5" value={deliveryRadius} onChange={(e) => setDeliveryRadius(e.target.value)} />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="min-order" className="text-xs">{tt("Mindestbestellwert (â‚¬)", "Min Order (â‚¬)")}</Label>
+                  <Label htmlFor="min-order" className="text-xs">{tt("Mindestbestellwert (€)", "Min Order (€)")}</Label>
                   <Input id="min-order" type="number" min="0" step="0.5" value={minOrder} onChange={(e) => setMinOrder(e.target.value)} />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="delivery-fee" className="text-xs">{tt("LiefergebÃ¼hr (â‚¬)", "Delivery Fee (â‚¬)")}</Label>
+                  <Label htmlFor="delivery-fee" className="text-xs">{tt("LiefergebÃ¼hr (€)", "Delivery Fee (€)")}</Label>
                   <Input id="delivery-fee" type="number" min="0" step="0.5" value={deliveryFee} onChange={(e) => setDeliveryFee(e.target.value)} />
                 </div>
               </div>
@@ -1215,7 +1231,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
               </div>
               {!hasPaymentMethod && (
                 <p className="text-[10px] text-rose-600 bg-rose-500/5 border border-rose-500/10 p-2.5 rounded-lg leading-relaxed">
-                  âš ï¸ {tt("Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie verÃ¶ffentlichen.", "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.")}
+                  ⚠️ {tt("Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie verÃ¶ffentlichen.", "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.")}
                 </p>
               )}
             </div>
@@ -1404,7 +1420,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
               {tt("Kredit- / Debitkarten (Stripe Connect)", "Credit / Debit Card (Stripe Connect)")}
             </h3>
             <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-stone-100 px-2 py-0.5 rounded-full border border-stone-200 shrink-0">
-              {tt("Empfohlen fÃ¼r Kartenzahlung", "Recommended for Cards")}
+              {tt("Empfohlen für Kartenzahlung", "Recommended for Cards")}
             </span>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
@@ -1461,7 +1477,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
           <h3 className="font-display text-xl text-forest">{tt("Direkte Kunden-Zahlungsmethoden", "Direct Customer Payment Methods")}</h3>
-          <p className="text-xs text-muted-foreground">{tt("Aktivieren Sie alternative Zahlungsmethoden wie Bargeld oder PayPal fÃ¼r Ihre Kunden.", "Enable storefront payment options like cash or PayPal for customer checkouts.")}</p>
+          <p className="text-xs text-muted-foreground">{tt("Aktivieren Sie alternative Zahlungsmethoden wie Bargeld oder PayPal für Ihre Kunden.", "Enable storefront payment options like cash or PayPal for customer checkouts.")}</p>
         </div>
 
         <div className="grid gap-6">
@@ -1615,9 +1631,10 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
           {subtabs.map((tab) => {
             const isActive = activeSubtab === tab.id;
             return (
-              <a
+              <Link
                 key={tab.id}
-                href={`#${tab.id}`}
+                to="."
+                search={{ tab: tab.id }}
                 className={`pb-4 text-sm font-medium transition-all border-b-2 relative ${
                   isActive
                     ? "border-forest text-forest font-semibold"
@@ -1625,7 +1642,7 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
                 }`}
               >
                 {tab.label}
-              </a>
+              </Link>
             );
           })}
         </nav>
@@ -1724,7 +1741,7 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
                       {!c.is_active && <span className="text-[10px] uppercase bg-muted px-2 py-0.5 rounded-full font-semibold">Inactive</span>}
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {c.discount_type === "percentage" ? `${c.discount_value}% off total` : `â‚¬${c.discount_value.toFixed(2)} off total`}
+                      {c.discount_type === "percentage" ? `${c.discount_value}% off total` : `€${c.discount_value.toFixed(2)} off total`}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -1754,7 +1771,7 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="percentage">Percent (%)</SelectItem>
-                  <SelectItem value="fixed">Fixed (â‚¬)</SelectItem>
+                  <SelectItem value="fixed">Fixed (€)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1974,7 +1991,7 @@ function BillingSection() {
       <div className="flex flex-col gap-1.5">
         <h2 className="font-display text-2xl text-forest">{tt("Abonnement & Abrechnung", "Subscription & Billing")}</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          {tt("Verwalte die Einstellungen fÃ¼r deine Kunden-Zahlungen und dein Speisely-Abonnement.", 
+          {tt("Verwalte die Einstellungen für deine Kunden-Zahlungen und dein Speisely-Abonnement.", 
              "Manage your customer-facing payment connections and your Speisely marketplace subscription.")}
         </p>
       </div>
@@ -1985,13 +2002,13 @@ function BillingSection() {
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-lg">ðŸš€</span>
+            <span className="text-lg">🚀</span>
             <h3 className="font-display text-xl text-forest">
               {tt("Speisely-Abonnement", "Speisely Subscription")}
             </h3>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            {tt("Verwalte das monatliche Abonnement fÃ¼r dein Speisely-HÃ¤ndlerkonto. Diese GebÃ¼hr flieÃŸt direkt an das Speisely-Plattformkonto.", 
+            {tt("Verwalte das monatliche Abonnement für dein Speisely-Händlerkonto. Diese Gebühr fließt direkt an das Speisely-Plattformkonto.", 
                "Manage the monthly subscription for your Speisely merchant account. This fee goes directly to the Speisely platform.")}
           </p>
         </div>
@@ -2001,7 +2018,7 @@ function BillingSection() {
           {subStatus === "past_due" && (
             <div className="bg-amber-500/5 text-amber-800 dark:text-amber-200 border border-amber-500/10 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="font-bold text-sm">âš ï¸ {tt("Zahlung ausstehend", "Payment Pending")}</p>
+                <p className="font-bold text-sm">⚠️ {tt("Zahlung ausstehend", "Payment Pending")}</p>
                 <p className="text-xs mt-1">
                   {tt("Die letzte Abonnement-Zahlung ist fehlgeschlagen. Bitte aktualisieren Sie Ihre Rechnungsdaten.", 
                      "Your last subscription payment failed. Please update your billing details.")}
@@ -2016,9 +2033,9 @@ function BillingSection() {
           {subStatus === "canceled" && (
             <div className="bg-rose-500/5 text-rose-800 dark:text-rose-200 border border-rose-500/10 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="font-bold text-sm">ðŸ›‘ {tt("Abonnement beendet", "Subscription Canceled")}</p>
+                <p className="font-bold text-sm">🛑 {tt("Abonnement beendet", "Subscription Canceled")}</p>
                 <p className="text-xs mt-1">
-                  {tt("Ihr Starter-Tarif wurde gekÃ¼ndigt. Ihr Storefront ist derzeit pausiert.", 
+                  {tt("Ihr Starter-Tarif wurde gekündigt. Ihr Storefront ist derzeit pausiert.", 
                      "Your Starter Plan has been canceled. Your storefront is currently paused.")}
                 </p>
               </div>
@@ -2038,7 +2055,7 @@ function BillingSection() {
                       {tt("Speisely Tarif", "Speisely Plan")}
                     </span>
                     <h3 className="mt-3 font-display text-2xl text-forest">
-                      {planName === "starter" ? tt("Starter-Paket (â‚¬34.99/Monat)", "Starter Plan (â‚¬34.99/month)") : planName}
+                      {planName === "starter" ? tt("Starter-Paket (€34.99/Monat)", "Starter Plan (€34.99/month)") : planName}
                     </h3>
                   </div>
                   <div className="text-right">
@@ -2055,7 +2072,7 @@ function BillingSection() {
                       <p className="font-semibold text-forest mt-0.5">{tt("Monatlich", "Monthly")}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground font-medium">{tt("NÃ¤chstes Rechnungsdatum", "Next Invoice Date")}</p>
+                      <p className="text-muted-foreground font-medium">{tt("Nächstes Rechnungsdatum", "Next Invoice Date")}</p>
                       <p className="font-semibold text-forest mt-0.5">{nextPaymentDate.toLocaleDateString(lang === "de" ? "de-DE" : "en-US")}</p>
                     </div>
                   </div>
@@ -2069,8 +2086,8 @@ function BillingSection() {
                     {tt("Abonniere das Restaurant Starter-Paket", "Subscribe to the Restaurant Starter Plan")}
                   </p>
                   <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
-                    {tt("FÃ¼r nur â‚¬34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.", 
-                       "For just â‚¬34.99/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.")}
+                    {tt("Für nur €34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.", 
+                       "For just €34.99/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.")}
                   </p>
                   <Button className="w-full bg-forest hover:bg-forest/90 text-cream font-semibold rounded-full py-2.5 shadow-sm transition" onClick={handleStartSubscription} disabled={loading}>
                     {tt("Plan abonnieren", "Subscribe to Plan")}
@@ -2085,19 +2102,19 @@ function BillingSection() {
                 <h4 className="font-semibold text-xs uppercase tracking-wider text-forest/70">{tt("Enthaltene Leistungen", "Plan Features")}</h4>
                 <ul className="space-y-3 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">âœ“</span>
+                    <span className="text-emerald-600 font-bold">✓</span>
                     <span>{tt("0% Bestellprovision", "0% order commission")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">âœ“</span>
+                    <span className="text-emerald-600 font-bold">✓</span>
                     <span>{tt("Tischreservierungen inklusive", "Table reservations included")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">âœ“</span>
+                    <span className="text-emerald-600 font-bold">✓</span>
                     <span>{tt("Eigene gehostete Storefront-URL", "Hosted storefront URL")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">âœ“</span>
+                    <span className="text-emerald-600 font-bold">✓</span>
                     <span>{tt("Custom Domain Support", "Custom domain support")}</span>
                   </li>
                 </ul>
@@ -2164,9 +2181,19 @@ function RestaurantDashboardInner() {
     };
   }, [q.data?.restaurant, qc]);
 
-  const { hash } = useLocation();
-  const activeTab = (hash || "#overview").replace("#", "");
-  const currentTab = activeTab === "profile" ? "settings-general" : activeTab === "billing" ? "settings-billing" : activeTab;
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const rawTab = searchParams.get("tab") || (location.hash || "#overview").replace("#", "");
+  
+  // Normalize settings tabs
+  let currentTab = rawTab;
+  if (currentTab === "profile" || currentTab === "settings") {
+    currentTab = "settings-general";
+  } else if (currentTab === "billing") {
+    currentTab = "settings-billing";
+  } else if (["general", "storefront", "operations", "payments", "reservations"].includes(currentTab)) {
+    currentTab = `settings-${currentTab}`;
+  }
 
   if (!q.data?.restaurant) {
     return (
