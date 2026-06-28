@@ -48,6 +48,9 @@ import { BlackoutCalendarSection } from "@/components/vendor/BlackoutCalendarSec
 import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
 import { VendorLayout, DashboardSkeleton } from "@/components/vendor/VendorLayout";
 import { useI18n } from "@/i18n/I18nProvider";
+import { Checkbox } from "@/components/ui/checkbox";
+import { updateMyConsent } from "@/lib/consent.functions";
+import { CommunicationPreferences } from "@/components/vendor/CommunicationPreferences";
 import { printEventBrief } from "@/utils/printEventBrief";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
 
@@ -128,16 +131,26 @@ function EmptyCard({
 }
 
 function CreateCatererForm() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const create = useServerFn(createMyCaterer);
+  const saveConsent = useServerFn(updateMyConsent);
   const qc = useQueryClient();
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [subdomain, setSubdomain] = useState("");
+  const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const mut = useMutation({
     mutationFn: (vars: { name: string; slug: string; custom_domain: string }) => create({ data: vars }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["caterer"] }),
+    onSuccess: async () => {
+      try {
+        await saveConsent({ data: { marketing_opt_in: marketingOptIn, source: "caterer_signup" } });
+      } catch (e) {
+        console.error("Failed to save marketing consent during signup:", e);
+      }
+      qc.invalidateQueries({ queryKey: ["caterer"] });
+    },
     onError: (e: any) => setErr(e.message ?? "Failed"),
   });
   return (
@@ -193,6 +206,25 @@ function CreateCatererForm() {
         <p className="text-[10px] text-muted-foreground">{t("Dies wird die offizielle URL für deine Kunden sein.", "This will be your official client-facing storefront URL.")}</p>
       </div>
       {err && <p className="text-xs text-rose-600 font-medium">{err}</p>}
+      
+      {/* Optional Marketing Consent */}
+      <div className="flex items-start gap-2.5 pt-1 pb-2">
+        <Checkbox
+          id="signup-marketing-consent"
+          checked={marketingOptIn}
+          onCheckedChange={(checked) => setMarketingOptIn(!!checked)}
+          className="mt-0.5 border-forest/20 text-forest data-[state=checked]:bg-forest data-[state=checked]:border-forest"
+        />
+        <div className="grid gap-1 leading-none">
+          <Label htmlFor="signup-marketing-consent" className="text-xs font-medium text-forest cursor-pointer">
+            {tt(
+              "Ich möchte Updates, Branchen-Tipps und Angebote von Speisely erhalten (optional)",
+              "I want to receive updates, industry tips, and promotions from Speisely (optional)"
+            )}
+          </Label>
+        </div>
+      </div>
+
       <Button type="submit" className="w-full rounded-full bg-forest hover:opacity-95 text-white py-2.5 font-semibold transition cursor-pointer mt-4" disabled={mut.isPending}>
         {mut.isPending ? t("Erstelle Storefront…", "Creating Storefront…") : t("Catering-Storefront erstellen", "Create Catering Storefront")}
       </Button>

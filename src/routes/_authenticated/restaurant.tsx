@@ -38,12 +38,15 @@ import {
 import { getMyPromoCodes } from "@/lib/promotions/queries.functions";
 import { createPromoCode, togglePromoCode } from "@/lib/promotions/mutations.functions";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useSpeiselyPing } from "@/lib/vendor/useSpeiselyPing";
 import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
 import { VendorLayout, DashboardSkeleton } from "@/components/vendor/VendorLayout";
 import { printReceipt } from "@/utils/printReceipt";
 import { useI18n } from "@/i18n/I18nProvider";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
+import { CommunicationPreferences } from "@/components/vendor/CommunicationPreferences";
+import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
@@ -199,15 +202,24 @@ function EmptyCard({
 }
 
 function CreateRestaurantForm() {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const create = useServerFn(createMyRestaurant);
+  const saveConsent = useServerFn(updateMyConsent);
   const qc = useQueryClient();
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [subdomain, setSubdomain] = useState("");
+  const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const mut = useMutation({
     mutationFn: (vars: { name: string; slug: string; custom_domain: string }) => create({ data: vars }),
-    onSuccess: () => {
+    onSuccess: async () => {
+      try {
+        await saveConsent({ data: { marketing_opt_in: marketingOptIn, source: "restaurant_signup" } });
+      } catch (e) {
+        console.error("Failed to save marketing consent during signup:", e);
+      }
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     },
     onError: (e: any) => setErr(e.message ?? "Failed"),
@@ -257,8 +269,27 @@ function CreateRestaurantForm() {
         <p className="text-xs text-muted-foreground">This will be your official storefront URL.</p>
       </div>
       {err && <p className="text-sm text-destructive">{err}</p>}
+      
+      {/* Optional Marketing Consent */}
+      <div className="flex items-start gap-2.5 pt-1 pb-2">
+        <Checkbox
+          id="signup-marketing-consent"
+          checked={marketingOptIn}
+          onCheckedChange={(checked) => setMarketingOptIn(!!checked)}
+          className="mt-0.5 border-forest/20 text-forest data-[state=checked]:bg-forest data-[state=checked]:border-forest"
+        />
+        <div className="grid gap-1 leading-none">
+          <Label htmlFor="signup-marketing-consent" className="text-xs font-medium text-forest cursor-pointer">
+            {tt(
+              "Ich möchte Updates, Branchen-Tipps und Angebote von Speisely erhalten (optional)",
+              "I want to receive updates, industry tips, and promotions from Speisely (optional)"
+            )}
+          </Label>
+        </div>
+      </div>
+
       <Button type="submit" className="w-full" disabled={mut.isPending}>
-        {mut.isPending ? "Creatingâ€¦" : "Create storefront"}
+        {mut.isPending ? "Creating…" : "Create storefront"}
       </Button>
     </form>
   );
@@ -458,6 +489,7 @@ function ProductsSection() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [showImportWizard, setShowImportWizard] = useState(false);
   const fileRef = React.useRef<HTMLInputElement>(null);
 
   const mut = useMutation({
@@ -503,7 +535,28 @@ function ProductsSection() {
 
   return (
     <section className="space-y-4">
-      <h2 className="font-display text-2xl">{tt("Speisekarte", "Menu")}</h2>
+      {showImportWizard && (
+        <MenuImportWizard
+          onClose={() => setShowImportWizard(false)}
+          onImported={() => {
+            qc.invalidateQueries({ queryKey: ["restaurant", "products"] });
+            setShowImportWizard(false);
+          }}
+        />
+      )}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <h2 className="font-display text-2xl">{tt("Speisekarte", "Menu")}</h2>
+        <Button
+          id="menu-import-btn"
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setShowImportWizard(true)}
+          className="gap-1.5 border-brand-orange text-brand-orange hover:bg-brand-orange/10"
+        >
+          ⬆️ {tt("Speisekarte importieren", "Import Menu")}
+        </Button>
+      </div>
       <div className="grid gap-6 md:grid-cols-[1fr_320px]">
         <div className="space-y-3">
           {q.data.products.length === 0 ? (
@@ -1017,6 +1070,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
   }
 
   return (
+    <>
     <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
       <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
         <h3 className="font-display text-xl text-forest">{tt("Allgemeine Einstellungen", "General Settings")}</h3>
@@ -1109,6 +1163,10 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
         </Button>
       </div>
     </div>
+    <div className="mt-6">
+      <CommunicationPreferences />
+    </div>
+    </>
   );
 }
 

@@ -182,3 +182,69 @@ export const verifyOptInToken = createServerFn({ method: "POST" })
 
     return { status: "success" as const, message: "Email verified successfully." };
   });
+
+export const getMyConsent = createServerFn({ method: "GET" })
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context as any;
+    if (!userId) return { marketing_opt_in: false, email: "" };
+    
+    const { data, error } = await supabase
+      .from("user_consents")
+      .select("marketing_opt_in, email")
+      .eq("user_id", userId)
+      .maybeSingle();
+      
+    if (error) {
+      console.error("[Consent Query Error]:", error.message);
+      return { marketing_opt_in: false, email: "" };
+    }
+    return data || { marketing_opt_in: false, email: "" };
+  });
+
+export const updateMyConsent = createServerFn({ method: "POST" })
+  .validator((input: { marketing_opt_in: boolean; source?: string }) =>
+    z.object({ 
+      marketing_opt_in: z.boolean(),
+      source: z.string().optional()
+    }).parse(input)
+  )
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context as any;
+    if (!userId) throw new Error("Unauthorized");
+    
+    const { data: { user }, error: userErr } = await supabase.auth.getUser();
+    if (userErr || !user) throw new Error("Could not load user profile");
+    
+    const email = user.email || "";
+    const source = data.source || "dashboard_settings";
+    
+    const { error } = await supabase
+      .from("user_consents")
+      .upsert({
+        user_id: userId,
+        email: email,
+        audience_type: "customer",
+        marketing_opt_in: data.marketing_opt_in,
+        terms_acknowledged: true,
+      }, { onConflict: "email" });
+      
+    if (error) throw new Error(error.message);
+    
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: record } = await supabaseAdmin
+      .from("user_consents")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
+      
+    if (record) {
+      await supabaseAdmin.from("consent_logs").insert({
+        consent_id: record.id,
+        email: email,
+        action_type: data.marketing_opt_in ? "granted_marketing" : "revoked_marketing",
+        source: source,
+      });
+    }
+    
+    return { success: true };
+  });
