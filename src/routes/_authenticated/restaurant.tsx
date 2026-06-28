@@ -1,4 +1,4 @@
-﻿import { createFileRoute, Link, useRouter, useLocation, redirect, isRedirect } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter, useLocation, redirect, isRedirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState, Component } from "react";
@@ -189,7 +189,7 @@ function EmptyCard({
   return (
     <div className="surface-card p-10 text-center">
       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-mint text-forest text-2xl">
-        ðŸ½ï¸
+        🍽️
       </div>
       <h3 className="font-display text-xl">{title}</h3>
       <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{description}</p>
@@ -323,7 +323,7 @@ function OrdersSection() {
             onClick={triggerTestPrint}
             className="rounded-full gap-2 border-forest/20 text-forest hover:bg-cream"
           >
-            ðŸ–¨ï¸ {t("Print Test Receipt", "Test-Beleg drucken")}
+            🖨️ {t("Print Test Receipt", "Test-Beleg drucken")}
           </Button>
           <p className="text-xs text-muted-foreground max-w-sm">
             {t(
@@ -361,7 +361,7 @@ function OrdersSection() {
             }}
             className="h-8 rounded-full text-xs gap-1.5 border-forest/20 text-forest hover:bg-cream"
           >
-            ðŸ–¨ï¸ {t("Test Print", "Test-Druck")}
+            🖨️ {t("Test Print", "Test-Druck")}
           </Button>
           <span className="text-sm text-muted-foreground">
             {data.orders.length} {t("total", "gesamt")}
@@ -390,7 +390,7 @@ function OrdersSection() {
                       onClick={() => printReceipt(o, data.restaurant.name)}
                       className="h-7 rounded-full text-xs gap-1 border-forest/20 text-forest hover:bg-cream shrink-0"
                     >
-                      ðŸ–¨ï¸ {t("Print", "Drucken")}
+                      🖨️ {t("Print", "Drucken")}
                     </Button>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
@@ -522,7 +522,7 @@ function ProductsSection() {
                   />
                 ) : (
                   <div className="w-32 bg-mint/40 grid place-items-center shrink-0">
-                    <span className="text-2xl">ðŸ½ï¸</span>
+                    <span className="text-2xl">🍽️</span>
                   </div>
                 )}
                 <div className="p-5 flex-1 flex items-start justify-between gap-4">
@@ -664,12 +664,12 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
     },
     {
       id: 3,
-      title: tt("Storefront verÃ¶ffentlichen", "Publish Storefront"),
+      title: tt("Storefront veröffentlichen", "Publish Storefront"),
       description: tt(
-        "Schalten Sie Ihr Storefront online, damit Kunden bestellen kÃ¶nnen.",
+        "Schalten Sie Ihr Storefront online, damit Kunden bestellen können.",
         "Make your storefront live so customers can place orders."
       ),
-      actionLabel: tt("Zum Profil & VerÃ¶ffentlichen", "Go to Profile & Publish"),
+      actionLabel: tt("Zum Profil & Veröffentlichen", "Go to Profile & Publish"),
       actionHash: "profile",
       disabledText: tt("Erfordert aktives Abonnement", "Requires active subscription"),
     },
@@ -686,8 +686,8 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
             {allCompleted 
-              ? tt("Herzlichen GlÃ¼ckwunsch! Ihr Storefront ist vollstÃ¤ndig eingerichtet und live.", "Congratulations! Your storefront is fully configured and live.")
-              : tt("SchlieÃŸen Sie diese Schritte ab, um Ihre Bestellungen auf Speisely zu starten.", "Complete these steps to start accepting orders on Speisely.")
+              ? tt("Herzlichen Glückwunsch! Ihr Storefront ist vollständig eingerichtet und live.", "Congratulations! Your storefront is fully configured and live.")
+              : tt("Schließen Sie diese Schritte ab, um Ihre Bestellungen auf Speisely zu starten.", "Complete these steps to start accepting orders on Speisely.")
             }
           </p>
         </div>
@@ -729,7 +729,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
                   
                   {isCurrent && (
                     <span className="text-[9px] font-bold uppercase tracking-widest text-brand-orange bg-brand-orange/10 px-2.5 py-1 rounded-full border border-brand-orange/20 animate-pulse">
-                      {tt("Als nÃ¤chstes", "Next Step")}
+                      {tt("Als nächstes", "Next Step")}
                     </span>
                   )}
                 </div>
@@ -771,6 +771,8 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
 }
 
 function OverviewSection() {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchKPIs = useServerFn(getRestaurantKPIs);
   const q = useSuspenseQuery({
     queryKey: ["restaurant", "kpis"],
@@ -809,9 +811,9 @@ function OverviewSection() {
       {/* SECTION 1: URGENT ACTIONS */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="font-display text-2xl">Urgent Actions</h2>
+          <h2 className="font-display text-2xl">{tt("Dringende Aktionen", "Urgent Actions")}</h2>
           <div className="flex items-center space-x-2">
-            <Label htmlFor="active-status" className="font-medium">Accepting Orders</Label>
+            <Label htmlFor="active-status" className="font-medium">{tt("Bestellungen annehmen", "Accepting Orders")}</Label>
             <Switch
               id="active-status"
               checked={q.data.isActive}
@@ -828,66 +830,66 @@ function OverviewSection() {
             {q.data.pendingOrders > 0 && (
               <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-base text-forest">{q.data.pendingOrders} new orders waiting</p>
-                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Review and accept your incoming orders.</p>
+                  <p className="font-display font-bold text-base text-forest">{q.data.pendingOrders} {tt("neue Bestellungen warten", "new orders waiting")}</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Prüfen und bestätigen Sie Ihre eingehenden Bestellungen.", "Review and accept your incoming orders.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("orders")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">View Orders</Button>
+                <Button onClick={() => navigateTo("orders")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Bestellungen anzeigen", "View Orders")}</Button>
               </div>
             )}
             {q.data.pendingReservations > 0 && (
               <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-base text-forest">{q.data.pendingReservations} reservation requests</p>
-                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Pending reservations require your approval.</p>
+                  <p className="font-display font-bold text-base text-forest">{q.data.pendingReservations} {tt("Reservierungsanfragen", "reservation requests")}</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Ausstehende Reservierungen erfordern Ihre Zustimmung.", "Pending reservations require your approval.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("reservations")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">View Reservations</Button>
+                <Button onClick={() => navigateTo("reservations")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Reservierungen anzeigen", "View Reservations")}</Button>
               </div>
             )}
             {q.data.totalProducts === 0 && (
               <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-base text-forest">Your menu has 0 items</p>
-                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Customers cannot place orders until you add items.</p>
+                  <p className="font-display font-bold text-base text-forest">{tt("Ihre Speisekarte hat 0 Artikel", "Your menu has 0 items")}</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Kunden können keine Bestellungen aufgeben, bis Sie Artikel hinzufügen.", "Customers cannot place orders until you add items.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("menu")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">Add Menu Items</Button>
+                <Button onClick={() => navigateTo("menu")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Artikel hinzufügen", "Add Menu Items")}</Button>
               </div>
             )}
             {q.data.isProfileIncomplete && (
               <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-base text-forest">Profile incomplete</p>
-                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Missing logo, phone, or description.</p>
+                  <p className="font-display font-bold text-base text-forest">{tt("Profil unvollständig", "Profile incomplete")}</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Logo, Telefonnummer oder Beschreibung fehlt.", "Missing logo, phone, or description.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("profile")} variant="outline" className="mt-5 w-full border-brand-orange text-brand-orange hover:bg-brand-orange/10 rounded-full text-xs font-semibold py-2 transition">Complete Profile</Button>
+                <Button onClick={() => navigateTo("profile")} variant="outline" className="mt-5 w-full border-brand-orange text-brand-orange hover:bg-brand-orange/10 rounded-full text-xs font-semibold py-2 transition">{tt("Profil vervollständigen", "Complete Profile")}</Button>
               </div>
             )}
           </div>
         ) : (
           <div className="rounded-2xl bg-emerald-500/5 border border-emerald-500/10 p-5 flex items-center gap-3">
-            <span className="text-emerald-600 text-2xl">ðŸŽ‰</span>
-            <p className="text-forest font-semibold text-base">All caught up! Nothing needs your attention right now.</p>
+            <span className="text-emerald-600 text-2xl">🎉</span>
+            <p className="text-forest font-semibold text-base">{tt("Alles erledigt! Aktuell gibt es keine dringenden Aktionen.", "All caught up! Nothing needs your attention right now.")}</p>
           </div>
         )}
       </div>
 
       {/* SECTION 2: TODAY AT A GLANCE */}
       <div className="space-y-4">
-        <h2 className="font-display text-xl text-forest">Today at a glance</h2>
+        <h2 className="font-display text-xl text-forest">{tt("Heute im Überblick", "Today at a glance")}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ›ï¸</span> Orders today</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">🛍️</span> {tt("Bestellungen heute", "Orders today")}</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.ordersToday}</p>
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ“ˆ</span> Revenue today</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📈</span> {tt("Umsatz heute", "Revenue today")}</p>
             <p className="text-3xl font-bold font-display text-forest">€{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ“…</span> Reservations today</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📅</span> {tt("Reservierungen heute", "Reservations today")}</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.reservationsToday}</p>
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ‘€</span> Profile views today</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">👀</span> {tt("Profilaufrufe heute", "Profile views today")}</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.profileViewsToday}</p>
           </div>
         </div>
@@ -895,10 +897,10 @@ function OverviewSection() {
 
       {/* SECTION 3: RECENT ACTIVITY FEED */}
       <div className="space-y-4">
-        <h2 className="font-display text-xl text-forest">Recent activity feed</h2>
+        <h2 className="font-display text-xl text-forest">{tt("Aktuelle Aktivitäten", "Recent activity feed")}</h2>
         <div className="bg-white border border-[#e2e8e4] rounded-2xl shadow-sm overflow-hidden">
           {(!aq.data || aq.data.length === 0) ? (
-            <div className="p-8 text-center text-muted-foreground">No recent activity.</div>
+            <div className="p-8 text-center text-muted-foreground">{tt("Keine aktuellen Aktivitäten.", "No recent activity.")}</div>
           ) : (
             <div className="divide-y divide-[#e2e8e4]/60">
               {aq.data.map((event: any) => {
@@ -910,7 +912,7 @@ function OverviewSection() {
                 if (isToday) {
                    timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 } else if (isYesterday) {
-                  timeStr = "yesterday";
+                  timeStr = tt("gestern", "yesterday");
                 } else {
                   timeStr = dateObj.toLocaleDateString();
                 }
@@ -919,13 +921,13 @@ function OverviewSection() {
                   <div key={event.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#f8faf9] transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="flex-shrink-0 mt-0.5 sm:mt-0">
-                        {event.type === 'order' && <span className="text-brand-orange text-lg">ðŸ›ï¸</span>}
-                        {event.type === 'reservation' && <span className="text-sky-500 text-lg">ðŸ“…</span>}
-                        {event.type === 'menu' && <span className="text-emerald-500 text-lg">ðŸ½ï¸</span>}
+                        {event.type === 'order' && <span className="text-brand-orange text-lg">🛍️</span>}
+                        {event.type === 'reservation' && <span className="text-sky-500 text-lg">📅</span>}
+                        {event.type === 'menu' && <span className="text-emerald-500 text-lg">🍽️</span>}
                       </div>
                       <p className="text-sm font-medium text-foreground">
                         {event.description}
-                        {event.status === "pending" && <span className="ml-2 inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">pending</span>}
+                        {event.status === "pending" && <span className="ml-2 inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">{tt("ausstehend", "pending")}</span>}
                       </p>
                     </div>
                     <span className="text-xs text-muted-foreground ml-7 sm:ml-0">{timeStr}</span>
@@ -1170,7 +1172,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
           <h3 className="font-display text-xl text-forest">{tt("Storefront & Liefer-Einstellungen", "Storefront & Delivery Settings")}</h3>
-          <p className="text-xs text-muted-foreground">{tt("Verwalten Sie Ihre BestellkanÃ¤le, LiefergebÃ¼hren und die Storefront-VerÃ¶ffentlichung.", "Manage your order channels, delivery fees, and storefront live status.")}</p>
+          <p className="text-xs text-muted-foreground">{tt("Verwalten Sie Ihre Bestellkanäle, Liefergebühren und die Storefront-Veröffentlichung.", "Manage your order channels, delivery fees, and storefront live status.")}</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -1178,7 +1180,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
             <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
               <div>
                 <Label htmlFor="accepts-pickup" className="font-semibold text-forest">{tt("Abholung erlauben", "Allow Pickup")}</Label>
-                <p className="text-[10px] text-muted-foreground mt-0.5">{tt("Kunden kÃ¶nnen Speisen vor Ort abholen", "Customers can pick up their orders at the counter")}</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{tt("Kunden können Speisen vor Ort abholen", "Customers can pick up their orders at the counter")}</p>
               </div>
               <Switch id="accepts-pickup" checked={acceptsPickup} onCheckedChange={setAcceptsPickup} />
             </div>
@@ -1202,7 +1204,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
                   <Input id="min-order" type="number" min="0" step="0.5" value={minOrder} onChange={(e) => setMinOrder(e.target.value)} />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="delivery-fee" className="text-xs">{tt("LiefergebÃ¼hr (€)", "Delivery Fee (€)")}</Label>
+                  <Label htmlFor="delivery-fee" className="text-xs">{tt("Liefergebühr (€)", "Delivery Fee (€)")}</Label>
                   <Input id="delivery-fee" type="number" min="0" step="0.5" value={deliveryFee} onChange={(e) => setDeliveryFee(e.target.value)} />
                 </div>
               </div>
@@ -1219,8 +1221,8 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
             <div className="flex flex-col gap-3 p-4 border border-[#e2e8e4] rounded-2xl bg-white shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="is-published" className="font-semibold text-forest">{tt("Storefront verÃ¶ffentlichen", "Publish Storefront")}</Label>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">{tt("Schalten Sie Ihr Storefront Ã¶ffentlich live unter /restaurant/", "Make your storefront live at /restaurant/")}{restaurant.slug}</p>
+                  <Label htmlFor="is-published" className="font-semibold text-forest">{tt("Storefront veröffentlichen", "Publish Storefront")}</Label>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{tt("Schalten Sie Ihr Storefront öffentlich live unter /restaurant/", "Make your storefront live at /restaurant/")}{restaurant.slug}</p>
                 </div>
                 <Switch id="is-published" checked={isPublished} disabled={!hasPaymentMethod} onCheckedChange={(val) => {
                   setIsPublished(val);
@@ -1231,7 +1233,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
               </div>
               {!hasPaymentMethod && (
                 <p className="text-[10px] text-rose-600 bg-rose-500/5 border border-rose-500/10 p-2.5 rounded-lg leading-relaxed">
-                  ⚠️ {tt("Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie verÃ¶ffentlichen.", "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.")}
+                  ⚠️ {tt("Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie veröffentlichen.", "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.")}
                 </p>
               )}
             </div>
@@ -1274,7 +1276,7 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
           operating_hours: operatingHours,
         }
       });
-      alert(tt("Ã–ffnungszeiten gespeichert!", "Operating hours saved successfully!"));
+      alert(tt("Öffnungszeiten gespeichert!", "Operating hours saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
       alert(e.message);
@@ -1286,8 +1288,8 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
   return (
     <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
       <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
-        <h3 className="font-display text-xl text-forest">{tt("Ã–ffnungszeiten & Betriebszeiten", "Operating Hours")}</h3>
-        <p className="text-xs text-muted-foreground">{tt("Legen Sie Ihre tÃ¤glichen Ã–ffnungszeiten fest. Kunden kÃ¶nnen auÃŸerhalb dieser Zeiten nur Vorbestellungen aufgeben.", "Set your daily business hours. Storefront orders will fall back to pre-ordering when closed.")}</p>
+        <h3 className="font-display text-xl text-forest">{tt("Öffnungszeiten & Betriebszeiten", "Operating Hours")}</h3>
+        <p className="text-xs text-muted-foreground">{tt("Legen Sie Ihre täglichen Öffnungszeiten fest. Kunden können außerhalb dieser Zeiten nur Vorbestellungen aufgeben.", "Set your daily business hours. Storefront orders will fall back to pre-ordering when closed.")}</p>
       </div>
 
       <div className="space-y-3">
@@ -1304,7 +1306,7 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
                   }))} 
                 />
                 <span className="text-xs font-semibold text-muted-foreground">
-                  {operatingHours[day]?.closed ? tt("Geschlossen", "Closed") : tt("GeÃ¶ffnet", "Open")}
+                  {operatingHours[day]?.closed ? tt("Geschlossen", "Closed") : tt("Geöffnet", "Open")}
                 </span>
               </div>
               {!operatingHours[day]?.closed && (
@@ -1337,7 +1339,7 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
 
       <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
         <Button onClick={handleSave} disabled={saving} className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer">
-          {saving ? tt("Wird gespeichert...", "Saving...") : tt("Ã–ffnungszeiten speichern", "Save Operating Hours")}
+          {saving ? tt("Wird gespeichert...", "Saving...") : tt("Öffnungszeiten speichern", "Save Operating Hours")}
         </Button>
       </div>
     </div>
@@ -1376,7 +1378,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
   }
 
   async function handleDisconnectStripe() {
-    if (!confirm(tt("Sind Sie sicher, dass Sie Stripe deautorisieren mÃ¶chten?", "Are you sure you want to disconnect Stripe?"))) return;
+    if (!confirm(tt("Sind Sie sicher, dass Sie Stripe deautorisieren möchten?", "Are you sure you want to disconnect Stripe?"))) return;
     setLoading(true);
     try {
       await disconnect();
@@ -1415,7 +1417,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-lg">ðŸ’³</span>
+            <span className="text-lg">💳</span>
             <h3 className="font-display text-xl text-forest">
               {tt("Kredit- / Debitkarten (Stripe Connect)", "Credit / Debit Card (Stripe Connect)")}
             </h3>
@@ -1484,7 +1486,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
           {/* Cash */}
           <div className="flex items-center justify-between border border-border/50 rounded-2xl p-4 bg-[#f8faf9]">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">ðŸ’µ</span>
+              <span className="text-2xl">💵</span>
               <div>
                 <p className="font-semibold text-forest">Cash (Barzahlung)</p>
                 <p className="text-xs text-muted-foreground">{tt("Kunden zahlen vor Ort oder bei Lieferung bar.", "Customers pay in cash upon pickup or delivery.")}</p>
@@ -1497,10 +1499,10 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
           <div className="border border-border/50 rounded-2xl p-4 bg-[#f8faf9] space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">ðŸ…¿ï¸</span>
+                <span className="text-2xl">🅿️</span>
                 <div>
                   <p className="font-semibold text-forest">PayPal</p>
-                  <p className="text-xs text-muted-foreground">{tt("Kunden zahlen im Checkout direkt Ã¼ber Ihren PayPal.Me Link.", "Customers pay via your PayPal.Me link at checkout.")}</p>
+                  <p className="text-xs text-muted-foreground">{tt("Kunden zahlen im Checkout direkt über Ihren PayPal.Me Link.", "Customers pay via your PayPal.Me link at checkout.")}</p>
                 </div>
               </div>
               <Switch id="accepts-paypal" checked={acceptsPaypal} onCheckedChange={setAcceptsPaypal} />
@@ -1521,14 +1523,14 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
                     className="shrink-0 border-blue-400 text-blue-600 hover:bg-blue-50 rounded-xl text-xs font-semibold"
                     onClick={() => window.open("https://www.paypal.com/paypalme/my/profile", "_blank")}
                   >
-                    PayPal.me erstellen â†’
+                    PayPal.me erstellen →
                   </Button>
                 </div>
                 <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10">
-                  <span>ðŸ”’</span>
+                  <span>🔒</span>
                   <p>
                     {tt(
-                      "Sicherheits-Hinweis: Wir fragen niemals nach Ihren PayPal-PasswÃ¶rtern oder sensiblen Anmeldedaten und speichern diese auch nicht. Es wird nur Ihr Ã¶ffentlicher PayPal.Me Link/E-Mail gespeichert.",
+                      "Sicherheits-Hinweis: Wir fragen niemals nach Ihren PayPal-Passwörtern oder sensiblen Anmeldedaten und speichern diese auch nicht. Es wird nur Ihr öffentlicher PayPal.Me Link/E-Mail gespeichert.",
                       "Security Note: We never ask for or store your PayPal passwords or sensitive login credentials. Only your public PayPal.Me link/email is stored."
                     )}
                   </p>
@@ -1579,12 +1581,12 @@ function SettingsReservationsSection({ restaurant }: { restaurant: any }) {
     <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
       <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
         <h3 className="font-display text-xl text-forest">{tt("Reservierungs-Einstellungen", "Reservation Settings")}</h3>
-        <p className="text-xs text-muted-foreground">{tt("Legen Sie Ihre maximale Tisch- und SitzplatzkapazitÃ¤t pro Zeitfenster fest.", "Configure slot-based seat capacities and limits for table bookings.")}</p>
+        <p className="text-xs text-muted-foreground">{tt("Legen Sie Ihre maximale Tisch- und Sitzplatzkapazität pro Zeitfenster fest.", "Configure slot-based seat capacities and limits for table bookings.")}</p>
       </div>
 
       <div className="space-y-4 max-w-md">
         <div className="space-y-1.5">
-          <Label htmlFor="seat-capacity">{tt("Maximale SitzplatzkapazitÃ¤t pro Slot", "Maximum Seat Capacity per Slot")}</Label>
+          <Label htmlFor="seat-capacity">{tt("Maximale Sitzplatzkapazität pro Slot", "Maximum Seat Capacity per Slot")}</Label>
           <Input 
             id="seat-capacity"
             type="number" 
@@ -1595,7 +1597,7 @@ function SettingsReservationsSection({ restaurant }: { restaurant: any }) {
         </div>
         <p className="text-xs text-muted-foreground leading-relaxed">
           {tt(
-            "Reservierungen werden bis zu dieser Sitzplatzanzahl pro Zeitslot automatisch vom System bestÃ¤tigt. Danach werden Buchungsanfragen auf die Warteliste gesetzt.",
+            "Reservierungen werden bis zu dieser Sitzplatzanzahl pro Zeitslot automatisch vom System bestätigt. Danach werden Buchungsanfragen auf die Warteliste gesetzt.",
             "Bookings will be automatically confirmed up to this limit per time slot. Subsequent requests will require manual approval."
           )}
         </p>
