@@ -1046,7 +1046,7 @@ function BusinessProfileSection() {
           certifications,
           accepts_cash: acceptsCash,
           accepts_paypal: acceptsPaypal,
-          paypal_email: acceptsPaypal ? (paypalEmail || null) : null,
+          paypal_email: paypalEmail || null,
         }
       });
       alert("Settings saved successfully!");
@@ -1229,10 +1229,19 @@ function BusinessProfileSection() {
                       Get PayPal.me →
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Don't have a PayPal.me link yet? Click "Get PayPal.me →" to create one on PayPal's website. Then paste it above.
-                    We only store your PayPal.me link — never your password.
+                  <p className="text-xs text-muted-foreground font-medium mt-1">
+                    {tt("Haben Sie noch keinen PayPal.Me Link? Klicken Sie auf \"Get PayPal.me →\", um einen auf PayPals Webseite zu erstellen und ihn oben einzufügen.",
+                        "Don't have a PayPal.me link yet? Click \"Get PayPal.me →\" to create one on PayPal's website. Then paste it above.")}
                   </p>
+                  <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10 mt-2">
+                    <span>🔒</span>
+                    <p>
+                      {tt(
+                        "Sicherheits-Hinweis: Wir fragen niemals nach Ihren PayPal-Passwörtern oder sensiblen Anmeldedaten und speichern diese auch nicht. Es wird nur Ihr öffentlicher PayPal.Me Link/E-Mail gespeichert.",
+                        "Security Note: We never ask for or store your PayPal passwords or sensitive login credentials. Only your public PayPal.Me link/email is stored."
+                      )}
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
@@ -1244,6 +1253,7 @@ function BusinessProfileSection() {
                 <div>
                   <p className="font-semibold">Credit / Debit Card (Stripe)</p>
                   <p className="text-xs text-muted-foreground">Connect your own Stripe account to accept card payments. Go to the Billing tab to connect.</p>
+                  <p className="text-[10px] text-emerald-700 mt-1 font-medium flex items-center gap-1"><span>🔒</span> {tt("Keine Passwörter oder Kartendaten gespeichert", "No passwords or card details stored")}</p>
                 </div>
               </div>
               <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
@@ -1748,6 +1758,15 @@ function BillingSection() {
               "Configure how storefront customers pay you. Connecting a custom Stripe account enables direct credit card processing with 0% order commission. This is optional and separate from your Speisely subscription."
             )}
           </p>
+          <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10 w-fit">
+            <span>🔒</span>
+            <p>
+              {tt(
+                "Sicherheits-Hinweis: Wir fragen niemals nach Ihren Stripe-Passwörtern oder sensiblen Anmeldedaten und speichern diese auch nicht. Alle Zahlungen werden sicher über den offiziellen Stripe-Connect-Gateway verarbeitet.",
+                "Security Note: We never ask for or store your Stripe passwords, bank credentials, or sensitive payment details. All processing is handled securely by Stripe's official gateway."
+              )}
+            </p>
+          </div>
         </div>
         
         {isStripeConnected ? (

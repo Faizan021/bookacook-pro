@@ -139,7 +139,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           certifications: z.string().optional().nullable(),
           accepts_cash: z.boolean().optional(),
           accepts_paypal: z.boolean().optional(),
-          paypal_email: z.string().email().optional().nullable(),
+          paypal_email: z.string().max(255).optional().nullable(),
         })
         .parse(input),
   )
