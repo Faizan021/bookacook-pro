@@ -31,7 +31,7 @@ export const createMyRestaurant = createServerFn({ method: "POST" })
 
 export const upsertRestaurantProduct = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .inputValidator(
+  .validator(
     (input: {
       id?: string;
       name: string;
@@ -87,7 +87,7 @@ export const upsertRestaurantProduct = createServerFn({ method: "POST" })
 
 export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .inputValidator(
+  .validator(
     (input: {
       name: string;
       description?: string;
@@ -178,7 +178,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
 
 export const getStripeConnectUrl = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .inputValidator((input: { slug: string; origin: string }) =>
+  .validator((input: { slug: string; origin: string }) =>
     z.object({ slug: z.string(), origin: z.string() }).parse(input)
   )
   .handler(async ({ data }) => {
@@ -232,7 +232,7 @@ export const disconnectStripe = createServerFn({ method: "POST" })
 
 export const startStarterSubscription = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .inputValidator((input: { origin: string }) =>
+  .validator((input: { origin: string }) =>
     z.object({ origin: z.string() }).parse(input)
   )
   .handler(async ({ context, data }) => {
@@ -264,7 +264,7 @@ export const startStarterSubscription = createServerFn({ method: "POST" })
 
 export const openBillingPortal = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .inputValidator((input: { origin: string }) =>
+  .validator((input: { origin: string }) =>
     z.object({ origin: z.string() }).parse(input)
   )
   .handler(async ({ context, data }) => {

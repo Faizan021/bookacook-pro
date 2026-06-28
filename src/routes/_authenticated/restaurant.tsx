@@ -47,6 +47,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
 import { CommunicationPreferences } from "@/components/vendor/CommunicationPreferences";
 import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
+import { SubscriptionTermsModal } from "@/components/vendor/SubscriptionTermsModal";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
@@ -1483,7 +1484,17 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      <div className="flex flex-col gap-1.5">
+        <h2 className="font-display text-2xl text-forest">{tt("Kunden-Zahlungsmethoden", "Customer Payment Methods")}</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {tt(
+            "Konfigurieren Sie, wie Ihre Kunden für Bestellungen und Reservierungen bezahlen. Diese Einnahmen fließen direkt an Sie.",
+            "Configure how your diners pay you for orders and reservations. These funds go directly to you."
+          )}
+        </p>
+      </div>
+
       {/* Stripe Connect Integration Card */}
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="space-y-1">
@@ -2079,12 +2090,14 @@ function BillingSection() {
   const getPortalUrl = useServerFn(openBillingPortal);
 
   const [loading, setLoading] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
 
   const handleStartSubscription = async () => {
+    setShowTerms(false);
     trackEvent("subscription_checkout_started");
     setLoading(true);
     try {
-      const res = await startSubscription({ origin: window.location.origin });
+      const res = await startSubscription({ data: { origin: window.location.origin } });
       if (res?.url) {
         window.location.href = res.url;
       }
@@ -2098,7 +2111,7 @@ function BillingSection() {
   const handleOpenPortal = async () => {
     setLoading(true);
     try {
-      const res = await getPortalUrl({ origin: window.location.origin });
+      const res = await getPortalUrl({ data: { origin: window.location.origin } });
       if (res?.url) {
         window.location.href = res.url;
       }
@@ -2121,8 +2134,8 @@ function BillingSection() {
       <div className="flex flex-col gap-1.5">
         <h2 className="font-display text-2xl text-forest">{tt("Abonnement & Abrechnung", "Subscription & Billing")}</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          {tt("Verwalte die Einstellungen für deine Kunden-Zahlungen und dein Speisely-Abonnement.", 
-             "Manage your customer-facing payment connections and your Speisely marketplace subscription.")}
+          {tt("Verwalte dein Speisely-Händlerkonto und Abonnement.", 
+             "Manage your Speisely marketplace subscription and billing settings.")}
         </p>
       </div>
 
@@ -2169,7 +2182,7 @@ function BillingSection() {
                      "Your Starter Plan has been canceled. Your storefront is currently paused.")}
                 </p>
               </div>
-              <Button size="sm" className="bg-rose-600 hover:bg-rose-700 text-white rounded-full px-4 shadow-sm" onClick={handleStartSubscription} disabled={loading}>
+              <Button size="sm" className="bg-rose-600 hover:bg-rose-700 text-white rounded-full px-4 shadow-sm" onClick={() => setShowTerms(true)} disabled={loading}>
                 {tt("Tarif reaktivieren", "Reactivate Plan")}
               </Button>
             </div>
@@ -2219,7 +2232,7 @@ function BillingSection() {
                     {tt("Für nur €34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.", 
                        "For just €34.99/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.")}
                   </p>
-                  <Button className="w-full bg-forest hover:bg-forest/90 text-cream font-semibold rounded-full py-2.5 shadow-sm transition" onClick={handleStartSubscription} disabled={loading}>
+                  <Button className="w-full bg-forest hover:bg-forest/90 text-cream font-semibold rounded-full py-2.5 shadow-sm transition" onClick={() => setShowTerms(true)} disabled={loading}>
                     {tt("Plan abonnieren", "Subscribe to Plan")}
                   </Button>
                 </div>
@@ -2252,14 +2265,23 @@ function BillingSection() {
 
               {/* Manage billing button when active or past_due */}
               {(isSubActive || subStatus === "past_due") && (
-                <Button variant="outline" size="sm" className="w-full rounded-full border-[#e2e8e4] hover:bg-stone-50" onClick={handleOpenPortal} disabled={loading}>
-                  {tt("Abrechnung & Belege verwalten", "Manage Billing & Invoices")}
-                </Button>
+                <div className="flex items-center justify-between pt-6 border-t border-border">
+                  <Button variant="outline" className="text-forest hover:bg-forest/5 rounded-full" onClick={handleOpenPortal} disabled={loading}>
+                    {tt("Rechnungen & Portal ansehen", "Manage Billing & Invoices")}
+                  </Button>
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
+
+      <SubscriptionTermsModal 
+        isOpen={showTerms} 
+        onClose={() => setShowTerms(false)} 
+        onConfirm={handleStartSubscription} 
+        isLoading={loading} 
+      />
     </section>
   );
 }
