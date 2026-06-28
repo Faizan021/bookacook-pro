@@ -1629,17 +1629,63 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
+  const isGeneralPending = !restaurant.logo_path || !restaurant.phone || !restaurant.description || !restaurant.address;
+  const isStorefrontPending = !restaurant.is_published;
+  const isPaymentsPending = !restaurant.accepts_cash && !restaurant.accepts_paypal && restaurant.stripe_connect_status !== "connected";
+  const isBillingPending = restaurant.subscription_status !== "active";
+
   const subtabs = [
-    { id: "settings-general", label: tt("Allgemein", "General") },
-    { id: "settings-storefront", label: tt("Storefront", "Storefront") },
-    { id: "settings-operations", label: tt("Betriebszeiten", "Operations") },
-    { id: "settings-payments", label: tt("Zahlungen", "Payments") },
-    { id: "settings-reservations", label: tt("Reservierungen", "Reservations") },
-    { id: "settings-billing", label: tt("Abonnement", "Billing") },
+    { 
+      id: "settings-general", 
+      label: tt("Allgemein", "General"),
+      pending: isGeneralPending,
+      tooltip: tt("Profilinformationen vervollständigen (Logo, Telefon, Beschreibung, Adresse)", "Complete profile information (Logo, Phone, Description, Address)")
+    },
+    { 
+      id: "settings-storefront", 
+      label: tt("Storefront", "Storefront"),
+      pending: isStorefrontPending,
+      tooltip: tt("Storefront veröffentlichen", "Publish storefront")
+    },
+    { 
+      id: "settings-operations", 
+      label: tt("Betriebszeiten", "Operations"),
+      pending: false,
+      tooltip: tt("Betriebszeiten verwalten", "Manage operating hours")
+    },
+    { 
+      id: "settings-payments", 
+      label: tt("Zahlungen", "Payments"),
+      pending: isPaymentsPending,
+      tooltip: tt("Mindestens eine Zahlungsmethode einrichten", "Set up at least one payment method")
+    },
+    { 
+      id: "settings-reservations", 
+      label: tt("Reservierungen", "Reservations"),
+      pending: false,
+      tooltip: tt("Reservierungs-Einstellungen verwalten", "Manage reservation settings")
+    },
+    { 
+      id: "settings-billing", 
+      label: tt("Abonnement", "Billing"),
+      pending: isBillingPending,
+      tooltip: tt("Starter-Paket aktivieren", "Activate Starter Plan")
+    },
   ];
 
   return (
     <div className="space-y-6">
+      {/* Settings Guide Banner */}
+      <div className="bg-cream/40 border border-brand-orange/10 rounded-2xl p-4 flex items-center gap-3">
+        <span className="text-xl">⚙️</span>
+        <div className="text-xs text-forest/80 leading-relaxed">
+          {tt(
+            "Bitte gehen Sie alle Einstellungsseiten durch. Vervollständigen Sie die ausstehenden Bereiche (gekennzeichnet mit einem pulsierenden orangefarbenen Punkt), um Ihr Storefront betriebsbereit zu machen.",
+            "Please go through all settings pages. Complete the pending sections (marked with a pulsing orange dot) to get your storefront fully operational."
+          )}
+        </div>
+      </div>
+
       {/* Subtab Navigation */}
       <div className="border-b border-[#e2e8e4] pb-px">
         <nav className="flex flex-wrap gap-6 -mb-px">
@@ -1650,13 +1696,19 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
                 key={tab.id}
                 to="."
                 search={{ tab: tab.id }}
-                className={`pb-4 text-sm font-medium transition-all border-b-2 relative ${
+                className={`pb-4 text-sm font-medium transition-all border-b-2 relative flex items-center gap-2 ${
                   isActive
                     ? "border-forest text-forest font-semibold"
                     : "border-transparent text-muted-foreground hover:text-forest"
                 }`}
+                title={tab.tooltip}
               >
-                {tab.label}
+                <span>{tab.label}</span>
+                {tab.pending ? (
+                  <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
+                ) : (
+                  <span className="text-[10px] text-emerald-600 font-bold shrink-0">✓</span>
+                )}
               </Link>
             );
           })}
