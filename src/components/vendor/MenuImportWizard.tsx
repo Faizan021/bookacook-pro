@@ -138,8 +138,45 @@ function parseCsvText(text: string): ReviewRow[] {
   // Detect delimiter
   const delim = lines[0].includes(";") ? ";" : ",";
 
+  /**
+   * RFC-4180-aware field splitter.
+   * Handles: quoted fields, embedded delimiters, escaped quotes ("").
+   */
+  function splitCsvLine(line: string): string[] {
+    const fields: string[] = [];
+    let cur = "";
+    let inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inQuote) {
+        if (ch === '"') {
+          // Peek: escaped quote ""?
+          if (line[i + 1] === '"') {
+            cur += '"';
+            i++; // skip second quote
+          } else {
+            inQuote = false; // closing quote
+          }
+        } else {
+          cur += ch;
+        }
+      } else {
+        if (ch === '"') {
+          inQuote = true;
+        } else if (ch === delim) {
+          fields.push(cur.trim());
+          cur = "";
+        } else {
+          cur += ch;
+        }
+      }
+    }
+    fields.push(cur.trim());
+    return fields;
+  }
+
   // Try to detect header row
-  const firstCells = lines[0].split(delim).map((c) => c.trim().toLowerCase().replace(/"/g, ""));
+  const firstCells = splitCsvLine(lines[0]).map((c) => c.toLowerCase());
   const hasHeader =
     firstCells.some((c) => ["name", "item", "dish", "artikel", "gericht"].includes(c)) ||
     firstCells.some((c) => ["price", "preis", "prix"].includes(c));
@@ -159,10 +196,7 @@ function parseCsvText(text: string): ReviewRow[] {
 
   for (const line of dataLines) {
     if (!line.trim()) continue;
-    // Simple CSV split (no embedded commas in quoted fields for MVP)
-    const cells = line
-      .split(delim)
-      .map((c) => c.trim().replace(/^"|"$/g, ""));
+    const cells = splitCsvLine(line);
 
     const name = colMap.name >= 0 ? cells[colMap.name] ?? "" : cells[0] ?? "";
     if (!name) continue;
