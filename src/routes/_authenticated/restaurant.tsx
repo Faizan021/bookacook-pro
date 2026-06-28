@@ -265,7 +265,8 @@ function CreateRestaurantForm() {
 }
 
 function OrdersSection() {
-  const { t } = useI18n();
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchOrders = useServerFn(getRestaurantOrders);
   const updateStatus = useServerFn(updateRestaurantOrderStatus);
   const qc = useQueryClient();
@@ -285,8 +286,8 @@ function OrdersSection() {
   if (!data?.restaurant) {
     return (
       <EmptyCard
-        title="Create your storefront"
-        description="Set up your restaurant to start receiving orders on Speisely."
+        title={tt("Erstellen Sie Ihr Storefront", "Create your storefront")}
+        description={tt("Richten Sie Ihr Restaurant ein, um Bestellungen über Speisely zu erhalten.", "Set up your restaurant to start receiving orders on Speisely.")}
       >
         <CreateRestaurantForm />
       </EmptyCard>
@@ -299,7 +300,7 @@ function OrdersSection() {
         created_at: new Date().toISOString(),
         customer_name: "John Doe (Test)",
         total_cents: 2450,
-        notes: t("Extra spicy, please", "Bitte extra scharf"),
+        notes: tt("Bitte extra scharf", "Extra spicy, please"),
         items: [
           { qty: 2, name: "Pizza Margherita", price_cents: 850 },
           { qty: 1, name: "Coca-Cola 0.33l", price_cents: 250 },
@@ -311,10 +312,10 @@ function OrdersSection() {
 
     return (
       <EmptyCard
-        title={t("No orders yet", "Noch keine Bestellungen")}
-        description={t(
-          `When customers order from ${data.restaurant.name}, they will appear here in real time.`,
-          `Sobald Kunden bei ${data.restaurant.name} bestellen, erscheinen die Bestellungen hier in Echtzeit.`
+        title={tt("Noch keine Bestellungen", "No orders yet")}
+        description={tt(
+          `Sobald Kunden bei ${data.restaurant.name} bestellen, erscheinen die Bestellungen hier in Echtzeit.`,
+          `When customers order from ${data.restaurant.name}, they will appear here in real time.`
         )}
       >
         <div className="flex flex-col items-center justify-center gap-3">
@@ -323,12 +324,12 @@ function OrdersSection() {
             onClick={triggerTestPrint}
             className="rounded-full gap-2 border-forest/20 text-forest hover:bg-cream"
           >
-            🖨️ {t("Print Test Receipt", "Test-Beleg drucken")}
+            🖨️ {tt("Test-Beleg drucken", "Print Test Receipt")}
           </Button>
           <p className="text-xs text-muted-foreground max-w-sm">
-            {t(
-              "Use this to test your 80mm thermal receipt printer alignment and layout.",
-              "Nutze dies, um die Ausrichtung und das Layout deines 80mm Thermo-Bondruckers zu testen."
+            {tt(
+              "Nutze dies, um die Ausrichtung und das Layout deines 80mm Thermo-Bondruckers zu testen.",
+              "Use this to test your 80mm thermal receipt printer alignment and layout."
             )}
           </p>
         </div>
@@ -441,6 +442,8 @@ function OrdersSection() {
 }
 
 function ProductsSection() {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchProducts = useServerFn(getRestaurantProducts);
   const upsert = useServerFn(upsertRestaurantProduct);
   const qc = useQueryClient();
@@ -469,7 +472,7 @@ function ProductsSection() {
       setImagePreview(null);
       setErr(null);
     },
-    onError: (e: any) => setErr(e.message ?? "Failed to save"),
+    onError: (e: any) => setErr(e.message ?? tt("Speichern fehlgeschlagen", "Failed to save")),
   });
 
   async function handleFile(file: File) {
@@ -489,7 +492,7 @@ function ProductsSection() {
       setImagePath(path);
       setImagePreview(signed?.signedUrl ?? null);
     } catch (e: any) {
-      setErr(e.message ?? "Upload failed");
+      setErr(e.message ?? tt("Upload fehlgeschlagen", "Upload failed"));
     } finally {
       setUploading(false);
     }
@@ -500,13 +503,13 @@ function ProductsSection() {
 
   return (
     <section className="space-y-4">
-      <h2 className="font-display text-2xl">Menu</h2>
+      <h2 className="font-display text-2xl">{tt("Speisekarte", "Menu")}</h2>
       <div className="grid gap-6 md:grid-cols-[1fr_320px]">
         <div className="space-y-3">
           {q.data.products.length === 0 ? (
             <EmptyCard
-              title="No menu items yet"
-              description="Add your first dish using the form on the right."
+              title={tt("Noch keine Artikel auf der Speisekarte", "No menu items yet")}
+              description={tt("Fügen Sie Ihr erstes Gericht mithilfe des Formulars auf der rechten Seite hinzu.", "Add your first dish using the form on the right.")}
             />
           ) : (
             q.data.products.map((p: any) => (
@@ -535,7 +538,7 @@ function ProductsSection() {
                   <div className="text-right">
                     <p className="font-display text-lg">{formatPrice(p.price_cents)}</p>
                     <p className="text-xs text-muted-foreground">
-                      {p.is_available ? "Available" : "Hidden"}
+                      {p.is_available ? tt("Verfügbar", "Available") : tt("Ausgeblendet", "Hidden")}
                     </p>
                   </div>
                 </div>
@@ -552,13 +555,13 @@ function ProductsSection() {
             mut.mutate({ name, description, price_cents: cents, image_url: imagePath });
           }}
         >
-          <h3 className="font-display text-lg">Add menu item</h3>
+          <h3 className="font-display text-lg">{tt("Menüartikel hinzufügen", "Add menu item")}</h3>
           <div className="space-y-1.5">
-            <Label htmlFor="pname">Name</Label>
+            <Label htmlFor="pname">{tt("Name", "Name")}</Label>
             <Input id="pname" value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="pdesc">Description</Label>
+            <Label htmlFor="pdesc">{tt("Beschreibung", "Description")}</Label>
             <Textarea
               id="pdesc"
               rows={2}
@@ -567,7 +570,7 @@ function ProductsSection() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="pprice">Price (EUR)</Label>
+            <Label htmlFor="pprice">{tt("Preis (EUR)", "Price (EUR)")}</Label>
             <Input
               id="pprice"
               type="number"
@@ -579,7 +582,7 @@ function ProductsSection() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label>Image (Optional)</Label>
+            <Label>{tt("Bild (Optional)", "Image (Optional)")}</Label>
             {imagePreview && (
               <img
                 src={imagePreview}
@@ -605,18 +608,17 @@ function ProductsSection() {
               disabled={uploading}
               onClick={() => fileRef.current?.click()}
             >
-              {uploading ? "Uploadingâ€¦" : imagePreview ? "Replace image" : "Upload image"}
+              {uploading ? tt("Wird hochgeladen...", "Uploading…") : imagePreview ? tt("Bild ersetzen", "Replace image") : tt("Bild hochladen", "Upload image")}
             </Button>
           </div>
           {err && <p className="text-sm text-destructive">{err}</p>}
           <Button type="submit" className="w-full" disabled={mut.isPending || uploading}>
-            {mut.isPending ? "Savingâ€¦" : "Add to menu"}
+            {mut.isPending ? tt("Wird gespeichert...", "Saving…") : tt("Zur Speisekarte hinzufügen", "Add to menu")}
           </Button>
         </form>
       </div>
     </section>
-  );
-}
+  );}
 
 function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
   const { lang } = useI18n();
@@ -1293,9 +1295,19 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
       </div>
 
       <div className="space-y-3">
-        {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
-          <div key={day} className="flex items-center justify-between border border-border/50 p-4 rounded-xl bg-[#f8faf9] flex-wrap gap-4">
-            <div className="w-28 font-medium capitalize text-forest">{day}</div>
+        {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => {
+          const dayNames: Record<string, { de: string; en: string }> = {
+            monday: { de: "Montag", en: "Monday" },
+            tuesday: { de: "Dienstag", en: "Tuesday" },
+            wednesday: { de: "Mittwoch", en: "Wednesday" },
+            thursday: { de: "Donnerstag", en: "Thursday" },
+            friday: { de: "Freitag", en: "Friday" },
+            saturday: { de: "Samstag", en: "Saturday" },
+            sunday: { de: "Sonntag", en: "Sunday" },
+          };
+          return (
+            <div key={day} className="flex items-center justify-between border border-border/50 p-4 rounded-xl bg-[#f8faf9] flex-wrap gap-4">
+              <div className="w-28 font-medium text-forest">{tt(dayNames[day].de, dayNames[day].en)}</div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Switch 
@@ -1334,7 +1346,8 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
               )}
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
@@ -1665,6 +1678,8 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
 
 
 function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" | "planners" }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchPromos = useServerFn(getMyPromoCodes);
   const createPromo = useServerFn(createPromoCode);
   const togglePromo = useServerFn(togglePromoCode);
@@ -1698,7 +1713,7 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
       setValue("");
       qc.invalidateQueries({ queryKey: ["promotions"] });
       qc.invalidateQueries({ queryKey: [vertical.slice(0, -1)] }); 
-      alert("Promo code created successfully!");
+      alert(tt("Rabattcode erfolgreich erstellt!", "Promo code created successfully!"));
     } catch (error: any) {
       setErr(error.message);
     } finally {
@@ -1711,7 +1726,7 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
       await togglePromo({ data: { id, is_active: active }});
       qc.invalidateQueries({ queryKey: ["promotions"] });
     } catch (e: any) {
-      alert("Failed to toggle: " + e.message);
+      alert(tt("Umschalten fehlgeschlagen: ", "Failed to toggle: ") + e.message);
     }
   };
 
@@ -1722,16 +1737,16 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
   return (
     <section className="space-y-6">
       <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl">Promotions & Vouchers</h2>
-        <p className="text-sm text-muted-foreground">Generate discount codes and sync them to your storefront banner.</p>
+        <h2 className="font-display text-2xl">{tt("Rabattcodes & Aktionen", "Promotions & Vouchers")}</h2>
+        <p className="text-sm text-muted-foreground">{tt("Erstellen Sie Rabattcodes und zeigen Sie diese in Ihrem Storefront-Banner an.", "Generate discount codes and sync them to your storefront banner.")}</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-[1fr_320px]">
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">Active Codes</h3>
+          <h3 className="font-semibold text-lg">{tt("Aktive Codes", "Active Codes")}</h3>
           {codes.length === 0 ? (
             <div className="surface-card p-8 text-center border border-dashed border-border text-muted-foreground">
-              You haven't created any promo codes yet.
+              {tt("Sie haben noch keine Rabattcodes erstellt.", "You haven't created any promo codes yet.")}
             </div>
           ) : (
             <div className="grid gap-3">
@@ -1740,14 +1755,17 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
                   <div>
                     <div className="flex items-center gap-2">
                       <h4 className="font-bold font-mono text-lg">{c.code}</h4>
-                      {!c.is_active && <span className="text-[10px] uppercase bg-muted px-2 py-0.5 rounded-full font-semibold">Inactive</span>}
+                      {!c.is_active && <span className="text-[10px] uppercase bg-muted px-2 py-0.5 rounded-full font-semibold">{tt("Inaktiv", "Inactive")}</span>}
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {c.discount_type === "percentage" ? `${c.discount_value}% off total` : `€${c.discount_value.toFixed(2)} off total`}
+                      {c.discount_type === "percentage" 
+                        ? (lang === "de" ? `${c.discount_value}% Rabatt auf Gesamtsumme` : `${c.discount_value}% off total`)
+                        : (lang === "de" ? `€${c.discount_value.toFixed(2)} Rabatt auf Gesamtsumme` : `€${c.discount_value.toFixed(2)} off total`)
+                      }
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Label htmlFor={`toggle-${c.id}`} className="text-xs">{c.is_active ? 'Active' : 'Disabled'}</Label>
+                    <Label htmlFor={`toggle-${c.id}`} className="text-xs">{c.is_active ? tt("Aktiv", "Active") : tt("Deaktiviert", "Disabled")}</Label>
                     <Switch 
                       id={`toggle-${c.id}`} 
                       checked={c.is_active} 
@@ -1761,41 +1779,41 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
         </div>
 
         <form className="surface-card h-fit space-y-4 p-5" onSubmit={handleCreate}>
-          <h3 className="font-display text-lg">Create new code</h3>
+          <h3 className="font-display text-lg">{tt("Neuen Code erstellen", "Create new code")}</h3>
           <div className="space-y-1.5">
-            <Label>Code</Label>
+            <Label>{tt("Code", "Code")}</Label>
             <Input value={code} onChange={e => setCode(e.target.value.toUpperCase().replace(/\s/g, ""))} placeholder="e.g. SUMMER20" required />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>Type</Label>
+              <Label>{tt("Typ", "Type")}</Label>
               <Select value={type} onValueChange={(v: any) => setType(v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="percentage">Percent (%)</SelectItem>
-                  <SelectItem value="fixed">Fixed (€)</SelectItem>
+                  <SelectItem value="percentage">{tt("Prozent (%)", "Percent (%)")}</SelectItem>
+                  <SelectItem value="fixed">{tt("Festbetrag (€)", "Fixed (€)")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Value</Label>
+              <Label>{tt("Wert", "Value")}</Label>
               <Input type="number" min="0" step={type === "percentage" ? "1" : "0.5"} value={value} onChange={e => setValue(e.target.value)} placeholder={type === "percentage" ? "10" : "5.00"} required />
             </div>
           </div>
           <div className="pt-2 pb-1 border-t border-border mt-2 space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="promote" className="flex-1 cursor-pointer">Promote on Storefront Banner</Label>
+              <Label htmlFor="promote" className="flex-1 cursor-pointer">{tt("Auf Storefront-Banner bewerben", "Promote on Storefront Banner")}</Label>
               <Switch id="promote" checked={promote} onCheckedChange={setPromote} />
             </div>
             {promote && (
               <p className="text-xs text-muted-foreground bg-muted p-2 rounded">
-                This will automatically update and turn on your public announcement banner to display this code.
+                {tt("Dadurch wird Ihr Ankündigungsbanner im Storefront automatisch aktualisiert und aktiviert, um diesen Code anzuzeigen.", "This will automatically update and turn on your public announcement banner to display this code.")}
               </p>
             )}
           </div>
           {err && <p className="text-sm text-destructive">{err}</p>}
           <Button type="submit" className="w-full" disabled={creating || !code || !value}>
-            {creating ? "Creating..." : "Create Code"}
+            {creating ? tt("Wird erstellt...", "Creating...") : tt("Code erstellen", "Create Code")}
           </Button>
         </form>
       </div>
