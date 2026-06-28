@@ -18,7 +18,7 @@ export type ParsedMenuItem = z.infer<typeof parsedItemSchema>;
  */
 export const bulkImportMenuItems = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .inputValidator((input: { items: ParsedMenuItem[] }) =>
+  .validator((input: { items: ParsedMenuItem[] }) =>
     z
       .object({ items: z.array(parsedItemSchema).min(1).max(200) })
       .parse(input),

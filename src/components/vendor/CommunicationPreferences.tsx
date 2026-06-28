@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { getMyConsent, updateMyConsent } from "@/lib/consent.functions";
-import { useI18n } from "@/i18n/useI18n";
+import { useI18n } from "@/i18n/I18nProvider";
 import { toast } from "sonner";
 
 export function CommunicationPreferences() {
