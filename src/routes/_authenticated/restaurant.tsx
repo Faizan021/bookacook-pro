@@ -678,7 +678,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
   const allCompleted = hasPaymentMethod && subActive && published;
 
   return (
-    <div className="surface-card p-6 border-l-4 border-l-forest shadow-sm space-y-6 mb-6">
+    <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6 mb-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-display font-bold text-xl text-forest flex items-center gap-2">
@@ -687,7 +687,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
           <p className="text-sm text-muted-foreground mt-1">
             {allCompleted 
               ? tt("Herzlichen Glückwunsch! Ihr Storefront ist vollständig eingerichtet und live.", "Congratulations! Your storefront is fully configured and live.")
-              : tt("Schließen Sie diese 3 Schritte ab, um Ihre Bestellungen auf Speisely zu starten.", "Complete these 3 steps to start accepting orders on Speisely.")
+              : tt("Schließen Sie diese Schritte ab, um Ihre Bestellungen auf Speisely zu starten.", "Complete these steps to start accepting orders on Speisely.")
             }
           </p>
         </div>
@@ -707,28 +707,28 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
           return (
             <div 
               key={step.id} 
-              className={`flex flex-col justify-between p-5 rounded-xl border transition-all duration-200 ${
+              className={`flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 ${
                 isCompleted 
-                  ? "bg-emerald-50/40 dark:bg-emerald-950/5 border-emerald-200" 
+                  ? "bg-emerald-500/5 dark:bg-emerald-950/10 border-emerald-500/20 shadow-sm" 
                   : isCurrent 
-                  ? "bg-amber-50/20 dark:bg-amber-950/5 border-amber-300 shadow-md ring-1 ring-amber-300/30" 
-                  : "bg-stone-50/50 dark:bg-stone-900/10 border-stone-200 opacity-60"
+                  ? "bg-white dark:bg-zinc-900 border-forest/35 shadow-md ring-1 ring-forest/10 scale-[1.01]" 
+                  : "bg-stone-50/50 dark:bg-stone-900/10 border-stone-200/60 opacity-60"
               }`}
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
+                  <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
                     isCompleted 
-                      ? "bg-emerald-600 text-white" 
+                      ? "bg-emerald-600 text-white shadow-sm" 
                       : isCurrent 
-                      ? "bg-amber-500 text-white animate-pulse" 
-                      : "bg-stone-200 text-stone-500"
+                      ? "bg-forest text-cream shadow-md" 
+                      : "bg-stone-200 text-stone-400"
                   }`}>
                     {isCompleted ? "✓" : step.id}
                   </span>
                   
                   {isCurrent && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 bg-amber-100/80 px-2 py-0.5 rounded animate-pulse">
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-brand-orange bg-brand-orange/10 px-2.5 py-1 rounded-full border border-brand-orange/20 animate-pulse">
                       {tt("Als nächstes", "Next Step")}
                     </span>
                   )}
@@ -752,7 +752,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
                 ) : isCurrent ? (
                   <Button 
                     onClick={() => { window.location.hash = step.actionHash; }}
-                    className="w-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold py-2 rounded-lg transition-colors cursor-pointer"
+                    className="w-full bg-forest hover:bg-forest/90 text-cream text-xs font-bold py-2.5 rounded-full transition-all duration-200 cursor-pointer shadow-sm"
                   >
                     {step.actionLabel}
                   </Button>
@@ -826,81 +826,81 @@ function OverviewSection() {
         {hasUrgentActions ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {q.data.pendingOrders > 0 && (
-              <div className="surface-card p-5 border-l-4 border-l-brand-orange shadow-sm flex flex-col justify-between">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-lg">{q.data.pendingOrders} new orders waiting</p>
-                  <p className="text-sm text-muted-foreground mt-1">Review and accept your incoming orders.</p>
+                  <p className="font-display font-bold text-base text-forest">{q.data.pendingOrders} new orders waiting</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Review and accept your incoming orders.</p>
                 </div>
-                <Button onClick={() => navigateTo("orders")} className="mt-4 w-full bg-brand-orange hover:bg-brand-orange/90 text-white">View Orders</Button>
+                <Button onClick={() => navigateTo("orders")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">View Orders</Button>
               </div>
             )}
             {q.data.pendingReservations > 0 && (
-              <div className="surface-card p-5 border-l-4 border-l-brand-orange shadow-sm flex flex-col justify-between">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-lg">{q.data.pendingReservations} reservation requests</p>
-                  <p className="text-sm text-muted-foreground mt-1">Pending reservations require your approval.</p>
+                  <p className="font-display font-bold text-base text-forest">{q.data.pendingReservations} reservation requests</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Pending reservations require your approval.</p>
                 </div>
-                <Button onClick={() => navigateTo("reservations")} className="mt-4 w-full bg-brand-orange hover:bg-brand-orange/90 text-white">View Reservations</Button>
+                <Button onClick={() => navigateTo("reservations")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">View Reservations</Button>
               </div>
             )}
             {q.data.totalProducts === 0 && (
-              <div className="surface-card p-5 border-l-4 border-l-brand-orange shadow-sm flex flex-col justify-between">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-lg">Your menu has 0 items</p>
-                  <p className="text-sm text-muted-foreground mt-1">Customers cannot place orders until you add items.</p>
+                  <p className="font-display font-bold text-base text-forest">Your menu has 0 items</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Customers cannot place orders until you add items.</p>
                 </div>
-                <Button onClick={() => navigateTo("menu")} className="mt-4 w-full bg-brand-orange hover:bg-brand-orange/90 text-white">Add Menu Items</Button>
+                <Button onClick={() => navigateTo("menu")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">Add Menu Items</Button>
               </div>
             )}
             {q.data.isProfileIncomplete && (
-              <div className="surface-card p-5 border-l-4 border-l-brand-orange shadow-sm flex flex-col justify-between">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
                 <div>
-                  <p className="font-display font-bold text-lg">Profile incomplete</p>
-                  <p className="text-sm text-muted-foreground mt-1">Missing logo, phone, or description.</p>
+                  <p className="font-display font-bold text-base text-forest">Profile incomplete</p>
+                  <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">Missing logo, phone, or description.</p>
                 </div>
-                <Button onClick={() => navigateTo("profile")} variant="outline" className="mt-4 w-full border-brand-orange text-brand-orange hover:bg-brand-orange/10">Complete Profile</Button>
+                <Button onClick={() => navigateTo("profile")} variant="outline" className="mt-5 w-full border-brand-orange text-brand-orange hover:bg-brand-orange/10 rounded-full text-xs font-semibold py-2 transition">Complete Profile</Button>
               </div>
             )}
           </div>
         ) : (
-          <div className="rounded-lg bg-mint/20 border border-mint/40 p-5 flex items-center gap-3">
-            <span className="text-forest text-2xl">🎉</span>
-            <p className="text-forest font-medium text-lg">All caught up! Nothing needs your attention right now.</p>
+          <div className="rounded-2xl bg-emerald-500/5 border border-emerald-500/10 p-5 flex items-center gap-3">
+            <span className="text-emerald-600 text-2xl">🎉</span>
+            <p className="text-forest font-semibold text-base">All caught up! Nothing needs your attention right now.</p>
           </div>
         )}
       </div>
 
       {/* SECTION 2: TODAY AT A GLANCE */}
       <div className="space-y-4">
-        <h2 className="font-display text-xl">Today at a glance</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="surface-card p-5 space-y-1 bg-white dark:bg-zinc-900 border border-border/50 shadow-sm">
-            <p className="text-sm text-muted-foreground font-medium flex items-center gap-2"><span className="text-brand-orange">🛍️</span> Orders today</p>
-            <p className="text-3xl font-bold font-display">{q.data.ordersToday}</p>
+        <h2 className="font-display text-xl text-forest">Today at a glance</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">🛍️</span> Orders today</p>
+            <p className="text-3xl font-bold font-display text-forest">{q.data.ordersToday}</p>
           </div>
-          <div className="surface-card p-5 space-y-1 bg-white dark:bg-zinc-900 border border-border/50 shadow-sm">
-            <p className="text-sm text-muted-foreground font-medium flex items-center gap-2"><span className="text-brand-orange">📈</span> Revenue today</p>
-            <p className="text-3xl font-bold font-display">€{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📈</span> Revenue today</p>
+            <p className="text-3xl font-bold font-display text-forest">€{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
           </div>
-          <div className="surface-card p-5 space-y-1 bg-white dark:bg-zinc-900 border border-border/50 shadow-sm">
-            <p className="text-sm text-muted-foreground font-medium flex items-center gap-2"><span className="text-brand-orange">📅</span> Reservations today</p>
-            <p className="text-3xl font-bold font-display">{q.data.reservationsToday}</p>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📅</span> Reservations today</p>
+            <p className="text-3xl font-bold font-display text-forest">{q.data.reservationsToday}</p>
           </div>
-          <div className="surface-card p-5 space-y-1 bg-white dark:bg-zinc-900 border border-border/50 shadow-sm">
-            <p className="text-sm text-muted-foreground font-medium flex items-center gap-2"><span className="text-brand-orange">👀</span> Profile views today</p>
-            <p className="text-3xl font-bold font-display">{q.data.profileViewsToday}</p>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">👀</span> Profile views today</p>
+            <p className="text-3xl font-bold font-display text-forest">{q.data.profileViewsToday}</p>
           </div>
         </div>
       </div>
 
       {/* SECTION 3: RECENT ACTIVITY FEED */}
       <div className="space-y-4">
-        <h2 className="font-display text-xl">Recent activity feed</h2>
-        <div className="surface-card overflow-hidden">
+        <h2 className="font-display text-xl text-forest">Recent activity feed</h2>
+        <div className="bg-white border border-[#e2e8e4] rounded-2xl shadow-sm overflow-hidden">
           {(!aq.data || aq.data.length === 0) ? (
             <div className="p-8 text-center text-muted-foreground">No recent activity.</div>
           ) : (
-            <div className="divide-y divide-border/50">
+            <div className="divide-y divide-[#e2e8e4]/60">
               {aq.data.map((event: any) => {
                 const dateObj = new Date(event.time);
                 const isToday = dateObj.toDateString() === new Date().toDateString();
@@ -908,7 +908,7 @@ function OverviewSection() {
                 let timeStr = "";
                 
                 if (isToday) {
-                  timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                   timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 } else if (isYesterday) {
                   timeStr = "yesterday";
                 } else {
@@ -916,7 +916,7 @@ function OverviewSection() {
                 }
 
                 return (
-                  <div key={event.id} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                  <div key={event.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#f8faf9] transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="flex-shrink-0 mt-0.5 sm:mt-0">
                         {event.type === 'order' && <span className="text-brand-orange text-lg">🛍️</span>}
@@ -1721,186 +1721,213 @@ function BillingSection() {
   const isSubActive = subStatus === "active";
 
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl">{tt("Abonnement & Abrechnung", "Subscription & Billing")}</h2>
-        <p className="text-sm text-muted-foreground">
-          {tt("Verwalte deine Stripe-Zahlungsverbindung und dein Speisely-Abonnement.", 
-             "Manage your Stripe payment connection and Speisely subscription plan.")}
+    <section className="space-y-8">
+      <div className="flex flex-col gap-1.5">
+        <h2 className="font-display text-2xl text-forest">{tt("Abonnement & Abrechnung", "Subscription & Billing")}</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {tt("Verwalte die Einstellungen für deine Kunden-Zahlungen und dein Speisely-Abonnement.", 
+             "Manage your customer-facing payment connections and your Speisely marketplace subscription.")}
         </p>
       </div>
 
       {/* STRIPE CONNECTION SECTION */}
-      <div className="surface-card p-6 space-y-4">
-        <h3 className="font-display text-xl flex items-center gap-2">
-          💳 {tt("Direktzahlungen (Stripe Connect)", "Direct Payments (Stripe Connect)")}
-        </h3>
+      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-lg">💳</span>
+            <h3 className="font-display text-xl text-forest">
+              {tt("Kunden-Zahlungsmethoden für dein Storefront", "Customer Payment Methods for your Storefront")}
+            </h3>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-stone-100 dark:bg-stone-855 px-2 py-0.5 rounded-full border border-stone-200 shrink-0">
+              {tt("Optional für Kreditkarten", "Optional for Credit Cards")}
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
+            {tt(
+              "Richten Sie ein, wie Ihre Kunden im öffentlichen Storefront bezahlen. Durch das Verbinden eines eigenen Stripe-Kontos aktivieren Sie direkte Kreditkartenzahlungen (0% Provision). Dies ist optional und hat keinen Einfluss auf Ihr Speisely-Abonnement.",
+              "Configure how storefront customers pay you. Connecting a custom Stripe account enables direct credit card processing with 0% order commission. This is optional and separate from your Speisely subscription."
+            )}
+          </p>
+        </div>
         
         {isStripeConnected ? (
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-[#22C55E] bg-[#22C55E]/10 p-3 rounded-lg border border-[#22C55E]/20 text-sm font-semibold">
-              <span>🟢</span>
-              <p>{tt("Ihr Stripe-Konto ist verbunden. Kunden bezahlen Sie direkt.", 
-                     "Your Stripe account is connected. Customers pay you directly.")}</p>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5 text-emerald-800 bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/10 text-sm font-semibold">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <p>{tt("Stripe Connect ist erfolgreich verbunden. Ihre Kunden können direkt mit Kreditkarte zahlen.", 
+                     "Stripe Connect is successfully connected. Your customers can pay you directly via credit card.")}</p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {tt("Verbundenes Stripe-Konto: ", "Connected Stripe Account: ")} <code className="font-mono bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded">{restaurant.stripe_user_id}</code>
-            </p>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-destructive hover:bg-destructive/10" 
-              disabled={loading} 
-              onClick={handleDisconnectStripe}
-            >
-              {tt("Stripe-Verbindung trennen", "Disconnect Stripe")}
-            </Button>
+            <div className="flex items-center justify-between flex-wrap gap-4 pt-2 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                {tt("Verbundenes Konto: ", "Connected Account: ")} <code className="font-mono bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded text-forest font-bold">{restaurant.stripe_user_id}</code>
+              </p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 rounded-full font-semibold transition" 
+                disabled={loading} 
+                onClick={handleDisconnectStripe}
+              >
+                {tt("Stripe-Verbindung trennen", "Disconnect Stripe")}
+              </Button>
+            </div>
           </div>
         ) : (
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-200/50 text-sm font-semibold">
-              <span>🔴</span>
-              <p>{tt("Stripe-Konto nicht verbunden. Verbinden Sie Ihr Konto, um Bestellungen anzunehmen.", 
-                     "Connect your Stripe account to accept online orders.")}</p>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5 text-stone-600 bg-stone-100/50 p-4 rounded-2xl border border-stone-200/50 text-sm font-semibold">
+              <span className="h-2 w-2 rounded-full bg-stone-300" />
+              <p>{tt("Kein Stripe Connect-Konto verbunden (Kreditkartenzahlungen deaktiviert).", 
+                     "No Stripe Connect account connected (Credit card payments disabled).")}</p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              {tt("Um Online-Bestellungen anzunehmen, müssen Sie ein Stripe-Konto über Stripe Connect verbinden. Dies dauert weniger als 2 Minuten.", 
-                 "To accept online orders, you need to connect a Stripe account via Stripe Connect. This takes less than 2 minutes.")}
-            </p>
-            <Button 
-              className="bg-[#635BFF] hover:bg-[#635BFF]/90 text-white font-semibold flex items-center gap-2" 
-              disabled={loading} 
-              onClick={handleConnectStripe}
-            >
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M13.962 10.885c0-1.83-.984-2.817-2.9-2.817c-1.22 0-2.296.536-2.9 1.053l-.536-3.238c.677-.384 2.112-.767 3.743-.767c3.82 0 5.86 1.954 5.86 5.62c0 4.148-3.084 5.925-6.236 5.925c-1.39 0-2.482-.321-3.023-.62l.52-3.177c.609.309 1.57.575 2.65.575c1.884.001 2.923-1.077 2.923-2.556zM8.344 6.772v10.51H4.664V6.772h3.68zM19.336 6.772v10.51h-3.68V6.772h3.68z"/></svg>
-              {tt("Mit Stripe verbinden", "Connect with Stripe")}
-            </Button>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-border">
+              <p className="text-xs text-muted-foreground leading-relaxed max-w-md">
+                {tt("Klicken Sie auf den Button, um Stripe Connect einzurichten. Sie werden zu Stripe weitergeleitet, um ein kostenloses Konto zu verknüpfen.",
+                   "Click to set up Stripe Connect. You will be redirected to Stripe to connect a free account in less than 2 minutes.")}
+              </p>
+              <Button 
+                className="bg-[#635BFF] hover:bg-[#635BFF]/90 text-white font-semibold flex items-center gap-2 rounded-full px-6 py-2.5 text-xs shadow-sm transition shrink-0" 
+                disabled={loading} 
+                onClick={handleConnectStripe}
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M13.962 10.885c0-1.83-.984-2.817-2.9-2.817c-1.22 0-2.296.536-2.9 1.053l-.536-3.238c.677-.384 2.112-.767 3.743-.767c3.82 0 5.86 1.954 5.86 5.62c0 4.148-3.084 5.925-6.236 5.925c-1.39 0-2.482-.321-3.023-.62l.52-3.177c.609.309 1.57.575 2.65.575c1.884.001 2.923-1.077 2.923-2.556zM8.344 6.772v10.51H4.664V6.772h3.68zM19.336 6.772v10.51h-3.68V6.772h3.68z"/></svg>
+                {tt("Mit Stripe verbinden", "Connect with Stripe")}
+              </Button>
+            </div>
           </div>
         )}
       </div>
 
       {/* SPEISELY SUBSCRIPTION SECTION */}
-      <div className="surface-card p-6 space-y-6">
-        <h3 className="font-display text-xl flex items-center gap-2">
-          🚀 {tt("Speisely-Abonnement", "Speisely Subscription")}
-        </h3>
+      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🚀</span>
+            <h3 className="font-display text-xl text-forest">
+              {tt("Speisely-Abonnement", "Speisely Subscription")}
+            </h3>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            {tt("Verwalte das monatliche Abonnement für dein Speisely-Händlerkonto. Diese Gebühr fließt direkt an das Speisely-Plattformkonto.", 
+               "Manage the monthly subscription for your Speisely merchant account. This fee goes directly to the Speisely platform.")}
+          </p>
+        </div>
 
-          <div className="space-y-6">
-            {/* Lapsed states / Active State Banners */}
-            {subStatus === "past_due" && (
-              <div className="bg-yellow-50 dark:bg-yellow-950/20 text-yellow-800 dark:text-yellow-200 border border-yellow-200 p-4 rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <p className="font-bold text-sm">⚠️ {tt("Zahlung fehlgeschlagen", "Payment Failed")}</p>
-                  <p className="text-xs mt-1">
-                    {tt("Ihre Zahlung ist fehlgeschlagen. Bitte aktualisieren Sie Ihre Rechnungsdaten, um Ihr Storefront online zu halten.", 
-                       "Your payment failed. Please update your billing details to keep your storefront live.")}
-                  </p>
-                </div>
-                <Button size="sm" className="bg-yellow-600 hover:bg-yellow-700 text-white shrink-0" onClick={handleOpenPortal} disabled={loading}>
-                  {tt("Abrechnung aktualisieren", "Update Billing")}
-                </Button>
+        <div className="space-y-6">
+          {/* Lapsed states / Active State Banners */}
+          {subStatus === "past_due" && (
+            <div className="bg-amber-500/5 text-amber-800 dark:text-amber-200 border border-amber-500/10 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <p className="font-bold text-sm">⚠️ {tt("Zahlung ausstehend", "Payment Pending")}</p>
+                <p className="text-xs mt-1">
+                  {tt("Die letzte Abonnement-Zahlung ist fehlgeschlagen. Bitte aktualisieren Sie Ihre Rechnungsdaten.", 
+                     "Your last subscription payment failed. Please update your billing details.")}
+                </p>
               </div>
-            )}
+              <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-4 shadow-sm" onClick={handleOpenPortal} disabled={loading}>
+                {tt("Abrechnung aktualisieren", "Update Billing")}
+              </Button>
+            </div>
+          )}
 
-            {subStatus === "canceled" && (
-              <div className="bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-200 border border-rose-200 p-4 rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <p className="font-bold text-sm">🛑 {tt("Abonnement gekündigt", "Subscription Canceled")}</p>
-                  <p className="text-xs mt-1">
-                    {tt("Ihr Starter-Tarif wurde gekündigt. Ihr Storefront ist derzeit pausiert.", 
-                       "Your Starter Plan has been canceled. Your storefront is currently paused.")}
-                  </p>
-                </div>
-                <Button size="sm" className="bg-rose-600 hover:bg-rose-700 text-white shrink-0" onClick={handleStartSubscription} disabled={loading}>
-                  {tt("Starter-Tarif starten", "Start Starter Plan")}
-                </Button>
+          {subStatus === "canceled" && (
+            <div className="bg-rose-500/5 text-rose-800 dark:text-rose-200 border border-rose-500/10 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <p className="font-bold text-sm">🛑 {tt("Abonnement beendet", "Subscription Canceled")}</p>
+                <p className="text-xs mt-1">
+                  {tt("Ihr Starter-Tarif wurde gekündigt. Ihr Storefront ist derzeit pausiert.", 
+                     "Your Starter Plan has been canceled. Your storefront is currently paused.")}
+                </p>
               </div>
-            )}
+              <Button size="sm" className="bg-rose-600 hover:bg-rose-700 text-white rounded-full px-4 shadow-sm" onClick={handleStartSubscription} disabled={loading}>
+                {tt("Tarif reaktivieren", "Reactivate Plan")}
+              </Button>
+            </div>
+          )}
 
-            {/* Plan Display Cards */}
-            <div className="grid gap-6 md:grid-cols-[1.5fr_1fr]">
-              <div className="space-y-4">
-                <div className={`surface-card p-6 border-l-4 ${isSubActive ? 'border-l-forest' : 'border-l-zinc-300'} shadow-sm`}>
-                  <div className="flex justify-between items-start">
+          {/* Plan Display Cards */}
+          <div className="grid gap-6 md:grid-cols-[1.5fr_1fr]">
+            <div className="space-y-4">
+              <div className={`bg-white border ${isSubActive ? 'border-forest/20 shadow-md ring-1 ring-forest/5' : 'border-[#e2e8e4]'} p-6 rounded-2xl shadow-sm transition-all duration-300`}>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className={`text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full ${isSubActive ? 'bg-forest/10 text-forest' : 'bg-stone-100 text-muted-foreground'}`}>
+                      {tt("Speisely Tarif", "Speisely Plan")}
+                    </span>
+                    <h3 className="mt-3 font-display text-2xl text-forest">
+                      {planName === "starter" ? tt("Starter-Paket (€34.99/Monat)", "Starter Plan (€34.99/month)") : planName}
+                    </h3>
+                  </div>
+                  <div className="text-right">
+                    <span className={`inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${isSubActive ? 'text-emerald-700 bg-emerald-500/10 border border-emerald-500/20' : 'text-stone-500 bg-stone-100'}`}>
+                      {isSubActive ? tt("Aktiv", "Active") : subStatus.replace('_', ' ')}
+                    </span>
+                  </div>
+                </div>
+
+                {isSubActive && (
+                  <div className="mt-6 pt-6 border-t border-border grid grid-cols-2 gap-4 text-xs">
                     <div>
-                      <span className={`text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full ${isSubActive ? 'bg-forest/10 text-forest' : 'bg-stone-100 text-muted-foreground'}`}>
-                        {tt("Speisely Tarif", "Speisely Plan")}
-                      </span>
-                      <h3 className="mt-3 font-display text-2xl">
-                        {planName === "starter" ? tt("Starter-Paket (€34.99/Monat)", "Starter Plan (€34.99/month)") : planName}
-                      </h3>
+                      <p className="text-muted-foreground font-medium">{tt("Abrechnungszeitraum", "Billing Cycle")}</p>
+                      <p className="font-semibold text-forest mt-0.5">{tt("Monatlich", "Monthly")}</p>
                     </div>
-                    <div className="text-right">
-                      <span className={`inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase ${isSubActive ? 'text-green-600 bg-green-100' : 'text-stone-500 bg-stone-100'}`}>
-                        {isSubActive ? tt("Aktiv", "Active") : subStatus.replace('_', ' ')}
-                      </span>
+                    <div>
+                      <p className="text-muted-foreground font-medium">{tt("Nächstes Rechnungsdatum", "Next Invoice Date")}</p>
+                      <p className="font-semibold text-forest mt-0.5">{nextPaymentDate.toLocaleDateString(lang === "de" ? "de-DE" : "en-US")}</p>
                     </div>
-                  </div>
-
-                  {isSubActive && (
-                    <div className="mt-6 pt-6 border-t border-border grid grid-cols-2 gap-4 text-xs">
-                      <div>
-                        <p className="text-muted-foreground font-medium">{tt("Abrechnungszeitraum", "Billing Cycle")}</p>
-                        <p className="font-semibold text-forest mt-0.5">{tt("Monatlich", "Monthly")}</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground font-medium">{tt("Nächste Zahlung am", "Next Invoice Date")}</p>
-                        <p className="font-semibold text-forest mt-0.5">{nextPaymentDate.toLocaleDateString(lang === "de" ? "de-DE" : "en-US")}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Plan Activation step if no subscription yet */}
-                {!isSubActive && subStatus !== "past_due" && subStatus !== "canceled" && (
-                  <div className="bg-stone-50 dark:bg-stone-900/20 p-5 rounded-lg border border-dashed border-border flex flex-col items-center text-center space-y-4">
-                    <p className="text-sm font-semibold">
-                      {tt("Abonnieren Sie das Restaurant Starter-Paket", "Subscribe to the Restaurant Starter Plan")}
-                    </p>
-                    <p className="text-xs text-muted-foreground max-w-sm">
-                      {tt("Für nur €34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihr eigenes Stripe-Konto.", 
-                         "For just €34.99/month, unlock your unlimited storefront with 0% order commission and connection to your own Stripe account.")}
-                    </p>
-                    <Button className="w-full bg-forest hover:bg-forest/90 text-white font-bold" onClick={handleStartSubscription} disabled={loading}>
-                      {tt("Starter-Tarif starten", "Start Starter Plan")}
-                    </Button>
                   </div>
                 )}
               </div>
 
-              <div className="space-y-4">
-                {/* Plan Features Checklist */}
-                <div className="surface-card p-5 space-y-3">
-                  <h4 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">{tt("Enthaltene Leistungen", "Plan Features")}</h4>
-                  <ul className="space-y-2 text-xs text-muted-foreground">
-                    <li className="flex items-center gap-2">
-                      <span className="text-emerald-500 font-bold">✓</span>
-                      <span>{tt("0% Bestellprovision", "0% order commission")}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-emerald-500 font-bold">✓</span>
-                      <span>{tt("Tischreservierungen inklusive", "Table reservations included")}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-emerald-500 font-bold">✓</span>
-                      <span>{tt("Eigene gehostete Storefront-URL", "Hosted storefront URL")}</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-emerald-500 font-bold">✓</span>
-                      <span>{tt("Custom Domain Support", "Custom domain support")}</span>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Manage billing button when active or past_due */}
-                {(isSubActive || subStatus === "past_due") && (
-                  <Button variant="outline" size="sm" className="w-full rounded-full" onClick={handleOpenPortal} disabled={loading}>
-                    {tt("Zahlungen & Rechnungen verwalten", "Manage Billing & Portal")}
+              {/* Plan Activation step if no subscription yet */}
+              {!isSubActive && subStatus !== "past_due" && subStatus !== "canceled" && (
+                <div className="bg-[#f8faf9] p-6 rounded-2xl border border-dashed border-[#e2e8e4] flex flex-col items-center text-center space-y-4">
+                  <p className="text-sm font-semibold text-forest">
+                    {tt("Abonniere das Restaurant Starter-Paket", "Subscribe to the Restaurant Starter Plan")}
+                  </p>
+                  <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
+                    {tt("Für nur €34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.", 
+                       "For just €34.99/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.")}
+                  </p>
+                  <Button className="w-full bg-forest hover:bg-forest/90 text-cream font-semibold rounded-full py-2.5 shadow-sm transition" onClick={handleStartSubscription} disabled={loading}>
+                    {tt("Plan abonnieren", "Subscribe to Plan")}
                   </Button>
-                )}
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-4">
+              {/* Plan Features Checklist */}
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-4">
+                <h4 className="font-semibold text-xs uppercase tracking-wider text-forest/70">{tt("Enthaltene Leistungen", "Plan Features")}</h4>
+                <ul className="space-y-3 text-xs text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span>{tt("0% Bestellprovision", "0% order commission")}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span>{tt("Tischreservierungen inklusive", "Table reservations included")}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span>{tt("Eigene gehostete Storefront-URL", "Hosted storefront URL")}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span>{tt("Custom Domain Support", "Custom domain support")}</span>
+                  </li>
+                </ul>
               </div>
+
+              {/* Manage billing button when active or past_due */}
+              {(isSubActive || subStatus === "past_due") && (
+                <Button variant="outline" size="sm" className="w-full rounded-full border-[#e2e8e4] hover:bg-stone-50" onClick={handleOpenPortal} disabled={loading}>
+                  {tt("Abrechnung & Belege verwalten", "Manage Billing & Invoices")}
+                </Button>
+              )}
             </div>
           </div>
+        </div>
       </div>
     </section>
   );
