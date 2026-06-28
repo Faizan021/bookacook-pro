@@ -8,7 +8,6 @@
  *   2. PDF          (reads text via the native PDF text-layer, falls back to raw text)
  *   3. Image / Photo (OCR via browser Canvas + heuristic regex)
  *   4. CSV / Excel  (PapaParse for CSV; XLSX-like manual parser for .xlsx)
- *   5. Manual entry (blank review table pre-seeded with one empty row)
  *
  * The review step lets the user edit every field.
  * Nothing is saved until "Save Menu Items" is confirmed.
@@ -26,7 +25,7 @@ import { bulkImportMenuItems, type ParsedMenuItem } from "@/lib/restaurant/menu-
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type ImportMethod = "url" | "pdf" | "image" | "csv" | "manual";
+type ImportMethod = "url" | "pdf" | "image" | "csv";
 
 type WizardStep = "select" | "parse" | "review" | "done";
 
@@ -240,7 +239,7 @@ async function fetchUrlText(url: string): Promise<string> {
   // Fallback: allorigins proxy
   const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
   const r2 = await fetch(proxy);
-  if (!r2.ok) throw new Error("Could not fetch URL. Paste the menu text manually instead.");
+  if (!r2.ok) throw new Error("Could not fetch URL. Please try importing from a file instead.");
   const json = await r2.json();
   const html: string = json.contents ?? "";
   return html.replace(/<[^>]+>/g, " ");
@@ -253,7 +252,7 @@ async function readImageText(file: File): Promise<string> {
   // We can't do real OCR without Tesseract in the browser.
   // Return a placeholder message so the review table shows one manual row.
   void file; // suppress unused warning
-  return ""; // empty → manual fallback row
+  return ""; // empty
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -411,19 +410,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
       try {
         let parsed: ReviewRow[] = [];
 
-        if (selectedMethod === "manual") {
-          // Single blank row for manual entry
-          parsed = [
-            {
-              _id: uid(),
-              name: "",
-              description: "",
-              price_cents: 0,
-              category: "",
-              tags: "",
-            },
-          ];
-        } else if (selectedMethod === "url") {
+        if (selectedMethod === "url") {
           const text = await fetchUrlText(urlInput.trim());
           parsed = parseTextToItems(text);
         } else if (selectedMethod === "csv" && file) {
@@ -445,7 +432,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
               {
                 _id: uid(),
                 name: "",
-                description: "⚠️ Image OCR not available in browser. Please enter items manually.",
+                description: "⚠️ Image OCR not available in browser. Please try another method.",
                 price_cents: 0,
                 category: "",
                 tags: "",
@@ -620,16 +607,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
                       "CSV- oder Excel-Datei importieren",
                       "Import from a CSV or Excel file",
                     ),
-                  },
-                  {
-                    id: "manual" as ImportMethod,
-                    emoji: "✏️",
-                    label: tt("Manuell eingeben", "Enter manually"),
-                    desc: tt(
-                      "Artikel einzeln eingeben",
-                      "Type menu items one by one",
-                    ),
-                  },
+                  }
                 ] as const
               ).map((opt) => (
                 <button
@@ -661,8 +639,8 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
                 />
                 <p className="text-xs text-muted-foreground">
                   {tt(
-                    "Wir versuchen, die Speisekarte von der Website zu extrahieren. Bei Problemen bitte manuell eingeben.",
-                    "We'll try to extract menu items from the page. If it fails, use manual entry.",
+                    "Wir versuchen, die Speisekarte von der Website zu extrahieren. Bei Problemen laden Sie bitte eine Datei hoch.",
+                    "We'll try to extract menu items from the page. If it fails, try uploading a file.",
                   )}
                 </p>
               </div>
@@ -704,7 +682,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
               <Button type="button" variant="outline" onClick={onClose}>
                 {tt("Abbrechen", "Cancel")}
               </Button>
-              {(method === "url" || method === "manual") && (
+              {method === "url" && (
                 <Button
                   type="button"
                   disabled={method === "url" && !urlInput.trim()}
