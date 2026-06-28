@@ -214,10 +214,10 @@ function CreateRestaurantForm() {
   const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const mut = useMutation({
-    mutationFn: (vars: { name: string; slug: string; custom_domain: string }) => create({ data: vars }),
+    mutationFn: (vars: { name: string; slug: string; custom_domain: string }) => create(vars),
     onSuccess: async () => {
       try {
-        await saveConsent({ data: { marketing_opt_in: marketingOptIn, source: "restaurant_signup" } });
+        await saveConsent({ marketing_opt_in: marketingOptIn, source: "restaurant_signup" });
       } catch (e) {
         console.error("Failed to save marketing consent during signup:", e);
       }
@@ -309,7 +309,7 @@ function OrdersSection() {
   });
   const statusMut = useMutation({
     mutationFn: (vars: { orderId: string; status: OrderStatus }) =>
-      updateStatus({ data: vars }),
+      updateStatus(vars),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["restaurant", "orders"] }),
   });
 
@@ -495,7 +495,7 @@ function ProductsSection() {
 
   const mut = useMutation({
     mutationFn: (vars: { name: string; description: string; price_cents: number; image_url: string | null }) =>
-      upsert({ data: vars }),
+      upsert(vars),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["restaurant", "products"] });
       setName("");
@@ -874,7 +874,7 @@ function OverviewSection() {
               id="active-status"
               checked={q.data.isActive}
               onCheckedChange={async (val) => {
-                await upsert({ data: { name: "placeholder", is_active: val } });
+                await upsert({ name: "placeholder", is_active: val });
                 qc.invalidateQueries({ queryKey: ["restaurant", "kpis"] });
               }}
             />
@@ -1051,7 +1051,6 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
     setSaving(true);
     try {
       await upsert({
-        data: {
           name,
           description: desc,
           phone,
@@ -1059,8 +1058,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
           logo_url: logoPath,
           banner_image_url: bannerPath,
           certifications,
-        }
-      });
+        });
       alert(tt("Allgemeine Einstellungen gespeichert!", "General settings saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
@@ -1193,7 +1191,6 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
     setSaving(true);
     try {
       await upsert({
-        data: {
           name: restaurant.name,
           accepts_pickup: acceptsPickup,
           accepts_delivery: acceptsDelivery,
@@ -1202,8 +1199,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
           delivery_fee: parseFloat(deliveryFee) || 0,
           service_areas: serviceAreas,
           is_published: isPublished,
-        }
-      });
+        });
       alert(tt("Storefront-Einstellungen gespeichert!", "Storefront settings saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
@@ -1220,12 +1216,10 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
         entity={restaurant} 
         onSave={async (slug, domain) => {
           await upsert({
-            data: {
               name: restaurant.name,
               slug: slug,
               custom_domain: domain
-            }
-          });
+            });
           qc.invalidateQueries({ queryKey: ["restaurant"] });
         }}
       />
@@ -1332,11 +1326,9 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
     setSaving(true);
     try {
       await upsert({
-        data: {
           name: restaurant.name,
           operating_hours: operatingHours,
-        }
-      });
+        });
       alert(tt("Öffnungszeiten gespeichert!", "Operating hours saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
@@ -1438,7 +1430,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
     trackEvent("stripe_connect_clicked");
     setLoading(true);
     try {
-      const res = await getConnectUrl({ data: { slug: restaurant.slug, origin: window.location.origin } });
+      const res = await getConnectUrl({ slug: restaurant.slug, origin: window.location.origin });
       if (res?.url) {
         window.location.href = res.url;
       }
@@ -1467,13 +1459,11 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
     setSaving(true);
     try {
       await upsert({
-        data: {
           name: restaurant.name,
           accepts_cash: acceptsCash,
           accepts_paypal: acceptsPaypal,
           paypal_email: paypalEmail || null,
-        }
-      });
+        });
       alert(tt("Zahlungsmethoden gespeichert!", "Payment methods saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
@@ -1645,11 +1635,9 @@ function SettingsReservationsSection({ restaurant }: { restaurant: any }) {
     setSaving(true);
     try {
       await upsert({
-        data: {
           name: restaurant.name,
           seat_capacity: parseInt(seatCapacity) || 30,
-        }
-      });
+        });
       alert(tt("Reservierungseinstellungen gespeichert!", "Reservation settings saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
@@ -1952,7 +1940,7 @@ function ReservationsSection() {
   });
   const statusMut = useMutation({
     mutationFn: (vars: { reservationId: string; status: "pending" | "confirmed" | "declined" | "approved" | "rejected" | "cancelled" | "completed" | "no_show" }) =>
-      updateStatus({ data: vars }),
+      updateStatus(vars),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["restaurant", "reservations"] }),
   });
 
@@ -2097,7 +2085,7 @@ function BillingSection() {
     trackEvent("subscription_checkout_started");
     setLoading(true);
     try {
-      const res = await startSubscription({ data: { origin: window.location.origin } });
+      const res = await startSubscription({ origin: window.location.origin });
       if (res?.url) {
         window.location.href = res.url;
       }
@@ -2111,7 +2099,7 @@ function BillingSection() {
   const handleOpenPortal = async () => {
     setLoading(true);
     try {
-      const res = await getPortalUrl({ data: { origin: window.location.origin } });
+      const res = await getPortalUrl({ origin: window.location.origin });
       if (res?.url) {
         window.location.href = res.url;
       }
