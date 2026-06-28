@@ -135,7 +135,7 @@ function AuthPage() {
         // Sign In Flow: Pre-check email exists and get its roles
         let checkResult = { exists: false, primaryRole: null as string | null };
         try {
-          checkResult = await checkEmailRoleFn({ email });
+          checkResult = await checkEmailRoleFn({ data: { email } });
         } catch (checkErr) {
           console.error("Error pre-checking email role:", checkErr);
           // Fall back to direct sign-in if server check fails

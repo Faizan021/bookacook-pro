@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_authenticated")({
     const { data, error } = await supabase.auth.getUser();
     
     if (error || !data.user) {
+      if (error) console.error("Supabase auth error, clearing session:", error);
+      await supabase.auth.signOut();
       throw redirect({
         to: "/auth",
         search: { signup: undefined, message: "Please sign in to continue." },
