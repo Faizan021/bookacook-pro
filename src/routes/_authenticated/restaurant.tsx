@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useRouter, useLocation, redirect, isRedirect } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useRouter, useLocation, redirect, isRedirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState, Component } from "react";
@@ -78,7 +78,7 @@ export const Route = createFileRoute("/_authenticated/restaurant")({
       });
     }
   },
-  head: () => ({ meta: [{ title: "Restaurant Dashboard — Speisely" }] }),
+  head: () => ({ meta: [{ title: "Restaurant Dashboard â€” Speisely" }] }),
   component: RestaurantDashboard,
 });
 
@@ -103,7 +103,7 @@ const STATUS_STYLES: Record<OrderStatus, string> = {
 };
 
 function formatPrice(cents: number) {
-  return `€${(cents / 100).toFixed(2)}`;
+  return `â‚¬${(cents / 100).toFixed(2)}`;
 }
 
 // Shell removed in favor of VendorLayout
@@ -155,7 +155,7 @@ class DashboardErrorBoundary extends Component<
       return (
         <div className="flex min-h-screen items-center justify-center bg-cream">
           <div className="surface-card p-10 text-center max-w-sm">
-            <p className="text-muted-foreground">Session expired. Redirecting to sign in…</p>
+            <p className="text-muted-foreground">Session expired. Redirecting to sign inâ€¦</p>
           </div>
         </div>
       );
@@ -189,7 +189,7 @@ function EmptyCard({
   return (
     <div className="surface-card p-10 text-center">
       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-mint text-forest text-2xl">
-        🍽️
+        ðŸ½ï¸
       </div>
       <h3 className="font-display text-xl">{title}</h3>
       <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">{description}</p>
@@ -258,7 +258,7 @@ function CreateRestaurantForm() {
       </div>
       {err && <p className="text-sm text-destructive">{err}</p>}
       <Button type="submit" className="w-full" disabled={mut.isPending}>
-        {mut.isPending ? "Creating…" : "Create storefront"}
+        {mut.isPending ? "Creatingâ€¦" : "Create storefront"}
       </Button>
     </form>
   );
@@ -323,7 +323,7 @@ function OrdersSection() {
             onClick={triggerTestPrint}
             className="rounded-full gap-2 border-forest/20 text-forest hover:bg-cream"
           >
-            🖨️ {t("Print Test Receipt", "Test-Beleg drucken")}
+            ðŸ–¨ï¸ {t("Print Test Receipt", "Test-Beleg drucken")}
           </Button>
           <p className="text-xs text-muted-foreground max-w-sm">
             {t(
@@ -361,7 +361,7 @@ function OrdersSection() {
             }}
             className="h-8 rounded-full text-xs gap-1.5 border-forest/20 text-forest hover:bg-cream"
           >
-            🖨️ {t("Test Print", "Test-Druck")}
+            ðŸ–¨ï¸ {t("Test Print", "Test-Druck")}
           </Button>
           <span className="text-sm text-muted-foreground">
             {data.orders.length} {t("total", "gesamt")}
@@ -382,7 +382,7 @@ function OrdersSection() {
                       {o.status}
                     </span>
                     <h3 className="font-display text-lg">
-                      {o.customer_name ?? "Customer"} — {formatPrice(o.total_cents)}
+                      {o.customer_name ?? "Customer"} â€” {formatPrice(o.total_cents)}
                     </h3>
                     <Button 
                       variant="outline" 
@@ -390,17 +390,17 @@ function OrdersSection() {
                       onClick={() => printReceipt(o, data.restaurant.name)}
                       className="h-7 rounded-full text-xs gap-1 border-forest/20 text-forest hover:bg-cream shrink-0"
                     >
-                      🖨️ {t("Print", "Drucken")}
+                      ðŸ–¨ï¸ {t("Print", "Drucken")}
                     </Button>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    #{o.id.slice(0, 8)} · {new Date(o.created_at).toLocaleString()}
+                    #{o.id.slice(0, 8)} Â· {new Date(o.created_at).toLocaleString()}
                   </p>
                   {items.length > 0 && (
                     <ul className="mt-3 text-sm text-foreground/80 space-y-0.5">
                       {items.map((it: any, i: number) => (
                         <li key={i}>
-                          {it.qty ?? 1}× {it.name}
+                          {it.qty ?? 1}Ã— {it.name}
                         </li>
                       ))}
                     </ul>
@@ -522,7 +522,7 @@ function ProductsSection() {
                   />
                 ) : (
                   <div className="w-32 bg-mint/40 grid place-items-center shrink-0">
-                    <span className="text-2xl">🍽️</span>
+                    <span className="text-2xl">ðŸ½ï¸</span>
                   </div>
                 )}
                 <div className="p-5 flex-1 flex items-start justify-between gap-4">
@@ -605,12 +605,12 @@ function ProductsSection() {
               disabled={uploading}
               onClick={() => fileRef.current?.click()}
             >
-              {uploading ? "Uploading…" : imagePreview ? "Replace image" : "Upload image"}
+              {uploading ? "Uploadingâ€¦" : imagePreview ? "Replace image" : "Upload image"}
             </Button>
           </div>
           {err && <p className="text-sm text-destructive">{err}</p>}
           <Button type="submit" className="w-full" disabled={mut.isPending || uploading}>
-            {mut.isPending ? "Saving…" : "Add to menu"}
+            {mut.isPending ? "Savingâ€¦" : "Add to menu"}
           </Button>
         </form>
       </div>
@@ -656,20 +656,20 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
       id: 2,
       title: tt("Starter-Paket aktivieren", "Activate Starter Plan"),
       description: tt(
-        "Abonnieren Sie das €34.99/Monat Starter-Paket für 0% Provision.",
-        "Subscribe to the €34.99/month Starter Plan for 0% order commission."
+        "Abonnieren Sie das â‚¬34.99/Monat Starter-Paket fÃ¼r 0% Provision.",
+        "Subscribe to the â‚¬34.99/month Starter Plan for 0% order commission."
       ),
       actionLabel: tt("Plan abonnieren", "Subscribe to Plan"),
       actionHash: "billing",
     },
     {
       id: 3,
-      title: tt("Storefront veröffentlichen", "Publish Storefront"),
+      title: tt("Storefront verÃ¶ffentlichen", "Publish Storefront"),
       description: tt(
-        "Schalten Sie Ihr Storefront online, damit Kunden bestellen können.",
+        "Schalten Sie Ihr Storefront online, damit Kunden bestellen kÃ¶nnen.",
         "Make your storefront live so customers can place orders."
       ),
-      actionLabel: tt("Zum Profil & Veröffentlichen", "Go to Profile & Publish"),
+      actionLabel: tt("Zum Profil & VerÃ¶ffentlichen", "Go to Profile & Publish"),
       actionHash: "profile",
       disabledText: tt("Erfordert aktives Abonnement", "Requires active subscription"),
     },
@@ -682,12 +682,12 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="font-display font-bold text-xl text-forest flex items-center gap-2">
-            🚀 {tt("Storefront-Einrichtung", "Storefront Setup Checklist")}
+            ðŸš€ {tt("Storefront-Einrichtung", "Storefront Setup Checklist")}
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
             {allCompleted 
-              ? tt("Herzlichen Glückwunsch! Ihr Storefront ist vollständig eingerichtet und live.", "Congratulations! Your storefront is fully configured and live.")
-              : tt("Schließen Sie diese Schritte ab, um Ihre Bestellungen auf Speisely zu starten.", "Complete these steps to start accepting orders on Speisely.")
+              ? tt("Herzlichen GlÃ¼ckwunsch! Ihr Storefront ist vollstÃ¤ndig eingerichtet und live.", "Congratulations! Your storefront is fully configured and live.")
+              : tt("SchlieÃŸen Sie diese Schritte ab, um Ihre Bestellungen auf Speisely zu starten.", "Complete these steps to start accepting orders on Speisely.")
             }
           </p>
         </div>
@@ -724,12 +724,12 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
                       ? "bg-forest text-cream shadow-md" 
                       : "bg-stone-200 text-stone-400"
                   }`}>
-                    {isCompleted ? "✓" : step.id}
+                    {isCompleted ? "âœ“" : step.id}
                   </span>
                   
                   {isCurrent && (
                     <span className="text-[9px] font-bold uppercase tracking-widest text-brand-orange bg-brand-orange/10 px-2.5 py-1 rounded-full border border-brand-orange/20 animate-pulse">
-                      {tt("Als nächstes", "Next Step")}
+                      {tt("Als nÃ¤chstes", "Next Step")}
                     </span>
                   )}
                 </div>
@@ -747,7 +747,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
               <div className="mt-5">
                 {isCompleted ? (
                   <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold py-2">
-                    <span className="text-sm">✓</span> {tt("Abgeschlossen", "Completed")}
+                    <span className="text-sm">âœ“</span> {tt("Abgeschlossen", "Completed")}
                   </div>
                 ) : isCurrent ? (
                   <Button 
@@ -864,7 +864,7 @@ function OverviewSection() {
           </div>
         ) : (
           <div className="rounded-2xl bg-emerald-500/5 border border-emerald-500/10 p-5 flex items-center gap-3">
-            <span className="text-emerald-600 text-2xl">🎉</span>
+            <span className="text-emerald-600 text-2xl">ðŸŽ‰</span>
             <p className="text-forest font-semibold text-base">All caught up! Nothing needs your attention right now.</p>
           </div>
         )}
@@ -875,19 +875,19 @@ function OverviewSection() {
         <h2 className="font-display text-xl text-forest">Today at a glance</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">🛍️</span> Orders today</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ›ï¸</span> Orders today</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.ordersToday}</p>
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📈</span> Revenue today</p>
-            <p className="text-3xl font-bold font-display text-forest">€{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ“ˆ</span> Revenue today</p>
+            <p className="text-3xl font-bold font-display text-forest">â‚¬{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📅</span> Reservations today</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ“…</span> Reservations today</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.reservationsToday}</p>
           </div>
           <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">👀</span> Profile views today</p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">ðŸ‘€</span> Profile views today</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.profileViewsToday}</p>
           </div>
         </div>
@@ -919,9 +919,9 @@ function OverviewSection() {
                   <div key={event.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#f8faf9] transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="flex-shrink-0 mt-0.5 sm:mt-0">
-                        {event.type === 'order' && <span className="text-brand-orange text-lg">🛍️</span>}
-                        {event.type === 'reservation' && <span className="text-sky-500 text-lg">📅</span>}
-                        {event.type === 'menu' && <span className="text-emerald-500 text-lg">🍽️</span>}
+                        {event.type === 'order' && <span className="text-brand-orange text-lg">ðŸ›ï¸</span>}
+                        {event.type === 'reservation' && <span className="text-sky-500 text-lg">ðŸ“…</span>}
+                        {event.type === 'menu' && <span className="text-emerald-500 text-lg">ðŸ½ï¸</span>}
                       </div>
                       <p className="text-sm font-medium text-foreground">
                         {event.description}
@@ -940,63 +940,32 @@ function OverviewSection() {
   );
 }
 
-function BusinessProfileSection() {
+function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const qc = useQueryClient();
-  const fetchProducts = useServerFn(getRestaurantProducts);
-  const q = useSuspenseQuery({ 
-    queryKey: ["restaurant", "products"],
-    queryFn: () => fetchProducts()
-  });
   const upsert = useServerFn(updateMyRestaurantSettings);
-  
-  const restaurant = q.data?.restaurant;
 
-  const [name, setName] = useState(restaurant?.name || "");
-  const [desc, setDesc] = useState(restaurant?.description || "");
-  const [phone, setPhone] = useState(restaurant?.phone || "");
-  const [address, setAddress] = useState(restaurant?.business_address || "");
-  const [logoPreview, setLogoPreview] = useState(restaurant?.logo_url || null);
-  const [bannerPreview, setBannerPreview] = useState(restaurant?.banner_image_url || null);
-  const [logoPath, setLogoPath] = useState(restaurant?.logo_url || null);
-  const [bannerPath, setBannerPath] = useState(restaurant?.banner_image_url || null);
+  const [name, setName] = useState(restaurant.name);
+  const [desc, setDesc] = useState(restaurant.description || "");
+  const [phone, setPhone] = useState(restaurant.phone || "");
+  const [address, setAddress] = useState(restaurant.business_address || "");
+  const [logoPreview, setLogoPreview] = useState(restaurant.logo_url ? supabase.storage.from("storefront-assets").getPublicUrl(restaurant.logo_url).data.publicUrl : null);
+  const [bannerPreview, setBannerPreview] = useState(restaurant.banner_image_url ? supabase.storage.from("storefront-assets").getPublicUrl(restaurant.banner_image_url).data.publicUrl : null);
+  const [logoPath, setLogoPath] = useState(restaurant.logo_url || null);
+  const [bannerPath, setBannerPath] = useState(restaurant.banner_image_url || null);
+  const [certifications, setCertifications] = useState((restaurant as any).certifications || "");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [isPublished, setIsPublished] = useState(restaurant?.is_published ?? false);
-  const [certifications, setCertifications] = useState((restaurant as any).certifications || "");
-
-  const [deliveryRadius, setDeliveryRadius] = useState(restaurant?.delivery_radius_km?.toString() || "5");
-  const [minOrder, setMinOrder] = useState(restaurant?.min_order_amount?.toString() || "10");
-  const [deliveryFee, setDeliveryFee] = useState(restaurant?.delivery_fee?.toString() || "2.5");
-  const [acceptsPickup, setAcceptsPickup] = useState(restaurant?.accepts_pickup ?? true);
-  const [acceptsDelivery, setAcceptsDelivery] = useState(restaurant?.accepts_delivery ?? true);
-  const [serviceAreas, setServiceAreas] = useState(restaurant?.service_areas || "");
-  const [seatCapacity, setSeatCapacity] = useState(restaurant?.seat_capacity?.toString() || "30");
-  // Payment Methods
-  const [acceptsCash, setAcceptsCash] = useState((restaurant as any).accepts_cash ?? false);
-  const [acceptsPaypal, setAcceptsPaypal] = useState((restaurant as any).accepts_paypal ?? false);
-  const [paypalEmail, setPaypalEmail] = useState((restaurant as any).paypal_email || "");
-  const [operatingHours, setOperatingHours] = useState<any>(restaurant?.operating_hours || {
-    monday: { open: "09:00", close: "22:00", closed: false },
-    tuesday: { open: "09:00", close: "22:00", closed: false },
-    wednesday: { open: "09:00", close: "22:00", closed: false },
-    thursday: { open: "09:00", close: "22:00", closed: false },
-    friday: { open: "09:00", close: "23:00", closed: false },
-    saturday: { open: "10:00", close: "23:00", closed: false },
-    sunday: { open: "10:00", close: "21:00", closed: false },
-  });
 
   const logoRef = React.useRef<HTMLInputElement>(null);
   const bannerRef = React.useRef<HTMLInputElement>(null);
-
-  if (!restaurant) return null;
 
   async function handleImage(file: File, type: "logo" | "banner") {
     setUploading(true);
     try {
       const ext = file.name.split(".").pop() || "jpg";
-      const path = `${restaurant!.id}/${type}-${crypto.randomUUID()}.${ext}`;
+      const path = `${restaurant.id}/${type}-${crypto.randomUUID()}.${ext}`;
       const { error } = await supabase.storage
         .from("storefront-assets")
         .upload(path, file, { cacheControl: "3600", upsert: false });
@@ -1021,9 +990,6 @@ function BusinessProfileSection() {
   }
 
   async function handleSave() {
-    if (isPublished) {
-      trackEvent("storefront_publish_attempted");
-    }
     setSaving(true);
     try {
       await upsert({
@@ -1034,22 +1000,10 @@ function BusinessProfileSection() {
           business_address: address,
           logo_url: logoPath,
           banner_image_url: bannerPath,
-          delivery_radius_km: parseFloat(deliveryRadius) || 0,
-          min_order_amount: parseFloat(minOrder) || 0,
-          delivery_fee: parseFloat(deliveryFee) || 0,
-          accepts_pickup: acceptsPickup,
-          accepts_delivery: acceptsDelivery,
-          service_areas: serviceAreas,
-          operating_hours: operatingHours,
-          seat_capacity: parseInt(seatCapacity) || 30,
-          is_published: isPublished,
           certifications,
-          accepts_cash: acceptsCash,
-          accepts_paypal: acceptsPaypal,
-          paypal_email: paypalEmail || null,
         }
       });
-      alert("Settings saved successfully!");
+      alert(tt("Allgemeine Einstellungen gespeichert!", "General settings saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
       alert(e.message);
@@ -1059,319 +1013,637 @@ function BusinessProfileSection() {
   }
 
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl">Business Profile</h2>
-        <p className="text-sm text-muted-foreground">Manage your storefront presence, business details, and delivery operations.</p>
+    <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+      <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
+        <h3 className="font-display text-xl text-forest">{tt("Allgemeine Einstellungen", "General Settings")}</h3>
+        <p className="text-xs text-muted-foreground">{tt("Verwalten Sie Ihre grundlegenden Restaurant-Informationen.", "Manage your basic restaurant details.")}</p>
       </div>
-      <div className="surface-card p-6 space-y-8 max-w-3xl">
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label>Logo</Label>
-            <div 
-              onClick={() => logoRef.current?.click()}
-              className="w-24 h-24 rounded-full border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-brand-orange transition-colors"
-            >
-              {logoPreview ? <img src={logoPreview} className="w-full h-full object-cover" /> : <span className="text-xs text-muted-foreground">Upload</span>}
-            </div>
-            <input ref={logoRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
-              if (e.target.files?.[0]) handleImage(e.target.files[0], "logo");
-            }} />
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="restaurant-name">{tt("Name des Restaurants", "Restaurant Name")}</Label>
+            <Input id="restaurant-name" value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
-          <div className="space-y-2">
-            <Label>Banner Image</Label>
-            <div 
-              onClick={() => bannerRef.current?.click()}
-              className="w-full h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-brand-orange transition-colors"
-            >
-              {bannerPreview ? <img src={bannerPreview} className="w-full h-full object-cover" /> : <span className="text-xs text-muted-foreground">Upload Banner</span>}
-            </div>
-            <input ref={bannerRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
-              if (e.target.files?.[0]) handleImage(e.target.files[0], "banner");
-            }} />
+
+          <div className="space-y-1.5">
+            <Label htmlFor="restaurant-phone">{tt("Telefonnummer", "Phone Number")}</Label>
+            <Input id="restaurant-phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="restaurant-address">{tt("GeschÃ¤ftsadresse", "Business Address")}</Label>
+            <Input id="restaurant-address" value={address} onChange={(e) => setAddress(e.target.value)} />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="restaurant-certifications">{tt("Zertifizierungen (z.B. Halal, Bio, Vegan)", "Certifications (e.g., Halal, Organic, Vegan)")}</Label>
+            <Input id="restaurant-certifications" value={certifications} onChange={(e) => setCertifications(e.target.value)} placeholder="Halal, Bio, Vegan" />
           </div>
         </div>
 
-        <div className="space-y-4 pt-4 border-t border-border">
+        <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label>Restaurant Name</Label>
-            <Input value={name} onChange={e => setName(e.target.value)} />
+            <Label htmlFor="restaurant-desc">{tt("Beschreibung", "Description")}</Label>
+            <Textarea id="restaurant-desc" value={desc} onChange={(e) => setDesc(e.target.value)} rows={5} className="resize-none" />
           </div>
-          <div className="space-y-1.5">
-            <Label>Description</Label>
-            <Textarea rows={3} value={desc} onChange={e => setDesc(e.target.value)} />
-          </div>
+
+          {/* Logo & Banner Upload Grid */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label>Phone</Label>
-              <Input value={phone} onChange={e => setPhone(e.target.value)} />
+            <div className="space-y-2">
+              <Label>{tt("Logo Bild", "Logo Image")}</Label>
+              <div className="relative border border-dashed border-[#e2e8e4] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] overflow-hidden">
+                {logoPreview ? (
+                  <img src={logoPreview} className="object-cover w-full h-full rounded-xl" alt="Logo" />
+                ) : (
+                  <span className="text-2xl">ðŸ“¸</span>
+                )}
+                <Button type="button" size="sm" variant="ghost" className="absolute inset-0 bg-black/40 text-white opacity-0 hover:opacity-100 transition rounded-2xl text-[10px]" onClick={() => logoRef.current?.click()} disabled={uploading}>
+                  {tt("Bild wÃ¤hlen", "Choose Logo")}
+                </Button>
+                <input ref={logoRef} type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImage(e.target.files[0], "logo")} />
+              </div>
             </div>
-            <div className="space-y-1.5">
-              <Label>Address</Label>
-              <Input value={address} onChange={e => setAddress(e.target.value)} />
+
+            <div className="space-y-2">
+              <Label>{tt("Banner Bild", "Banner Image")}</Label>
+              <div className="relative border border-dashed border-[#e2e8e4] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] overflow-hidden">
+                {bannerPreview ? (
+                  <img src={bannerPreview} className="object-cover w-full h-full rounded-xl" alt="Banner" />
+                ) : (
+                  <span className="text-2xl">ðŸ–¼ï¸</span>
+                )}
+                <Button type="button" size="sm" variant="ghost" className="absolute inset-0 bg-black/40 text-white opacity-0 hover:opacity-100 transition rounded-2xl text-[10px]" onClick={() => bannerRef.current?.click()} disabled={uploading}>
+                  {tt("Bild wÃ¤hlen", "Choose Banner")}
+                </Button>
+                <input ref={bannerRef} type="file" className="hidden" accept="image/*" onChange={(e) => e.target.files?.[0] && handleImage(e.target.files[0], "banner")} />
+              </div>
             </div>
-          </div>
-          <div className="space-y-1.5">
-            <Label>Zertifizierungen & Standards / Certifications & Standards (Optional)</Label>
-            <Input 
-              value={certifications} 
-              onChange={e => setCertifications(e.target.value)} 
-              placeholder="z.B. Bio, HACCP, Halal, DGE-orientiert, Vegan, Allergy-Aware"
-            />
-            <p className="text-[10px] text-muted-foreground">
-              Geben Sie Zertifizierungen durch Komma getrennt ein. Sie werden als storefront Badges angezeigt. (Comma-separated, e.g. Bio, HACCP, Halal)
-            </p>
           </div>
         </div>
+      </div>
 
-        <div className="space-y-4 pt-4 border-t border-border">
-          <h3 className="font-semibold text-lg">Delivery & Service Area</h3>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="flex items-center justify-between border border-border p-3 rounded-md">
-              <Label htmlFor="accepts-delivery">Accepts Delivery</Label>
-              <Switch id="accepts-delivery" checked={acceptsDelivery} onCheckedChange={setAcceptsDelivery} />
-            </div>
-            <div className="flex items-center justify-between border border-border p-3 rounded-md">
-              <Label htmlFor="accepts-pickup">Accepts Pickup</Label>
+      <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
+        <Button onClick={handleSave} disabled={uploading || saving} className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer">
+          {saving ? tt("Wird gespeichert...", "Saving...") : tt("Allgemeines speichern", "Save General Settings")}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const qc = useQueryClient();
+  const upsert = useServerFn(updateMyRestaurantSettings);
+
+  const [acceptsPickup, setAcceptsPickup] = useState(restaurant.accepts_pickup ?? true);
+  const [acceptsDelivery, setAcceptsDelivery] = useState(restaurant.accepts_delivery ?? true);
+  const [deliveryRadius, setDeliveryRadius] = useState(restaurant.delivery_radius_km?.toString() || "5");
+  const [minOrder, setMinOrder] = useState(restaurant.min_order_amount?.toString() || "10");
+  const [deliveryFee, setDeliveryFee] = useState(restaurant.delivery_fee?.toString() || "2.5");
+  const [serviceAreas, setServiceAreas] = useState(restaurant.service_areas || "");
+  const [isPublished, setIsPublished] = useState(restaurant.is_published ?? false);
+  const [saving, setSaving] = useState(false);
+
+  // Check if payments are configured
+  const hasPaymentMethod = restaurant.stripe_connect_status === "connected" || restaurant.accepts_cash || restaurant.accepts_paypal;
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await upsert({
+        data: {
+          name: restaurant.name,
+          accepts_pickup: acceptsPickup,
+          accepts_delivery: acceptsDelivery,
+          delivery_radius_km: parseFloat(deliveryRadius) || 0,
+          min_order_amount: parseFloat(minOrder) || 0,
+          delivery_fee: parseFloat(deliveryFee) || 0,
+          service_areas: serviceAreas,
+          is_published: isPublished,
+        }
+      });
+      alert(tt("Storefront-Einstellungen gespeichert!", "Storefront settings saved successfully!"));
+      qc.invalidateQueries({ queryKey: ["restaurant"] });
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Custom Domain Component */}
+      <CustomDomainSection 
+        entity={restaurant} 
+        onSave={async (slug, domain) => {
+          await upsert({
+            data: {
+              name: restaurant.name,
+              slug: slug,
+              custom_domain: domain
+            }
+          });
+          qc.invalidateQueries({ queryKey: ["restaurant"] });
+        }}
+      />
+
+      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+        <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
+          <h3 className="font-display text-xl text-forest">{tt("Storefront & Liefer-Einstellungen", "Storefront & Delivery Settings")}</h3>
+          <p className="text-xs text-muted-foreground">{tt("Verwalten Sie Ihre BestellkanÃ¤le, LiefergebÃ¼hren und die Storefront-VerÃ¶ffentlichung.", "Manage your order channels, delivery fees, and storefront live status.")}</p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+              <div>
+                <Label htmlFor="accepts-pickup" className="font-semibold text-forest">{tt("Abholung erlauben", "Allow Pickup")}</Label>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{tt("Kunden kÃ¶nnen Speisen vor Ort abholen", "Customers can pick up their orders at the counter")}</p>
+              </div>
               <Switch id="accepts-pickup" checked={acceptsPickup} onCheckedChange={setAcceptsPickup} />
             </div>
+
+            <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+              <div>
+                <Label htmlFor="accepts-delivery" className="font-semibold text-forest">{tt("Lieferung erlauben", "Allow Delivery")}</Label>
+                <p className="text-[10px] text-muted-foreground mt-0.5">{tt("Eigener Lieferservice aktivieren", "Enable your own delivery service")}</p>
+              </div>
+              <Switch id="accepts-delivery" checked={acceptsDelivery} onCheckedChange={setAcceptsDelivery} />
+            </div>
+
+            {acceptsDelivery && (
+              <div className="grid grid-cols-3 gap-3 pt-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="delivery-radius" className="text-xs">{tt("Lieferradius (km)", "Radius (km)")}</Label>
+                  <Input id="delivery-radius" type="number" min="0" step="0.5" value={deliveryRadius} onChange={(e) => setDeliveryRadius(e.target.value)} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="min-order" className="text-xs">{tt("Mindestbestellwert (â‚¬)", "Min Order (â‚¬)")}</Label>
+                  <Input id="min-order" type="number" min="0" step="0.5" value={minOrder} onChange={(e) => setMinOrder(e.target.value)} />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="delivery-fee" className="text-xs">{tt("LiefergebÃ¼hr (â‚¬)", "Delivery Fee (â‚¬)")}</Label>
+                  <Input id="delivery-fee" type="number" min="0" step="0.5" value={deliveryFee} onChange={(e) => setDeliveryFee(e.target.value)} />
+                </div>
+              </div>
+            )}
           </div>
 
-          {acceptsDelivery && (
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-1.5">
-                <Label>Delivery Radius (km)</Label>
-                <Input type="number" min="0" step="0.1" value={deliveryRadius} onChange={e => setDeliveryRadius(e.target.value)} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Min. Order (€)</Label>
-                <Input type="number" min="0" step="0.5" value={minOrder} onChange={e => setMinOrder(e.target.value)} />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Delivery Fee (€)</Label>
-                <Input type="number" min="0" step="0.1" value={deliveryFee} onChange={e => setDeliveryFee(e.target.value)} />
-              </div>
+          <div className="space-y-6">
+            <div className="space-y-1.5">
+              <Label htmlFor="service-areas">{tt("Liefergebiete (Postleitzahlen / Stadtteile)", "Service Areas (ZIPs / Neighborhoods)")}</Label>
+              <Textarea id="service-areas" value={serviceAreas} onChange={(e) => setServiceAreas(e.target.value)} placeholder="e.g., 10115, 10435, Mitte" rows={3} className="resize-none" />
             </div>
-          )}
 
-          <div className="space-y-1.5 pt-4">
-            <Label className="text-lg font-semibold flex items-center gap-2"><span className="text-brand-orange">📍</span> Service Areas / Delivery Postal Codes</Label>
-            <p className="text-sm text-muted-foreground mb-2">
-              To maximize your reach, specify exactly where you can deliver. Enter a comma-separated list of postal codes (e.g., 10115, 10117, 10119, 10435). This ensures customers only see your restaurant if you can fulfill their order.
-            </p>
-            <Input 
-              value={serviceAreas} 
-              onChange={e => setServiceAreas(e.target.value)} 
-              placeholder="e.g. 10115, 10117, 10119, 10435"
-              className="text-lg py-6"
-            />
+            {/* Publishing Section */}
+            <div className="flex flex-col gap-3 p-4 border border-[#e2e8e4] rounded-2xl bg-white shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="is-published" className="font-semibold text-forest">{tt("Storefront verÃ¶ffentlichen", "Publish Storefront")}</Label>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{tt("Schalten Sie Ihr Storefront Ã¶ffentlich live unter /restaurant/", "Make your storefront live at /restaurant/")}{restaurant.slug}</p>
+                </div>
+                <Switch id="is-published" checked={isPublished} disabled={!hasPaymentMethod} onCheckedChange={(val) => {
+                  setIsPublished(val);
+                  if (val) {
+                    trackEvent("storefront_publish_attempted");
+                  }
+                }} />
+              </div>
+              {!hasPaymentMethod && (
+                <p className="text-[10px] text-rose-600 bg-rose-500/5 border border-rose-500/10 p-2.5 rounded-lg leading-relaxed">
+                  âš ï¸ {tt("Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie verÃ¶ffentlichen.", "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.")}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* ── PAYMENT METHODS ─────────────────────────────────────── */}
-        <div className="space-y-4 pt-4 border-t border-border">
-          <div>
-            <h3 className="font-semibold text-lg flex items-center gap-2">💳 Payment Methods</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Choose which payment methods your restaurant accepts. At least one must be enabled before you can publish your storefront. We never store passwords or sensitive card data.
-            </p>
-          </div>
+        <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
+          <Button onClick={handleSave} disabled={saving} className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer">
+            {saving ? tt("Wird gespeichert...", "Saving...") : tt("Storefront speichern", "Save Storefront Settings")}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-          <div className="grid gap-3">
-            {/* Cash */}
-            <div className="flex items-center justify-between border border-border rounded-lg p-4 bg-stone-50 dark:bg-stone-900/20">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">💵</span>
-                <div>
-                  <p className="font-semibold">Cash (Bar)</p>
-                  <p className="text-xs text-muted-foreground">Customers pay in cash on delivery or at the counter</p>
-                </div>
-              </div>
-              <Switch
-                id="accepts-cash"
-                checked={acceptsCash}
-                onCheckedChange={setAcceptsCash}
-              />
-            </div>
+function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const qc = useQueryClient();
+  const upsert = useServerFn(updateMyRestaurantSettings);
 
-            {/* PayPal */}
-            <div className="border border-border rounded-lg p-4 bg-stone-50 dark:bg-stone-900/20 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">🅿️</span>
-                  <div>
-                    <p className="font-semibold">PayPal</p>
-                    <p className="text-xs text-muted-foreground">Customers pay via your PayPal.me link — no password stored</p>
-                  </div>
-                </div>
-                <Switch
-                  id="accepts-paypal"
-                  checked={acceptsPaypal}
-                  onCheckedChange={setAcceptsPaypal}
+  const [operatingHours, setOperatingHours] = useState<any>(restaurant.operating_hours || {
+    monday: { open: "09:00", close: "22:00", closed: false },
+    tuesday: { open: "09:00", close: "22:00", closed: false },
+    wednesday: { open: "09:00", close: "22:00", closed: false },
+    thursday: { open: "09:00", close: "22:00", closed: false },
+    friday: { open: "09:00", close: "23:00", closed: false },
+    saturday: { open: "10:00", close: "23:00", closed: false },
+    sunday: { open: "10:00", close: "21:00", closed: false },
+  });
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await upsert({
+        data: {
+          name: restaurant.name,
+          operating_hours: operatingHours,
+        }
+      });
+      alert(tt("Ã–ffnungszeiten gespeichert!", "Operating hours saved successfully!"));
+      qc.invalidateQueries({ queryKey: ["restaurant"] });
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+      <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
+        <h3 className="font-display text-xl text-forest">{tt("Ã–ffnungszeiten & Betriebszeiten", "Operating Hours")}</h3>
+        <p className="text-xs text-muted-foreground">{tt("Legen Sie Ihre tÃ¤glichen Ã–ffnungszeiten fest. Kunden kÃ¶nnen auÃŸerhalb dieser Zeiten nur Vorbestellungen aufgeben.", "Set your daily business hours. Storefront orders will fall back to pre-ordering when closed.")}</p>
+      </div>
+
+      <div className="space-y-3">
+        {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
+          <div key={day} className="flex items-center justify-between border border-border/50 p-4 rounded-xl bg-[#f8faf9] flex-wrap gap-4">
+            <div className="w-28 font-medium capitalize text-forest">{day}</div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Switch 
+                  checked={!operatingHours[day]?.closed} 
+                  onCheckedChange={(checked) => setOperatingHours((prev: any) => ({
+                    ...prev, 
+                    [day]: { ...prev[day], closed: !checked }
+                  }))} 
                 />
+                <span className="text-xs font-semibold text-muted-foreground">
+                  {operatingHours[day]?.closed ? tt("Geschlossen", "Closed") : tt("GeÃ¶ffnet", "Open")}
+                </span>
               </div>
-              {acceptsPaypal && (
-                <div className="space-y-2 pt-2 border-t border-border/50">
-                  <Label className="text-sm font-medium">Your PayPal.me link or PayPal email</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      value={paypalEmail}
-                      onChange={e => setPaypalEmail(e.target.value)}
-                      placeholder="paypal.me/yourname  or  your@email.com"
-                      className="flex-1"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="shrink-0 border-blue-400 text-blue-600 hover:bg-blue-50"
-                      onClick={() => window.open("https://www.paypal.com/paypalme/my/profile", "_blank")}
-                    >
-                      Get PayPal.me →
-                    </Button>
-                  </div>
-                  <p className="text-xs text-muted-foreground font-medium mt-1">
-                    {tt("Haben Sie noch keinen PayPal.Me Link? Klicken Sie auf \"Get PayPal.me →\", um einen auf PayPals Webseite zu erstellen und ihn oben einzufügen.",
-                        "Don't have a PayPal.me link yet? Click \"Get PayPal.me →\" to create one on PayPal's website. Then paste it above.")}
-                  </p>
-                  <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10 mt-2">
-                    <span>🔒</span>
-                    <p>
-                      {tt(
-                        "Sicherheits-Hinweis: Wir fragen niemals nach Ihren PayPal-Passwörtern oder sensiblen Anmeldedaten und speichern diese auch nicht. Es wird nur Ihr öffentlicher PayPal.Me Link/E-Mail gespeichert.",
-                        "Security Note: We never ask for or store your PayPal passwords or sensitive login credentials. Only your public PayPal.Me link/email is stored."
-                      )}
-                    </p>
-                  </div>
+              {!operatingHours[day]?.closed && (
+                <div className="flex items-center gap-2 text-xs">
+                  <Input 
+                    type="time" 
+                    value={operatingHours[day]?.open || "09:00"} 
+                    onChange={e => setOperatingHours((prev: any) => ({
+                      ...prev, 
+                      [day]: { ...prev[day], open: e.target.value }
+                    }))} 
+                    className="w-24 bg-white"
+                  />
+                  <span>-</span>
+                  <Input 
+                    type="time" 
+                    value={operatingHours[day]?.close || "22:00"} 
+                    onChange={e => setOperatingHours((prev: any) => ({
+                      ...prev, 
+                      [day]: { ...prev[day], close: e.target.value }
+                    }))} 
+                    className="w-24 bg-white"
+                  />
                 </div>
               )}
             </div>
-
-            {/* Stripe / Card */}
-            <div className="flex items-center justify-between border border-border rounded-lg p-4 bg-stone-50 dark:bg-stone-900/20">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">💳</span>
-                <div>
-                  <p className="font-semibold">Credit / Debit Card (Stripe)</p>
-                  <p className="text-xs text-muted-foreground">Connect your own Stripe account to accept card payments. Go to the Billing tab to connect.</p>
-                  <p className="text-[10px] text-emerald-700 mt-1 font-medium flex items-center gap-1"><span>🔒</span> {tt("Keine Passwörter oder Kartendaten gespeichert", "No passwords or card details stored")}</p>
-                </div>
-              </div>
-              <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                restaurant.stripe_connect_status === "connected"
-                  ? "bg-emerald-100 text-emerald-800"
-                  : "bg-amber-100 text-amber-800"
-              }`}>
-                {restaurant.stripe_connect_status === "connected" ? "✓ Connected" : "Not connected"}
-              </span>
-            </div>
           </div>
+        ))}
+      </div>
 
-          {!acceptsCash && !acceptsPaypal && restaurant.stripe_connect_status !== "connected" && (
-            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200/60 rounded p-3 font-medium">
-              ⚠️ Please enable at least one payment method before publishing your storefront.
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-4 pt-4 border-t border-border">
-          <h3 className="font-semibold text-lg">Operating Hours</h3>
-          <p className="text-sm text-muted-foreground">Set your opening hours. Customers won't be able to order for immediate pickup/delivery outside of these hours, but they can still pre-order for a future time when you are open.</p>
-          <div className="space-y-3">
-            {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day) => (
-              <div key={day} className="flex items-center gap-4 border border-border p-3 rounded-md">
-                <div className="w-28 font-medium capitalize">{day}</div>
-                <div className="flex items-center gap-2">
-                  <Switch 
-                    checked={!operatingHours[day]?.closed} 
-                    onCheckedChange={(checked) => setOperatingHours((prev: any) => ({
-                      ...prev, 
-                      [day]: { ...prev[day], closed: !checked }
-                    }))} 
-                  />
-                  <Label className="w-16">{!operatingHours[day]?.closed ? "Open" : "Closed"}</Label>
-                </div>
-                {!operatingHours[day]?.closed && (
-                  <div className="flex items-center gap-2 flex-1">
-                    <Input 
-                      type="time" 
-                      value={operatingHours[day]?.open || "09:00"} 
-                      onChange={(e) => setOperatingHours((prev: any) => ({
-                        ...prev, 
-                        [day]: { ...prev[day], open: e.target.value }
-                      }))}
-                      className="w-32"
-                    />
-                    <span className="text-muted-foreground">to</span>
-                    <Input 
-                      type="time" 
-                      value={operatingHours[day]?.close || "22:00"} 
-                      onChange={(e) => setOperatingHours((prev: any) => ({
-                        ...prev, 
-                        [day]: { ...prev[day], close: e.target.value }
-                      }))}
-                      className="w-32"
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-4 pt-4 border-t border-border">
-          <h3 className="font-semibold text-lg">{t("Tischreservierungen", "Table Reservations")}</h3>
-          <p className="text-sm text-muted-foreground">
-            {t(
-              "Legen Sie Ihre Sitzplatzkapazität pro Zeitraum fest. Reservierungen werden bis zu diesem Limit automatisch bestätigt.",
-              "Set your slot seat capacity. Bookings will be automatically accepted up to this limit per time slot."
-            )}
-          </p>
-          <div className="space-y-1.5 max-w-xs">
-            <Label>{t("Maximale Kapazität pro Slot", "Maximum Seat Capacity per Slot")}</Label>
-            <Input 
-              type="number" 
-              min="1" 
-              value={seatCapacity} 
-              onChange={e => setSeatCapacity(e.target.value)} 
-            />
-          </div>
-        </div>
-
-        <div className="space-y-4 pt-4 border-t border-border">
-          <h3 className="font-semibold text-lg flex items-center gap-2">🚀 Storefront Publishing</h3>
-          <div className="flex items-center justify-between border border-border p-4 rounded-lg bg-stone-50 dark:bg-stone-900/20">
-            <div>
-              <Label htmlFor="is-published" className="font-semibold text-base">Publish Storefront</Label>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Make your storefront live at /restaurant/{restaurant.slug}
-              </p>
-            </div>
-            <Switch 
-              id="is-published" 
-              checked={isPublished} 
-              disabled={!acceptsCash && !acceptsPaypal && restaurant.stripe_connect_status !== "connected"}
-              onCheckedChange={(val) => {
-                setIsPublished(val);
-                if (val) {
-                  trackEvent("storefront_publish_attempted");
-                }
-              }} 
-            />
-          </div>
-          {!acceptsCash && !acceptsPaypal && restaurant.stripe_connect_status !== "connected" && (
-            <p className="text-xs text-amber-600 bg-amber-50 dark:text-amber-400 dark:bg-amber-950/20 p-3 rounded border border-amber-200/50 font-medium">
-              To publish your storefront, enable at least one payment method above (Cash, PayPal, or connect Stripe).
-            </p>
-          )}
-        </div>
-
-        <Button onClick={handleSave} disabled={uploading || saving} className="w-full">
-          {saving ? "Saving..." : "Save Settings"}
+      <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
+        <Button onClick={handleSave} disabled={saving} className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer">
+          {saving ? tt("Wird gespeichert...", "Saving...") : tt("Ã–ffnungszeiten speichern", "Save Operating Hours")}
         </Button>
       </div>
-    </section>
+    </div>
   );
 }
+
+function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const qc = useQueryClient();
+  const upsert = useServerFn(updateMyRestaurantSettings);
+  const getConnectUrl = useServerFn(getStripeConnectUrl);
+  const disconnect = useServerFn(disconnectStripe);
+
+  const [acceptsCash, setAcceptsCash] = useState(restaurant.accepts_cash ?? false);
+  const [acceptsPaypal, setAcceptsPaypal] = useState(restaurant.accepts_paypal ?? false);
+  const [paypalEmail, setPaypalEmail] = useState(restaurant.paypal_email || "");
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const isStripeConnected = restaurant.stripe_connect_status === "connected";
+
+  async function handleConnectStripe() {
+    trackEvent("stripe_connect_clicked");
+    setLoading(true);
+    try {
+      const res = await getConnectUrl({ data: { slug: restaurant.slug, origin: window.location.origin } });
+      if (res?.url) {
+        window.location.href = res.url;
+      }
+    } catch (e: any) {
+      alert("Failed to get Stripe connection URL: " + e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDisconnectStripe() {
+    if (!confirm(tt("Sind Sie sicher, dass Sie Stripe deautorisieren mÃ¶chten?", "Are you sure you want to disconnect Stripe?"))) return;
+    setLoading(true);
+    try {
+      await disconnect();
+      alert(tt("Stripe-Verbindung getrennt!", "Stripe successfully disconnected!"));
+      qc.invalidateQueries({ queryKey: ["restaurant"] });
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await upsert({
+        data: {
+          name: restaurant.name,
+          accepts_cash: acceptsCash,
+          accepts_paypal: acceptsPaypal,
+          paypal_email: paypalEmail || null,
+        }
+      });
+      alert(tt("Zahlungsmethoden gespeichert!", "Payment methods saved successfully!"));
+      qc.invalidateQueries({ queryKey: ["restaurant"] });
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Stripe Connect Integration Card */}
+      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-lg">ðŸ’³</span>
+            <h3 className="font-display text-xl text-forest">
+              {tt("Kredit- / Debitkarten (Stripe Connect)", "Credit / Debit Card (Stripe Connect)")}
+            </h3>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-stone-100 px-2 py-0.5 rounded-full border border-stone-200 shrink-0">
+              {tt("Empfohlen fÃ¼r Kartenzahlung", "Recommended for Cards")}
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
+            {tt(
+              "Verbinden Sie Ihr Stripe-Konto, um Kartenzahlungen direkt von Ihren Kunden zu empfangen. Dies ist optional und hat keinen Einfluss auf Ihr Speisely-Abonnement.",
+              "Connect your Stripe account to accept credit and debit card payments directly from your customers. This is optional and separate from your Speisely subscription."
+            )}
+          </p>
+        </div>
+
+        {isStripeConnected ? (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5 text-emerald-800 bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/10 text-sm font-semibold">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <p>{tt("Stripe Connect ist verbunden. Kunden bezahlen direkt auf Ihr Konto.", 
+                     "Stripe Connect is connected. Customers pay directly to your account.")}</p>
+            </div>
+            <div className="flex items-center justify-between flex-wrap gap-4 pt-2 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                {tt("Verbundenes Konto: ", "Connected Account: ")} <code className="font-mono bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded text-forest font-bold">{restaurant.stripe_user_id}</code>
+              </p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 rounded-full font-semibold transition" 
+                disabled={loading} 
+                onClick={handleDisconnectStripe}
+              >
+                {tt("Verbindung trennen", "Disconnect Account")}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-border">
+              <p className="text-xs text-muted-foreground leading-relaxed max-w-md">
+                {tt("Klicken Sie auf den Button, um Stripe Connect einzurichten. Sie werden zu Stripe weitergeleitet, um Ihr Konto sicher zu verbinden.",
+                   "Click to set up Stripe Connect. You will be redirected to Stripe to securely connect your free account.")}
+              </p>
+              <Button 
+                className="bg-[#635BFF] hover:bg-[#635BFF]/90 text-white font-semibold flex items-center gap-2 rounded-full px-6 py-2.5 text-xs shadow-sm transition shrink-0" 
+                disabled={loading} 
+                onClick={handleConnectStripe}
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M13.962 10.885c0-1.83-.984-2.817-2.9-2.817c-1.22 0-2.296.536-2.9 1.053l-.536-3.238c.677-.384 2.112-.767 3.743-.767c3.82 0 5.86 1.954 5.86 5.62c0 4.148-3.084 5.925-6.236 5.925c-1.39 0-2.482-.321-3.023-.62l.52-3.177c.609.309 1.57.575 2.65.575c1.884.001 2.923-1.077 2.923-2.556zM8.344 6.772v10.51H4.664V6.772h3.68zM19.336 6.772v10.51h-3.68V6.772h3.68z"/></svg>
+                {tt("Mit Stripe verbinden", "Connect with Stripe")}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Alternative payment methods */}
+      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+        <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
+          <h3 className="font-display text-xl text-forest">{tt("Direkte Kunden-Zahlungsmethoden", "Direct Customer Payment Methods")}</h3>
+          <p className="text-xs text-muted-foreground">{tt("Aktivieren Sie alternative Zahlungsmethoden wie Bargeld oder PayPal fÃ¼r Ihre Kunden.", "Enable storefront payment options like cash or PayPal for customer checkouts.")}</p>
+        </div>
+
+        <div className="grid gap-6">
+          {/* Cash */}
+          <div className="flex items-center justify-between border border-border/50 rounded-2xl p-4 bg-[#f8faf9]">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">ðŸ’µ</span>
+              <div>
+                <p className="font-semibold text-forest">Cash (Barzahlung)</p>
+                <p className="text-xs text-muted-foreground">{tt("Kunden zahlen vor Ort oder bei Lieferung bar.", "Customers pay in cash upon pickup or delivery.")}</p>
+              </div>
+            </div>
+            <Switch id="accepts-cash" checked={acceptsCash} onCheckedChange={setAcceptsCash} />
+          </div>
+
+          {/* PayPal */}
+          <div className="border border-border/50 rounded-2xl p-4 bg-[#f8faf9] space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">ðŸ…¿ï¸</span>
+                <div>
+                  <p className="font-semibold text-forest">PayPal</p>
+                  <p className="text-xs text-muted-foreground">{tt("Kunden zahlen im Checkout direkt Ã¼ber Ihren PayPal.Me Link.", "Customers pay via your PayPal.Me link at checkout.")}</p>
+                </div>
+              </div>
+              <Switch id="accepts-paypal" checked={acceptsPaypal} onCheckedChange={setAcceptsPaypal} />
+            </div>
+            {acceptsPaypal && (
+              <div className="space-y-3 pt-3 border-t border-border/50">
+                <Label className="text-xs font-semibold text-forest">{tt("Ihr PayPal.Me Link oder PayPal-E-Mail", "Your PayPal.Me Link or PayPal Email")}</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    value={paypalEmail} 
+                    onChange={e => setPaypalEmail(e.target.value)} 
+                    placeholder="paypal.me/ihrname  oder  email@domain.com"
+                    className="flex-1 bg-white"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="shrink-0 border-blue-400 text-blue-600 hover:bg-blue-50 rounded-xl text-xs font-semibold"
+                    onClick={() => window.open("https://www.paypal.com/paypalme/my/profile", "_blank")}
+                  >
+                    PayPal.me erstellen â†’
+                  </Button>
+                </div>
+                <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10">
+                  <span>ðŸ”’</span>
+                  <p>
+                    {tt(
+                      "Sicherheits-Hinweis: Wir fragen niemals nach Ihren PayPal-PasswÃ¶rtern oder sensiblen Anmeldedaten und speichern diese auch nicht. Es wird nur Ihr Ã¶ffentlicher PayPal.Me Link/E-Mail gespeichert.",
+                      "Security Note: We never ask for or store your PayPal passwords or sensitive login credentials. Only your public PayPal.Me link/email is stored."
+                    )}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
+          <Button onClick={handleSave} disabled={saving} className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer">
+            {saving ? tt("Wird gespeichert...", "Saving...") : tt("Zahlungsmethoden speichern", "Save Payment Methods")}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SettingsReservationsSection({ restaurant }: { restaurant: any }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const qc = useQueryClient();
+  const upsert = useServerFn(updateMyRestaurantSettings);
+
+  const [seatCapacity, setSeatCapacity] = useState(restaurant.seat_capacity?.toString() || "30");
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await upsert({
+        data: {
+          name: restaurant.name,
+          seat_capacity: parseInt(seatCapacity) || 30,
+        }
+      });
+      alert(tt("Reservierungseinstellungen gespeichert!", "Reservation settings saved successfully!"));
+      qc.invalidateQueries({ queryKey: ["restaurant"] });
+    } catch (e: any) {
+      alert(e.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+      <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
+        <h3 className="font-display text-xl text-forest">{tt("Reservierungs-Einstellungen", "Reservation Settings")}</h3>
+        <p className="text-xs text-muted-foreground">{tt("Legen Sie Ihre maximale Tisch- und SitzplatzkapazitÃ¤t pro Zeitfenster fest.", "Configure slot-based seat capacities and limits for table bookings.")}</p>
+      </div>
+
+      <div className="space-y-4 max-w-md">
+        <div className="space-y-1.5">
+          <Label htmlFor="seat-capacity">{tt("Maximale SitzplatzkapazitÃ¤t pro Slot", "Maximum Seat Capacity per Slot")}</Label>
+          <Input 
+            id="seat-capacity"
+            type="number" 
+            min="1" 
+            value={seatCapacity} 
+            onChange={e => setSeatCapacity(e.target.value)} 
+          />
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          {tt(
+            "Reservierungen werden bis zu dieser Sitzplatzanzahl pro Zeitslot automatisch vom System bestÃ¤tigt. Danach werden Buchungsanfragen auf die Warteliste gesetzt.",
+            "Bookings will be automatically confirmed up to this limit per time slot. Subsequent requests will require manual approval."
+          )}
+        </p>
+      </div>
+
+      <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
+        <Button onClick={handleSave} disabled={saving} className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer">
+          {saving ? tt("Wird gespeichert...", "Saving...") : tt("Reservierungen speichern", "Save Reservation Settings")}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; restaurant: any }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+
+  const subtabs = [
+    { id: "settings-general", label: tt("Allgemein", "General") },
+    { id: "settings-storefront", label: tt("Storefront", "Storefront") },
+    { id: "settings-operations", label: tt("Betriebszeiten", "Operations") },
+    { id: "settings-payments", label: tt("Zahlungen", "Payments") },
+    { id: "settings-reservations", label: tt("Reservierungen", "Reservations") },
+    { id: "settings-billing", label: tt("Abonnement", "Billing") },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Subtab Navigation */}
+      <div className="border-b border-[#e2e8e4] pb-px">
+        <nav className="flex flex-wrap gap-6 -mb-px">
+          {subtabs.map((tab) => {
+            const isActive = activeSubtab === tab.id;
+            return (
+              <a
+                key={tab.id}
+                href={`#${tab.id}`}
+                className={`pb-4 text-sm font-medium transition-all border-b-2 relative ${
+                  isActive
+                    ? "border-forest text-forest font-semibold"
+                    : "border-transparent text-muted-foreground hover:text-forest"
+                }`}
+              >
+                {tab.label}
+              </a>
+            );
+          })}
+        </nav>
+      </div>
+
+      {/* Subtab Content */}
+      <div className="pt-2">
+        {activeSubtab === "settings-general" && <SettingsGeneralSection restaurant={restaurant} />}
+        {activeSubtab === "settings-storefront" && <SettingsStorefrontSection restaurant={restaurant} />}
+        {activeSubtab === "settings-operations" && <SettingsOperationsSection restaurant={restaurant} />}
+        {activeSubtab === "settings-payments" && <SettingsPaymentsSection restaurant={restaurant} />}
+        {activeSubtab === "settings-reservations" && <SettingsReservationsSection restaurant={restaurant} />}
+        {activeSubtab === "settings-billing" && <BillingSection />}
+      </div>
+    </div>
+  );
+}
+
 
 function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" | "planners" }) {
   const fetchPromos = useServerFn(getMyPromoCodes);
@@ -1452,7 +1724,7 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
                       {!c.is_active && <span className="text-[10px] uppercase bg-muted px-2 py-0.5 rounded-full font-semibold">Inactive</span>}
                     </div>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {c.discount_type === "percentage" ? `${c.discount_value}% off total` : `€${c.discount_value.toFixed(2)} off total`}
+                      {c.discount_type === "percentage" ? `${c.discount_value}% off total` : `â‚¬${c.discount_value.toFixed(2)} off total`}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -1482,7 +1754,7 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="percentage">Percent (%)</SelectItem>
-                  <SelectItem value="fixed">Fixed (€)</SelectItem>
+                  <SelectItem value="fixed">Fixed (â‚¬)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1565,7 +1837,7 @@ function ReservationsSection() {
                     {r.status}
                   </span>
                   <h3 className="font-display text-lg">
-                    {r.first_name} {r.last_name} — {r.guest_count} Guests
+                    {r.first_name} {r.last_name} â€” {r.guest_count} Guests
                   </h3>
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -1656,43 +1928,10 @@ function BillingSection() {
   const billingCycleStart = restaurant.billing_cycle_start ? new Date(restaurant.billing_cycle_start) : new Date();
 
   // Mutations
-  const getConnectUrl = useServerFn(getStripeConnectUrl);
-  const disconnect = useServerFn(disconnectStripe);
   const startSubscription = useServerFn(startStarterSubscription);
   const getPortalUrl = useServerFn(openBillingPortal);
 
   const [loading, setLoading] = useState(false);
-
-  const handleConnectStripe = async () => {
-    trackEvent("stripe_connect_clicked");
-    setLoading(true);
-    try {
-      const res = await getConnectUrl({ data: { slug: restaurant.slug, origin: window.location.origin } });
-      if (res?.url) {
-        window.location.href = res.url;
-      }
-    } catch (e: any) {
-      alert("Failed to get Stripe connection URL: " + e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDisconnectStripe = async () => {
-    if (confirm(tt("Bist du sicher, dass du Stripe trennen möchtest? Dein Storefront wird offline geschaltet und Bestellungen pausiert.", 
-                   "Are you sure you want to disconnect Stripe? Your storefront will be unpublished and ordering paused."))) {
-      setLoading(true);
-      try {
-        await disconnect();
-        alert(tt("Stripe-Konto getrennt.", "Stripe account disconnected."));
-        qc.invalidateQueries({ queryKey: ["restaurant"] });
-      } catch (e: any) {
-        alert("Failed to disconnect: " + e.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
 
   const handleStartSubscription = async () => {
     trackEvent("subscription_checkout_started");
@@ -1735,98 +1974,24 @@ function BillingSection() {
       <div className="flex flex-col gap-1.5">
         <h2 className="font-display text-2xl text-forest">{tt("Abonnement & Abrechnung", "Subscription & Billing")}</h2>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          {tt("Verwalte die Einstellungen für deine Kunden-Zahlungen und dein Speisely-Abonnement.", 
+          {tt("Verwalte die Einstellungen fÃ¼r deine Kunden-Zahlungen und dein Speisely-Abonnement.", 
              "Manage your customer-facing payment connections and your Speisely marketplace subscription.")}
         </p>
       </div>
 
-      {/* STRIPE CONNECTION SECTION */}
-      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-lg">💳</span>
-            <h3 className="font-display text-xl text-forest">
-              {tt("Kunden-Zahlungsmethoden für dein Storefront", "Customer Payment Methods for your Storefront")}
-            </h3>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-stone-100 dark:bg-stone-855 px-2 py-0.5 rounded-full border border-stone-200 shrink-0">
-              {tt("Optional für Kreditkarten", "Optional for Credit Cards")}
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
-            {tt(
-              "Richten Sie ein, wie Ihre Kunden im öffentlichen Storefront bezahlen. Durch das Verbinden eines eigenen Stripe-Kontos aktivieren Sie direkte Kreditkartenzahlungen (0% Provision). Dies ist optional und hat keinen Einfluss auf Ihr Speisely-Abonnement.",
-              "Configure how storefront customers pay you. Connecting a custom Stripe account enables direct credit card processing with 0% order commission. This is optional and separate from your Speisely subscription."
-            )}
-          </p>
-          <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10 w-fit">
-            <span>🔒</span>
-            <p>
-              {tt(
-                "Sicherheits-Hinweis: Wir fragen niemals nach Ihren Stripe-Passwörtern oder sensiblen Anmeldedaten und speichern diese auch nicht. Alle Zahlungen werden sicher über den offiziellen Stripe-Connect-Gateway verarbeitet.",
-                "Security Note: We never ask for or store your Stripe passwords, bank credentials, or sensitive payment details. All processing is handled securely by Stripe's official gateway."
-              )}
-            </p>
-          </div>
-        </div>
-        
-        {isStripeConnected ? (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2.5 text-emerald-800 bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/10 text-sm font-semibold">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <p>{tt("Stripe Connect ist erfolgreich verbunden. Ihre Kunden können direkt mit Kreditkarte zahlen.", 
-                     "Stripe Connect is successfully connected. Your customers can pay you directly via credit card.")}</p>
-            </div>
-            <div className="flex items-center justify-between flex-wrap gap-4 pt-2 border-t border-border">
-              <p className="text-xs text-muted-foreground">
-                {tt("Verbundenes Konto: ", "Connected Account: ")} <code className="font-mono bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded text-forest font-bold">{restaurant.stripe_user_id}</code>
-              </p>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-rose-600 border-rose-200 hover:bg-rose-50 hover:text-rose-700 rounded-full font-semibold transition" 
-                disabled={loading} 
-                onClick={handleDisconnectStripe}
-              >
-                {tt("Stripe-Verbindung trennen", "Disconnect Stripe")}
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2.5 text-stone-600 bg-stone-100/50 p-4 rounded-2xl border border-stone-200/50 text-sm font-semibold">
-              <span className="h-2 w-2 rounded-full bg-stone-300" />
-              <p>{tt("Kein Stripe Connect-Konto verbunden (Kreditkartenzahlungen deaktiviert).", 
-                     "No Stripe Connect account connected (Credit card payments disabled).")}</p>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-border">
-              <p className="text-xs text-muted-foreground leading-relaxed max-w-md">
-                {tt("Klicken Sie auf den Button, um Stripe Connect einzurichten. Sie werden zu Stripe weitergeleitet, um ein kostenloses Konto zu verknüpfen.",
-                   "Click to set up Stripe Connect. You will be redirected to Stripe to connect a free account in less than 2 minutes.")}
-              </p>
-              <Button 
-                className="bg-[#635BFF] hover:bg-[#635BFF]/90 text-white font-semibold flex items-center gap-2 rounded-full px-6 py-2.5 text-xs shadow-sm transition shrink-0" 
-                disabled={loading} 
-                onClick={handleConnectStripe}
-              >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M13.962 10.885c0-1.83-.984-2.817-2.9-2.817c-1.22 0-2.296.536-2.9 1.053l-.536-3.238c.677-.384 2.112-.767 3.743-.767c3.82 0 5.86 1.954 5.86 5.62c0 4.148-3.084 5.925-6.236 5.925c-1.39 0-2.482-.321-3.023-.62l.52-3.177c.609.309 1.57.575 2.65.575c1.884.001 2.923-1.077 2.923-2.556zM8.344 6.772v10.51H4.664V6.772h3.68zM19.336 6.772v10.51h-3.68V6.772h3.68z"/></svg>
-                {tt("Mit Stripe verbinden", "Connect with Stripe")}
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
+
 
       {/* SPEISELY SUBSCRIPTION SECTION */}
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-lg">🚀</span>
+            <span className="text-lg">ðŸš€</span>
             <h3 className="font-display text-xl text-forest">
               {tt("Speisely-Abonnement", "Speisely Subscription")}
             </h3>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            {tt("Verwalte das monatliche Abonnement für dein Speisely-Händlerkonto. Diese Gebühr fließt direkt an das Speisely-Plattformkonto.", 
+            {tt("Verwalte das monatliche Abonnement fÃ¼r dein Speisely-HÃ¤ndlerkonto. Diese GebÃ¼hr flieÃŸt direkt an das Speisely-Plattformkonto.", 
                "Manage the monthly subscription for your Speisely merchant account. This fee goes directly to the Speisely platform.")}
           </p>
         </div>
@@ -1836,7 +2001,7 @@ function BillingSection() {
           {subStatus === "past_due" && (
             <div className="bg-amber-500/5 text-amber-800 dark:text-amber-200 border border-amber-500/10 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="font-bold text-sm">⚠️ {tt("Zahlung ausstehend", "Payment Pending")}</p>
+                <p className="font-bold text-sm">âš ï¸ {tt("Zahlung ausstehend", "Payment Pending")}</p>
                 <p className="text-xs mt-1">
                   {tt("Die letzte Abonnement-Zahlung ist fehlgeschlagen. Bitte aktualisieren Sie Ihre Rechnungsdaten.", 
                      "Your last subscription payment failed. Please update your billing details.")}
@@ -1851,9 +2016,9 @@ function BillingSection() {
           {subStatus === "canceled" && (
             <div className="bg-rose-500/5 text-rose-800 dark:text-rose-200 border border-rose-500/10 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="font-bold text-sm">🛑 {tt("Abonnement beendet", "Subscription Canceled")}</p>
+                <p className="font-bold text-sm">ðŸ›‘ {tt("Abonnement beendet", "Subscription Canceled")}</p>
                 <p className="text-xs mt-1">
-                  {tt("Ihr Starter-Tarif wurde gekündigt. Ihr Storefront ist derzeit pausiert.", 
+                  {tt("Ihr Starter-Tarif wurde gekÃ¼ndigt. Ihr Storefront ist derzeit pausiert.", 
                      "Your Starter Plan has been canceled. Your storefront is currently paused.")}
                 </p>
               </div>
@@ -1873,7 +2038,7 @@ function BillingSection() {
                       {tt("Speisely Tarif", "Speisely Plan")}
                     </span>
                     <h3 className="mt-3 font-display text-2xl text-forest">
-                      {planName === "starter" ? tt("Starter-Paket (€34.99/Monat)", "Starter Plan (€34.99/month)") : planName}
+                      {planName === "starter" ? tt("Starter-Paket (â‚¬34.99/Monat)", "Starter Plan (â‚¬34.99/month)") : planName}
                     </h3>
                   </div>
                   <div className="text-right">
@@ -1890,7 +2055,7 @@ function BillingSection() {
                       <p className="font-semibold text-forest mt-0.5">{tt("Monatlich", "Monthly")}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground font-medium">{tt("Nächstes Rechnungsdatum", "Next Invoice Date")}</p>
+                      <p className="text-muted-foreground font-medium">{tt("NÃ¤chstes Rechnungsdatum", "Next Invoice Date")}</p>
                       <p className="font-semibold text-forest mt-0.5">{nextPaymentDate.toLocaleDateString(lang === "de" ? "de-DE" : "en-US")}</p>
                     </div>
                   </div>
@@ -1904,8 +2069,8 @@ function BillingSection() {
                     {tt("Abonniere das Restaurant Starter-Paket", "Subscribe to the Restaurant Starter Plan")}
                   </p>
                   <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
-                    {tt("Für nur €34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.", 
-                       "For just €34.99/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.")}
+                    {tt("FÃ¼r nur â‚¬34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.", 
+                       "For just â‚¬34.99/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.")}
                   </p>
                   <Button className="w-full bg-forest hover:bg-forest/90 text-cream font-semibold rounded-full py-2.5 shadow-sm transition" onClick={handleStartSubscription} disabled={loading}>
                     {tt("Plan abonnieren", "Subscribe to Plan")}
@@ -1920,19 +2085,19 @@ function BillingSection() {
                 <h4 className="font-semibold text-xs uppercase tracking-wider text-forest/70">{tt("Enthaltene Leistungen", "Plan Features")}</h4>
                 <ul className="space-y-3 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-emerald-600 font-bold">âœ“</span>
                     <span>{tt("0% Bestellprovision", "0% order commission")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-emerald-600 font-bold">âœ“</span>
                     <span>{tt("Tischreservierungen inklusive", "Table reservations included")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-emerald-600 font-bold">âœ“</span>
                     <span>{tt("Eigene gehostete Storefront-URL", "Hosted storefront URL")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-emerald-600 font-bold">âœ“</span>
                     <span>{tt("Custom Domain Support", "Custom domain support")}</span>
                   </li>
                 </ul>
@@ -2001,9 +2166,8 @@ function RestaurantDashboardInner() {
 
   const { hash } = useLocation();
   const activeTab = (hash || "#overview").replace("#", "");
+  const currentTab = activeTab === "profile" ? "settings-general" : activeTab === "billing" ? "settings-billing" : activeTab;
 
-
-  
   if (!q.data?.restaurant) {
     return (
       <VendorLayout vertical="restaurant" title="Restaurant Dashboard">
@@ -2022,30 +2186,13 @@ function RestaurantDashboardInner() {
       title={`${q.data.restaurant.name} Dashboard`} 
       storefrontSlug={q.data.restaurant.slug}
     >
-      {activeTab === "overview" && <OverviewSection />}
-      {activeTab === "orders" && <OrdersSection />}
-      {activeTab === "reservations" && <ReservationsSection />}
-      {activeTab === "menu" && <ProductsSection />}
-      {activeTab === "promotions" && <PromotionsSection vertical="restaurants" />}
-      {activeTab === "billing" && <BillingSection />}
-      {activeTab === "profile" && (
-        <div className="space-y-10">
-          <CustomDomainSection 
-            entity={q.data.restaurant} 
-            onSave={async (slug, domain) => {
-              const { updateMyRestaurantSettings } = await import("@/lib/restaurant/mutations.functions");
-              await updateMyRestaurantSettings({
-                data: {
-                  name: q.data.restaurant.name, // required by schema
-                  slug: slug,
-                  custom_domain: domain
-                }
-              });
-              qc.invalidateQueries({ queryKey: ["restaurant", "products"] });
-            }}
-          />
-          <BusinessProfileSection />
-        </div>
+      {currentTab === "overview" && <OverviewSection />}
+      {currentTab === "orders" && <OrdersSection />}
+      {currentTab === "reservations" && <ReservationsSection />}
+      {currentTab === "menu" && <ProductsSection />}
+      {currentTab === "promotions" && <PromotionsSection vertical="restaurants" />}
+      {currentTab.startsWith("settings-") && (
+        <SettingsShell activeSubtab={currentTab} restaurant={q.data.restaurant} />
       )}
     </VendorLayout>
   );

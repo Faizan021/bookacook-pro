@@ -42,8 +42,8 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
       { id: "reservations", label: tt("Reservierungen", "Reservations"), icon: CalendarDays },
       { id: "menu", label: tt("Speisekarte", "Menu"), icon: UtensilsCrossed },
       { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },
-      { id: "billing", label: tt("Abonnement", "Subscription"), icon: CreditCard },
-      { id: "profile", label: tt("Einstellungen", "Settings"), icon: Settings },
+      { id: "settings-billing", label: tt("Abonnement", "Subscription"), icon: CreditCard },
+      { id: "settings-general", label: tt("Einstellungen", "Settings"), icon: Settings },
     ],
     caterer: [
       { id: "overview", label: tt("Übersicht", "Overview"), icon: LayoutDashboard },
@@ -95,7 +95,10 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
               
               // We'll pass the `id` to the URL hash so the parent can read it.
               const cleanHash = (location.hash || "").replace("#", "");
-              const isActive = cleanHash === item.id || (!cleanHash && item.id === "overview");
+              let isActive = cleanHash === item.id || (!cleanHash && item.id === "overview");
+              if (item.id === "settings-general" && cleanHash.startsWith("settings-") && cleanHash !== "settings-billing") {
+                isActive = true;
+              }
               
               return (
                 <Link
