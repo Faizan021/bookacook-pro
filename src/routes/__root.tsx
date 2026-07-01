@@ -100,15 +100,55 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Speisely",
-          description: "Provisionsfreier Marktplatz für direkte Essensbestellungen, Catering und Event-Planung in Deutschland.",
-          url: "https://speisely.de",
-          areaServed: "DE",
-          serviceType: ["Food Ordering", "Catering Marketplace", "Event Planning"],
-        }),
+        children: JSON.stringify([
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Speisely",
+            alternateName: "Speisely Marketplace",
+            description: "Speisely ist ein provisionsfreier B2B2C-Marktplatz für direkte Essensbestellungen, Catering und Event-Planung in Deutschland. Restaurants zahlen eine monatliche Flatrate ohne Provision. Caterer und Event-Planer erhalten qualifizierte Anfragen.",
+            url: "https://speisely.de",
+            logo: "https://speisely.de/favicon.svg",
+            foundingDate: "2026",
+            areaServed: {
+              "@type": "Country",
+              name: "Germany",
+            },
+            serviceType: [
+              "Instant Food Ordering",
+              "Catering Marketplace",
+              "Event Planning Platform",
+              "Restaurant Digital Storefront",
+            ],
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "customer support",
+              availableLanguage: ["German", "English"],
+            },
+            sameAs: [
+              "https://www.linkedin.com/company/speisely",
+            ],
+            dateModified: new Date().toISOString().split("T")[0],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Speisely",
+            url: "https://speisely.de",
+            inLanguage: ["de", "en"],
+            description: "Speisely verbindet Restaurants, Caterer und Event-Planer mit Kunden in ganz Deutschland — Sofortbestellung, Catering-Anfragen und Event-Planung auf einer Plattform.",
+            datePublished: "2026-06-01",
+            dateModified: new Date().toISOString().split("T")[0],
+            potentialAction: {
+              "@type": "SearchAction",
+              target: {
+                "@type": "EntryPoint",
+                urlTemplate: "https://speisely.de/catering?q={search_term_string}",
+              },
+              "query-input": "required name=search_term_string",
+            },
+          },
+        ]),
       },
     ],
   }),
