@@ -4,6 +4,14 @@ import { LanguageToggle } from "./LanguageToggle";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { User, ShieldCheck, LogOut, ChevronDown, LayoutDashboard } from "lucide-react";
 
 export function SiteHeader() {
   const { t, lang } = useI18n();
@@ -50,7 +58,6 @@ export function SiteHeader() {
     { to: "/partners", label: t("nav.partners") },
     { to: "/about", label: t("nav.about") },
     { to: "/blog", label: "Blog" },
-    ...(isAdmin ? [{ to: "/admin" as const, label: "Admin" }] : []),
   ];
 
   const routerState = useRouterState();
@@ -92,12 +99,40 @@ export function SiteHeader() {
           <LanguageToggle />
           <div className="hidden sm:flex items-center gap-2">
             {isLoggedIn ? (
-              <Link
-                to="/dashboard"
-                className="inline-flex items-center justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium hover:opacity-90 transition"
-              >
-                Dashboard
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="inline-flex items-center gap-1.5 justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium hover:opacity-90 transition outline-none ring-0">
+                  <User className="h-4 w-4" />
+                  <span>Mein Konto</span>
+                  <ChevronDown className="h-3 w-3 opacity-70" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 bg-white border border-[#e2e8e4] rounded-xl shadow-lg p-1">
+                  <DropdownMenuItem asChild className="rounded-lg hover:bg-forest/5 cursor-pointer text-forest p-2">
+                    <Link to="/dashboard" className="flex items-center w-full">
+                      <LayoutDashboard className="mr-2 h-4 w-4 text-forest/70" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem asChild className="rounded-lg hover:bg-forest/5 cursor-pointer text-forest p-2 mt-1">
+                      <Link to="/admin" className="flex items-center w-full">
+                        <ShieldCheck className="mr-2 h-4 w-4 text-brand-orange" />
+                        <span className="font-medium">Admin Portal</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
+                  <DropdownMenuItem 
+                    className="rounded-lg hover:bg-rose-50 text-rose-600 cursor-pointer p-2"
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      window.location.href = "/auth";
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Abmelden</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <Link
