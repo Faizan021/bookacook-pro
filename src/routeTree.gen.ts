@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
+import { Route as SpeiselyRouteImport } from './routes/speisely'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PartnersRouteImport } from './routes/partners'
@@ -55,6 +56,11 @@ const VerifyEmailRoute = VerifyEmailRouteImport.update({
 const UeberUnsRoute = UeberUnsRouteImport.update({
   id: '/ueber-uns',
   path: '/ueber-uns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpeiselyRoute = SpeiselyRouteImport.update({
+  id: '/speisely',
+  path: '/speisely',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -254,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/speisely': typeof SpeiselyRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/caterer': typeof AuthenticatedCatererRoute
@@ -290,6 +297,7 @@ export interface FileRoutesByTo {
   '/llms.txt': typeof LlmsDottxtRoute
   '/partners': typeof PartnersRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/speisely': typeof SpeiselyRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/caterer': typeof AuthenticatedCatererRoute
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/speisely': typeof SpeiselyRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/verify-email': typeof VerifyEmailRoute
   '/_authenticated/caterer': typeof AuthenticatedCatererRoute
@@ -370,6 +379,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/planner'
     | '/sitemap.xml'
+    | '/speisely'
     | '/ueber-uns'
     | '/verify-email'
     | '/caterer'
@@ -406,6 +416,7 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/partners'
     | '/sitemap.xml'
+    | '/speisely'
     | '/ueber-uns'
     | '/verify-email'
     | '/caterer'
@@ -445,6 +456,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/planner'
     | '/sitemap.xml'
+    | '/speisely'
     | '/ueber-uns'
     | '/verify-email'
     | '/_authenticated/caterer'
@@ -485,6 +497,7 @@ export interface RootRouteChildren {
   PartnersRoute: typeof PartnersRoute
   PlannerRoute: typeof PlannerRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SpeiselyRoute: typeof SpeiselyRoute
   UeberUnsRoute: typeof UeberUnsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -511,6 +524,13 @@ declare module '@tanstack/react-router' {
       path: '/ueber-uns'
       fullPath: '/ueber-uns'
       preLoaderRoute: typeof UeberUnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/speisely': {
+      id: '/speisely'
+      path: '/speisely'
+      fullPath: '/speisely'
+      preLoaderRoute: typeof SpeiselyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -843,6 +863,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartnersRoute: PartnersRoute,
   PlannerRoute: PlannerRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SpeiselyRoute: SpeiselyRoute,
   UeberUnsRoute: UeberUnsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   BlogSlugRoute: BlogSlugRoute,

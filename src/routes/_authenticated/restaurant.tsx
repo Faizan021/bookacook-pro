@@ -990,6 +990,8 @@ function OverviewSection() {
                     <span className="text-xs text-muted-foreground ml-7 sm:ml-0">{timeStr}</span>
                   </div>
                 );
+              })}
+            </div>
           )}
         </div>
       </div>
