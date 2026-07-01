@@ -11,6 +11,7 @@ import {
   ChevronDown,
   BarChart3,
   Save,
+  Sparkles,
 } from 'lucide-react';
 import { useServerFn } from "@tanstack/react-start";
 import { saveSeoDraft } from "@/lib/admin/mutations.functions";
