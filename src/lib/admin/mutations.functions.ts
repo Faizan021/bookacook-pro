@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
+import { verifyDraftContent } from "./verification.server";
 
 // Helper to verify admin role
 async function verifyAdmin(supabaseAdmin: any, userId: string) {
@@ -128,6 +129,21 @@ export const updateSeoStatus = createServerFn({ method: "POST" })
 
     const updateData: any = { status, last_edited_by: userId };
     if (status === "published") {
+      // 1. Fetch current content to verify
+      const { data: currentDraft } = await supabaseAdmin
+        .from("seo_content_pages")
+        .select("content")
+        .eq("id", id)
+        .single();
+        
+      if (currentDraft?.content) {
+        const verification = verifyDraftContent(currentDraft.content);
+        if (!verification.isValid) {
+          const reasons = verification.flaggedPhrases.map(f => `'${f.phrase}'`).join(", ");
+          throw new Error(`Verification Failed: Draft contains unsupported claims: ${reasons}. Please edit the content.`);
+        }
+      }
+      
       updateData.published_at = new Date().toISOString();
     }
 
@@ -189,3 +205,51 @@ export const markSitemapIndexed = createServerFn({ method: "POST" })
     if (error) throw new Error("Failed to update sitemap indexed status: " + error.message);
     return { success: true };
   });
+
+export const auditAllSeoContent = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    // 1. Fetch all records
+    const { data: allContent, error: fetchError } = await supabaseAdmin
+      .from("seo_content_pages")
+      .select("id, title, status, content");
+
+    if (fetchError) throw new Error("Failed to fetch seo content for audit: " + fetchError.message);
+
+    const demotedRecords: Array<{ id: string; title: string; previousStatus: string; reasons: string }> = [];
+
+    // 2. Audit each record
+    for (const record of allContent || []) {
+      if (record.content) {
+        const verification = verifyDraftContent(record.content);
+        if (!verification.isValid) {
+          const reasons = verification.flaggedPhrases.map(f => `'${f.phrase}'`).join(", ");
+          
+          // Demote the record
+          const { error: updateError } = await supabaseAdmin
+            .from("seo_content_pages")
+            .update({ status: "in_review", last_edited_by: userId })
+            .eq("id", record.id);
+
+          if (updateError) {
+            console.error(`Failed to demote record ${record.id}: `, updateError);
+          } else {
+            demotedRecords.push({
+              id: record.id,
+              title: record.title,
+              previousStatus: record.status,
+              reasons
+            });
+          }
+        }
+      }
+    }
+
+    return { success: true, totalAudited: allContent?.length || 0, demotedRecords };
+  });
+

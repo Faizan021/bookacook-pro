@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getSeoDrafts } from "@/lib/admin/queries.functions";
-import { updateSeoStatus, updateSeoContent } from "@/lib/admin/mutations.functions";
+import { updateSeoStatus, updateSeoContent, auditAllSeoContent } from "@/lib/admin/mutations.functions";
 import { toast } from "sonner";
 import {
   FileEdit,
@@ -21,11 +21,14 @@ export function DraftReviewQueue() {
   const fetchDrafts = useServerFn(getSeoDrafts);
   const updateStatus = useServerFn(updateSeoStatus);
   const updateContent = useServerFn(updateSeoContent);
+  const auditAllContent = useServerFn(auditAllSeoContent);
 
   const [activeTab, setActiveTab] = useState<"draft" | "in_review" | "approved" | "published" | "archived" | "rejected">("draft");
   const [selectedDraft, setSelectedDraft] = useState<any | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [editedData, setEditedData] = useState<any>(null);
+  const [verificationError, setVerificationError] = useState<string | null>(null);
+  const [auditResult, setAuditResult] = useState<{ totalAudited: number; demotedRecords: any[] } | null>(null);
 
   const { data: drafts = [], isLoading } = useQuery({
     queryKey: ["admin", "seo-drafts"],
@@ -36,6 +39,7 @@ export function DraftReviewQueue() {
 
   const statusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string, status: any }) => {
+      setVerificationError(null);
       await updateStatus({ data: { id, status } });
     },
     onSuccess: () => {
@@ -43,7 +47,12 @@ export function DraftReviewQueue() {
       setSelectedDraft(null);
       toast.success("Status updated");
     },
-    onError: (err: any) => toast.error(err.message)
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to update status");
+      if (err.message?.includes("Verification Failed")) {
+        setVerificationError(err.message);
+      }
+    }
   });
 
   const saveMutation = useMutation({
@@ -54,6 +63,18 @@ export function DraftReviewQueue() {
       qc.invalidateQueries({ queryKey: ["admin", "seo-drafts"] });
       setEditMode(false);
       toast.success("Content saved");
+    },
+    onError: (err: any) => toast.error(err.message)
+  });
+
+  const auditMutation = useMutation({
+    mutationFn: async () => {
+      return await auditAllContent();
+    },
+    onSuccess: (res) => {
+      qc.invalidateQueries({ queryKey: ["admin", "seo-drafts"] });
+      setAuditResult({ totalAudited: res.totalAudited, demotedRecords: res.demotedRecords });
+      toast.success("Global Audit Complete");
     },
     onError: (err: any) => toast.error(err.message)
   });
@@ -69,6 +90,7 @@ export function DraftReviewQueue() {
       content: draft.content
     });
     setEditMode(false);
+    setVerificationError(null);
   };
 
   const statusColors: any = {
@@ -87,7 +109,16 @@ export function DraftReviewQueue() {
         <h2 className="text-xl font-bold font-display text-forest flex items-center gap-2">
           <FileEdit className="w-5 h-5" /> Draft Review Queue
         </h2>
-        <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-fit overflow-x-auto">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => auditMutation.mutate()}
+            disabled={auditMutation.isPending}
+            className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 disabled:opacity-50 flex items-center gap-2"
+          >
+            <RefreshCw className={`w-4 h-4 ${auditMutation.isPending ? "animate-spin" : ""}`} />
+            Run Global Audit
+          </button>
+          <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-fit overflow-x-auto">
           {["draft", "in_review", "approved", "published", "rejected", "archived"].map((tab) => (
             <button
               key={tab}
@@ -100,7 +131,29 @@ export function DraftReviewQueue() {
             </button>
           ))}
         </div>
+        </div>
       </div>
+
+      {auditResult && (
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm mb-6">
+          <h3 className="font-semibold text-gray-900 mb-2">Global Audit Complete</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Scanned {auditResult.totalAudited} records. Found {auditResult.demotedRecords.length} violations.
+          </p>
+          {auditResult.demotedRecords.length > 0 && (
+            <ul className="space-y-2 max-h-64 overflow-y-auto">
+              {auditResult.demotedRecords.map((r, i) => (
+                <li key={i} className="flex flex-col text-sm p-3 bg-red-50 border border-red-100 rounded-lg">
+                  <span className="font-semibold text-red-900">{r.title}</span>
+                  <span className="text-red-700 text-xs">Demoted from <strong className="uppercase">{r.previousStatus}</strong> to <strong>IN REVIEW</strong></span>
+                  <span className="text-red-600 text-xs mt-1 font-mono">{r.reasons}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <button onClick={() => setAuditResult(null)} className="mt-4 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium">Dismiss</button>
+        </div>
+      )}
 
       {/* Main Layout: List (Left) + Detail (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -150,6 +203,17 @@ export function DraftReviewQueue() {
             <>
               {/* Toolbar */}
               <div className="p-4 border-b border-gray-100 flex flex-wrap gap-2 items-center justify-between bg-gray-50/50 rounded-t-2xl">
+                <div className="flex flex-col gap-2 w-full">
+                  {verificationError && (
+                    <div className="w-full mb-2 p-3 bg-red-50 border border-red-200 text-red-800 rounded-lg text-sm flex items-start gap-2">
+                      <XCircle className="w-5 h-5 shrink-0 text-red-500" />
+                      <div>
+                        <strong className="block font-semibold">Publish Blocked</strong>
+                        {verificationError}
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${statusColors[selectedDraft.status]}`}>
                     {selectedDraft.status.replace("_", " ")}
@@ -192,8 +256,10 @@ export function DraftReviewQueue() {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
 
-              {/* Editor / Preview Area */}
+          {/* Editor / Preview Area */}
               <div className="flex-1 overflow-y-auto p-6">
                 {editMode ? (
                   <div className="space-y-4 max-w-2xl">
