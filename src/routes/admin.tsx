@@ -20,6 +20,7 @@ import { CompetitorMonitor } from "@/components/geo/CompetitorMonitor";
 import { GeoTargetingEngine } from "@/components/geo/GeoTargetingEngine";
 import { SitemapMonitor } from "@/components/geo/SitemapMonitor";
 import { DraftReviewQueue } from "@/components/geo/DraftReviewQueue";
+import { AdminAnalyticsDashboard } from "@/components/admin/AdminAnalyticsDashboard";
 import {
   LineChart,
   Line,
@@ -41,7 +42,8 @@ import {
   AlertTriangle,
   RefreshCw,
   LogOut,
-  Globe
+  Globe,
+  MousePointerClick
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -63,7 +65,7 @@ function AdminPage() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<"overview" | "users" | "listings" | "orders" | "ai-tools">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "analytics" | "users" | "listings" | "orders" | "ai-tools">("overview");
   const [aiSubTab, setAiSubTab] = useState<"drafts" | "sitemap" | "competitor" | "geo">("drafts");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -355,6 +357,17 @@ function AdminPage() {
             <span>Overview & Revenue</span>
           </button>
           <button
+            onClick={() => { setActiveTab("analytics"); setSearchTerm(""); }}
+            className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "analytics"
+                ? "border-emerald-600 text-emerald-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            }`}
+          >
+            <MousePointerClick className="w-4 h-4" />
+            <span>Traffic & Analytics</span>
+          </button>
+          <button
             onClick={() => { setActiveTab("users"); setSearchTerm(""); }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "users"
@@ -544,7 +557,12 @@ function AdminPage() {
           </div>
         )}
 
-        {/* Tab 2: Users */}
+        {/* Tab 2: Analytics */}
+        {activeTab === "analytics" && (
+          <AdminAnalyticsDashboard />
+        )}
+
+        {/* Tab 3: Users */}
         {activeTab === "users" && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {/* Search Filters */}
