@@ -16,6 +16,9 @@ import {
   updateUserRole,
   toggleListingPublish
 } from "@/lib/admin/mutations.functions";
+import { CompetitorMonitor } from "@/components/geo/CompetitorMonitor";
+import { GeoTargetingEngine } from "@/components/geo/GeoTargetingEngine";
+import { SitemapMonitor } from "@/components/geo/SitemapMonitor";
 import {
   LineChart,
   Line,
@@ -36,7 +39,8 @@ import {
   CheckCircle,
   AlertTriangle,
   RefreshCw,
-  LogOut
+  LogOut,
+  Globe
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -58,13 +62,16 @@ function AdminPage() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<"overview" | "users" | "listings" | "orders">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "users" | "listings" | "orders" | "ai-tools">("overview");
 
   // Search filter
   const [searchTerm, setSearchTerm] = useState("");
 
   // Sub-tab for listings
   const [listingSubTab, setListingSubTab] = useState<"restaurants" | "caterers" | "planners">("restaurants");
+
+  // Sub-tab for AI Tools
+  const [aiSubTab, setAiSubTab] = useState<"competitor" | "geo" | "sitemap">("sitemap");
 
   // Server functions
   const fetchOverview = useServerFn(getAdminOverview);
@@ -382,6 +389,17 @@ function AdminPage() {
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Orders & Bookings</span>
+          </button>
+          <button
+            onClick={() => { setActiveTab("ai-tools"); setSearchTerm(""); }}
+            className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "ai-tools"
+                ? "border-emerald-600 text-emerald-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            }`}
+          >
+            <Globe className="w-4 h-4" />
+            <span>AI Visibility & Tools</span>
           </button>
         </div>
 
@@ -874,6 +892,56 @@ function AdminPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 5: AI Tools */}
+        {activeTab === "ai-tools" && (
+          <div className="space-y-6">
+            <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-fit">
+              <button
+                onClick={() => setAiSubTab("sitemap")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  aiSubTab === "sitemap" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Sitemap Monitor
+              </button>
+              <button
+                onClick={() => setAiSubTab("competitor")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  aiSubTab === "competitor" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Competitor Intelligence
+              </button>
+              <button
+                onClick={() => setAiSubTab("geo")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  aiSubTab === "geo" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Geo-Targeting Engine
+              </button>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              {aiSubTab === "sitemap" && (
+                <div className="p-6 lg:p-8">
+                  <SitemapMonitor />
+                </div>
+              )}
+              {aiSubTab === "competitor" && (
+                <div className="p-6 lg:p-8">
+                  <CompetitorMonitor />
+                </div>
+              )}
+              {aiSubTab === "geo" && (
+                <div className="p-6 lg:p-8">
+                  <GeoTargetingEngine />
+                </div>
+              )}
             </div>
           </div>
         )}
