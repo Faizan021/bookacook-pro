@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider } from "../i18n/I18nProvider";
 import { CookieBanner } from "../components/CookieBanner";
+import { Analytics } from "@vercel/analytics/react";
 import { initPostHog } from "../utils/posthog";
 import posthog from "posthog-js";
 
@@ -203,6 +204,7 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CookieBanner />
+        <Analytics />
       </I18nProvider>
     </QueryClientProvider>
   );
