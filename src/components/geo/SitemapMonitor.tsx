@@ -499,22 +499,22 @@ export function SitemapMonitor() {
         </div>
       </div>
 
-      {/* ── Pending Indexing Queue ── */}
+      {/* ── Pending Sitemap Verification ── */}
       <div className="surface-card rounded-2xl border border-forest/10 bg-white overflow-hidden shadow-sm lg:col-span-12 xl:col-span-12 max-w-[420px] w-full">
         <div className="px-5 py-4 border-b border-forest/10 bg-gray-50/50">
           <h3 className="font-display text-lg font-semibold text-forest leading-tight flex items-center gap-2">
             <LinkIcon className="w-5 h-5 text-amber-600" />
-            Pending Sitemap Indexing
+            Pending Sitemap Verification
           </h3>
           <p className="text-xs text-forest/60 mt-1">
-            Published pages waiting to appear in the XML sitemap.
+            Published pages waiting to be verified in the XML sitemap.
           </p>
         </div>
         <div className="p-0 max-h-[400px] overflow-y-auto">
           {unindexedPages.length === 0 ? (
             <div className="p-8 flex flex-col items-center justify-center text-center">
               <CheckCircle className="w-8 h-8 text-emerald-400 mb-2 opacity-50" />
-              <p className="text-sm font-medium text-forest/50">All published pages are indexed.</p>
+              <p className="text-sm font-medium text-forest/50">All published pages are verified.</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-100">
@@ -537,7 +537,7 @@ export function SitemapMonitor() {
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-forest hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 rounded-lg transition-colors"
                     >
                       <Check className="w-3 h-3" />
-                      Mark Indexed
+                      Mark Verified
                     </button>
                   </div>
                 </div>
