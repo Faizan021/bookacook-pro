@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { Activity, RefreshCw, Globe, Clock, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { Activity, RefreshCw, Globe, Clock, FileText, CheckCircle, AlertCircle, Link as LinkIcon, Check } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getSeoDrafts } from "@/lib/admin/queries.functions";
+import { markSitemapIndexed } from "@/lib/admin/mutations.functions";
+import { toast } from "sonner";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -112,8 +117,32 @@ export function SitemapMonitor() {
   const [notification, setNotification] = useState<string | null>(null);
   const [isRunning, setIsRunning] = useState<boolean>(true);
 
+  const qc = useQueryClient();
+  const fetchDrafts = useServerFn(getSeoDrafts);
+  const markIndexedFn = useServerFn(markSitemapIndexed);
+
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const notifTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Fetch SEO Drafts
+  const { data: allDrafts = [] } = useQuery({
+    queryKey: ["admin", "seo-drafts"],
+    queryFn: () => fetchDrafts(),
+  });
+
+  const unindexedPages = allDrafts.filter((d: any) => d.status === 'published' && !d.sitemap_indexed);
+
+  const markIndexedMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await markIndexedFn({ data: { id, indexed: true } });
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin", "seo-drafts"] });
+      toast.success("Page marked as indexed in sitemap");
+      addLog("Manually verified page in sitemap", "success");
+    },
+    onError: (err: any) => toast.error(err.message)
+  });
 
   // ── Init on mount ──
   useEffect(() => {
@@ -265,7 +294,7 @@ export function SitemapMonitor() {
 
   // ─────────────────────────────────────────────────────────────────────────────
   return (
-    <>
+    <div className="flex flex-col xl:flex-row gap-6 items-start">
       {/* Shimmer + pulse keyframes */}
       <style>{`
         @keyframes shimmer {
@@ -469,6 +498,54 @@ export function SitemapMonitor() {
           )}
         </div>
       </div>
-    </>
+
+      {/* ── Pending Indexing Queue ── */}
+      <div className="surface-card rounded-2xl border border-forest/10 bg-white overflow-hidden shadow-sm lg:col-span-12 xl:col-span-12 max-w-[420px] w-full">
+        <div className="px-5 py-4 border-b border-forest/10 bg-gray-50/50">
+          <h3 className="font-display text-lg font-semibold text-forest leading-tight flex items-center gap-2">
+            <LinkIcon className="w-5 h-5 text-amber-600" />
+            Pending Sitemap Indexing
+          </h3>
+          <p className="text-xs text-forest/60 mt-1">
+            Published pages waiting to appear in the XML sitemap.
+          </p>
+        </div>
+        <div className="p-0 max-h-[400px] overflow-y-auto">
+          {unindexedPages.length === 0 ? (
+            <div className="p-8 flex flex-col items-center justify-center text-center">
+              <CheckCircle className="w-8 h-8 text-emerald-400 mb-2 opacity-50" />
+              <p className="text-sm font-medium text-forest/50">All published pages are indexed.</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {unindexedPages.map((page: any) => (
+                <div key={page.id} className="p-4 flex flex-col gap-2 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h4 className="text-sm font-semibold text-forest">{page.title}</h4>
+                      <p className="text-xs text-forest/60 mt-0.5">/{page.slug}</p>
+                    </div>
+                    <span className="px-2 py-1 bg-amber-100 text-amber-800 text-[10px] font-bold uppercase rounded-md tracking-wide flex-shrink-0">
+                      Pending
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+                    <span className="text-xs text-gray-500 font-medium">Published: {new Date(page.published_at || page.updated_at).toLocaleDateString()}</span>
+                    <button 
+                      onClick={() => markIndexedMutation.mutate(page.id)}
+                      disabled={markIndexedMutation.isPending}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-forest hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 rounded-lg transition-colors"
+                    >
+                      <Check className="w-3 h-3" />
+                      Mark Indexed
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

@@ -84,3 +84,108 @@ export const toggleListingPublish = createServerFn({ method: "POST" })
 
     return { success: true };
   });
+
+// SEO Content Pipeline
+export const saveSeoDraft = createServerFn({ method: "POST" })
+  .validator((d: { 
+    type: string; 
+    target_keyword: string; 
+    title: string; 
+    slug: string; 
+    meta_title: string; 
+    meta_description: string; 
+    content: string; 
+    cta_text: string; 
+    internal_links: string[]; 
+  }) => d)
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context, data }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const { error } = await supabaseAdmin
+      .from("seo_content_pages")
+      .insert({
+        ...data,
+        status: "draft",
+        last_edited_by: userId
+      });
+
+    if (error) throw new Error("Failed to save SEO draft: " + error.message);
+    return { success: true };
+  });
+
+export const updateSeoStatus = createServerFn({ method: "POST" })
+  .validator((d: { id: string; status: "draft" | "in_review" | "approved" | "published" | "rejected" | "archived" }) => d)
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context, data: { id, status } }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const updateData: any = { status, last_edited_by: userId };
+    if (status === "published") {
+      updateData.published_at = new Date().toISOString();
+    }
+
+    const { error } = await supabaseAdmin
+      .from("seo_content_pages")
+      .update(updateData)
+      .eq("id", id);
+
+    if (error) throw new Error(`Failed to update SEO status to ${status}: ` + error.message);
+    return { success: true };
+  });
+
+export const updateSeoContent = createServerFn({ method: "POST" })
+  .validator((d: { 
+    id: string; 
+    title: string; 
+    slug: string; 
+    meta_title: string; 
+    meta_description: string; 
+    content: string; 
+  }) => d)
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context, data }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const { error } = await supabaseAdmin
+      .from("seo_content_pages")
+      .update({
+        title: data.title,
+        slug: data.slug,
+        meta_title: data.meta_title,
+        meta_description: data.meta_description,
+        content: data.content,
+        last_edited_by: userId
+      })
+      .eq("id", data.id);
+
+    if (error) throw new Error("Failed to update SEO content: " + error.message);
+    return { success: true };
+  });
+
+export const markSitemapIndexed = createServerFn({ method: "POST" })
+  .validator((d: { id: string; indexed: boolean }) => d)
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context, data: { id, indexed } }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const { error } = await supabaseAdmin
+      .from("seo_content_pages")
+      .update({ sitemap_indexed: indexed })
+      .eq("id", id);
+
+    if (error) throw new Error("Failed to update sitemap indexed status: " + error.message);
+    return { success: true };
+  });

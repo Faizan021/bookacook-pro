@@ -19,6 +19,7 @@ import {
 import { CompetitorMonitor } from "@/components/geo/CompetitorMonitor";
 import { GeoTargetingEngine } from "@/components/geo/GeoTargetingEngine";
 import { SitemapMonitor } from "@/components/geo/SitemapMonitor";
+import { DraftReviewQueue } from "@/components/geo/DraftReviewQueue";
 import {
   LineChart,
   Line,
@@ -63,15 +64,11 @@ function AdminPage() {
 
   // Active Tab
   const [activeTab, setActiveTab] = useState<"overview" | "users" | "listings" | "orders" | "ai-tools">("overview");
-
-  // Search filter
+  const [aiSubTab, setAiSubTab] = useState<"drafts" | "sitemap" | "competitor" | "geo">("drafts");
   const [searchTerm, setSearchTerm] = useState("");
 
   // Sub-tab for listings
   const [listingSubTab, setListingSubTab] = useState<"restaurants" | "caterers" | "planners">("restaurants");
-
-  // Sub-tab for AI Tools
-  const [aiSubTab, setAiSubTab] = useState<"competitor" | "geo" | "sitemap">("sitemap");
 
   // Server functions
   const fetchOverview = useServerFn(getAdminOverview);
@@ -901,6 +898,14 @@ function AdminPage() {
           <div className="space-y-6">
             <div className="flex gap-2 p-1 bg-gray-100 rounded-lg w-fit">
               <button
+                onClick={() => setAiSubTab("drafts")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                  aiSubTab === "drafts" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Draft Review Queue
+              </button>
+              <button
                 onClick={() => setAiSubTab("sitemap")}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
                   aiSubTab === "sitemap" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
@@ -927,6 +932,11 @@ function AdminPage() {
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              {aiSubTab === "drafts" && (
+                <div className="p-6 lg:p-8">
+                  <DraftReviewQueue />
+                </div>
+              )}
               {aiSubTab === "sitemap" && (
                 <div className="p-6 lg:p-8">
                   <SitemapMonitor />

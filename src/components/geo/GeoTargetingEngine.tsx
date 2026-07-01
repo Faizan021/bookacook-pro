@@ -9,9 +9,12 @@ import {
   Download,
   CheckCircle2,
   ChevronDown,
-  Sparkles,
   BarChart3,
+  Save,
 } from 'lucide-react';
+import { useServerFn } from "@tanstack/react-start";
+import { saveSeoDraft } from "@/lib/admin/mutations.functions";
+import { toast } from "sonner";
 
 // ─────────────────────────────────────────────
 // Types
@@ -504,6 +507,8 @@ export function GeoTargetingEngine() {
   const [progress, setProgress] = useState(0);
   const [activeFilter, setActiveFilter] = useState<FilterTab>('all');
   const [copied, setCopied] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const saveDraft = useServerFn(saveSeoDraft);
 
   const updateForm = useCallback(
     (key: keyof FormState) => (value: string) => {
@@ -543,12 +548,36 @@ export function GeoTargetingEngine() {
     [pages],
   );
 
-  const handleCopyMarkdown = useCallback(async () => {
-    const md = pages.map(pageToMarkdown).join('\n');
-    await navigator.clipboard.writeText(md);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [pages]);
+  const handleSaveDrafts = useCallback(async () => {
+    setIsSaving(true);
+    let successCount = 0;
+    try {
+      for (const page of pages) {
+        const slug = `${form.serviceType}-${page.city.name}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        await saveDraft({
+          data: {
+            type: "geo",
+            target_keyword: page.city.name,
+            title: page.seoTitle,
+            slug: slug,
+            meta_title: page.seoTitle,
+            meta_description: page.metaDescription,
+            content: pageToMarkdown(page),
+            cta_text: page.ctaText,
+            internal_links: []
+          }
+        });
+        successCount++;
+      }
+      toast.success(`${successCount} drafts saved to Review Queue`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err: any) {
+      toast.error(`Error saving drafts: ${err.message}. Saved ${successCount}/${pages.length}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [pages, form]);
 
   const handleExportCSV = useCallback(() => {
     const csv = pagesToCSV(pages);
@@ -697,15 +726,16 @@ export function GeoTargetingEngine() {
               </div>
               <div className="ml-auto flex items-center gap-2 flex-wrap">
                 <button
-                  onClick={handleCopyMarkdown}
-                  className="inline-flex items-center gap-1.5 border border-forest/20 text-forest text-xs font-semibold px-3.5 py-2 rounded-lg hover:bg-forest/5 active:scale-95 transition-all"
+                  onClick={handleSaveDrafts}
+                  disabled={isSaving}
+                  className="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-xs font-semibold px-3.5 py-2 rounded-lg hover:bg-emerald-500 active:scale-95 transition-all disabled:opacity-50"
                 >
                   {copied ? (
-                    <CheckCircle2 size={13} className="text-green-500" />
+                    <CheckCircle2 size={13} className="text-white" />
                   ) : (
-                    <Copy size={13} />
+                    <Save size={13} />
                   )}
-                  {copied ? 'Kopiert!' : 'Als Markdown kopieren'}
+                  {copied ? 'Gespeichert!' : isSaving ? 'Speichere...' : 'In Entw\u00fcrfe speichern'}
                 </button>
                 <button
                   onClick={handleExportCSV}

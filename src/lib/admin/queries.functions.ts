@@ -316,3 +316,25 @@ export const getAdminOrders = createServerFn({ method: "GET" })
 
     return ordersList;
   });
+
+export const getSeoDrafts = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const { data, error } = await supabaseAdmin
+      .from("seo_content_pages")
+      .select(`
+        *,
+        author:last_edited_by (
+          email
+        )
+      `)
+      .order("updated_at", { ascending: false });
+
+    if (error) throw new Error("Failed to fetch SEO drafts: " + error.message);
+    return data;
+  });

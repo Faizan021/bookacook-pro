@@ -10,7 +10,11 @@ import {
   Clock,
   ChevronRight,
   Sparkles,
+  Save
 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { saveSeoDraft } from "@/lib/admin/mutations.functions";
+import { toast } from "sonner";
 
 // ─────────────────────────────────────────────
 // Types
@@ -239,18 +243,7 @@ function buildMarkdownPost(domain: string, data: CompetitorData): string {
 
   const weaknessList = data.weaknesses.map((w) => `- ${w}`).join("\n");
 
-  return `---
-title: "Alternative zu ${data.displayName}: Warum Restaurants zu Speisely wechseln"
-slug: alternative-zu-${slug}
-date: ${today}
-category: Wettbewerb
-tags: [alternative, ${slug}, catering, b2b, marketplace]
-description: >
-  ${data.displayName} ist eine ${data.category}-Lösung – aber für Gastronomen
-  und B2B-Kunden bietet Speisely klare Vorteile. Hier ist der vollständige
-  Vergleich.
----
-
+  return `
 # Alternative zu ${data.displayName} — Der ehrliche Vergleich (${new Date().getFullYear()})
 
 > **TL;DR:** ${data.displayName} richtet sich an ${data.targetAudience}.
@@ -470,6 +463,8 @@ export function CompetitorMonitor() {
   const [activeData, setActiveData] = useState<CompetitorData | null>(null);
   const [markdown, setMarkdown] = useState<string>("");
   const [copied, setCopied] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const saveDraft = useServerFn(saveSeoDraft);
   const [activeTab, setActiveTab] = useState<"preview" | "markdown">("preview");
   const [unknownDomain, setUnknownDomain] = useState(false);
 
@@ -568,13 +563,34 @@ export function CompetitorMonitor() {
     }, 1500);
   }, []);
 
-  const handleCopy = useCallback(() => {
-    if (!markdown) return;
-    navigator.clipboard.writeText(markdown).then(() => {
-      setCopied(true);
+  const handleSaveDraft = useCallback(async () => {
+    if (!activeData || !activeDomain || !markdown) return;
+    
+    setIsSaving(true);
+    try {
+      const slug = activeDomain.replace(/\./g, "-");
+      await saveDraft({
+        data: {
+          type: "competitor",
+          target_keyword: activeDomain,
+          title: `Alternative zu ${activeData.displayName}: Warum Restaurants zu Speisely wechseln`,
+          slug: `alternative-zu-${slug}`,
+          meta_title: `Alternative zu ${activeData.displayName} für B2B Catering`,
+          meta_description: `${activeData.displayName} ist eine ${activeData.category}-Lösung – aber für Gastronomen und B2B-Kunden bietet Speisely klare Vorteile. Hier ist der Vergleich.`,
+          content: markdown,
+          cta_text: activeData.ctaHeadline,
+          internal_links: []
+        }
+      });
+      toast.success("Draft saved successfully to the Review Queue");
+      setCopied(true); // Re-using copied state for success UI
       setTimeout(() => setCopied(false), 2000);
-    });
-  }, [markdown]);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save draft");
+    } finally {
+      setIsSaving(false);
+    }
+  }, [activeData, activeDomain, markdown]);
 
   const speiselyWinCount =
     activeData?.comparisonRows.filter((r) => r.speiselyWins).length ?? 0;
@@ -850,8 +866,9 @@ export function CompetitorMonitor() {
                       </span>
                     </div>
                     <button
-                      onClick={handleCopy}
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                      onClick={handleSaveDraft}
+                      disabled={isSaving}
+                      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition disabled:opacity-50 ${
                         copied
                           ? "bg-emerald-500 text-white"
                           : "bg-emerald-600 text-white hover:bg-emerald-500"
@@ -860,12 +877,12 @@ export function CompetitorMonitor() {
                       {copied ? (
                         <>
                           <Check size={12} />
-                          Copied!
+                          Saved!
                         </>
                       ) : (
                         <>
-                          <ClipboardCopy size={12} />
-                          Copy to Clipboard
+                          <Save size={12} />
+                          {isSaving ? "Saving..." : "Save Draft"}
                         </>
                       )}
                     </button>
@@ -876,11 +893,12 @@ export function CompetitorMonitor() {
                 </div>
               )}
 
-              {/* Copy button (always visible below) */}
+              {/* Save button (always visible below) */}
               <div className="flex justify-end">
                 <button
-                  onClick={handleCopy}
-                  className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm transition ${
+                  onClick={handleSaveDraft}
+                  disabled={isSaving}
+                  className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm transition disabled:opacity-50 ${
                     copied
                       ? "bg-emerald-500 text-white"
                       : "bg-forest text-white hover:opacity-90"
@@ -889,12 +907,12 @@ export function CompetitorMonitor() {
                   {copied ? (
                     <>
                       <Check size={15} />
-                      Copied to Clipboard!
+                      Saved to Draft Queue
                     </>
                   ) : (
                     <>
-                      <ClipboardCopy size={15} />
-                      Copy Markdown to Clipboard
+                      <Save size={15} />
+                      {isSaving ? "Saving..." : "Save to Draft Queue"}
                     </>
                   )}
                 </button>
