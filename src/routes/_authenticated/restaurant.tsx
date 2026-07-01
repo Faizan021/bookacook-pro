@@ -48,8 +48,12 @@ import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner
 import { CommunicationPreferences } from "@/components/vendor/CommunicationPreferences";
 import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
 import { SubscriptionTermsModal } from "@/components/vendor/SubscriptionTermsModal";
+import { CompetitorMonitor } from "@/components/geo/CompetitorMonitor";
+import { GeoTargetingEngine } from "@/components/geo/GeoTargetingEngine";
+import { SitemapMonitor } from "@/components/geo/SitemapMonitor";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
+
 
 export const Route = createFileRoute("/_authenticated/restaurant")({
   ssr: false,
@@ -991,8 +995,13 @@ function OverviewSection() {
                 );
               })}
             </div>
-          )}
         </div>
+      </div>
+
+      {/* SECTION 4: AI VISIBILITY MONITOR */}
+      <div className="space-y-4">
+        <h2 className="font-display text-xl text-forest">{tt("KI-Sichtbarkeit", "AI Visibility")}</h2>
+        <SitemapMonitor />
       </div>
     </section>
   );
@@ -2358,11 +2367,22 @@ function RestaurantDashboardInner() {
       {currentTab === "reservations" && <ReservationsSection />}
       {currentTab === "menu" && <ProductsSection />}
       {currentTab === "promotions" && <PromotionsSection vertical="restaurants" />}
+      {currentTab === "competitor-monitor" && (
+        <div className="p-6 lg:p-8 max-w-5xl mx-auto w-full">
+          <CompetitorMonitor />
+        </div>
+      )}
+      {currentTab === "geo-targeting" && (
+        <div className="p-6 lg:p-8 max-w-6xl mx-auto w-full">
+          <GeoTargetingEngine />
+        </div>
+      )}
       {currentTab.startsWith("settings-") && (
         <SettingsShell activeSubtab={currentTab} restaurant={q.data.restaurant} />
       )}
     </VendorLayout>
   );
+
 }
 
 function RestaurantDashboard() {

@@ -14,7 +14,10 @@ import {
   LogOut,
   Store,
   CreditCard,
+  Globe,
+  MapPin,
 } from "lucide-react";
+
 
 interface VendorLayoutProps {
   children: React.ReactNode;
@@ -42,6 +45,8 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
       { id: "reservations", label: tt("Reservierungen", "Reservations"), icon: CalendarDays },
       { id: "menu", label: tt("Speisekarte", "Menu"), icon: UtensilsCrossed },
       { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },
+      { id: "competitor-monitor", label: tt("KI-Sichtbarkeit", "AI Visibility"), icon: Globe },
+      { id: "geo-targeting", label: tt("Geo-Targeting", "Geo-Targeting"), icon: MapPin },
       { id: "settings-billing", label: tt("Abonnement", "Subscription"), icon: CreditCard },
       { id: "settings-general", label: tt("Einstellungen", "Settings"), icon: Settings },
     ],
