@@ -87,15 +87,6 @@ function SpeiselyFacts() {
     { icon: <MapPin className="h-5 w-5" />, title: t("Lokale Communities", "Local Communities"), desc: t("Die lokale Restaurants und Caterer in ihrer Region entdecken und unterstützen möchten.", "Wanting to discover and support local restaurants and caterers.") },
   ];
 
-  const comparisons = [
-    { feature: t("Provision pro Bestellung", "Order Commission"), speisely: t("0% (Pauschalabo)", "0% (Flat subscription)"), food: "Variable", mealprep: "Variable", lieferando: "13–30%" },
-    { feature: t("Catering-Marktplatz", "Catering Marketplace"), speisely: "✓", food: "✗", mealprep: t("Begrenzt", "Limited"), lieferando: "✗" },
-    { feature: t("Event-Planung CRM", "Event Planning CRM"), speisely: "✓", food: "✗", mealprep: "✗", lieferando: "✗" },
-    { feature: t("Direktzahlung", "Direct Payouts"), speisely: t("✓ (Stripe/PayPal)", "✓ (Stripe/PayPal)"), food: "✗", mealprep: "✗", lieferando: "✗" },
-    { feature: t("Kundendaten-Eigentum", "Customer Data Ownership"), speisely: "✓", food: "✗", mealprep: "✗", lieferando: "✗" },
-    { feature: t("Custom Domain Support", "Custom Domain Support"), speisely: "✓", food: "✗", mealprep: "✗", lieferando: "✗" },
-  ];
-
   return (
     <SiteShell>
       {/* Hero */}
@@ -182,51 +173,6 @@ function SpeiselyFacts() {
               <MapPin className="h-3.5 w-3.5" /> {r}
             </span>
           ))}
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section className="bg-cream/50 py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-10">
-          <h2 className="text-3xl font-display font-bold text-forest text-center mb-4">
-            {t("Feature-Übersicht", "Feature Overview")}
-          </h2>
-          <p className="text-center text-forest/70 mb-10 max-w-xl mx-auto">
-            {t(
-              "Wie sich Speisely im Vergleich zu anderen deutschen Plattformen positioniert.",
-              "How Speisely compares to other platforms operating in Germany."
-            )}
-          </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr className="border-b border-forest/15">
-                  <th className="text-left py-3 px-4 font-semibold text-forest">{t("Feature", "Feature")}</th>
-                  <th className="py-3 px-4 font-bold text-forest bg-forest/5 rounded-t-lg">Speisely</th>
-                  <th className="py-3 px-4 font-semibold text-forest/60">food.de</th>
-                  <th className="py-3 px-4 font-semibold text-forest/60">mealprep.de</th>
-                  <th className="py-3 px-4 font-semibold text-forest/60">Lieferando</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisons.map((row, i) => (
-                  <tr key={row.feature} className={i % 2 === 0 ? "bg-white" : ""}>
-                    <td className="py-3 px-4 text-forest/80 font-medium">{row.feature}</td>
-                    <td className="py-3 px-4 text-center font-semibold text-forest bg-forest/5">{row.speisely}</td>
-                    <td className="py-3 px-4 text-center text-forest/50">{row.food}</td>
-                    <td className="py-3 px-4 text-center text-forest/50">{row.mealprep}</td>
-                    <td className="py-3 px-4 text-center text-forest/50">{row.lieferando}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="text-center text-xs text-forest/40 mt-4">
-            {t(
-              `Vergleich basiert auf öffentlich zugänglichen Informationen und Produktmaterialien, zuletzt geprüft am ${TODAY}.`,
-              `Comparison based on publicly available information and product materials, last checked on ${TODAY}.`
-            )}
-          </p>
         </div>
       </section>
 
