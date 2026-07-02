@@ -25,7 +25,7 @@ export function SiteFooter() {
           items={[
             { label: t("nav.instant"), to: "/instant-order" },
             { label: t("nav.catering"), to: "/catering" },
-            { label: "Event-Planer", to: "/planner" },
+            { label: t("Event-Planer", "Event Planner"), to: "/planner" },
             { label: "FAQ", to: "/faq" },
             { label: "Blog", to: "/blog" },
           ]}
@@ -38,7 +38,7 @@ export function SiteFooter() {
           </h4>
           <ul className="space-y-2.5 text-sm">
             <FooterLink to="/partners" label={t("nav.partners")} />
-            <FooterLink to="/speisely" label={t("Was ist Speisely?")} />
+            <FooterLink to="/speisely" label={t("Was ist Speisely?", "What is Speisely?")} />
             <FooterLink to="/about" label={t("nav.about")} />
             <FooterLink to="/" label="Success Stories" />
             <FooterLink to="/" label="Careers" />
