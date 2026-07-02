@@ -190,7 +190,7 @@ function RootComponent() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && import.meta.env.VITE_POSTHOG_KEY) {
+    if (typeof window !== "undefined") {
       posthog.capture("$pageview", {
         $current_url: window.location.href,
         $pathname: pathname,

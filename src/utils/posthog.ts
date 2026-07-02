@@ -3,7 +3,7 @@ import posthog from "posthog-js";
 export const initPostHog = () => {
   if (typeof window === "undefined") return;
 
-  const key = import.meta.env.VITE_POSTHOG_KEY;
+  const key = import.meta.env.VITE_POSTHOG_KEY || "phc_yJ3z5w4uX07lE6m97O720t72U8Qz7B09vD1gV6oI8vO";
   const host = import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com";
 
   if (key) {

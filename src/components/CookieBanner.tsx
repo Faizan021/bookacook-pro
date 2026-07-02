@@ -17,7 +17,7 @@ export function CookieBanner() {
 
   const handleAcceptAll = () => {
     localStorage.setItem("speisely-cookie-consent", "accepted");
-    if (typeof window !== "undefined" && import.meta.env.VITE_POSTHOG_KEY) {
+    if (typeof window !== "undefined") {
       posthog.opt_in_capturing();
       posthog.startSessionRecording();
       // Track the landing pageview that was blocked prior to opt-in
@@ -31,7 +31,7 @@ export function CookieBanner() {
 
   const handleCustomize = () => {
     localStorage.setItem("speisely-cookie-consent", "declined");
-    if (typeof window !== "undefined" && import.meta.env.VITE_POSTHOG_KEY) {
+    if (typeof window !== "undefined") {
       posthog.opt_out_capturing();
       posthog.stopSessionRecording();
     }
