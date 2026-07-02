@@ -75,7 +75,7 @@ export function SiteHeader() {
 
   const headerBg = isHome && !scrolled
     ? "bg-transparent border-transparent"
-    : "bg-[oklch(0.93_0.05_152/0.85)] backdrop-blur-md border-b border-[oklch(0.85_0.05_152)]";
+    : "bg-cream/95 backdrop-blur-md border-b border-forest/10";
 
   return (
     <header className={`sticky top-0 z-40 transition-colors duration-300 ${headerBg}`}>
