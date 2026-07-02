@@ -20,7 +20,7 @@ export const Route = createFileRoute("/auth")({
     message: typeof s.message === "string" ? (s.message as string) : undefined,
     logout: typeof s.logout === "string" ? (s.logout as string) : undefined,
   }),
-  head: () => ({ meta: [{ title: "Login — Speisely" }] }),
+  head: () => ({ meta: [{ title: "Login — Speisely" }, { name: "robots", content: "noindex" }] }),
   component: AuthPage,
 });
 

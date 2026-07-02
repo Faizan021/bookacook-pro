@@ -517,7 +517,7 @@ export const blogPosts: BlogPost[] = [
         <p>Einige Planer bieten feste Pakete an. Ein "Day-of-Coordination" Paket (nur die Betreuung am Tag der Veranstaltung) kostet oft zwischen 800 € und 1.500 €.</p>
         
         <h3>Warum lohnt sich die Investition in einen Eventplaner?</h3>
-        <p>Auch wenn die Kosten zunächst hoch erscheinen, sparen professionelle Eventplaner oft Zeit und Geld. Sie verhandeln bessere Konditionen mit Dienstleistern, vermeiden teure Anfängerfehler und garantieren einen stressfreien Ablauf. Für weitere Details zur Organisation lies auch <a href="/blog/plan-perfect-corporate-event-berlin-munich">unseren Event-Guide</a>.</p>
+        <p>Auch wenn die Kosten zunächst hoch erscheinen, sparen professionelle Eventplaner oft Zeit und Geld. Sie verhandeln bessere Konditionen mit Dienstleistern, vermeiden teure Anfängerfehler und garantieren einen stressfreien Ablauf. Für weitere Details zur Organisation lies auch <a href="/blog/plan-perfect-corporate-event-germany">unseren Event-Guide</a>.</p>
         <p>Finden Sie auf <a href="/planner">Speisely</a> geprüfte Eventplaner in Ihrer Nähe und vergleichen Sie transparente Angebote.</p>
       `,
       en: `

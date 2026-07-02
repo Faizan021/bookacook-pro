@@ -38,6 +38,7 @@ export function SiteFooter() {
           </h4>
           <ul className="space-y-2.5 text-sm">
             <FooterLink to="/partners" label={t("nav.partners")} />
+            <FooterLink to="/speisely" label={t("Was ist Speisely?")} />
             <FooterLink to="/about" label={t("nav.about")} />
             <FooterLink to="/" label="Success Stories" />
             <FooterLink to="/" label="Careers" />
