@@ -272,6 +272,10 @@ function SpeiselyFacts() {
               </tbody>
             </table>
           </div>
+          <p className="text-center text-xs text-forest/40 mt-4">
+            Comparison based on publicly available information and product materials, last checked on {TODAY}.<br />
+            (Vergleich basiert auf öffentlich zugänglichen Informationen und Produktmaterialien, zuletzt geprüft am {TODAY}.)
+          </p>
         </div>
       </section>
 
