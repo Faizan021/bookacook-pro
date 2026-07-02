@@ -3,6 +3,12 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/signup/customer", "destination": "/auth?signup=customer", "permanent": true },
+    { "source": "/signup/caterer", "destination": "/auth?signup=caterer", "permanent": true },
+    { "source": "/signup", "destination": "/auth", "permanent": true },
+    { "source": "/caterers", "destination": "/catering", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
