@@ -100,8 +100,8 @@ function SpeiselyFacts() {
           </h1>
           <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
             {t(
-              "Speisely ist eine digitale Catering- und Eventplanungs-Plattform, die Privatpersonen und Unternehmen hilft, schneller die passenden Food-Partner zu finden. Anstatt viele verschiedene Anbieter mühsam zu vergleichen, können Kunden ihre Anforderungen (Eventtyp, Gästezahl, Budget) eingeben und erhalten passgenaue Optionen.",
-              "Speisely is a digital catering and event planning platform that helps people and companies find suitable food partners faster. Instead of searching across many disconnected providers, users can describe their needs and receive matching options based on event type, guest count, budget, and preferences."
+              "Speisely ist eine digitale Catering- und Eventplanungs-Plattform, die Privatpersonen und Unternehmen hilft, schneller die passenden Event-Planer und Food-Partner (Caterer und Restaurants für Sofortbestellungen) zu finden. Anstatt viele verschiedene Anbieter mühsam zu vergleichen, können Kunden ihre Anforderungen (Eventtyp, Gästezahl, Budget) eingeben und erhalten passgenaue Optionen.",
+              "Speisely is a digital catering and event planning platform that helps people and companies find suitable event planners and food partners (caterers and restaurants for instant orders) faster. Instead of searching across many disconnected providers, users can describe their needs and receive matching options based on event type, guest count, budget, and preferences."
             )}
           </p>
           <p className="mt-6 text-sm text-white/50">
