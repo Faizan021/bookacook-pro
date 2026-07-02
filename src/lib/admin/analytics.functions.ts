@@ -21,7 +21,8 @@ async function fetchPostHog(path: string, payload: any) {
 
   if (!response.ok) {
     const err = await response.text();
-    throw new Error(`PostHog API Error: ${response.status} - ${err}`);
+    const maskedKey = apiKey ? apiKey.substring(0, 10) + "..." : "missing";
+    throw new Error(`[Debug] Host: ${host} | Key: ${maskedKey} | PostHog API Error: ${response.status} - ${err}`);
   }
 
   return await response.json();
