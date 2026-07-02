@@ -4,7 +4,7 @@ export const initPostHog = () => {
   if (typeof window === "undefined") return;
 
   const key = import.meta.env.VITE_POSTHOG_KEY;
-  const host = import.meta.env.VITE_POSTHOG_HOST || "https://eu.i.posthog.com";
+  const host = import.meta.env.VITE_POSTHOG_HOST || "https://us.i.posthog.com";
 
   if (key) {
     posthog.init(key, {

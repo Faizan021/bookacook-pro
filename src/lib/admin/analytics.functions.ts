@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 async function fetchPostHog(path: string, payload: any) {
   const projectId = process.env.POSTHOG_PROJECT_ID;
   const apiKey = process.env.POSTHOG_PERSONAL_API_KEY;
-  const host = process.env.POSTHOG_HOST || "https://eu.posthog.com";
+  const host = process.env.POSTHOG_HOST || "https://us.posthog.com";
 
   if (!projectId || !apiKey) {
     throw new Error("Missing PostHog configuration. Please ensure POSTHOG_PROJECT_ID and POSTHOG_PERSONAL_API_KEY are set.");
