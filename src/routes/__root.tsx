@@ -170,7 +170,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
-        <meta name="ahrefs-site-verification" content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6">
+        <meta name="ahrefs-site-verification" content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6" />
         <link rel="canonical" href={canonicalUrl} />
         <script src="https://analytics.ahrefs.com/analytics.js" data-key="m0ja41AgfTD2NuyNepW+LA" async></script>
       </head>

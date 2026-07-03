@@ -78,3 +78,58 @@ The Speisely Team
 
     return { success: true };
   });
+
+export const sendContactEmail = createServerFn({ method: "POST" })
+  .validator((input: { name: string; email: string; message: string }) =>
+    z.object({
+      name: z.string().min(1, "Name is required"),
+      email: z.string().email("Valid email is required"),
+      message: z.string().min(10, "Message must be at least 10 characters")
+    }).parse(input)
+  )
+  .handler(async ({ data }) => {
+    const subject = `New Contact Form Submission from ${data.name}`;
+    const text = `
+You have received a new message from the Speisely Contact Form.
+
+Name: ${data.name}
+Email: ${data.email}
+
+Message:
+${data.message}
+    `.trim();
+
+    const html = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #16372f;">
+        <h2 style="color: #16372f;">New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${data.name}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <hr style="border: none; border-top: 1px solid #eadfce; margin: 20px 0;" />
+        <p><strong>Message:</strong></p>
+        <p style="white-space: pre-wrap;">${data.message}</p>
+        <hr style="border: none; border-top: 1px solid #eadfce; margin: 30px 0;" />
+        <p style="font-size: 12px; color: #999;">Sent from the Speisely.de Contact Form.</p>
+      </div>
+    `;
+
+    if (resend) {
+      try {
+        await resend.emails.send({
+          from: "Speisely Contact <noreply@speisely.de>",
+          to: "faizan.ahmed01213@gmail.com",
+          reply_to: data.email,
+          subject,
+          text,
+          html,
+        });
+        console.log(`[Email] Contact form submitted by ${data.email}`);
+      } catch (err: any) {
+        console.error(`[Email Error] Failed to send contact email: ${err?.code ?? err?.message ?? "unknown"}`);
+        throw new Error("Failed to send message. Please try again later.");
+      }
+    } else {
+      console.log(`[Email Dev] Contact form email NOT sent (no Resend key) from ${data.email}. Message: ${data.message}`);
+    }
+
+    return { success: true };
+  });

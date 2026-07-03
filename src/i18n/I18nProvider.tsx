@@ -9,6 +9,7 @@ const dict: Dict = {
   "nav.catering": { de: "Catering", en: "Catering" },
   "nav.partners": { de: "Für Partner", en: "For partners" },
   "nav.about": { de: "Über uns", en: "About Us" },
+  "nav.contact": { de: "Kontakt", en: "Contact" },
   "nav.register": { de: "Registrieren", en: "Register" },
 
   "home.eyebrow": { de: "Ein Marktplatz. Drei Wege zu genießen.", en: "One marketplace. Three ways to enjoy." },

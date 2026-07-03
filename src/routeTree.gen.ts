@@ -20,6 +20,7 @@ import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as InstantOrderRouteImport } from './routes/instant-order'
 import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -101,6 +102,11 @@ const ImpressumRoute = ImpressumRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CateringRoute = CateringRouteImport.update({
@@ -252,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/catering': typeof CateringRouteWithChildren
+  '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
   '/instant-order': typeof InstantOrderRoute
@@ -290,6 +297,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
   '/instant-order': typeof InstantOrderRoute
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/catering': typeof CateringRouteWithChildren
+  '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
   '/instant-order': typeof InstantOrderRoute
@@ -371,6 +380,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/catering'
+    | '/contact'
     | '/faq'
     | '/impressum'
     | '/instant-order'
@@ -409,6 +419,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/auth'
+    | '/contact'
     | '/faq'
     | '/impressum'
     | '/instant-order'
@@ -448,6 +459,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/auth'
     | '/catering'
+    | '/contact'
     | '/faq'
     | '/impressum'
     | '/instant-order'
@@ -489,6 +501,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   CateringRoute: typeof CateringRouteWithChildren
+  ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   ImpressumRoute: typeof ImpressumRoute
   InstantOrderRoute: typeof InstantOrderRoute
@@ -587,6 +600,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering': {
@@ -855,6 +875,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   CateringRoute: CateringRouteWithChildren,
+  ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   ImpressumRoute: ImpressumRoute,
   InstantOrderRoute: InstantOrderRoute,

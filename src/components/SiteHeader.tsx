@@ -57,6 +57,7 @@ export function SiteHeader() {
     { to: "/planner", label: "Event Planner" },
     { to: "/partners", label: t("nav.partners") },
     { to: "/about", label: t("nav.about") },
+    { to: "/contact", label: t("nav.contact") },
     { to: "/blog", label: "Blog" },
   ];
 
