@@ -171,6 +171,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <link rel="canonical" href={canonicalUrl} />
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="m0ja41AgfTD2NuyNepW+LA" async></script>
       </head>
       <body>
         {children}
