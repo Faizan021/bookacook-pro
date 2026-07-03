@@ -46,7 +46,7 @@ export function SiteFooter() {
           </ul>
           <div className="mt-5 flex gap-3">
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/company/speisely"
               target="_blank"
               rel="noreferrer"
               aria-label="LinkedIn"
