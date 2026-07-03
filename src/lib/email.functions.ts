@@ -80,21 +80,25 @@ The Speisely Team
   });
 
 export const sendContactEmail = createServerFn({ method: "POST" })
-  .validator((input: { name: string; email: string; message: string }) =>
+  .validator((input: { name: string; email: string; message: string; reason: string; company?: string; phone?: string }) =>
     z.object({
       name: z.string().min(1, "Name is required"),
       email: z.string().email("Valid email is required"),
+      reason: z.string().min(1, "Contact reason is required"),
+      company: z.string().optional(),
+      phone: z.string().optional(),
       message: z.string().min(10, "Message must be at least 10 characters")
     }).parse(input)
   )
   .handler(async ({ data }) => {
-    const subject = `New Contact Form Submission from ${data.name}`;
+    const subject = `[${data.reason}] Contact Form Submission from ${data.name}`;
     const text = `
 You have received a new message from the Speisely Contact Form.
 
+Reason: ${data.reason}
 Name: ${data.name}
 Email: ${data.email}
-
+${data.company ? `Company: ${data.company}\n` : ""}${data.phone ? `Phone: ${data.phone}\n` : ""}
 Message:
 ${data.message}
     `.trim();
@@ -102,8 +106,11 @@ ${data.message}
     const html = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #16372f;">
         <h2 style="color: #16372f;">New Contact Form Submission</h2>
+        <p><strong>Reason:</strong> <span style="background-color: #eadfce; padding: 4px 8px; border-radius: 4px;">${data.reason}</span></p>
         <p><strong>Name:</strong> ${data.name}</p>
         <p><strong>Email:</strong> ${data.email}</p>
+        ${data.company ? `<p><strong>Company:</strong> ${data.company}</p>` : ""}
+        ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ""}
         <hr style="border: none; border-top: 1px solid #eadfce; margin: 20px 0;" />
         <p><strong>Message:</strong></p>
         <p style="white-space: pre-wrap;">${data.message}</p>

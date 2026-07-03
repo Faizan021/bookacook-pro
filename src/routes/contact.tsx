@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Mail, MessageSquare, User, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, MessageSquare, User, Send, CheckCircle2, AlertCircle, Building2, Phone, ChevronDown } from "lucide-react";
 import { sendContactEmail } from "@/lib/email.functions";
 
 export const Route = createFileRoute("/contact")({
@@ -25,10 +25,13 @@ function ContactRoute() {
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
+    const reason = formData.get("reason") as string;
+    const company = formData.get("company") as string;
+    const phone = formData.get("phone") as string;
     const message = formData.get("message") as string;
 
     try {
-      const result = await sendContactEmail({ data: { name, email, message } });
+      const result = await sendContactEmail({ data: { name, email, reason, company, phone, message } });
       if (result.success) {
         setSuccess(true);
         (e.target as HTMLFormElement).reset();
@@ -52,7 +55,7 @@ function ContactRoute() {
               {tt("Lassen Sie uns reden", "Let's get in touch")}
             </h1>
             <p className="text-forest/80 text-lg max-w-xl mx-auto">
-              {tt("Haben Sie Fragen zu unseren Catering-Partnern oder möchten Sie Event-Planer werden? Schreiben Sie uns eine Nachricht.", "Have questions about our catering partners or want to become an event planner? Send us a message.")}
+              {tt("Haben Sie Fragen zu unseren Partnerprogrammen für Restaurants, Caterer oder Event-Planer? Schreiben Sie uns eine Nachricht.", "Have questions about our partner programs for restaurants, caterers, or event planners? Send us a message.")}
             </p>
           </div>
 
@@ -83,6 +86,28 @@ function ContactRoute() {
                     <p className="text-sm">{error}</p>
                   </div>
                 )}
+
+                <div className="space-y-2">
+                  <label htmlFor="reason" className="text-sm font-medium text-forest block">
+                    {tt("Betreff / Grund", "Contact Reason")}
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="reason"
+                      id="reason"
+                      required
+                      className="block w-full px-4 py-3 bg-[oklch(0.97_0.02_92)]/50 border border-forest/10 rounded-xl focus:ring-2 focus:ring-forest focus:border-forest transition outline-none text-forest appearance-none"
+                    >
+                      <option value="">{tt("Bitte wählen...", "Please select...")}</option>
+                      <option value="Join Speisely">{tt("Speisely beitreten (Restaurants, Caterer, Planer)", "Join Speisely (Restaurants, Caterers, Planners)")}</option>
+                      <option value="Support or Complaint">{tt("Support oder Beschwerde", "Support or Complaint")}</option>
+                      <option value="Partnership or Promotion">{tt("Partnerschaft oder Promotion", "Partnership or Promotion")}</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                      <ChevronDown className="h-5 w-5 text-forest/40" />
+                    </div>
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -119,6 +144,44 @@ function ContactRoute() {
                         required
                         className="block w-full pl-11 pr-4 py-3 bg-[oklch(0.97_0.02_92)]/50 border border-forest/10 rounded-xl focus:ring-2 focus:ring-forest focus:border-forest transition outline-none text-forest"
                         placeholder={tt("ihre@email.de", "your@email.com")}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="company" className="text-sm font-medium text-forest block">
+                      {tt("Unternehmen (optional)", "Company (optional)")}
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <Building2 className="h-5 w-5 text-forest/40" />
+                      </div>
+                      <input
+                        type="text"
+                        name="company"
+                        id="company"
+                        className="block w-full pl-11 pr-4 py-3 bg-[oklch(0.97_0.02_92)]/50 border border-forest/10 rounded-xl focus:ring-2 focus:ring-forest focus:border-forest transition outline-none text-forest"
+                        placeholder={tt("Ihr Unternehmen", "Your company")}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="phone" className="text-sm font-medium text-forest block">
+                      {tt("Telefonnummer (optional)", "Phone (optional)")}
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <Phone className="h-5 w-5 text-forest/40" />
+                      </div>
+                      <input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        className="block w-full pl-11 pr-4 py-3 bg-[oklch(0.97_0.02_92)]/50 border border-forest/10 rounded-xl focus:ring-2 focus:ring-forest focus:border-forest transition outline-none text-forest"
+                        placeholder={tt("+49 123 456789", "+49 123 456789")}
                       />
                     </div>
                   </div>
