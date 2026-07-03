@@ -80,30 +80,30 @@ export function SiteHeader() {
 
   return (
     <header className={`sticky top-0 z-40 transition-colors duration-300 ${headerBg}`}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 h-16 sm:h-20 grid grid-cols-[auto_1fr_auto] items-center gap-2 lg:gap-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
         <Link to="/" className="shrink-0"><SpeiselyLogo /></Link>
 
-        <nav className="hidden md:flex flex-wrap items-center justify-center gap-0.5 lg:gap-1">
+        <nav className="hidden md:flex items-center justify-center gap-1 lg:gap-2 overflow-hidden">
           {navItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-medium text-forest/80 hover:text-forest transition-colors whitespace-nowrap"
-              activeProps={{ className: "px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-medium bg-cream text-forest shadow-sm whitespace-nowrap" }}
+              className="px-2.5 py-1.5 rounded-full text-sm font-medium text-forest/80 hover:text-forest transition-colors whitespace-nowrap"
+              activeProps={{ className: "px-2.5 py-1.5 rounded-full text-sm font-medium bg-cream text-forest shadow-sm whitespace-nowrap" }}
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0 justify-end">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <LanguageToggle />
           <div className="hidden sm:flex items-center gap-2">
             {isLoggedIn ? (
               <DropdownMenu>
-                <DropdownMenuTrigger className="inline-flex items-center gap-1.5 justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium hover:opacity-90 transition outline-none ring-0">
+                <DropdownMenuTrigger className="inline-flex items-center gap-1.5 justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 text-sm font-medium hover:opacity-90 transition outline-none ring-0">
                   <User className="h-4 w-4" />
-                  <span>Mein Konto</span>
+                  <span className="hidden lg:inline">Mein Konto</span>
                   <ChevronDown className="h-3 w-3 opacity-70" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48 bg-white border border-[#e2e8e4] rounded-xl shadow-lg p-1">
@@ -139,14 +139,14 @@ export function SiteHeader() {
                 <Link
                   to="/auth"
                   search={{ signup: undefined }}
-                  className="inline-flex items-center justify-center rounded-full border border-forest/20 px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium text-forest hover:bg-cream transition"
+                  className="inline-flex items-center justify-center rounded-full border border-forest/20 px-3 py-1.5 text-sm font-medium text-forest hover:bg-cream transition whitespace-nowrap"
                 >
                   {tt("Anmelden", "Sign in")}
                 </Link>
                 <Link
                   to="/auth"
                   search={{ signup: "partner" }}
-                  className="inline-flex items-center justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium hover:opacity-90 transition"
+                  className="inline-flex items-center justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 text-sm font-medium hover:opacity-90 transition whitespace-nowrap"
                 >
                   {tt("Registrieren", "Register")}
                 </Link>
