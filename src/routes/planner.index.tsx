@@ -28,6 +28,8 @@ import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { TrustSection } from "@/components/TrustSection";
 import { SiteShell } from "@/components/SiteShell";
 
+import { z } from "zod";
+
 export const Route = createFileRoute("/planner/")({
   head: () => ({
     meta: [
@@ -48,6 +50,9 @@ export const Route = createFileRoute("/planner/")({
     links: [
       { rel: "preload", href: "/planner-clean.png", as: "image", fetchpriority: "high" },
     ],
+  }),
+  validateSearch: z.object({
+    q: z.string().optional(),
   }),
   loader: async () => await getPlanners(),
   component: PlannerPage,

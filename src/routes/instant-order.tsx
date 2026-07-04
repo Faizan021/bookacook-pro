@@ -8,6 +8,8 @@ import { getRestaurants, type Dietary, type Restaurant } from "@/data/restaurant
 import { TrustSection } from "@/components/TrustSection";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 
+import { z } from "zod";
+
 export const Route = createFileRoute("/instant-order")({
   head: () => ({
     meta: [
@@ -18,6 +20,9 @@ export const Route = createFileRoute("/instant-order")({
       { property: "og:url", content: "/instant-order" },
     ],
     links: [{ rel: "canonical", href: "/instant-order" }],
+  }),
+  validateSearch: z.object({
+    q: z.string().optional(),
   }),
   loader: async () => await getRestaurants(),
   component: InstantOrder,
@@ -33,13 +38,14 @@ const parseMinutes = (s: string) => {
 const parseFee = (s: string) => parseFloat(s.replace(/[^\d.]/g, "")) || 0;
 
 function InstantOrder() {
+  const search = Route.useSearch();
   const restaurants = Route.useLoaderData() as Restaurant[];
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
   const [activeFilter, setActiveFilter] = useState("all");
   const [sort, setSort] = useState<SortKey>("time");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(search.q || "");
   const [location, setLocation] = useState("");
   const [locOpen, setLocOpen] = useState(false);
   const [locDraft, setLocDraft] = useState("");

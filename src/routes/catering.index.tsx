@@ -13,6 +13,8 @@ import { trackEvent } from "@/utils/posthog";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { TrustSection } from "@/components/TrustSection";
 
+import { z } from "zod";
+
 export const Route = createFileRoute("/catering/")({
   head: () => ({
     meta: [
@@ -27,6 +29,9 @@ export const Route = createFileRoute("/catering/")({
       { rel: "preload", href: "/images/event_catering_hero.png", as: "image", fetchpriority: "high" },
     ],
   }),
+  validateSearch: z.object({
+    q: z.string().optional(),
+  }),
   loader: async () => await getCaterers(),
   component: Catering,
 });
@@ -37,9 +42,10 @@ type SortKey = "price-asc" | "price-desc";
 const CITY_LIST = ["Berlin", "Hamburg", "München", "Köln", "Frankfurt", "Stuttgart", "Düsseldorf", "Leipzig"];
 
 function Catering() {
+  const search = Route.useSearch();
   const { t, lang } = useI18n();
   const [cat, setCat] = useState<CatId>("all");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(search.q || "");
   const [date, setDate] = useState("");
   const [guests, setGuests] = useState("");
   const [city, setCity] = useState("");

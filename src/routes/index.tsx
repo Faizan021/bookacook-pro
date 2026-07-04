@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { trackEvent } from "@/utils/posthog";
 import { useState, useEffect } from "react";
 import {
@@ -53,10 +53,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const navigate = useNavigate();
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const [mounted, setMounted] = useState(false);
   const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">("catering");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -222,11 +224,24 @@ function Home() {
                 </div>
                 <input
                   type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && searchQuery.trim()) {
+                      trackEvent("ai_search_clicked", { query: searchQuery, vertical: activeVertical });
+                      navigate({ to: current.to, search: { q: searchQuery } as any });
+                    }
+                  }}
                   className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-36 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/50"
                   placeholder={tt("Was suchst du? z.B. 'Vegan Catering Berlin'", "What are you looking for? e.g. 'Vegan Catering Berlin'")}
                 />
                 <button 
-                  onClick={() => trackEvent("ai_search_clicked")}
+                  onClick={() => {
+                    if (searchQuery.trim()) {
+                      trackEvent("ai_search_clicked", { query: searchQuery, vertical: activeVertical });
+                      navigate({ to: current.to, search: { q: searchQuery } as any });
+                    }
+                  }}
                   className="absolute inset-y-2 right-2 bg-forest text-white rounded-full px-5 sm:px-6 font-bold text-sm sm:text-base shadow-md hover:bg-forest/90 transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   {tt("KI Suche", "AI Search")}
