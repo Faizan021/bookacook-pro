@@ -1941,7 +1941,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 border border-gray-100 bg-white shadow-sm rounded-2xl p-6 h-fit">
           <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
-            <Plus className="w-4 h-4 text-orange-600" />
+            <Plus className="w-4 h-4 text-forest" />
             {tt("Neuen Code erstellen", "Create New Code")}
           </h3>
           <form onSubmit={handleCreate} className="space-y-4">
@@ -1949,12 +1949,12 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
             
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Code</label>
-              <input value={code} onChange={e => setCode(e.target.value.toUpperCase())} placeholder="z.B. SOMMER20" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 uppercase text-sm" />
+              <input value={code} onChange={e => setCode(e.target.value.toUpperCase())} placeholder="z.B. SOMMER20" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest uppercase text-sm" />
             </div>
 
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Rabatt-Typ", "Discount Type")}</label>
-              <select value={type} onChange={(e) => { setType(e.target.value as any); setValue(""); }} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+              <select value={type} onChange={(e) => { setType(e.target.value as any); setValue(""); }} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
                 <option value="percentage">{tt("Prozentsatz", "Percentage")}</option>
                 <option value="fixed">{tt("Fester Betrag", "Fixed Amount")}</option>
                 <option value="free_delivery">{tt("Kostenlose Lieferung", "Free Delivery")}</option>
@@ -1966,21 +1966,21 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
             {(type === "percentage" || type === "fixed") && (
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Wert", "Value")} {type === "percentage" ? "(%)" : "(€)"}</label>
-                <input type="number" step="any" value={value} onChange={e => setValue(e.target.value)} placeholder="z.B. 10" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+                <input type="number" step="any" value={value} onChange={e => setValue(e.target.value)} placeholder="z.B. 10" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
               </div>
             )}
 
             {type === "bogo" && (
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Benötigte Menge (X)", "Required Quantity (X)")}</label>
-                <input type="number" min="1" value={requiredQty} onChange={e => setRequiredQty(e.target.value)} placeholder="z.B. 2" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+                <input type="number" min="1" value={requiredQty} onChange={e => setRequiredQty(e.target.value)} placeholder="z.B. 2" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
               </div>
             )}
 
             {type === "free_item" && availableItems.length > 0 && (
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gratis-Artikel", "Free Item")}</label>
-                <select value={freeItemName} onChange={e => setFreeItemName(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                <select value={freeItemName} onChange={e => setFreeItemName(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
                   <option value="">{tt("Auswählen...", "Select...")}</option>
                   {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
                 </select>
@@ -1990,7 +1990,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
             {(type !== "free_delivery" && type !== "free_item") && availableItems.length > 0 && (
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gilt für", "Applies to")}</label>
-                <select value={appliesTo} onChange={e => setAppliesTo(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                <select value={appliesTo} onChange={e => setAppliesTo(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
                   <option value="all">{tt("Gesamte Bestellung", "Entire Order")}</option>
                   {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
                 </select>
@@ -1999,29 +1999,29 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
 
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Mindestbestellwert (€) (Optional)", "Min. Order Value (€) (Optional)")}</label>
-              <input type="number" min="0" step="any" value={minOrder} onChange={e => setMinOrder(e.target.value)} placeholder="z.B. 50" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              <input type="number" min="0" step="any" value={minOrder} onChange={e => setMinOrder(e.target.value)} placeholder="z.B. 50" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig ab (Optional)", "Valid From (Optional)")}</label>
-                <input type="datetime-local" value={startsAt} onChange={e => setStartsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+                <input type="datetime-local" value={startsAt} onChange={e => setStartsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig bis (Optional)", "Valid Until (Optional)")}</label>
-                <input type="datetime-local" value={endsAt} onChange={e => setEndsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+                <input type="datetime-local" value={endsAt} onChange={e => setEndsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
               </div>
             </div>
 
             <label className="flex items-center gap-2 cursor-pointer mt-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <input type="checkbox" checked={promote} onChange={e => setPromote(e.target.checked)} className="rounded text-orange-600 focus:ring-orange-500 bg-white" />
+              <input type="checkbox" checked={promote} onChange={e => setPromote(e.target.checked)} className="rounded text-forest focus:ring-forest bg-white" />
               <div className="flex flex-col">
                 <span className="text-sm font-medium text-gray-700">{tt("Im Shop ankündigen", "Announce on storefront")}</span>
                 <span className="text-[10px] text-gray-500">{tt("Zeigt ein Banner für alle Besucher", "Shows a banner to all visitors")}</span>
               </div>
             </label>
 
-            <button disabled={creating} type="submit" className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+            <button disabled={creating} type="submit" className="w-full bg-forest hover:bg-forest/90 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
               {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Tag className="w-4 h-4" />}
               {tt("Code Speichern", "Save Code")}
             </button>
@@ -2030,7 +2030,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
 
         <div className="lg:col-span-2 space-y-4">
           <h3 className="font-semibold text-black flex items-center gap-2 px-1">
-            <Ticket className="w-4 h-4 text-orange-600" />
+            <Ticket className="w-4 h-4 text-forest" />
             {tt("Ihre Codes", "Your Codes")}
           </h3>
           
@@ -2043,7 +2043,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
                       <span className="font-bold text-lg text-black">{p.code}</span>
                       {getStatusBadge(p)}
                     </div>
-                    <span className="text-orange-600 font-semibold text-sm">
+                    <span className="text-forest font-semibold text-sm">
                       {getPromoSummary(p)}
                     </span>
                   </div>
@@ -2055,7 +2055,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
                       if(active) toast.success(tt("Aktiviert", "Activated"));
                       else toast.success(tt("Deaktiviert", "Deactivated"));
                     }} />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-forest"></div>
                   </label>
                 </div>
                 <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
