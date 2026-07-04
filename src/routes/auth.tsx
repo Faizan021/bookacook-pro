@@ -62,7 +62,7 @@ function AuthPage() {
   useEffect(() => {
     if (logout === "true") {
       supabase.auth.signOut().then(() => {
-        navigate({ to: "/auth", search: { message }, replace: true });
+        navigate({ to: "/auth", search: { message, signup: undefined, logout: undefined }, replace: true });
       });
       return;
     }

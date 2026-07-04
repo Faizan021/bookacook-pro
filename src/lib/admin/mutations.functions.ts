@@ -8,7 +8,7 @@ async function verifyAdmin(supabaseAdmin: any, userId: string) {
     .from("user_roles")
     .select("role")
     .eq("user_id", userId)
-    .eq("role", "admin")
+    .eq("role", "admin" as string)
     .maybeSingle();
 
   if (error || !roleRecord) {
@@ -49,7 +49,7 @@ export const updateUserRole = createServerFn({ method: "POST" })
         .from("user_roles")
         .insert({
           user_id: targetUserId,
-          role: newRole
+          role: newRole as "customer" | "restaurant_owner" | "caterer" | "planner" | "admin"
         });
       if (insertRoleError) throw new Error("Failed to insert new role mapping: " + insertRoleError.message);
     }

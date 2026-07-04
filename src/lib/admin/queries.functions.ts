@@ -7,7 +7,7 @@ async function verifyAdmin(supabaseAdmin: any, userId: string) {
     .from("user_roles")
     .select("role")
     .eq("user_id", userId)
-    .eq("role", "admin")
+    .eq("role", "admin" as string)
     .maybeSingle();
 
   if (error || !roleRecord) {
@@ -53,7 +53,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       // Sum active plans created on or before this month end
       let monthMRR = 0;
       subscriptions?.forEach(s => {
-        const createdDate = new Date(s.created_at || s.current_period_start);
+        const createdDate = new Date(s.created_at || s.current_period_start || "");
         if (createdDate <= monthEnd && (s.status === 'active' || s.status === 'trialing')) {
           if (s.plan === 'starter') monthMRR += 34.99;
           else if (s.plan === 'growth') monthMRR += 59;
@@ -134,7 +134,7 @@ export const getAdminUsers = createServerFn({ method: "GET" })
     // Map profiles with their roles
     return (profiles || []).map(p => {
       const userRoles = (roles || []).filter(r => r.user_id === p.id).map(r => r.role);
-      const primaryRole = userRoles.includes("admin") ? "admin" 
+      const primaryRole = (userRoles as string[]).includes("admin") ? "admin" 
                         : userRoles.includes("caterer") ? "caterer"
                         : userRoles.includes("restaurant_owner") ? "restaurant_owner"
                         : userRoles.includes("planner") ? "planner"
@@ -275,7 +275,7 @@ export const getAdminOrders = createServerFn({ method: "GET" })
         id: o.id,
         type: "Restaurant Order",
         merchantName: rest?.name || "Unknown Restaurant",
-        customerName: o.customer_name || getCustomerName(o.customer_id),
+        customerName: o.customer_name || getCustomerName(o.customer_id ?? ""),
         date: o.created_at,
         amount: Number(o.total_cents || 0) / 100,
         status: o.status,

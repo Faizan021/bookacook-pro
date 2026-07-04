@@ -47,7 +47,7 @@ function Shell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   async function signOut() {
     await supabase.auth.signOut();
-    router.navigate({ to: "/auth", search: { signup: undefined } });
+    router.navigate({ to: "/auth", search: { signup: undefined, message: undefined, logout: undefined } });
   }
   return (
     <div className="min-h-screen bg-mint-dotted">
@@ -65,7 +65,7 @@ function Shell({ children }: { children: React.ReactNode }) {
               variant="outline"
               onClick={async () => {
                 await supabase.auth.signOut();
-                router.navigate({ to: "/auth", search: { signup: undefined } });
+                router.navigate({ to: "/auth", search: { signup: undefined, message: undefined, logout: undefined } });
               }}
             >
               Sign out

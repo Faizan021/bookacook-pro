@@ -54,7 +54,7 @@ function Partners() {
             <p className="mt-6 text-lg text-white/80 max-w-lg leading-relaxed drop-shadow-sm">
               {t("p.subtitle")}
             </p>
-            <Link to="/auth" search={{ signup: "partner", message: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_hero", role: "restaurant_owner" })} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-8 py-4 text-sm font-bold shadow-xl shadow-[#b28a3c]/20 transition-all hover:bg-[#9a7633] hover:scale-105">
+            <Link to="/auth" search={{ signup: "partner", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_hero", role: "restaurant_owner" })} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-8 py-4 text-sm font-bold shadow-xl shadow-[#b28a3c]/20 transition-all hover:bg-[#9a7633] hover:scale-105">
               {t("p.cta")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
@@ -152,7 +152,7 @@ function Partners() {
             </div>
             
             <div className="p-8 bg-cream/30 border-t border-[#eadfce]/30">
-              <Link to="/auth" search={{ signup: "partner", message: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_restaurant_card", role: "restaurant_owner" })} className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md">
+              <Link to="/auth" search={{ signup: "partner", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_restaurant_card", role: "restaurant_owner" })} className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md">
                 {t("Jetzt starten", "Get Started")} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -207,7 +207,7 @@ function Partners() {
             </div>
             
             <div className="p-8 bg-cream/30 border-t border-[#eadfce]/30">
-              <Link to="/auth" search={{ signup: "caterer", message: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_caterer_card", role: "caterer" })} className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md">
+              <Link to="/auth" search={{ signup: "caterer", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_caterer_card", role: "caterer" })} className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md">
                 {t("Caterer / Planer Registrierung", "Caterer / Planner Registration")} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -221,7 +221,7 @@ function Partners() {
             <h2 className="font-display text-3xl sm:text-4xl">{t("p.ready.title")}</h2>
             <p className="mt-3 opacity-80 max-w-xl">{t("p.ready.body")}</p>
           </div>
-          <Link to="/auth" search={{ signup: "partner", message: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_ready_banner", role: "restaurant_owner" })} className="inline-flex items-center justify-center gap-2 rounded-full bg-cream text-forest px-6 py-3.5 text-sm font-medium hover:opacity-90">
+          <Link to="/auth" search={{ signup: "partner", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_ready_banner", role: "restaurant_owner" })} className="inline-flex items-center justify-center gap-2 rounded-full bg-cream text-forest px-6 py-3.5 text-sm font-medium hover:opacity-90">
             {t("p.ready.cta")} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

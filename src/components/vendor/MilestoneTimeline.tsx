@@ -134,7 +134,7 @@ export function MilestoneTimeline({
         {isVendor && (
           <form onSubmit={addMilestone} className="mt-4 flex gap-2">
             <Input
-              size="sm"
+              size={Number("sm")}
               className="h-8 text-sm"
               placeholder="e.g. Menu Finalized, Venue Secured..."
               value={newTitle}

@@ -55,6 +55,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/planner")({
         throw redirect({
           to: "/auth",
           search: {
+            signup: undefined,
             message: `Please sign in with a Business Partner account.`,
             logout: "true",
           },
@@ -68,6 +69,7 @@ export const Route = createFileRoute("/_authenticated/dashboard/planner")({
       throw redirect({
         to: "/auth",
         search: {
+          signup: undefined,
           message: "Session expired or unauthorized. Please sign in again.",
           logout: "true",
         },

@@ -102,7 +102,7 @@ function UpdatePasswordPage() {
           <p className="text-forest/70">
             {tt("Bitte fordere einen neuen Link zum Zurücksetzen des Passworts an.", "Please request a new password reset link.")}
           </p>
-          <Link to="/auth" className="block w-full">
+          <Link to="/auth" search={{ signup: undefined, message: undefined, logout: undefined }} className="block w-full">
             <Button variant="outline" className="w-full mt-4">
               {tt("Zurück zur Anmeldung", "Back to Login")}
             </Button>
@@ -116,7 +116,7 @@ function UpdatePasswordPage() {
     <div className="min-h-screen bg-mint-dotted flex items-center justify-center px-4 py-16">
       <div className="surface-card w-full max-w-md p-8">
         <div className="flex items-center justify-between">
-          <Link to="/auth" className="text-xs uppercase tracking-widest text-forest/70 hover:text-forest">
+          <Link to="/auth" search={{ signup: undefined, message: undefined, logout: undefined }} className="text-xs uppercase tracking-widest text-forest/70 hover:text-forest">
             ← Speisely
           </Link>
           <LanguageToggle />

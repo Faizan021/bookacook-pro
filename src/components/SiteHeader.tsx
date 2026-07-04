@@ -29,7 +29,7 @@ export function SiteHeader() {
           .from("user_roles")
           .select("role")
           .eq("user_id", session.user.id)
-          .eq("role", "admin")
+          .eq("role", "admin" as string)
           .maybeSingle();
         setIsAdmin(!!data);
       } else {
@@ -138,14 +138,14 @@ export function SiteHeader() {
               <>
                 <Link
                   to="/auth"
-                  search={{ signup: undefined }}
+                  search={{ signup: undefined, message: undefined, logout: undefined }}
                   className="inline-flex items-center justify-center rounded-full border border-forest/20 px-3 py-1.5 text-sm font-medium text-forest hover:bg-cream transition whitespace-nowrap"
                 >
                   {tt("Anmelden", "Sign in")}
                 </Link>
                 <Link
                   to="/auth"
-                  search={{ signup: "partner" }}
+                  search={{ signup: "partner", message: undefined, logout: undefined }}
                   className="inline-flex items-center justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 text-sm font-medium hover:opacity-90 transition whitespace-nowrap"
                 >
                   {tt("Registrieren", "Register")}

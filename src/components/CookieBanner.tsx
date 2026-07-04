@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "@tanstack/react-router";
+
 import { useI18n } from "@/i18n/I18nProvider";
 import posthog from "posthog-js";
 
@@ -50,12 +50,12 @@ export function CookieBanner() {
               "Wir verwenden Cookies, um unsere Website zu verbessern und dir ein besseres Erlebnis zu bieten."
             )}
           </span>{" "}
-          <Link
-            to="/privacy-policy"
+          <a
+            href="/privacy-policy"
             className="text-[#22C55E] font-medium underline hover:text-[#22C55E]/90 transition"
           >
             {t("Privacy Policy", "Datenschutzbestimmungen")}
-          </Link>
+          </a>
         </div>
         <div className="flex flex-row gap-2 w-full md:w-auto shrink-0">
           <button

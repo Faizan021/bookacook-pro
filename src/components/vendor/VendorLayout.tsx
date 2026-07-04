@@ -41,7 +41,7 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
 
   async function signOut() {
     await supabase.auth.signOut();
-    router.navigate({ to: "/auth", search: { signup: undefined } });
+    router.navigate({ to: "/auth", search: { signup: undefined, message: undefined, logout: undefined } });
   }
 
   // Navigation config based on vertical
