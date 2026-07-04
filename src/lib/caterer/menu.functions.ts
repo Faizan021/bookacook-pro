@@ -187,7 +187,12 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
         .object({
           catererId: z.string().uuid(),
           eventType: z.string(),
-          eventDate: z.string(),
+          eventDate: z.string().refine((date) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const parsed = new Date(date);
+            return !isNaN(parsed.getTime()) && parsed >= today;
+          }, { message: "Event date cannot be in the past" }),
           guestCount: z.number().min(1),
           budgetCents: z.number().min(0),
           location: z.string(),

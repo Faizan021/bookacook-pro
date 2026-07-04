@@ -22,7 +22,12 @@ export const createTableReservation = createServerFn({ method: "POST" })
       phone: z.string().min(1),
       email: z.string().email(),
       guestCount: z.number().min(1),
-      reservationDate: z.string(),
+      reservationDate: z.string().refine((date) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const parsed = new Date(date);
+        return !isNaN(parsed.getTime()) && parsed >= today;
+      }, { message: "Reservation date cannot be in the past" }),
       reservationTime: z.string(),
       notes: z.string().optional(),
       locale: z.string().optional(),

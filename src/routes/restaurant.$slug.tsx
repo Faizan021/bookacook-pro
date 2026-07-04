@@ -457,6 +457,7 @@ function RestaurantPage() {
               <div className="grid grid-cols-2 gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
                 <input 
                   type="date" 
+                  min={new Date().toISOString().split('T')[0]}
                   value={scheduleDate}
                   onChange={(e) => setScheduleDate(e.target.value)}
                   className="w-full rounded-md border border-[#eadfce] bg-white px-2 py-1.5 text-xs text-forest focus:outline-none focus:border-[#10b981]" 
@@ -768,7 +769,7 @@ function RestaurantPage() {
                       </div>
                       <div className="space-y-1">
                         <label className="text-sm font-medium">{t("Datum", "Date")} *</label>
-                        <input required type="date" className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm" value={resForm.reservationDate} onChange={e => setResForm({...resForm, reservationDate: e.target.value})} />
+                        <input required type="date" min={new Date().toISOString().split('T')[0]} className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm" value={resForm.reservationDate} onChange={e => setResForm({...resForm, reservationDate: e.target.value})} />
                       </div>
                       <div className="space-y-1">
                         <label className="text-sm font-medium">{t("Uhrzeit", "Time")} *</label>

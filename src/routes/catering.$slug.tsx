@@ -531,6 +531,7 @@ function CatererPage() {
                 <Label>{t("Gewünschter Start", "Desired Start Date")}</Label>
                 <Input 
                   type="date" 
+                  min={new Date().toISOString().split('T')[0]}
                   required 
                   className="bg-white border-[#eadfce]"
                   value={b2bForm.startDate} 
@@ -664,6 +665,7 @@ function CatererPage() {
                     <Label>{t("Gewünschter Start", "Desired Start Date")}</Label>
                     <Input 
                       type="date" 
+                      min={new Date().toISOString().split('T')[0]}
                       required 
                       className="bg-white border-[#eadfce]"
                       value={b2bForm.startDate} 

@@ -203,7 +203,7 @@ function CateringEmbedPage() {
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-1.5">
             <Label htmlFor="eventDate" className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> Date *</Label>
-            <Input id="eventDate" type="date" required value={form.eventDate} onChange={e => setForm({...form, eventDate: e.target.value})} />
+            <Input id="eventDate" type="date" min={new Date().toISOString().split('T')[0]} required value={form.eventDate} onChange={e => setForm({...form, eventDate: e.target.value})} />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="guests" className="flex items-center gap-1"><Users className="h-3.5 w-3.5" /> Guests *</Label>

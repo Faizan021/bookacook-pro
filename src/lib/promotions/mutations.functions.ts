@@ -15,7 +15,40 @@ export const createPromoCode = createServerFn()
     required_qty?: number;
     starts_at?: string;
     ends_at?: string;
-  }) => d)
+  }) => z.object({
+    code: z.string().min(1),
+    discount_type: z.enum(["percentage", "fixed", "free_delivery", "free_item", "bogo"]),
+    discount_value: z.number(),
+    promote_on_storefront: z.boolean(),
+    vertical: z.enum(["restaurants", "caterers", "planners"]),
+    applies_to_product_name: z.string().optional(),
+    min_order_value_cents: z.number().optional(),
+    free_item_name: z.string().optional(),
+    required_qty: z.number().optional(),
+    starts_at: z.string().optional(),
+    ends_at: z.string().optional(),
+  }).refine(data => {
+    if (data.starts_at) {
+      const today = new Date();
+      today.setMinutes(today.getMinutes() - 5);
+      const parsedStart = new Date(data.starts_at);
+      if (!isNaN(parsedStart.getTime()) && parsedStart < today) {
+        return false;
+      }
+    }
+    return true;
+  }, { message: "Promo start time cannot be in the past", path: ["starts_at"] })
+  .refine(data => {
+    if (data.starts_at && data.ends_at) {
+      const start = new Date(data.starts_at);
+      const end = new Date(data.ends_at);
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && end <= start) {
+        return false;
+      }
+    }
+    return true;
+  }, { message: "End time must be after start time", path: ["ends_at"] })
+  .parse(d))
   .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
