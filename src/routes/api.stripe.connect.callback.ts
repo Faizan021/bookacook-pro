@@ -120,7 +120,7 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
           // ── Persist the connected account ID ────────────────────────────────
           // Write to the private secure table
           const { error: dbError } = await supabaseAdmin
-            .from("restaurant_stripe_accounts")
+            .from("restaurant_stripe_accounts" as any)
             .upsert({
               restaurant_id: restaurant.id,
               stripe_user_id: stripeUserId,

@@ -53,6 +53,11 @@ const catererQueryOptions = (slug: string) =>
     queryFn: () => getPublicCatererProfile({ data: { slug } }),
   });
 export const Route = createFileRoute("/catering/$slug")({
+  loader: async ({ params, context }) => {
+    await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
+    const fullCaterer = await getCaterer(params.slug);
+    return { fullCaterer };
+  },
   head: ({ loaderData, params }) => {
     const c = loaderData?.fullCaterer;
     const city = c?.area ?? "Deutschland";
@@ -93,11 +98,7 @@ export const Route = createFileRoute("/catering/$slug")({
         : undefined,
     };
   },
-  loader: async ({ params, context }) => {
-    await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
-    const fullCaterer = await getCaterer(params.slug);
-    return { fullCaterer };
-  },
+  // moved to above head
   component: CatererPage,
   notFoundComponent: () => (
     <SiteShell>

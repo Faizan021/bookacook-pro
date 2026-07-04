@@ -51,6 +51,14 @@ const plannerQueryOptions = (slug: string) => queryOptions({
 });
 
 export const Route = createFileRoute("/planner/$slug")({
+  loader: async ({ params, context }) => {
+    await context.queryClient.ensureQueryData(plannerQueryOptions(params.slug));
+    const fullPlanner = await getPlanner(params.slug);
+    if (!fullPlanner) {
+      throw new Error("Planner not found");
+    }
+    return { fullPlanner };
+  },
   head: ({ loaderData, params }) => {
     const p = loaderData?.fullPlanner;
     const city = p?.area ?? "Deutschland";
@@ -88,14 +96,7 @@ export const Route = createFileRoute("/planner/$slug")({
         : undefined,
     };
   },
-  loader: async ({ params, context }) => {
-    await context.queryClient.ensureQueryData(plannerQueryOptions(params.slug));
-    const fullPlanner = await getPlanner(params.slug);
-    if (!fullPlanner) {
-      throw new Error("Planner not found");
-    }
-    return { fullPlanner };
-  },
+  // moved to above head
   component: PlannerStorefront,
   notFoundComponent: () => (
     <SiteShell>

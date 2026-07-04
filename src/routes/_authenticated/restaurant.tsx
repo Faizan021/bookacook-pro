@@ -6,12 +6,14 @@ import {
   useLocation,
   redirect,
   isRedirect,
+  useNavigate,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState, Component } from "react";
 import { trackEvent } from "@/utils/posthog";
 import { supabase } from "@/integrations/supabase/client";
+import { updateMyConsent } from "@/lib/consent.functions";
 // Imports consolidated below
 import {
   createMyRestaurant,
@@ -309,7 +311,7 @@ function CreateRestaurantForm() {
 }
 
 function OrdersSection() {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchOrders = useServerFn(getRestaurantOrders);
   const updateStatus = useServerFn(updateRestaurantOrderStatus);
@@ -320,7 +322,7 @@ function OrdersSection() {
     retry: false,
   });
   const statusMut = useMutation({
-    mutationFn: (vars: { orderId: string; status: OrderStatus }) => updateStatus(vars),
+    mutationFn: (vars: { orderId: string; status: any }) => updateStatus({ data: vars }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["restaurant", "orders"] }),
   });
 
@@ -759,7 +761,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
   const stripeConnected = kpis.stripeConnectStatus === "connected";
   const subActive = kpis.subscriptionStatus === "active";
   const published = kpis.isPublished;
-  const hasPaymentMethod = stripeConnected || kpis.acceptsCash || kpis.acceptsPaypal;
+  const hasPaymentMethod = stripeConnected;
 
   const getStepStatus = (stepId: number) => {
     if (stepId === 1) {

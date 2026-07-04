@@ -124,10 +124,7 @@ function RestaurantPage() {
     if (!dbRestaurant) return false;
     // Only gate ordering if NO payment method is available at all
     const hasStripe = dbRestaurant.stripe_connect_status === "connected";
-    const hasCash = (dbRestaurant as any).accepts_cash === true;
-    const hasPaypal =
-      (dbRestaurant as any).accepts_paypal === true && !!(dbRestaurant as any).paypal_email;
-    return !hasStripe && !hasCash && !hasPaypal;
+    return !hasStripe;
   }, [dbRestaurant]);
   const restaurant = useMemo(() => {
     if (!fullRestaurant) return null;

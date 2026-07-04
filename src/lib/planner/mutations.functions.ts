@@ -158,6 +158,7 @@ export const updateMyPlannerSettings = createServerFn({ method: "POST" })
       min_delivery_cents?: number;
       max_delivery_distance_km?: number;
       custom_domain?: string | null;
+      slug?: string;
     }) =>
       z
         .object({
@@ -173,7 +174,8 @@ export const updateMyPlannerSettings = createServerFn({ method: "POST" })
           delivery_fee_cents: z.number().optional().nullable(),
           min_delivery_cents: z.number().optional().nullable(),
           max_delivery_distance_km: z.number().optional().nullable(),
-          custom_domain: z.string().optional().nullable(),
+          custom_domain: z.string().max(100).optional().nullable(),
+          slug: z.string().max(100).optional(),
         })
         .parse(input),
   )

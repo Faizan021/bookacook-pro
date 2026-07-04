@@ -793,7 +793,7 @@ function PlannerDirectory({ lang, tt, planners }: { lang: string; tt: (de: strin
 
   // Compute live category counts based on city & guest filters (excluding cat filter itself)
   const catCounts = useMemo(() => {
-    const counts: Record<PlannerCat, number> = {
+    const counts = {
       all: planners.length,
       wedding: 0,
       corporate: 0,
@@ -801,7 +801,7 @@ function PlannerDirectory({ lang, tt, planners }: { lang: string; tt: (de: strin
       ramadan: 0,
       christmas: 0,
       festival: 0,
-    };
+    } as unknown as Record<PlannerCat, number>;
 
     counts.all = planners.filter((p) => {
       if (city && !p.area?.toLowerCase().includes(city.toLowerCase())) return false;

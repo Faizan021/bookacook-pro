@@ -110,9 +110,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       custom_domain?: string | null;
       seat_capacity?: number | null;
       certifications?: string | null;
-      accepts_cash?: boolean;
-      accepts_paypal?: boolean;
-      paypal_email?: string | null;
+      slug?: string;
     }) =>
       z
         .object({
@@ -134,12 +132,10 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           accepts_delivery: z.boolean().optional().nullable(),
           service_areas: z.string().optional().nullable(),
           operating_hours: z.any().optional(),
-          custom_domain: z.string().optional().nullable(),
-          seat_capacity: z.number().optional().nullable(),
-          certifications: z.string().optional().nullable(),
-          accepts_cash: z.boolean().optional(),
-          accepts_paypal: z.boolean().optional(),
-          paypal_email: z.string().max(255).optional().nullable(),
+          custom_domain: z.string().max(100).optional().nullable(),
+          seat_capacity: z.number().int().min(0).max(5000).optional().nullable(),
+          certifications: z.string().max(1000).optional().nullable(),
+          slug: z.string().max(100).optional(),
         })
         .parse(input),
   )

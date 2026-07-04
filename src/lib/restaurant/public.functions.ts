@@ -116,7 +116,7 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
     const { data: rest, error } = await supabaseAdmin
       .from("restaurants")
       .select(
-        "id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications, accepts_cash, accepts_paypal, paypal_email",
+        "id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications",
       )
       .eq("slug", data.slug)
       .maybeSingle();

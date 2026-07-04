@@ -111,7 +111,7 @@ function AdminPage() {
         .from("user_roles")
         .select("role")
         .eq("user_id", userId)
-        .eq("role", "admin" as string)
+        .eq("role", "admin" as any)
         .maybeSingle();
 
       if (error || !data) {

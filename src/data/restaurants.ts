@@ -13,6 +13,7 @@ export type MenuItem = {
 
 export type Restaurant = {
   id: string;
+  slug?: string;
   name: string;
   tags: string[];
   rating: number;
@@ -220,7 +221,8 @@ export const fallbackRestaurants: Restaurant[] = [
 function mapRestaurant(r: any): Restaurant {
   return {
     id: r.id,
-    name: r.business_name || "Restaurant",
+    slug: r.slug,
+    name: r.name || r.business_name || "Restaurant",
     tags: r.cuisine_type ? [r.cuisine_type] : [],
     rating: 4.5,
     time: "25-35 min",
@@ -275,11 +277,12 @@ export async function getRestaurants(): Promise<Restaurant[]> {
   return [...liveRestaurants, ...showcaseItems];
 }
 
-export async function getRestaurant(id: string): Promise<Restaurant | undefined> {
+export async function getRestaurant(slugOrId: string): Promise<Restaurant | undefined> {
+  // Try by slug first (URL-based lookup), fallback to id
   const { data, error } = await supabase
     .from("restaurants")
     .select("*, restaurant_products(*)")
-    .eq("id", id)
+    .or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
     .maybeSingle();
 
   if (!error && data) {
