@@ -3,35 +3,41 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 export const createTableReservation = createServerFn({ method: "POST" })
-  .validator((input: {
-    restaurantId: string;
-    firstName: string;
-    lastName: string;
-    phone: string;
-    email: string;
-    guestCount: number;
-    reservationDate: string;
-    reservationTime: string;
-    notes?: string;
-    locale?: string;
-  }) =>
-    z.object({
-      restaurantId: z.string().uuid(),
-      firstName: z.string().min(1),
-      lastName: z.string().min(1),
-      phone: z.string().min(1),
-      email: z.string().email(),
-      guestCount: z.number().min(1),
-      reservationDate: z.string().refine((date) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const parsed = new Date(date);
-        return !isNaN(parsed.getTime()) && parsed >= today;
-      }, { message: "Reservation date cannot be in the past" }),
-      reservationTime: z.string(),
-      notes: z.string().optional(),
-      locale: z.string().optional(),
-    }).parse(input)
+  .validator(
+    (input: {
+      restaurantId: string;
+      firstName: string;
+      lastName: string;
+      phone: string;
+      email: string;
+      guestCount: number;
+      reservationDate: string;
+      reservationTime: string;
+      notes?: string;
+      locale?: string;
+    }) =>
+      z
+        .object({
+          restaurantId: z.string().uuid(),
+          firstName: z.string().min(1),
+          lastName: z.string().min(1),
+          phone: z.string().min(1),
+          email: z.string().email(),
+          guestCount: z.number().min(1),
+          reservationDate: z.string().refine(
+            (date) => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const parsed = new Date(date);
+              return !isNaN(parsed.getTime()) && parsed >= today;
+            },
+            { message: "Reservation date cannot be in the past" },
+          ),
+          reservationTime: z.string(),
+          notes: z.string().optional(),
+          locale: z.string().optional(),
+        })
+        .parse(input),
   )
   .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
@@ -39,9 +45,10 @@ export const createTableReservation = createServerFn({ method: "POST" })
     const { userId } = context;
 
     // Standardize time formatting to HH:MM:00 for strict match
-    const timeWithSeconds = data.reservationTime.includes(":") && data.reservationTime.split(":").length === 2
-      ? `${data.reservationTime}:00`
-      : data.reservationTime;
+    const timeWithSeconds =
+      data.reservationTime.includes(":") && data.reservationTime.split(":").length === 2
+        ? `${data.reservationTime}:00`
+        : data.reservationTime;
 
     // 1. Fetch restaurant's seat capacity
     const { data: restaurant, error: restError } = await supabaseAdmin
@@ -71,7 +78,7 @@ export const createTableReservation = createServerFn({ method: "POST" })
 
     const totalConfirmedGuests = (existingReservations || []).reduce(
       (sum, r) => sum + r.guest_count,
-      0
+      0,
     );
 
     // 3. Verify if capacity allows booking
@@ -79,7 +86,7 @@ export const createTableReservation = createServerFn({ method: "POST" })
       throw new Error(
         data.locale === "de"
           ? "Es sind leider nicht genügend Plätze für diesen Zeitraum frei."
-          : "Sorry, there are not enough seats available for this time slot."
+          : "Sorry, there are not enough seats available for this time slot.",
       );
     }
 
@@ -103,14 +110,14 @@ export const createTableReservation = createServerFn({ method: "POST" })
   });
 
 export const getRestaurantBySlug = createServerFn({ method: "GET" })
-  .inputValidator((input: { slug: string }) =>
-    z.object({ slug: z.string() }).parse(input)
-  )
+  .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rest, error } = await supabaseAdmin
       .from("restaurants")
-      .select("id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications")
+      .select(
+        "id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications",
+      )
       .eq("slug", data.slug)
       .maybeSingle();
 
@@ -119,18 +126,16 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
   });
 
 export const startStorefrontCheckout = createServerFn({ method: "POST" })
-  .inputValidator((input: {
-    restaurantId: string;
-    amountCents: number;
-    origin: string;
-    slug: string;
-  }) =>
-    z.object({
-      restaurantId: z.string().uuid(),
-      amountCents: z.number().int().min(50).max(100000000), // Stripe min limit 50 cents
-      origin: z.string(),
-      slug: z.string(),
-    }).parse(input)
+  .inputValidator(
+    (input: { restaurantId: string; amountCents: number; origin: string; slug: string }) =>
+      z
+        .object({
+          restaurantId: z.string().uuid(),
+          amountCents: z.number().int().min(50).max(100000000), // Stripe min limit 50 cents
+          origin: z.string(),
+          slug: z.string(),
+        })
+        .parse(input),
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -175,9 +180,8 @@ export const startStorefrontCheckout = createServerFn({ method: "POST" })
       data.amountCents,
       rest.name,
       successUrl,
-      cancelUrl
+      cancelUrl,
     );
 
     return { url: session.url };
   });
-

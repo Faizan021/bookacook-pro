@@ -3,56 +3,67 @@ import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 import { z } from "zod";
 
 export const createPromoCode = createServerFn()
-  .validator((d: { 
-    code: string; 
-    discount_type: "percentage" | "fixed" | "free_delivery" | "free_item" | "bogo"; 
-    discount_value: number;
-    promote_on_storefront: boolean;
-    vertical: "restaurants" | "caterers" | "planners";
-    applies_to_product_name?: string;
-    min_order_value_cents?: number;
-    free_item_name?: string;
-    required_qty?: number;
-    starts_at?: string;
-    ends_at?: string;
-  }) => z.object({
-    code: z.string().min(1),
-    discount_type: z.enum(["percentage", "fixed", "free_delivery", "free_item", "bogo"]),
-    discount_value: z.number(),
-    promote_on_storefront: z.boolean(),
-    vertical: z.enum(["restaurants", "caterers", "planners"]),
-    applies_to_product_name: z.string().optional(),
-    min_order_value_cents: z.number().optional(),
-    free_item_name: z.string().optional(),
-    required_qty: z.number().optional(),
-    starts_at: z.string().optional(),
-    ends_at: z.string().optional(),
-  }).refine(data => {
-    if (data.starts_at) {
-      const today = new Date();
-      today.setMinutes(today.getMinutes() - 5);
-      const parsedStart = new Date(data.starts_at);
-      if (!isNaN(parsedStart.getTime()) && parsedStart < today) {
-        return false;
-      }
-    }
-    return true;
-  }, { message: "Promo start time cannot be in the past", path: ["starts_at"] })
-  .refine(data => {
-    if (data.starts_at && data.ends_at) {
-      const start = new Date(data.starts_at);
-      const end = new Date(data.ends_at);
-      if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && end <= start) {
-        return false;
-      }
-    }
-    return true;
-  }, { message: "End time must be after start time", path: ["ends_at"] })
-  .parse(d))
+  .validator(
+    (d: {
+      code: string;
+      discount_type: "percentage" | "fixed" | "free_delivery" | "free_item" | "bogo";
+      discount_value: number;
+      promote_on_storefront: boolean;
+      vertical: "restaurants" | "caterers" | "planners";
+      applies_to_product_name?: string;
+      min_order_value_cents?: number;
+      free_item_name?: string;
+      required_qty?: number;
+      starts_at?: string;
+      ends_at?: string;
+    }) =>
+      z
+        .object({
+          code: z.string().min(1),
+          discount_type: z.enum(["percentage", "fixed", "free_delivery", "free_item", "bogo"]),
+          discount_value: z.number(),
+          promote_on_storefront: z.boolean(),
+          vertical: z.enum(["restaurants", "caterers", "planners"]),
+          applies_to_product_name: z.string().optional(),
+          min_order_value_cents: z.number().optional(),
+          free_item_name: z.string().optional(),
+          required_qty: z.number().optional(),
+          starts_at: z.string().optional(),
+          ends_at: z.string().optional(),
+        })
+        .refine(
+          (data) => {
+            if (data.starts_at) {
+              const today = new Date();
+              today.setMinutes(today.getMinutes() - 5);
+              const parsedStart = new Date(data.starts_at);
+              if (!isNaN(parsedStart.getTime()) && parsedStart < today) {
+                return false;
+              }
+            }
+            return true;
+          },
+          { message: "Promo start time cannot be in the past", path: ["starts_at"] },
+        )
+        .refine(
+          (data) => {
+            if (data.starts_at && data.ends_at) {
+              const start = new Date(data.starts_at);
+              const end = new Date(data.ends_at);
+              if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && end <= start) {
+                return false;
+              }
+            }
+            return true;
+          },
+          { message: "End time must be after start time", path: ["ends_at"] },
+        )
+        .parse(d),
+  )
   .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
-    
+
     if (!userId) {
       throw new Error("Unauthorized");
     }
@@ -60,24 +71,23 @@ export const createPromoCode = createServerFn()
     const uppercaseCode = data.code.trim().toUpperCase();
 
     // 1. Insert the promo code
-    const { error: insertErr } = await supabase
-      .from("promo_codes")
-      .insert({
-        code: uppercaseCode,
-        owner_id: userId,
-        discount_type: data.discount_type,
-        discount_value: data.discount_value,
-        applies_to_product_name: data.applies_to_product_name || null,
-        min_order_value_cents: data.min_order_value_cents || null,
-        free_item_name: data.free_item_name || null,
-        required_qty: data.required_qty || null,
-        starts_at: data.starts_at || null,
-        ends_at: data.ends_at || null,
-        is_active: true
-      });
+    const { error: insertErr } = await supabase.from("promo_codes").insert({
+      code: uppercaseCode,
+      owner_id: userId,
+      discount_type: data.discount_type,
+      discount_value: data.discount_value,
+      applies_to_product_name: data.applies_to_product_name || null,
+      min_order_value_cents: data.min_order_value_cents || null,
+      free_item_name: data.free_item_name || null,
+      required_qty: data.required_qty || null,
+      starts_at: data.starts_at || null,
+      ends_at: data.ends_at || null,
+      is_active: true,
+    });
 
     if (insertErr) {
-      if (insertErr.code === '23505') { // Unique violation
+      if (insertErr.code === "23505") {
+        // Unique violation
         throw new Error("A promo code with this name already exists.");
       }
       throw new Error(insertErr.message);
@@ -85,10 +95,9 @@ export const createPromoCode = createServerFn()
 
     // 2. If promote_on_storefront is true, update the banner
     if (data.promote_on_storefront) {
-      const discountText = data.discount_type === "percentage" 
-        ? `${data.discount_value}%` 
-        : `€${data.discount_value}`;
-        
+      const discountText =
+        data.discount_type === "percentage" ? `${data.discount_value}%` : `€${data.discount_value}`;
+
       const bannerText = `Use code ${uppercaseCode} for ${discountText} off! 🎁`;
 
       const { error: updateErr } = await supabase
@@ -96,7 +105,7 @@ export const createPromoCode = createServerFn()
         .update({
           announcement_active: true,
           announcement_text: bannerText,
-          announcement_bg_color: "default"
+          announcement_bg_color: "default",
         })
         .eq("owner_id", userId);
 
@@ -114,7 +123,7 @@ export const togglePromoCode = createServerFn()
   .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
-    
+
     if (!userId) {
       throw new Error("Unauthorized");
     }
@@ -126,6 +135,6 @@ export const togglePromoCode = createServerFn()
       .eq("owner_id", userId); // Ensure they only toggle their own codes
 
     if (error) throw new Error(error.message);
-    
+
     return { success: true };
   });

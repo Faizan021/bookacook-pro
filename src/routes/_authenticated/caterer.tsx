@@ -1,8 +1,15 @@
-import { createFileRoute, Link, useRouter, useLocation, redirect, isRedirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  useRouter,
+  useLocation,
+  redirect,
+  isRedirect,
+} from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import {  Sparkles , Plus, Loader2, Tag, Ticket } from "lucide-react";
+import { Sparkles, Plus, Loader2, Tag, Ticket } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Select,
@@ -47,7 +54,7 @@ import { MilestoneTimeline } from "@/components/vendor/MilestoneTimeline";
 import { BlackoutCalendarSection } from "@/components/vendor/BlackoutCalendarSection";
 import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
 import { VendorLayout, DashboardSkeleton } from "@/components/vendor/VendorLayout";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 import { useI18n } from "@/i18n/I18nProvider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { updateMyConsent } from "@/lib/consent.functions";
@@ -65,7 +72,7 @@ export const Route = createFileRoute("/_authenticated/caterer")({
       if (!profile.roles.includes("partner")) {
         throw redirect({
           to: "/auth",
-          search: { 
+          search: {
             message: `Please sign in with a Business Partner account.`,
             logout: "true",
           },
@@ -78,7 +85,7 @@ export const Route = createFileRoute("/_authenticated/caterer")({
       console.error("beforeLoad error on caterer dashboard:", err);
       throw redirect({
         to: "/auth",
-        search: { 
+        search: {
           message: "Session expired or unauthorized. Please sign in again.",
           logout: "true",
         },
@@ -122,7 +129,9 @@ function EmptyCard({
         🥂
       </div>
       <h3 className="font-display text-lg font-bold text-forest">{title}</h3>
-      <p className="mx-auto mt-1 max-w-sm text-xs text-muted-foreground leading-relaxed">{description}</p>
+      <p className="mx-auto mt-1 max-w-sm text-xs text-muted-foreground leading-relaxed">
+        {description}
+      </p>
       {children && <div className="mt-4">{children}</div>}
     </div>
   );
@@ -137,7 +146,7 @@ function CreateCatererForm() {
   const fetchMenu = useServerFn(getMyCatererMenu);
   const menuQ = useQuery({
     queryKey: ["caterer", "menu"],
-    queryFn: () => fetchMenu()
+    queryFn: () => fetchMenu(),
   });
   const availableItems = (menuQ.data || []).map((m: any) => m.name);
   const [name, setName] = useState("");
@@ -146,7 +155,8 @@ function CreateCatererForm() {
   const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const mut = useMutation({
-    mutationFn: (vars: { name: string; slug: string; custom_domain: string }) => create({ data: vars }),
+    mutationFn: (vars: { name: string; slug: string; custom_domain: string }) =>
+      create({ data: vars }),
     onSuccess: async () => {
       try {
         await saveConsent({ data: { marketing_opt_in: marketingOptIn, source: "caterer_signup" } });
@@ -167,18 +177,22 @@ function CreateCatererForm() {
       }}
     >
       <div className="space-y-1.5">
-        <Label htmlFor="cname" className="text-xs font-semibold text-forest/80">{t("Catering-Markenname", "Catering Brand Name")}</Label>
-        <Input 
-          id="cname" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)} 
+        <Label htmlFor="cname" className="text-xs font-semibold text-forest/80">
+          {t("Catering-Markenname", "Catering Brand Name")}
+        </Label>
+        <Input
+          id="cname"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder={t("z.B. Maison Verde Catering", "e.g. Maison Verde Catering")}
-          required 
+          required
           className="bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="cslug" className="text-xs font-semibold text-forest/80">{t("URL-Slug", "URL Slug")}</Label>
+        <Label htmlFor="cslug" className="text-xs font-semibold text-forest/80">
+          {t("URL-Slug", "URL Slug")}
+        </Label>
         <Input
           id="cslug"
           value={slug}
@@ -195,7 +209,9 @@ function CreateCatererForm() {
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="csubdomain" className="text-xs font-semibold text-forest/80">{t("Speisely Subdomain", "Speisely Subdomain")}</Label>
+        <Label htmlFor="csubdomain" className="text-xs font-semibold text-forest/80">
+          {t("Speisely Subdomain", "Speisely Subdomain")}
+        </Label>
         <div className="flex items-center gap-2">
           <Input
             id="csubdomain"
@@ -207,10 +223,15 @@ function CreateCatererForm() {
           />
           <span className="text-muted-foreground text-sm font-semibold shrink-0">.speisely.de</span>
         </div>
-        <p className="text-[10px] text-muted-foreground">{t("Dies wird die offizielle URL für deine Kunden sein.", "This will be your official client-facing storefront URL.")}</p>
+        <p className="text-[10px] text-muted-foreground">
+          {t(
+            "Dies wird die offizielle URL für deine Kunden sein.",
+            "This will be your official client-facing storefront URL.",
+          )}
+        </p>
       </div>
       {err && <p className="text-xs text-rose-600 font-medium">{err}</p>}
-      
+
       {/* Optional Marketing Consent */}
       <div className="flex items-start gap-2.5 pt-1 pb-2">
         <Checkbox
@@ -220,17 +241,26 @@ function CreateCatererForm() {
           className="mt-0.5 border-forest/20 text-forest data-[state=checked]:bg-forest data-[state=checked]:border-forest"
         />
         <div className="grid gap-1 leading-none">
-          <Label htmlFor="signup-marketing-consent" className="text-xs font-medium text-forest cursor-pointer">
+          <Label
+            htmlFor="signup-marketing-consent"
+            className="text-xs font-medium text-forest cursor-pointer"
+          >
             {tt(
               "Ich möchte Updates, Branchen-Tipps und Angebote von Speisely erhalten (optional)",
-              "I want to receive updates, industry tips, and promotions from Speisely (optional)"
+              "I want to receive updates, industry tips, and promotions from Speisely (optional)",
             )}
           </Label>
         </div>
       </div>
 
-      <Button type="submit" className="w-full rounded-full bg-forest hover:opacity-95 text-white py-2.5 font-semibold transition cursor-pointer mt-4" disabled={mut.isPending}>
-        {mut.isPending ? t("Erstelle Storefront…", "Creating Storefront…") : t("Catering-Storefront erstellen", "Create Catering Storefront")}
+      <Button
+        type="submit"
+        className="w-full rounded-full bg-forest hover:opacity-95 text-white py-2.5 font-semibold transition cursor-pointer mt-4"
+        disabled={mut.isPending}
+      >
+        {mut.isPending
+          ? t("Erstelle Storefront…", "Creating Storefront…")
+          : t("Catering-Storefront erstellen", "Create Catering Storefront")}
       </Button>
     </form>
   );
@@ -256,13 +286,12 @@ function BriefsSection() {
     queryFn: () => fetchBriefs(),
   });
   const mut = useMutation({
-    mutationFn: (vars: { briefId: string; status: BriefStatus }) =>
-      updateStatus({ data: vars }),
+    mutationFn: (vars: { briefId: string; status: BriefStatus }) => updateStatus({ data: vars }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["caterer", "briefs"] }),
   });
 
   const [selectedBriefId, setSelectedBriefId] = useState<string | null>(
-    q.data?.briefs?.[0]?.id || null
+    q.data?.briefs?.[0]?.id || null,
   );
 
   const [proposalBrief, setProposalBrief] = useState<any | null>(null);
@@ -270,8 +299,12 @@ function BriefsSection() {
   const [depositAmount, setDepositAmount] = useState("");
   const [proposalNotes, setProposalNotes] = useState("");
   const proposalMut = useMutation({
-    mutationFn: (vars: { briefId: string; proposalCents: number; depositCents: number; notes: string }) =>
-      submitProposal({ data: vars }),
+    mutationFn: (vars: {
+      briefId: string;
+      proposalCents: number;
+      depositCents: number;
+      notes: string;
+    }) => submitProposal({ data: vars }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["caterer", "briefs"] });
       setProposalBrief(null);
@@ -280,65 +313,83 @@ function BriefsSection() {
 
   const selectedBrief = q.data?.briefs?.find((b: any) => b.id === selectedBriefId);
 
-  if (q.error) return <div className="surface-card p-8 text-center text-destructive">Could not load your leads. Please try again.</div>;
-  if (!q.data?.caterer) return (
-    <EmptyCard
-      title="Create your storefront"
-      description="Set up your brand to start receiving event briefs from customers on Speisely."
-    >
-      <CreateCatererForm />
-    </EmptyCard>
-  );
-
-  if (q.data.briefs.length === 0) return (
-    <div className="space-y-6">
-      <div className="max-w-md mx-auto">
-        <PrintOnboardingBanner type="a4" brandName={q.data.caterer.name} />
+  if (q.error)
+    return (
+      <div className="surface-card p-8 text-center text-destructive">
+        Could not load your leads. Please try again.
       </div>
+    );
+  if (!q.data?.caterer)
+    return (
       <EmptyCard
-        title={t("No leads yet", "Noch keine Anfragen")}
-        description={t(
-          `When a customer routes a brief to ${q.data.caterer.name}, it will appear here.`,
-          `Sobald ein Kunde eine Anfrage an ${q.data.caterer.name} sendet, erscheint sie hier.`
-        )}
+        title="Create your storefront"
+        description="Set up your brand to start receiving event briefs from customers on Speisely."
       >
-        <div className="flex flex-col items-center justify-center gap-3 mt-4">
-          <Button
-            variant="outline"
-            onClick={() => {
-              const mockBrief = {
-                id: "test-lead-12345",
-                created_at: new Date().toISOString(),
-                event_type: t("Company Anniversary", "Firmenjubiläum"),
-                guest_count: 75,
-                event_date: new Date(Date.now() + 86400000 * 30).toISOString(),
-                location: "Berlin City Center Hall",
-                budget_cents: 350000,
-                notes: t("Buffet setup with vegan options, high-end tableware requested.", "Buffet-Aufbau mit veganen Optionen, hochwertiges Geschirr gewünscht."),
-                status: "quote_requested",
-                is_b2b: true,
-                company_name: "TechCorp GmbH",
-                milestones: [
-                  { title: t("Inquiry Received", "Anfrage erhalten"), status: "received", created_at: new Date().toISOString() },
-                  { title: t("Details Confirmed", "Details bestätigt"), status: "confirmed", created_at: new Date().toISOString() }
-                ]
-              };
-              printEventBrief(mockBrief, q.data.caterer.name, "caterer");
-            }}
-            className="rounded-full gap-2 border-forest/20 text-forest hover:bg-cream"
-          >
-            🖨️ {t("Print Test Brief", "Test-Brief drucken")}
-          </Button>
-          <p className="text-[10px] text-muted-foreground max-w-sm">
-            {t(
-              "Use this to test your A4 page styling or export event summaries to PDF.",
-              "Nutze dies, um dein A4-Seitenlayout zu testen oder Eventzettel als PDF zu exportieren."
-            )}
-          </p>
-        </div>
+        <CreateCatererForm />
       </EmptyCard>
-    </div>
-  );
+    );
+
+  if (q.data.briefs.length === 0)
+    return (
+      <div className="space-y-6">
+        <div className="max-w-md mx-auto">
+          <PrintOnboardingBanner type="a4" brandName={q.data.caterer.name} />
+        </div>
+        <EmptyCard
+          title={t("No leads yet", "Noch keine Anfragen")}
+          description={t(
+            `When a customer routes a brief to ${q.data.caterer.name}, it will appear here.`,
+            `Sobald ein Kunde eine Anfrage an ${q.data.caterer.name} sendet, erscheint sie hier.`,
+          )}
+        >
+          <div className="flex flex-col items-center justify-center gap-3 mt-4">
+            <Button
+              variant="outline"
+              onClick={() => {
+                const mockBrief = {
+                  id: "test-lead-12345",
+                  created_at: new Date().toISOString(),
+                  event_type: t("Company Anniversary", "Firmenjubiläum"),
+                  guest_count: 75,
+                  event_date: new Date(Date.now() + 86400000 * 30).toISOString(),
+                  location: "Berlin City Center Hall",
+                  budget_cents: 350000,
+                  notes: t(
+                    "Buffet setup with vegan options, high-end tableware requested.",
+                    "Buffet-Aufbau mit veganen Optionen, hochwertiges Geschirr gewünscht.",
+                  ),
+                  status: "quote_requested",
+                  is_b2b: true,
+                  company_name: "TechCorp GmbH",
+                  milestones: [
+                    {
+                      title: t("Inquiry Received", "Anfrage erhalten"),
+                      status: "received",
+                      created_at: new Date().toISOString(),
+                    },
+                    {
+                      title: t("Details Confirmed", "Details bestätigt"),
+                      status: "confirmed",
+                      created_at: new Date().toISOString(),
+                    },
+                  ],
+                };
+                printEventBrief(mockBrief, q.data.caterer.name, "caterer");
+              }}
+              className="rounded-full gap-2 border-forest/20 text-forest hover:bg-cream"
+            >
+              🖨️ {t("Print Test Brief", "Test-Brief drucken")}
+            </Button>
+            <p className="text-[10px] text-muted-foreground max-w-sm">
+              {t(
+                "Use this to test your A4 page styling or export event summaries to PDF.",
+                "Nutze dies, um dein A4-Seitenlayout zu testen oder Eventzettel als PDF zu exportieren.",
+              )}
+            </p>
+          </div>
+        </EmptyCard>
+      </div>
+    );
 
   return (
     <>
@@ -361,14 +412,25 @@ function BriefsSection() {
                   event_date: new Date(Date.now() + 86400000 * 30).toISOString(),
                   location: "Berlin City Center Hall",
                   budget_cents: 350000,
-                  notes: t("Buffet setup with vegan options, high-end tableware requested.", "Buffet-Aufbau mit veganen Optionen, hochwertiges Geschirr gewünscht."),
+                  notes: t(
+                    "Buffet setup with vegan options, high-end tableware requested.",
+                    "Buffet-Aufbau mit veganen Optionen, hochwertiges Geschirr gewünscht.",
+                  ),
                   status: "quote_requested",
                   is_b2b: true,
                   company_name: "TechCorp GmbH",
                   milestones: [
-                    { title: t("Inquiry Received", "Anfrage erhalten"), status: "received", created_at: new Date().toISOString() },
-                    { title: t("Details Confirmed", "Details bestätigt"), status: "confirmed", created_at: new Date().toISOString() }
-                  ]
+                    {
+                      title: t("Inquiry Received", "Anfrage erhalten"),
+                      status: "received",
+                      created_at: new Date().toISOString(),
+                    },
+                    {
+                      title: t("Details Confirmed", "Details bestätigt"),
+                      status: "confirmed",
+                      created_at: new Date().toISOString(),
+                    },
+                  ],
                 };
                 printEventBrief(mockBrief, q.data.caterer.name, "caterer");
               }}
@@ -399,22 +461,35 @@ function BriefsSection() {
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className={`inline-block rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
-                      STATUS_STYLES[b.status as BriefStatus] || "bg-stone-200 text-stone-800"
-                    }`}>
+                    <span
+                      className={`inline-block rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                        STATUS_STYLES[b.status as BriefStatus] || "bg-stone-200 text-stone-800"
+                      }`}
+                    >
                       {b.status.replace(/_/g, " ")}
                     </span>
                     <div className="flex gap-1 shrink-0">
-                      {b.is_b2b && <span className="bg-blue-100 text-blue-800 border border-blue-200 rounded px-1.5 py-0.2 text-[8px] font-bold">🏢 B2B</span>}
-                      {b.is_recurring && <span className="bg-purple-100 text-purple-800 border border-purple-200 rounded px-1.5 py-0.2 text-[8px] font-bold">🔄 Rec</span>}
+                      {b.is_b2b && (
+                        <span className="bg-blue-100 text-blue-800 border border-blue-200 rounded px-1.5 py-0.2 text-[8px] font-bold">
+                          🏢 B2B
+                        </span>
+                      )}
+                      {b.is_recurring && (
+                        <span className="bg-purple-100 text-purple-800 border border-purple-200 rounded px-1.5 py-0.2 text-[8px] font-bold">
+                          🔄 Rec
+                        </span>
+                      )}
                     </div>
                   </div>
                   <h3 className="font-display font-bold text-sm text-forest truncate">
-                    {b.company_name ? `${b.company_name} — ` : ""}{b.event_type ?? "Event"}
+                    {b.company_name ? `${b.company_name} — ` : ""}
+                    {b.event_type ?? "Event"}
                   </h3>
                   <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[10px] text-muted-foreground">
                     <span>👥 {b.guest_count || "—"} guests</span>
-                    <span>📅 {b.event_date ? new Date(b.event_date).toLocaleDateString() : "—"}</span>
+                    <span>
+                      📅 {b.event_date ? new Date(b.event_date).toLocaleDateString() : "—"}
+                    </span>
                   </div>
                 </div>
               );
@@ -441,11 +516,13 @@ function BriefsSection() {
                       )}
                     </div>
                     <h3 className="font-display text-xl font-bold text-forest mt-2">
-                      {selectedBrief.company_name ? `${selectedBrief.company_name} — ` : ""}{selectedBrief.event_type ?? "Event"}
+                      {selectedBrief.company_name ? `${selectedBrief.company_name} — ` : ""}
+                      {selectedBrief.event_type ?? "Event"}
                       {selectedBrief.guest_count ? ` · ${selectedBrief.guest_count} guests` : ""}
                     </h3>
                     <p className="text-[10px] text-muted-foreground mt-0.5">
-                      #{selectedBrief.id.slice(0, 8)} · received {new Date(selectedBrief.created_at).toLocaleString()}
+                      #{selectedBrief.id.slice(0, 8)} · received{" "}
+                      {new Date(selectedBrief.created_at).toLocaleString()}
                     </p>
                   </div>
                   <Button
@@ -462,24 +539,35 @@ function BriefsSection() {
                   {/* Left Detail Body */}
                   <div className="space-y-5">
                     <div>
-                      <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Event Information</h4>
+                      <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Event Information
+                      </h4>
                       <dl className="mt-2 grid grid-cols-2 gap-3 text-xs">
                         {selectedBrief.event_date && (
                           <div className="bg-cream/10 p-2.5 rounded-xl border border-border/20">
                             <dt className="text-muted-foreground text-[10px]">Date</dt>
-                            <dd className="font-semibold text-forest mt-0.5">{new Date(selectedBrief.event_date).toLocaleDateString()}</dd>
+                            <dd className="font-semibold text-forest mt-0.5">
+                              {new Date(selectedBrief.event_date).toLocaleDateString()}
+                            </dd>
                           </div>
                         )}
                         {selectedBrief.location && (
                           <div className="bg-cream/10 p-2.5 rounded-xl border border-border/20">
                             <dt className="text-muted-foreground text-[10px]">Location</dt>
-                            <dd className="font-semibold text-forest mt-0.5 truncate" title={selectedBrief.location}>{selectedBrief.location}</dd>
+                            <dd
+                              className="font-semibold text-forest mt-0.5 truncate"
+                              title={selectedBrief.location}
+                            >
+                              {selectedBrief.location}
+                            </dd>
                           </div>
                         )}
                         {selectedBrief.budget_cents != null && (
                           <div className="bg-cream/10 p-2.5 rounded-xl border border-border/20 col-span-2 sm:col-span-1">
                             <dt className="text-muted-foreground text-[10px]">Budget</dt>
-                            <dd className="font-semibold text-forest mt-0.5">{price(selectedBrief.budget_cents)}</dd>
+                            <dd className="font-semibold text-forest mt-0.5">
+                              {price(selectedBrief.budget_cents)}
+                            </dd>
                           </div>
                         )}
                       </dl>
@@ -487,7 +575,9 @@ function BriefsSection() {
 
                     {selectedBrief.notes && (
                       <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Customer Notes</h4>
+                        <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          Customer Notes
+                        </h4>
                         <div className="mt-2 p-3 bg-stone-50 border border-border/30 rounded-xl text-xs text-forest/90 italic leading-relaxed">
                           "{selectedBrief.notes}"
                         </div>
@@ -495,12 +585,14 @@ function BriefsSection() {
                     )}
 
                     <div className="border-t border-border/40 pt-4">
-                      <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Milestone Progress</h4>
-                      <MilestoneTimeline 
-                        briefId={selectedBrief.id} 
-                        milestones={selectedBrief.milestones} 
-                        onUpdate={() => qc.invalidateQueries({ queryKey: ["caterer", "briefs"] })} 
-                        isVendor={true} 
+                      <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">
+                        Milestone Progress
+                      </h4>
+                      <MilestoneTimeline
+                        briefId={selectedBrief.id}
+                        milestones={selectedBrief.milestones}
+                        onUpdate={() => qc.invalidateQueries({ queryKey: ["caterer", "briefs"] })}
+                        isVendor={true}
                       />
                     </div>
                   </div>
@@ -544,18 +636,26 @@ function BriefsSection() {
                           size="sm"
                           className="text-[10px] py-1 h-8 rounded-lg font-semibold bg-forest text-white"
                           disabled={mut.isPending}
-                          onClick={() => mut.mutate({ briefId: selectedBrief.id, status: "booked" })}
+                          onClick={() =>
+                            mut.mutate({ briefId: selectedBrief.id, status: "booked" })
+                          }
                         >
                           Confirm Booked
                         </Button>
                       </div>
-                      {(selectedBrief.status === "quote_requested" || selectedBrief.status === "draft" || selectedBrief.status === "needs_more_info") && (
-                        <Button 
-                          size="sm" 
-                          className="w-full mt-2 text-xs py-1 h-8 rounded-lg bg-forest text-white font-semibold" 
+                      {(selectedBrief.status === "quote_requested" ||
+                        selectedBrief.status === "draft" ||
+                        selectedBrief.status === "needs_more_info") && (
+                        <Button
+                          size="sm"
+                          className="w-full mt-2 text-xs py-1 h-8 rounded-lg bg-forest text-white font-semibold"
                           onClick={() => {
                             setProposalBrief(selectedBrief);
-                            setProposalAmount(selectedBrief.budget_cents ? (selectedBrief.budget_cents / 100).toString() : "");
+                            setProposalAmount(
+                              selectedBrief.budget_cents
+                                ? (selectedBrief.budget_cents / 100).toString()
+                                : "",
+                            );
                             setDepositAmount("0");
                             setProposalNotes("");
                           }}
@@ -566,9 +666,14 @@ function BriefsSection() {
                     </div>
 
                     <div className="pt-4 border-t border-border/40">
-                      <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Message Client</h4>
+                      <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                        Message Client
+                      </h4>
                       <div className="border border-border/40 rounded-2xl overflow-hidden bg-white shadow-sm">
-                        <SecureChat briefId={selectedBrief.id} currentUserId={q.data.caterer.owner_id} />
+                        <SecureChat
+                          briefId={selectedBrief.id}
+                          currentUserId={q.data.caterer.owner_id}
+                        />
                       </div>
                     </div>
                   </div>
@@ -589,50 +694,53 @@ function BriefsSection() {
           <DialogHeader>
             <DialogTitle>Send Proposal</DialogTitle>
             <DialogDescription>
-              Submit an official proposal to the customer. This will update the brief's total and set its status to "Proposal Sent".
+              Submit an official proposal to the customer. This will update the brief's total and
+              set its status to "Proposal Sent".
             </DialogDescription>
           </DialogHeader>
           {proposalBrief && (
             <div className="space-y-4 py-4">
               <div className="space-y-1.5">
                 <Label>Total Proposal Amount (€)</Label>
-                <Input 
-                  type="number" 
-                  step="0.01" 
+                <Input
+                  type="number"
+                  step="0.01"
                   min="0"
-                  value={proposalAmount} 
-                  onChange={e => setProposalAmount(e.target.value)} 
+                  value={proposalAmount}
+                  onChange={(e) => setProposalAmount(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label>Required Deposit Amount (€)</Label>
-                <Input 
-                  type="number" 
-                  step="0.01" 
+                <Input
+                  type="number"
+                  step="0.01"
                   min="0"
-                  value={depositAmount} 
-                  onChange={e => setDepositAmount(e.target.value)} 
+                  value={depositAmount}
+                  onChange={(e) => setDepositAmount(e.target.value)}
                 />
-                <p className="text-xs text-muted-foreground">Amount due immediately to confirm booking.</p>
+                <p className="text-xs text-muted-foreground">
+                  Amount due immediately to confirm booking.
+                </p>
               </div>
               <div className="space-y-1.5">
                 <Label>Milestone Terms & Notes</Label>
-                <Textarea 
+                <Textarea
                   rows={4}
-                  value={proposalNotes} 
-                  onChange={e => setProposalNotes(e.target.value)} 
+                  value={proposalNotes}
+                  onChange={(e) => setProposalNotes(e.target.value)}
                   placeholder="e.g. 50% deposit required upon booking. Final payment due 7 days prior to event."
                 />
               </div>
-              <Button 
-                className="w-full" 
+              <Button
+                className="w-full"
                 disabled={proposalMut.isPending || !proposalAmount}
                 onClick={() => {
                   proposalMut.mutate({
                     briefId: proposalBrief.id,
                     proposalCents: Math.round(parseFloat(proposalAmount || "0") * 100),
                     depositCents: Math.round(parseFloat(depositAmount || "0") * 100),
-                    notes: proposalNotes
+                    notes: proposalNotes,
                   });
                 }}
               >
@@ -719,7 +827,12 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
         </div>
         <div className="space-y-1.5">
           <Label>Category</Label>
-          <Input value={category} onChange={(e) => setCategory(e.target.value)} required placeholder="Menü, Vorspeisen..." />
+          <Input
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+            placeholder="Menü, Vorspeisen..."
+          />
         </div>
       </div>
       <div className="space-y-1.5">
@@ -729,27 +842,62 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
       <div className="grid grid-cols-3 gap-3">
         <div className="space-y-1.5">
           <Label>Price (€)</Label>
-          <Input type="number" step="0.01" min="0" value={price} onChange={(e) => setPrice(e.target.value)} required />
+          <Input
+            type="number"
+            step="0.01"
+            min="0"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+          />
         </div>
         <div className="space-y-1.5">
           <Label>Unit</Label>
-          <Input value={unit} onChange={(e) => setUnit(e.target.value)} required placeholder="Person, Platte..." />
+          <Input
+            value={unit}
+            onChange={(e) => setUnit(e.target.value)}
+            required
+            placeholder="Person, Platte..."
+          />
         </div>
         <div className="space-y-1.5">
           <Label>Serves</Label>
-          <Input type="number" min="1" value={serves} onChange={(e) => setServes(e.target.value)} required />
+          <Input
+            type="number"
+            min="1"
+            value={serves}
+            onChange={(e) => setServes(e.target.value)}
+            required
+          />
         </div>
       </div>
       <div className="space-y-1.5">
         <Label>Image (Optional)</Label>
         {imagePreview && (
-          <img src={imagePreview} alt="" className="h-24 w-full rounded-lg object-cover shadow-sm mb-2" />
+          <img
+            src={imagePreview}
+            alt=""
+            className="h-24 w-full rounded-lg object-cover shadow-sm mb-2"
+          />
         )}
-        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) handleFile(f);
-        }} />
-        <Button type="button" variant="outline" size="sm" className="w-full" disabled={uploading} onClick={() => fileRef.current?.click()}>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handleFile(f);
+          }}
+        />
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="w-full"
+          disabled={uploading}
+          onClick={() => fileRef.current?.click()}
+        >
           {uploading ? "Uploading…" : imagePreview ? "Replace image" : "Upload image"}
         </Button>
       </div>
@@ -787,20 +935,28 @@ function CatererMenuSection() {
           {q.data.menu.length === 0 ? (
             <div className="surface-card p-6 text-center border-2 border-dashed border-[#eadfce]/55 rounded-3xl bg-cream/5 flex flex-col items-center justify-center min-h-[300px] space-y-3">
               <span className="text-2xl">🍽️</span>
-              <h3 className="font-display text-base font-bold text-forest">No catering packages yet</h3>
+              <h3 className="font-display text-base font-bold text-forest">
+                No catering packages yet
+              </h3>
               <p className="text-xs text-muted-foreground max-w-sm text-center leading-relaxed">
-                Create your first menu item or buffet package using the builder form on the right. Once added, packages will show up here as client-facing menu cards.
+                Create your first menu item or buffet package using the builder form on the right.
+                Once added, packages will show up here as client-facing menu cards.
               </p>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
               {q.data.menu.map((m: any) => (
-                <article key={m.id} className="surface-card overflow-hidden border border-[#eadfce]/35 rounded-3xl bg-white shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                <article
+                  key={m.id}
+                  className="surface-card overflow-hidden border border-[#eadfce]/35 rounded-3xl bg-white shadow-sm flex flex-col justify-between hover:shadow-md transition"
+                >
                   <div>
                     {m.image_signed_url ? (
                       <img src={m.image_signed_url} alt="" className="h-32 w-full object-cover" />
                     ) : (
-                      <div className="flex h-32 w-full items-center justify-center bg-mint/20 text-2xl">🥂</div>
+                      <div className="flex h-32 w-full items-center justify-center bg-mint/20 text-2xl">
+                        🥂
+                      </div>
                     )}
                     <div className="p-4 space-y-1.5 text-left">
                       <div className="flex items-center justify-between">
@@ -808,20 +964,30 @@ function CatererMenuSection() {
                           {m.category}
                         </span>
                       </div>
-                      <h4 className="font-display font-bold text-base text-forest line-clamp-1">{m.name}</h4>
-                      {m.description && <p className="line-clamp-2 text-[11px] text-muted-foreground leading-relaxed">{m.description}</p>}
+                      <h4 className="font-display font-bold text-base text-forest line-clamp-1">
+                        {m.name}
+                      </h4>
+                      {m.description && (
+                        <p className="line-clamp-2 text-[11px] text-muted-foreground leading-relaxed">
+                          {m.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="p-4 pt-0 border-t border-[#eadfce]/20 mt-3 flex items-center justify-between">
                     <p className="text-xs">
-                      <span className="font-display font-bold text-base text-forest">€{(m.price_cents / 100).toFixed(2)}</span>
-                      <span className="text-muted-foreground text-[10px] ml-1">/ {m.unit} (serves ~{m.serves})</span>
+                      <span className="font-display font-bold text-base text-forest">
+                        €{(m.price_cents / 100).toFixed(2)}
+                      </span>
+                      <span className="text-muted-foreground text-[10px] ml-1">
+                        / {m.unit} (serves ~{m.serves})
+                      </span>
                     </p>
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
+                    <Button
+                      size="sm"
+                      variant="ghost"
                       className="text-xs h-7 px-2.5 rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-                      disabled={delMut.isPending} 
+                      disabled={delMut.isPending}
                       onClick={() => delMut.mutate(m.id)}
                     >
                       Delete
@@ -853,20 +1019,75 @@ function OverviewSection({ caterer }: { caterer: any }) {
 
   const [checklistCollapsed, setChecklistCollapsed] = useState(false);
 
-  if (q.error) return <div className="surface-card p-8 text-center text-destructive font-medium">{t("Übersichtsdetails konnten nicht geladen werden: ", "Could not load overview details: ")}{(q.error as any).message ?? "Unknown error"}</div>;
-  if (!q.data) return <div className="surface-card p-8 text-center text-muted-foreground">{t("Keine Übersichtsdetails verfügbar.", "No overview details available.")}</div>;
+  if (q.error)
+    return (
+      <div className="surface-card p-8 text-center text-destructive font-medium">
+        {t("Übersichtsdetails konnten nicht geladen werden: ", "Could not load overview details: ")}
+        {(q.error as any).message ?? "Unknown error"}
+      </div>
+    );
+  if (!q.data)
+    return (
+      <div className="surface-card p-8 text-center text-muted-foreground">
+        {t("Keine Übersichtsdetails verfügbar.", "No overview details available.")}
+      </div>
+    );
 
   const steps = [
-    { id: "storefront", label: t("Storefront erstellen", "Create storefront"), done: true, desc: t("Konfiguriere deinen Catering-Markennamen und die Subdomain.", "Configure your catering brand name and subdomain.") },
-    { id: "profile", label: t("Unternehmensprofil vervollständigen", "Complete business profile"), done: !!(caterer.logo_url && caterer.description), desc: t("Füge ein Logo, Bannerbild und eine Beschreibung hinzu.", "Add a logo, banner image, and business description."), link: "#profile" },
-    { id: "category", label: t("Service-Kategorie wählen", "Choose service category focus"), done: !!caterer.service_areas, desc: t("Konfiguriere Liefergebiete, um regionale Nachfrage zu sichern.", "Configure delivery zones to capture regional demand."), link: "#logistics" },
-    { id: "menu", label: t("Erstes Paket oder Gericht hinzufügen", "Add first package or menu item"), done: !!(menuQ.data?.menu && menuQ.data.menu.length > 0), desc: t("Erstelle Menükarten und Preise für deine Kunden.", "Create menu cards and pricing for clients to view."), link: "#menu" },
-    { id: "logistics", label: t("Verfügbarkeit & Logistik einrichten", "Set availability & logistics"), done: !!(caterer.delivery_fee_cents || caterer.min_delivery_cents), desc: t("Definiere Liefergebühren, Mindestbestellwert und Grenzen.", "Define pricing rules, delivery fees, and boundaries."), link: "#logistics" }
+    {
+      id: "storefront",
+      label: t("Storefront erstellen", "Create storefront"),
+      done: true,
+      desc: t(
+        "Konfiguriere deinen Catering-Markennamen und die Subdomain.",
+        "Configure your catering brand name and subdomain.",
+      ),
+    },
+    {
+      id: "profile",
+      label: t("Unternehmensprofil vervollständigen", "Complete business profile"),
+      done: !!(caterer.logo_url && caterer.description),
+      desc: t(
+        "Füge ein Logo, Bannerbild und eine Beschreibung hinzu.",
+        "Add a logo, banner image, and business description.",
+      ),
+      link: "#profile",
+    },
+    {
+      id: "category",
+      label: t("Service-Kategorie wählen", "Choose service category focus"),
+      done: !!caterer.service_areas,
+      desc: t(
+        "Konfiguriere Liefergebiete, um regionale Nachfrage zu sichern.",
+        "Configure delivery zones to capture regional demand.",
+      ),
+      link: "#logistics",
+    },
+    {
+      id: "menu",
+      label: t("Erstes Paket oder Gericht hinzufügen", "Add first package or menu item"),
+      done: !!(menuQ.data?.menu && menuQ.data.menu.length > 0),
+      desc: t(
+        "Erstelle Menükarten und Preise für deine Kunden.",
+        "Create menu cards and pricing for clients to view.",
+      ),
+      link: "#menu",
+    },
+    {
+      id: "logistics",
+      label: t("Verfügbarkeit & Logistik einrichten", "Set availability & logistics"),
+      done: !!(caterer.delivery_fee_cents || caterer.min_delivery_cents),
+      desc: t(
+        "Definiere Liefergebühren, Mindestbestellwert und Grenzen.",
+        "Define pricing rules, delivery fees, and boundaries.",
+      ),
+      link: "#logistics",
+    },
   ];
 
-  const completedCount = steps.filter(s => s.done).length;
+  const completedCount = steps.filter((s) => s.done).length;
   const allDone = completedCount === steps.length;
-  const nextStep = steps.find(s => !s.done);
+  const nextStep = steps.find((s) => !s.done);
 
   return (
     <section className="space-y-6">
@@ -884,20 +1105,37 @@ function OverviewSection({ caterer }: { caterer: any }) {
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">📈</span> {t("Umsatz (Gebucht)", "Revenue (Booked)")}</p>
-                <p className="text-xl font-bold font-display text-forest mt-1">€{(q.data.revenueCents / 100).toFixed(2)}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-forest">📈</span>{" "}
+                  {t("Umsatz (Gebucht)", "Revenue (Booked)")}
+                </p>
+                <p className="text-xl font-bold font-display text-forest mt-1">
+                  €{(q.data.revenueCents / 100).toFixed(2)}
+                </p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">💶</span> {t("Ø Budget", "Avg Budget")}</p>
-                <p className="text-xl font-bold font-display text-forest mt-1">€{(q.data.averageOrderCents / 100).toFixed(2)}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-forest">💶</span> {t("Ø Budget", "Avg Budget")}
+                </p>
+                <p className="text-xl font-bold font-display text-forest mt-1">
+                  €{(q.data.averageOrderCents / 100).toFixed(2)}
+                </p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">📅</span> {t("Gebuchte Events", "Booked Events")}</p>
-                <p className="text-xl font-bold font-display text-forest mt-1">{q.data.totalOrders}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-forest">📅</span> {t("Gebuchte Events", "Booked Events")}
+                </p>
+                <p className="text-xl font-bold font-display text-forest mt-1">
+                  {q.data.totalOrders}
+                </p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">⏱️</span> {t("Aktive Anfragen", "Active Leads")}</p>
-                <p className="text-xl font-bold font-display text-forest mt-1">{q.data.pendingOrders}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-forest">⏱️</span> {t("Aktive Anfragen", "Active Leads")}
+                </p>
+                <p className="text-xl font-bold font-display text-forest mt-1">
+                  {q.data.pendingOrders}
+                </p>
               </div>
             </div>
           </div>
@@ -909,24 +1147,47 @@ function OverviewSection({ caterer }: { caterer: any }) {
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-sky-600">📊</span> {t("Konversion", "Conversion")}</p>
-                <p className="text-xl font-bold font-display text-sky-600 mt-1">{q.data.conversionRate}%</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-sky-600">📊</span> {t("Konversion", "Conversion")}
+                </p>
+                <p className="text-xl font-bold font-display text-sky-600 mt-1">
+                  {q.data.conversionRate}%
+                </p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-sky-600">👀</span> {t("Profilaufrufe", "Profile Views")}</p>
-                <p className="text-xl font-bold font-display text-sky-600 mt-1">{q.data.profileViews || 0}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-sky-600">👀</span> {t("Profilaufrufe", "Profile Views")}
+                </p>
+                <p className="text-xl font-bold font-display text-sky-600 mt-1">
+                  {q.data.profileViews || 0}
+                </p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">🔄</span> {t("Kundenbindung", "Retention")}</p>
-                <p className="text-xl font-bold font-display text-forest mt-1">{q.data.customerRetentionRate}%</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-forest">🔄</span> {t("Kundenbindung", "Retention")}
+                </p>
+                <p className="text-xl font-bold font-display text-forest mt-1">
+                  {q.data.customerRetentionRate}%
+                </p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left col-span-1 sm:col-span-2 lg:col-span-1">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">⭐</span> {t("Beliebt", "Popular")}</p>
-                <p className="text-xs font-bold font-display truncate mt-2.5" title={q.data.popularDish}>{q.data.popularDish || "N/A"}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-forest">⭐</span> {t("Beliebt", "Popular")}
+                </p>
+                <p
+                  className="text-xs font-bold font-display truncate mt-2.5"
+                  title={q.data.popularDish}
+                >
+                  {q.data.popularDish || "N/A"}
+                </p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-rose-600">❌</span> {t("Storniert", "Cancelled")}</p>
-                <p className="text-xl font-bold font-display text-rose-600 mt-1">{q.data.cancelledOrders}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5">
+                  <span className="text-rose-600">❌</span> {t("Storniert", "Cancelled")}
+                </p>
+                <p className="text-xl font-bold font-display text-rose-600 mt-1">
+                  {q.data.cancelledOrders}
+                </p>
               </div>
             </div>
           </div>
@@ -934,7 +1195,11 @@ function OverviewSection({ caterer }: { caterer: any }) {
           {q.data.pendingOrders > 0 && (
             <div className="rounded-2xl bg-forest/10 border border-forest/20 p-4 text-left shadow-sm">
               <p className="text-forest font-medium text-xs flex items-center gap-2">
-                <span>⏱️</span> {t(`Sie haben ${q.data.pendingOrders} offene Anfragen, die Aufmerksamkeit erfordern. Gehen Sie zum Reiter "Anfragen", um Details zu sehen.`, `You have ${q.data.pendingOrders} pending leads that require attention. Go to the Leads tab to view details.`)}
+                <span>⏱️</span>{" "}
+                {t(
+                  `Sie haben ${q.data.pendingOrders} offene Anfragen, die Aufmerksamkeit erfordern. Gehen Sie zum Reiter "Anfragen", um Details zu sehen.`,
+                  `You have ${q.data.pendingOrders} pending leads that require attention. Go to the Leads tab to view details.`,
+                )}
               </p>
             </div>
           )}
@@ -956,10 +1221,10 @@ function OverviewSection({ caterer }: { caterer: any }) {
                   {completedCount}/5 {t("Erledigt", "Done")}
                 </span>
               </div>
-              
+
               {/* Progress Bar */}
               <div className="w-full bg-border/40 h-1.5 rounded-full overflow-hidden">
-                <div 
+                <div
                   className="bg-forest h-full transition-all duration-300"
                   style={{ width: `${(completedCount / 5) * 100}%` }}
                 />
@@ -969,24 +1234,31 @@ function OverviewSection({ caterer }: { caterer: any }) {
               <div className="space-y-3 pt-1">
                 {steps.map((s, idx) => (
                   <div key={s.id} className="flex gap-2.5 items-start">
-                    <div className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 text-[8px] font-bold mt-0.5 border ${
-                      s.done 
-                        ? "bg-forest border-emerald-600 text-white" 
-                        : nextStep?.id === s.id
-                          ? "border-emerald-600 text-forest bg-forest/10"
-                          : "border-muted text-muted-foreground"
-                    }`}>
+                    <div
+                      className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 text-[8px] font-bold mt-0.5 border ${
+                        s.done
+                          ? "bg-forest border-emerald-600 text-white"
+                          : nextStep?.id === s.id
+                            ? "border-emerald-600 text-forest bg-forest/10"
+                            : "border-muted text-muted-foreground"
+                      }`}
+                    >
                       {s.done ? "✓" : idx + 1}
                     </div>
                     <div className="min-w-0">
-                      <h4 className={`text-[11px] font-bold ${s.done ? "text-forest/60 line-through" : "text-forest"}`}>
+                      <h4
+                        className={`text-[11px] font-bold ${s.done ? "text-forest/60 line-through" : "text-forest"}`}
+                      >
                         {s.label}
                       </h4>
                       {!s.done && nextStep?.id === s.id && (
                         <p className="text-[10px] text-forest/75 mt-0.5 leading-relaxed bg-white/60 p-1.5 rounded-lg border border-border/20">
                           {s.desc}
                           {s.link && (
-                            <a href={s.link} className="block mt-1 font-semibold text-forest hover:underline text-[9px]">
+                            <a
+                              href={s.link}
+                              className="block mt-1 font-semibold text-forest hover:underline text-[9px]"
+                            >
                               {t("Jetzt einrichten →", "Configure now →")}
                             </a>
                           )}
@@ -996,11 +1268,12 @@ function OverviewSection({ caterer }: { caterer: any }) {
                   </div>
                 ))}
               </div>
-              
+
               {!allDone && nextStep && (
                 <div className="pt-2 border-t border-border/30">
                   <p className="text-[9px] text-muted-foreground">
-                    {t("Nächster empfohlener Schritt: ", "Next recommended action: ")}<span className="font-semibold text-forest">{nextStep.label}</span>
+                    {t("Nächster empfohlener Schritt: ", "Next recommended action: ")}
+                    <span className="font-semibold text-forest">{nextStep.label}</span>
                   </p>
                 </div>
               )}
@@ -1012,20 +1285,31 @@ function OverviewSection({ caterer }: { caterer: any }) {
             <h3 className="font-display font-bold text-sm text-forest">
               {t("Storefront-Status", "Storefront Status")}
             </h3>
-            
+
             <div className="space-y-2.5 text-xs text-forest/80">
               <div className="flex justify-between items-center py-1.5 border-b border-border/30">
-                <span className="text-muted-foreground text-[11px]">{t("Subdomain", "Subdomain")}</span>
-                <span className="font-mono text-[10px] font-semibold text-forest">{caterer.slug}.speisely.de</span>
+                <span className="text-muted-foreground text-[11px]">
+                  {t("Subdomain", "Subdomain")}
+                </span>
+                <span className="font-mono text-[10px] font-semibold text-forest">
+                  {caterer.slug}.speisely.de
+                </span>
               </div>
               <div className="flex justify-between items-center py-1.5 border-b border-border/30">
-                <span className="text-muted-foreground text-[11px]">{t("Eigene Domain", "Custom Domain")}</span>
-                <span className="font-mono text-[10px] font-semibold text-forest truncate max-w-[150px]" title={caterer.custom_domain || "None"}>
+                <span className="text-muted-foreground text-[11px]">
+                  {t("Eigene Domain", "Custom Domain")}
+                </span>
+                <span
+                  className="font-mono text-[10px] font-semibold text-forest truncate max-w-[150px]"
+                  title={caterer.custom_domain || "None"}
+                >
                   {caterer.custom_domain || t("Nicht konfiguriert", "Not configured")}
                 </span>
               </div>
               <div className="flex justify-between items-center py-1.5">
-                <span className="text-muted-foreground text-[11px]">{t("Postleitzahlen", "Postal Codes")}</span>
+                <span className="text-muted-foreground text-[11px]">
+                  {t("Postleitzahlen", "Postal Codes")}
+                </span>
                 <span className="font-mono text-[10px] font-semibold text-forest truncate max-w-[150px]">
                   {caterer.service_areas || t("Nicht konfiguriert", "Not configured")}
                 </span>
@@ -1033,9 +1317,9 @@ function OverviewSection({ caterer }: { caterer: any }) {
             </div>
 
             <div className="pt-2 flex flex-col gap-2">
-              <a 
-                href={`https://${caterer.slug}.speisely.de`} 
-                target="_blank" 
+              <a
+                href={`https://${caterer.slug}.speisely.de`}
+                target="_blank"
                 rel="noreferrer"
                 className="w-full text-center rounded-full bg-forest text-[10px] font-bold text-white py-2 hover:opacity-90 transition cursor-pointer"
               >
@@ -1058,14 +1342,14 @@ function OverviewSection({ caterer }: { caterer: any }) {
 function BusinessProfileSection() {
   const qc = useQueryClient();
   const fetchBriefs = useServerFn(getCatererBriefs);
-  const q = useQuery({ 
+  const q = useQuery({
     queryKey: ["caterer", "briefs"],
-    queryFn: () => fetchBriefs()
+    queryFn: () => fetchBriefs(),
   });
   const upsert = useServerFn(updateMyCatererSettings);
-  
+
   const caterer = q.data?.caterer;
-  
+
   const [name, setName] = useState(caterer?.name || "");
   const [desc, setDesc] = useState(caterer?.description || "");
   const [phone, setPhone] = useState(caterer?.phone || "");
@@ -1093,11 +1377,11 @@ function BusinessProfileSection() {
         .from("storefront-assets")
         .upload(path, file, { cacheControl: "3600", upsert: false });
       if (error) throw error;
-      
+
       const { data: signed } = await supabase.storage
         .from("storefront-assets")
         .createSignedUrl(path, 60 * 60 * 24 * 7); // 1 week
-        
+
       if (type === "logo") {
         setLogoPath(path);
         setLogoPreview(signed?.signedUrl ?? null);
@@ -1124,8 +1408,8 @@ function BusinessProfileSection() {
           logo_url: logoPath,
           banner_image_url: bannerPath,
           service_areas: serviceAreas,
-          certifications
-        }
+          certifications,
+        },
       });
       toast.success("Settings saved successfully!");
       qc.invalidateQueries({ queryKey: ["caterer"] });
@@ -1140,64 +1424,87 @@ function BusinessProfileSection() {
     <section className="space-y-6">
       <div className="flex flex-col gap-1">
         <h2 className="font-display text-2xl">Business Profile</h2>
-        <p className="text-sm text-muted-foreground">Manage your storefront presence, business details, and delivery operations.</p>
+        <p className="text-sm text-muted-foreground">
+          Manage your storefront presence, business details, and delivery operations.
+        </p>
       </div>
       <div className="surface-card p-6 space-y-8 max-w-3xl">
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label>Logo</Label>
-            <div 
+            <div
               onClick={() => logoRef.current?.click()}
               className="w-24 h-24 rounded-full border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-forest transition-colors"
             >
-              {logoPreview ? <img src={logoPreview} className="w-full h-full object-cover" /> : <span className="text-xs text-muted-foreground">Upload</span>}
+              {logoPreview ? (
+                <img src={logoPreview} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-xs text-muted-foreground">Upload</span>
+              )}
             </div>
-            <input ref={logoRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
-              if (e.target.files?.[0]) handleImage(e.target.files[0], "logo");
-            }} />
+            <input
+              ref={logoRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleImage(e.target.files[0], "logo");
+              }}
+            />
           </div>
           <div className="space-y-2">
             <Label>Banner Image</Label>
-            <div 
+            <div
               onClick={() => bannerRef.current?.click()}
               className="w-full h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-forest transition-colors"
             >
-              {bannerPreview ? <img src={bannerPreview} className="w-full h-full object-cover" /> : <span className="text-xs text-muted-foreground">Upload Banner</span>}
+              {bannerPreview ? (
+                <img src={bannerPreview} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-xs text-muted-foreground">Upload Banner</span>
+              )}
             </div>
-            <input ref={bannerRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
-              if (e.target.files?.[0]) handleImage(e.target.files[0], "banner");
-            }} />
+            <input
+              ref={bannerRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleImage(e.target.files[0], "banner");
+              }}
+            />
           </div>
         </div>
 
         <div className="space-y-4 pt-4 border-t border-border">
           <div className="space-y-1.5">
             <Label>Caterer Name</Label>
-            <Input value={name} onChange={e => setName(e.target.value)} />
+            <Input value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div className="space-y-1.5">
             <Label>Description</Label>
-            <Textarea rows={3} value={desc} onChange={e => setDesc(e.target.value)} />
+            <Textarea rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label>Phone</Label>
-              <Input value={phone} onChange={e => setPhone(e.target.value)} />
+              <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
             </div>
             <div className="space-y-1.5">
               <Label>Address</Label>
-              <Input value={address} onChange={e => setAddress(e.target.value)} />
+              <Input value={address} onChange={(e) => setAddress(e.target.value)} />
             </div>
           </div>
           <div className="space-y-1.5">
             <Label>Zertifizierungen & Standards / Certifications & Standards (Optional)</Label>
-            <Input 
-              value={certifications} 
-              onChange={e => setCertifications(e.target.value)} 
+            <Input
+              value={certifications}
+              onChange={(e) => setCertifications(e.target.value)}
               placeholder="z.B. Bio, HACCP, Halal, DGE-orientiert, Vegan, Allergy-Aware"
             />
             <p className="text-[10px] text-muted-foreground">
-              Geben Sie Zertifizierungen durch Komma getrennt ein. Sie werden als storefront Badges angezeigt. (Comma-separated, e.g. Bio, HACCP, Halal)
+              Geben Sie Zertifizierungen durch Komma getrennt ein. Sie werden als storefront Badges
+              angezeigt. (Comma-separated, e.g. Bio, HACCP, Halal)
             </p>
           </div>
         </div>
@@ -1215,23 +1522,29 @@ function BusinessProfileSection() {
   );
 }
 
-
-
-function PromotionsSection({ vertical, availableItems = [] }: { vertical: "restaurants" | "caterers" | "planners"; availableItems?: string[] }) {
+function PromotionsSection({
+  vertical,
+  availableItems = [],
+}: {
+  vertical: "restaurants" | "caterers" | "planners";
+  availableItems?: string[];
+}) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchPromos = useServerFn(getMyPromoCodes);
   const createPromo = useServerFn(createPromoCode);
   const togglePromo = useServerFn(togglePromoCode);
   const qc = useQueryClient();
-  
+
   const q = useSuspenseQuery({
     queryKey: ["promotions"],
-    queryFn: () => fetchPromos()
+    queryFn: () => fetchPromos(),
   });
 
   const [code, setCode] = useState("");
-  const [type, setType] = useState<"percentage" | "fixed" | "free_delivery" | "free_item" | "bogo">("percentage");
+  const [type, setType] = useState<"percentage" | "fixed" | "free_delivery" | "free_item" | "bogo">(
+    "percentage",
+  );
   const [value, setValue] = useState("");
   const [promote, setPromote] = useState(true);
   const [appliesTo, setAppliesTo] = useState<string>("all");
@@ -1246,7 +1559,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr("");
-    
+
     if (!code.trim()) return setErr(tt("Code fehlt", "Missing code"));
     if ((type === "percentage" || type === "fixed") && (!value || isNaN(Number(value)))) {
       return setErr(tt("Ungültiger Wert", "Invalid value"));
@@ -1260,20 +1573,21 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
 
     setCreating(true);
     try {
-      await createPromo({ 
+      await createPromo({
         data: {
           code: code.trim(),
           discount_type: type,
-          discount_value: (type === "percentage" || type === "fixed") ? Number(value) : 0,
+          discount_value: type === "percentage" || type === "fixed" ? Number(value) : 0,
           promote_on_storefront: promote,
           vertical,
           applies_to_product_name: appliesTo !== "all" ? appliesTo : undefined,
-          min_order_value_cents: minOrder && !isNaN(Number(minOrder)) ? Math.round(Number(minOrder) * 100) : undefined,
+          min_order_value_cents:
+            minOrder && !isNaN(Number(minOrder)) ? Math.round(Number(minOrder) * 100) : undefined,
           free_item_name: type === "free_item" ? freeItemName : undefined,
           required_qty: type === "bogo" ? Number(requiredQty) : undefined,
           starts_at: startsAt ? new Date(startsAt).toISOString() : undefined,
-          ends_at: endsAt ? new Date(endsAt).toISOString() : undefined
-        }
+          ends_at: endsAt ? new Date(endsAt).toISOString() : undefined,
+        },
       });
       await qc.invalidateQueries({ queryKey: ["promotions"] });
       setCode("");
@@ -1295,25 +1609,47 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
   const getStatusBadge = (promo: any) => {
     const now = new Date();
     if (!promo.is_active) {
-      return <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">{tt("Inaktiv", "Inactive")}</span>;
+      return (
+        <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">
+          {tt("Inaktiv", "Inactive")}
+        </span>
+      );
     }
     if (promo.starts_at && new Date(promo.starts_at) > now) {
-      return <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">{tt("Geplant", "Scheduled")}</span>;
+      return (
+        <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">
+          {tt("Geplant", "Scheduled")}
+        </span>
+      );
     }
     if (promo.ends_at && new Date(promo.ends_at) < now) {
-      return <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">{tt("Abgelaufen", "Expired")}</span>;
+      return (
+        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">
+          {tt("Abgelaufen", "Expired")}
+        </span>
+      );
     }
-    return <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">{tt("Aktiv", "Active")}</span>;
+    return (
+      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+        {tt("Aktiv", "Active")}
+      </span>
+    );
   };
 
   const getPromoSummary = (promo: any) => {
     let text = "";
     if (promo.discount_type === "percentage") text = `${promo.discount_value}% OFF`;
     else if (promo.discount_type === "fixed") text = `€${promo.discount_value} OFF`;
-    else if (promo.discount_type === "free_delivery") text = tt("Kostenlose Lieferung", "Free Delivery");
-    else if (promo.discount_type === "free_item") text = tt(`Gratis ${promo.free_item_name}`, `Free ${promo.free_item_name}`);
-    else if (promo.discount_type === "bogo") text = tt(`Kaufe ${promo.required_qty} erhalte 1 gratis`, `Buy ${promo.required_qty} get 1 free`);
-    
+    else if (promo.discount_type === "free_delivery")
+      text = tt("Kostenlose Lieferung", "Free Delivery");
+    else if (promo.discount_type === "free_item")
+      text = tt(`Gratis ${promo.free_item_name}`, `Free ${promo.free_item_name}`);
+    else if (promo.discount_type === "bogo")
+      text = tt(
+        `Kaufe ${promo.required_qty} erhalte 1 gratis`,
+        `Buy ${promo.required_qty} get 1 free`,
+      );
+
     if (promo.applies_to_product_name) text += ` (${promo.applies_to_product_name})`;
     return text;
   };
@@ -1321,8 +1657,15 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
   return (
     <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h2 className="text-xl font-bold text-black mb-1">{tt("Promotions & Gutscheine", "Promotions & Vouchers")}</h2>
-        <p className="text-gray-500 text-sm">{tt("Erstellen Sie Rabattcodes für Ihre Kunden.", "Create discount codes for your customers.")}</p>
+        <h2 className="text-xl font-bold text-black mb-1">
+          {tt("Promotions & Gutscheine", "Promotions & Vouchers")}
+        </h2>
+        <p className="text-gray-500 text-sm">
+          {tt(
+            "Erstellen Sie Rabattcodes für Ihre Kunden.",
+            "Create discount codes for your customers.",
+          )}
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -1333,15 +1676,29 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
           </h3>
           <form onSubmit={handleCreate} className="space-y-4">
             {err && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">{err}</div>}
-            
+
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Code</label>
-              <input value={code} onChange={e => setCode(e.target.value.toUpperCase())} placeholder="z.B. SOMMER20" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest uppercase text-sm" />
+              <input
+                value={code}
+                onChange={(e) => setCode(e.target.value.toUpperCase())}
+                placeholder="z.B. SOMMER20"
+                className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest uppercase text-sm"
+              />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Rabatt-Typ", "Discount Type")}</label>
-              <select value={type} onChange={(e) => { setType(e.target.value as any); setValue(""); }} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                {tt("Rabatt-Typ", "Discount Type")}
+              </label>
+              <select
+                value={type}
+                onChange={(e) => {
+                  setType(e.target.value as any);
+                  setValue("");
+                }}
+                className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+              >
                 <option value="percentage">{tt("Prozentsatz", "Percentage")}</option>
                 <option value="fixed">{tt("Fester Betrag", "Fixed Amount")}</option>
                 <option value="free_delivery">{tt("Kostenlose Lieferung", "Free Delivery")}</option>
@@ -1352,64 +1709,152 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
 
             {(type === "percentage" || type === "fixed") && (
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Wert", "Value")} {type === "percentage" ? "(%)" : "(€)"}</label>
-                <input type="number" step="any" value={value} onChange={e => setValue(e.target.value)} placeholder="z.B. 10" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {tt("Wert", "Value")} {type === "percentage" ? "(%)" : "(€)"}
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  placeholder="z.B. 10"
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                />
               </div>
             )}
 
             {type === "bogo" && (
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Benötigte Menge (X)", "Required Quantity (X)")}</label>
-                <input type="number" min="1" value={requiredQty} onChange={e => setRequiredQty(e.target.value)} placeholder="z.B. 2" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {tt("Benötigte Menge (X)", "Required Quantity (X)")}
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  value={requiredQty}
+                  onChange={(e) => setRequiredQty(e.target.value)}
+                  placeholder="z.B. 2"
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                />
               </div>
             )}
 
             {type === "free_item" && (
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gratis-Artikel", "Free Item")}</label>
-                <select value={freeItemName} onChange={e => setFreeItemName(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {tt("Gratis-Artikel", "Free Item")}
+                </label>
+                <select
+                  value={freeItemName}
+                  onChange={(e) => setFreeItemName(e.target.value)}
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                >
                   <option value="">{tt("Auswählen...", "Select...")}</option>
-                  {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
+                  {availableItems.map((i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
                 </select>
               </div>
             )}
 
-            {(type !== "free_delivery" && type !== "free_item") && (
+            {type !== "free_delivery" && type !== "free_item" && (
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gilt für", "Applies to")}</label>
-                <select value={appliesTo} onChange={e => setAppliesTo(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {tt("Gilt für", "Applies to")}
+                </label>
+                <select
+                  value={appliesTo}
+                  onChange={(e) => setAppliesTo(e.target.value)}
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                >
                   <option value="all">{tt("Gesamte Bestellung", "Entire Order")}</option>
-                  {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
+                  {availableItems.map((i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
                 </select>
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Mindestbestellwert (€) (Optional)", "Min. Order Value (€) (Optional)")}</label>
-              <input type="number" min="0" step="any" value={minOrder} onChange={e => setMinOrder(e.target.value)} placeholder="z.B. 50" className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                {tt("Mindestbestellwert (€) (Optional)", "Min. Order Value (€) (Optional)")}
+              </label>
+              <input
+                type="number"
+                min="0"
+                step="any"
+                value={minOrder}
+                onChange={(e) => setMinOrder(e.target.value)}
+                placeholder="z.B. 50"
+                className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig ab (Optional)", "Valid From (Optional)")}</label>
-                <input type="datetime-local" min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)} value={startsAt} onChange={e => setStartsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {tt("Gültig ab (Optional)", "Valid From (Optional)")}
+                </label>
+                <input
+                  type="datetime-local"
+                  min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+                    .toISOString()
+                    .slice(0, 16)}
+                  value={startsAt}
+                  onChange={(e) => setStartsAt(e.target.value)}
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig bis (Optional)", "Valid Until (Optional)")}</label>
-                <input type="datetime-local" min={startsAt || new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)} value={endsAt} onChange={e => setEndsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm" />
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {tt("Gültig bis (Optional)", "Valid Until (Optional)")}
+                </label>
+                <input
+                  type="datetime-local"
+                  min={
+                    startsAt ||
+                    new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+                      .toISOString()
+                      .slice(0, 16)
+                  }
+                  value={endsAt}
+                  onChange={(e) => setEndsAt(e.target.value)}
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                />
               </div>
             </div>
 
             <label className="flex items-center gap-2 cursor-pointer mt-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <input type="checkbox" checked={promote} onChange={e => setPromote(e.target.checked)} className="rounded text-forest focus:ring-forest bg-white" />
+              <input
+                type="checkbox"
+                checked={promote}
+                onChange={(e) => setPromote(e.target.checked)}
+                className="rounded text-forest focus:ring-forest bg-white"
+              />
               <div className="flex flex-col">
-                <span className="text-sm font-medium text-gray-700">{tt("Im Shop ankündigen", "Announce on storefront")}</span>
-                <span className="text-[10px] text-gray-500">{tt("Zeigt ein Banner für alle Besucher", "Shows a banner to all visitors")}</span>
+                <span className="text-sm font-medium text-gray-700">
+                  {tt("Im Shop ankündigen", "Announce on storefront")}
+                </span>
+                <span className="text-[10px] text-gray-500">
+                  {tt("Zeigt ein Banner für alle Besucher", "Shows a banner to all visitors")}
+                </span>
               </div>
             </label>
 
-            <button disabled={creating} type="submit" className="w-full bg-forest hover:bg-forest/90 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
-              {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Tag className="w-4 h-4" />}
+            <button
+              disabled={creating}
+              type="submit"
+              className="w-full bg-forest hover:bg-forest/90 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2"
+            >
+              {creating ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Tag className="w-4 h-4" />
+              )}
               {tt("Code Speichern", "Save Code")}
             </button>
           </form>
@@ -1420,35 +1865,54 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
             <Ticket className="w-4 h-4 text-forest" />
             {tt("Ihre Codes", "Your Codes")}
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {q.data?.map((p: any) => (
-              <div key={p.id} className={`bg-white border rounded-2xl p-5 transition-all shadow-sm ${p.is_active ? 'border-gray-200' : 'border-gray-100 opacity-60'}`}>
+              <div
+                key={p.id}
+                className={`bg-white border rounded-2xl p-5 transition-all shadow-sm ${p.is_active ? "border-gray-200" : "border-gray-100 opacity-60"}`}
+              >
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-bold text-lg text-black">{p.code}</span>
                       {getStatusBadge(p)}
                     </div>
-                    <span className="text-forest font-semibold text-sm">
-                      {getPromoSummary(p)}
-                    </span>
+                    <span className="text-forest font-semibold text-sm">{getPromoSummary(p)}</span>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" checked={p.is_active} onChange={async (e) => {
-                      const active = e.target.checked;
-                      await togglePromo({ data: { id: p.id, is_active: active } });
-                      qc.invalidateQueries({ queryKey: ["promotions"] });
-                      if(active) toast.success(tt("Aktiviert", "Activated"));
-                      else toast.success(tt("Deaktiviert", "Deactivated"));
-                    }} />
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={p.is_active}
+                      onChange={async (e) => {
+                        const active = e.target.checked;
+                        await togglePromo({ data: { id: p.id, is_active: active } });
+                        qc.invalidateQueries({ queryKey: ["promotions"] });
+                        if (active) toast.success(tt("Aktiviert", "Activated"));
+                        else toast.success(tt("Deaktiviert", "Deactivated"));
+                      }}
+                    />
                     <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-forest"></div>
                   </label>
                 </div>
                 <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
-                  {p.min_order_value_cents > 0 && <p>• {tt("Mindestbestellwert:", "Min. Spend:")} €{(p.min_order_value_cents/100).toFixed(2)}</p>}
-                  {p.starts_at && <p>• {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}</p>}
-                  {p.ends_at && <p>• {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}</p>}
+                  {p.min_order_value_cents > 0 && (
+                    <p>
+                      • {tt("Mindestbestellwert:", "Min. Spend:")} €
+                      {(p.min_order_value_cents / 100).toFixed(2)}
+                    </p>
+                  )}
+                  {p.starts_at && (
+                    <p>
+                      • {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}
+                    </p>
+                  )}
+                  {p.ends_at && (
+                    <p>
+                      • {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -1468,14 +1932,14 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
 function LogisticsSection() {
   const qc = useQueryClient();
   const fetchBriefs = useServerFn(getCatererBriefs);
-  const q = useSuspenseQuery({ 
+  const q = useSuspenseQuery({
     queryKey: ["caterer", "briefs"],
-    queryFn: () => fetchBriefs()
+    queryFn: () => fetchBriefs(),
   });
   const upsert = useServerFn(updateMyCatererSettings);
-  
+
   const caterer = q.data?.caterer;
-  
+
   const [serviceAreas, setServiceAreas] = useState((caterer as any)?.service_areas || "");
   const [deliveryFee, setDeliveryFee] = useState(((caterer as any)?.delivery_fee_cents || 0) / 100);
   const [minDelivery, setMinDelivery] = useState(((caterer as any)?.min_delivery_cents || 0) / 100);
@@ -1493,8 +1957,8 @@ function LogisticsSection() {
           service_areas: serviceAreas,
           delivery_fee_cents: Math.round(deliveryFee * 100),
           min_delivery_cents: Math.round(minDelivery * 100),
-          max_delivery_distance_km: maxDistance
-        }
+          max_delivery_distance_km: maxDistance,
+        },
       });
       toast.success("Logistics settings saved successfully!");
       qc.invalidateQueries({ queryKey: ["caterer"] });
@@ -1509,61 +1973,72 @@ function LogisticsSection() {
     <section className="space-y-6">
       <div className="flex flex-col gap-1">
         <h2 className="font-display text-2xl">Logistics & Delivery</h2>
-        <p className="text-sm text-muted-foreground">Manage where you deliver, delivery fees, and minimum order requirements.</p>
+        <p className="text-sm text-muted-foreground">
+          Manage where you deliver, delivery fees, and minimum order requirements.
+        </p>
       </div>
       <div className="surface-card p-6 space-y-8 max-w-3xl">
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2"><span className="text-forest">📍</span> Service Areas / Postal Codes</h3>
+          <h3 className="font-semibold text-lg flex items-center gap-2">
+            <span className="text-forest">📍</span> Service Areas / Postal Codes
+          </h3>
           <p className="text-sm text-muted-foreground">
-            Enter a comma-separated list of postal codes (e.g., 10115, 10117, 10119, 10435). This ensures customers only see your catering brand if you can fulfill their order.
+            Enter a comma-separated list of postal codes (e.g., 10115, 10117, 10119, 10435). This
+            ensures customers only see your catering brand if you can fulfill their order.
           </p>
-          <Input 
-            value={serviceAreas} 
-            onChange={e => setServiceAreas(e.target.value)} 
+          <Input
+            value={serviceAreas}
+            onChange={(e) => setServiceAreas(e.target.value)}
             placeholder="e.g. 10115, 10117, 10119, 10435"
             className="text-lg py-6"
           />
         </div>
 
         <div className="space-y-4 pt-4 border-t border-border">
-          <h3 className="font-semibold text-lg flex items-center gap-2"><span className="text-forest">🚚</span> Delivery Rules</h3>
-          
+          <h3 className="font-semibold text-lg flex items-center gap-2">
+            <span className="text-forest">🚚</span> Delivery Rules
+          </h3>
+
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label>Base Delivery Fee (€)</Label>
-              <Input 
-                type="number" 
-                min="0" 
+              <Input
+                type="number"
+                min="0"
                 step="1"
-                value={deliveryFee || ""} 
-                onChange={e => setDeliveryFee(parseFloat(e.target.value) || 0)} 
+                value={deliveryFee || ""}
+                onChange={(e) => setDeliveryFee(parseFloat(e.target.value) || 0)}
                 placeholder="0.00"
               />
               <p className="text-xs text-muted-foreground">Fee added to the quote for delivery.</p>
             </div>
             <div className="space-y-2">
               <Label>Minimum Delivery Value (€)</Label>
-              <Input 
-                type="number" 
-                min="0" 
+              <Input
+                type="number"
+                min="0"
                 step="1"
-                value={minDelivery || ""} 
-                onChange={e => setMinDelivery(parseFloat(e.target.value) || 0)} 
+                value={minDelivery || ""}
+                onChange={(e) => setMinDelivery(parseFloat(e.target.value) || 0)}
                 placeholder="0.00"
               />
-              <p className="text-xs text-muted-foreground">Minimum subtotal required to accept an order.</p>
+              <p className="text-xs text-muted-foreground">
+                Minimum subtotal required to accept an order.
+              </p>
             </div>
             <div className="space-y-2">
               <Label>Max Delivery Distance (km)</Label>
-              <Input 
-                type="number" 
-                min="0" 
+              <Input
+                type="number"
+                min="0"
                 step="1"
-                value={maxDistance || ""} 
-                onChange={e => setMaxDistance(parseFloat(e.target.value) || 0)} 
+                value={maxDistance || ""}
+                onChange={(e) => setMaxDistance(parseFloat(e.target.value) || 0)}
                 placeholder="20"
               />
-              <p className="text-xs text-muted-foreground">Maximum radius you are willing to travel.</p>
+              <p className="text-xs text-muted-foreground">
+                Maximum radius you are willing to travel.
+              </p>
             </div>
           </div>
         </div>
@@ -1581,9 +2056,14 @@ function ServiceCategoriesGuidance() {
   return (
     <div className="space-y-6 text-left">
       <div className="border-t border-[#eadfce]/30 pt-8">
-        <h3 className="font-display text-xl font-bold text-forest">{t("Service-Kategorien & Onboarding-Hilfe", "Service Categories & Setup Guidance")}</h3>
+        <h3 className="font-display text-xl font-bold text-forest">
+          {t("Service-Kategorien & Onboarding-Hilfe", "Service Categories & Setup Guidance")}
+        </h3>
         <p className="text-xs text-muted-foreground mt-1 max-w-2xl">
-          {t("Konfiguriere dein Dashboard passend zu diesen Zielgruppen, um in entsprechenden Suchen zu erscheinen.", "To appear in specific client searches, configure your dashboard settings according to these target segment expectations.")}
+          {t(
+            "Konfiguriere dein Dashboard passend zu diesen Zielgruppen, um in entsprechenden Suchen zu erscheinen.",
+            "To appear in specific client searches, configure your dashboard settings according to these target segment expectations.",
+          )}
         </p>
       </div>
 
@@ -1594,17 +2074,30 @@ function ServiceCategoriesGuidance() {
             <span className="inline-flex items-center gap-1 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-bold text-forest uppercase tracking-wider">
               {t("Einmalige Events", "One-Off Events")}
             </span>
-            <h4 className="font-display text-base font-bold text-forest">{t("Event-Catering", "Event Catering")}</h4>
+            <h4 className="font-display text-base font-bold text-forest">
+              {t("Event-Catering", "Event Catering")}
+            </h4>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
-              {t("Für Hochzeiten, private Feiern und Firmen-Events.", "Targeting weddings, private parties, and corporate functions.")}
+              {t(
+                "Für Hochzeiten, private Feiern und Firmen-Events.",
+                "Targeting weddings, private parties, and corporate functions.",
+              )}
             </p>
-            
+
             <div className="space-y-2 pt-1 text-[11px] leading-relaxed text-[#5c6f68]">
               <p>
-                <strong>{t("Erwartung:", "Expectations:")}</strong> {t("Flexible Menüs, Diät-Anpassungen & Servicepersonal.", "Flexible menu selections, dietary options & service staffing.")}
+                <strong>{t("Erwartung:", "Expectations:")}</strong>{" "}
+                {t(
+                  "Flexible Menüs, Diät-Anpassungen & Servicepersonal.",
+                  "Flexible menu selections, dietary options & service staffing.",
+                )}
               </p>
               <p>
-                <strong>{t("Aktion:", "Action:")}</strong> {t("Erstelle modulare Pakete im Menü-Manager & verfeinere dein Profil.", "Create modular packages in Menu Manager & refine your profile.")}
+                <strong>{t("Aktion:", "Action:")}</strong>{" "}
+                {t(
+                  "Erstelle modulare Pakete im Menü-Manager & verfeinere dein Profil.",
+                  "Create modular packages in Menu Manager & refine your profile.",
+                )}
               </p>
             </div>
           </div>
@@ -1631,17 +2124,30 @@ function ServiceCategoriesGuidance() {
             <span className="inline-flex items-center gap-1 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-bold text-forest uppercase tracking-wider">
               {t("Wiederkehrende Teams", "Recurring Teams")}
             </span>
-            <h4 className="font-display text-base font-bold text-forest">{t("Tägliche Catering-Abos", "Daily Catering Subscriptions")}</h4>
+            <h4 className="font-display text-base font-bold text-forest">
+              {t("Tägliche Catering-Abos", "Daily Catering Subscriptions")}
+            </h4>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
-              {t("Für Büros, Team-Lunches und regelmäßige Firmen-Abos.", "Targeting offices, team lunches, and recurring corporate subscriptions.")}
+              {t(
+                "Für Büros, Team-Lunches und regelmäßige Firmen-Abos.",
+                "Targeting offices, team lunches, and recurring corporate subscriptions.",
+              )}
             </p>
-            
+
             <div className="space-y-2 pt-1 text-[11px] leading-relaxed text-[#5c6f68]">
               <p>
-                <strong>{t("Erwartung:", "Expectations:")}</strong> {t("Pünktliche tägliche Lieferung, wöchentliche Rotation & Allergenangaben.", "Reliable daily delivery, weekly rotation & clear allergen info.")}
+                <strong>{t("Erwartung:", "Expectations:")}</strong>{" "}
+                {t(
+                  "Pünktliche tägliche Lieferung, wöchentliche Rotation & Allergenangaben.",
+                  "Reliable daily delivery, weekly rotation & clear allergen info.",
+                )}
               </p>
               <p>
-                <strong>{t("Aktion:", "Action:")}</strong> {t("Erstelle wöchentliche Menüpläne und pflege Postleitzahlen in der Logistik ein.", "Set up weekly menu plans and configure delivery zip codes in Logistics.")}
+                <strong>{t("Aktion:", "Action:")}</strong>{" "}
+                {t(
+                  "Erstelle wöchentliche Menüpläne und pflege Postleitzahlen in der Logistik ein.",
+                  "Set up weekly menu plans and configure delivery zip codes in Logistics.",
+                )}
               </p>
             </div>
           </div>
@@ -1668,17 +2174,30 @@ function ServiceCategoriesGuidance() {
             <span className="inline-flex items-center gap-1 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-bold text-forest uppercase tracking-wider">
               {t("Gemeinschaftsverpflegung", "Institutional Verpflegung")}
             </span>
-            <h4 className="font-display text-base font-bold text-forest">{t("Care- & Schul-Catering", "Institutional Catering")}</h4>
+            <h4 className="font-display text-base font-bold text-forest">
+              {t("Care- & Schul-Catering", "Institutional Catering")}
+            </h4>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
-              {t("Für Schulen, Kitas, Kliniken und Kantinen-Verpflegung.", "Targeting schools, kitas, clinics, and high-frequency canteen programs.")}
+              {t(
+                "Für Schulen, Kitas, Kliniken und Kantinen-Verpflegung.",
+                "Targeting schools, kitas, clinics, and high-frequency canteen programs.",
+              )}
             </p>
-            
+
             <div className="space-y-2 pt-1 text-[11px] leading-relaxed text-[#5c6f68]">
               <p>
-                <strong>{t("Erwartung:", "Expectations:")}</strong> {t("Zertifizierungen (DGE, Bio), HACCP-Richtlinien & hohe Kapazität.", "Certifications (DGE, Bio), HACCP compliance & high volume capacity.")}
+                <strong>{t("Erwartung:", "Expectations:")}</strong>{" "}
+                {t(
+                  "Zertifizierungen (DGE, Bio), HACCP-Richtlinien & hohe Kapazität.",
+                  "Certifications (DGE, Bio), HACCP compliance & high volume capacity.",
+                )}
               </p>
               <p>
-                <strong>{t("Aktion:", "Action:")}</strong> {t("Hinterlege Zertifikate und beschreibe deine HACCP-Abläufe im Profil.", "List certifications and describe your HACCP workflows in your profile.")}
+                <strong>{t("Aktion:", "Action:")}</strong>{" "}
+                {t(
+                  "Hinterlege Zertifikate und beschreibe deine HACCP-Abläufe im Profil.",
+                  "List certifications and describe your HACCP workflows in your profile.",
+                )}
               </p>
             </div>
           </div>
@@ -1716,8 +2235,6 @@ function CatererDashboard() {
   const { hash } = useLocation();
   const activeTab = (hash || "#overview").replace("#", "");
 
-
-  
   if (!q.data?.caterer) {
     return (
       <VendorLayout vertical="caterer" title={t("Caterer-Dashboard", "Caterer Dashboard")}>
@@ -1726,53 +2243,98 @@ function CatererDashboard() {
           <div className="surface-card p-6 border border-[#eadfce]/50 bg-cream/15 rounded-3xl shadow-sm grid md:grid-cols-[1.1fr_0.9fr] gap-6 items-start">
             <div className="space-y-4 text-left">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-forest">
-                <Sparkles className="h-3 w-3 animate-pulse" /> {t("Onboarding-Checkliste", "Onboarding Checklist")}
+                <Sparkles className="h-3 w-3 animate-pulse" />{" "}
+                {t("Onboarding-Checkliste", "Onboarding Checklist")}
               </span>
               <h2 className="text-2xl font-display font-bold text-forest leading-tight">
                 {t("Willkommen bei Speisely", "Welcome to Speisely")}
               </h2>
               <p className="text-xs text-forest/75 leading-relaxed">
-                {t("Veröffentliche dein Catering-Storefront und erreiche Kunden vor Ort in vier einfachen Schritten:", "Launch your catering storefront and reach local demand in four simple steps:")}
+                {t(
+                  "Veröffentliche dein Catering-Storefront und erreiche Kunden vor Ort in vier einfachen Schritten:",
+                  "Launch your catering storefront and reach local demand in four simple steps:",
+                )}
               </p>
 
               {/* Onboarding Sequence Steps */}
               <div className="space-y-3 pt-1">
                 <div className="flex gap-2.5 items-start">
-                  <div className="h-5 w-5 rounded-full bg-forest text-white flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">✓</div>
+                  <div className="h-5 w-5 rounded-full bg-forest text-white flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">
+                    ✓
+                  </div>
                   <div>
-                    <h4 className="text-[11px] font-bold text-forest">{t("1. Setup verstehen", "1. Understand the Setup")}</h4>
-                    <p className="text-[10px] text-forest/65">{t("Verbinde dich direkt mit Privat- und Firmenkunden, die Catering suchen.", "Connect directly with private and corporate clients seeking catering.")}</p>
+                    <h4 className="text-[11px] font-bold text-forest">
+                      {t("1. Setup verstehen", "1. Understand the Setup")}
+                    </h4>
+                    <p className="text-[10px] text-forest/65">
+                      {t(
+                        "Verbinde dich direkt mit Privat- und Firmenkunden, die Catering suchen.",
+                        "Connect directly with private and corporate clients seeking catering.",
+                      )}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex gap-2.5 items-start">
-                  <div className="h-5 w-5 rounded-full border-2 border-emerald-600 bg-cream text-forest flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">2</div>
+                  <div className="h-5 w-5 rounded-full border-2 border-emerald-600 bg-cream text-forest flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">
+                    2
+                  </div>
                   <div>
-                    <h4 className="text-[11px] font-bold text-forest">{t("2. Storefront erstellen", "2. Create Storefront")} <span className="ml-1 text-[9px] font-normal text-forest">{t("(Aktion erforderlich)", "(Action Required)")}</span></h4>
-                    <p className="text-[10px] text-forest/65">{t("Fülle das Storefront-Registrierungsformular auf der rechten Seite aus.", "Complete the storefront registration form on the right.")}</p>
+                    <h4 className="text-[11px] font-bold text-forest">
+                      {t("2. Storefront erstellen", "2. Create Storefront")}{" "}
+                      <span className="ml-1 text-[9px] font-normal text-forest">
+                        {t("(Aktion erforderlich)", "(Action Required)")}
+                      </span>
+                    </h4>
+                    <p className="text-[10px] text-forest/65">
+                      {t(
+                        "Fülle das Storefront-Registrierungsformular auf der rechten Seite aus.",
+                        "Complete the storefront registration form on the right.",
+                      )}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex gap-2.5 items-start">
-                  <div className="h-5 w-5 rounded-full border-2 border-[#eadfce] bg-transparent text-muted-foreground flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">3</div>
+                  <div className="h-5 w-5 rounded-full border-2 border-[#eadfce] bg-transparent text-muted-foreground flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">
+                    3
+                  </div>
                   <div>
-                    <h4 className="text-[11px] font-bold text-muted-foreground">{t("3. Service-Kategorie wählen", "3. Choose Service Category Focus")}</h4>
-                    <p className="text-[10px] text-muted-foreground/65">{t("Beachte die Onboarding-Hilfe für Service-Kategorien unten.", "Check the operational category guidance at the bottom.")}</p>
+                    <h4 className="text-[11px] font-bold text-muted-foreground">
+                      {t("3. Service-Kategorie wählen", "3. Choose Service Category Focus")}
+                    </h4>
+                    <p className="text-[10px] text-muted-foreground/65">
+                      {t(
+                        "Beachte die Onboarding-Hilfe für Service-Kategorien unten.",
+                        "Check the operational category guidance at the bottom.",
+                      )}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex gap-2.5 items-start">
-                  <div className="h-5 w-5 rounded-full border-2 border-[#eadfce] bg-transparent text-muted-foreground flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">4</div>
+                  <div className="h-5 w-5 rounded-full border-2 border-[#eadfce] bg-transparent text-muted-foreground flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">
+                    4
+                  </div>
                   <div>
-                    <h4 className="text-[11px] font-bold text-muted-foreground">{t("4. Profil & Pakete einrichten", "4. Complete Profile & Package Setup")}</h4>
-                    <p className="text-[10px] text-muted-foreground/65">{t("Definiere Lieferregeln, lade Bilder hoch und erstelle Menüs.", "Define delivery rules, upload assets, and list initial menus.")}</p>
+                    <h4 className="text-[11px] font-bold text-muted-foreground">
+                      {t("4. Profil & Pakete einrichten", "4. Complete Profile & Package Setup")}
+                    </h4>
+                    <p className="text-[10px] text-muted-foreground/65">
+                      {t(
+                        "Definiere Lieferregeln, lade Bilder hoch und erstelle Menüs.",
+                        "Define delivery rules, upload assets, and list initial menus.",
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="bg-white p-5 rounded-2xl border border-[#eadfce]/40 shadow-sm">
-              <h3 className="font-display font-semibold text-base text-forest mb-3 text-left">{t("Storefront registrieren", "Register Storefront")}</h3>
+              <h3 className="font-display font-semibold text-base text-forest mb-3 text-left">
+                {t("Storefront registrieren", "Register Storefront")}
+              </h3>
               <CreateCatererForm />
             </div>
           </div>
@@ -1785,16 +2347,18 @@ function CatererDashboard() {
   }
 
   return (
-    <VendorLayout 
-      vertical="caterer" 
-      title={`${q.data.caterer.name} ${t("Dashboard", "Dashboard")}`} 
+    <VendorLayout
+      vertical="caterer"
+      title={`${q.data.caterer.name} ${t("Dashboard", "Dashboard")}`}
       storefrontSlug={q.data.caterer.slug}
     >
-      <React.Suspense fallback={
-        <div className="flex-1 flex items-center justify-center min-h-[400px]">
-          <div className="w-8 h-8 rounded-full border-4 border-forest/20 border-t-forest animate-spin" />
-        </div>
-      }>
+      <React.Suspense
+        fallback={
+          <div className="flex-1 flex items-center justify-center min-h-[400px]">
+            <div className="w-8 h-8 rounded-full border-4 border-forest/20 border-t-forest animate-spin" />
+          </div>
+        }
+      >
         {activeTab === "overview" && <OverviewSection caterer={q.data.caterer} />}
         {activeTab === "briefs" && <BriefsSection />}
         {activeTab === "calendar" && <BlackoutCalendarSection vendorType="caterer" />}
@@ -1802,24 +2366,24 @@ function CatererDashboard() {
         {activeTab === "promotions" && <PromotionsSection vertical="caterers" />}
         {activeTab === "logistics" && <LogisticsSection />}
         {activeTab === "profile" && (
-        <div className="space-y-10">
-          <CustomDomainSection 
-            entity={q.data.caterer} 
-            onSave={async (slug, domain) => {
-              const { updateMyCatererSettings } = await import("@/lib/caterer/queries.functions");
-              await updateMyCatererSettings({
-                data: {
-                  name: q.data.caterer.name,
-                  slug: slug,
-                  custom_domain: domain
-                }
-              });
-              qc.invalidateQueries({ queryKey: ["caterer", "briefs"] });
-            }}
-          />
-          <BusinessProfileSection />
-        </div>
-      )}
+          <div className="space-y-10">
+            <CustomDomainSection
+              entity={q.data.caterer}
+              onSave={async (slug, domain) => {
+                const { updateMyCatererSettings } = await import("@/lib/caterer/queries.functions");
+                await updateMyCatererSettings({
+                  data: {
+                    name: q.data.caterer.name,
+                    slug: slug,
+                    custom_domain: domain,
+                  },
+                });
+                qc.invalidateQueries({ queryKey: ["caterer", "briefs"] });
+              }}
+            />
+            <BusinessProfileSection />
+          </div>
+        )}
       </React.Suspense>
     </VendorLayout>
   );

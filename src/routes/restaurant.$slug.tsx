@@ -1,7 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { trackEvent } from "@/utils/posthog";
-import { MapPin, Star, Clock, Plus, Minus, ArrowLeft, Phone, ShoppingBag, Check, Calendar, Globe, ShieldCheck, CheckCircle2, ChevronRight } from "lucide-react";
+import {
+  MapPin,
+  Star,
+  Clock,
+  Plus,
+  Minus,
+  ArrowLeft,
+  Phone,
+  ShoppingBag,
+  Check,
+  Calendar,
+  Globe,
+  ShieldCheck,
+  CheckCircle2,
+  ChevronRight,
+} from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
 import { CategoryNav } from "@/components/ui/CategoryNav";
@@ -16,7 +31,11 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { createTableReservation, getRestaurantBySlug, startStorefrontCheckout } from "@/lib/restaurant/public.functions";
+import {
+  createTableReservation,
+  getRestaurantBySlug,
+  startStorefrontCheckout,
+} from "@/lib/restaurant/public.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { UnifiedCustomerFields } from "@/components/UnifiedCustomerFields";
 import { recordPageView } from "@/lib/vendor/analytics.functions";
@@ -52,30 +71,35 @@ export const Route = createFileRoute("/restaurant/$slug")({
         { title },
         { name: "description", content: description },
         { property: "og:title", content: r ? `${r.name} – Speisely` : title },
-        { property: "og:description", content: r ? `Jetzt direkt bei ${r.name} in ${city} bestellen.` : description },
+        {
+          property: "og:description",
+          content: r ? `Jetzt direkt bei ${r.name} in ${city} bestellen.` : description,
+        },
         { property: "og:image", content: ogImage },
         { property: "og:url", content: canonicalUrl },
         { property: "og:type", content: "website" },
       ],
       links: [{ rel: "canonical", href: canonicalUrl }],
       scripts: r
-        ? [{
-            type: "application/ld+json",
-            children: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Restaurant",
-              name: r.name,
-              image: r.img || "https://speisely.de/og-default.jpg",
-              description: description,
-              url: canonicalUrl,
-              address: { 
-                "@type": "PostalAddress", 
-                addressLocality: r.area,
-                addressCountry: "DE"
-              },
-              servesCuisine: r.tags?.[0] ?? "",
-            }),
-          }]
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Restaurant",
+                name: r.name,
+                image: r.img || "https://speisely.de/og-default.jpg",
+                description: description,
+                url: canonicalUrl,
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: r.area,
+                  addressCountry: "DE",
+                },
+                servesCuisine: r.tags?.[0] ?? "",
+              }),
+            },
+          ]
         : undefined,
     };
   },
@@ -92,7 +116,6 @@ export const Route = createFileRoute("/restaurant/$slug")({
   ),
 });
 
-
 function RestaurantPage() {
   const { slug } = Route.useParams();
   const { lang } = useI18n();
@@ -102,7 +125,8 @@ function RestaurantPage() {
     // Only gate ordering if NO payment method is available at all
     const hasStripe = dbRestaurant.stripe_connect_status === "connected";
     const hasCash = (dbRestaurant as any).accepts_cash === true;
-    const hasPaypal = (dbRestaurant as any).accepts_paypal === true && !!(dbRestaurant as any).paypal_email;
+    const hasPaypal =
+      (dbRestaurant as any).accepts_paypal === true && !!(dbRestaurant as any).paypal_email;
     return !hasStripe && !hasCash && !hasPaypal;
   }, [dbRestaurant]);
   const restaurant = useMemo(() => {
@@ -113,8 +137,8 @@ function RestaurantPage() {
     };
   }, [fullRestaurant, dbRestaurant]);
 
-  const storefrontUrl = dbRestaurant?.custom_domain 
-    ? `https://${dbRestaurant.custom_domain}` 
+  const storefrontUrl = dbRestaurant?.custom_domain
+    ? `https://${dbRestaurant.custom_domain}`
     : `https://${dbRestaurant?.slug || slug}.speisely.de`;
 
   const [cart, setCart] = useState<Record<string, number>>({});
@@ -125,12 +149,16 @@ function RestaurantPage() {
   const [selectedPayment, setSelectedPayment] = useState<"cash" | "paypal" | "stripe" | null>(null);
 
   // Derive which payment methods this restaurant supports
-  const paymentMethods = useMemo(() => ({
-    cash: (dbRestaurant as any)?.accepts_cash === true,
-    paypal: (dbRestaurant as any)?.accepts_paypal === true && !!(dbRestaurant as any)?.paypal_email,
-    paypalLink: (dbRestaurant as any)?.paypal_email || "",
-    stripe: dbRestaurant?.stripe_connect_status === "connected",
-  }), [dbRestaurant]);
+  const paymentMethods = useMemo(
+    () => ({
+      cash: (dbRestaurant as any)?.accepts_cash === true,
+      paypal:
+        (dbRestaurant as any)?.accepts_paypal === true && !!(dbRestaurant as any)?.paypal_email,
+      paypalLink: (dbRestaurant as any)?.paypal_email || "",
+      stripe: dbRestaurant?.stripe_connect_status === "connected",
+    }),
+    [dbRestaurant],
+  );
 
   const [scheduleMode, setScheduleMode] = useState<"now" | "later">("now");
   const [scheduleDate, setScheduleDate] = useState("");
@@ -142,8 +170,9 @@ function RestaurantPage() {
 
   useEffect(() => {
     if (restaurant?.id) {
-      recordView({ data: { vendorId: restaurant.id, vendorType: "restaurant", url: window.location.pathname } })
-        .catch(e => console.error("Tracking error", e));
+      recordView({
+        data: { vendorId: restaurant.id, vendorType: "restaurant", url: window.location.pathname },
+      }).catch((e) => console.error("Tracking error", e));
     }
   }, [restaurant?.id]);
 
@@ -179,10 +208,13 @@ function RestaurantPage() {
           <p className="text-muted-foreground">
             {t(
               "Dieser Speisely-Storefront befindet sich derzeit im Aufbau oder ist vorübergehend pausiert. Schauen Sie bald wieder vorbei!",
-              "This Speisely storefront is currently under construction or temporarily paused. Check back soon!"
+              "This Speisely storefront is currently under construction or temporarily paused. Check back soon!",
             )}
           </p>
-          <Link to="/instant-order" className="inline-block mt-4 rounded-full bg-forest text-white px-6 py-3 font-semibold shadow-md hover:bg-forest/90 transition-colors">
+          <Link
+            to="/instant-order"
+            className="inline-block mt-4 rounded-full bg-forest text-white px-6 py-3 font-semibold shadow-md hover:bg-forest/90 transition-colors"
+          >
             {t("Entdecken Sie andere Restaurants", "Explore other restaurants")}
           </Link>
         </div>
@@ -198,7 +230,7 @@ function RestaurantPage() {
     const dateStr = reservationDate.replace(/-/g, "");
     const timeStr = reservationTime.replace(/:/g, "") + "00";
     const startDateTime = `${dateStr}T${timeStr}`;
-    
+
     // Default duration 2 hours
     const [hours, minutes] = reservationTime.split(":").map(Number);
     const endHours = (hours + 2) % 24;
@@ -230,14 +262,17 @@ function RestaurantPage() {
       `DTEND:${endDateTime}`,
       "STATUS:CONFIRMED",
       "END:VEVENT",
-      "END:VCALENDAR"
+      "END:VCALENDAR",
     ].join("\r\n");
 
     const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `reservation_${restaurant.name.toLowerCase().replace(/\s+/g, "_")}.ics`);
+    link.setAttribute(
+      "download",
+      `reservation_${restaurant.name.toLowerCase().replace(/\s+/g, "_")}.ics`,
+    );
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -247,7 +282,12 @@ function RestaurantPage() {
   const handleReservationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!identity.termsAccepted) {
-      setResError(t("Bitte akzeptieren Sie die Reservierungsbedingungen.", "Please accept the reservation terms."));
+      setResError(
+        t(
+          "Bitte akzeptieren Sie die Reservierungsbedingungen.",
+          "Please accept the reservation terms.",
+        ),
+      );
       return;
     }
     setResLoading(true);
@@ -271,11 +311,11 @@ function RestaurantPage() {
             reservationDate: resForm.reservationDate,
             reservationTime: resForm.reservationTime,
             notes: resForm.notes,
-          }
+          },
         });
       } else {
         // Mock submission for static data
-        await new Promise(res => setTimeout(res, 800));
+        await new Promise((res) => setTimeout(res, 800));
       }
 
       trackEvent("reservation_submitted", { restaurantId: restaurant!.id, type: "table" });
@@ -341,11 +381,12 @@ function RestaurantPage() {
   const total = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
   const totalCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
 
-
   const handleApplyPromo = () => {
     setPromoError("");
     const codes = mockPromoCodes[restaurant.id] || [];
-    const validCode = codes.find(c => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase());
+    const validCode = codes.find(
+      (c) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase(),
+    );
     if (validCode) {
       const now = new Date();
       if (validCode.starts_at && new Date(validCode.starts_at) > now) {
@@ -354,8 +395,13 @@ function RestaurantPage() {
       if (validCode.ends_at && new Date(validCode.ends_at) < now) {
         return setPromoError(t("Dieser Code ist abgelaufen", "This code has expired"));
       }
-      if (validCode.min_order_value_cents && (total * 100) < validCode.min_order_value_cents) {
-        return setPromoError(t(`Mindestbestellwert: €${(validCode.min_order_value_cents/100).toFixed(2)}`, `You must spend at least €${(validCode.min_order_value_cents/100).toFixed(2)} to use this code`));
+      if (validCode.min_order_value_cents && total * 100 < validCode.min_order_value_cents) {
+        return setPromoError(
+          t(
+            `Mindestbestellwert: €${(validCode.min_order_value_cents / 100).toFixed(2)}`,
+            `You must spend at least €${(validCode.min_order_value_cents / 100).toFixed(2)} to use this code`,
+          ),
+        );
       }
       setAppliedPromo(validCode);
       setPromoCodeInput("");
@@ -372,14 +418,14 @@ function RestaurantPage() {
     if ((appliedPromo as any).discount_type === "free_delivery") {
       deliveryFee = 0;
     } else if ((appliedPromo as any).discount_type === "free_item") {
-      const targetItem = cartItems.find(i => i.name === (appliedPromo as any).free_item_name);
+      const targetItem = cartItems.find((i) => i.name === (appliedPromo as any).free_item_name);
       if (targetItem) {
         discountAmount = targetItem.price;
       }
     } else if ((appliedPromo as any).discount_type === "bogo") {
       const rq = (appliedPromo as any).required_qty || 2;
       const appliesTo = (appliedPromo as any).applies_to_product_name;
-      const targetItem = cartItems.find(i => i.name === appliesTo);
+      const targetItem = cartItems.find((i) => i.name === appliesTo);
       if (targetItem) {
         const freeItems = Math.floor(targetItem.qty / rq);
         discountAmount = freeItems * targetItem.price;
@@ -387,7 +433,9 @@ function RestaurantPage() {
     } else {
       let eligibleSubtotal = subtotal;
       if ((appliedPromo as any).applies_to_product_name) {
-        const targetItem = cartItems.find(i => i.name === (appliedPromo as any).applies_to_product_name);
+        const targetItem = cartItems.find(
+          (i) => i.name === (appliedPromo as any).applies_to_product_name,
+        );
         eligibleSubtotal = targetItem ? targetItem.price * targetItem.qty : 0;
       }
 
@@ -411,13 +459,20 @@ function RestaurantPage() {
       )}
       {isGated && (
         <div className="mt-4 p-3 rounded-lg bg-rose-50 text-rose-800 text-xs border border-rose-200 text-left font-medium">
-          ⚠️ {t("Online-Bestellungen sind für dieses Restaurant vorübergehend deaktiviert (Abonnement inaktiv oder Zahlungsverbindung fehlt).", "Online ordering is temporarily disabled for this restaurant (inactive subscription or missing payment connection).")}
+          ⚠️{" "}
+          {t(
+            "Online-Bestellungen sind für dieses Restaurant vorübergehend deaktiviert (Abonnement inaktiv oder Zahlungsverbindung fehlt).",
+            "Online ordering is temporarily disabled for this restaurant (inactive subscription or missing payment connection).",
+          )}
         </div>
       )}
       {cartItems.length === 0 ? (
         <>
           <p className="mt-4 text-sm text-forest/40 italic">
-            {t("👆 Füge Gerichte hinzu, um deine Bestellung zu starten", "👆 Add dishes to start your order")}
+            {t(
+              "👆 Füge Gerichte hinzu, um deine Bestellung zu starten",
+              "👆 Add dishes to start your order",
+            )}
           </p>
           <button
             disabled
@@ -434,8 +489,8 @@ function RestaurantPage() {
                 type="button"
                 onClick={() => setScheduleMode("now")}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-                  scheduleMode === "now" 
-                    ? "bg-[#10b981] text-white shadow-sm" 
+                  scheduleMode === "now"
+                    ? "bg-[#10b981] text-white shadow-sm"
                     : "text-forest/60 hover:bg-[#eadfce]/30 hover:text-forest"
                 }`}
               >
@@ -445,8 +500,8 @@ function RestaurantPage() {
                 type="button"
                 onClick={() => setScheduleMode("later")}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-                  scheduleMode === "later" 
-                    ? "bg-[#10b981] text-white shadow-sm" 
+                  scheduleMode === "later"
+                    ? "bg-[#10b981] text-white shadow-sm"
                     : "text-forest/60 hover:bg-[#eadfce]/30 hover:text-forest"
                 }`}
               >
@@ -455,18 +510,18 @@ function RestaurantPage() {
             </div>
             {scheduleMode === "later" && (
               <div className="grid grid-cols-2 gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                <input 
-                  type="date" 
-                  min={new Date().toISOString().split('T')[0]}
+                <input
+                  type="date"
+                  min={new Date().toISOString().split("T")[0]}
                   value={scheduleDate}
                   onChange={(e) => setScheduleDate(e.target.value)}
-                  className="w-full rounded-md border border-[#eadfce] bg-white px-2 py-1.5 text-xs text-forest focus:outline-none focus:border-[#10b981]" 
+                  className="w-full rounded-md border border-[#eadfce] bg-white px-2 py-1.5 text-xs text-forest focus:outline-none focus:border-[#10b981]"
                 />
-                <input 
-                  type="time" 
+                <input
+                  type="time"
                   value={scheduleTime}
                   onChange={(e) => setScheduleTime(e.target.value)}
-                  className="w-full rounded-md border border-[#eadfce] bg-white px-2 py-1.5 text-xs text-forest focus:outline-none focus:border-[#10b981]" 
+                  className="w-full rounded-md border border-[#eadfce] bg-white px-2 py-1.5 text-xs text-forest focus:outline-none focus:border-[#10b981]"
                 />
               </div>
             )}
@@ -478,7 +533,9 @@ function RestaurantPage() {
                   {i.qty}
                 </span>
                 <span className="text-sm text-forest truncate">{i.name}</span>
-                <span className="text-sm font-medium text-forest">€{(i.price * i.qty).toFixed(2)}</span>
+                <span className="text-sm font-medium text-forest">
+                  €{(i.price * i.qty).toFixed(2)}
+                </span>
               </div>
             ))}
           </div>
@@ -494,14 +551,21 @@ function RestaurantPage() {
           {appliedPromo ? (
             <div className="mt-3 flex items-center justify-between text-sm text-[oklch(0.55_0.15_30)] bg-[oklch(0.95_0.05_30)] p-2.5 rounded-lg border border-[oklch(0.85_0.15_30)]">
               <div className="flex flex-col">
-                <span className="font-semibold">{t("Gutschein", "Voucher")}: {appliedPromo.code}</span>
+                <span className="font-semibold">
+                  {t("Gutschein", "Voucher")}: {appliedPromo.code}
+                </span>
                 <span className="text-xs">
-                  {appliedPromo.discount_type === "percentage" ? `-${appliedPromo.discount_value}%` : `-€${appliedPromo.discount_value.toFixed(2)}`}
+                  {appliedPromo.discount_type === "percentage"
+                    ? `-${appliedPromo.discount_value}%`
+                    : `-€${appliedPromo.discount_value.toFixed(2)}`}
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="font-semibold">-€{discountAmount.toFixed(2)}</span>
-                <button onClick={handleRemovePromo} className="text-[oklch(0.55_0.15_30)] hover:text-black">
+                <button
+                  onClick={handleRemovePromo}
+                  className="text-[oklch(0.55_0.15_30)] hover:text-black"
+                >
                   <Minus className="h-4 w-4" />
                 </button>
               </div>
@@ -583,7 +647,10 @@ function RestaurantPage() {
               </div>
               {selectedPayment === "paypal" && paymentMethods.paypalLink && (
                 <p className="text-[10px] text-muted-foreground">
-                  {t("Nach der Bestellung werden Sie zu PayPal weitergeleitet.", "After placing your order you'll be redirected to PayPal.")}
+                  {t(
+                    "Nach der Bestellung werden Sie zu PayPal weitergeleitet.",
+                    "After placing your order you'll be redirected to PayPal.",
+                  )}
                 </p>
               )}
             </div>
@@ -593,7 +660,9 @@ function RestaurantPage() {
             onClick={async () => {
               if (isGated || checkoutLoading) return;
               if (!selectedPayment) {
-                alert(t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."));
+                alert(
+                  t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."),
+                );
                 return;
               }
               if (selectedPayment === "paypal" && paymentMethods.paypalLink) {
@@ -601,7 +670,12 @@ function RestaurantPage() {
                   ? paymentMethods.paypalLink
                   : `https://paypal.me/${paymentMethods.paypalLink.replace(/^paypal\.me\//i, "")}/${finalTotal.toFixed(2)}EUR`;
                 window.open(link, "_blank");
-                alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
+                alert(
+                  t(
+                    `Bestellung über ${totalCount} Artikel aufgegeben!`,
+                    `Order placed for ${totalCount} items!`,
+                  ),
+                );
                 if (isMobile) setMobileCartOpen(false);
               } else if (selectedPayment === "stripe") {
                 setCheckoutLoading(true);
@@ -615,7 +689,12 @@ function RestaurantPage() {
                   if (res?.url) {
                     window.location.href = res.url;
                   } else {
-                    alert(t("Fehler beim Erstellen der Zahlungssitzung.", "Failed to create checkout session."));
+                    alert(
+                      t(
+                        "Fehler beim Erstellen der Zahlungssitzung.",
+                        "Failed to create checkout session.",
+                      ),
+                    );
                   }
                 } catch (err: any) {
                   alert(t("Fehler: ", "Error: ") + (err.message || err));
@@ -624,19 +703,24 @@ function RestaurantPage() {
                 }
               } else {
                 // Cash
-                alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
+                alert(
+                  t(
+                    `Bestellung über ${totalCount} Artikel aufgegeben!`,
+                    `Order placed for ${totalCount} items!`,
+                  ),
+                );
                 if (isMobile) setMobileCartOpen(false);
               }
             }}
             disabled={isGated || checkoutLoading}
             className={`mt-5 w-full rounded-full py-3 font-semibold shadow-md transition ${
-              (isGated || checkoutLoading)
+              isGated || checkoutLoading
                 ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
                 : "bg-[#22C55E] hover:bg-[#22C55E]/90 text-white cursor-pointer"
             }`}
           >
-            {checkoutLoading 
-              ? t("Wird geladen...", "Loading...") 
+            {checkoutLoading
+              ? t("Wird geladen...", "Loading...")
               : `${t("Zur Kasse", "Go to checkout")} · €${finalTotal.toFixed(2)}`}
           </button>
         </>
@@ -665,16 +749,19 @@ function RestaurantPage() {
             src={restaurant.img}
             alt={restaurant.name}
             className="absolute inset-0 h-full w-full object-cover"
-            style={{ objectPosition: 'center 30%' }}
+            style={{ objectPosition: "center 30%" }}
             loading="eager"
             fetchPriority="high"
             width={1200}
             height={420}
           />
           {/* Dark gradient overlay */}
-          <div 
-            className="absolute inset-0 z-10" 
-            style={{ backgroundImage: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%)' }}
+          <div
+            className="absolute inset-0 z-10"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%)",
+            }}
           />
 
           {/* Top Right Actions */}
@@ -687,23 +774,28 @@ function RestaurantPage() {
               onClick={scrollToMenu}
               className="group flex items-center gap-1.5 rounded-full bg-[#10b981] hover:bg-[#10b981]/90 px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
             >
-              {restaurant.status === "Open" ? t("Zur Speisekarte", "See Menu") : t("Vorbestellen", "Pre-order")}
+              {restaurant.status === "Open"
+                ? t("Zur Speisekarte", "See Menu")
+                : t("Vorbestellen", "Pre-order")}
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
-            <Dialog open={resModalOpen} onOpenChange={(open) => {
-              setResModalOpen(open);
-              if (open) {
-                trackEvent("reservation_form_started", { restaurantId: restaurant!.id });
-              } else {
-                setResSuccess(false);
-                setResForm({
-                  guestCount: 2,
-                  reservationDate: "",
-                  reservationTime: "19:00",
-                  notes: "",
-                });
-              }
-            }}>
+            <Dialog
+              open={resModalOpen}
+              onOpenChange={(open) => {
+                setResModalOpen(open);
+                if (open) {
+                  trackEvent("reservation_form_started", { restaurantId: restaurant!.id });
+                } else {
+                  setResSuccess(false);
+                  setResForm({
+                    guestCount: 2,
+                    reservationDate: "",
+                    reservationTime: "19:00",
+                    notes: "",
+                  });
+                }
+              }}
+            >
               <DialogTrigger asChild>
                 <button className="group flex items-center gap-1.5 rounded-full border border-white bg-white/20 hover:bg-white/30 backdrop-blur-md px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer">
                   {t("Tisch Reservieren", "Book a Table")}
@@ -712,19 +804,27 @@ function RestaurantPage() {
               </DialogTrigger>
               <DialogContent className="sm:max-w-md bg-[#fdfaf5] text-forest border-[#eadfce]">
                 <DialogHeader>
-                  <DialogTitle>{t("Tisch reservieren bei ", "Book a table at ")}{restaurant.name}</DialogTitle>
+                  <DialogTitle>
+                    {t("Tisch reservieren bei ", "Book a table at ")}
+                    {restaurant.name}
+                  </DialogTitle>
                 </DialogHeader>
-                
+
                 {resSuccess ? (
                   <div className="py-8 text-center text-forest flex flex-col items-center">
                     <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-[#22C55E]/10 text-[#22C55E] grid place-items-center">
                       <Check className="h-8 w-8" />
                     </div>
-                    <h3 className="text-xl font-bold font-display text-forest">{t("Reservierung bestätigt!", "Reservation Confirmed!")}</h3>
+                    <h3 className="text-xl font-bold font-display text-forest">
+                      {t("Reservierung bestätigt!", "Reservation Confirmed!")}
+                    </h3>
                     <p className="mt-2 text-sm text-forest/70 max-w-sm px-4">
-                      {t("Ihre Reservierung wurde erfolgreich bestätigt. Wir freuen uns auf Ihren Besuch!", "Your reservation has been successfully confirmed. We look forward to your visit!")}
+                      {t(
+                        "Ihre Reservierung wurde erfolgreich bestätigt. Wir freuen uns auf Ihren Besuch!",
+                        "Your reservation has been successfully confirmed. We look forward to your visit!",
+                      )}
                     </p>
-                    
+
                     <div className="mt-6 flex flex-col gap-2 w-full max-w-xs">
                       <button
                         type="button"
@@ -734,7 +834,7 @@ function RestaurantPage() {
                         <Calendar className="h-4 w-4" />
                         {t("In den Kalender eintragen", "Add to Calendar")}
                       </button>
-                      
+
                       <button
                         type="button"
                         onClick={() => {
@@ -756,7 +856,7 @@ function RestaurantPage() {
                 ) : (
                   <form onSubmit={handleReservationSubmit} className="grid gap-4 mt-4">
                     {resError && <p className="text-sm text-red-600">{resError}</p>}
-                    
+
                     <UnifiedCustomerFields
                       value={identity}
                       onChange={(fields) => setIdentity({ ...identity, ...fields })}
@@ -765,25 +865,57 @@ function RestaurantPage() {
                     <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[oklch(0.85_0.05_152)]">
                       <div className="space-y-1">
                         <label className="text-sm font-medium">{t("Personen", "Guests")} *</label>
-                        <input required type="number" min="1" max="20" className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm" value={resForm.guestCount} onChange={e => setResForm({...resForm, guestCount: parseInt(e.target.value)})} />
+                        <input
+                          required
+                          type="number"
+                          min="1"
+                          max="20"
+                          className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm"
+                          value={resForm.guestCount}
+                          onChange={(e) =>
+                            setResForm({ ...resForm, guestCount: parseInt(e.target.value) })
+                          }
+                        />
                       </div>
                       <div className="space-y-1">
                         <label className="text-sm font-medium">{t("Datum", "Date")} *</label>
-                        <input required type="date" min={new Date().toISOString().split('T')[0]} className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm" value={resForm.reservationDate} onChange={e => setResForm({...resForm, reservationDate: e.target.value})} />
+                        <input
+                          required
+                          type="date"
+                          min={new Date().toISOString().split("T")[0]}
+                          className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm"
+                          value={resForm.reservationDate}
+                          onChange={(e) =>
+                            setResForm({ ...resForm, reservationDate: e.target.value })
+                          }
+                        />
                       </div>
                       <div className="space-y-1">
                         <label className="text-sm font-medium">{t("Uhrzeit", "Time")} *</label>
-                        <input required type="time" className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm" value={resForm.reservationTime} onChange={e => setResForm({...resForm, reservationTime: e.target.value})} />
+                        <input
+                          required
+                          type="time"
+                          className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm"
+                          value={resForm.reservationTime}
+                          onChange={(e) =>
+                            setResForm({ ...resForm, reservationTime: e.target.value })
+                          }
+                        />
                       </div>
                     </div>
                     <div className="space-y-1">
-                      <label className="text-sm font-medium">{t("Besondere Wünsche (Optional)", "Notes (Optional)")}</label>
-                      <textarea className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm min-h-[60px]" value={resForm.notes} onChange={e => setResForm({...resForm, notes: e.target.value})} />
+                      <label className="text-sm font-medium">
+                        {t("Besondere Wünsche (Optional)", "Notes (Optional)")}
+                      </label>
+                      <textarea
+                        className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm min-h-[60px]"
+                        value={resForm.notes}
+                        onChange={(e) => setResForm({ ...resForm, notes: e.target.value })}
+                      />
                     </div>
 
-                    
-                    <button 
-                      type="submit" 
+                    <button
+                      type="submit"
                       disabled={resLoading}
                       className="mt-2 w-full rounded-full bg-forest py-2.5 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50"
                     >
@@ -823,11 +955,13 @@ function RestaurantPage() {
               <ShieldCheck className="h-5 w-5" />
               <span className="text-sm font-bold">{t("Geprüftes Profil", "Checked Profile")}</span>
             </div>
-            
+
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
-            
+
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">{t("Lieferung", "Delivery")}</dt>
+              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+                {t("Lieferung", "Delivery")}
+              </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
                 <ShoppingBag className="h-4 w-4 text-forest/40" /> {restaurant.fee}
               </dd>
@@ -836,27 +970,32 @@ function RestaurantPage() {
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
 
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">{t("Dauer", "Time")}</dt>
+              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+                {t("Dauer", "Time")}
+              </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
                 <Clock className="h-4 w-4 text-forest/40" /> {restaurant.time}
               </dd>
             </div>
-            
+
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
 
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">{t("Standort", "Location")}</dt>
+              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+                {t("Standort", "Location")}
+              </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <MapPin className="h-4 w-4 text-forest/40" /> <span className="truncate max-w-[200px]">{restaurant.address}</span>
+                <MapPin className="h-4 w-4 text-forest/40" />{" "}
+                <span className="truncate max-w-[200px]">{restaurant.address}</span>
               </dd>
             </div>
           </dl>
-          
+
           {visibleBadges.length > 0 && (
             <div className="flex flex-wrap items-center gap-2 pt-4 md:pt-0 border-t border-[#eadfce] md:border-0 w-full md:w-auto">
               {visibleBadges.map((badge, idx) => (
-                <span 
-                  key={idx} 
+                <span
+                  key={idx}
                   className="inline-flex items-center gap-1 rounded-full bg-[#fdfaf5] px-3 py-1 text-xs font-semibold text-forest border border-[#eadfce]"
                 >
                   <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> {badge}
@@ -879,17 +1018,24 @@ function RestaurantPage() {
         )}
       </section>
 
-      <section id="menu" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 grid gap-8 lg:grid-cols-[1fr_22rem] pb-16 scroll-mt-24">
+      <section
+        id="menu"
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 grid gap-8 lg:grid-cols-[1fr_22rem] pb-16 scroll-mt-24"
+      >
         <div>
-          <h2 className="text-3xl font-display font-bold text-forest">{t("Speisekarte", "Menu")}</h2>
+          <h2 className="text-3xl font-display font-bold text-forest">
+            {t("Speisekarte", "Menu")}
+          </h2>
 
           <div className="mt-5 flex flex-wrap gap-2">
-            {([
-              { key: "all", label: t("Alle", "All") },
-              { key: "vegetarian", label: t("Vegetarisch", "Vegetarian") },
-              { key: "vegan", label: "Vegan" },
-              { key: "gluten-free", label: t("Glutenfrei", "Gluten-free") },
-            ] as const).map((f) => {
+            {(
+              [
+                { key: "all", label: t("Alle", "All") },
+                { key: "vegetarian", label: t("Vegetarisch", "Vegetarian") },
+                { key: "vegan", label: "Vegan" },
+                { key: "gluten-free", label: t("Glutenfrei", "Gluten-free") },
+              ] as const
+            ).map((f) => {
               const active = filter === f.key;
               return (
                 <button
@@ -911,71 +1057,99 @@ function RestaurantPage() {
           <CategoryNav
             categories={categories}
             onSelect={(cat) => {
-              document.getElementById(`category-${cat}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              document
+                .getElementById(`category-${cat}`)
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
             }}
           />
 
           <div className="mt-8 space-y-10">
             {categories.map((cat) => {
-              const items = restaurant.menu.filter((m) => (m.category || "Menu") === cat && (filter === "all" || (m.dietary ?? []).includes(filter)));
+              const items = restaurant.menu.filter(
+                (m) =>
+                  (m.category || "Menu") === cat &&
+                  (filter === "all" || (m.dietary ?? []).includes(filter)),
+              );
               if (items.length === 0) return null;
               return (
-              <div key={cat} id={`category-${cat}`} className="scroll-mt-32">
-                <h3 className="font-display text-2xl text-forest">{cat}</h3>
-                <div className="mt-4 grid gap-4">
-                  {items.map((m) => {
-                    const qty = cart[m.name] || 0;
-                    return (
-                      <div key={m.name} className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group">
-                        <div className="min-w-0 flex flex-col md:flex-row gap-4">
-                          {m.img && (
-                            <div className="shrink-0">
-                              <img src={m.img} alt={m.name} loading="lazy" className="h-24 w-24 md:h-32 md:w-32 rounded-lg object-cover border border-[#eadfce]/50" />
+                <div key={cat} id={`category-${cat}`} className="scroll-mt-32">
+                  <h3 className="font-display text-2xl text-forest">{cat}</h3>
+                  <div className="mt-4 grid gap-4">
+                    {items.map((m) => {
+                      const qty = cart[m.name] || 0;
+                      return (
+                        <div
+                          key={m.name}
+                          className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group"
+                        >
+                          <div className="min-w-0 flex flex-col md:flex-row gap-4">
+                            {m.img && (
+                              <div className="shrink-0">
+                                <img
+                                  src={m.img}
+                                  alt={m.name}
+                                  loading="lazy"
+                                  className="h-24 w-24 md:h-32 md:w-32 rounded-lg object-cover border border-[#eadfce]/50"
+                                />
+                              </div>
+                            )}
+                            <div>
+                              <div className="flex flex-wrap items-center gap-2">
+                                <h4 className="font-display text-lg font-bold text-forest">
+                                  {m.name}
+                                </h4>
+                                {(m.dietary ?? []).map((d) => (
+                                  <span
+                                    key={d}
+                                    className="inline-flex items-center rounded-full bg-[#fdfaf5] text-[#16372f] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide border border-[#eadfce]/60"
+                                    title={d}
+                                  >
+                                    {d === "vegan" ? "🌱 Vegan" : d === "vegetarian" ? "V" : "GF"}
+                                  </span>
+                                ))}
+                              </div>
+                              <p className="text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">
+                                {m.desc[lang]}
+                              </p>
+                              <p className="mt-3 text-lg font-bold text-forest">
+                                €{m.price.toFixed(2)}
+                              </p>
                             </div>
-                          )}
-                          <div>
-                            <div className="flex flex-wrap items-center gap-2">
-                              <h4 className="font-display text-lg font-bold text-forest">{m.name}</h4>
-                              {(m.dietary ?? []).map((d) => (
-                                <span
-                                  key={d}
-                                  className="inline-flex items-center rounded-full bg-[#fdfaf5] text-[#16372f] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide border border-[#eadfce]/60"
-                                  title={d}
+                          </div>
+                          <div className="flex items-center">
+                            {qty === 0 ? (
+                              <button
+                                onClick={() => add(m.name)}
+                                className="h-10 w-10 grid place-items-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90 pulse-btn shadow-md"
+                                aria-label={t("Hinzufügen", "Add")}
+                              >
+                                <Plus className="h-5 w-5" />
+                              </button>
+                            ) : (
+                              <div className="inline-flex items-center gap-3 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10 shadow-md">
+                                <button
+                                  onClick={() => remove(m.name)}
+                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10"
+                                  aria-label="-"
                                 >
-                                  {d === "vegan" ? "🌱 Vegan" : d === "vegetarian" ? "V" : "GF"}
-                                </span>
-                              ))}
-                            </div>
-                            <p className="text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">{m.desc[lang]}</p>
-                            <p className="mt-3 text-lg font-bold text-forest">€{m.price.toFixed(2)}</p>
+                                  <Minus className="h-4 w-4" />
+                                </button>
+                                <span className="min-w-[1ch] text-sm font-semibold">{qty}</span>
+                                <button
+                                  onClick={() => add(m.name)}
+                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10 pulse-btn"
+                                  aria-label="+"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <div className="flex items-center">
-                        {qty === 0 ? (
-                          <button
-                            onClick={() => add(m.name)}
-                            className="h-10 w-10 grid place-items-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90 pulse-btn shadow-md"
-                            aria-label={t("Hinzufügen", "Add")}
-                          >
-                            <Plus className="h-5 w-5" />
-                          </button>
-                        ) : (
-                          <div className="inline-flex items-center gap-3 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10 shadow-md">
-                            <button onClick={() => remove(m.name)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10" aria-label="-">
-                              <Minus className="h-4 w-4" />
-                            </button>
-                            <span className="min-w-[1ch] text-sm font-semibold">{qty}</span>
-                            <button onClick={() => add(m.name)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10 pulse-btn" aria-label="+">
-                              <Plus className="h-4 w-4" />
-                            </button>
-                          </div>
-                        )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
               );
             })}
           </div>
@@ -1001,35 +1175,58 @@ function RestaurantPage() {
       {/* Process Section */}
       <section className="bg-[#fdfaf5] border-y border-[#eadfce]/50 py-16 mt-8 mb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-          <h2 className="text-2xl font-display font-bold text-forest text-center mb-10">{t("So einfach funktioniert's", "How it works")}</h2>
+          <h2 className="text-2xl font-display font-bold text-forest text-center mb-10">
+            {t("So einfach funktioniert's", "How it works")}
+          </h2>
           <div className="grid md:grid-cols-3 gap-8 relative">
             <div className="hidden md:block absolute top-6 left-[16%] right-[16%] h-px bg-forest/10" />
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">1</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">
+                1
+              </div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Auswählen", "Choose")}</h3>
-              <p className="text-sm text-forest/70 max-w-xs">{t("Leckere Gerichte aus der Speisekarte aussuchen.", "Select delicious dishes from the menu.")}</p>
+              <p className="text-sm text-forest/70 max-w-xs">
+                {t(
+                  "Leckere Gerichte aus der Speisekarte aussuchen.",
+                  "Select delicious dishes from the menu.",
+                )}
+              </p>
             </div>
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">2</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">
+                2
+              </div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Bestellen", "Order")}</h3>
-              <p className="text-sm text-forest/70 max-w-xs">{t("Bequem und sicher online bezahlen.", "Pay conveniently and securely online.")}</p>
+              <p className="text-sm text-forest/70 max-w-xs">
+                {t("Bequem und sicher online bezahlen.", "Pay conveniently and securely online.")}
+              </p>
             </div>
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">3</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">
+                3
+              </div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Genießen", "Enjoy")}</h3>
-              <p className="text-sm text-forest/70 max-w-xs">{t("Entspannen und auf die schnelle Lieferung warten.", "Relax and wait for the fast delivery.")}</p>
+              <p className="text-sm text-forest/70 max-w-xs">
+                {t(
+                  "Entspannen und auf die schnelle Lieferung warten.",
+                  "Relax and wait for the fast delivery.",
+                )}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-
       {/* Mobile Sticky Bottom Cart Bar */}
       {totalCount > 0 && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#eadfce] p-4 z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] flex items-center justify-between pb-safe">
           <div className="text-forest">
-            <div className="font-semibold text-sm">{totalCount} {totalCount === 1 ? t("Artikel", "Item") : t("Artikel", "Items")}</div>
-            <div className="text-xs text-forest/70">{t("Gesamt", "Total")}: €{finalTotal.toFixed(2)}</div>
+            <div className="font-semibold text-sm">
+              {totalCount} {totalCount === 1 ? t("Artikel", "Item") : t("Artikel", "Items")}
+            </div>
+            <div className="text-xs text-forest/70">
+              {t("Gesamt", "Total")}: €{finalTotal.toFixed(2)}
+            </div>
           </div>
           <Sheet open={mobileCartOpen} onOpenChange={setMobileCartOpen}>
             <SheetTrigger asChild>
@@ -1037,16 +1234,17 @@ function RestaurantPage() {
                 {t("Bestellung anzeigen", "View order")}
               </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="h-[85vh] bg-[#fdfaf5] text-forest border-t border-[#eadfce] rounded-t-2xl px-4 py-6 overflow-y-auto">
+            <SheetContent
+              side="bottom"
+              className="h-[85vh] bg-[#fdfaf5] text-forest border-t border-[#eadfce] rounded-t-2xl px-4 py-6 overflow-y-auto"
+            >
               <SheetHeader className="text-left mb-4">
                 <SheetTitle className="flex items-center gap-2 font-display text-xl text-forest">
                   <ShoppingBag className="h-5 w-5 text-forest" />
                   {t("Deine Bestellung", "Your order")}
                 </SheetTitle>
               </SheetHeader>
-              <div className="py-2 pb-10">
-                {renderSidebar(true)}
-              </div>
+              <div className="py-2 pb-10">{renderSidebar(true)}</div>
             </SheetContent>
           </Sheet>
         </div>
@@ -1056,4 +1254,3 @@ function RestaurantPage() {
     </SiteShell>
   );
 }
-

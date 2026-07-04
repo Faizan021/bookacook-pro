@@ -20,7 +20,9 @@ export const getMyCatererMenu = createServerFn({ method: "GET" })
     if (!caterer) return { caterer: null, menu: [] as any[] };
     const { data, error } = await (supabase as any)
       .from("caterer_menu_items")
-      .select("id, category, name, description, price_cents, unit, serves, image_url, is_available, created_at")
+      .select(
+        "id, category, name, description, price_cents, unit, serves, image_url, is_available, created_at",
+      )
       .eq("caterer_id", caterer.id)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -28,8 +30,7 @@ export const getMyCatererMenu = createServerFn({ method: "GET" })
     const menu = await Promise.all(
       (data ?? []).map(async (m: any) => {
         if (!m.image_url) return { ...m, image_signed_url: null as string | null };
-        if (/^https?:\/\//i.test(m.image_url))
-          return { ...m, image_signed_url: m.image_url };
+        if (/^https?:\/\//i.test(m.image_url)) return { ...m, image_signed_url: m.image_url };
         const { data: signed } = await supabase.storage
           .from("caterer-menu")
           .createSignedUrl(m.image_url, 60 * 60);
@@ -99,9 +100,7 @@ export const upsertCatererMenuItem = createServerFn({ method: "POST" })
 
 export const deleteCatererMenuItem = createServerFn({ method: "POST" })
   .middleware([requireRole("caterer")])
-  .inputValidator((input: { id: string }) =>
-    z.object({ id: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: { id: string }) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
     const caterer = await resolveOwnedCaterer(supabase, userId);
@@ -116,17 +115,17 @@ export const deleteCatererMenuItem = createServerFn({ method: "POST" })
   });
 
 export const getPublicCatererProfile = createServerFn({ method: "GET" })
-  .inputValidator((input: { slug: string }) =>
-    z.object({ slug: z.string() }).parse(input),
-  )
+  .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: caterer, error: cErr } = await supabaseAdmin
       .from("caterers")
-      .select("id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text")
+      .select(
+        "id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
+      )
       .eq("slug", data.slug)
       .maybeSingle();
-    
+
     if (cErr || !caterer) return null;
 
     const { data: menuData, error: mErr } = await (supabaseAdmin as any)
@@ -141,8 +140,7 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
     const menu = await Promise.all(
       (menuData ?? []).map(async (m: any) => {
         if (!m.image_url) return { ...m, image_signed_url: null as string | null };
-        if (/^https?:\/\//i.test(m.image_url))
-          return { ...m, image_signed_url: m.image_url };
+        if (/^https?:\/\//i.test(m.image_url)) return { ...m, image_signed_url: m.image_url };
         const { data: signed } = await supabaseAdmin.storage
           .from("caterer-menu")
           .createSignedUrl(m.image_url, 60 * 60);
@@ -153,18 +151,19 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
     return { ...caterer, menu };
   });
 
-export const getPublicCatererList = createServerFn({ method: "GET" })
-  .handler(async () => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
-      .from("caterers")
-      .select("id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text");
-    if (error) {
-      console.error("Error in getPublicCatererList:", error);
-      throw new Error(error.message);
-    }
-    return data || [];
-  });
+export const getPublicCatererList = createServerFn({ method: "GET" }).handler(async () => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin
+    .from("caterers")
+    .select(
+      "id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
+    );
+  if (error) {
+    console.error("Error in getPublicCatererList:", error);
+    throw new Error(error.message);
+  }
+  return data || [];
+});
 
 export const submitCateringBrief = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth()])
@@ -187,12 +186,15 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
         .object({
           catererId: z.string().uuid(),
           eventType: z.string(),
-          eventDate: z.string().refine((date) => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const parsed = new Date(date);
-            return !isNaN(parsed.getTime()) && parsed >= today;
-          }, { message: "Event date cannot be in the past" }),
+          eventDate: z.string().refine(
+            (date) => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const parsed = new Date(date);
+              return !isNaN(parsed.getTime()) && parsed >= today;
+            },
+            { message: "Event date cannot be in the past" },
+          ),
           guestCount: z.number().min(1),
           budgetCents: z.number().min(0),
           location: z.string(),
@@ -219,12 +221,14 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
       budget_cents: data.budgetCents,
       location: data.location,
       notes: data.notes,
-      milestones: [{
-        title: "Request Submitted",
-        description: "Your catering request has been sent.",
-        completed: true,
-        date: new Date().toISOString()
-      }]
+      milestones: [
+        {
+          title: "Request Submitted",
+          description: "Your catering request has been sent.",
+          completed: true,
+          date: new Date().toISOString(),
+        },
+      ],
     };
 
     if (data.isB2b) insertData.is_b2b = data.isB2b;
@@ -289,12 +293,14 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
       company_name: data.companyName,
       is_recurring: true,
       recurrence_pattern: data.pattern,
-      milestones: [{
-        title: "B2B Request Submitted",
-        description: "Your recurring catering request has been sent.",
-        completed: true,
-        date: new Date().toISOString()
-      }]
+      milestones: [
+        {
+          title: "B2B Request Submitted",
+          description: "Your recurring catering request has been sent.",
+          completed: true,
+          date: new Date().toISOString(),
+        },
+      ],
     });
 
     if (error) throw new Error(error.message);
