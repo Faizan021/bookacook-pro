@@ -236,7 +236,7 @@ function mapRestaurant(r: any): Restaurant {
     menu: (r.restaurant_products || []).map((p: any) => ({
       name: p.name,
       desc: { de: p.description || "", en: p.description || "" },
-      price: Number(p.price),
+      price: (p.price_cents || 0) / 100,
       img: p.image_url || null,
       category: p.category || "Menu",
       dietary: p.dietary_tags || [],
