@@ -13,7 +13,7 @@ export type Planner = {
   rating: number;
   reviewCount: number;
   since: number;
-  cat: "wedding" | "corporate" | "private" | "ramadan" | "christmas" | "festival";
+  cat: "wedding" | "corporate" | "private" | "ramadan" | "christmas" | "festival" | "conference" | "seminar" | "concert" | "trade-show";
   img: string | null;
   gallery: string[];
   area: string | null;
@@ -155,6 +155,108 @@ export const fallbackPlanners: Planner[] = [
       },
     ],
   },
+  {
+    id: "expo-masters",
+    name: "Expo Masters",
+    tagline: { de: "Messe- & Konferenzplanung", en: "Trade Show & Conference Planning" },
+    rating: 4.9,
+    reviewCount: 88,
+    since: 2012,
+    cat: "conference",
+    img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=900&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&fit=crop",
+      "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&fit=crop",
+    ],
+    area: "Frankfurt & München",
+    address: "Messeplatz 1, 60327 Frankfurt",
+    phone: "+49 69 123456",
+    minGuests: 200,
+    leadTimeDays: 120,
+    minBudget: 30000,
+    startingPrice: 10000,
+    verified: true,
+    about: {
+      de: "Ihr Spezialist für großangelegte Fachkonferenzen und Messeauftritte. Wir sorgen für einen reibungslosen Ablauf und professionelle Repräsentation.",
+      en: "Your specialist for large-scale professional conferences and trade show appearances. We ensure smooth operations and professional representation.",
+    },
+    packages: [
+      {
+        name: "Full Conference Management",
+        desc: { de: "Komplette Organisation von Kongressen inklusive Speaker-Management.", en: "Complete organization of congresses including speaker management." },
+        startingFrom: 15000,
+        unit: { de: "ab", en: "from" },
+      },
+    ],
+  },
+  {
+    id: "sound-live-agency",
+    name: "Sound Live Agency",
+    tagline: { de: "Konzert & Festival Produktion", en: "Concert & Festival Production" },
+    rating: 4.7,
+    reviewCount: 210,
+    since: 2010,
+    cat: "concert",
+    img: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1200&h=900&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800&fit=crop",
+      "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&fit=crop",
+    ],
+    area: "Bundesweit",
+    address: "Reeperbahn 1, 20359 Hamburg",
+    phone: "+49 40 987654",
+    minGuests: 500,
+    leadTimeDays: 180,
+    minBudget: 50000,
+    startingPrice: 20000,
+    verified: true,
+    about: {
+      de: "Wir bringen die Bühne zum Beben. Von der Künstlerbetreuung bis zur Bühnentechnik organisieren wir Konzerte und Live-Shows auf höchstem Niveau.",
+      en: "We make the stage shake. From artist management to stage technology, we organize concerts and live shows at the highest level.",
+    },
+    packages: [
+      {
+        name: "Live Show Production",
+        desc: { de: "Komplette technische und organisatorische Umsetzung.", en: "Complete technical and organizational implementation." },
+        startingFrom: 20000,
+        unit: { de: "ab", en: "from" },
+      },
+    ],
+  },
+  {
+    id: "workshop-wizards",
+    name: "Workshop Wizards",
+    tagline: { de: "Seminare & Teambuilding", en: "Seminars & Teambuilding" },
+    rating: 4.9,
+    reviewCount: 65,
+    since: 2019,
+    cat: "seminar",
+    img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=900&fit=crop",
+    gallery: [
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&fit=crop",
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&fit=crop",
+    ],
+    area: "Düsseldorf & NRW",
+    address: "Königsallee 10, 40212 Düsseldorf",
+    phone: "+49 211 555666",
+    minGuests: 20,
+    leadTimeDays: 14,
+    minBudget: 2000,
+    startingPrice: 1500,
+    verified: true,
+    about: {
+      de: "Spezialisiert auf interaktive Workshops, Seminare und Teambuilding-Events. Wir schaffen Räume für Innovation und Zusammenarbeit.",
+      en: "Specialized in interactive workshops, seminars, and teambuilding events. We create spaces for innovation and collaboration.",
+    },
+    packages: [
+      {
+        name: "Seminar Planning",
+        desc: { de: "Location-Scouting, Catering und technisches Setup für Seminare.", en: "Location scouting, catering, and technical setup for seminars." },
+        startingFrom: 1500,
+        unit: { de: "ab", en: "from" },
+      },
+    ],
+  }
 ];
 
 import { supabase } from "@/integrations/supabase/client";
@@ -194,7 +296,7 @@ export async function getPlanners(): Promise<Planner[]> {
   }
 
   const livePlanners = (data || []).map(mapPlanner);
-  const MIN_DISPLAY_COUNT = 3;
+  const MIN_DISPLAY_COUNT = fallbackPlanners.length; // Show all mock data if needed
   
   if (livePlanners.length >= MIN_DISPLAY_COUNT) {
     return livePlanners;

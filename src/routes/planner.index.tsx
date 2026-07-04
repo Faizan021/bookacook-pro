@@ -59,7 +59,7 @@ export const Route = createFileRoute("/planner/")({
 });
 
 
-type EventType = "wedding" | "corporate" | "private" | "ramadan" | "festival" | "other";
+type EventType = "wedding" | "corporate" | "private" | "ramadan" | "festival" | "conference" | "seminar" | "concert" | "trade-show" | "other";
 type Budget = "low" | "mid" | "premium" | "luxury";
 type Cuisine =
   | "mediterranean"
@@ -99,9 +99,13 @@ function PlannerPage() {
   const eventTypes: { id: EventType; title: string; sub: string }[] = [
     { id: "wedding", title: tt("Hochzeit", "Wedding"), sub: tt("Magische Momente, persönliches Menü", "Magical moments, personal menu") },
     { id: "corporate", title: tt("Corporate", "Corporate"), sub: tt("Meetings, Konferenzen, Team-Dinner", "Meetings, conferences, team dinners") },
+    { id: "conference", title: tt("Konferenz", "Conference"), sub: tt("Große Fachveranstaltungen & Kongresse", "Large professional events & congresses") },
+    { id: "trade-show", title: tt("Messe", "Trade Show"), sub: tt("Messeauftritte & Ausstellungen", "Trade fair appearances & exhibitions") },
+    { id: "seminar", title: tt("Seminar / Workshop", "Seminar / Workshop"), sub: tt("Weiterbildung & Teambuilding", "Training & teambuilding") },
     { id: "private", title: tt("Privates Dinner", "Private Dinner"), sub: tt("Geburtstag, Jubiläum, Familie", "Birthday, anniversary, family") },
     { id: "ramadan", title: tt("Ramadan Iftar", "Ramadan Iftar"), sub: tt("Festliches Abendessen zur Fastenbrechung", "Festive evening gathering") },
     { id: "festival", title: tt("Festival", "Festival"), sub: tt("Großveranstaltung, mehrtägige Feiern", "Large-scale celebration, multi-day events") },
+    { id: "concert", title: tt("Konzert", "Concert"), sub: tt("Musikevents & Live-Shows", "Music events & live shows") },
     { id: "other", title: tt("Anderes", "Other"), sub: tt("Erzähl uns mehr im Briefing", "Tell us more in the brief") },
   ];
 
@@ -735,7 +739,7 @@ function SuccessView({ brief, lang }: { brief: Brief; lang: string }) {
   );
 }
 
-type PlannerCat = "all" | "wedding" | "corporate" | "private" | "ramadan" | "christmas" | "festival";
+type PlannerCat = "all" | "wedding" | "corporate" | "conference" | "trade-show" | "seminar" | "private" | "ramadan" | "christmas" | "festival" | "concert";
 type PlannerSort = "price-asc" | "price-desc" | "experience";
 type ServiceType = "all" | "full" | "day-of" | "consulting";
 
@@ -753,10 +757,14 @@ function PlannerDirectory({ lang, tt, planners }: { lang: string; tt: (de: strin
     { id: "all", label: tt("Alle", "All") },
     { id: "wedding", label: tt("Hochzeit", "Wedding") },
     { id: "corporate", label: tt("Corporate", "Corporate") },
+    { id: "conference", label: tt("Konferenz", "Conference") },
+    { id: "trade-show", label: tt("Messe", "Trade Show") },
+    { id: "seminar", label: tt("Seminar", "Seminar") },
     { id: "private", label: tt("Privates Dinner", "Private Dinner") },
     { id: "ramadan", label: tt("Ramadan Iftar", "Ramadan Iftar") },
     { id: "christmas", label: tt("Weihnachtsfeier", "Christmas Party") },
     { id: "festival", label: tt("Festival", "Festival") },
+    { id: "concert", label: tt("Konzert", "Concert") },
   ];
 
   const services: { id: ServiceType; label: string }[] = [
