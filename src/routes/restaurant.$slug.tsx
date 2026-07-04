@@ -681,10 +681,12 @@ function RestaurantPage() {
                 setCheckoutLoading(true);
                 try {
                   const res = await checkoutFn({
-                    restaurantId: dbRestaurant?.id ?? "",
-                    amountCents: Math.round(finalTotal * 100),
-                    origin: window.location.origin,
-                    slug: slug,
+                    data: {
+                      restaurantId: dbRestaurant?.id ?? "",
+                      amountCents: Math.round(finalTotal * 100),
+                      origin: window.location.origin,
+                      slug: slug,
+                    }
                   });
                   if (res?.url) {
                     window.location.href = res.url;

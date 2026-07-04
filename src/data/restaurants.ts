@@ -228,7 +228,9 @@ function mapRestaurant(r: any): Restaurant {
     minOrder: Number(r.min_order_amount ?? 10),
     distanceKm: 2.0,
     status: r.is_active ? "Open" : "Closed",
-    img: r.banner_image_url || "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200",
+    img: r.banner_image_url 
+      ? (r.banner_image_url.startsWith('http') ? r.banner_image_url : supabase.storage.from('storefront-assets').getPublicUrl(r.banner_image_url).data.publicUrl)
+      : "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200",
     area: r.city || "Berlin",
     address: r.business_address || "",
     phone: r.phone || "",
@@ -237,7 +239,9 @@ function mapRestaurant(r: any): Restaurant {
       name: p.name,
       desc: { de: p.description || "", en: p.description || "" },
       price: (p.price_cents || 0) / 100,
-      img: p.image_url || null,
+      img: p.image_url 
+        ? (p.image_url.startsWith('http') ? p.image_url : supabase.storage.from('restaurant-products').getPublicUrl(p.image_url).data.publicUrl)
+        : null,
       category: p.category || "Menu",
       dietary: p.dietary_tags || [],
     })),
