@@ -16,6 +16,14 @@ import { CookieBanner } from "../components/CookieBanner";
 import { Analytics } from "@vercel/analytics/react";
 import { initPostHog } from "../utils/posthog";
 import posthog from "posthog-js";
+import * as Sentry from "@sentry/react";
+
+if (typeof window !== "undefined") {
+  Sentry.init({
+    dsn: "https://9a2bcf7470d25fb0f32cdae74a09c335@o4511677378002944.ingest.de.sentry.io/4511677391306832",
+    // We only enable basic error monitoring to keep V1 lightweight (no tracing/replays)
+  });
+}
 
 function NotFoundComponent() {
   return (
@@ -83,7 +91,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Speisely — Instant Food Order, Catering & Event Planning" },
-      { name: "description", content: "Speisely connects spontaneous restaurant food orders, curated catering and professional event planning on one marketplace." },
+      {
+        name: "description",
+        content:
+          "Speisely connects spontaneous restaurant food orders, curated catering and professional event planning on one marketplace.",
+      },
       { property: "og:site_name", content: "Speisely" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -107,7 +119,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "@type": "Organization",
             name: "Speisely",
             alternateName: "Speisely Marketplace",
-            description: "Speisely ist ein provisionsfreier B2B2C-Marktplatz für direkte Essensbestellungen, Catering und Event-Planung in Deutschland. Restaurants zahlen eine monatliche Flatrate ohne Provision. Caterer und Event-Planer erhalten qualifizierte Anfragen.",
+            description:
+              "Speisely ist ein provisionsfreier B2B2C-Marktplatz für direkte Essensbestellungen, Catering und Event-Planung in Deutschland. Restaurants zahlen eine monatliche Flatrate ohne Provision. Caterer und Event-Planer erhalten qualifizierte Anfragen.",
             url: "https://speisely.de",
             logo: "https://speisely.de/favicon.svg",
             foundingDate: "2026",
@@ -126,9 +139,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               contactType: "customer support",
               availableLanguage: ["German", "English"],
             },
-            sameAs: [
-              "https://www.linkedin.com/company/speisely",
-            ],
+            sameAs: ["https://www.linkedin.com/company/speisely"],
             dateModified: new Date().toISOString().split("T")[0],
           },
           {
@@ -137,7 +148,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             name: "Speisely",
             url: "https://speisely.de",
             inLanguage: ["de", "en"],
-            description: "Speisely verbindet Restaurants, Caterer und Event-Planer mit Kunden in ganz Deutschland — Sofortbestellung, Catering-Anfragen und Event-Planung auf einer Plattform.",
+            description:
+              "Speisely verbindet Restaurants, Caterer und Event-Planer mit Kunden in ganz Deutschland — Sofortbestellung, Catering-Anfragen und Event-Planung auf einer Plattform.",
             datePublished: "2026-06-01",
             dateModified: new Date().toISOString().split("T")[0],
             potentialAction: {
@@ -170,9 +182,16 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
-        <meta name="ahrefs-site-verification" content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"></meta>
+        <meta
+          name="ahrefs-site-verification"
+          content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"
+        ></meta>
         <link rel="canonical" href={canonicalUrl} />
-        <script src="https://analytics.ahrefs.com/analytics.js" data-key="m0ja41AgfTD2NuyNepW+LA" async></script>
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="m0ja41AgfTD2NuyNepW+LA"
+          async
+        ></script>
       </head>
       <body>
         {children}

@@ -1,3 +1,4 @@
+import { Plus, Loader2, Tag, Ticket } from "lucide-react";
 import { createFileRoute, Link, useRouter, useLocation, redirect, isRedirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
@@ -43,6 +44,7 @@ import { useSpeiselyPing } from "@/lib/vendor/useSpeiselyPing";
 import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
 import { VendorLayout, DashboardSkeleton } from "@/components/vendor/VendorLayout";
 import { printReceipt } from "@/utils/printReceipt";
+import { toast } from 'sonner';
 import { useI18n } from "@/i18n/I18nProvider";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
 import { CommunicationPreferences } from "@/components/vendor/CommunicationPreferences";
@@ -98,7 +100,7 @@ const STATUS_STYLES: Record<OrderStatus, string> = {
   pending: "bg-amber-100 text-amber-900",
   confirmed: "bg-sky-100 text-sky-900",
   preparing: "bg-indigo-100 text-indigo-900",
-  ready: "bg-emerald-100 text-emerald-900",
+  ready: "bg-forest/10 border border-forest/20 text-forest",
   picked_up: "bg-teal-100 text-teal-900",
   delivered: "bg-green-100 text-green-900",
   cancelled: "bg-rose-100 text-rose-900",
@@ -212,7 +214,7 @@ function CreateRestaurantForm() {
   const [marketingOptIn, setMarketingOptIn] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const mut = useMutation({
-    mutationFn: (vars: { name: string; slug: string; custom_domain: string }) => create(vars),
+    mutationFn: (vars: { name: string; slug: string; custom_domain: string }) => create({ data: vars }),
     onSuccess: async () => {
       try {
         await saveConsent({ marketing_opt_in: marketingOptIn, source: "restaurant_signup" });
@@ -489,11 +491,12 @@ function ProductsSection() {
   const [uploading, setUploading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [showImportWizard, setShowImportWizard] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const fileRef = React.useRef<HTMLInputElement>(null);
 
   const mut = useMutation({
-    mutationFn: (vars: { name: string; description: string; price_cents: number; image_url: string | null }) =>
-      upsert(vars),
+    mutationFn: (vars: { id?: string; name: string; description: string; price_cents: number; image_url: string | null }) =>
+      upsert({ data: vars }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["restaurant", "products"] });
       setName("");
@@ -501,6 +504,7 @@ function ProductsSection() {
       setPrice("");
       setImagePath(null);
       setImagePreview(null);
+      setEditingId(null);
       setErr(null);
     },
     onError: (e: any) => setErr(e.message ?? tt("Speichern fehlgeschlagen", "Failed to save")),
@@ -551,7 +555,7 @@ function ProductsSection() {
           variant="outline"
           size="sm"
           onClick={() => setShowImportWizard(true)}
-          className="gap-1.5 border-brand-orange text-brand-orange hover:bg-brand-orange/10"
+          className="gap-1.5 border-forest text-forest hover:bg-forest/10"
         >
           ⬆️ {tt("Speisekarte importieren", "Import Menu")}
         </Button>
@@ -587,11 +591,29 @@ function ProductsSection() {
                       <p className="mt-1 text-sm text-muted-foreground">{p.description}</p>
                     )}
                   </div>
-                  <div className="text-right">
-                    <p className="font-display text-lg">{formatPrice(p.price_cents)}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {p.is_available ? tt("Verfügbar", "Available") : tt("Ausgeblendet", "Hidden")}
-                    </p>
+                  <div className="text-right flex flex-col items-end justify-between gap-2">
+                    <div>
+                      <p className="font-display text-lg">{formatPrice(p.price_cents)}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {p.is_available ? tt("Verfügbar", "Available") : tt("Ausgeblendet", "Hidden")}
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-xs px-3"
+                      onClick={() => {
+                        setEditingId(p.id);
+                        setName(p.name);
+                        setDescription(p.description || "");
+                        setPrice((p.price_cents / 100).toString());
+                        setImagePath(p.image_url);
+                        setImagePreview(p.image_signed_url);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                    >
+                      {tt("Bearbeiten", "Edit")}
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -604,10 +626,10 @@ function ProductsSection() {
             e.preventDefault();
             const cents = Math.round(parseFloat(price || "0") * 100);
             if (!name || cents < 0) return;
-            mut.mutate({ name, description, price_cents: cents, image_url: imagePath });
+            mut.mutate({ id: editingId || undefined, name, description, price_cents: cents, image_url: imagePath });
           }}
         >
-          <h3 className="font-display text-lg">{tt("Menüartikel hinzufügen", "Add menu item")}</h3>
+          <h3 className="font-display text-lg">{editingId ? tt("Menüartikel bearbeiten", "Edit menu item") : tt("Menüartikel hinzufügen", "Add menu item")}</h3>
           <div className="space-y-1.5">
             <Label htmlFor="pname">{tt("Name", "Name")}</Label>
             <Input id="pname" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -664,9 +686,29 @@ function ProductsSection() {
             </Button>
           </div>
           {err && <p className="text-sm text-destructive">{err}</p>}
-          <Button type="submit" className="w-full" disabled={mut.isPending || uploading}>
-            {mut.isPending ? tt("Wird gespeichert...", "Saving…") : tt("Zur Speisekarte hinzufügen", "Add to menu")}
-          </Button>
+          <div className="flex gap-2">
+            {editingId && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  setEditingId(null);
+                  setName("");
+                  setDescription("");
+                  setPrice("");
+                  setImagePath(null);
+                  setImagePreview(null);
+                  setErr(null);
+                }}
+              >
+                {tt("Abbrechen", "Cancel")}
+              </Button>
+            )}
+            <Button type="submit" className="w-full" disabled={mut.isPending || uploading || !name}>
+              {mut.isPending ? tt("Wird gespeichert...", "Saving…") : editingId ? tt("Änderungen speichern", "Save changes") : tt("Zur Speisekarte hinzufügen", "Add to menu")}
+            </Button>
+          </div>
         </form>
       </div>
     </section>
@@ -746,7 +788,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
           </p>
         </div>
         {allCompleted && (
-          <span className="bg-emerald-100 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-200">
+          <span className="bg-forest/10 border border-forest/20 dark:bg-emerald-950/20 text-forest dark:text-emerald-300 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-200">
             {tt("Aktiv & Live", "Active & Live")}
           </span>
         )}
@@ -763,7 +805,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
               key={step.id} 
               className={`flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 ${
                 isCompleted 
-                  ? "bg-emerald-500/5 dark:bg-emerald-950/10 border-emerald-500/20 shadow-sm" 
+                  ? "bg-forest/5 dark:bg-emerald-950/10 border-forest/20 shadow-sm" 
                   : isCurrent 
                   ? "bg-white dark:bg-zinc-900 border-forest/35 shadow-md ring-1 ring-forest/10 scale-[1.01]" 
                   : "bg-stone-50/50 dark:bg-stone-900/10 border-stone-200/60 opacity-60"
@@ -773,7 +815,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
                 <div className="flex items-center justify-between">
                   <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
                     isCompleted 
-                      ? "bg-emerald-600 text-white shadow-sm" 
+                      ? "bg-forest text-white shadow-sm" 
                       : isCurrent 
                       ? "bg-forest text-cream shadow-md" 
                       : "bg-stone-200 text-stone-400"
@@ -782,7 +824,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
                   </span>
                   
                   {isCurrent && (
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-brand-orange bg-brand-orange/10 px-2.5 py-1 rounded-full border border-brand-orange/20 animate-pulse">
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-forest bg-forest/10 px-2.5 py-1 rounded-full border border-forest/20 animate-pulse">
                       {tt("Als nächstes", "Next Step")}
                     </span>
                   )}
@@ -800,7 +842,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
 
               <div className="mt-5">
                 {isCompleted ? (
-                  <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold py-2">
+                  <div className="flex items-center gap-1.5 text-xs text-forest font-semibold py-2">
                     <span className="text-sm">✓</span> {tt("Abgeschlossen", "Completed")}
                   </div>
                 ) : isCurrent ? (
@@ -872,7 +914,7 @@ function OverviewSection() {
               id="active-status"
               checked={q.data.isActive}
               onCheckedChange={async (val) => {
-                await upsert({ name: "placeholder", is_active: val });
+                await upsert({ data: { name: "placeholder", is_active: val } });
                 qc.invalidateQueries({ queryKey: ["restaurant", "kpis"] });
               }}
             />
@@ -882,45 +924,45 @@ function OverviewSection() {
         {hasUrgentActions ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {q.data.pendingOrders > 0 && (
-              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-forest">
                 <div>
                   <p className="font-display font-bold text-base text-forest">{q.data.pendingOrders} {tt("neue Bestellungen warten", "new orders waiting")}</p>
                   <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Prüfen und bestätigen Sie Ihre eingehenden Bestellungen.", "Review and accept your incoming orders.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("orders")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Bestellungen anzeigen", "View Orders")}</Button>
+                <Button onClick={() => navigateTo("orders")} className="mt-5 w-full bg-forest hover:bg-forest/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Bestellungen anzeigen", "View Orders")}</Button>
               </div>
             )}
             {q.data.pendingReservations > 0 && (
-              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-forest">
                 <div>
                   <p className="font-display font-bold text-base text-forest">{q.data.pendingReservations} {tt("Reservierungsanfragen", "reservation requests")}</p>
                   <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Ausstehende Reservierungen erfordern Ihre Zustimmung.", "Pending reservations require your approval.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("reservations")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Reservierungen anzeigen", "View Reservations")}</Button>
+                <Button onClick={() => navigateTo("reservations")} className="mt-5 w-full bg-forest hover:bg-forest/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Reservierungen anzeigen", "View Reservations")}</Button>
               </div>
             )}
             {q.data.totalProducts === 0 && (
-              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-forest">
                 <div>
                   <p className="font-display font-bold text-base text-forest">{tt("Ihre Speisekarte hat 0 Artikel", "Your menu has 0 items")}</p>
                   <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Kunden können keine Bestellungen aufgeben, bis Sie Artikel hinzufügen.", "Customers cannot place orders until you add items.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("menu")} className="mt-5 w-full bg-brand-orange hover:bg-brand-orange/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Artikel hinzufügen", "Add Menu Items")}</Button>
+                <Button onClick={() => navigateTo("menu")} className="mt-5 w-full bg-forest hover:bg-forest/90 text-white rounded-full text-xs font-semibold py-2 transition shadow-sm">{tt("Artikel hinzufügen", "Add Menu Items")}</Button>
               </div>
             )}
             {q.data.isProfileIncomplete && (
-              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-brand-orange">
+              <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm flex flex-col justify-between border-l-4 border-l-forest">
                 <div>
                   <p className="font-display font-bold text-base text-forest">{tt("Profil unvollständig", "Profile incomplete")}</p>
                   <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{tt("Logo, Telefonnummer oder Beschreibung fehlt.", "Missing logo, phone, or description.")}</p>
                 </div>
-                <Button onClick={() => navigateTo("profile")} variant="outline" className="mt-5 w-full border-brand-orange text-brand-orange hover:bg-brand-orange/10 rounded-full text-xs font-semibold py-2 transition">{tt("Profil vervollständigen", "Complete Profile")}</Button>
+                <Button onClick={() => navigateTo("profile")} variant="outline" className="mt-5 w-full border-forest text-forest hover:bg-forest/10 rounded-full text-xs font-semibold py-2 transition">{tt("Profil vervollständigen", "Complete Profile")}</Button>
               </div>
             )}
           </div>
         ) : (
-          <div className="rounded-2xl bg-emerald-500/5 border border-emerald-500/10 p-5 flex items-center gap-3">
-            <span className="text-emerald-600 text-2xl">🎉</span>
+          <div className="rounded-2xl bg-forest/5 border border-forest/10 p-5 flex items-center gap-3">
+            <span className="text-forest text-2xl">🎉</span>
             <p className="text-forest font-semibold text-base">{tt("Alles erledigt! Aktuell gibt es keine dringenden Aktionen.", "All caught up! Nothing needs your attention right now.")}</p>
           </div>
         )}
@@ -930,20 +972,20 @@ function OverviewSection() {
       <div className="space-y-4">
         <h2 className="font-display text-xl text-forest">{tt("Heute im Überblick", "Today at a glance")}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">🛍️</span> {tt("Bestellungen heute", "Orders today")}</p>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md space-y-2 hover:border-forest/30 hover:shadow-lg transition-all duration-300">
+            <p className="text-[11px] uppercase tracking-widest text-forest/70 font-bold flex items-center gap-1.5"><span className="text-base">🛍️</span> {tt("Bestellungen heute", "Orders today")}</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.ordersToday}</p>
           </div>
-          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📈</span> {tt("Umsatz heute", "Revenue today")}</p>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md space-y-2 hover:border-forest/30 hover:shadow-lg transition-all duration-300">
+            <p className="text-[11px] uppercase tracking-widest text-forest/70 font-bold flex items-center gap-1.5"><span className="text-base">📈</span> {tt("Umsatz heute", "Revenue today")}</p>
             <p className="text-3xl font-bold font-display text-forest">€{(q.data.revenueTodayCents / 100).toFixed(2)}</p>
           </div>
-          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">📅</span> {tt("Reservierungen heute", "Reservations today")}</p>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md space-y-2 hover:border-forest/30 hover:shadow-lg transition-all duration-300">
+            <p className="text-[11px] uppercase tracking-widest text-forest/70 font-bold flex items-center gap-1.5"><span className="text-base">📅</span> {tt("Reservierungen heute", "Reservations today")}</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.reservationsToday}</p>
           </div>
-          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-sm space-y-2 hover:border-forest/20 transition-all duration-200">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-base">👀</span> {tt("Profilaufrufe heute", "Profile views today")}</p>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md space-y-2 hover:border-forest/30 hover:shadow-lg transition-all duration-300">
+            <p className="text-[11px] uppercase tracking-widest text-forest/70 font-bold flex items-center gap-1.5"><span className="text-base">👀</span> {tt("Profilaufrufe heute", "Profile views today")}</p>
             <p className="text-3xl font-bold font-display text-forest">{q.data.profileViewsToday}</p>
           </div>
         </div>
@@ -952,9 +994,13 @@ function OverviewSection() {
       {/* SECTION 3: RECENT ACTIVITY FEED */}
       <div className="space-y-4">
         <h2 className="font-display text-xl text-forest">{tt("Aktuelle Aktivitäten", "Recent activity feed")}</h2>
-        <div className="bg-white border border-[#e2e8e4] rounded-2xl shadow-sm overflow-hidden">
+        <div className="bg-white border border-[#e2e8e4] rounded-2xl shadow-md overflow-hidden">
           {(!aq.data || aq.data.length === 0) ? (
-            <div className="p-8 text-center text-muted-foreground">{tt("Keine aktuellen Aktivitäten.", "No recent activity.")}</div>
+            <div className="p-12 flex flex-col items-center justify-center text-center">
+              <div className="h-16 w-16 mb-4 rounded-full bg-forest/5 flex items-center justify-center text-forest/20 text-3xl">📭</div>
+              <p className="text-forest font-semibold">{tt("Keine aktuellen Aktivitäten.", "No recent activity.")}</p>
+              <p className="text-xs text-muted-foreground mt-1 max-w-xs">{tt("Neue Bestellungen und Reservierungen erscheinen hier automatisch.", "New orders and reservations will appear here automatically.")}</p>
+            </div>
           ) : (
             <div className="divide-y divide-[#e2e8e4]/60">
               {aq.data.map((event: any) => {
@@ -975,9 +1021,9 @@ function OverviewSection() {
                   <div key={event.id} className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#f8faf9] transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="flex-shrink-0 mt-0.5 sm:mt-0">
-                        {event.type === 'order' && <span className="text-brand-orange text-lg">🛍️</span>}
+                        {event.type === 'order' && <span className="text-forest text-lg">🛍️</span>}
                         {event.type === 'reservation' && <span className="text-sky-500 text-lg">📅</span>}
-                        {event.type === 'menu' && <span className="text-emerald-500 text-lg">🍽️</span>}
+                        {event.type === 'menu' && <span className="text-forest text-lg">🍽️</span>}
                       </div>
                       <p className="text-sm font-medium text-foreground">
                         {event.description}
@@ -1039,7 +1085,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
         setBannerPreview(signed?.signedUrl ?? null);
       }
     } catch (e: any) {
-      alert("Upload failed: " + e.message);
+      toast.error("Upload failed: " + e.message);
     } finally {
       setUploading(false);
     }
@@ -1048,7 +1094,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
   async function handleSave() {
     setSaving(true);
     try {
-      await upsert({
+      await upsert({ data: {
           name,
           description: desc,
           phone,
@@ -1056,11 +1102,11 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
           logo_url: logoPath,
           banner_image_url: bannerPath,
           certifications,
-        });
-      alert(tt("Allgemeine Einstellungen gespeichert!", "General settings saved successfully!"));
+        } });
+      toast.success(tt("Allgemeine Einstellungen gespeichert!", "General settings saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setSaving(false);
     }
@@ -1188,7 +1234,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
   async function handleSave() {
     setSaving(true);
     try {
-      await upsert({
+      await upsert({ data: {
           name: restaurant.name,
           accepts_pickup: acceptsPickup,
           accepts_delivery: acceptsDelivery,
@@ -1197,11 +1243,11 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
           delivery_fee: parseFloat(deliveryFee) || 0,
           service_areas: serviceAreas,
           is_published: isPublished,
-        });
-      alert(tt("Storefront-Einstellungen gespeichert!", "Storefront settings saved successfully!"));
+        } });
+      toast.success(tt("Storefront-Einstellungen gespeichert!", "Storefront settings saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setSaving(false);
     }
@@ -1213,11 +1259,11 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
       <CustomDomainSection 
         entity={restaurant} 
         onSave={async (slug, domain) => {
-          await upsert({
+          await upsert({ data: {
               name: restaurant.name,
               slug: slug,
               custom_domain: domain
-            });
+            } });
           qc.invalidateQueries({ queryKey: ["restaurant"] });
         }}
       />
@@ -1323,14 +1369,14 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
   async function handleSave() {
     setSaving(true);
     try {
-      await upsert({
+      await upsert({ data: {
           name: restaurant.name,
           operating_hours: operatingHours,
-        });
-      alert(tt("Öffnungszeiten gespeichert!", "Operating hours saved successfully!"));
+        } });
+      toast.success(tt("Öffnungszeiten gespeichert!", "Operating hours saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setSaving(false);
     }
@@ -1433,7 +1479,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
         window.location.href = res.url;
       }
     } catch (e: any) {
-      alert("Failed to get Stripe connection URL: " + e.message);
+      toast.error("Failed to get Stripe connection URL: " + e.message);
     } finally {
       setLoading(false);
     }
@@ -1444,10 +1490,10 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
     setLoading(true);
     try {
       await disconnect();
-      alert(tt("Stripe-Verbindung getrennt!", "Stripe successfully disconnected!"));
+      toast.success(tt("Stripe-Verbindung getrennt!", "Stripe successfully disconnected!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setLoading(false);
     }
@@ -1456,16 +1502,16 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
   async function handleSave() {
     setSaving(true);
     try {
-      await upsert({
+      await upsert({ data: {
           name: restaurant.name,
           accepts_cash: acceptsCash,
           accepts_paypal: acceptsPaypal,
           paypal_email: paypalEmail || null,
-        });
-      alert(tt("Zahlungsmethoden gespeichert!", "Payment methods saved successfully!"));
+        } });
+      toast.success(tt("Zahlungsmethoden gespeichert!", "Payment methods saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setSaving(false);
     }
@@ -1505,8 +1551,8 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
 
         {isStripeConnected ? (
           <div className="space-y-4">
-            <div className="flex items-center gap-2.5 text-emerald-800 bg-emerald-500/5 p-4 rounded-2xl border border-emerald-500/10 text-sm font-semibold">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <div className="flex items-center gap-2.5 text-forest bg-forest/5 p-4 rounded-2xl border border-forest/10 text-sm font-semibold">
+              <span className="h-2 w-2 rounded-full bg-forest animate-pulse" />
               <p>{tt("Stripe Connect ist verbunden. Kunden bezahlen direkt auf Ihr Konto.", 
                      "Stripe Connect is connected. Customers pay directly to your account.")}</p>
             </div>
@@ -1596,7 +1642,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
                     PayPal.me erstellen →
                   </Button>
                 </div>
-                <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 bg-emerald-500/5 px-3 py-2 rounded-lg border border-emerald-500/10">
+                <div className="flex items-center gap-1.5 text-[11px] text-forest bg-forest/5 px-3 py-2 rounded-lg border border-forest/10">
                   <span>🔒</span>
                   <p>
                     {tt(
@@ -1632,14 +1678,14 @@ function SettingsReservationsSection({ restaurant }: { restaurant: any }) {
   async function handleSave() {
     setSaving(true);
     try {
-      await upsert({
+      await upsert({ data: {
           name: restaurant.name,
           seat_capacity: parseInt(seatCapacity) || 30,
-        });
-      alert(tt("Reservierungseinstellungen gespeichert!", "Reservation settings saved successfully!"));
+        } });
+      toast.success(tt("Reservierungseinstellungen gespeichert!", "Reservation settings saved successfully!"));
       qc.invalidateQueries({ queryKey: ["restaurant"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setSaving(false);
     }
@@ -1731,7 +1777,7 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
   return (
     <div className="space-y-6">
       {/* Settings Guide Banner */}
-      <div className="bg-cream/40 border border-brand-orange/10 rounded-2xl p-4 flex items-center gap-3">
+      <div className="bg-cream/40 border border-forest/10 rounded-2xl p-4 flex items-center gap-3">
         <span className="text-xl">⚙️</span>
         <div className="text-xs text-forest/80 leading-relaxed">
           {tt(
@@ -1762,7 +1808,7 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
                 {tab.pending ? (
                   <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
                 ) : (
-                  <span className="text-[10px] text-emerald-600 font-bold shrink-0">✓</span>
+                  <span className="text-[10px] text-forest font-bold shrink-0">✓</span>
                 )}
               </Link>
             );
@@ -1784,7 +1830,7 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
 }
 
 
-function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" | "planners" }) {
+function PromotionsSection({ vertical, availableItems = [] }: { vertical: "restaurants" | "caterers" | "planners"; availableItems?: string[] }) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchPromos = useServerFn(getMyPromoCodes);
@@ -1798,133 +1844,237 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
   });
 
   const [code, setCode] = useState("");
-  const [type, setType] = useState<"percentage" | "fixed">("percentage");
+  const [type, setType] = useState<"percentage" | "fixed" | "free_delivery" | "free_item" | "bogo">("percentage");
   const [value, setValue] = useState("");
   const [promote, setPromote] = useState(true);
+  const [appliesTo, setAppliesTo] = useState<string>("all");
+  const [minOrder, setMinOrder] = useState("");
+  const [freeItemName, setFreeItemName] = useState<string>("");
+  const [requiredQty, setRequiredQty] = useState("");
+  const [startsAt, setStartsAt] = useState("");
+  const [endsAt, setEndsAt] = useState("");
   const [creating, setCreating] = useState(false);
   const [err, setErr] = useState("");
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr("");
+    
+    if (!code.trim()) return setErr(tt("Code fehlt", "Missing code"));
+    if ((type === "percentage" || type === "fixed") && (!value || isNaN(Number(value)))) {
+      return setErr(tt("Ungültiger Wert", "Invalid value"));
+    }
+    if (type === "free_item" && !freeItemName) {
+      return setErr(tt("Bitte ein Gratis-Produkt auswählen", "Please select a free product"));
+    }
+    if (type === "bogo" && (!requiredQty || isNaN(Number(requiredQty)))) {
+      return setErr(tt("Ungültige Menge für BOGO", "Invalid quantity for BOGO"));
+    }
+
     setCreating(true);
     try {
-      await createPromo({ data: {
-        code,
-        discount_type: type,
-        discount_value: parseFloat(value) || 0,
-        promote_on_storefront: promote,
-        vertical
-      }});
+      await createPromo({ 
+        data: {
+          code: code.trim(),
+          discount_type: type,
+          discount_value: (type === "percentage" || type === "fixed") ? Number(value) : 0,
+          promote_on_storefront: promote,
+          vertical,
+          applies_to_product_name: appliesTo !== "all" ? appliesTo : undefined,
+          min_order_value_cents: minOrder && !isNaN(Number(minOrder)) ? Math.round(Number(minOrder) * 100) : undefined,
+          free_item_name: type === "free_item" ? freeItemName : undefined,
+          required_qty: type === "bogo" ? Number(requiredQty) : undefined,
+          starts_at: startsAt ? new Date(startsAt).toISOString() : undefined,
+          ends_at: endsAt ? new Date(endsAt).toISOString() : undefined
+        }
+      });
+      await qc.invalidateQueries({ queryKey: ["promotions"] });
       setCode("");
       setValue("");
-      qc.invalidateQueries({ queryKey: ["promotions"] });
-      qc.invalidateQueries({ queryKey: [vertical.slice(0, -1)] }); 
-      alert(tt("Rabattcode erfolgreich erstellt!", "Promo code created successfully!"));
-    } catch (error: any) {
-      setErr(error.message);
+      setAppliesTo("all");
+      setMinOrder("");
+      setFreeItemName("");
+      setRequiredQty("");
+      setStartsAt("");
+      setEndsAt("");
+      toast.success(tt("Promo-Code erstellt", "Promo code created"));
+    } catch (e: any) {
+      setErr(e.message);
     } finally {
       setCreating(false);
     }
   };
 
-  const handleToggle = async (id: string, active: boolean) => {
-    try {
-      await togglePromo({ data: { id, is_active: active }});
-      qc.invalidateQueries({ queryKey: ["promotions"] });
-    } catch (e: any) {
-      alert(tt("Umschalten fehlgeschlagen: ", "Failed to toggle: ") + e.message);
+  const getStatusBadge = (promo: any) => {
+    const now = new Date();
+    if (!promo.is_active) {
+      return <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">{tt("Inaktiv", "Inactive")}</span>;
     }
+    if (promo.starts_at && new Date(promo.starts_at) > now) {
+      return <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">{tt("Geplant", "Scheduled")}</span>;
+    }
+    if (promo.ends_at && new Date(promo.ends_at) < now) {
+      return <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">{tt("Abgelaufen", "Expired")}</span>;
+    }
+    return <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">{tt("Aktiv", "Active")}</span>;
   };
 
-
-
-  const codes = q.data || [];
+  const getPromoSummary = (promo: any) => {
+    let text = "";
+    if (promo.discount_type === "percentage") text = `${promo.discount_value}% OFF`;
+    else if (promo.discount_type === "fixed") text = `€${promo.discount_value} OFF`;
+    else if (promo.discount_type === "free_delivery") text = tt("Kostenlose Lieferung", "Free Delivery");
+    else if (promo.discount_type === "free_item") text = tt(`Gratis ${promo.free_item_name}`, `Free ${promo.free_item_name}`);
+    else if (promo.discount_type === "bogo") text = tt(`Kaufe ${promo.required_qty} erhalte 1 gratis`, `Buy ${promo.required_qty} get 1 free`);
+    
+    if (promo.applies_to_product_name) text += ` (${promo.applies_to_product_name})`;
+    return text;
+  };
 
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl">{tt("Rabattcodes & Aktionen", "Promotions & Vouchers")}</h2>
-        <p className="text-sm text-muted-foreground">{tt("Erstellen Sie Rabattcodes und zeigen Sie diese in Ihrem Storefront-Banner an.", "Generate discount codes and sync them to your storefront banner.")}</p>
+    <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div>
+        <h2 className="text-xl font-bold text-black mb-1">{tt("Promotions & Gutscheine", "Promotions & Vouchers")}</h2>
+        <p className="text-gray-500 text-sm">{tt("Erstellen Sie Rabattcodes für Ihre Kunden.", "Create discount codes for your customers.")}</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[1fr_320px]">
-        <div className="space-y-4">
-          <h3 className="font-semibold text-lg">{tt("Aktive Codes", "Active Codes")}</h3>
-          {codes.length === 0 ? (
-            <div className="surface-card p-8 text-center border border-dashed border-border text-muted-foreground">
-              {tt("Sie haben noch keine Rabattcodes erstellt.", "You haven't created any promo codes yet.")}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1 border border-gray-100 bg-white shadow-sm rounded-2xl p-6 h-fit">
+          <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
+            <Plus className="w-4 h-4 text-orange-600" />
+            {tt("Neuen Code erstellen", "Create New Code")}
+          </h3>
+          <form onSubmit={handleCreate} className="space-y-4">
+            {err && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">{err}</div>}
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Code</label>
+              <input value={code} onChange={e => setCode(e.target.value.toUpperCase())} placeholder="z.B. SOMMER20" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 uppercase text-sm" />
             </div>
-          ) : (
-            <div className="grid gap-3">
-              {codes.map((c: any) => (
-                <div key={c.id} className={`surface-card p-4 flex items-center justify-between border ${c.is_active ? 'border-brand-orange/50' : 'border-border opacity-60'}`}>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-bold font-mono text-lg">{c.code}</h4>
-                      {!c.is_active && <span className="text-[10px] uppercase bg-muted px-2 py-0.5 rounded-full font-semibold">{tt("Inaktiv", "Inactive")}</span>}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {c.discount_type === "percentage" 
-                        ? (lang === "de" ? `${c.discount_value}% Rabatt auf Gesamtsumme` : `${c.discount_value}% off total`)
-                        : (lang === "de" ? `€${c.discount_value.toFixed(2)} Rabatt auf Gesamtsumme` : `€${c.discount_value.toFixed(2)} off total`)
-                      }
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Label htmlFor={`toggle-${c.id}`} className="text-xs">{c.is_active ? tt("Aktiv", "Active") : tt("Deaktiviert", "Disabled")}</Label>
-                    <Switch 
-                      id={`toggle-${c.id}`} 
-                      checked={c.is_active} 
-                      onCheckedChange={(val) => handleToggle(c.id, val)}
-                    />
-                  </div>
-                </div>
-              ))}
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Rabatt-Typ", "Discount Type")}</label>
+              <select value={type} onChange={(e) => { setType(e.target.value as any); setValue(""); }} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                <option value="percentage">{tt("Prozentsatz", "Percentage")}</option>
+                <option value="fixed">{tt("Fester Betrag", "Fixed Amount")}</option>
+                <option value="free_delivery">{tt("Kostenlose Lieferung", "Free Delivery")}</option>
+                <option value="free_item">{tt("Gratis-Artikel", "Free Item")}</option>
+                <option value="bogo">{tt("Kauf X erhalte 1 gratis", "Buy X Get 1 Free")}</option>
+              </select>
             </div>
-          )}
+
+            {(type === "percentage" || type === "fixed") && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Wert", "Value")} {type === "percentage" ? "(%)" : "(€)"}</label>
+                <input type="number" step="any" value={value} onChange={e => setValue(e.target.value)} placeholder="z.B. 10" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+            )}
+
+            {type === "bogo" && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Benötigte Menge (X)", "Required Quantity (X)")}</label>
+                <input type="number" min="1" value={requiredQty} onChange={e => setRequiredQty(e.target.value)} placeholder="z.B. 2" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+            )}
+
+            {type === "free_item" && availableItems.length > 0 && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gratis-Artikel", "Free Item")}</label>
+                <select value={freeItemName} onChange={e => setFreeItemName(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                  <option value="">{tt("Auswählen...", "Select...")}</option>
+                  {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
+                </select>
+              </div>
+            )}
+
+            {(type !== "free_delivery" && type !== "free_item") && availableItems.length > 0 && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gilt für", "Applies to")}</label>
+                <select value={appliesTo} onChange={e => setAppliesTo(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                  <option value="all">{tt("Gesamte Bestellung", "Entire Order")}</option>
+                  {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
+                </select>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Mindestbestellwert (€) (Optional)", "Min. Order Value (€) (Optional)")}</label>
+              <input type="number" min="0" step="any" value={minOrder} onChange={e => setMinOrder(e.target.value)} placeholder="z.B. 50" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig ab (Optional)", "Valid From (Optional)")}</label>
+                <input type="datetime-local" value={startsAt} onChange={e => setStartsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig bis (Optional)", "Valid Until (Optional)")}</label>
+                <input type="datetime-local" value={endsAt} onChange={e => setEndsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+            </div>
+
+            <label className="flex items-center gap-2 cursor-pointer mt-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+              <input type="checkbox" checked={promote} onChange={e => setPromote(e.target.checked)} className="rounded text-orange-600 focus:ring-orange-500 bg-white" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-700">{tt("Im Shop ankündigen", "Announce on storefront")}</span>
+                <span className="text-[10px] text-gray-500">{tt("Zeigt ein Banner für alle Besucher", "Shows a banner to all visitors")}</span>
+              </div>
+            </label>
+
+            <button disabled={creating} type="submit" className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+              {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Tag className="w-4 h-4" />}
+              {tt("Code Speichern", "Save Code")}
+            </button>
+          </form>
         </div>
 
-        <form className="surface-card h-fit space-y-4 p-5" onSubmit={handleCreate}>
-          <h3 className="font-display text-lg">{tt("Neuen Code erstellen", "Create new code")}</h3>
-          <div className="space-y-1.5">
-            <Label>{tt("Code", "Code")}</Label>
-            <Input value={code} onChange={e => setCode(e.target.value.toUpperCase().replace(/\s/g, ""))} placeholder="e.g. SUMMER20" required />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label>{tt("Typ", "Type")}</Label>
-              <Select value={type} onValueChange={(v: any) => setType(v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="percentage">{tt("Prozent (%)", "Percent (%)")}</SelectItem>
-                  <SelectItem value="fixed">{tt("Festbetrag (€)", "Fixed (€)")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1.5">
-              <Label>{tt("Wert", "Value")}</Label>
-              <Input type="number" min="0" step={type === "percentage" ? "1" : "0.5"} value={value} onChange={e => setValue(e.target.value)} placeholder={type === "percentage" ? "10" : "5.00"} required />
-            </div>
-          </div>
-          <div className="pt-2 pb-1 border-t border-border mt-2 space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="promote" className="flex-1 cursor-pointer">{tt("Auf Storefront-Banner bewerben", "Promote on Storefront Banner")}</Label>
-              <Switch id="promote" checked={promote} onCheckedChange={setPromote} />
-            </div>
-            {promote && (
-              <p className="text-xs text-muted-foreground bg-muted p-2 rounded">
-                {tt("Dadurch wird Ihr Ankündigungsbanner im Storefront automatisch aktualisiert und aktiviert, um diesen Code anzuzeigen.", "This will automatically update and turn on your public announcement banner to display this code.")}
-              </p>
+        <div className="lg:col-span-2 space-y-4">
+          <h3 className="font-semibold text-black flex items-center gap-2 px-1">
+            <Ticket className="w-4 h-4 text-orange-600" />
+            {tt("Ihre Codes", "Your Codes")}
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {q.data?.map((p: any) => (
+              <div key={p.id} className={`bg-white border rounded-2xl p-5 transition-all shadow-sm ${p.is_active ? 'border-gray-200' : 'border-gray-100 opacity-60'}`}>
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-bold text-lg text-black">{p.code}</span>
+                      {getStatusBadge(p)}
+                    </div>
+                    <span className="text-orange-600 font-semibold text-sm">
+                      {getPromoSummary(p)}
+                    </span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" checked={p.is_active} onChange={async (e) => {
+                      const active = e.target.checked;
+                      await togglePromo({ data: { id: p.id, is_active: active } });
+                      qc.invalidateQueries({ queryKey: ["promotions"] });
+                      if(active) toast.success(tt("Aktiviert", "Activated"));
+                      else toast.success(tt("Deaktiviert", "Deactivated"));
+                    }} />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
+                  </label>
+                </div>
+                <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
+                  {p.min_order_value_cents > 0 && <p>• {tt("Mindestbestellwert:", "Min. Spend:")} €{(p.min_order_value_cents/100).toFixed(2)}</p>}
+                  {p.starts_at && <p>• {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}</p>}
+                  {p.ends_at && <p>• {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}</p>}
+                </div>
+              </div>
+            ))}
+            {q.data?.length === 0 && (
+              <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed">
+                <Ticket className="w-8 h-8 mx-auto mb-3 text-gray-300" />
+                <p>{tt("Noch keine Codes erstellt", "No codes created yet")}</p>
+              </div>
             )}
           </div>
-          {err && <p className="text-sm text-destructive">{err}</p>}
-          <Button type="submit" className="w-full" disabled={creating || !code || !value}>
-            {creating ? tt("Wird erstellt...", "Creating...") : tt("Code erstellen", "Create Code")}
-          </Button>
-        </form>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -1956,9 +2106,9 @@ function ReservationsSection() {
 
   const statusStyles: Record<string, string> = {
     pending: "bg-amber-100 text-amber-900",
-    confirmed: "bg-emerald-100 text-emerald-900",
+    confirmed: "bg-forest/10 border border-forest/20 text-forest",
     declined: "bg-rose-100 text-rose-900",
-    approved: "bg-emerald-100 text-emerald-900",
+    approved: "bg-forest/10 border border-forest/20 text-forest",
     rejected: "bg-rose-100 text-rose-900",
     cancelled: "bg-gray-100 text-gray-900",
     completed: "bg-indigo-100 text-indigo-900",
@@ -2088,7 +2238,7 @@ function BillingSection() {
         window.location.href = res.url;
       }
     } catch (e: any) {
-      alert("Failed to start subscription: " + e.message);
+      toast.error("Failed to start subscription: " + e.message);
     } finally {
       setLoading(false);
     }
@@ -2102,7 +2252,7 @@ function BillingSection() {
         window.location.href = res.url;
       }
     } catch (e: any) {
-      alert("Failed to open billing portal: " + e.message);
+      toast.error("Failed to open billing portal: " + e.message);
     } finally {
       setLoading(false);
     }
@@ -2188,7 +2338,7 @@ function BillingSection() {
                     </h3>
                   </div>
                   <div className="text-right">
-                    <span className={`inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${isSubActive ? 'text-emerald-700 bg-emerald-500/10 border border-emerald-500/20' : 'text-stone-500 bg-stone-100'}`}>
+                    <span className={`inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider ${isSubActive ? 'text-forest bg-forest/10 border border-forest/20' : 'text-stone-500 bg-stone-100'}`}>
                       {isSubActive ? tt("Aktiv", "Active") : subStatus.replace('_', ' ')}
                     </span>
                   </div>
@@ -2231,19 +2381,19 @@ function BillingSection() {
                 <h4 className="font-semibold text-xs uppercase tracking-wider text-forest/70">{tt("Enthaltene Leistungen", "Plan Features")}</h4>
                 <ul className="space-y-3 text-xs text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-forest font-bold">✓</span>
                     <span>{tt("0% Bestellprovision", "0% order commission")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-forest font-bold">✓</span>
                     <span>{tt("Tischreservierungen inklusive", "Table reservations included")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-forest font-bold">✓</span>
                     <span>{tt("Eigene gehostete Storefront-URL", "Hosted storefront URL")}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-emerald-600 font-bold">✓</span>
+                    <span className="text-forest font-bold">✓</span>
                     <span>{tt("Custom Domain Support", "Custom domain support")}</span>
                   </li>
                 </ul>
@@ -2351,14 +2501,20 @@ function RestaurantDashboardInner() {
       title={`${q.data.restaurant.name} Dashboard`} 
       storefrontSlug={q.data.restaurant.slug}
     >
-      {currentTab === "overview" && <OverviewSection />}
-      {currentTab === "orders" && <OrdersSection />}
-      {currentTab === "reservations" && <ReservationsSection />}
-      {currentTab === "menu" && <ProductsSection />}
-      {currentTab === "promotions" && <PromotionsSection vertical="restaurants" />}
-      {currentTab.startsWith("settings-") && (
-        <SettingsShell activeSubtab={currentTab} restaurant={q.data.restaurant} />
-      )}
+      <React.Suspense fallback={
+        <div className="flex-1 flex items-center justify-center min-h-[400px]">
+          <div className="w-8 h-8 rounded-full border-4 border-forest/20 border-t-forest animate-spin" />
+        </div>
+      }>
+        {currentTab === "overview" && <OverviewSection />}
+        {currentTab === "orders" && <OrdersSection />}
+        {currentTab === "reservations" && <ReservationsSection />}
+        {currentTab === "menu" && <ProductsSection />}
+        {currentTab === "promotions" && <PromotionsSection vertical="restaurants" availableItems={(q.data.restaurant?.restaurant_products || []).map((p: any) => p.name)} />}
+        {currentTab.startsWith("settings-") && (
+          <SettingsShell activeSubtab={currentTab} restaurant={q.data.restaurant} />
+        )}
+      </React.Suspense>
     </VendorLayout>
   );
 

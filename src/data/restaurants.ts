@@ -291,8 +291,14 @@ export async function getRestaurant(id: string): Promise<Restaurant | undefined>
 
 export type PromoCode = {
   code: string;
-  discount_type: "percentage" | "fixed";
+  discount_type: "percentage" | "fixed" | "free_delivery" | "free_item" | "bogo";
   discount_value: number;
+  applies_to_product_name?: string;
+  min_order_value_cents?: number;
+  free_item_name?: string;
+  required_qty?: number;
+  starts_at?: string;
+  ends_at?: string;
 };
 
 // Mock promo codes for Verde & Grain

@@ -2,7 +2,7 @@ import { createFileRoute, Link, useRouter, useLocation, redirect, isRedirect } f
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Sparkles } from "lucide-react";
+import {  Sparkles , Plus, Loader2, Tag, Ticket } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Select,
@@ -47,6 +47,7 @@ import { MilestoneTimeline } from "@/components/vendor/MilestoneTimeline";
 import { BlackoutCalendarSection } from "@/components/vendor/BlackoutCalendarSection";
 import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
 import { VendorLayout, DashboardSkeleton } from "@/components/vendor/VendorLayout";
+import { toast } from 'sonner';
 import { useI18n } from "@/i18n/I18nProvider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { updateMyConsent } from "@/lib/consent.functions";
@@ -117,7 +118,7 @@ function EmptyCard({
 }) {
   return (
     <div className="surface-card p-6 md:p-8 text-center border border-[#eadfce]/35 max-w-xl mx-auto rounded-3xl bg-cream/10">
-      <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 shadow-sm text-xl">
+      <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-forest/10 text-forest shadow-sm text-xl">
         🥂
       </div>
       <h3 className="font-display text-lg font-bold text-forest">{title}</h3>
@@ -133,6 +134,12 @@ function CreateCatererForm() {
   const create = useServerFn(createMyCaterer);
   const saveConsent = useServerFn(updateMyConsent);
   const qc = useQueryClient();
+  const fetchMenu = useServerFn(getMyCatererMenu);
+  const menuQ = useQuery({
+    queryKey: ["caterer", "menu"],
+    queryFn: () => fetchMenu()
+  });
+  const availableItems = (menuQ.data || []).map((m: any) => m.name);
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [subdomain, setSubdomain] = useState("");
@@ -797,7 +804,7 @@ function CatererMenuSection() {
                     )}
                     <div className="p-4 space-y-1.5 text-left">
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-600 uppercase tracking-wider">
+                        <span className="inline-flex items-center rounded-full bg-forest/10 px-2 py-0.5 text-[9px] font-bold text-forest uppercase tracking-wider">
                           {m.category}
                         </span>
                       </div>
@@ -877,20 +884,20 @@ function OverviewSection({ caterer }: { caterer: any }) {
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-emerald-600">📈</span> {t("Umsatz (Gebucht)", "Revenue (Booked)")}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">📈</span> {t("Umsatz (Gebucht)", "Revenue (Booked)")}</p>
                 <p className="text-xl font-bold font-display text-forest mt-1">€{(q.data.revenueCents / 100).toFixed(2)}</p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-emerald-600">💶</span> {t("Ø Budget", "Avg Budget")}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">💶</span> {t("Ø Budget", "Avg Budget")}</p>
                 <p className="text-xl font-bold font-display text-forest mt-1">€{(q.data.averageOrderCents / 100).toFixed(2)}</p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-emerald-600">📅</span> {t("Gebuchte Events", "Booked Events")}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">📅</span> {t("Gebuchte Events", "Booked Events")}</p>
                 <p className="text-xl font-bold font-display text-forest mt-1">{q.data.totalOrders}</p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-brand-orange">⏱️</span> {t("Aktive Anfragen", "Active Leads")}</p>
-                <p className="text-xl font-bold font-display text-brand-orange mt-1">{q.data.pendingOrders}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">⏱️</span> {t("Aktive Anfragen", "Active Leads")}</p>
+                <p className="text-xl font-bold font-display text-forest mt-1">{q.data.pendingOrders}</p>
               </div>
             </div>
           </div>
@@ -910,11 +917,11 @@ function OverviewSection({ caterer }: { caterer: any }) {
                 <p className="text-xl font-bold font-display text-sky-600 mt-1">{q.data.profileViews || 0}</p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-emerald-600">🔄</span> {t("Kundenbindung", "Retention")}</p>
-                <p className="text-xl font-bold font-display text-emerald-600 mt-1">{q.data.customerRetentionRate}%</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">🔄</span> {t("Kundenbindung", "Retention")}</p>
+                <p className="text-xl font-bold font-display text-forest mt-1">{q.data.customerRetentionRate}%</p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left col-span-1 sm:col-span-2 lg:col-span-1">
-                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-emerald-600">⭐</span> {t("Beliebt", "Popular")}</p>
+                <p className="text-[10px] text-muted-foreground font-semibold flex items-center gap-1.5"><span className="text-forest">⭐</span> {t("Beliebt", "Popular")}</p>
                 <p className="text-xs font-bold font-display truncate mt-2.5" title={q.data.popularDish}>{q.data.popularDish || "N/A"}</p>
               </div>
               <div className="p-3 bg-cream/5 rounded-2xl border border-border/20 text-left">
@@ -925,8 +932,8 @@ function OverviewSection({ caterer }: { caterer: any }) {
           </div>
 
           {q.data.pendingOrders > 0 && (
-            <div className="rounded-2xl bg-brand-orange/10 border border-brand-orange/20 p-4 text-left shadow-sm">
-              <p className="text-brand-orange font-medium text-xs flex items-center gap-2">
+            <div className="rounded-2xl bg-forest/10 border border-forest/20 p-4 text-left shadow-sm">
+              <p className="text-forest font-medium text-xs flex items-center gap-2">
                 <span>⏱️</span> {t(`Sie haben ${q.data.pendingOrders} offene Anfragen, die Aufmerksamkeit erfordern. Gehen Sie zum Reiter "Anfragen", um Details zu sehen.`, `You have ${q.data.pendingOrders} pending leads that require attention. Go to the Leads tab to view details.`)}
               </p>
             </div>
@@ -953,7 +960,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
               {/* Progress Bar */}
               <div className="w-full bg-border/40 h-1.5 rounded-full overflow-hidden">
                 <div 
-                  className="bg-emerald-600 h-full transition-all duration-300"
+                  className="bg-forest h-full transition-all duration-300"
                   style={{ width: `${(completedCount / 5) * 100}%` }}
                 />
               </div>
@@ -964,9 +971,9 @@ function OverviewSection({ caterer }: { caterer: any }) {
                   <div key={s.id} className="flex gap-2.5 items-start">
                     <div className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 text-[8px] font-bold mt-0.5 border ${
                       s.done 
-                        ? "bg-emerald-600 border-emerald-600 text-white" 
+                        ? "bg-forest border-emerald-600 text-white" 
                         : nextStep?.id === s.id
-                          ? "border-emerald-600 text-emerald-600 bg-emerald-500/10"
+                          ? "border-emerald-600 text-forest bg-forest/10"
                           : "border-muted text-muted-foreground"
                     }`}>
                       {s.done ? "✓" : idx + 1}
@@ -979,7 +986,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
                         <p className="text-[10px] text-forest/75 mt-0.5 leading-relaxed bg-white/60 p-1.5 rounded-lg border border-border/20">
                           {s.desc}
                           {s.link && (
-                            <a href={s.link} className="block mt-1 font-semibold text-brand-orange hover:underline text-[9px]">
+                            <a href={s.link} className="block mt-1 font-semibold text-forest hover:underline text-[9px]">
                               {t("Jetzt einrichten →", "Configure now →")}
                             </a>
                           )}
@@ -1099,7 +1106,7 @@ function BusinessProfileSection() {
         setBannerPreview(signed?.signedUrl ?? null);
       }
     } catch (e: any) {
-      alert("Upload failed: " + e.message);
+      toast.error("Upload failed: " + e.message);
     } finally {
       setUploading(false);
     }
@@ -1120,10 +1127,10 @@ function BusinessProfileSection() {
           certifications
         }
       });
-      alert("Settings saved successfully!");
+      toast.success("Settings saved successfully!");
       qc.invalidateQueries({ queryKey: ["caterer"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setSaving(false);
     }
@@ -1141,7 +1148,7 @@ function BusinessProfileSection() {
             <Label>Logo</Label>
             <div 
               onClick={() => logoRef.current?.click()}
-              className="w-24 h-24 rounded-full border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-brand-orange transition-colors"
+              className="w-24 h-24 rounded-full border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-forest transition-colors"
             >
               {logoPreview ? <img src={logoPreview} className="w-full h-full object-cover" /> : <span className="text-xs text-muted-foreground">Upload</span>}
             </div>
@@ -1153,7 +1160,7 @@ function BusinessProfileSection() {
             <Label>Banner Image</Label>
             <div 
               onClick={() => bannerRef.current?.click()}
-              className="w-full h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-brand-orange transition-colors"
+              className="w-full h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-forest transition-colors"
             >
               {bannerPreview ? <img src={bannerPreview} className="w-full h-full object-cover" /> : <span className="text-xs text-muted-foreground">Upload Banner</span>}
             </div>
@@ -1208,7 +1215,11 @@ function BusinessProfileSection() {
   );
 }
 
-function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" | "planners" }) {
+
+
+function PromotionsSection({ vertical, availableItems = [] }: { vertical: "restaurants" | "caterers" | "planners"; availableItems?: string[] }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchPromos = useServerFn(getMyPromoCodes);
   const createPromo = useServerFn(createPromoCode);
   const togglePromo = useServerFn(togglePromoCode);
@@ -1220,169 +1231,237 @@ function PromotionsSection({ vertical }: { vertical: "restaurants" | "caterers" 
   });
 
   const [code, setCode] = useState("");
-  const [type, setType] = useState<"percentage" | "fixed">("percentage");
+  const [type, setType] = useState<"percentage" | "fixed" | "free_delivery" | "free_item" | "bogo">("percentage");
   const [value, setValue] = useState("");
   const [promote, setPromote] = useState(true);
+  const [appliesTo, setAppliesTo] = useState<string>("all");
+  const [minOrder, setMinOrder] = useState("");
+  const [freeItemName, setFreeItemName] = useState<string>("");
+  const [requiredQty, setRequiredQty] = useState("");
+  const [startsAt, setStartsAt] = useState("");
+  const [endsAt, setEndsAt] = useState("");
   const [creating, setCreating] = useState(false);
   const [err, setErr] = useState("");
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr("");
+    
+    if (!code.trim()) return setErr(tt("Code fehlt", "Missing code"));
+    if ((type === "percentage" || type === "fixed") && (!value || isNaN(Number(value)))) {
+      return setErr(tt("Ungültiger Wert", "Invalid value"));
+    }
+    if (type === "free_item" && !freeItemName) {
+      return setErr(tt("Bitte ein Gratis-Produkt auswählen", "Please select a free product"));
+    }
+    if (type === "bogo" && (!requiredQty || isNaN(Number(requiredQty)))) {
+      return setErr(tt("Ungültige Menge für BOGO", "Invalid quantity for BOGO"));
+    }
+
     setCreating(true);
     try {
-      await createPromo({ data: {
-        code,
-        discount_type: type,
-        discount_value: parseFloat(value) || 0,
-        promote_on_storefront: promote,
-        vertical
-      }});
+      await createPromo({ 
+        data: {
+          code: code.trim(),
+          discount_type: type,
+          discount_value: (type === "percentage" || type === "fixed") ? Number(value) : 0,
+          promote_on_storefront: promote,
+          vertical,
+          applies_to_product_name: appliesTo !== "all" ? appliesTo : undefined,
+          min_order_value_cents: minOrder && !isNaN(Number(minOrder)) ? Math.round(Number(minOrder) * 100) : undefined,
+          free_item_name: type === "free_item" ? freeItemName : undefined,
+          required_qty: type === "bogo" ? Number(requiredQty) : undefined,
+          starts_at: startsAt ? new Date(startsAt).toISOString() : undefined,
+          ends_at: endsAt ? new Date(endsAt).toISOString() : undefined
+        }
+      });
+      await qc.invalidateQueries({ queryKey: ["promotions"] });
       setCode("");
       setValue("");
-      qc.invalidateQueries({ queryKey: ["promotions"] });
-      qc.invalidateQueries({ queryKey: [vertical.slice(0, -1)] }); 
-      alert("Promo code created successfully!");
-    } catch (error: any) {
-      setErr(error.message);
+      setAppliesTo("all");
+      setMinOrder("");
+      setFreeItemName("");
+      setRequiredQty("");
+      setStartsAt("");
+      setEndsAt("");
+      toast.success(tt("Promo-Code erstellt", "Promo code created"));
+    } catch (e: any) {
+      setErr(e.message);
     } finally {
       setCreating(false);
     }
   };
 
-  const handleToggle = async (id: string, active: boolean) => {
-    try {
-      await togglePromo({ data: { id, is_active: active }});
-      qc.invalidateQueries({ queryKey: ["promotions"] });
-    } catch (e: any) {
-      alert("Failed to toggle: " + e.message);
+  const getStatusBadge = (promo: any) => {
+    const now = new Date();
+    if (!promo.is_active) {
+      return <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full font-medium">{tt("Inaktiv", "Inactive")}</span>;
     }
+    if (promo.starts_at && new Date(promo.starts_at) > now) {
+      return <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">{tt("Geplant", "Scheduled")}</span>;
+    }
+    if (promo.ends_at && new Date(promo.ends_at) < now) {
+      return <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">{tt("Abgelaufen", "Expired")}</span>;
+    }
+    return <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">{tt("Aktiv", "Active")}</span>;
   };
 
-  const codes = q.data || [];
+  const getPromoSummary = (promo: any) => {
+    let text = "";
+    if (promo.discount_type === "percentage") text = `${promo.discount_value}% OFF`;
+    else if (promo.discount_type === "fixed") text = `€${promo.discount_value} OFF`;
+    else if (promo.discount_type === "free_delivery") text = tt("Kostenlose Lieferung", "Free Delivery");
+    else if (promo.discount_type === "free_item") text = tt(`Gratis ${promo.free_item_name}`, `Free ${promo.free_item_name}`);
+    else if (promo.discount_type === "bogo") text = tt(`Kaufe ${promo.required_qty} erhalte 1 gratis`, `Buy ${promo.required_qty} get 1 free`);
+    
+    if (promo.applies_to_product_name) text += ` (${promo.applies_to_product_name})`;
+    return text;
+  };
 
   return (
-    <section className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl">Promotions & Vouchers</h2>
-        <p className="text-sm text-muted-foreground">Generate discount codes and sync them to your storefront banner.</p>
+    <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div>
+        <h2 className="text-xl font-bold text-black mb-1">{tt("Promotions & Gutscheine", "Promotions & Vouchers")}</h2>
+        <p className="text-gray-500 text-sm">{tt("Erstellen Sie Rabattcodes für Ihre Kunden.", "Create discount codes for your customers.")}</p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[1fr_320px] items-start">
-        <div className="space-y-4">
-          <h3 className="font-semibold text-lg text-left">Active Codes</h3>
-          {codes.length === 0 ? (
-            <div className="surface-card p-6 text-center border-2 border-dashed border-[#eadfce]/55 rounded-3xl bg-cream/5 flex flex-col items-center justify-center min-h-[220px] space-y-3">
-              <span className="text-2xl">🎟️</span>
-              <h4 className="font-display text-base font-bold text-forest">No active promotions</h4>
-              <p className="text-xs text-muted-foreground max-w-sm text-center leading-relaxed">
-                Create a promo code on the right. Once created, it will be styled as an active ticket and optionally shown on your storefront banner.
-              </p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-1 border border-gray-100 bg-white shadow-sm rounded-2xl p-6 h-fit">
+          <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
+            <Plus className="w-4 h-4 text-orange-600" />
+            {tt("Neuen Code erstellen", "Create New Code")}
+          </h3>
+          <form onSubmit={handleCreate} className="space-y-4">
+            {err && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">{err}</div>}
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">Code</label>
+              <input value={code} onChange={e => setCode(e.target.value.toUpperCase())} placeholder="z.B. SOMMER20" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 uppercase text-sm" />
             </div>
-          ) : (
-            <div className="grid gap-3">
-              {codes.map((c: any) => (
-                <div 
-                  key={c.id} 
-                  className={`relative p-4 rounded-2xl border-2 border-dashed flex items-center justify-between overflow-hidden transition ${
-                    c.is_active 
-                      ? "border-emerald-600/40 bg-cream/5" 
-                      : "border-border/60 bg-stone-50/50 opacity-60"
-                  }`}
-                >
-                  {/* Decorative Ticket Notches */}
-                  <div className="absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border border-r-2 border-border/20" />
-                  <div className="absolute -right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-white border border-l-2 border-border/20" />
-                  
-                  <div className="pl-3 text-left">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-lg text-forest tracking-wider uppercase bg-forest/5 px-2.5 py-0.5 rounded border border-forest/10">
-                        {c.code}
-                      </span>
-                      {!c.is_active && (
-                        <span className="text-[9px] bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full font-bold uppercase">
-                          Inactive
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Value: <span className="font-bold text-forest">
-                        {c.discount_type === "percentage" ? `${c.discount_value}% off total` : `€${c.discount_value.toFixed(2)} off total`}
-                      </span>
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center gap-3 pr-3">
-                    <span className="text-[10px] font-semibold text-muted-foreground">
-                      {c.is_active ? 'Active' : 'Disabled'}
-                    </span>
-                    <Switch 
-                      id={`toggle-${c.id}`} 
-                      checked={c.is_active} 
-                      onCheckedChange={(val) => handleToggle(c.id, val)}
-                    />
-                  </div>
-                </div>
-              ))}
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Rabatt-Typ", "Discount Type")}</label>
+              <select value={type} onChange={(e) => { setType(e.target.value as any); setValue(""); }} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                <option value="percentage">{tt("Prozentsatz", "Percentage")}</option>
+                <option value="fixed">{tt("Fester Betrag", "Fixed Amount")}</option>
+                <option value="free_delivery">{tt("Kostenlose Lieferung", "Free Delivery")}</option>
+                <option value="free_item">{tt("Gratis-Artikel", "Free Item")}</option>
+                <option value="bogo">{tt("Kauf X erhalte 1 gratis", "Buy X Get 1 Free")}</option>
+              </select>
             </div>
-          )}
+
+            {(type === "percentage" || type === "fixed") && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Wert", "Value")} {type === "percentage" ? "(%)" : "(€)"}</label>
+                <input type="number" step="any" value={value} onChange={e => setValue(e.target.value)} placeholder="z.B. 10" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+            )}
+
+            {type === "bogo" && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Benötigte Menge (X)", "Required Quantity (X)")}</label>
+                <input type="number" min="1" value={requiredQty} onChange={e => setRequiredQty(e.target.value)} placeholder="z.B. 2" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+            )}
+
+            {type === "free_item" && availableItems.length > 0 && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gratis-Artikel", "Free Item")}</label>
+                <select value={freeItemName} onChange={e => setFreeItemName(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                  <option value="">{tt("Auswählen...", "Select...")}</option>
+                  {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
+                </select>
+              </div>
+            )}
+
+            {(type !== "free_delivery" && type !== "free_item") && availableItems.length > 0 && (
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gilt für", "Applies to")}</label>
+                <select value={appliesTo} onChange={e => setAppliesTo(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm">
+                  <option value="all">{tt("Gesamte Bestellung", "Entire Order")}</option>
+                  {availableItems.map(i => <option key={i} value={i}>{i}</option>)}
+                </select>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Mindestbestellwert (€) (Optional)", "Min. Order Value (€) (Optional)")}</label>
+              <input type="number" min="0" step="any" value={minOrder} onChange={e => setMinOrder(e.target.value)} placeholder="z.B. 50" className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig ab (Optional)", "Valid From (Optional)")}</label>
+                <input type="datetime-local" value={startsAt} onChange={e => setStartsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gültig bis (Optional)", "Valid Until (Optional)")}</label>
+                <input type="datetime-local" value={endsAt} onChange={e => setEndsAt(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-orange-500 focus:ring-orange-500 text-sm" />
+              </div>
+            </div>
+
+            <label className="flex items-center gap-2 cursor-pointer mt-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+              <input type="checkbox" checked={promote} onChange={e => setPromote(e.target.checked)} className="rounded text-orange-600 focus:ring-orange-500 bg-white" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-gray-700">{tt("Im Shop ankündigen", "Announce on storefront")}</span>
+                <span className="text-[10px] text-gray-500">{tt("Zeigt ein Banner für alle Besucher", "Shows a banner to all visitors")}</span>
+              </div>
+            </label>
+
+            <button disabled={creating} type="submit" className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+              {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Tag className="w-4 h-4" />}
+              {tt("Code Speichern", "Save Code")}
+            </button>
+          </form>
         </div>
 
-        <form className="surface-card h-fit space-y-4 p-5 text-left bg-white border border-[#eadfce]/35 rounded-3xl shadow-sm" onSubmit={handleCreate}>
-          <h3 className="font-display font-semibold text-base text-forest mb-3">Create new code</h3>
-          <div className="space-y-1.5">
-            <Label className="text-xs text-forest/85 font-semibold">Code</Label>
-            <Input 
-              value={code} 
-              onChange={e => setCode(e.target.value.toUpperCase().replace(/\s/g, ""))} 
-              placeholder="e.g. SUMMER20" 
-              required 
-              className="bg-white border-border/40 focus-visible:ring-emerald-500 rounded-xl text-xs"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label className="text-xs text-forest/85 font-semibold">Type</Label>
-              <Select value={type} onValueChange={(v: any) => setType(v)}>
-                <SelectTrigger className="text-xs h-9 rounded-xl"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="percentage" className="text-xs">Percent (%)</SelectItem>
-                  <SelectItem value="fixed" className="text-xs">Fixed (€)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs text-forest/85 font-semibold">Value</Label>
-              <Input 
-                type="number" 
-                min="0" 
-                step={type === "percentage" ? "1" : "0.5"} 
-                value={value} 
-                onChange={e => setValue(e.target.value)} 
-                placeholder={type === "percentage" ? "10" : "5.00"} 
-                required 
-                className="bg-white border-border/40 focus-visible:ring-emerald-500 rounded-xl text-xs"
-              />
-            </div>
-          </div>
-          <div className="pt-2 pb-1 border-t border-border/30 mt-2 space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="promote" className="text-xs text-forest/85 cursor-pointer font-semibold">Promote on Storefront Banner</Label>
-              <Switch id="promote" checked={promote} onCheckedChange={setPromote} />
-            </div>
-            {promote && (
-              <p className="text-[10px] text-muted-foreground bg-muted/60 p-2 rounded-xl">
-                This will automatically update and turn on your public announcement banner to display this code.
-              </p>
+        <div className="lg:col-span-2 space-y-4">
+          <h3 className="font-semibold text-black flex items-center gap-2 px-1">
+            <Ticket className="w-4 h-4 text-orange-600" />
+            {tt("Ihre Codes", "Your Codes")}
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {q.data?.map((p: any) => (
+              <div key={p.id} className={`bg-white border rounded-2xl p-5 transition-all shadow-sm ${p.is_active ? 'border-gray-200' : 'border-gray-100 opacity-60'}`}>
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-bold text-lg text-black">{p.code}</span>
+                      {getStatusBadge(p)}
+                    </div>
+                    <span className="text-orange-600 font-semibold text-sm">
+                      {getPromoSummary(p)}
+                    </span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" className="sr-only peer" checked={p.is_active} onChange={async (e) => {
+                      const active = e.target.checked;
+                      await togglePromo({ data: { id: p.id, is_active: active } });
+                      qc.invalidateQueries({ queryKey: ["promotions"] });
+                      if(active) toast.success(tt("Aktiviert", "Activated"));
+                      else toast.success(tt("Deaktiviert", "Deactivated"));
+                    }} />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
+                  </label>
+                </div>
+                <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
+                  {p.min_order_value_cents > 0 && <p>• {tt("Mindestbestellwert:", "Min. Spend:")} €{(p.min_order_value_cents/100).toFixed(2)}</p>}
+                  {p.starts_at && <p>• {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}</p>}
+                  {p.ends_at && <p>• {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}</p>}
+                </div>
+              </div>
+            ))}
+            {q.data?.length === 0 && (
+              <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed">
+                <Ticket className="w-8 h-8 mx-auto mb-3 text-gray-300" />
+                <p>{tt("Noch keine Codes erstellt", "No codes created yet")}</p>
+              </div>
             )}
           </div>
-          {err && <p className="text-xs text-rose-600 font-semibold">{err}</p>}
-          <Button type="submit" className="w-full rounded-full bg-forest text-xs py-2 h-9 text-white font-semibold" disabled={creating || !code || !value}>
-            {creating ? "Creating..." : "Create Code"}
-          </Button>
-        </form>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -1417,10 +1496,10 @@ function LogisticsSection() {
           max_delivery_distance_km: maxDistance
         }
       });
-      alert("Logistics settings saved successfully!");
+      toast.success("Logistics settings saved successfully!");
       qc.invalidateQueries({ queryKey: ["caterer"] });
     } catch (e: any) {
-      alert(e.message);
+      toast.error(e.message);
     } finally {
       setSaving(false);
     }
@@ -1434,7 +1513,7 @@ function LogisticsSection() {
       </div>
       <div className="surface-card p-6 space-y-8 max-w-3xl">
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2"><span className="text-brand-orange">📍</span> Service Areas / Postal Codes</h3>
+          <h3 className="font-semibold text-lg flex items-center gap-2"><span className="text-forest">📍</span> Service Areas / Postal Codes</h3>
           <p className="text-sm text-muted-foreground">
             Enter a comma-separated list of postal codes (e.g., 10115, 10117, 10119, 10435). This ensures customers only see your catering brand if you can fulfill their order.
           </p>
@@ -1447,7 +1526,7 @@ function LogisticsSection() {
         </div>
 
         <div className="space-y-4 pt-4 border-t border-border">
-          <h3 className="font-semibold text-lg flex items-center gap-2"><span className="text-brand-orange">🚚</span> Delivery Rules</h3>
+          <h3 className="font-semibold text-lg flex items-center gap-2"><span className="text-forest">🚚</span> Delivery Rules</h3>
           
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -1512,7 +1591,7 @@ function ServiceCategoriesGuidance() {
         {/* Card 1: Event Catering */}
         <div className="surface-card p-6 border border-[#eadfce]/45 rounded-3xl bg-white flex flex-col justify-between hover:shadow-md transition">
           <div className="space-y-4">
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-bold text-forest uppercase tracking-wider">
               {t("Einmalige Events", "One-Off Events")}
             </span>
             <h4 className="font-display text-base font-bold text-forest">{t("Event-Catering", "Event Catering")}</h4>
@@ -1549,7 +1628,7 @@ function ServiceCategoriesGuidance() {
         {/* Card 2: Daily Catering Subscriptions */}
         <div className="surface-card p-6 border border-[#eadfce]/45 rounded-3xl bg-white flex flex-col justify-between hover:shadow-md transition">
           <div className="space-y-4">
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-bold text-forest uppercase tracking-wider">
               {t("Wiederkehrende Teams", "Recurring Teams")}
             </span>
             <h4 className="font-display text-base font-bold text-forest">{t("Tägliche Catering-Abos", "Daily Catering Subscriptions")}</h4>
@@ -1586,7 +1665,7 @@ function ServiceCategoriesGuidance() {
         {/* Card 3: Institutional Catering */}
         <div className="surface-card p-6 border border-[#eadfce]/45 rounded-3xl bg-white flex flex-col justify-between hover:shadow-md transition">
           <div className="space-y-4">
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-bold text-forest uppercase tracking-wider">
               {t("Gemeinschaftsverpflegung", "Institutional Verpflegung")}
             </span>
             <h4 className="font-display text-base font-bold text-forest">{t("Care- & Schul-Catering", "Institutional Catering")}</h4>
@@ -1646,7 +1725,7 @@ function CatererDashboard() {
           {/* Guided Split-Onboarding Block */}
           <div className="surface-card p-6 border border-[#eadfce]/50 bg-cream/15 rounded-3xl shadow-sm grid md:grid-cols-[1.1fr_0.9fr] gap-6 items-start">
             <div className="space-y-4 text-left">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-600">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-forest">
                 <Sparkles className="h-3 w-3 animate-pulse" /> {t("Onboarding-Checkliste", "Onboarding Checklist")}
               </span>
               <h2 className="text-2xl font-display font-bold text-forest leading-tight">
@@ -1659,7 +1738,7 @@ function CatererDashboard() {
               {/* Onboarding Sequence Steps */}
               <div className="space-y-3 pt-1">
                 <div className="flex gap-2.5 items-start">
-                  <div className="h-5 w-5 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">✓</div>
+                  <div className="h-5 w-5 rounded-full bg-forest text-white flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">✓</div>
                   <div>
                     <h4 className="text-[11px] font-bold text-forest">{t("1. Setup verstehen", "1. Understand the Setup")}</h4>
                     <p className="text-[10px] text-forest/65">{t("Verbinde dich direkt mit Privat- und Firmenkunden, die Catering suchen.", "Connect directly with private and corporate clients seeking catering.")}</p>
@@ -1667,9 +1746,9 @@ function CatererDashboard() {
                 </div>
 
                 <div className="flex gap-2.5 items-start">
-                  <div className="h-5 w-5 rounded-full border-2 border-emerald-600 bg-cream text-emerald-600 flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">2</div>
+                  <div className="h-5 w-5 rounded-full border-2 border-emerald-600 bg-cream text-forest flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">2</div>
                   <div>
-                    <h4 className="text-[11px] font-bold text-forest">{t("2. Storefront erstellen", "2. Create Storefront")} <span className="ml-1 text-[9px] font-normal text-brand-orange">{t("(Aktion erforderlich)", "(Action Required)")}</span></h4>
+                    <h4 className="text-[11px] font-bold text-forest">{t("2. Storefront erstellen", "2. Create Storefront")} <span className="ml-1 text-[9px] font-normal text-forest">{t("(Aktion erforderlich)", "(Action Required)")}</span></h4>
                     <p className="text-[10px] text-forest/65">{t("Fülle das Storefront-Registrierungsformular auf der rechten Seite aus.", "Complete the storefront registration form on the right.")}</p>
                   </div>
                 </div>
@@ -1711,13 +1790,18 @@ function CatererDashboard() {
       title={`${q.data.caterer.name} ${t("Dashboard", "Dashboard")}`} 
       storefrontSlug={q.data.caterer.slug}
     >
-      {activeTab === "overview" && <OverviewSection caterer={q.data.caterer} />}
-      {activeTab === "briefs" && <BriefsSection />}
-      {activeTab === "calendar" && <BlackoutCalendarSection vendorType="caterer" />}
-      {activeTab === "menu" && <CatererMenuSection />}
-      {activeTab === "promotions" && <PromotionsSection vertical="caterers" />}
-      {activeTab === "logistics" && <LogisticsSection />}
-      {activeTab === "profile" && (
+      <React.Suspense fallback={
+        <div className="flex-1 flex items-center justify-center min-h-[400px]">
+          <div className="w-8 h-8 rounded-full border-4 border-forest/20 border-t-forest animate-spin" />
+        </div>
+      }>
+        {activeTab === "overview" && <OverviewSection caterer={q.data.caterer} />}
+        {activeTab === "briefs" && <BriefsSection />}
+        {activeTab === "calendar" && <BlackoutCalendarSection vendorType="caterer" />}
+        {activeTab === "menu" && <CatererMenuSection />}
+        {activeTab === "promotions" && <PromotionsSection vertical="caterers" />}
+        {activeTab === "logistics" && <LogisticsSection />}
+        {activeTab === "profile" && (
         <div className="space-y-10">
           <CustomDomainSection 
             entity={q.data.caterer} 
@@ -1736,6 +1820,7 @@ function CatererDashboard() {
           <BusinessProfileSection />
         </div>
       )}
+      </React.Suspense>
     </VendorLayout>
   );
 }

@@ -5,10 +5,16 @@ import { z } from "zod";
 export const createPromoCode = createServerFn()
   .validator((d: { 
     code: string; 
-    discount_type: "percentage" | "fixed"; 
+    discount_type: "percentage" | "fixed" | "free_delivery" | "free_item" | "bogo"; 
     discount_value: number;
     promote_on_storefront: boolean;
     vertical: "restaurants" | "caterers" | "planners";
+    applies_to_product_name?: string;
+    min_order_value_cents?: number;
+    free_item_name?: string;
+    required_qty?: number;
+    starts_at?: string;
+    ends_at?: string;
   }) => d)
   .middleware([requireSupabaseAuth()])
   .handler(async ({ data, context }) => {
@@ -28,6 +34,12 @@ export const createPromoCode = createServerFn()
         owner_id: userId,
         discount_type: data.discount_type,
         discount_value: data.discount_value,
+        applies_to_product_name: data.applies_to_product_name || null,
+        min_order_value_cents: data.min_order_value_cents || null,
+        free_item_name: data.free_item_name || null,
+        required_qty: data.required_qty || null,
+        starts_at: data.starts_at || null,
+        ends_at: data.ends_at || null,
         is_active: true
       });
 

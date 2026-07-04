@@ -347,6 +347,16 @@ function RestaurantPage() {
     const codes = mockPromoCodes[restaurant.id] || [];
     const validCode = codes.find(c => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase());
     if (validCode) {
+      const now = new Date();
+      if (validCode.starts_at && new Date(validCode.starts_at) > now) {
+        return setPromoError(t("Dieser Code ist noch nicht gültig", "This code is not valid yet"));
+      }
+      if (validCode.ends_at && new Date(validCode.ends_at) < now) {
+        return setPromoError(t("Dieser Code ist abgelaufen", "This code has expired"));
+      }
+      if (validCode.min_order_value_cents && (total * 100) < validCode.min_order_value_cents) {
+        return setPromoError(t(`Mindestbestellwert: €${(validCode.min_order_value_cents/100).toFixed(2)}`, `You must spend at least €${(validCode.min_order_value_cents/100).toFixed(2)} to use this code`));
+      }
       setAppliedPromo(validCode);
       setPromoCodeInput("");
     } else {
@@ -355,16 +365,39 @@ function RestaurantPage() {
   };
   const handleRemovePromo = () => setAppliedPromo(null);
 
-  const deliveryFee = parseFloat(restaurant.fee.replace("€", ""));
+  let deliveryFee = parseFloat(restaurant.fee.replace("€", ""));
   const subtotal = total;
   let discountAmount = 0;
   if (appliedPromo) {
-    if (appliedPromo.discount_type === "percentage") {
-      discountAmount = subtotal * (appliedPromo.discount_value / 100);
+    if ((appliedPromo as any).discount_type === "free_delivery") {
+      deliveryFee = 0;
+    } else if ((appliedPromo as any).discount_type === "free_item") {
+      const targetItem = cartItems.find(i => i.name === (appliedPromo as any).free_item_name);
+      if (targetItem) {
+        discountAmount = targetItem.price;
+      }
+    } else if ((appliedPromo as any).discount_type === "bogo") {
+      const rq = (appliedPromo as any).required_qty || 2;
+      const appliesTo = (appliedPromo as any).applies_to_product_name;
+      const targetItem = cartItems.find(i => i.name === appliesTo);
+      if (targetItem) {
+        const freeItems = Math.floor(targetItem.qty / rq);
+        discountAmount = freeItems * targetItem.price;
+      }
     } else {
-      discountAmount = appliedPromo.discount_value;
+      let eligibleSubtotal = subtotal;
+      if ((appliedPromo as any).applies_to_product_name) {
+        const targetItem = cartItems.find(i => i.name === (appliedPromo as any).applies_to_product_name);
+        eligibleSubtotal = targetItem ? targetItem.price * targetItem.qty : 0;
+      }
+
+      if (appliedPromo.discount_type === "percentage") {
+        discountAmount = eligibleSubtotal * (appliedPromo.discount_value / 100);
+      } else {
+        discountAmount = appliedPromo.discount_value;
+      }
+      discountAmount = Math.min(discountAmount, eligibleSubtotal);
     }
-    discountAmount = Math.min(discountAmount, subtotal);
   }
   const finalTotal = subtotal - discountAmount + deliveryFee;
 
