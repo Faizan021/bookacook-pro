@@ -1977,7 +1977,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
               </div>
             )}
 
-            {type === "free_item" && availableItems.length > 0 && (
+            {type === "free_item" && (
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gratis-Artikel", "Free Item")}</label>
                 <select value={freeItemName} onChange={e => setFreeItemName(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
@@ -1987,7 +1987,7 @@ function PromotionsSection({ vertical, availableItems = [] }: { vertical: "resta
               </div>
             )}
 
-            {(type !== "free_delivery" && type !== "free_item") && availableItems.length > 0 && (
+            {(type !== "free_delivery" && type !== "free_item") && (
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">{tt("Gilt für", "Applies to")}</label>
                 <select value={appliesTo} onChange={e => setAppliesTo(e.target.value)} className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm">
