@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { trackEvent } from "@/utils/posthog";
 import {
@@ -51,6 +51,9 @@ export const Route = createFileRoute("/restaurant/$slug")({
       console.error("Error loading restaurant db record", e);
     }
     const fullRestaurant = await getRestaurant(params.slug);
+    if (!fullRestaurant) {
+      throw notFound();
+    }
     return { dbRestaurant, fullRestaurant };
   },
   head: ({ loaderData, params }) => {
@@ -328,9 +331,8 @@ function RestaurantPage() {
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
   // TODO: Connect this mock review UI to the real Supabase reviews table later
   const reviews: any[] = [];
-
   if (!restaurant) return null;
-
+  
   const scrollToMenu = () => {
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
   };
