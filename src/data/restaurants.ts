@@ -289,7 +289,7 @@ export async function getRestaurant(slugOrId: string): Promise<Restaurant | unde
     return mapRestaurant(data);
   }
 
-  const fallback = fallbackRestaurants.find((r) => r.id === id);
+  const fallback = fallbackRestaurants.find((r) => r.id === slugOrId);
   if (fallback) {
     return { ...fallback, isShowcase: true };
   }
