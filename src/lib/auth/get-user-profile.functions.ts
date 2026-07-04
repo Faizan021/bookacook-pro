@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 import { z } from "zod";
 
-export type UserRole = "customer" | "restaurant_owner" | "caterer" | "planner";
+export type UserRole = "customer" | "restaurant_owner" | "caterer" | "planner" | "partner";
 
 // SEC-2: Roles that may be restored from signup metadata during self-healing.
 // "admin" is intentionally excluded — it can never be granted via metadata.
@@ -11,6 +11,7 @@ const SELF_HEALABLE_ROLES: UserRole[] = [
   "restaurant_owner",
   "caterer",
   "planner",
+  "partner",
 ];
 
 export const getUserProfile = createServerFn({ method: "GET" })
@@ -70,12 +71,22 @@ export const getUserProfile = createServerFn({ method: "GET" })
     }
 
     const priority: UserRole[] = [
+      "partner",
       "restaurant_owner",
       "caterer",
       "planner",
       "customer",
     ];
-    const primary = priority.find((r) => roleList.includes(r)) ?? "customer";
+    let primary = priority.find((r) => roleList.includes(r)) ?? "customer";
+    
+    // Map legacy roles to unified partner role
+    if (["restaurant_owner", "caterer", "planner"].includes(primary)) {
+      primary = "partner";
+    }
+    
+    if (roleList.some(r => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
+      roleList.push("partner");
+    }
 
     return {
       userId,
@@ -131,12 +142,21 @@ export const checkEmailRole = createServerFn({ method: "POST" })
     }
 
     const priority: UserRole[] = [
+      "partner",
       "restaurant_owner",
       "caterer",
       "planner",
       "customer",
     ];
-    const primary = priority.find((r) => roleList.includes(r)) ?? "customer";
+    let primary = priority.find((r) => roleList.includes(r)) ?? "customer";
+    
+    if (["restaurant_owner", "caterer", "planner"].includes(primary)) {
+      primary = "partner";
+    }
+
+    if (roleList.some(r => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
+      roleList.push("partner");
+    }
 
     return {
       exists: true,

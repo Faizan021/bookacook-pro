@@ -57,14 +57,11 @@ export const Route = createFileRoute("/_authenticated/restaurant")({
   beforeLoad: async () => {
     try {
       const profile = await getUserProfile();
-      if (!profile.roles.includes("restaurant_owner")) {
-        const otherRole = profile.roles.find(r => r !== "customer");
-        const roleName = otherRole === "caterer" ? "Caterer" : otherRole === "planner" ? "Event Planner" : "Customer";
-        
+      if (!profile.roles.includes("partner")) {
         throw redirect({
           to: "/auth",
           search: { 
-            message: `This account is registered as a ${roleName}. Please sign in with a Restaurant Owner account.`,
+            message: `Please sign in with a Business Partner account.`,
             logout: "true",
           },
         });

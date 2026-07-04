@@ -43,14 +43,11 @@ export const Route = createFileRoute("/_authenticated/dashboard/planner")({
   beforeLoad: async () => {
     try {
       const profile = await getUserProfile();
-      if (!profile.roles.includes("planner")) {
-        const otherRole = profile.roles.find(r => r !== "customer");
-        const roleName = otherRole === "restaurant_owner" ? "Restaurant Owner" : otherRole === "caterer" ? "Caterer" : "Customer";
-        
+      if (!profile.roles.includes("partner")) {
         throw redirect({
           to: "/auth",
           search: { 
-            message: `This account is registered as a ${roleName}. Please sign in with a Planner account.`,
+            message: `Please sign in with a Business Partner account.`,
             logout: "true",
           },
         });

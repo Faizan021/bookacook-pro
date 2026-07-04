@@ -11,7 +11,7 @@ import { Utensils, ChefHat, CalendarHeart, User } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { LanguageToggle } from "@/components/LanguageToggle";
 
-type Role = "customer" | "restaurant_owner" | "caterer" | "planner";
+type Role = "customer" | "restaurant_owner" | "caterer" | "planner" | "partner";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -32,7 +32,7 @@ function AuthPage() {
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
   const initialMode = signup ? "signup" : "signin";
-  const initialRole: Role = signup === "caterer" ? "caterer" : signup === "partner" ? "restaurant_owner" : "customer";
+  const initialRole: Role = signup === "caterer" || signup === "partner" || signup === "restaurant_owner" || signup === "planner" ? "partner" : "customer";
   const [mode, setMode] = useState<"signin" | "signup" | "check-email">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,9 +65,7 @@ function AuthPage() {
 
   const ROLES: { value: Role; label: string; desc: string; Icon: any }[] = [
     { value: "customer", label: tt("Kunde", "Customer"), desc: tt("Essen bestellen & Caterer anfragen", "Order food & book caterers"), Icon: User },
-    { value: "restaurant_owner", label: "Restaurant", desc: tt("Kostenlose Kontoerstellung. 0% Provision. 100% Deins — €34.99/Monat.", "Free account creation. 0% commission. 100% yours — €34.99/month."), Icon: Utensils },
-    { value: "caterer", label: "Caterer", desc: tt("Catering-Anfragen erhalten", "Receive catering briefs"), Icon: ChefHat },
-    { value: "planner", label: tt("Event Planner", "Event Planner"), desc: tt("Event-Services anbieten", "List your event services"), Icon: CalendarHeart },
+    { value: "partner", label: tt("Business Partner", "Business Partner"), desc: tt("Restaurants, Caterer & Event-Planer", "Restaurants, Caterers & Event Planners"), Icon: Utensils },
   ];
 
   useEffect(() => {
@@ -115,7 +113,7 @@ function AuthPage() {
         await upsertConsentRecord({
           data: {
             email,
-            audience_type: role === "restaurant_owner" ? "restaurant" : role,
+            audience_type: role === "restaurant_owner" || role === "partner" ? "restaurant" : role,
             user_id: data.user?.id || null,
             marketing_opt_in: marketingOptIn,
             terms_acknowledged: termsAccepted,
@@ -181,7 +179,7 @@ function AuthPage() {
 
     if (code.startsWith("incorrect_password_with_role:")) {
       const roleKey = code.split(":")[1];
-      const roleName = roleKey === "caterer" ? "Caterer" : roleKey === "restaurant_owner" ? "Restaurant" : roleKey === "planner" ? "Event Planner" : "Customer";
+      const roleName = roleKey === "caterer" ? "Caterer" : roleKey === "restaurant_owner" ? "Restaurant" : roleKey === "planner" ? "Event Planner" : roleKey === "partner" ? "Business Partner" : "Customer";
       return de(`Falsches Passwort für dieses Konto. Dieses E-Mail ist als ${roleName} registriert.`) ?? `Incorrect password for this account. This email is registered as a ${roleName}.`;
     }
 

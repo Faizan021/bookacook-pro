@@ -4,6 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { getPartnerWorkspaces } from "@/lib/auth/workspace.functions";
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -29,6 +32,12 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
   const location = useLocation();
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
+
+  const getWorkspaces = useServerFn(getPartnerWorkspaces);
+  const { data: workspaces } = useQuery({ 
+    queryKey: ["partner-workspaces"], 
+    queryFn: () => getWorkspaces() 
+  });
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -143,6 +152,20 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
         <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-[#e2e8e4] bg-cream/80 px-8 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <h1 className="font-display text-xl">{title}</h1>
+            {workspaces && (
+               <div className="ml-4 flex items-center gap-2">
+                 {workspaces.restaurant && vertical !== "restaurant" && (
+                   <Link to="/restaurant" className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition">{tt("Restaurant", "Restaurant")}</Link>
+                 )}
+                 {workspaces.caterer && vertical !== "caterer" && (
+                   <Link to="/caterer" className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition">{tt("Catering", "Catering")}</Link>
+                 )}
+                 {workspaces.planner && vertical !== "planner" && (
+                   <Link to="/dashboard/planner" className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition">{tt("Event Planner", "Event Planner")}</Link>
+                 )}
+                 <Link to="/dashboard" className="text-xs font-medium border border-[#b28a3c] text-[#b28a3c] px-2 py-1 rounded-md hover:bg-[#b28a3c]/10 transition">{tt("Hub", "Hub")}</Link>
+               </div>
+            )}
           </div>
           <div className="flex items-center gap-4">
             <LanguageToggle />

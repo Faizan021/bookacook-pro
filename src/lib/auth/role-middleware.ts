@@ -11,6 +11,7 @@ const SELF_HEALABLE_ROLES: UserRole[] = [
   "restaurant_owner",
   "caterer",
   "planner",
+  "partner",
 ];
 
 export const requireSupabaseAuth = () => createMiddleware({ type: 'function' }).server(
@@ -181,6 +182,11 @@ export const requireRole = (role: UserRole) =>
 
       if (roleList.length === 0) {
         roleList = ["customer"];
+      }
+
+      // Map legacy roles to unified partner role
+      if (roleList.some(r => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
+        roleList.push("partner");
       }
 
       if (!roleList.includes(role)) {
