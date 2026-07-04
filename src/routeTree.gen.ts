@@ -37,6 +37,7 @@ import { Route as CateringEventsRouteImport } from './routes/catering.events'
 import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
 import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-password'
 import { Route as AuthenticatedRestaurantRouteImport } from './routes/_authenticated/restaurant'
 import { Route as AuthenticatedCustomerRouteImport } from './routes/_authenticated/customer'
 import { Route as AuthenticatedCatererRouteImport } from './routes/_authenticated/caterer'
@@ -190,6 +191,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
+  id: '/update-password',
+  path: '/update-password',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthenticatedRestaurantRoute = AuthenticatedRestaurantRouteImport.update({
   id: '/restaurant',
   path: '/restaurant',
@@ -256,7 +262,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/catering': typeof CateringRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -273,6 +279,7 @@ export interface FileRoutesByFullPath {
   '/caterer': typeof AuthenticatedCatererRoute
   '/customer': typeof AuthenticatedCustomerRoute
   '/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
+  '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
@@ -296,7 +303,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -311,6 +318,7 @@ export interface FileRoutesByTo {
   '/caterer': typeof AuthenticatedCatererRoute
   '/customer': typeof AuthenticatedCustomerRoute
   '/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
+  '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
@@ -336,7 +344,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/catering': typeof CateringRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -353,6 +361,7 @@ export interface FileRoutesById {
   '/_authenticated/caterer': typeof AuthenticatedCatererRoute
   '/_authenticated/customer': typeof AuthenticatedCustomerRoute
   '/_authenticated/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
+  '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
@@ -395,6 +404,7 @@ export interface FileRouteTypes {
     | '/caterer'
     | '/customer'
     | '/restaurant'
+    | '/auth/update-password'
     | '/blog/$slug'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
@@ -433,6 +443,7 @@ export interface FileRouteTypes {
     | '/caterer'
     | '/customer'
     | '/restaurant'
+    | '/auth/update-password'
     | '/blog/$slug'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
@@ -474,6 +485,7 @@ export interface FileRouteTypes {
     | '/_authenticated/caterer'
     | '/_authenticated/customer'
     | '/_authenticated/restaurant'
+    | '/auth/update-password'
     | '/blog/$slug'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
@@ -499,7 +511,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   CateringRoute: typeof CateringRouteWithChildren
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
@@ -721,6 +733,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/update-password': {
+      id: '/auth/update-password'
+      path: '/update-password'
+      fullPath: '/auth/update-password'
+      preLoaderRoute: typeof AuthUpdatePasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/_authenticated/restaurant': {
       id: '/_authenticated/restaurant'
       path: '/restaurant'
@@ -834,6 +853,16 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AuthRouteChildren {
+  AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 interface CateringRouteChildren {
   CateringSlugRoute: typeof CateringSlugRoute
   CateringDailyCateringSubscriptionsRoute: typeof CateringDailyCateringSubscriptionsRoute
@@ -873,7 +902,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   CateringRoute: CateringRouteWithChildren,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,

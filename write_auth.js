@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+const fs = require('fs');
+const content = `import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { checkEmailRole } from "@/lib/auth/get-user-profile.functions";
 import { useEffect, useState, useRef } from "react";
@@ -119,7 +120,7 @@ function AuthPage() {
     }
   });
 
-  const { register, handleSubmit, formState: { errors }, watch } = form;
+  const { register, handleSubmit, formState: { errors }, watch, getValues } = form;
   const currentPassword = watch("password");
   const currentEmail = watch("email");
 
@@ -195,7 +196,7 @@ function AuthPage() {
         const { error } = await supabase.auth.signInWithPassword({ email: values.email, password: values.password });
         if (error) {
           if (error.message?.includes("Invalid login credentials") || error.message?.includes("invalid_credentials")) {
-            throw new Error(`incorrect_password_with_role:${checkResult.primaryRole}`);
+            throw new Error(\`incorrect_password_with_role:\${checkResult.primaryRole}\`);
           }
           throw error;
         }
@@ -260,7 +261,7 @@ function AuthPage() {
 
   return (
     <div className="min-h-screen bg-mint-dotted flex items-center justify-center px-4 py-16">
-      <div className={`surface-card w-full ${mode === "signup" && isPartner ? "max-w-2xl" : "max-w-md"} p-8`}>
+      <div className={\`surface-card w-full \${mode === "signup" && isPartner ? "max-w-2xl" : "max-w-md"} p-8\`}>
         <div className="flex items-center justify-between">
           <Link to="/" className="text-xs uppercase tracking-widest text-forest/70 hover:text-forest">
             ← Speisely
@@ -269,7 +270,7 @@ function AuthPage() {
         </div>
         
         {mode === "forgot-password" && (
-          <button onClick={() => { form.reset(); setMode("signin"); setGlobalErr(null); setGlobalSuccess(null); }} className="mt-4 flex items-center gap-1 text-sm text-forest/70 hover:text-forest">
+          <button onClick={() => setMode("signin")} className="mt-4 flex items-center gap-1 text-sm text-forest/70 hover:text-forest">
             <ArrowLeft className="w-4 h-4" /> {tt("Zurück", "Back")}
           </button>
         )}
@@ -301,12 +302,12 @@ function AuthPage() {
                       type="button"
                       key={value}
                       onClick={() => setRole(value)}
-                      className={`flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition ${
+                      className={\`flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition \${
                         active ? "border-[#b28a3c] bg-[#b28a3c]/10 ring-2 ring-[#b28a3c]/30" : "border-[#eadfce] hover:border-forest/40"
-                      }`}
+                      }\`}
                     >
-                      <Icon className={`h-4 w-4 ${active ? "text-[#b28a3c]" : "text-forest"}`} />
-                      <span className={`text-sm font-medium ${active ? "text-[#16372f]" : "text-forest"}`}>{label}</span>
+                      <Icon className={\`h-4 w-4 \${active ? "text-[#b28a3c]" : "text-forest"}\`} />
+                      <span className={\`text-sm font-medium \${active ? "text-[#16372f]" : "text-forest"}\`}>{label}</span>
                       <span className="text-[11px] text-forest/60 leading-tight">{desc}</span>
                     </button>
                   );
@@ -318,14 +319,14 @@ function AuthPage() {
           {mode === "signup" && (
             <div className="space-y-1.5">
               <Label htmlFor="fullName" className="text-forest">{tt("Vollständiger Name", "Full name")} <span className="text-red-500">*</span></Label>
-              <Input id="fullName" {...register("fullName")} className={`${errors.fullName ? "border-red-500" : "border-[#eadfce]"}`} />
+              <Input id="fullName" {...register("fullName")} className={\`\${errors.fullName ? "border-red-500" : "border-[#eadfce]"}\`} />
               {errors.fullName && <p className="text-xs text-red-500">{errors.fullName.message}</p>}
             </div>
           )}
 
           <div className="space-y-1.5">
             <Label htmlFor="email" className="text-forest">{tt("E-Mail", "Email")} <span className="text-red-500">*</span></Label>
-            <Input id="email" type="email" {...register("email")} className={`${errors.email ? "border-red-500" : "border-[#eadfce]"}`} />
+            <Input id="email" type="email" {...register("email")} className={\`\${errors.email ? "border-red-500" : "border-[#eadfce]"}\`} />
             {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
           </div>
 
@@ -381,7 +382,7 @@ function AuthPage() {
 
           {mode === "signin" && (
             <div className="flex justify-end">
-              <button type="button" onClick={() => { form.reset(); setMode("forgot-password"); setGlobalErr(null); setGlobalSuccess(null); }} className="text-sm text-[#b28a3c] hover:underline">
+              <button type="button" onClick={() => setMode("forgot-password")} className="text-sm text-[#b28a3c] hover:underline">
                 {tt("Passwort vergessen?", "Forgot Password?")}
               </button>
             </div>
@@ -406,7 +407,6 @@ function AuthPage() {
             <button type="button" className="mt-6 w-full text-sm text-forest/70 hover:text-forest" onClick={() => {
               form.reset();
               setGlobalErr(null);
-              setGlobalSuccess(null);
               setMode(mode === "signup" ? "signin" : "signup");
             }}>
               {mode === "signup" ? tt("Du hast bereits ein Konto? Anmelden", "Already have an account? Sign in") : tt("Neu bei Speisely? Konto erstellen", "New to Speisely? Create an account")}
@@ -417,3 +417,7 @@ function AuthPage() {
     </div>
   );
 }
+\`;
+
+fs.writeFileSync('src/routes/auth.tsx', content);
+console.log('Successfully wrote auth.tsx');
