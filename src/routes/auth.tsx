@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Utensils, ChefHat, CalendarHeart, User } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { z } from "zod";
 
 type Role = "customer" | "restaurant_owner" | "caterer" | "planner" | "partner";
 
@@ -89,10 +90,32 @@ function AuthPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setErr(null);
-    if (mode === "signup" && !termsAccepted) {
-      setErr(tt("Bitte akzeptieren Sie die Nutzungsbedingungen.", "Please accept the Terms of Service."));
-      return;
+
+    // Strict JS Validation to prevent DOM-manipulation bypasses
+    if (mode === "signup") {
+      const signupSchema = z.object({
+        fullName: z.string().min(2, tt("Bitte geben Sie Ihren vollständigen Namen ein.", "Please enter your full name.")),
+        email: z.string().email(tt("Bitte geben Sie eine gültige E-Mail-Adresse ein.", "Please enter a valid email address.")),
+        password: z
+          .string()
+          .min(8, tt("Das Passwort muss mindestens 8 Zeichen lang sein.", "Password must be at least 8 characters long."))
+          .regex(/[A-Z]/, tt("Das Passwort muss mindestens einen Großbuchstaben enthalten.", "Password must contain at least one uppercase letter."))
+          .regex(/[0-9]/, tt("Das Passwort muss mindestens eine Zahl enthalten.", "Password must contain at least one number."))
+          .regex(/[^A-Za-z0-9]/, tt("Das Passwort muss mindestens ein Sonderzeichen enthalten.", "Password must contain at least one special character."))
+      });
+
+      const validation = signupSchema.safeParse({ fullName, email, password });
+      if (!validation.success) {
+        setErr(validation.error.errors[0].message);
+        return;
+      }
+
+      if (!termsAccepted) {
+        setErr(tt("Bitte akzeptieren Sie die Nutzungsbedingungen.", "Please accept the Terms of Service."));
+        return;
+      }
     }
+
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -282,7 +305,9 @@ function AuthPage() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="name" className="text-forest">{tt("Vollständiger Name", "Full name")}</Label>
+                <Label htmlFor="name" className="text-forest">
+                  {tt("Vollständiger Name", "Full name")} <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   id="name"
                   value={fullName}
@@ -297,7 +322,9 @@ function AuthPage() {
             </>
           )}
           <div className="space-y-1.5">
-            <Label htmlFor="email" className="text-forest">{tt("E-Mail", "Email")}</Label>
+            <Label htmlFor="email" className="text-forest">
+              {tt("E-Mail", "Email")} <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="email"
               type="email"
@@ -311,7 +338,9 @@ function AuthPage() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="password" className="text-forest">{tt("Passwort", "Password")}</Label>
+            <Label htmlFor="password" className="text-forest">
+              {tt("Passwort", "Password")} <span className="text-red-500">*</span>
+            </Label>
             <Input
               id="password"
               type="password"
