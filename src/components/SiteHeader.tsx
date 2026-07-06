@@ -73,15 +73,15 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isHome = routerState.location.pathname === "/";
-  const isLight = isHome && !scrolled;
+  const isCinematicPage = ["/", "/about", "/contact", "/partners"].includes(routerState.location.pathname);
+  const isLight = isCinematicPage && !scrolled;
 
   const headerBg = isLight 
     ? "bg-transparent border-transparent" 
     : "bg-cream/95 backdrop-blur-md border-b border-forest/10";
 
   return (
-    <header className={`sticky top-0 z-40 transition-all duration-300 ${headerBg}`}>
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${headerBg}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
         <Link to="/" className="shrink-0">
           <SpeiselyLogo variant={isLight ? "light" : "dark"} />

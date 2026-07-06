@@ -56,7 +56,7 @@ export function AdminAnalyticsDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-xl font-bold font-display text-forest flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-emerald-600" /> 
+            <TrendingUp className="w-5 h-5 text-forest" /> 
             Traffic & Analytics
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -98,7 +98,7 @@ export function AdminAnalyticsDashboard() {
                   {data.kpis.uniqueVisitors.toLocaleString()}
                 </h3>
               </div>
-              <div className="p-3 bg-emerald-50 rounded-xl text-emerald-600">
+              <div className="p-3 bg-cream rounded-xl text-forest">
                 <Users className="w-6 h-6" />
               </div>
             </div>

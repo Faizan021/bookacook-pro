@@ -203,7 +203,7 @@ function BlogPostPage() {
             {post.faq && post.faq.length > 0 && (
               <div className="mt-16 border-t border-forest/10 pt-16">
                 <div className="flex items-center gap-3 mb-8">
-                  <HelpCircle className="h-8 w-8 text-emerald-600" />
+                  <HelpCircle className="h-8 w-8 text-forest" />
                   <h2 className="text-3xl font-display font-bold text-forest">Häufig gestellte Fragen (FAQ)</h2>
                 </div>
                 
@@ -222,7 +222,7 @@ function BlogPostPage() {
                         >
                           <h3 className="font-bold text-forest text-base sm:text-lg pr-8">{item.question}</h3>
                           <ChevronDown 
-                            className={`h-5 w-5 text-emerald-600 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+                            className={`h-5 w-5 text-forest shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
                           />
                         </button>
                         

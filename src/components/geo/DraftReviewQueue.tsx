@@ -97,7 +97,7 @@ export function DraftReviewQueue() {
     draft: "bg-gray-100 text-gray-800",
     in_review: "bg-blue-100 text-blue-800",
     approved: "bg-green-100 text-green-800",
-    published: "bg-emerald-100 text-emerald-800 border border-emerald-300",
+    published: "bg-mint text-forest border border-emerald-300",
     rejected: "bg-red-100 text-red-800",
     archived: "bg-slate-100 text-slate-800"
   };
@@ -165,7 +165,7 @@ export function DraftReviewQueue() {
               <input 
                 type="text" 
                 placeholder="Search keyword or title..." 
-                className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-forest/20 focus:border-forest"
               />
             </div>
           </div>
@@ -181,12 +181,12 @@ export function DraftReviewQueue() {
                   onClick={() => handleOpenDraft(draft)}
                   className={`w-full text-left p-4 rounded-xl transition-all border ${
                     selectedDraft?.id === draft.id 
-                      ? "bg-emerald-50 border-emerald-100" 
+                      ? "bg-cream border-forest/10" 
                       : "bg-white border-transparent hover:bg-gray-50 hover:border-gray-100"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wide">{draft.type}</span>
+                    <span className="text-xs font-semibold text-forest uppercase tracking-wide">{draft.type}</span>
                     <span className="text-[10px] text-gray-400">{new Date(draft.updated_at).toLocaleDateString()}</span>
                   </div>
                   <h4 className="text-sm font-semibold text-gray-900 truncate">{draft.target_keyword}</h4>
@@ -239,7 +239,7 @@ export function DraftReviewQueue() {
                   {selectedDraft.status === 'approved' && (
                     <>
                       <button onClick={() => statusMutation.mutate({ id: selectedDraft.id, status: 'draft' })} className="px-3 py-1.5 text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg flex items-center gap-1"><RefreshCw className="w-3 h-3"/> Revert</button>
-                      <button onClick={() => statusMutation.mutate({ id: selectedDraft.id, status: 'published' })} className="px-3 py-1.5 text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg flex items-center gap-1"><Send className="w-3 h-3"/> Publish Live</button>
+                      <button onClick={() => statusMutation.mutate({ id: selectedDraft.id, status: 'published' })} className="px-3 py-1.5 text-xs font-semibold bg-forest text-white hover:bg-forest rounded-lg flex items-center gap-1"><Send className="w-3 h-3"/> Publish Live</button>
                     </>
                   )}
                   {(selectedDraft.status === 'published' || selectedDraft.status === 'rejected') && (
@@ -265,32 +265,32 @@ export function DraftReviewQueue() {
                   <div className="space-y-4 max-w-2xl">
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1">Title</label>
-                      <input type="text" value={editedData.title} onChange={e => setEditedData({...editedData, title: e.target.value})} className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" />
+                      <input type="text" value={editedData.title} onChange={e => setEditedData({...editedData, title: e.target.value})} className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-forest/20 focus:border-forest" />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1">URL Slug</label>
                       <div className="flex items-center">
                         <span className="text-sm text-gray-400 bg-gray-50 border border-r-0 rounded-l-lg px-3 py-2">/</span>
-                        <input type="text" value={editedData.slug} onChange={e => setEditedData({...editedData, slug: e.target.value})} className="w-full p-2 text-sm border rounded-r-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" />
+                        <input type="text" value={editedData.slug} onChange={e => setEditedData({...editedData, slug: e.target.value})} className="w-full p-2 text-sm border rounded-r-lg focus:ring-2 focus:ring-forest/20 focus:border-forest" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-semibold text-gray-700 mb-1">Meta Title</label>
-                        <textarea value={editedData.meta_title} onChange={e => setEditedData({...editedData, meta_title: e.target.value})} className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" rows={2} />
+                        <textarea value={editedData.meta_title} onChange={e => setEditedData({...editedData, meta_title: e.target.value})} className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-forest/20 focus:border-forest" rows={2} />
                       </div>
                       <div>
                         <label className="block text-xs font-semibold text-gray-700 mb-1">Meta Description</label>
-                        <textarea value={editedData.meta_description} onChange={e => setEditedData({...editedData, meta_description: e.target.value})} className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" rows={2} />
+                        <textarea value={editedData.meta_description} onChange={e => setEditedData({...editedData, meta_description: e.target.value})} className="w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-forest/20 focus:border-forest" rows={2} />
                       </div>
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1">Markdown Content</label>
-                      <textarea value={editedData.content} onChange={e => setEditedData({...editedData, content: e.target.value})} className="w-full p-3 font-mono text-xs border rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-gray-50" rows={15} />
+                      <textarea value={editedData.content} onChange={e => setEditedData({...editedData, content: e.target.value})} className="w-full p-3 font-mono text-xs border rounded-lg focus:ring-2 focus:ring-forest/20 focus:border-forest bg-gray-50" rows={15} />
                     </div>
                     <div className="pt-4 flex justify-end gap-2 border-t">
                       <button onClick={() => { setEditMode(false); setEditedData({...selectedDraft}); }} className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                      <button onClick={() => saveMutation.mutate(editedData)} disabled={saveMutation.isPending} className="px-4 py-2 text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-500 rounded-lg">Save Changes</button>
+                      <button onClick={() => saveMutation.mutate(editedData)} disabled={saveMutation.isPending} className="px-4 py-2 text-sm font-medium bg-forest text-white hover:bg-forest rounded-lg">Save Changes</button>
                     </div>
                   </div>
                 ) : (

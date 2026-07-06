@@ -57,7 +57,7 @@ function InstitutionalCatering() {
       {/* Target Audiences (Schools, Kitas, Care Homes) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">{lang === "de" ? "EINRICHTUNGEN" : "INSTITUTIONS"}</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "EINRICHTUNGEN" : "INSTITUTIONS"}</span>
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">
             {lang === "de" ? "Spezialisierte Konzepte für jede Altersgruppe" : "Specialized Concepts for Every Age Group"}
           </h2>
@@ -72,7 +72,7 @@ function InstitutionalCatering() {
           {/* Daycares & Kitas */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <Heart className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -89,7 +89,7 @@ function InstitutionalCatering() {
           {/* Schools */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <GraduationCap className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -106,7 +106,7 @@ function InstitutionalCatering() {
           {/* Clinics & Care */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -175,7 +175,7 @@ function InstitutionalCatering() {
               />
             </div>
             <div className="space-y-6">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">{lang === "de" ? "HYGIENE & NÄHRSTOFFE" : "SAFETY & HEALTH"}</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "HYGIENE & NÄHRSTOFFE" : "SAFETY & HEALTH"}</span>
               <h2 className="text-3xl font-display font-bold text-forest">{lang === "de" ? "Höchste Standards bei Hygiene und Qualität" : "Highest Hygiene and Quality Standards"}</h2>
               <p className="text-sm text-forest/70 leading-relaxed">{lang === "de" ? "Unsere Partner-Caterer befolgen strikt die HACCP-Richtlinien und sind DGE-geschult, um eine gesunde und sichere Verpflegung zu gewährleisten." : "Our partner caterers strictly comply with HACCP guidelines and are DGE-trained to guarantee secure and healthy meals."}</p>
               
@@ -187,7 +187,7 @@ function InstitutionalCatering() {
                   lang === "de" ? "Regionale Bio-Zutaten und Verzicht auf Zusatzstoffe" : "Regional organic ingredients and zero artificial additives"
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-2.5 text-sm text-forest/80 font-medium">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-5 w-5 text-forest shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}

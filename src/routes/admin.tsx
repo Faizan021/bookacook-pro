@@ -195,7 +195,7 @@ function AdminPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="flex flex-col items-center gap-4">
-          <RefreshCw className="w-8 h-8 text-emerald-600 animate-spin" />
+          <RefreshCw className="w-8 h-8 text-forest animate-spin" />
           <p className="text-gray-600 font-medium">Verifying admin credentials...</p>
         </div>
       </div>
@@ -208,8 +208,8 @@ function AdminPage() {
       <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
           <div className="flex flex-col items-center mb-8">
-            <div className="p-3 bg-emerald-50 rounded-xl mb-3">
-              <ShieldCheck className="w-8 h-8 text-emerald-600" />
+            <div className="p-3 bg-cream rounded-xl mb-3">
+              <ShieldCheck className="w-8 h-8 text-forest" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 font-heading">Speisely Admin Portal</h2>
             <p className="text-gray-500 text-sm mt-1">Authorized Administrator Access Only</p>
@@ -249,7 +249,7 @@ function AdminPage() {
             <Button
               type="submit"
               disabled={loginLoading}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold transition"
+              className="w-full bg-forest hover:bg-forest/90 text-white py-2.5 rounded-xl font-semibold transition"
             >
               {loginLoading ? "Authenticating..." : "Sign In to Control Panel"}
             </Button>
@@ -319,7 +319,7 @@ function AdminPage() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="w-7 h-7 text-emerald-600" />
+            <ShieldCheck className="w-7 h-7 text-forest" />
             <span className="font-heading font-bold text-xl text-gray-900">Speisely Admin</span>
           </div>
 
@@ -349,7 +349,7 @@ function AdminPage() {
             onClick={() => { setActiveTab("overview"); setSearchTerm(""); }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "overview"
-                ? "border-emerald-600 text-emerald-600"
+                ? "border-forest text-forest"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -360,7 +360,7 @@ function AdminPage() {
             onClick={() => { setActiveTab("analytics"); setSearchTerm(""); }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "analytics"
-                ? "border-emerald-600 text-emerald-600"
+                ? "border-forest text-forest"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -371,7 +371,7 @@ function AdminPage() {
             onClick={() => { setActiveTab("users"); setSearchTerm(""); }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "users"
-                ? "border-emerald-600 text-emerald-600"
+                ? "border-forest text-forest"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -382,7 +382,7 @@ function AdminPage() {
             onClick={() => { setActiveTab("listings"); setSearchTerm(""); }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "listings"
-                ? "border-emerald-600 text-emerald-600"
+                ? "border-forest text-forest"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -393,7 +393,7 @@ function AdminPage() {
             onClick={() => { setActiveTab("orders"); setSearchTerm(""); }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "orders"
-                ? "border-emerald-600 text-emerald-600"
+                ? "border-forest text-forest"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -404,7 +404,7 @@ function AdminPage() {
             onClick={() => { setActiveTab("ai-tools"); setSearchTerm(""); }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "ai-tools"
-                ? "border-emerald-600 text-emerald-600"
+                ? "border-forest text-forest"
                 : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
             }`}
           >
@@ -425,7 +425,7 @@ function AdminPage() {
                     €{(overview?.mrr || 0).toLocaleString()}
                   </h3>
                 </div>
-                <div className="p-3 bg-emerald-50 rounded-xl text-emerald-600">
+                <div className="p-3 bg-cream rounded-xl text-forest">
                   <DollarSign className="w-6 h-6" />
                 </div>
               </div>
@@ -534,9 +534,9 @@ function AdminPage() {
                         <tr key={idx}>
                           <td className="py-2.5">{new Date(p.created_at).toLocaleDateString()}</td>
                           <td className="py-2.5">€{Number(p.amount_total).toFixed(2)}</td>
-                          <td className="py-2.5 text-emerald-600 font-medium">€{Number(p.platform_fee_amount).toFixed(2)}</td>
+                          <td className="py-2.5 text-forest font-medium">€{Number(p.platform_fee_amount).toFixed(2)}</td>
                           <td className="py-2.5">
-                            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-full">
+                            <span className="px-2 py-0.5 bg-cream text-forest text-xs font-medium rounded-full">
                               {p.status}
                             </span>
                           </td>
@@ -603,7 +603,7 @@ function AdminPage() {
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                           u.role === 'admin' ? 'bg-purple-50 text-purple-700' :
                           u.role === 'restaurant_owner' ? 'bg-orange-50 text-orange-700' :
-                          u.role === 'caterer' ? 'bg-emerald-50 text-emerald-700' :
+                          u.role === 'caterer' ? 'bg-cream text-forest' :
                           u.role === 'planner' ? 'bg-blue-50 text-blue-700' : 'bg-gray-50 text-gray-500'
                         }`}>
                           {u.role}
@@ -651,7 +651,7 @@ function AdminPage() {
                 onClick={() => { setListingSubTab("restaurants"); setSearchTerm(""); }}
                 className={`py-2 px-4 rounded-xl font-medium text-xs transition ${
                   listingSubTab === "restaurants"
-                    ? "bg-emerald-600 text-white shadow-sm"
+                    ? "bg-forest text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -661,7 +661,7 @@ function AdminPage() {
                 onClick={() => { setListingSubTab("caterers"); setSearchTerm(""); }}
                 className={`py-2 px-4 rounded-xl font-medium text-xs transition ${
                   listingSubTab === "caterers"
-                    ? "bg-emerald-600 text-white shadow-sm"
+                    ? "bg-forest text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -671,7 +671,7 @@ function AdminPage() {
                 onClick={() => { setListingSubTab("planners"); setSearchTerm(""); }}
                 className={`py-2 px-4 rounded-xl font-medium text-xs transition ${
                   listingSubTab === "planners"
-                    ? "bg-emerald-600 text-white shadow-sm"
+                    ? "bg-forest text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
               >
@@ -726,7 +726,7 @@ function AdminPage() {
                             <td className="px-6 py-4">
                               <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                                 r.stripe_connect_status === 'connected'
-                                  ? 'bg-emerald-50 text-emerald-700'
+                                  ? 'bg-cream text-forest'
                                   : 'bg-red-50 text-red-700'
                               }`}>
                                 {r.stripe_connect_status}
@@ -736,7 +736,7 @@ function AdminPage() {
                               {r.subscription ? (
                                 <div>
                                   <span className="font-medium text-gray-700 uppercase">{r.subscription.plan}</span>
-                                  <span className="ml-1 text-xs text-emerald-600">({r.subscription.status})</span>
+                                  <span className="ml-1 text-xs text-forest">({r.subscription.status})</span>
                                 </div>
                               ) : (
                                 <span className="text-gray-400">None</span>
@@ -744,7 +744,7 @@ function AdminPage() {
                             </td>
                             <td className="px-6 py-4">
                               <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                                r.onboardingStep.includes('Complete') ? 'bg-emerald-50 text-emerald-700' :
+                                r.onboardingStep.includes('Complete') ? 'bg-cream text-forest' :
                                 r.onboardingStep.includes('Publish') ? 'bg-blue-50 text-blue-700' :
                                 r.onboardingStep.includes('Subscription') ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
                               }`}>
@@ -753,7 +753,7 @@ function AdminPage() {
                             </td>
                             <td className="px-6 py-4 text-right">
                               <div className="flex items-center justify-end gap-2">
-                                <span className={`text-xs ${r.is_published ? "text-emerald-600 font-semibold" : "text-gray-400"}`}>
+                                <span className={`text-xs ${r.is_published ? "text-forest font-semibold" : "text-gray-400"}`}>
                                   {r.is_published ? "Published" : "Draft"}
                                 </span>
                                 <input
@@ -766,7 +766,7 @@ function AdminPage() {
                                       isPublished: e.target.checked
                                     });
                                   }}
-                                  className="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500"
+                                  className="w-4 h-4 text-forest bg-gray-100 border-gray-300 rounded focus:ring-forest"
                                 />
                               </div>
                             </td>
@@ -888,7 +888,7 @@ function AdminPage() {
                         <td className="px-6 py-4">
                           <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                             o.status === 'confirmed' || o.status === 'delivered' || o.status === 'completed'
-                              ? 'bg-emerald-50 text-emerald-700'
+                              ? 'bg-cream text-forest'
                               : o.status === 'cancelled' || o.status === 'failed'
                               ? 'bg-red-50 text-red-700'
                               : 'bg-amber-50 text-amber-700'

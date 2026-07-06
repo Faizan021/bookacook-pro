@@ -57,7 +57,7 @@ function DailySubscriptions() {
       {/* Subscription Features (Invoicing, Logistics, Dietaries) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">{lang === "de" ? "VORTEILE" : "BENEFITS"}</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "VORTEILE" : "BENEFITS"}</span>
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">
             {lang === "de" ? "Entlastung für Office Manager & HR" : "Relief for Office Managers & HR"}
           </h2>
@@ -72,7 +72,7 @@ function DailySubscriptions() {
           {/* Billing */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <Building className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -89,7 +89,7 @@ function DailySubscriptions() {
           {/* Flexible Scheduling */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <Clock className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -106,7 +106,7 @@ function DailySubscriptions() {
           {/* Dietaries */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <Utensils className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -169,7 +169,7 @@ function DailySubscriptions() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">{lang === "de" ? "UNSER VERSPRECHEN" : "OUR COMMITMENT"}</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "UNSER VERSPRECHEN" : "OUR COMMITMENT"}</span>
               <h2 className="text-3xl font-display font-bold text-forest">{lang === "de" ? "Sorgenfreie Verpflegung garantiert" : "Worry-Free Catering Guaranteed"}</h2>
               <p className="text-sm text-forest/70 leading-relaxed">{lang === "de" ? "Wir stellen sicher, dass eure Essenslieferung pünktlich ankommt, perfekt verpackt ist und die höchsten Hygienestandards erfüllt." : "We ensure your meal delivery arrives on time, is perfectly packaged, and meets the highest hygiene guidelines."}</p>
               
@@ -181,7 +181,7 @@ function DailySubscriptions() {
                   lang === "de" ? "Direkter persönlicher Support bei Fragen oder Wünschen" : "Direct personal account support for changes or requests"
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-2.5 text-sm text-forest/80 font-medium">
-                    <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-5 w-5 text-forest shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}

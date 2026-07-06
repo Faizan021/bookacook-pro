@@ -189,7 +189,7 @@ function CreateCatererForm() {
           onChange={(e) => setName(e.target.value)}
           placeholder={t("z.B. Maison Verde Catering", "e.g. Maison Verde Catering")}
           required
-          className="bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
+          className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
         />
       </div>
       <div className="space-y-1.5">
@@ -208,7 +208,7 @@ function CreateCatererForm() {
           }}
           placeholder="maison-verde"
           required
-          className="bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
+          className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
         />
       </div>
       <div className="space-y-1.5">
@@ -222,7 +222,7 @@ function CreateCatererForm() {
             onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
             placeholder="maison-verde"
             required
-            className="flex-1 bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
+            className="flex-1 bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
           />
           <span className="text-muted-foreground text-sm font-semibold shrink-0">.speisely.de</span>
         </div>
@@ -526,7 +526,7 @@ function BriefsSection() {
                   onClick={() => setSelectedBriefId(b.id)}
                   className={`surface-card p-4 text-left border rounded-2xl cursor-pointer transition-all ${
                     isActive
-                      ? "border-emerald-600 bg-cream/15 ring-1 ring-emerald-600 shadow-sm"
+                      ? "border-forest bg-cream/15 ring-1 ring-emerald-600 shadow-sm"
                       : "border-border/60 hover:border-forest/40 hover:bg-cream/5"
                   }`}
                 >
@@ -1311,9 +1311,9 @@ function OverviewSection({ caterer }: { caterer: any }) {
                     <div
                       className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 text-[8px] font-bold mt-0.5 border ${
                         s.done
-                          ? "bg-forest border-emerald-600 text-white"
+                          ? "bg-forest border-forest text-white"
                           : nextStep?.id === s.id
-                            ? "border-emerald-600 text-forest bg-forest/10"
+                            ? "border-forest text-forest bg-forest/10"
                             : "border-muted text-muted-foreground"
                       }`}
                     >
@@ -2351,7 +2351,7 @@ function CatererDashboard() {
                 </div>
 
                 <div className="flex gap-2.5 items-start">
-                  <div className="h-5 w-5 rounded-full border-2 border-emerald-600 bg-cream text-forest flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">
+                  <div className="h-5 w-5 rounded-full border-2 border-forest bg-cream text-forest flex items-center justify-center font-bold text-[9px] shrink-0 mt-0.5">
                     2
                   </div>
                   <div>

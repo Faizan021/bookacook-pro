@@ -171,13 +171,13 @@ function DepositCheckoutPage() {
 
             {/* CTA/Status */}
             {isAlreadyPaid ? (
-              <div className="flex flex-col items-center text-center p-6 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-2xl space-y-3">
-                <ShieldCheck className="h-12 w-12 text-emerald-600" />
+              <div className="flex flex-col items-center text-center p-6 bg-cream text-forest border border-forest/20 rounded-2xl space-y-3">
+                <ShieldCheck className="h-12 w-12 text-forest" />
                 <h3 className="text-lg font-bold">Deposit Paid & Booking Confirmed!</h3>
                 <p className="text-sm max-w-md">
                   Thank you! Your 10% platform deposit of €{booking.depositAmount.toFixed(2)} has been successfully captured. {booking.vendorName} has been notified and your event is officially scheduled.
                 </p>
-                <Button asChild className="mt-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full">
+                <Button asChild className="mt-2 bg-forest hover:bg-forest/90 text-white rounded-full">
                   <Link to="/customer">Go to Activity Dashboard</Link>
                 </Button>
               </div>

@@ -838,7 +838,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
           </p>
         </div>
         {allCompleted && (
-          <span className="bg-forest/10 border border-forest/20 dark:bg-emerald-950/20 text-forest dark:text-emerald-300 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-200">
+          <span className="bg-forest/10 border border-forest/20 dark:bg-forest/20 text-forest dark:text-mint text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-forest/20">
             {tt("Aktiv & Live", "Active & Live")}
           </span>
         )}
@@ -855,7 +855,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
               key={step.id}
               className={`flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 ${
                 isCompleted
-                  ? "bg-forest/5 dark:bg-emerald-950/10 border-forest/20 shadow-sm"
+                  ? "bg-forest/5 dark:bg-forest/10 border-forest/20 shadow-sm"
                   : isCurrent
                     ? "bg-white dark:bg-zinc-900 border-forest/35 shadow-md ring-1 ring-forest/10 scale-[1.01]"
                     : "bg-stone-50/50 dark:bg-stone-900/10 border-stone-200/60 opacity-60"

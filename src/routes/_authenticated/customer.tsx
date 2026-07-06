@@ -23,7 +23,7 @@ const STATUS_STYLES: Record<string, string> = {
   pending: "bg-amber-100 text-amber-900",
   confirmed: "bg-sky-100 text-sky-900",
   preparing: "bg-indigo-100 text-indigo-900",
-  ready: "bg-emerald-100 text-emerald-900",
+  ready: "bg-mint text-forest",
   picked_up: "bg-teal-100 text-teal-900",
   delivered: "bg-green-100 text-green-900",
   cancelled: "bg-rose-100 text-rose-900",
@@ -32,7 +32,7 @@ const STATUS_STYLES: Record<string, string> = {
   quoted: "bg-indigo-100 text-indigo-900",
   accepted: "bg-green-100 text-green-900",
   declined: "bg-rose-100 text-rose-900",
-  approved: "bg-emerald-100 text-emerald-900",
+  approved: "bg-mint text-forest",
   rejected: "bg-rose-100 text-rose-900",
   completed: "bg-indigo-100 text-indigo-900",
   no_show: "bg-red-100 text-red-900",
@@ -160,7 +160,7 @@ function ReservationCard({ item }: { item: Extract<UnifiedActivityItem, { kind: 
   const isAccepted = item.status === "approved" || item.status === "accepted";
   
   return (
-    <article className={`surface-card p-5 ${isAccepted ? 'ring-2 ring-emerald-400 bg-emerald-50/20' : ''}`}>
+    <article className={`surface-card p-5 ${isAccepted ? 'ring-2 ring-emerald-400 bg-cream/20' : ''}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
@@ -179,7 +179,7 @@ function ReservationCard({ item }: { item: Extract<UnifiedActivityItem, { kind: 
         <div className="flex flex-col items-end gap-2">
           <StatusPill status={item.status} />
           {isAccepted && (
-            <span className="text-xs font-medium text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md">
+            <span className="text-xs font-medium text-forest bg-mint px-2 py-1 rounded-md">
               🎉 Reservation Accepted!
             </span>
           )}

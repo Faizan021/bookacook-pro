@@ -474,7 +474,7 @@ function PlannerStorefront() {
         {/* Enhanced Trust & Info Bar */}
         <div className="mt-6 mb-2 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center p-5 bg-white rounded-xl border border-[#eadfce] shadow-sm">
           <dl className="flex flex-wrap items-center gap-x-6 gap-y-4 m-0">
-            <div className="flex items-center gap-2 text-emerald-700">
+            <div className="flex items-center gap-2 text-forest">
               <ShieldCheck className="h-5 w-5" />
               <span className="text-sm font-bold">{t("Geprüftes Profil", "Checked Profile")}</span>
             </div>
@@ -509,7 +509,7 @@ function PlannerStorefront() {
           
           <div className="flex flex-wrap items-center gap-2 pt-4 md:pt-0 border-t border-[#eadfce] md:border-0 w-full md:w-auto">
             <span className="inline-flex items-center gap-1 rounded-full bg-[#fdfaf5] px-3 py-1 text-xs font-semibold text-forest border border-[#eadfce]">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> {t("Verifizierter Partner", "Verified Partner")}
+              <ShieldCheck className="h-3.5 w-3.5 text-forest" /> {t("Verifizierter Partner", "Verified Partner")}
             </span>
           </div>
         </div>
@@ -621,11 +621,11 @@ function PlannerStorefront() {
             {renderSidebar()}
             <div className="mt-6 flex flex-col gap-2 pt-6 border-t border-[#eadfce]/60">
               <div className="flex items-center gap-2 text-xs font-medium text-forest/70">
-                <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                <ShieldCheck className="h-4 w-4 text-forest" />
                 {t("100% sichere Buchung über Speisely", "100% secure booking via Speisely")}
               </div>
               <div className="flex items-center gap-2 text-xs font-medium text-forest/70">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                <CheckCircle2 className="h-4 w-4 text-forest" />
                 {t("Kostenlos anfragen, unverbindlich", "Request for free, no obligation")}
               </div>
             </div>
@@ -640,17 +640,17 @@ function PlannerStorefront() {
           <div className="grid md:grid-cols-3 gap-8 relative">
             <div className="hidden md:block absolute top-6 left-[16%] right-[16%] h-px bg-forest/10" />
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">1</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">1</div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Auswählen", "Choose")}</h3>
               <p className="text-sm text-forest/70 max-w-xs">{t("Stelle dein Wunsch-Paket für dein Event zusammen.", "Put together your desired package for your event.")}</p>
             </div>
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">2</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">2</div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Anfragen", "Request")}</h3>
               <p className="text-sm text-forest/70 max-w-xs">{t("Sende eine unverbindliche Anfrage direkt an den Planner.", "Send a non-binding request directly to the planner.")}</p>
             </div>
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-emerald-600 mb-4 z-10">3</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">3</div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Planen & Genießen", "Plan & Enjoy")}</h3>
               <p className="text-sm text-forest/70 max-w-xs">{t("Details klären, sicher buchen und ein tolles Event erleben.", "Clarify details, book securely and enjoy a great event.")}</p>
             </div>

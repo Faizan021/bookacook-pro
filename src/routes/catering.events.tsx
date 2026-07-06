@@ -57,7 +57,7 @@ function EventsCatering() {
       {/* Event Formats (Weddings, Private Plating, Business Events) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">{lang === "de" ? "UNSERE FORMATS" : "OUR FORMATS"}</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "UNSERE FORMATS" : "OUR FORMATS"}</span>
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">
             {lang === "de" ? "Kreative Genusskonzepte für dein Event" : "Creative Culinary Concepts for Your Event"}
           </h2>
@@ -72,7 +72,7 @@ function EventsCatering() {
           {/* Wedding */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <Heart className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -89,7 +89,7 @@ function EventsCatering() {
           {/* Corporate Event */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <Calendar className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -106,7 +106,7 @@ function EventsCatering() {
           {/* Private Dining / Business Lunch */}
           <div className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between text-left">
             <div className="space-y-4">
-              <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+              <div className="h-12 w-12 rounded-2xl bg-forest/10 text-forest flex items-center justify-center">
                 <Users className="h-6 w-6" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">
@@ -167,22 +167,22 @@ function EventsCatering() {
       <section className="bg-cream/10 py-16 md:py-24 border-t border-b border-[#eadfce]/30 text-left">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
           <div className="max-w-2xl space-y-3">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">{lang === "de" ? "ABLAUF" : "HOW IT WORKS"}</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "ABLAUF" : "HOW IT WORKS"}</span>
             <h2 className="text-3xl font-display font-bold text-forest">{lang === "de" ? "In 3 Schritten zum perfekten Event-Menü" : "In 3 Steps to Your Perfect Event Menu"}</h2>
           </div>
           <div className="mt-12 grid gap-8 sm:grid-cols-3">
             <div className="space-y-3">
-              <div className="text-4xl font-display font-bold text-emerald-600">01</div>
+              <div className="text-4xl font-display font-bold text-forest">01</div>
               <h4 className="font-bold text-forest text-base">{lang === "de" ? "Caterer auswählen" : "Select Caterer"}</h4>
               <p className="text-xs text-forest/70 leading-relaxed">{lang === "de" ? "Filtere nach Anlass, Personenanzahl und Ort, und entdecke unsere geprüften Partner." : "Filter by occasion, guest count, and location, and explore our verified catering partners."}</p>
             </div>
             <div className="space-y-3">
-              <div className="text-4xl font-display font-bold text-emerald-600">02</div>
+              <div className="text-4xl font-display font-bold text-forest">02</div>
               <h4 className="font-bold text-forest text-base">{lang === "de" ? "Konzept anfordern" : "Request Proposal"}</h4>
               <p className="text-xs text-forest/70 leading-relaxed">{lang === "de" ? "Wähle ein vordefiniertes Menü oder frage ein individuelles Konzept an. Kostenlos & unverbindlich." : "Choose a predefined package or request a custom menu path. Free of charge & non-binding."}</p>
             </div>
             <div className="space-y-3">
-              <div className="text-4xl font-display font-bold text-emerald-600">03</div>
+              <div className="text-4xl font-display font-bold text-forest">03</div>
               <h4 className="font-bold text-forest text-base">{lang === "de" ? "Genießen" : "Celebrate & Enjoy"}</h4>
               <p className="text-xs text-forest/70 leading-relaxed">{lang === "de" ? "Besprich letzte Details direkt mit dem Caterer. Pünktliche Lieferung und Aufbau vor Ort sind garantiert." : "Clarify details directly with the food partner. Logistical accuracy and on-site setup are fully guaranteed."}</p>
             </div>

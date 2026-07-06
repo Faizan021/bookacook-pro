@@ -29,7 +29,7 @@ function About() {
   return (
     <SiteShell>
       {/* Cinematic Hero */}
-      <section className="relative overflow-hidden py-16 lg:py-24">
+      <section className="relative overflow-hidden min-h-screen flex items-center -mt-20 lg:-mt-24 pt-36 pb-24 lg:pt-44 lg:pb-36">
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img

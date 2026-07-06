@@ -534,7 +534,7 @@ export function SitemapMonitor() {
                     <button 
                       onClick={() => markIndexedMutation.mutate(page.id)}
                       disabled={markIndexedMutation.isPending}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-forest hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 rounded-lg transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 shadow-sm text-xs font-semibold text-forest hover:bg-cream hover:text-forest hover:border-forest/20 rounded-lg transition-colors"
                     >
                       <Check className="w-3 h-3" />
                       Mark Verified

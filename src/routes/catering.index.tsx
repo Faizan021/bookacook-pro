@@ -258,7 +258,7 @@ function Catering() {
 
       {/* Featured / Search Section */}
       <section id="listings-section" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-16 pb-6 scroll-mt-6 relative z-10">
-        <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-600 mb-3">{t("cat.eyebrow")}</div>
+        <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest mb-3">{t("cat.eyebrow")}</div>
         <div className="mt-3 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-forest leading-tight text-left">
             {lang === "de" ? "Partner-Caterer finden" : "Find Partner Caterers"}
@@ -276,7 +276,7 @@ function Catering() {
 
         {/* Booking search bar */}
         <div className="surface-card rounded-2xl mt-6 p-3 sm:p-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5 border border-[#eadfce]/40 shadow-sm">
-          <FilterField icon={<CalendarIcon className="h-4 w-4 text-emerald-600" />} label={lang === "de" ? "Datum" : "Date"} htmlFor="cat-date">
+          <FilterField icon={<CalendarIcon className="h-4 w-4 text-forest" />} label={lang === "de" ? "Datum" : "Date"} htmlFor="cat-date">
             <input
               id="cat-date"
               type="date"
@@ -287,7 +287,7 @@ function Catering() {
               className="w-full bg-transparent outline-none text-sm text-forest"
             />
           </FilterField>
-          <FilterField icon={<Users className="h-4 w-4 text-emerald-600" />} label={lang === "de" ? "Gäste" : "Guests"} htmlFor="cat-guests">
+          <FilterField icon={<Users className="h-4 w-4 text-forest" />} label={lang === "de" ? "Gäste" : "Guests"} htmlFor="cat-guests">
             <input
               id="cat-guests"
               type="number"
@@ -299,7 +299,7 @@ function Catering() {
               className="w-full bg-transparent outline-none text-sm text-forest placeholder:text-forest/40"
             />
           </FilterField>
-          <FilterField icon={<PartyPopper className="h-4 w-4 text-emerald-600" />} label={lang === "de" ? "Event" : "Event"} htmlFor="cat-event">
+          <FilterField icon={<PartyPopper className="h-4 w-4 text-forest" />} label={lang === "de" ? "Event" : "Event"} htmlFor="cat-event">
             <select
               id="cat-event"
               aria-label={lang === "de" ? "Event" : "Event"}
@@ -312,7 +312,7 @@ function Catering() {
               ))}
             </select>
           </FilterField>
-          <FilterField icon={<Utensils className="h-4 w-4 text-emerald-600" />} label={lang === "de" ? "Menü" : "Menu"} htmlFor="cat-menu">
+          <FilterField icon={<Utensils className="h-4 w-4 text-forest" />} label={lang === "de" ? "Menü" : "Menu"} htmlFor="cat-menu">
             <select
               id="cat-menu"
               aria-label={lang === "de" ? "Menü" : "Menu"}
@@ -326,7 +326,7 @@ function Catering() {
               ))}
             </select>
           </FilterField>
-          <FilterField icon={<MapPin className="h-4 w-4 text-emerald-600" />} label={lang === "de" ? "Stadt" : "City"} htmlFor="cat-city">
+          <FilterField icon={<MapPin className="h-4 w-4 text-forest" />} label={lang === "de" ? "Stadt" : "City"} htmlFor="cat-city">
             <select
               id="cat-city"
               aria-label={lang === "de" ? "Stadt" : "City"}
@@ -357,7 +357,7 @@ function Catering() {
             ))}
           </div>
           <label htmlFor="cat-sort" className="flex items-center gap-2 rounded-full bg-white/60 border border-[#eadfce]/40 px-4 py-2 text-sm text-forest cursor-pointer shadow-sm hover:bg-white transition-all duration-300">
-            <ArrowUpDown className="h-4 w-4 text-emerald-600" />
+            <ArrowUpDown className="h-4 w-4 text-forest" />
             <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-forest/60">{lang === "de" ? "Sortieren" : "Sort by"}</span>
             <select
               id="cat-sort"
@@ -397,7 +397,7 @@ function Catering() {
                 key={c.id}
                 to="/catering/$slug"
                 params={{ slug: c.id }}
-                className="surface-card overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-3xl border border-[#eadfce]/40 hover:border-emerald-600/30 group text-left"
+                className="surface-card overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-3xl border border-[#eadfce]/40 hover:border-forest/30 group text-left"
               >
                 <div className="overflow-hidden aspect-[4/3] relative">
                   <img 
@@ -408,7 +408,7 @@ function Catering() {
                     width={600} 
                     height={450} 
                   />
-                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-emerald-700 shadow-md flex items-center gap-1 border border-emerald-500/20 uppercase tracking-wider">
+                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-forest shadow-md flex items-center gap-1 border border-forest/20 uppercase tracking-wider">
                     {lang === "de" ? "Buchbar" : "Bookable"}
                   </div>
                   {c.isShowcase && (
@@ -420,9 +420,9 @@ function Catering() {
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-display text-xl font-bold text-forest group-hover:text-emerald-600 transition-colors truncate">{c.name}</h3>
+                      <h3 className="font-display text-xl font-bold text-forest group-hover:text-forest transition-colors truncate">{c.name}</h3>
                       {c.verified && (
-                        <BadgeCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                        <BadgeCheck className="h-4 w-4 text-forest shrink-0" />
                       )}
                     </div>
                     <p className="text-xs text-forest/70 line-clamp-2 min-h-[2rem]">{c.tagline[lang]}</p>
@@ -435,7 +435,7 @@ function Catering() {
                     </div>
                   </div>
                   <div className="mt-6 pt-4 border-t border-[#eadfce]/30 flex items-center justify-between text-xs text-forest/60">
-                    <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5 text-emerald-600" /> {c.area}</span>
+                    <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5 text-forest" /> {c.area}</span>
                     <div className="text-right">
                       <div className="text-[10px] uppercase tracking-widest text-forest/50">{lang === "de" ? "Budget ab" : "Min. order"}</div>
                       <div className="text-sm text-forest font-bold">€{c.minOrder}</div>
@@ -451,7 +451,7 @@ function Catering() {
       {/* Pathway Sections */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-600 drop-shadow-sm">
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest drop-shadow-sm">
             {lang === "de" ? "DREI WEGE ZUM PERFEKTEN LUNCH" : "THREE PATHWAYS TO PERFECT DINING"}
           </span>
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">
@@ -471,10 +471,10 @@ function Catering() {
             className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group text-left"
           >
             <div className="space-y-4">
-              <div className="h-14 w-14 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center border border-emerald-500/20">
+              <div className="h-14 w-14 rounded-2xl bg-forest/10 text-forest flex items-center justify-center border border-forest/20">
                 <PartyPopper className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-display font-bold text-forest group-hover:text-emerald-600 transition-colors">
+              <h3 className="text-xl font-display font-bold text-forest group-hover:text-forest transition-colors">
                 {lang === "de" ? "Event-Catering" : "Event Catering"}
               </h3>
               <p className="text-sm text-forest/70 leading-relaxed">
@@ -483,7 +483,7 @@ function Catering() {
                   : "Custom packages for weddings, birthdays, corporate parties, and conferences. Buffets, finger food, and full-service dining."}
               </p>
             </div>
-            <div className="mt-8 flex items-center gap-2 text-xs font-bold text-emerald-600 group-hover:translate-x-2 transition-transform">
+            <div className="mt-8 flex items-center gap-2 text-xs font-bold text-forest group-hover:translate-x-2 transition-transform">
               <span>{lang === "de" ? "Event-Catering ansehen" : "Explore Event Catering"}</span>
               <ChevronRight className="h-4 w-4" />
             </div>
@@ -495,10 +495,10 @@ function Catering() {
             className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group text-left"
           >
             <div className="space-y-4">
-              <div className="h-14 w-14 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center border border-emerald-500/20">
+              <div className="h-14 w-14 rounded-2xl bg-forest/10 text-forest flex items-center justify-center border border-forest/20">
                 <Utensils className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-display font-bold text-forest group-hover:text-emerald-600 transition-colors">
+              <h3 className="text-xl font-display font-bold text-forest group-hover:text-forest transition-colors">
                 {lang === "de" ? "Daily Catering Subscriptions" : "Daily Catering Subscriptions"}
               </h3>
               <p className="text-sm text-forest/70 leading-relaxed">
@@ -507,7 +507,7 @@ function Catering() {
                   : "Recurring lunch plans and flexible canteen alternatives for offices and teams. Simple scheduling, diet-friendly, and reliable delivery."}
               </p>
             </div>
-            <div className="mt-8 flex items-center gap-2 text-xs font-bold text-emerald-600 group-hover:translate-x-2 transition-transform">
+            <div className="mt-8 flex items-center gap-2 text-xs font-bold text-forest group-hover:translate-x-2 transition-transform">
               <span>{lang === "de" ? "Büroverpflegung ansehen" : "Explore Office Subscriptions"}</span>
               <ChevronRight className="h-4 w-4" />
             </div>
@@ -519,10 +519,10 @@ function Catering() {
             className="surface-card p-8 rounded-3xl border border-[#eadfce]/45 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group text-left"
           >
             <div className="space-y-4">
-              <div className="h-14 w-14 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center border border-emerald-500/20">
+              <div className="h-14 w-14 rounded-2xl bg-forest/10 text-forest flex items-center justify-center border border-forest/20">
                 <GraduationCap className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-display font-bold text-forest group-hover:text-emerald-600 transition-colors">
+              <h3 className="text-xl font-display font-bold text-forest group-hover:text-forest transition-colors">
                 {lang === "de" ? "Institutionelles Catering" : "Institutional Catering"}
               </h3>
               <p className="text-sm text-forest/70 leading-relaxed">
@@ -531,7 +531,7 @@ function Catering() {
                   : "Dependable, healthy large-scale meal plans for schools, daycares, clinics, and care homes matching strict quality criteria."}
               </p>
             </div>
-            <div className="mt-8 flex items-center gap-2 text-xs font-bold text-emerald-600 group-hover:translate-x-2 transition-transform">
+            <div className="mt-8 flex items-center gap-2 text-xs font-bold text-forest group-hover:translate-x-2 transition-transform">
               <span>{lang === "de" ? "Großverpflegung ansehen" : "Explore Institutional Catering"}</span>
               <ChevronRight className="h-4 w-4" />
             </div>
@@ -543,7 +543,7 @@ function Catering() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">
         <div className="grid md:grid-cols-[1fr_2fr] gap-12 items-start">
           <div className="space-y-4 text-left">
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-600">
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest">
               {lang === "de" ? "EINSATZBEREICHE" : "USE CASES"}
             </span>
             <h2 className="text-3xl font-display font-bold text-forest">
@@ -700,7 +700,7 @@ function Catering() {
 function FilterField({ icon, label, children, htmlFor }: { icon: ReactNode; label: string; children: ReactNode; htmlFor?: string }) {
   return (
     <label htmlFor={htmlFor} className="flex items-center gap-2.5 rounded-full bg-[#eadfce]/40 hover:bg-[#eadfce]/60 transition-colors px-4 py-2 ring-1 ring-[#eadfce] cursor-pointer shadow-sm">
-      <span className="text-emerald-600">{icon}</span>
+      <span className="text-forest">{icon}</span>
       <span className="flex-1 min-w-0">
         <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-forest/60 leading-none mb-1">{label}</span>
         {children}

@@ -85,7 +85,7 @@ const COMPETITOR_DB: Record<string, CompetitorData> = {
     tagline: "Weekly meal prep subscription service",
     category: "Meal Prep Subscription",
     founded: "2019",
-    accentColor: "bg-emerald-600",
+    accentColor: "bg-forest",
     targetAudience: "Fitness-focused individuals wanting pre-portioned weekly kits",
     comparisonRows: [
       { feature: "On-Demand Ordering", speisely: "✅ Order anytime", competitor: "❌ Weekly subscription only", speiselyWins: true },
@@ -327,7 +327,7 @@ function StatusBadge({ status }: { status: Status }) {
   }
   if (status === "generated") {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-cream px-3 py-1 text-xs font-semibold text-forest">
         <ShieldCheck size={11} />
         Content Generated
       </span>
@@ -429,7 +429,7 @@ function ComparisonTablePreview({ rows }: { rows: ComparisonRow[] }) {
               </td>
               <td
                 className={`px-4 py-2.5 font-semibold ${
-                  row.speiselyWins ? "text-emerald-700" : "text-forest/60"
+                  row.speiselyWins ? "text-forest" : "text-forest/60"
                 }`}
               >
                 {row.speisely}
@@ -729,9 +729,9 @@ export function CompetitorMonitor() {
                       Generic Template Used
                     </span>
                   )}
-                  <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5">
-                    <ShieldCheck size={14} className="text-emerald-600" />
-                    <span className="text-xs font-semibold text-emerald-700">
+                  <div className="flex items-center gap-2 rounded-full bg-cream px-3 py-1.5">
+                    <ShieldCheck size={14} className="text-forest" />
+                    <span className="text-xs font-semibold text-forest">
                       Speisely wins {speiselyWinCount}/{totalRows} features
                     </span>
                   </div>
@@ -744,8 +744,8 @@ export function CompetitorMonitor() {
                   {
                     label: "Speisely Wins",
                     value: speiselyWinCount,
-                    color: "text-emerald-700",
-                    bg: "bg-emerald-50 border-emerald-200",
+                    color: "text-forest",
+                    bg: "bg-cream border-forest/20",
                   },
                   {
                     label: "Competitor Wins",
@@ -869,8 +869,8 @@ export function CompetitorMonitor() {
                       disabled={isSaving}
                       className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition disabled:opacity-50 ${
                         copied
-                          ? "bg-emerald-500 text-white"
-                          : "bg-emerald-600 text-white hover:bg-emerald-500"
+                          ? "bg-forest text-white"
+                          : "bg-forest text-white hover:bg-forest"
                       }`}
                     >
                       {copied ? (
@@ -886,7 +886,7 @@ export function CompetitorMonitor() {
                       )}
                     </button>
                   </div>
-                  <pre className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-emerald-300 whitespace-pre">
+                  <pre className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-mint whitespace-pre">
                     <code>{markdown}</code>
                   </pre>
                 </div>
@@ -899,7 +899,7 @@ export function CompetitorMonitor() {
                   disabled={isSaving}
                   className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm transition disabled:opacity-50 ${
                     copied
-                      ? "bg-emerald-500 text-white"
+                      ? "bg-forest text-white"
                       : "bg-forest text-white hover:opacity-90"
                   }`}
                 >

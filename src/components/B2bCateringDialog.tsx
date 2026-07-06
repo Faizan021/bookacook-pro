@@ -113,7 +113,7 @@ export function B2bCateringDialog({
       <DialogContent className="sm:max-w-[500px] bg-[#fdfaf5] text-forest border-[#eadfce] rounded-3xl">
         <DialogHeader className="space-y-1">
           <DialogTitle className="font-display text-2xl font-bold text-forest flex items-center gap-2">
-            <Building className="h-6 w-6 text-emerald-600" />{" "}
+            <Building className="h-6 w-6 text-forest" />{" "}
             {lang === "de" ? "B2B Firmen-Catering" : "Corporate Catering"}
           </DialogTitle>
           <p className="text-xs text-forest/70">
@@ -130,7 +130,7 @@ export function B2bCateringDialog({
             <Input
               id="companyName"
               required
-              className="bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
+              className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
               value={b2bForm.companyName}
               onChange={(e) =>
                 setB2bForm((prev) => ({ ...prev, companyName: e.target.value }))
@@ -148,7 +148,7 @@ export function B2bCateringDialog({
                 type="number"
                 required
                 min="1"
-                className="bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
+                className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
                 value={b2bForm.employees}
                 onChange={(e) =>
                   setB2bForm((prev) => ({ ...prev, employees: e.target.value }))
@@ -167,7 +167,7 @@ export function B2bCateringDialog({
               >
                 <SelectTrigger
                   id="pattern"
-                  className="bg-white border-[#eadfce] focus:ring-emerald-500 rounded-xl"
+                  className="bg-white border-[#eadfce] focus:ring-forest rounded-xl"
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -201,7 +201,7 @@ export function B2bCateringDialog({
             >
               <SelectTrigger
                 id="catererSelect"
-                className="bg-white border-[#eadfce] focus:ring-emerald-500 rounded-xl"
+                className="bg-white border-[#eadfce] focus:ring-forest rounded-xl"
               >
                 <SelectValue placeholder={lang === "de" ? "Bitte wählen..." : "Please select..."} />
               </SelectTrigger>
@@ -223,7 +223,7 @@ export function B2bCateringDialog({
               id="startDate"
               type="date"
               required
-              className="bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
+              className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
               value={b2bForm.startDate}
               onChange={(e) =>
                 setB2bForm((prev) => ({ ...prev, startDate: e.target.value }))
@@ -237,7 +237,7 @@ export function B2bCateringDialog({
             <Textarea
               id="notes"
               rows={3}
-              className="bg-white border-[#eadfce] focus-visible:ring-emerald-500 rounded-xl"
+              className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
               value={b2bForm.notes}
               onChange={(e) =>
                 setB2bForm((prev) => ({ ...prev, notes: e.target.value }))

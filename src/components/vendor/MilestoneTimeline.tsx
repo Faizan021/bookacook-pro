@@ -99,7 +99,7 @@ export function MilestoneTimeline({
               disabled={saving}
             >
               {m.completed ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                <CheckCircle2 className="w-5 h-5 text-forest" />
               ) : (
                 <Circle className="w-5 h-5" />
               )}

@@ -18,7 +18,7 @@ export function TrustSection({ badgeText, headline, items, className = "" }: Tru
     <section className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30 ${className}`}>
       <div className="text-center max-w-2xl mx-auto space-y-4">
         {badgeText && (
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">
             {badgeText}
           </span>
         )}
@@ -32,7 +32,7 @@ export function TrustSection({ badgeText, headline, items, className = "" }: Tru
           const Icon = item.icon;
           return (
             <div key={idx} className="flex flex-col items-center text-center space-y-4 group">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 transition-colors group-hover:bg-emerald-500/20">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-forest/10 text-forest transition-colors group-hover:bg-forest/20">
                 <Icon className="h-8 w-8" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">{item.title}</h3>

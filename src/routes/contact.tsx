@@ -48,7 +48,7 @@ function ContactRoute() {
   return (
     <SiteShell>
       {/* Cinematic Hero */}
-      <section className="relative overflow-hidden pt-20 pb-32 lg:pt-24 lg:pb-40 text-center">
+      <section className="relative overflow-hidden min-h-screen flex items-center justify-center -mt-20 lg:-mt-24 pt-36 pb-24 lg:pt-44 lg:pb-36 text-center">
         <div className="absolute inset-0 z-0">
           <img
             src="/hero-cinematic.png"

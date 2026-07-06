@@ -1061,7 +1061,7 @@ function PlannerDirectory({ lang, tt, planners }: { lang: string; tt: (de: strin
                     width={600}
                     height={375}
                   />
-                  <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full text-[10px] font-bold text-emerald-700 shadow-md flex items-center gap-1 border border-emerald-500/20 uppercase tracking-wider">
+                  <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full text-[10px] font-bold text-forest shadow-md flex items-center gap-1 border border-forest/20 uppercase tracking-wider">
                     {tt("Buchbar", "Bookable")}
                   </div>
                   {p.isShowcase && (
@@ -1072,9 +1072,9 @@ function PlannerDirectory({ lang, tt, planners }: { lang: string; tt: (de: strin
                 </div>
                 <div className="p-5 flex-1 flex flex-col text-left">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-display text-xl text-forest font-bold truncate group-hover:text-emerald-800 transition-colors">{p.name}</h3>
+                    <h3 className="font-display text-xl text-forest font-bold truncate group-hover:text-forest transition-colors">{p.name}</h3>
                     {p.verified && (
-                      <BadgeCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                      <BadgeCheck className="h-4 w-4 text-forest shrink-0" />
                     )}
                   </div>
                   <p className="mt-1 text-sm text-forest/70 font-semibold line-clamp-1">{p.tagline[lang as "de" | "en"]}</p>

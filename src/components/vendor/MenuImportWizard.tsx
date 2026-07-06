@@ -268,7 +268,7 @@ function StepIndicator({ step }: { step: WizardStep }) {
           <div
             className={`flex items-center gap-1.5 px-3 py-1 rounded-full font-medium transition-colors ${
               i < current
-                ? "bg-emerald-100 text-emerald-800"
+                ? "bg-mint text-forest"
                 : i === current
                   ? "bg-brand-orange text-white"
                   : "bg-muted text-muted-foreground"

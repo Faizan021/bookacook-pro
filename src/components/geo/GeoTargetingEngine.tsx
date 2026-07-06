@@ -184,7 +184,7 @@ const STATE_COLORS: Record<string, string> = {
   Hessen: 'bg-violet-100 text-violet-700',
   'Sachsen-Anhalt': 'bg-yellow-100 text-yellow-700',
   Sachsen: 'bg-amber-100 text-amber-700',
-  BW: 'bg-emerald-100 text-emerald-700',
+  BW: 'bg-mint text-forest',
   Niedersachsen: 'bg-teal-100 text-teal-700',
   Bremen: 'bg-pink-100 text-pink-700',
   SH: 'bg-cyan-100 text-cyan-700',
@@ -729,7 +729,7 @@ export function GeoTargetingEngine() {
                 <button
                   onClick={handleSaveDrafts}
                   disabled={isSaving}
-                  className="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-xs font-semibold px-3.5 py-2 rounded-lg hover:bg-emerald-500 active:scale-95 transition-all disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 bg-forest text-white text-xs font-semibold px-3.5 py-2 rounded-lg hover:bg-forest active:scale-95 transition-all disabled:opacity-50"
                 >
                   {copied ? (
                     <CheckCircle2 size={13} className="text-white" />

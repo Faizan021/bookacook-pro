@@ -208,7 +208,7 @@ function CateringEmbedPage() {
   if (success) {
     return (
       <div className="p-8 text-center bg-[#fdfaf5] text-forest min-h-screen flex flex-col justify-center items-center space-y-4">
-        <CheckCircle2 className="h-16 w-16 text-emerald-500" />
+        <CheckCircle2 className="h-16 w-16 text-forest" />
         <h2 className="text-2xl font-bold font-display">Inquiry Sent Successfully!</h2>
         <p className="text-sm text-muted-foreground max-w-sm">
           Thank you! Your catering brief has been received by {caterer.name}. We will review the

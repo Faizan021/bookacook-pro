@@ -41,7 +41,7 @@ function FaqPage() {
       <section className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-10 py-32 md:py-40 text-left">
         <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-forest/5 mb-4">
-            <HelpCircle className="h-8 w-8 text-emerald-600" />
+            <HelpCircle className="h-8 w-8 text-forest" />
           </div>
           <h1 className="text-4xl md:text-5xl font-display font-bold text-forest">
             {tt("Häufig gestellte Fragen", "Frequently Asked Questions")}
@@ -70,7 +70,7 @@ function FaqPage() {
                   <div key={index} className={`border border-[#eadfce]/50 rounded-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'bg-white shadow-md' : 'bg-cream/40 hover:bg-cream/80'}`}>
                     <button onClick={() => toggleCatering(index)} className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none cursor-pointer" aria-expanded={isOpen}>
                       <h3 className="font-bold text-forest text-base sm:text-lg pr-8">{item.question}</h3>
-                      <ChevronDown className={`h-5 w-5 text-emerald-600 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-5 w-5 text-forest shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
                     <div className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100 pb-5' : 'max-h-0 opacity-0'}`} aria-hidden={!isOpen}>
                       <p className="text-sm text-forest/80 leading-relaxed">{item.answer}</p>
@@ -96,7 +96,7 @@ function FaqPage() {
                   <div key={index} className={`border border-[#eadfce]/50 rounded-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'bg-white shadow-md' : 'bg-cream/40 hover:bg-cream/80'}`}>
                     <button onClick={() => togglePlanner(index)} className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none cursor-pointer" aria-expanded={isOpen}>
                       <h3 className="font-bold text-forest text-base sm:text-lg pr-8">{item.question}</h3>
-                      <ChevronDown className={`h-5 w-5 text-emerald-600 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`h-5 w-5 text-forest shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
                     <div className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[500px] opacity-100 pb-5' : 'max-h-0 opacity-0'}`} aria-hidden={!isOpen}>
                       <p className="text-sm text-forest/80 leading-relaxed">{item.answer}</p>

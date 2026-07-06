@@ -83,7 +83,7 @@ export function BlackoutCalendarSection({ vendorType }: { vendorType: "caterer" 
                   placeholder="Reason (e.g. 'Fully booked')" 
                   value={reason} 
                   onChange={e => setReason(e.target.value)} 
-                  className="bg-white border-border/40 focus-visible:ring-emerald-500 text-xs rounded-xl"
+                  className="bg-white border-border/40 focus-visible:ring-forest text-xs rounded-xl"
                 />
                 <Button onClick={handleAddDates} disabled={adding} className="w-full rounded-full bg-forest text-xs py-2 h-9 font-semibold text-white">
                   {adding ? "Saving..." : "Confirm Block Availability"}

@@ -398,7 +398,7 @@ function InstantOrder() {
                     </div>
                   )}
                   <div className="absolute bottom-3 left-3 flex gap-2">
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold text-emerald-700 shadow-sm backdrop-blur-md uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold text-forest shadow-sm backdrop-blur-md uppercase tracking-wider">
                       <ShieldCheck className="h-3.5 w-3.5" />
                       {tt("Geprüft", "Verified")}
                     </div>
