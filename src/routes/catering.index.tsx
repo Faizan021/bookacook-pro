@@ -254,10 +254,10 @@ function Catering() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/catering-clean.png"
+            src="/hero-cinematic.png"
             fetchPriority="high"
-            alt="Catering Background"
-            className="w-full h-full object-cover object-center scale-105"
+            alt="Premium Catering Background"
+            className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" />
           <div className="absolute inset-0 bg-black/20" />

@@ -324,7 +324,7 @@ function PlannerPage() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/planner-clean.png"
+            src="/hero-cinematic.png"
             fetchPriority="high"
             alt="Event Planner Background"
             className="w-full h-full object-cover object-center scale-105"
