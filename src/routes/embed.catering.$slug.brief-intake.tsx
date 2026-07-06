@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { trackEvent } from "@/utils/posthog";
 import { z } from "zod";
 import { getPublicCatererProfile } from "@/lib/caterer/menu.functions";
+import { sendPartnerNotificationEmail } from "@/lib/email.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -75,6 +76,40 @@ export const submitPublicCateringBrief = createServerFn({ method: "POST" })
     });
 
     if (error) throw new Error(error.message);
+
+    // Notify Caterer via Email
+    const { data: caterer } = await supabaseAdmin
+      .from("caterers")
+      .select("name, owner_id")
+      .eq("id", data.catererId)
+      .maybeSingle();
+
+    if (caterer?.owner_id) {
+      const { data: user } = await supabaseAdmin.auth.admin.getUserById(caterer.owner_id);
+      if (user?.user?.email) {
+        const eventDateStr = new Date(data.eventDate).toLocaleDateString("de-DE");
+        const budgetStr = `€${(data.budgetCents / 100).toFixed(2)}`;
+        await sendPartnerNotificationEmail({
+          data: {
+            to: user.user.email,
+            subject: `Neue Event-Anfrage von ${data.customerName}`,
+            text: `Sie haben eine neue Anfrage von ${data.customerName} für ${data.eventType} (${data.guestCount} Personen) am ${eventDateStr} in ${data.location}. Budget: ${budgetStr}.`,
+            html: `<p>Hallo ${caterer.name},</p><p>Sie haben eine neue Event-Anfrage erhalten!</p>
+                   <ul>
+                     <li><strong>Kunde:</strong> ${data.customerName} (${data.customerEmail})</li>
+                     <li><strong>Art des Events:</strong> ${data.eventType}</li>
+                     <li><strong>Datum:</strong> ${eventDateStr}</li>
+                     <li><strong>Gästezahl:</strong> ${data.guestCount}</li>
+                     <li><strong>Budget:</strong> ${budgetStr}</li>
+                     <li><strong>Ort:</strong> ${data.location}</li>
+                     <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
+                   </ul>
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`
+          }
+        });
+      }
+    }
+
     return { ok: true };
   });
 

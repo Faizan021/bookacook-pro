@@ -39,33 +39,414 @@ export type Database = {
   }
   public: {
     Tables: {
-      availability: {
+      _archive_availability: {
         Row: {
-          available_date: string
-          caterer_id: string
-          created_at: string
-          id: string
-          is_available: boolean
+          _archived_at: string | null
+          available_date: string | null
+          caterer_id: string | null
+          created_at: string | null
+          id: string | null
+          is_available: boolean | null
           note: string | null
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          available_date: string
-          caterer_id: string
-          created_at?: string
-          id?: string
-          is_available?: boolean
+          _archived_at?: string | null
+          available_date?: string | null
+          caterer_id?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_available?: boolean | null
           note?: string | null
-          updated_at?: string
+          updated_at?: string | null
         }
         Update: {
-          available_date?: string
-          caterer_id?: string
-          created_at?: string
-          id?: string
-          is_available?: boolean
+          _archived_at?: string | null
+          available_date?: string | null
+          caterer_id?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_available?: boolean | null
           note?: string | null
-          updated_at?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      _archive_event_request_matches: {
+        Row: {
+          _archived_at: string | null
+          caterer_id: string | null
+          created_at: string | null
+          event_request_id: string | null
+          id: string | null
+          match_reasons: Json | null
+          match_score: number | null
+        }
+        Insert: {
+          _archived_at?: string | null
+          caterer_id?: string | null
+          created_at?: string | null
+          event_request_id?: string | null
+          id?: string | null
+          match_reasons?: Json | null
+          match_score?: number | null
+        }
+        Update: {
+          _archived_at?: string | null
+          caterer_id?: string | null
+          created_at?: string | null
+          event_request_id?: string | null
+          id?: string | null
+          match_reasons?: Json | null
+          match_score?: number | null
+        }
+        Relationships: []
+      }
+      _archive_event_requests: {
+        Row: {
+          _archived_at: string | null
+          ai_query: string | null
+          budget_per_person: number | null
+          budget_total: number | null
+          catering_type: string | null
+          city: string | null
+          created_at: string | null
+          cuisine_preferences: string[] | null
+          customer_id: string | null
+          dietary_requirements: string[] | null
+          event_date: string | null
+          event_type: string | null
+          extra_services: string[] | null
+          guest_count: number | null
+          id: string | null
+          lat: number | null
+          lng: number | null
+          planning_stage: string | null
+          postal_code: string | null
+          preferred_caterer_id: string | null
+          service_style: string | null
+          source: string | null
+          special_requests: string | null
+          status: string | null
+          storefront_slug: string | null
+          updated_at: string | null
+          venue_type: string | null
+        }
+        Insert: {
+          _archived_at?: string | null
+          ai_query?: string | null
+          budget_per_person?: number | null
+          budget_total?: number | null
+          catering_type?: string | null
+          city?: string | null
+          created_at?: string | null
+          cuisine_preferences?: string[] | null
+          customer_id?: string | null
+          dietary_requirements?: string[] | null
+          event_date?: string | null
+          event_type?: string | null
+          extra_services?: string[] | null
+          guest_count?: number | null
+          id?: string | null
+          lat?: number | null
+          lng?: number | null
+          planning_stage?: string | null
+          postal_code?: string | null
+          preferred_caterer_id?: string | null
+          service_style?: string | null
+          source?: string | null
+          special_requests?: string | null
+          status?: string | null
+          storefront_slug?: string | null
+          updated_at?: string | null
+          venue_type?: string | null
+        }
+        Update: {
+          _archived_at?: string | null
+          ai_query?: string | null
+          budget_per_person?: number | null
+          budget_total?: number | null
+          catering_type?: string | null
+          city?: string | null
+          created_at?: string | null
+          cuisine_preferences?: string[] | null
+          customer_id?: string | null
+          dietary_requirements?: string[] | null
+          event_date?: string | null
+          event_type?: string | null
+          extra_services?: string[] | null
+          guest_count?: number | null
+          id?: string | null
+          lat?: number | null
+          lng?: number | null
+          planning_stage?: string | null
+          postal_code?: string | null
+          preferred_caterer_id?: string | null
+          service_style?: string | null
+          source?: string | null
+          special_requests?: string | null
+          status?: string | null
+          storefront_slug?: string | null
+          updated_at?: string | null
+          venue_type?: string | null
+        }
+        Relationships: []
+      }
+      _archive_order_items: {
+        Row: {
+          _archived_at: string | null
+          created_at: string | null
+          id: string | null
+          modifiers: Json | null
+          notes: string | null
+          order_id: string | null
+          product_id: string | null
+          product_name: string | null
+          quantity: number | null
+          total_price: number | null
+          unit_price: number | null
+        }
+        Insert: {
+          _archived_at?: string | null
+          created_at?: string | null
+          id?: string | null
+          modifiers?: Json | null
+          notes?: string | null
+          order_id?: string | null
+          product_id?: string | null
+          product_name?: string | null
+          quantity?: number | null
+          total_price?: number | null
+          unit_price?: number | null
+        }
+        Update: {
+          _archived_at?: string | null
+          created_at?: string | null
+          id?: string | null
+          modifiers?: Json | null
+          notes?: string | null
+          order_id?: string | null
+          product_id?: string | null
+          product_name?: string | null
+          quantity?: number | null
+          total_price?: number | null
+          unit_price?: number | null
+        }
+        Relationships: []
+      }
+      _archive_orders: {
+        Row: {
+          _archived_at: string | null
+          caterer_id: string | null
+          created_at: string | null
+          customer_email: string | null
+          customer_id: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          delivery_address: string | null
+          delivery_city: string | null
+          delivery_fee: number | null
+          delivery_postal_code: string | null
+          fulfillment_type: string | null
+          id: string | null
+          notes: string | null
+          order_type: string | null
+          payment_status: string | null
+          platform_fee_amount: number | null
+          platform_fee_rate: number | null
+          requested_time: string | null
+          source: string | null
+          status: string | null
+          subtotal: number | null
+          total_amount: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          _archived_at?: string | null
+          caterer_id?: string | null
+          created_at?: string | null
+          customer_email?: string | null
+          customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          delivery_address?: string | null
+          delivery_city?: string | null
+          delivery_fee?: number | null
+          delivery_postal_code?: string | null
+          fulfillment_type?: string | null
+          id?: string | null
+          notes?: string | null
+          order_type?: string | null
+          payment_status?: string | null
+          platform_fee_amount?: number | null
+          platform_fee_rate?: number | null
+          requested_time?: string | null
+          source?: string | null
+          status?: string | null
+          subtotal?: number | null
+          total_amount?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          _archived_at?: string | null
+          caterer_id?: string | null
+          created_at?: string | null
+          customer_email?: string | null
+          customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          delivery_address?: string | null
+          delivery_city?: string | null
+          delivery_fee?: number | null
+          delivery_postal_code?: string | null
+          fulfillment_type?: string | null
+          id?: string | null
+          notes?: string | null
+          order_type?: string | null
+          payment_status?: string | null
+          platform_fee_amount?: number | null
+          platform_fee_rate?: number | null
+          requested_time?: string | null
+          source?: string | null
+          status?: string | null
+          subtotal?: number | null
+          total_amount?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      _archive_packages: {
+        Row: {
+          _archived_at: string | null
+          add_ons: string[] | null
+          booking_notice_days: number | null
+          cancellation_policy: string | null
+          category: string | null
+          caterer_id: string | null
+          cleanup_time_minutes: number | null
+          cover_image_url: string | null
+          created_at: string | null
+          cuisine_type: string | null
+          currency: string | null
+          deposit_percentage: number | null
+          description: string | null
+          dietary_options: string[] | null
+          duration_hours: number | null
+          event_type: string | null
+          event_types: string[] | null
+          featured: boolean | null
+          gallery_images: string[] | null
+          id: string | null
+          image_url: string | null
+          images: string[] | null
+          included_items: string[] | null
+          includes: string[] | null
+          is_active: boolean | null
+          is_published: boolean | null
+          keywords: string[] | null
+          location: string | null
+          max_bookings_per_day: number | null
+          max_guests: number | null
+          min_guests: number | null
+          price_amount: number | null
+          price_type: string | null
+          service_area: string[] | null
+          setup_time_hours: number | null
+          setup_time_minutes: number | null
+          short_summary: string | null
+          status: string | null
+          summary: string | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          _archived_at?: string | null
+          add_ons?: string[] | null
+          booking_notice_days?: number | null
+          cancellation_policy?: string | null
+          category?: string | null
+          caterer_id?: string | null
+          cleanup_time_minutes?: number | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          cuisine_type?: string | null
+          currency?: string | null
+          deposit_percentage?: number | null
+          description?: string | null
+          dietary_options?: string[] | null
+          duration_hours?: number | null
+          event_type?: string | null
+          event_types?: string[] | null
+          featured?: boolean | null
+          gallery_images?: string[] | null
+          id?: string | null
+          image_url?: string | null
+          images?: string[] | null
+          included_items?: string[] | null
+          includes?: string[] | null
+          is_active?: boolean | null
+          is_published?: boolean | null
+          keywords?: string[] | null
+          location?: string | null
+          max_bookings_per_day?: number | null
+          max_guests?: number | null
+          min_guests?: number | null
+          price_amount?: number | null
+          price_type?: string | null
+          service_area?: string[] | null
+          setup_time_hours?: number | null
+          setup_time_minutes?: number | null
+          short_summary?: string | null
+          status?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          _archived_at?: string | null
+          add_ons?: string[] | null
+          booking_notice_days?: number | null
+          cancellation_policy?: string | null
+          category?: string | null
+          caterer_id?: string | null
+          cleanup_time_minutes?: number | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          cuisine_type?: string | null
+          currency?: string | null
+          deposit_percentage?: number | null
+          description?: string | null
+          dietary_options?: string[] | null
+          duration_hours?: number | null
+          event_type?: string | null
+          event_types?: string[] | null
+          featured?: boolean | null
+          gallery_images?: string[] | null
+          id?: string | null
+          image_url?: string | null
+          images?: string[] | null
+          included_items?: string[] | null
+          includes?: string[] | null
+          is_active?: boolean | null
+          is_published?: boolean | null
+          keywords?: string[] | null
+          location?: string | null
+          max_bookings_per_day?: number | null
+          max_guests?: number | null
+          min_guests?: number | null
+          price_amount?: number | null
+          price_type?: string | null
+          service_area?: string[] | null
+          setup_time_hours?: number | null
+          setup_time_minutes?: number | null
+          short_summary?: string | null
+          status?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -522,6 +903,146 @@ export type Database = {
         }
         Relationships: []
       }
+      catering_packages: {
+        Row: {
+          add_ons: string[] | null
+          booking_notice_days: number | null
+          cancellation_policy: string | null
+          category: string | null
+          caterer_id: string
+          cleanup_time_minutes: number | null
+          cover_image_url: string | null
+          created_at: string
+          cuisine_type: string | null
+          currency: string
+          deposit_percentage: number | null
+          description: string | null
+          dietary_options: string[] | null
+          duration_hours: number | null
+          event_type: string | null
+          event_types: string[] | null
+          featured: boolean
+          gallery_images: string[] | null
+          id: string
+          image_url: string | null
+          images: string[] | null
+          included_items: string[] | null
+          includes: string[] | null
+          is_active: boolean
+          is_published: boolean
+          keywords: string[] | null
+          location: string | null
+          max_bookings_per_day: number | null
+          max_guests: number | null
+          min_guests: number | null
+          price_amount: number
+          price_type: string
+          service_area: string[] | null
+          setup_time_hours: number | null
+          setup_time_minutes: number | null
+          short_summary: string | null
+          status: string
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          add_ons?: string[] | null
+          booking_notice_days?: number | null
+          cancellation_policy?: string | null
+          category?: string | null
+          caterer_id: string
+          cleanup_time_minutes?: number | null
+          cover_image_url?: string | null
+          created_at?: string
+          cuisine_type?: string | null
+          currency?: string
+          deposit_percentage?: number | null
+          description?: string | null
+          dietary_options?: string[] | null
+          duration_hours?: number | null
+          event_type?: string | null
+          event_types?: string[] | null
+          featured?: boolean
+          gallery_images?: string[] | null
+          id?: string
+          image_url?: string | null
+          images?: string[] | null
+          included_items?: string[] | null
+          includes?: string[] | null
+          is_active?: boolean
+          is_published?: boolean
+          keywords?: string[] | null
+          location?: string | null
+          max_bookings_per_day?: number | null
+          max_guests?: number | null
+          min_guests?: number | null
+          price_amount?: number
+          price_type?: string
+          service_area?: string[] | null
+          setup_time_hours?: number | null
+          setup_time_minutes?: number | null
+          short_summary?: string | null
+          status?: string
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          add_ons?: string[] | null
+          booking_notice_days?: number | null
+          cancellation_policy?: string | null
+          category?: string | null
+          caterer_id?: string
+          cleanup_time_minutes?: number | null
+          cover_image_url?: string | null
+          created_at?: string
+          cuisine_type?: string | null
+          currency?: string
+          deposit_percentage?: number | null
+          description?: string | null
+          dietary_options?: string[] | null
+          duration_hours?: number | null
+          event_type?: string | null
+          event_types?: string[] | null
+          featured?: boolean
+          gallery_images?: string[] | null
+          id?: string
+          image_url?: string | null
+          images?: string[] | null
+          included_items?: string[] | null
+          includes?: string[] | null
+          is_active?: boolean
+          is_published?: boolean
+          keywords?: string[] | null
+          location?: string | null
+          max_bookings_per_day?: number | null
+          max_guests?: number | null
+          min_guests?: number | null
+          price_amount?: number
+          price_type?: string
+          service_area?: string[] | null
+          setup_time_hours?: number | null
+          setup_time_minutes?: number | null
+          short_summary?: string | null
+          status?: string
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catering_packages_caterer_id_fkey"
+            columns: ["caterer_id"]
+            isOneToOne: false
+            referencedRelation: "caterers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consent_logs: {
         Row: {
           action_type: string
@@ -655,128 +1176,6 @@ export type Database = {
           },
         ]
       }
-      event_request_matches: {
-        Row: {
-          caterer_id: string
-          created_at: string
-          event_request_id: string
-          id: string
-          match_reasons: Json
-          match_score: number
-        }
-        Insert: {
-          caterer_id: string
-          created_at?: string
-          event_request_id: string
-          id?: string
-          match_reasons?: Json
-          match_score?: number
-        }
-        Update: {
-          caterer_id?: string
-          created_at?: string
-          event_request_id?: string
-          id?: string
-          match_reasons?: Json
-          match_score?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "event_request_matches_event_request_id_fkey"
-            columns: ["event_request_id"]
-            isOneToOne: false
-            referencedRelation: "event_requests"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      event_requests: {
-        Row: {
-          ai_query: string | null
-          budget_per_person: number | null
-          budget_total: number | null
-          catering_type: string | null
-          city: string | null
-          created_at: string
-          cuisine_preferences: string[] | null
-          customer_id: string | null
-          dietary_requirements: string[] | null
-          event_date: string | null
-          event_type: string | null
-          extra_services: string[] | null
-          guest_count: number | null
-          id: string
-          lat: number | null
-          lng: number | null
-          planning_stage: string | null
-          postal_code: string | null
-          preferred_caterer_id: string | null
-          service_style: string | null
-          source: string
-          special_requests: string | null
-          status: string
-          storefront_slug: string | null
-          updated_at: string
-          venue_type: string | null
-        }
-        Insert: {
-          ai_query?: string | null
-          budget_per_person?: number | null
-          budget_total?: number | null
-          catering_type?: string | null
-          city?: string | null
-          created_at?: string
-          cuisine_preferences?: string[] | null
-          customer_id?: string | null
-          dietary_requirements?: string[] | null
-          event_date?: string | null
-          event_type?: string | null
-          extra_services?: string[] | null
-          guest_count?: number | null
-          id?: string
-          lat?: number | null
-          lng?: number | null
-          planning_stage?: string | null
-          postal_code?: string | null
-          preferred_caterer_id?: string | null
-          service_style?: string | null
-          source?: string
-          special_requests?: string | null
-          status?: string
-          storefront_slug?: string | null
-          updated_at?: string
-          venue_type?: string | null
-        }
-        Update: {
-          ai_query?: string | null
-          budget_per_person?: number | null
-          budget_total?: number | null
-          catering_type?: string | null
-          city?: string | null
-          created_at?: string
-          cuisine_preferences?: string[] | null
-          customer_id?: string | null
-          dietary_requirements?: string[] | null
-          event_date?: string | null
-          event_type?: string | null
-          extra_services?: string[] | null
-          guest_count?: number | null
-          id?: string
-          lat?: number | null
-          lng?: number | null
-          planning_stage?: string | null
-          postal_code?: string | null
-          preferred_caterer_id?: string | null
-          service_style?: string | null
-          source?: string
-          special_requests?: string | null
-          status?: string
-          storefront_slug?: string | null
-          updated_at?: string
-          venue_type?: string | null
-        }
-        Relationships: []
-      }
       german_locations: {
         Row: {
           id: string
@@ -804,308 +1203,6 @@ export type Database = {
           postal_code?: string | null
           state?: string | null
           type?: string | null
-        }
-        Relationships: []
-      }
-      messages: {
-        Row: {
-          booking_id: string
-          created_at: string
-          id: string
-          is_read: boolean
-          message_text: string
-          recipient_id: string
-          sender_id: string
-        }
-        Insert: {
-          booking_id: string
-          created_at?: string
-          id?: string
-          is_read?: boolean
-          message_text: string
-          recipient_id: string
-          sender_id: string
-        }
-        Update: {
-          booking_id?: string
-          created_at?: string
-          id?: string
-          is_read?: boolean
-          message_text?: string
-          recipient_id?: string
-          sender_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "messages_recipient_id_fkey"
-            columns: ["recipient_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "messages_sender_id_fkey"
-            columns: ["sender_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      order_items: {
-        Row: {
-          created_at: string
-          id: string
-          modifiers: Json
-          notes: string | null
-          order_id: string
-          product_id: string | null
-          product_name: string
-          quantity: number
-          total_price: number
-          unit_price: number
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          modifiers?: Json
-          notes?: string | null
-          order_id: string
-          product_id?: string | null
-          product_name: string
-          quantity?: number
-          total_price?: number
-          unit_price?: number
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          modifiers?: Json
-          notes?: string | null
-          order_id?: string
-          product_id?: string | null
-          product_name?: string
-          quantity?: number
-          total_price?: number
-          unit_price?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "order_items_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      orders: {
-        Row: {
-          caterer_id: string
-          created_at: string
-          customer_email: string | null
-          customer_id: string | null
-          customer_name: string | null
-          customer_phone: string | null
-          delivery_address: string | null
-          delivery_city: string | null
-          delivery_fee: number
-          delivery_postal_code: string | null
-          fulfillment_type: string
-          id: string
-          notes: string | null
-          order_type: string
-          payment_status: string
-          platform_fee_amount: number
-          platform_fee_rate: number
-          requested_time: string | null
-          source: string
-          status: string
-          subtotal: number
-          total_amount: number
-          updated_at: string
-        }
-        Insert: {
-          caterer_id: string
-          created_at?: string
-          customer_email?: string | null
-          customer_id?: string | null
-          customer_name?: string | null
-          customer_phone?: string | null
-          delivery_address?: string | null
-          delivery_city?: string | null
-          delivery_fee?: number
-          delivery_postal_code?: string | null
-          fulfillment_type?: string
-          id?: string
-          notes?: string | null
-          order_type?: string
-          payment_status?: string
-          platform_fee_amount?: number
-          platform_fee_rate?: number
-          requested_time?: string | null
-          source?: string
-          status?: string
-          subtotal?: number
-          total_amount?: number
-          updated_at?: string
-        }
-        Update: {
-          caterer_id?: string
-          created_at?: string
-          customer_email?: string | null
-          customer_id?: string | null
-          customer_name?: string | null
-          customer_phone?: string | null
-          delivery_address?: string | null
-          delivery_city?: string | null
-          delivery_fee?: number
-          delivery_postal_code?: string | null
-          fulfillment_type?: string
-          id?: string
-          notes?: string | null
-          order_type?: string
-          payment_status?: string
-          platform_fee_amount?: number
-          platform_fee_rate?: number
-          requested_time?: string | null
-          source?: string
-          status?: string
-          subtotal?: number
-          total_amount?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      packages: {
-        Row: {
-          add_ons: string[] | null
-          booking_notice_days: number | null
-          cancellation_policy: string | null
-          category: string | null
-          caterer_id: string
-          cleanup_time_minutes: number | null
-          cover_image_url: string | null
-          created_at: string
-          cuisine_type: string | null
-          currency: string
-          deposit_percentage: number | null
-          description: string | null
-          dietary_options: string[] | null
-          duration_hours: number | null
-          event_type: string | null
-          event_types: string[] | null
-          featured: boolean | null
-          gallery_images: string[] | null
-          id: string
-          image_url: string | null
-          images: string[] | null
-          included_items: string[] | null
-          includes: string[] | null
-          is_active: boolean
-          is_published: boolean
-          keywords: string[] | null
-          location: string | null
-          max_bookings_per_day: number | null
-          max_guests: number | null
-          min_guests: number | null
-          price_amount: number
-          price_type: string
-          service_area: string[] | null
-          setup_time_hours: number | null
-          setup_time_minutes: number | null
-          short_summary: string | null
-          status: string | null
-          summary: string | null
-          tags: string[] | null
-          title: string
-          updated_at: string
-        }
-        Insert: {
-          add_ons?: string[] | null
-          booking_notice_days?: number | null
-          cancellation_policy?: string | null
-          category?: string | null
-          caterer_id: string
-          cleanup_time_minutes?: number | null
-          cover_image_url?: string | null
-          created_at?: string
-          cuisine_type?: string | null
-          currency?: string
-          deposit_percentage?: number | null
-          description?: string | null
-          dietary_options?: string[] | null
-          duration_hours?: number | null
-          event_type?: string | null
-          event_types?: string[] | null
-          featured?: boolean | null
-          gallery_images?: string[] | null
-          id?: string
-          image_url?: string | null
-          images?: string[] | null
-          included_items?: string[] | null
-          includes?: string[] | null
-          is_active?: boolean
-          is_published?: boolean
-          keywords?: string[] | null
-          location?: string | null
-          max_bookings_per_day?: number | null
-          max_guests?: number | null
-          min_guests?: number | null
-          price_amount: number
-          price_type?: string
-          service_area?: string[] | null
-          setup_time_hours?: number | null
-          setup_time_minutes?: number | null
-          short_summary?: string | null
-          status?: string | null
-          summary?: string | null
-          tags?: string[] | null
-          title: string
-          updated_at?: string
-        }
-        Update: {
-          add_ons?: string[] | null
-          booking_notice_days?: number | null
-          cancellation_policy?: string | null
-          category?: string | null
-          caterer_id?: string
-          cleanup_time_minutes?: number | null
-          cover_image_url?: string | null
-          created_at?: string
-          cuisine_type?: string | null
-          currency?: string
-          deposit_percentage?: number | null
-          description?: string | null
-          dietary_options?: string[] | null
-          duration_hours?: number | null
-          event_type?: string | null
-          event_types?: string[] | null
-          featured?: boolean | null
-          gallery_images?: string[] | null
-          id?: string
-          image_url?: string | null
-          images?: string[] | null
-          included_items?: string[] | null
-          includes?: string[] | null
-          is_active?: boolean
-          is_published?: boolean
-          keywords?: string[] | null
-          location?: string | null
-          max_bookings_per_day?: number | null
-          max_guests?: number | null
-          min_guests?: number | null
-          price_amount?: number
-          price_type?: string
-          service_area?: string[] | null
-          setup_time_hours?: number | null
-          setup_time_minutes?: number | null
-          short_summary?: string | null
-          status?: string | null
-          summary?: string | null
-          tags?: string[] | null
-          title?: string
-          updated_at?: string
         }
         Relationships: []
       }
@@ -1396,98 +1493,6 @@ export type Database = {
         }
         Relationships: []
       }
-      product_categories: {
-        Row: {
-          caterer_id: string
-          created_at: string
-          description: string | null
-          display_order: number | null
-          id: string
-          is_active: boolean
-          name: string
-          updated_at: string
-        }
-        Insert: {
-          caterer_id: string
-          created_at?: string
-          description?: string | null
-          display_order?: number | null
-          id?: string
-          is_active?: boolean
-          name: string
-          updated_at?: string
-        }
-        Update: {
-          caterer_id?: string
-          created_at?: string
-          description?: string | null
-          display_order?: number | null
-          id?: string
-          is_active?: boolean
-          name?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      products: {
-        Row: {
-          allergen_info: string | null
-          category_id: string
-          caterer_id: string
-          created_at: string
-          description: string | null
-          display_order: number | null
-          id: string
-          image_url: string | null
-          is_available: boolean
-          name: string
-          preparation_time_minutes: number | null
-          price: number
-          service_type: string
-          updated_at: string
-        }
-        Insert: {
-          allergen_info?: string | null
-          category_id: string
-          caterer_id: string
-          created_at?: string
-          description?: string | null
-          display_order?: number | null
-          id?: string
-          image_url?: string | null
-          is_available?: boolean
-          name: string
-          preparation_time_minutes?: number | null
-          price: number
-          service_type?: string
-          updated_at?: string
-        }
-        Update: {
-          allergen_info?: string | null
-          category_id?: string
-          caterer_id?: string
-          created_at?: string
-          description?: string | null
-          display_order?: number | null
-          id?: string
-          image_url?: string | null
-          is_available?: boolean
-          name?: string
-          preparation_time_minutes?: number | null
-          price?: number
-          service_type?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "products_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "product_categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1584,145 +1589,53 @@ export type Database = {
         }
         Relationships: []
       }
-      quote_items: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          name: string
-          product_id: string | null
-          quantity: number
-          quote_id: string
-          total_price: number
-          unit_price: number
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          name: string
-          product_id?: string | null
-          quantity?: number
-          quote_id: string
-          total_price?: number
-          unit_price?: number
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          name?: string
-          product_id?: string | null
-          quantity?: number
-          quote_id?: string
-          total_price?: number
-          unit_price?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "quote_items_quote_id_fkey"
-            columns: ["quote_id"]
-            isOneToOne: false
-            referencedRelation: "quotes"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      quotes: {
-        Row: {
-          brief_id: string | null
-          caterer_id: string
-          created_at: string
-          customer_id: string | null
-          delivery_fee: number
-          description: string | null
-          id: string
-          pdf_url: string | null
-          platform_fee_amount: number
-          platform_fee_rate: number
-          service_fee: number
-          source: string
-          status: string
-          subtotal: number
-          title: string | null
-          total_amount: number
-          updated_at: string
-          valid_until: string | null
-        }
-        Insert: {
-          brief_id?: string | null
-          caterer_id: string
-          created_at?: string
-          customer_id?: string | null
-          delivery_fee?: number
-          description?: string | null
-          id?: string
-          pdf_url?: string | null
-          platform_fee_amount?: number
-          platform_fee_rate?: number
-          service_fee?: number
-          source?: string
-          status?: string
-          subtotal?: number
-          title?: string | null
-          total_amount?: number
-          updated_at?: string
-          valid_until?: string | null
-        }
-        Update: {
-          brief_id?: string | null
-          caterer_id?: string
-          created_at?: string
-          customer_id?: string | null
-          delivery_fee?: number
-          description?: string | null
-          id?: string
-          pdf_url?: string | null
-          platform_fee_amount?: number
-          platform_fee_rate?: number
-          service_fee?: number
-          source?: string
-          status?: string
-          subtotal?: number
-          title?: string | null
-          total_amount?: number
-          updated_at?: string
-          valid_until?: string | null
-        }
-        Relationships: []
-      }
       restaurant_orders: {
         Row: {
+          applied_promo_code: string | null
           created_at: string
+          customer_email: string | null
           customer_id: string | null
           customer_name: string | null
+          customer_phone: string | null
+          delivery_address: string | null
           id: string
           items: Json
           notes: string | null
+          order_type: string | null
           restaurant_id: string
           status: Database["public"]["Enums"]["order_status"]
           total_cents: number
           updated_at: string
         }
         Insert: {
+          applied_promo_code?: string | null
           created_at?: string
+          customer_email?: string | null
           customer_id?: string | null
           customer_name?: string | null
+          customer_phone?: string | null
+          delivery_address?: string | null
           id?: string
           items?: Json
           notes?: string | null
+          order_type?: string | null
           restaurant_id: string
           status?: Database["public"]["Enums"]["order_status"]
           total_cents?: number
           updated_at?: string
         }
         Update: {
+          applied_promo_code?: string | null
           created_at?: string
+          customer_email?: string | null
           customer_id?: string | null
           customer_name?: string | null
+          customer_phone?: string | null
+          delivery_address?: string | null
           id?: string
           items?: Json
           notes?: string | null
+          order_type?: string | null
           restaurant_id?: string
           status?: Database["public"]["Enums"]["order_status"]
           total_cents?: number
@@ -2008,47 +1921,6 @@ export type Database = {
           token?: string
         }
         Relationships: []
-      }
-      reviews: {
-        Row: {
-          booking_id: string
-          caterer_id: string
-          comment: string | null
-          created_at: string
-          customer_id: string
-          id: string
-          rating: number
-          reviewed_at: string
-        }
-        Insert: {
-          booking_id: string
-          caterer_id: string
-          comment?: string | null
-          created_at?: string
-          customer_id: string
-          id?: string
-          rating: number
-          reviewed_at?: string
-        }
-        Update: {
-          booking_id?: string
-          caterer_id?: string
-          comment?: string | null
-          created_at?: string
-          customer_id?: string
-          id?: string
-          rating?: number
-          reviewed_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reviews_customer_id_fkey"
-            columns: ["customer_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       saved_caterers: {
         Row: {

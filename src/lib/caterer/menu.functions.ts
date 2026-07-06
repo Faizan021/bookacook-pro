@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { optionalSupabaseAuth, requireSupabaseAuth } from "@/lib/auth/role-middleware";
 import { requireRole } from "@/lib/auth/role-middleware";
+import { sendPartnerNotificationEmail } from "@/lib/email.functions";
 
 async function resolveOwnedCaterer(supabase: any, userId: string) {
   const { data } = await supabase
@@ -121,7 +122,7 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
     const { data: caterer, error: cErr } = await supabaseAdmin
       .from("caterers")
       .select(
-        "id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
+        "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
       )
       .eq("slug", data.slug)
       .maybeSingle();
@@ -148,7 +149,20 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
       }),
     );
 
-    return { ...caterer, menu };
+    let promoCodes: any[] = [];
+    const now = new Date().toISOString();
+    const { data: promos } = await supabaseAdmin
+      .from("promo_codes")
+      .select("*")
+      .eq("owner_id", caterer.owner_id) // Wait, caterer object here does not have owner_id fetched! I need to add it to the select query!
+      .eq("is_active", true)
+      .or(`starts_at.is.null,starts_at.lte.${now}`)
+      .or(`ends_at.is.null,ends_at.gte.${now}`);
+    if (promos) {
+      promoCodes = promos;
+    }
+
+    return { ...caterer, menu, promoCodes };
   });
 
 export const getPublicCatererList = createServerFn({ method: "GET" }).handler(async () => {
@@ -240,6 +254,37 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
     const { error } = await supabaseAdmin.from("catering_briefs").insert(insertData);
     if (error) throw new Error(error.message);
 
+    // Notify Caterer via Email
+    const { data: caterer } = await supabaseAdmin
+      .from("caterers")
+      .select("name, owner_id")
+      .eq("id", data.catererId)
+      .maybeSingle();
+
+    if (caterer?.owner_id) {
+      const { data: user } = await supabaseAdmin.auth.admin.getUserById(caterer.owner_id);
+      if (user?.user?.email) {
+        const eventDateStr = new Date(data.eventDate).toLocaleDateString("de-DE");
+        const budgetStr = `€${(data.budgetCents / 100).toFixed(2)}`;
+        await sendPartnerNotificationEmail({
+          data: {
+            to: user.user.email,
+            subject: `Neue Catering-Anfrage für ${eventDateStr}`,
+            text: `Sie haben eine neue Anfrage für ${data.eventType} (${data.guestCount} Personen) am ${eventDateStr} in ${data.location}. Budget: ${budgetStr}.`,
+            html: `<p>Hallo ${caterer.name},</p><p>Sie haben eine neue Catering-Anfrage erhalten!</p>
+                   <ul>
+                     <li><strong>Art des Events:</strong> ${data.eventType}</li>
+                     <li><strong>Datum:</strong> ${eventDateStr}</li>
+                     <li><strong>Gästezahl:</strong> ${data.guestCount}</li>
+                     <li><strong>Budget:</strong> ${budgetStr}</li>
+                     <li><strong>Ort:</strong> ${data.location}</li>
+                   </ul>
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`
+          }
+        });
+      }
+    }
+
     return { ok: true };
   });
 
@@ -304,5 +349,37 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
     });
 
     if (error) throw new Error(error.message);
+
+    // Notify Caterer via Email
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: catererData } = await supabaseAdmin
+      .from("caterers")
+      .select("name, owner_id")
+      .eq("id", caterer.id)
+      .maybeSingle();
+
+    if (catererData?.owner_id) {
+      const { data: user } = await supabaseAdmin.auth.admin.getUserById(catererData.owner_id);
+      if (user?.user?.email) {
+        const startDateStr = new Date(data.startDate).toLocaleDateString("de-DE");
+        await sendPartnerNotificationEmail({
+          data: {
+            to: user.user.email,
+            subject: `Neue B2B Catering-Anfrage von ${data.companyName}`,
+            text: `Sie haben eine neue wiederkehrende Anfrage von ${data.companyName} für ${data.employees} Mitarbeiter ab ${startDateStr}. Rhythmus: ${data.pattern}.`,
+            html: `<p>Hallo ${catererData.name},</p><p>Sie haben eine neue B2B Catering-Anfrage erhalten!</p>
+                   <ul>
+                     <li><strong>Unternehmen:</strong> ${data.companyName}</li>
+                     <li><strong>Startdatum:</strong> ${startDateStr}</li>
+                     <li><strong>Mitarbeiterzahl:</strong> ${data.employees}</li>
+                     <li><strong>Rhythmus:</strong> ${data.pattern}</li>
+                     <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
+                   </ul>
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`
+          }
+        });
+      }
+    }
+
     return { ok: true };
   });

@@ -362,9 +362,9 @@ function CatererPage() {
 
   const handleApplyPromo = () => {
     setPromoError("");
-    const codes = mockPromoCodes[catererProfile.id] || [];
+    const codes = catererProfile.promoCodes || [];
     const validCode = codes.find(
-      (c) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase(),
+      (c: any) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase(),
     );
     if (validCode) {
       const now = new Date();

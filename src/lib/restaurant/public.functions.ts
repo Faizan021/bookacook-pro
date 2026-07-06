@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
-
+import { sendPartnerNotificationEmail } from "@/lib/email.functions";
 export const createTableReservation = createServerFn({ method: "POST" })
   .validator(
     (input: {
@@ -417,6 +417,27 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
       // We should ideally leave it as "pending" for the kitchen to accept, 
       // or "confirmed" automatically. Let's auto-confirm for now just like reservations do.
       await supabaseAdmin.from("restaurant_orders").update({ status: "confirmed" }).eq("id", order.id);
+
+      // Notify Restaurant via Email
+      const { data: user } = await supabaseAdmin.auth.admin.getUserById((rest as any).owner_id);
+      if (user?.user?.email) {
+        const totalStr = `€${(finalTotalCents / 100).toFixed(2)}`;
+        await sendPartnerNotificationEmail({
+          data: {
+            to: user.user.email,
+            subject: `Neue Bestellung (${data.paymentMethod}) von ${data.customerName}`,
+            text: `Sie haben eine neue Bestellung (${data.orderType}) von ${data.customerName} über ${totalStr}. Zahlungsmethode: ${data.paymentMethod}.`,
+            html: `<p>Hallo ${(rest as any).name},</p><p>Eine neue Bestellung wurde soeben aufgegeben (Zahlung: ${data.paymentMethod}).</p>
+                   <ul>
+                     <li><strong>Kunde:</strong> ${data.customerName}</li>
+                     <li><strong>Typ:</strong> ${data.orderType}</li>
+                     <li><strong>Betrag:</strong> ${totalStr}</li>
+                   </ul>
+                   <p>Melden Sie sich in Ihrem Dashboard an, um die Bestelldetails zu sehen.</p>`
+          }
+        });
+      }
+
       return { orderId: order.id, url: redirectUrl };
     }
   });

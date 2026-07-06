@@ -55,7 +55,7 @@ The Speisely Team
     if (resend) {
       try {
         await resend.emails.send({
-          from: "Speisely <noreply@speisely.de>",
+          from: "Speisely <noreply@send.speisely.de>",
           to: data.email,
           subject,
           text,
@@ -121,14 +121,18 @@ ${data.message}
 
     if (resend) {
       try {
-        await resend.emails.send({
-          from: "Speisely Contact <noreply@speisely.de>",
+        const response = await resend.emails.send({
+          from: "Speisely Contact <noreply@send.speisely.de>",
           to: "faizan.ahmed01213@gmail.com",
           replyTo: data.email,
           subject,
           text,
           html,
         });
+        if (response.error) {
+          console.error(`[Email Error] Resend API error:`, response.error);
+          throw new Error(response.error.message);
+        }
         console.log(`[Email] Contact form submitted by ${data.email}`);
       } catch (err: any) {
         console.error(`[Email Error] Failed to send contact email: ${err?.code ?? err?.message ?? "unknown"}`);
@@ -138,5 +142,38 @@ ${data.message}
       console.log(`[Email Dev] Contact form email NOT sent (no Resend key) from ${data.email}. Message: ${data.message}`);
     }
 
+    return { success: true };
+  });
+
+export const sendPartnerNotificationEmail = createServerFn({ method: "POST" })
+  .validator((input: { to: string; subject: string; text: string; html: string }) =>
+    z.object({
+      to: z.string().email(),
+      subject: z.string().min(1),
+      text: z.string().min(1),
+      html: z.string().min(1)
+    }).parse(input)
+  )
+  .handler(async ({ data }) => {
+    if (resend) {
+      try {
+        const response = await resend.emails.send({
+          from: "Speisely Orders <noreply@send.speisely.de>",
+          to: data.to,
+          subject: data.subject,
+          text: data.text,
+          html: data.html,
+        });
+        if (response.error) {
+          console.error(`[Email Error] Resend API error:`, response.error);
+          throw new Error(response.error.message);
+        }
+        console.log(`[Email] Partner notification sent to ${data.to}`);
+      } catch (err: any) {
+        console.error(`[Email Error] Failed to send partner notification: ${err?.code ?? err?.message ?? "unknown"}`);
+      }
+    } else {
+      console.log(`[Email Dev] Partner notification NOT sent (no Resend key) to ${data.to}. Subject: ${data.subject}`);
+    }
     return { success: true };
   });

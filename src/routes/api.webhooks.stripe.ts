@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Stripe from "stripe";
+import { sendPartnerNotificationEmail } from "@/lib/email.functions";
 
 // Hard-fail on missing secrets — never fall back to placeholders.
 // If these are absent in production, the misconfiguration must surface
@@ -146,6 +147,45 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
               
               if (error) {
                 console.error("Failed to confirm storefront order:", error);
+              } else {
+                // Fetch order details for email
+                const { data: order } = await supabaseAdmin
+                  .from("restaurant_orders")
+                  .select(`
+                    id, customer_name, customer_email, order_type, total_cents,
+                    restaurant_id
+                  `)
+                  .eq("id", orderId)
+                  .single();
+
+                if (order) {
+                  const { data: rest } = await supabaseAdmin
+                    .from("restaurants")
+                    .select("name, owner_id")
+                    .eq("id", order.restaurant_id)
+                    .single();
+                  
+                  if (rest?.owner_id) {
+                    const { data: user } = await supabaseAdmin.auth.admin.getUserById(rest.owner_id);
+                    if (user?.user?.email) {
+                      const totalStr = `€${(order.total_cents / 100).toFixed(2)}`;
+                      await sendPartnerNotificationEmail({
+                        data: {
+                          to: user.user.email,
+                          subject: `Neue bezahlte Bestellung von ${order.customer_name}`,
+                          text: `Sie haben eine neue Bestellung (${order.order_type}) von ${order.customer_name} über ${totalStr}.`,
+                          html: `<p>Hallo ${rest.name},</p><p>Eine neue Bestellung wurde soeben erfolgreich per Karte bezahlt.</p>
+                                 <ul>
+                                   <li><strong>Kunde:</strong> ${order.customer_name}</li>
+                                   <li><strong>Typ:</strong> ${order.order_type}</li>
+                                   <li><strong>Betrag:</strong> ${totalStr}</li>
+                                 </ul>
+                                 <p>Melden Sie sich in Ihrem Dashboard an, um die Bestelldetails zu sehen.</p>`
+                        }
+                      });
+                    }
+                  }
+                }
               }
             }
 

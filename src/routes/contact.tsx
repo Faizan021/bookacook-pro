@@ -47,19 +47,37 @@ function ContactRoute() {
 
   return (
     <SiteShell>
-      <div className="bg-cream min-h-screen py-16 md:py-24">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-display text-forest mb-4">
-              {tt("Lassen Sie uns reden", "Let's get in touch")}
-            </h1>
-            <p className="text-forest/80 text-lg max-w-xl mx-auto">
-              {tt("Haben Sie Fragen zu unseren Partnerprogrammen für Restaurants, Caterer oder Event-Planer? Schreiben Sie uns eine Nachricht.", "Have questions about our partner programs for restaurants, caterers, or event planners? Send us a message.")}
-            </p>
-          </div>
+      {/* Cinematic Hero */}
+      <section className="relative overflow-hidden pt-20 pb-32 lg:pt-24 lg:pb-40 text-center">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/hero-cinematic.png"
+            fetchPriority="high"
+            alt="Contact Us Background"
+            className="w-full h-full object-cover object-center scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest/90 via-forest/80 to-forest/95" />
+          <div className="absolute inset-0 bg-black/30" />
+        </div>
 
-          <div className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-forest/5">
+        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 flex flex-col items-center">
+          <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#f2d896] shadow-xl mb-6">
+            <MessageSquare className="h-7 w-7" />
+          </div>
+          <div className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#b28a3c] mb-4 drop-shadow-md">
+            {tt("Kontakt", "Contact")}
+          </div>
+          <h1 className="text-5xl sm:text-6xl font-display font-bold text-white leading-[1.05] tracking-tight drop-shadow-sm mb-6">
+            {tt("Lassen Sie uns reden", "Let's get in touch")}
+          </h1>
+          <p className="text-lg text-white/80 max-w-xl leading-relaxed drop-shadow-sm">
+            {tt("Haben Sie Fragen zu unseren Partnerprogrammen für Restaurants, Caterer oder Event-Planer? Schreiben Sie uns eine Nachricht.", "Have questions about our partner programs for restaurants, caterers, or event planners? Send us a message.")}
+          </p>
+        </div>
+      </section>
+
+      <section className="relative z-20 -mt-16 lg:-mt-24 mx-auto max-w-3xl px-4 sm:px-6 pb-24">
+        <div className="bg-white rounded-[2rem] p-6 md:p-10 shadow-2xl shadow-forest/10 border border-forest/10">
             {success ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -224,9 +242,7 @@ function ContactRoute() {
               </form>
             )}
           </div>
-          
-        </div>
-      </div>
+      </section>
     </SiteShell>
   );
 }

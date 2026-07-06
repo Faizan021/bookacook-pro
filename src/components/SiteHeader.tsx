@@ -62,7 +62,6 @@ export function SiteHeader() {
   ];
 
   const routerState = useRouterState();
-  const isHome = routerState.location.pathname === "/";
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -74,22 +73,33 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const headerBg = isHome && !scrolled
-    ? "bg-transparent border-transparent"
+  const isHome = routerState.location.pathname === "/";
+  const isLight = isHome && !scrolled;
+
+  const headerBg = isLight 
+    ? "bg-transparent border-transparent" 
     : "bg-cream/95 backdrop-blur-md border-b border-forest/10";
 
   return (
-    <header className={`sticky top-0 z-40 transition-colors duration-300 ${headerBg}`}>
+    <header className={`sticky top-0 z-40 transition-all duration-300 ${headerBg}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
-        <Link to="/" className="shrink-0"><SpeiselyLogo /></Link>
+        <Link to="/" className="shrink-0">
+          <SpeiselyLogo variant={isLight ? "light" : "dark"} />
+        </Link>
 
         <nav className="hidden md:flex items-center justify-center gap-1 lg:gap-2 overflow-hidden">
           {navItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="px-2.5 py-1.5 rounded-full text-sm font-medium text-forest/80 hover:text-forest transition-colors whitespace-nowrap"
-              activeProps={{ className: "px-2.5 py-1.5 rounded-full text-sm font-medium bg-cream text-forest shadow-sm whitespace-nowrap" }}
+              className={`px-2.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+                isLight ? "text-white/80 hover:text-white" : "text-forest/80 hover:text-forest"
+              }`}
+              activeProps={{
+                className: `px-2.5 py-1.5 rounded-full text-sm font-medium shadow-sm whitespace-nowrap ${
+                  isLight ? "bg-white/10 text-white" : "bg-cream text-forest"
+                }`
+              }}
             >
               {item.label}
             </Link>
@@ -97,11 +107,13 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          <LanguageToggle />
+          <LanguageToggle variant={isLight ? "light" : "dark"} />
           <div className="hidden sm:flex items-center gap-2">
             {isLoggedIn ? (
               <DropdownMenu>
-                <DropdownMenuTrigger className="inline-flex items-center gap-1.5 justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 text-sm font-medium hover:opacity-90 transition outline-none ring-0">
+                <DropdownMenuTrigger className={`inline-flex items-center gap-1.5 justify-center rounded-full px-3 py-1.5 text-sm font-medium hover:opacity-90 transition outline-none ring-0 ${
+                  isLight ? "bg-white text-forest" : "bg-forest text-[oklch(0.97_0.02_92)]"
+                }`}>
                   <User className="h-4 w-4" />
                   <span className="hidden lg:inline">Mein Konto</span>
                   <ChevronDown className="h-3 w-3 opacity-70" />
@@ -139,14 +151,22 @@ export function SiteHeader() {
                 <Link
                   to="/auth"
                   search={{ signup: undefined, message: undefined, logout: undefined }}
-                  className="inline-flex items-center justify-center rounded-full border border-forest/20 px-3 py-1.5 text-sm font-medium text-forest hover:bg-cream transition whitespace-nowrap"
+                  className={`inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-sm font-medium transition whitespace-nowrap ${
+                    isLight 
+                      ? "border-white/20 text-white hover:bg-white/10" 
+                      : "border-forest/20 text-forest hover:bg-cream"
+                  }`}
                 >
                   {tt("Anmelden", "Sign in")}
                 </Link>
                 <Link
                   to="/auth"
                   search={{ signup: "partner", message: undefined, logout: undefined }}
-                  className="inline-flex items-center justify-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1.5 text-sm font-medium hover:opacity-90 transition whitespace-nowrap"
+                  className={`inline-flex items-center justify-center rounded-full px-3 py-1.5 text-sm font-medium transition whitespace-nowrap ${
+                    isLight 
+                      ? "bg-white text-forest hover:bg-white/90" 
+                      : "bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90"
+                  }`}
                 >
                   {tt("Registrieren", "Register")}
                 </Link>
@@ -160,8 +180,14 @@ export function SiteHeader() {
           <Link
             key={item.to}
             to={item.to}
-            className="shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium text-forest/80 border border-transparent"
-            activeProps={{ className: "shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium bg-cream text-forest border border-[#eadfce]" }}
+            className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium border border-transparent ${
+              isLight ? "text-white/80 hover:text-white" : "text-forest/80 hover:text-forest"
+            }`}
+            activeProps={{
+              className: `shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium border ${
+                isLight ? "bg-white/10 text-white border-white/20" : "bg-cream text-forest border-[#eadfce]"
+              }`
+            }}
           >
             {item.label}
           </Link>

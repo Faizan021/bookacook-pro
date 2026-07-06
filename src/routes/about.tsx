@@ -29,7 +29,7 @@ function About() {
   return (
     <SiteShell>
       {/* Cinematic Hero */}
-      <section className="relative overflow-hidden py-24 lg:py-32 text-center">
+      <section className="relative overflow-hidden py-16 lg:py-24">
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
@@ -38,23 +38,39 @@ function About() {
             alt="About Us Background"
             className="w-full h-full object-cover object-center scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest/90 via-forest/80 to-forest/95" />
-          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" />
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 flex flex-col items-center">
-          <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#f2d896] shadow-xl mb-6">
-            <UtensilsCrossed className="h-7 w-7" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#f2d896] mb-3 drop-shadow-md">
+              {t("ab.eyebrow")}
+            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm mb-6">
+              <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
+              {lang === "de" ? "Made in Germany" : "Made in Germany"}
+            </span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white leading-[0.95] drop-shadow-sm">
+              {t("ab.title")}
+            </h1>
+            <p className="mt-6 text-lg text-white/80 max-w-lg leading-relaxed drop-shadow-sm">
+              {t("ab.subtitle")}
+            </p>
           </div>
-          <div className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#b28a3c] mb-4 drop-shadow-md">
-            {t("ab.eyebrow")}
+          <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 aspect-[4/3] group">
+            <img src="https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&q=80" alt="Restaurant Interior" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-transparent to-transparent opacity-60" />
+            <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20 flex items-center gap-3">
+              <div className="p-2 bg-[#b28a3c]/20 rounded-lg text-[#f2d896]">
+                <UtensilsCrossed className="h-5 w-5" />
+              </div>
+              <div className="text-[12px] font-bold text-white leading-none">
+                <div>{lang === "de" ? "Kuratiert" : "Curated"}</div>
+                <div className="text-[10px] text-white/60 font-medium mt-1">{lang === "de" ? "Handverlesene Partner" : "Hand-picked partners"}</div>
+              </div>
+            </div>
           </div>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-white leading-[1.05] tracking-tight drop-shadow-sm mb-6">
-            {t("ab.title")}
-          </h1>
-          <p className="text-lg sm:text-xl text-white/80 max-w-2xl leading-relaxed drop-shadow-sm">
-            {t("ab.subtitle")}
-          </p>
         </div>
       </section>
 

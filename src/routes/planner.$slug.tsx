@@ -43,7 +43,20 @@ export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
       .eq("planner_id", planner.id)
       .eq("is_available", true);
 
-    return { ...planner, services: services || [] };
+    let promoCodes: any[] = [];
+    const now = new Date().toISOString();
+    const { data: promos } = await supabaseAdmin
+      .from("promo_codes")
+      .select("*")
+      .eq("owner_id", planner.owner_id)
+      .eq("is_active", true)
+      .or(`starts_at.is.null,starts_at.lte.${now}`)
+      .or(`ends_at.is.null,ends_at.gte.${now}`);
+    if (promos) {
+      promoCodes = promos;
+    }
+
+    return { ...planner, services: services || [], promoCodes };
   });
 
 const plannerQueryOptions = (slug: string) => queryOptions({
@@ -219,8 +232,8 @@ function PlannerStorefront() {
 
   const handleApplyPromo = () => {
     setPromoError("");
-    const codes = mockPromoCodes[planner.id] || [];
-    const validCode = codes.find(c => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase());
+    const codes = dbPlanner?.promoCodes || [];
+    const validCode = codes.find((c: any) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase());
     if (validCode) {
       const now = new Date();
       if (validCode.starts_at && new Date(validCode.starts_at) > now) {
