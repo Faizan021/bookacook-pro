@@ -87,7 +87,7 @@ export function SiteHeader() {
               className="px-2.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap text-forest/70 hover:text-forest hover:bg-forest/5"
               activeProps={{
                 className:
-                  "px-2.5 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap bg-forest text-[oklch(0.97_0.02_92)]",
+                  "px-2.5 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap bg-forest !text-[oklch(0.97_0.02_92)]",
               }}
             >
               {item.label}
@@ -173,7 +173,7 @@ export function SiteHeader() {
             className="shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium border border-transparent transition-colors text-forest/70 hover:text-forest"
             activeProps={{
               className:
-                "shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold border bg-forest text-[oklch(0.97_0.02_92)] border-forest",
+                "shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold border bg-forest !text-[oklch(0.97_0.02_92)] border-forest",
             }}
           >
             {item.label}
