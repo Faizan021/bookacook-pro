@@ -93,36 +93,12 @@ function ContactRoute() {
                 "Have questions about our partner programs for restaurants, caterers, or event planners? Send us a message.",
               )}
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 pt-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#f2d896] border border-white/10">
-                  <Phone className="h-4 w-4" />
-                </div>
-                <div className="text-left">
-                  <div className="text-[10px] text-white/60 uppercase tracking-wider">
-                    {tt("Rufen Sie uns an", "Call us")}
-                  </div>
-                  <div className="text-sm font-semibold text-white">+49 (0) 30 123 456</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#f2d896] border border-white/10">
-                  <Mail className="h-4 w-4" />
-                </div>
-                <div className="text-left">
-                  <div className="text-[10px] text-white/60 uppercase tracking-wider">
-                    {tt("E-Mail", "Email")}
-                  </div>
-                  <div className="text-sm font-semibold text-white">hello@speisely.com</div>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 aspect-[4/3] max-h-[360px] group">
             <img
-              src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80"
-              alt="Hospitality Support"
+              src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80"
+              alt="Premium Contact Support"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-transparent to-transparent opacity-60" />
