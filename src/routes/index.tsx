@@ -266,7 +266,7 @@ function Home() {
                     className={`flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 border ${
                       activeVertical === v.key
                         ? "bg-white text-forest border-white shadow-lg shadow-white/10"
-                        : "bg-white/10 backdrop-blur-sm text-white/90 border-white/20 hover:bg-white/20 hover:border-white/30 hover:shadow-sm"
+                        : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
                     }`}
                   >
                     <span className="text-base leading-none">{v.emoji}</span>

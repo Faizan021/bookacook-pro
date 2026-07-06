@@ -73,7 +73,16 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isCinematicPage = ["/", "/about", "/contact", "/partners"].includes(routerState.location.pathname);
+  const normalizedPath = routerState.location.pathname.replace(/\/$/, "");
+  const isCinematicPage = [
+    "",
+    "/about",
+    "/contact",
+    "/partners",
+    "/instant-order",
+    "/catering",
+    "/planner"
+  ].includes(normalizedPath);
   const isLight = isCinematicPage && !scrolled;
 
   const headerBg = isLight 

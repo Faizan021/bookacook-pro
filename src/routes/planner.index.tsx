@@ -272,7 +272,7 @@ function PlannerPage() {
   return (
     <SiteShell>
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-16 lg:py-24">
+      <section className="relative overflow-hidden min-h-[60vh] flex items-center -mt-20 lg:-mt-24 pt-36 pb-24 lg:pt-44 lg:pb-36">
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
@@ -285,7 +285,7 @@ function PlannerPage() {
           <div className="absolute inset-0 bg-black/20" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid md:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 text-left">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm">
               <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
