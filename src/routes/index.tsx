@@ -146,8 +146,8 @@ function Home() {
           HERO — Cinematic split layout
       ───────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center overflow-hidden -mt-20 lg:-mt-24">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 z-0 hero-gradient-bg" />
+        {/* Dark forest background */}
+        <div className="absolute inset-0 z-0 bg-forest" />
 
         {/* Right-side cinematic image — desktop only */}
         <div className="absolute right-0 top-0 bottom-0 w-[48%] z-0 hidden lg:block">
@@ -161,9 +161,9 @@ function Home() {
             className="w-full h-full object-cover object-center"
           />
           {/* Left-side gradient fade so text is never blocked */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.96_0.04_92)] via-[oklch(0.96_0.04_92/0.45)] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/80 to-transparent" />
           {/* Subtle bottom vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[oklch(0.96_0.04_92/0.3)] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest/30 via-transparent to-transparent" />
         </div>
 
         {/* Mobile background image (behind content, heavily dimmed) */}
@@ -174,7 +174,7 @@ function Home() {
             alt=""
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-[oklch(0.96_0.04_92/0.88)]" />
+          <div className="absolute inset-0 bg-forest/85" />
         </div>
 
         {/* Hero text content */}
@@ -183,7 +183,7 @@ function Home() {
 
             {/* Eyebrow badge */}
             <div className={`transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/70 backdrop-blur-sm border border-white/80 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-forest shadow-sm">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-white/90 shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
                 {tt("Marktplatz für Gastronomie & Events", "Marketplace for hospitality & events")}
               </span>
@@ -191,7 +191,7 @@ function Home() {
 
             {/* Main headline */}
             <h1
-              className={`mt-8 font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.25rem] leading-[0.92] text-forest transition-all duration-700 delay-100 ${
+              className={`mt-8 font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.25rem] leading-[0.92] text-white transition-all duration-700 delay-100 ${
                 mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
             >
@@ -202,7 +202,7 @@ function Home() {
 
             {/* Subheadline */}
             <p
-              className={`mt-7 text-lg sm:text-xl text-forest/70 max-w-[34rem] leading-relaxed transition-all duration-700 delay-200 ${
+              className={`mt-7 text-lg sm:text-xl text-white/80 max-w-[34rem] leading-relaxed transition-all duration-700 delay-200 ${
                 mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
             >
@@ -265,14 +265,14 @@ function Home() {
                     onClick={() => setActiveVertical(v.key)}
                     className={`flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 border ${
                       activeVertical === v.key
-                        ? "bg-forest text-white border-forest shadow-lg shadow-forest/20"
-                        : "bg-white/80 backdrop-blur-sm text-forest border-white/80 hover:bg-white hover:border-forest/20 hover:shadow-sm"
+                        ? "bg-white text-forest border-white shadow-lg shadow-white/10"
+                        : "bg-white/10 backdrop-blur-sm text-white/90 border-white/20 hover:bg-white/20 hover:border-white/30 hover:shadow-sm"
                     }`}
                   >
                     <span className="text-base leading-none">{v.emoji}</span>
                     <span>{v.label}</span>
                     {activeVertical !== v.key && (
-                      <span className="hidden sm:block text-[10px] text-forest/50 font-medium">{v.sublabel}</span>
+                      <span className="hidden sm:block text-[10px] text-white/50 font-medium">{v.sublabel}</span>
                     )}
                   </button>
                 ))}
@@ -293,7 +293,7 @@ function Home() {
                   id="hero-partner-cta"
                   to="/partners"
                   onClick={() => trackEvent("partner_cta_clicked", { location: "homepage_hero_secondary" })}
-                  className="text-sm font-semibold text-forest/65 hover:text-forest transition-colors inline-flex items-center gap-1.5"
+                  className="text-sm font-semibold text-white/65 hover:text-white transition-colors inline-flex items-center gap-1.5"
                 >
                   {tt("Partner werden", "Become a partner")}
                   <ChevronRight className="h-4 w-4" />

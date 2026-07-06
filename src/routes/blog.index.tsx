@@ -3,7 +3,8 @@ import { trackEvent } from "@/utils/posthog";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { blogPosts } from "@/data/blog";
-import { ArrowRight, CalendarDays, User } from "lucide-react";
+import { ArrowRight, CalendarDays, User, Sparkles } from "lucide-react";
+import { PageHero } from "@/components/PageHero";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -21,21 +22,15 @@ function BlogIndex() {
 
   return (
     <SiteShell>
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 lg:py-24">
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full bg-cream px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-forest shadow-sm mb-6">
-            Speisely Blog
-          </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display text-forest leading-[0.95]">
-            {tt("News, Insights & Trends", "News, Insights & Trends")}
-          </h1>
-          <p className="mt-6 text-lg text-forest/75">
-            {tt(
-              "Die neuesten Entwicklungen in den Bereichen Food Delivery, Eventplanung und Premium-Catering in Deutschland.",
-              "The latest developments in food delivery, event planning, and premium catering in Germany."
-            )}
-          </p>
-        </div>
+      <PageHero
+        eyebrow="Speisely Blog"
+        heading={tt("News, Insights & Trends", "News, Insights & Trends")}
+        subtext={tt(
+          "Die neuesten Entwicklungen in den Bereichen Food Delivery, Eventplanung und Premium-Catering in Deutschland.",
+          "The latest developments in food delivery, event planning, and premium catering in Germany."
+        )}
+      />
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-16 lg:pb-24">
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {blogPosts.map((post) => (
