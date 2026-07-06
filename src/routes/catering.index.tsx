@@ -1,9 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState, type ReactNode } from "react";
-import { 
-  Search, Star, Calendar as CalendarIcon, Users, PartyPopper, Utensils, 
-  MapPin, BadgeCheck, UtensilsCrossed, ArrowUpDown, Clock, Building, 
-  ShieldCheck, Sparkles, BookOpen, GraduationCap, ChevronRight, HelpCircle, ArrowRight
+import {
+  Search,
+  Star,
+  Calendar as CalendarIcon,
+  Users,
+  PartyPopper,
+  Utensils,
+  MapPin,
+  BadgeCheck,
+  UtensilsCrossed,
+  ArrowUpDown,
+  Clock,
+  Building,
+  ShieldCheck,
+  Sparkles,
+  BookOpen,
+  GraduationCap,
+  ChevronRight,
+  HelpCircle,
+  ArrowRight,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -19,14 +35,27 @@ export const Route = createFileRoute("/catering/")({
   head: () => ({
     meta: [
       { title: "Premium-Catering für Events, Teams & Institutionen — Speisely" },
-      { name: "description", content: "Entdecke geprüfte Caterer für Hochzeiten, Firmenevents, tägliche Büro-Verpflegung, Schulen und Pflege-Einrichtungen. Vergleichen und direkt buchen." },
+      {
+        name: "description",
+        content:
+          "Entdecke geprüfte Caterer für Hochzeiten, Firmenevents, tägliche Büro-Verpflegung, Schulen und Pflege-Einrichtungen. Vergleichen und direkt buchen.",
+      },
       { property: "og:title", content: "Event-, Büro- & Groß-Catering — Speisely" },
-      { property: "og:description", content: "Geprüfte Caterer für jeden Anlass. Finde das perfekte Menü für Events, Büros oder Institutionen." },
+      {
+        property: "og:description",
+        content:
+          "Geprüfte Caterer für jeden Anlass. Finde das perfekte Menü für Events, Büros oder Institutionen.",
+      },
       { property: "og:url", content: "/catering" },
     ],
     links: [
       { rel: "preload", href: "/catering-clean.png", as: "image", fetchpriority: "high" },
-      { rel: "preload", href: "/images/event_catering_hero.png", as: "image", fetchpriority: "high" },
+      {
+        rel: "preload",
+        href: "/images/event_catering_hero.png",
+        as: "image",
+        fetchpriority: "high",
+      },
     ],
   }),
   validateSearch: z.object({
@@ -39,7 +68,16 @@ export const Route = createFileRoute("/catering/")({
 type CatId = "all" | "wedding" | "business" | "corporate" | "private" | "ramadan" | "christmas";
 type SortKey = "price-asc" | "price-desc";
 
-const CITY_LIST = ["Berlin", "Hamburg", "München", "Köln", "Frankfurt", "Stuttgart", "Düsseldorf", "Leipzig"];
+const CITY_LIST = [
+  "Berlin",
+  "Hamburg",
+  "München",
+  "Köln",
+  "Frankfurt",
+  "Stuttgart",
+  "Düsseldorf",
+  "Leipzig",
+];
 
 function Catering() {
   const search = Route.useSearch();
@@ -59,7 +97,13 @@ function Catering() {
   const allCaterers = Route.useLoaderData() as Caterer[];
 
   const corporateCaterers = useMemo(() => {
-    return allCaterers.filter(c => c.cat === "corporate" || c.cat === "business" || c.tags.includes("Office") || c.tags.includes("Business"));
+    return allCaterers.filter(
+      (c) =>
+        c.cat === "corporate" ||
+        c.cat === "business" ||
+        c.tags.includes("Office") ||
+        c.tags.includes("Business"),
+    );
   }, [allCaterers]);
 
   const cats: { id: CatId; label: string }[] = [
@@ -79,7 +123,13 @@ function Catering() {
   }, [allCaterers]);
 
   const resetFilters = () => {
-    setCat("all"); setQuery(""); setDate(""); setGuests(""); setCity(""); setMenu(""); setSort("price-asc");
+    setCat("all");
+    setQuery("");
+    setDate("");
+    setGuests("");
+    setCity("");
+    setMenu("");
+    setSort("price-asc");
   };
 
   const filtered = allCaterers.filter((c) => {
@@ -87,7 +137,11 @@ function Catering() {
     if (city && !c.area.toLowerCase().includes(city.toLowerCase())) return false;
     if (guests && c.minGuests > Number(guests)) return false;
     if (menu && !c.menu?.some((m) => (m.category || "Menü") === menu)) return false;
-    if (query && !`${c.name} ${c.tagline[lang]} ${c.area}`.toLowerCase().includes(query.toLowerCase())) return false;
+    if (
+      query &&
+      !`${c.name} ${c.tagline[lang]} ${c.area}`.toLowerCase().includes(query.toLowerCase())
+    )
+      return false;
     return true;
   });
 
@@ -108,51 +162,79 @@ function Catering() {
 
   const cateringFaqs = [
     {
-      question: { de: "Wie lange im Voraus sollte ich Catering buchen?", en: "How far in advance should I book catering?" },
-      answer: { de: "Für kleinere Meetings empfehlen wir 2-3 Tage, für große Events wie Hochzeiten oder Firmenfeiern idealerweise 4-8 Wochen im Voraus.", en: "For smaller meetings, we recommend 2-3 days, for large events like weddings or corporate parties ideally 4-8 weeks in advance." }
+      question: {
+        de: "Wie lange im Voraus sollte ich Catering buchen?",
+        en: "How far in advance should I book catering?",
+      },
+      answer: {
+        de: "Für kleinere Meetings empfehlen wir 2-3 Tage, für große Events wie Hochzeiten oder Firmenfeiern idealerweise 4-8 Wochen im Voraus.",
+        en: "For smaller meetings, we recommend 2-3 days, for large events like weddings or corporate parties ideally 4-8 weeks in advance.",
+      },
     },
     {
       question: { de: "Gibt es einen Mindestbestellwert?", en: "Is there a minimum order value?" },
-      answer: { de: "Das hängt vom jeweiligen Partner ab. Viele Caterer bieten Menüs ab 10 Personen an, während sich andere auf Großevents spezialisieren.", en: "This depends on the respective partner. Many caterers offer menus for 10 people or more, while others specialize in large-scale events." }
+      answer: {
+        de: "Das hängt vom jeweiligen Partner ab. Viele Caterer bieten Menüs ab 10 Personen an, während sich andere auf Großevents spezialisieren.",
+        en: "This depends on the respective partner. Many caterers offer menus for 10 people or more, while others specialize in large-scale events.",
+      },
     },
     {
-      question: { de: "Können Allergien und Ernährungsformen (vegan, glutenfrei) berücksichtigt werden?", en: "Can allergies and diets (vegan, gluten-free) be accommodated?" },
-      answer: { de: "Ja, die meisten unserer Partner bieten flexible Anpassungen für vegane, vegetarische, glutenfreie oder halal-zertifizierte Menüs an.", en: "Yes, most of our partners offer flexible adjustments for vegan, vegetarian, gluten-free, or halal-certified menus." }
-    }
+      question: {
+        de: "Können Allergien und Ernährungsformen (vegan, glutenfrei) berücksichtigt werden?",
+        en: "Can allergies and diets (vegan, gluten-free) be accommodated?",
+      },
+      answer: {
+        de: "Ja, die meisten unserer Partner bieten flexible Anpassungen für vegane, vegetarische, glutenfreie oder halal-zertifizierte Menüs an.",
+        en: "Yes, most of our partners offer flexible adjustments for vegan, vegetarian, gluten-free, or halal-certified menus.",
+      },
+    },
   ];
 
   const jsonLd = [
     {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      "itemListElement": visible.map((c, i) => ({
+      itemListElement: visible.map((c, i) => ({
         "@type": "ListItem",
-        "position": i + 1,
-        "item": {
+        position: i + 1,
+        item: {
           "@type": "FoodEstablishment",
-          "name": c.name,
-          "url": `https://speisely.de/catering/${c.id}`
-        }
-      }))
+          name: c.name,
+          url: `https://speisely.de/catering/${c.id}`,
+        },
+      })),
     },
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "mainEntity": cateringFaqs.map(faq => ({
+      mainEntity: cateringFaqs.map((faq) => ({
         "@type": "Question",
-        "name": faq.question[lang as "de" | "en"],
-        "acceptedAnswer": {
+        name: faq.question[lang as "de" | "en"],
+        acceptedAnswer: {
           "@type": "Answer",
-          "text": faq.answer[lang as "de" | "en"]
-        }
-      }))
-    }
+          text: faq.answer[lang as "de" | "en"],
+        },
+      })),
+    },
   ];
 
-  function FilterField({ icon, label, htmlFor, children }: { icon: ReactNode, label: string, htmlFor: string, children: ReactNode }) {
+  function FilterField({
+    icon,
+    label,
+    htmlFor,
+    children,
+  }: {
+    icon: ReactNode;
+    label: string;
+    htmlFor: string;
+    children: ReactNode;
+  }) {
     return (
       <div className="flex flex-col gap-1 p-2 rounded-lg bg-forest/5 border border-transparent hover:border-forest/10 transition-colors">
-        <label htmlFor={htmlFor} className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-forest/60">
+        <label
+          htmlFor={htmlFor}
+          className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-forest/60"
+        >
           {icon}
           {label}
         </label>
@@ -162,7 +244,7 @@ function Catering() {
   }
 
   return (
-    <SiteShell>
+    <SiteShell darkHero>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -184,13 +266,20 @@ function Catering() {
         <div className="relative z-10 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid md:grid-cols-[1.15fr_0.85fr] gap-12 items-center">
           <div className="space-y-6 text-left">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm">
-              <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" /> {lang === "de" ? "100% Kostenloser Service." : "100% Free Service."}
+              <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />{" "}
+              {lang === "de" ? "100% Kostenloser Service." : "100% Free Service."}
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-white leading-[1.05] tracking-tight drop-shadow-sm">
               {lang === "de" ? (
-                <>Finde & buche die besten Caterer. <br/><span className="text-[#b28a3c]">Ohne versteckte Gebühren.</span></>
+                <>
+                  Finde & buche die besten Caterer. <br />
+                  <span className="text-[#b28a3c]">Ohne versteckte Gebühren.</span>
+                </>
               ) : (
-                <>Find & book the best caterers. <br/><span className="text-[#b28a3c]">With zero hidden fees.</span></>
+                <>
+                  Find & book the best caterers. <br />
+                  <span className="text-[#b28a3c]">With zero hidden fees.</span>
+                </>
               )}
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
@@ -202,15 +291,21 @@ function Catering() {
             <ul className="space-y-2.5 pt-2 text-sm sm:text-base text-white/90 font-medium">
               <li className="flex items-center gap-2.5">
                 <BadgeCheck className="h-5 w-5 text-[#b28a3c] shrink-0" />
-                {lang === "de" ? "100% kostenloser Service für Besteller" : "100% free service for requesters"}
+                {lang === "de"
+                  ? "100% kostenloser Service für Besteller"
+                  : "100% free service for requesters"}
               </li>
               <li className="flex items-center gap-2.5">
                 <BadgeCheck className="h-5 w-5 text-[#b28a3c] shrink-0" />
-                {lang === "de" ? "Direkter Kontakt ohne Zwischenhändler" : "Direct contact without middlemen"}
+                {lang === "de"
+                  ? "Direkter Kontakt ohne Zwischenhändler"
+                  : "Direct contact without middlemen"}
               </li>
               <li className="flex items-center gap-2.5">
                 <BadgeCheck className="h-5 w-5 text-[#b28a3c] shrink-0" />
-                {lang === "de" ? "Qualitätsgeprüfte Premium-Partner" : "Quality-checked premium partners"}
+                {lang === "de"
+                  ? "Qualitätsgeprüfte Premium-Partner"
+                  : "Quality-checked premium partners"}
               </li>
             </ul>
 
@@ -242,7 +337,7 @@ function Catering() {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-transparent to-transparent opacity-60" />
-              
+
               {/* Floating Badges */}
               <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20 flex items-center gap-3">
                 <div className="p-2 bg-[#b28a3c]/20 rounded-lg text-[#f2d896]">
@@ -250,7 +345,9 @@ function Catering() {
                 </div>
                 <div className="text-[12px] font-bold text-white leading-none">
                   <div>100% Vetted</div>
-                  <div className="text-[10px] text-white/60 font-medium mt-1">{lang === "de" ? "Geprüfte Partner" : "Verified partners"}</div>
+                  <div className="text-[10px] text-white/60 font-medium mt-1">
+                    {lang === "de" ? "Geprüfte Partner" : "Verified partners"}
+                  </div>
                 </div>
               </div>
 
@@ -260,7 +357,9 @@ function Catering() {
                 </div>
                 <div className="text-[12px] font-bold text-white leading-none">
                   <div>4.9 / 5.0</div>
-                  <div className="text-[10px] text-white/60 font-medium mt-1">{lang === "de" ? "Kundenbewertung" : "Customer rating"}</div>
+                  <div className="text-[10px] text-white/60 font-medium mt-1">
+                    {lang === "de" ? "Kundenbewertung" : "Customer rating"}
+                  </div>
                 </div>
               </div>
             </div>
@@ -269,8 +368,13 @@ function Catering() {
       </section>
 
       {/* Featured / Search Section */}
-      <section id="listings-section" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-16 pb-6 scroll-mt-6 relative z-10">
-        <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest mb-3">{t("cat.eyebrow")}</div>
+      <section
+        id="listings-section"
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-16 pb-6 scroll-mt-6 relative z-10"
+      >
+        <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest mb-3">
+          {t("cat.eyebrow")}
+        </div>
         <div className="mt-3 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-forest leading-tight text-left">
             {lang === "de" ? "Partner-Caterer finden" : "Find Partner Caterers"}
@@ -288,7 +392,11 @@ function Catering() {
 
         {/* Booking search bar */}
         <div className="surface-card rounded-2xl mt-6 p-3 sm:p-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5 border border-[#eadfce]/40 shadow-sm">
-          <FilterField icon={<CalendarIcon className="h-4 w-4 text-forest" />} label={lang === "de" ? "Datum" : "Date"} htmlFor="cat-date">
+          <FilterField
+            icon={<CalendarIcon className="h-4 w-4 text-forest" />}
+            label={lang === "de" ? "Datum" : "Date"}
+            htmlFor="cat-date"
+          >
             <input
               id="cat-date"
               type="date"
@@ -299,7 +407,11 @@ function Catering() {
               className="w-full bg-transparent outline-none text-sm text-forest"
             />
           </FilterField>
-          <FilterField icon={<Users className="h-4 w-4 text-forest" />} label={lang === "de" ? "Gäste" : "Guests"} htmlFor="cat-guests">
+          <FilterField
+            icon={<Users className="h-4 w-4 text-forest" />}
+            label={lang === "de" ? "Gäste" : "Guests"}
+            htmlFor="cat-guests"
+          >
             <input
               id="cat-guests"
               type="number"
@@ -311,7 +423,11 @@ function Catering() {
               className="w-full bg-transparent outline-none text-sm text-forest placeholder:text-forest/40"
             />
           </FilterField>
-          <FilterField icon={<PartyPopper className="h-4 w-4 text-forest" />} label={lang === "de" ? "Event" : "Event"} htmlFor="cat-event">
+          <FilterField
+            icon={<PartyPopper className="h-4 w-4 text-forest" />}
+            label={lang === "de" ? "Event" : "Event"}
+            htmlFor="cat-event"
+          >
             <select
               id="cat-event"
               aria-label={lang === "de" ? "Event" : "Event"}
@@ -320,11 +436,17 @@ function Catering() {
               className="w-full bg-transparent outline-none text-sm text-forest"
             >
               {cats.map((c) => (
-                <option key={c.id} value={c.id}>{c.label}</option>
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
               ))}
             </select>
           </FilterField>
-          <FilterField icon={<Utensils className="h-4 w-4 text-forest" />} label={lang === "de" ? "Menü" : "Menu"} htmlFor="cat-menu">
+          <FilterField
+            icon={<Utensils className="h-4 w-4 text-forest" />}
+            label={lang === "de" ? "Menü" : "Menu"}
+            htmlFor="cat-menu"
+          >
             <select
               id="cat-menu"
               aria-label={lang === "de" ? "Menü" : "Menu"}
@@ -334,11 +456,17 @@ function Catering() {
             >
               <option value="">{lang === "de" ? "Alle" : "All"}</option>
               {menuOptions.map((m) => (
-                <option key={m} value={m}>{m}</option>
+                <option key={m} value={m}>
+                  {m}
+                </option>
               ))}
             </select>
           </FilterField>
-          <FilterField icon={<MapPin className="h-4 w-4 text-forest" />} label={lang === "de" ? "Stadt" : "City"} htmlFor="cat-city">
+          <FilterField
+            icon={<MapPin className="h-4 w-4 text-forest" />}
+            label={lang === "de" ? "Stadt" : "City"}
+            htmlFor="cat-city"
+          >
             <select
               id="cat-city"
               aria-label={lang === "de" ? "Stadt" : "City"}
@@ -348,7 +476,9 @@ function Catering() {
             >
               <option value="">{lang === "de" ? "Alle" : "All"}</option>
               {CITY_LIST.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
             </select>
           </FilterField>
@@ -361,16 +491,23 @@ function Catering() {
                 key={c.id}
                 onClick={() => setCat(c.id)}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 cursor-pointer shadow-sm border ${
-                  cat === c.id ? "bg-forest text-white border-forest shadow-forest/20" : "bg-white/60 text-forest border-[#eadfce]/40 hover:bg-white hover:text-forest"
+                  cat === c.id
+                    ? "bg-forest text-white border-forest shadow-forest/20"
+                    : "bg-white/60 text-forest border-[#eadfce]/40 hover:bg-white hover:text-forest"
                 }`}
               >
                 {c.label}
               </button>
             ))}
           </div>
-          <label htmlFor="cat-sort" className="flex items-center gap-2 rounded-full bg-white/60 border border-[#eadfce]/40 px-4 py-2 text-sm text-forest cursor-pointer shadow-sm hover:bg-white transition-all duration-300">
+          <label
+            htmlFor="cat-sort"
+            className="flex items-center gap-2 rounded-full bg-white/60 border border-[#eadfce]/40 px-4 py-2 text-sm text-forest cursor-pointer shadow-sm hover:bg-white transition-all duration-300"
+          >
             <ArrowUpDown className="h-4 w-4 text-forest" />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-forest/60">{lang === "de" ? "Sortieren" : "Sort by"}</span>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-forest/60">
+              {lang === "de" ? "Sortieren" : "Sort by"}
+            </span>
             <select
               id="cat-sort"
               aria-label={lang === "de" ? "Sortieren" : "Sort by"}
@@ -378,9 +515,12 @@ function Catering() {
               onChange={(e) => setSort(e.target.value as SortKey)}
               className="bg-transparent outline-none text-sm text-forest"
             >
-
-              <option value="price-asc">{lang === "de" ? "Preis (aufsteigend)" : "Price (low to high)"}</option>
-              <option value="price-desc">{lang === "de" ? "Preis (absteigend)" : "Price (high to low)"}</option>
+              <option value="price-asc">
+                {lang === "de" ? "Preis (aufsteigend)" : "Price (low to high)"}
+              </option>
+              <option value="price-desc">
+                {lang === "de" ? "Preis (absteigend)" : "Price (high to low)"}
+              </option>
             </select>
           </label>
         </div>
@@ -391,9 +531,13 @@ function Catering() {
         {visible.length === 0 ? (
           <div className="surface-card flex flex-col items-center justify-center text-center py-20 px-6 border border-[#eadfce]/40 rounded-3xl shadow-sm">
             <UtensilsCrossed className="h-12 w-12 text-forest/40" />
-            <h3 className="mt-4 font-display text-xl text-forest">{lang === "de" ? "Keine Caterer gefunden" : "No caterers found"}</h3>
+            <h3 className="mt-4 font-display text-xl text-forest">
+              {lang === "de" ? "Keine Caterer gefunden" : "No caterers found"}
+            </h3>
             <p className="mt-2 text-sm text-forest/70 max-w-md">
-              {lang === "de" ? "Versuche andere Filter oder ein anderes Datum." : "Try different filters or another date."}
+              {lang === "de"
+                ? "Versuche andere Filter oder ein anderes Datum."
+                : "Try different filters or another date."}
             </p>
             <button
               onClick={resetFilters}
@@ -412,13 +556,13 @@ function Catering() {
                 className="surface-card overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-3xl border border-[#eadfce]/40 hover:border-forest/30 group text-left"
               >
                 <div className="overflow-hidden aspect-[4/3] relative">
-                  <img 
-                    src={c.img} 
-                    alt={c.name} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
-                    loading="lazy" 
-                    width={600} 
-                    height={450} 
+                  <img
+                    src={c.img}
+                    alt={c.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                    width={600}
+                    height={450}
                   />
                   <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-forest shadow-md flex items-center gap-1 border border-forest/20 uppercase tracking-wider">
                     {lang === "de" ? "Buchbar" : "Bookable"}
@@ -432,24 +576,33 @@ function Catering() {
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-display text-xl font-bold text-forest group-hover:text-forest transition-colors truncate">{c.name}</h3>
-                      {c.verified && (
-                        <BadgeCheck className="h-4 w-4 text-forest shrink-0" />
-                      )}
+                      <h3 className="font-display text-xl font-bold text-forest group-hover:text-forest transition-colors truncate">
+                        {c.name}
+                      </h3>
+                      {c.verified && <BadgeCheck className="h-4 w-4 text-forest shrink-0" />}
                     </div>
-                    <p className="text-xs text-forest/70 line-clamp-2 min-h-[2rem]">{c.tagline[lang]}</p>
+                    <p className="text-xs text-forest/70 line-clamp-2 min-h-[2rem]">
+                      {c.tagline[lang]}
+                    </p>
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {c.dietary.map((d) => (
-                        <span key={d} className="rounded-full bg-[#eadfce]/40 px-2.5 py-0.5 text-[10px] font-semibold text-forest border border-[#eadfce]/60">
+                        <span
+                          key={d}
+                          className="rounded-full bg-[#eadfce]/40 px-2.5 py-0.5 text-[10px] font-semibold text-forest border border-[#eadfce]/60"
+                        >
                           {d}
                         </span>
                       ))}
                     </div>
                   </div>
                   <div className="mt-6 pt-4 border-t border-[#eadfce]/30 flex items-center justify-between text-xs text-forest/60">
-                    <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5 text-forest" /> {c.area}</span>
+                    <span className="flex items-center gap-1">
+                      <MapPin className="h-3.5 w-3.5 text-forest" /> {c.area}
+                    </span>
                     <div className="text-right">
-                      <div className="text-[10px] uppercase tracking-widest text-forest/50">{lang === "de" ? "Budget ab" : "Min. order"}</div>
+                      <div className="text-[10px] uppercase tracking-widest text-forest/50">
+                        {lang === "de" ? "Budget ab" : "Min. order"}
+                      </div>
                       <div className="text-sm text-forest font-bold">€{c.minOrder}</div>
                     </div>
                   </div>
@@ -520,7 +673,9 @@ function Catering() {
               </p>
             </div>
             <div className="mt-8 flex items-center gap-2 text-xs font-bold text-forest group-hover:translate-x-2 transition-transform">
-              <span>{lang === "de" ? "Büroverpflegung ansehen" : "Explore Office Subscriptions"}</span>
+              <span>
+                {lang === "de" ? "Büroverpflegung ansehen" : "Explore Office Subscriptions"}
+              </span>
               <ChevronRight className="h-4 w-4" />
             </div>
           </Link>
@@ -544,7 +699,9 @@ function Catering() {
               </p>
             </div>
             <div className="mt-8 flex items-center gap-2 text-xs font-bold text-forest group-hover:translate-x-2 transition-transform">
-              <span>{lang === "de" ? "Großverpflegung ansehen" : "Explore Institutional Catering"}</span>
+              <span>
+                {lang === "de" ? "Großverpflegung ansehen" : "Explore Institutional Catering"}
+              </span>
               <ChevronRight className="h-4 w-4" />
             </div>
           </Link>
@@ -559,7 +716,9 @@ function Catering() {
               {lang === "de" ? "EINSATZBEREICHE" : "USE CASES"}
             </span>
             <h2 className="text-3xl font-display font-bold text-forest">
-              {lang === "de" ? "Das richtige Konzept für jedes Vorhaben" : "The Right Concept for Every Event"}
+              {lang === "de"
+                ? "Das richtige Konzept für jedes Vorhaben"
+                : "The Right Concept for Every Event"}
             </h2>
             <p className="text-sm sm:text-base text-forest/70 leading-relaxed">
               {lang === "de"
@@ -569,20 +728,44 @@ function Catering() {
           </div>
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="bg-cream/35 p-6 rounded-2xl border border-[#eadfce]/20 text-left shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-              <h4 className="font-bold text-forest text-base">{lang === "de" ? "Hochzeiten & Jubiläen" : "Weddings & Anniversaries"}</h4>
-              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">{lang === "de" ? "Elegante Plating-Menüs, Sektempfänge und traumhafte Buffets für deinen großen Tag." : "Sophisticated plated multi-course dinners, sparkling champagne receptions, and wedding buffets."}</p>
+              <h4 className="font-bold text-forest text-base">
+                {lang === "de" ? "Hochzeiten & Jubiläen" : "Weddings & Anniversaries"}
+              </h4>
+              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">
+                {lang === "de"
+                  ? "Elegante Plating-Menüs, Sektempfänge und traumhafte Buffets für deinen großen Tag."
+                  : "Sophisticated plated multi-course dinners, sparkling champagne receptions, and wedding buffets."}
+              </p>
             </div>
             <div className="bg-cream/35 p-6 rounded-2xl border border-[#eadfce]/20 text-left shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-              <h4 className="font-bold text-forest text-base">{lang === "de" ? "Täglicher Office-Lunch" : "Daily Office Lunch"}</h4>
-              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">{lang === "de" ? "Regelmäßiges, gesundes warmes Mittagessen für Büros und Co-Working Spaces." : "Fresh, healthy hot lunch subscriptions for tech teams, agencies, and co-working locations."}</p>
+              <h4 className="font-bold text-forest text-base">
+                {lang === "de" ? "Täglicher Office-Lunch" : "Daily Office Lunch"}
+              </h4>
+              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">
+                {lang === "de"
+                  ? "Regelmäßiges, gesundes warmes Mittagessen für Büros und Co-Working Spaces."
+                  : "Fresh, healthy hot lunch subscriptions for tech teams, agencies, and co-working locations."}
+              </p>
             </div>
             <div className="bg-cream/35 p-6 rounded-2xl border border-[#eadfce]/20 text-left shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-              <h4 className="font-bold text-forest text-base">{lang === "de" ? "Tagungen & Konferenzen" : "Conferences & Seminars"}</h4>
-              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">{lang === "de" ? "Praktisches Fingerfood, Kaffeepausen-Pakete und handliches Business-Lunch-Buffet." : "Uncomplicated savory finger food platters, hot coffee pairings, and warm lunch trays."}</p>
+              <h4 className="font-bold text-forest text-base">
+                {lang === "de" ? "Tagungen & Konferenzen" : "Conferences & Seminars"}
+              </h4>
+              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">
+                {lang === "de"
+                  ? "Praktisches Fingerfood, Kaffeepausen-Pakete und handliches Business-Lunch-Buffet."
+                  : "Uncomplicated savory finger food platters, hot coffee pairings, and warm lunch trays."}
+              </p>
             </div>
             <div className="bg-cream/35 p-6 rounded-2xl border border-[#eadfce]/20 text-left shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-              <h4 className="font-bold text-forest text-base">{lang === "de" ? "Schul- & Kitaverpflegung" : "School & Daycare Meals"}</h4>
-              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">{lang === "de" ? "Ausgewogene, DGE-zertifizierte Mahlzeiten für heranwachsende Kinder und Schüler." : "Nutritionally balanced, certified daily meal programs for kids, kitas, and schools."}</p>
+              <h4 className="font-bold text-forest text-base">
+                {lang === "de" ? "Schul- & Kitaverpflegung" : "School & Daycare Meals"}
+              </h4>
+              <p className="text-xs sm:text-sm text-forest/70 mt-2 leading-relaxed">
+                {lang === "de"
+                  ? "Ausgewogene, DGE-zertifizierte Mahlzeiten für heranwachsende Kinder und Schüler."
+                  : "Nutritionally balanced, certified daily meal programs for kids, kitas, and schools."}
+              </p>
             </div>
           </div>
         </div>
@@ -600,15 +783,17 @@ function Catering() {
                 <Star className="h-3 w-3 fill-current" /> B2B & Office Subscriptions
               </span>
               <h2 className="font-display text-3xl sm:text-4xl text-mint leading-tight">
-                {lang === "de" ? "Regelmäßiges Catering für Ihr Office" : "Recurring Meals for Your Workspace"}
+                {lang === "de"
+                  ? "Regelmäßiges Catering für Ihr Office"
+                  : "Recurring Meals for Your Workspace"}
               </h2>
               <p className="text-cream/80 text-base leading-relaxed">
-                {lang === "de" 
+                {lang === "de"
                   ? "Entlasten Sie Ihre HR- & Office-Verantwortlichen. Speisely ermöglicht flexible wöchentliche Büro-Meal-Lunches oder tägliche Kantinen-Lösungen inklusive konsolidierter Rechnungsstellung."
                   : "Support your HR and Office leads. Speisely facilitates flexible weekly office lunches or daily canteen solutions, including full consolidated monthly invoicing."}
               </p>
               <div className="pt-2 flex flex-wrap gap-4">
-                <button 
+                <button
                   onClick={() => handleOpenB2bDialog("officement-catering")}
                   className="rounded-full bg-mint px-6 py-3.5 text-sm font-semibold text-forest hover:bg-white transition cursor-pointer shadow-md"
                 >
@@ -623,9 +808,9 @@ function Catering() {
               </div>
             </div>
             <div className="relative z-10 hidden md:block w-1/3 min-w-[280px]">
-              <img 
-                src="/images/office_catering_hero.png" 
-                alt="Corporate Office Plating Buffet" 
+              <img
+                src="/images/office_catering_hero.png"
+                alt="Corporate Office Plating Buffet"
                 className="rounded-2xl shadow-2xl aspect-[4/3] object-cover border-2 border-white/10"
               />
             </div>
@@ -641,23 +826,26 @@ function Catering() {
           {
             icon: BadgeCheck,
             title: lang === "de" ? "Geprüfte Qualität" : "Verified Partners",
-            description: lang === "de" 
-              ? "Alle unsere Partner-Caterer durchlaufen strenge Hygiene- und Qualitätskontrollen, bevor sie auf unserer Plattform freigeschaltet werden." 
-              : "All food partners undergo strict hygiene and quality compliance assessments before joining the Speisely marketplace.",
+            description:
+              lang === "de"
+                ? "Alle unsere Partner-Caterer durchlaufen strenge Hygiene- und Qualitätskontrollen, bevor sie auf unserer Plattform freigeschaltet werden."
+                : "All food partners undergo strict hygiene and quality compliance assessments before joining the Speisely marketplace.",
           },
           {
             icon: UtensilsCrossed,
             title: lang === "de" ? "Dietary Flexibility" : "Dietary Flexibility",
-            description: lang === "de" 
-              ? "Ob vegan, vegetarisch, glutenfrei oder halal – unsere Caterer passen ihre Menüs präzise an die Bedürfnisse deiner Gäste an." 
-              : "From vegan and vegetarian to gluten-free and halal - our partners adapt their menus precisely to your guests' requirements.",
+            description:
+              lang === "de"
+                ? "Ob vegan, vegetarisch, glutenfrei oder halal – unsere Caterer passen ihre Menüs präzise an die Bedürfnisse deiner Gäste an."
+                : "From vegan and vegetarian to gluten-free and halal - our partners adapt their menus precisely to your guests' requirements.",
           },
           {
             icon: Clock,
             title: lang === "de" ? "Logistische Zuverlässigkeit" : "Logistical Confidence",
-            description: lang === "de" 
-              ? "Pünktliche Lieferung und fachgerechter Aufbau mit Warmhaltebehältern. Wir garantieren einen reibungslosen Ablauf vor Ort." 
-              : "On-time delivery and professional on-site setup. We guarantee smooth logistics for team lunches or major corporate events.",
+            description:
+              lang === "de"
+                ? "Pünktliche Lieferung und fachgerechter Aufbau mit Warmhaltebehältern. Wir garantieren einen reibungslosen Ablauf vor Ort."
+                : "On-time delivery and professional on-site setup. We guarantee smooth logistics for team lunches or major corporate events.",
           },
         ]}
       />
@@ -666,11 +854,13 @@ function Catering() {
       <section className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-10 py-16">
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl font-display font-bold text-forest mb-4">
-            {lang === "de" ? "Häufig gestellte Fragen zum Catering" : "Frequently Asked Questions about Catering"}
+            {lang === "de"
+              ? "Häufig gestellte Fragen zum Catering"
+              : "Frequently Asked Questions about Catering"}
           </h2>
           <p className="text-forest/70 max-w-xl mx-auto">
-            {lang === "de" 
-              ? "Die wichtigsten Antworten rund um deine Catering-Planung." 
+            {lang === "de"
+              ? "Die wichtigsten Antworten rund um deine Catering-Planung."
               : "The most important answers for your catering planning."}
           </p>
         </div>
@@ -680,15 +870,13 @@ function Catering() {
               <h3 className="text-lg font-bold text-forest mb-2">
                 {faq.question[lang as "de" | "en"]}
               </h3>
-              <p className="text-forest/80 leading-relaxed">
-                {faq.answer[lang as "de" | "en"]}
-              </p>
+              <p className="text-forest/80 leading-relaxed">{faq.answer[lang as "de" | "en"]}</p>
             </div>
           ))}
         </div>
         <div className="mt-10 text-center">
-          <Link 
-            to="/faq" 
+          <Link
+            to="/faq"
             className="inline-flex items-center gap-2 rounded-full border border-forest/20 text-forest px-6 py-3 font-medium hover:bg-forest/5 transition"
           >
             {lang === "de" ? "Alle FAQs ansehen" : "View all FAQs"}
@@ -709,12 +897,27 @@ function Catering() {
   );
 }
 
-function FilterField({ icon, label, children, htmlFor }: { icon: ReactNode; label: string; children: ReactNode; htmlFor?: string }) {
+function FilterField({
+  icon,
+  label,
+  children,
+  htmlFor,
+}: {
+  icon: ReactNode;
+  label: string;
+  children: ReactNode;
+  htmlFor?: string;
+}) {
   return (
-    <label htmlFor={htmlFor} className="flex items-center gap-2.5 rounded-full bg-[#eadfce]/40 hover:bg-[#eadfce]/60 transition-colors px-4 py-2 ring-1 ring-[#eadfce] cursor-pointer shadow-sm">
+    <label
+      htmlFor={htmlFor}
+      className="flex items-center gap-2.5 rounded-full bg-[#eadfce]/40 hover:bg-[#eadfce]/60 transition-colors px-4 py-2 ring-1 ring-[#eadfce] cursor-pointer shadow-sm"
+    >
       <span className="text-forest">{icon}</span>
       <span className="flex-1 min-w-0">
-        <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-forest/60 leading-none mb-1">{label}</span>
+        <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-forest/60 leading-none mb-1">
+          {label}
+        </span>
         {children}
       </span>
     </label>

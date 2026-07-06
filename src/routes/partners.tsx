@@ -11,9 +11,16 @@ export const Route = createFileRoute("/partners")({
   head: () => ({
     meta: [
       { title: "Für Partner — Restaurants, Caterer & Event-Planer · Speisely" },
-      { name: "description", content: "Speisely bringt Restaurants, Caterer und Event-Planer mit den richtigen Gästen zusammen — von spontanen Bestellungen bis zu großen Firmenevents." },
+      {
+        name: "description",
+        content:
+          "Speisely bringt Restaurants, Caterer und Event-Planer mit den richtigen Gästen zusammen — von spontanen Bestellungen bis zu großen Firmenevents.",
+      },
       { property: "og:title", content: "Für Partner — Speisely" },
-      { property: "og:description", content: "Wachse mit Speisely: erreiche neue Gäste für Bestellungen, Catering und Events." },
+      {
+        property: "og:description",
+        content: "Wachse mit Speisely: erreiche neue Gäste für Bestellungen, Catering und Events.",
+      },
       { property: "og:url", content: "/partners" },
     ],
     links: [{ rel: "canonical", href: "/partners" }],
@@ -21,11 +28,10 @@ export const Route = createFileRoute("/partners")({
   component: Partners,
 });
 
-
 function Partners() {
   const { t, lang } = useI18n();
   return (
-    <SiteShell>
+    <SiteShell darkHero>
       <section className="relative overflow-hidden min-h-screen flex items-center -mt-20 lg:-mt-24 pt-36 pb-24 lg:pt-44 lg:pb-36">
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
@@ -54,12 +60,26 @@ function Partners() {
             <p className="mt-6 text-lg text-white/80 max-w-lg leading-relaxed drop-shadow-sm">
               {t("p.subtitle")}
             </p>
-            <Link to="/auth" search={{ signup: "partner", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_hero", role: "restaurant_owner" })} className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-8 py-4 text-sm font-bold shadow-xl shadow-[#b28a3c]/20 transition-all hover:bg-[#9a7633] hover:scale-105">
+            <Link
+              to="/auth"
+              search={{ signup: "partner", message: undefined, logout: undefined }}
+              onClick={() =>
+                trackEvent("partner_cta_clicked", {
+                  location: "partners_hero",
+                  role: "restaurant_owner",
+                })
+              }
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-8 py-4 text-sm font-bold shadow-xl shadow-[#b28a3c]/20 transition-all hover:bg-[#9a7633] hover:scale-105"
+            >
               {t("p.cta")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 aspect-[4/3] group">
-            <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=1200&q=80" alt="Chef preparing food" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <img
+              src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=1200&q=80"
+              alt="Chef preparing food"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-transparent to-transparent opacity-60" />
             <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20 flex items-center gap-3">
               <div className="p-2 bg-[#b28a3c]/20 rounded-lg text-[#f2d896]">
@@ -67,7 +87,9 @@ function Partners() {
               </div>
               <div className="text-[12px] font-bold text-white leading-none">
                 <div>{lang === "de" ? "Neue Kunden" : "New Customers"}</div>
-                <div className="text-[10px] text-white/60 font-medium mt-1">{lang === "de" ? "Erreiche tausende Gäste" : "Reach thousands of guests"}</div>
+                <div className="text-[10px] text-white/60 font-medium mt-1">
+                  {lang === "de" ? "Erreiche tausende Gäste" : "Reach thousands of guests"}
+                </div>
               </div>
             </div>
           </div>
@@ -102,8 +124,10 @@ function Partners() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="font-display text-4xl sm:text-5xl text-forest">{t("p.f4.title")}</h2>
           <p className="mt-3 text-forest/70">
-            {t("Wähle das Modell, das am besten zu deinem Unternehmen passt. Keine Einrichtungsgebühr, jederzeit kündbar.", 
-               "Choose the model that fits your business best. No setup fees, cancel anytime.")}
+            {t(
+              "Wähle das Modell, das am besten zu deinem Unternehmen passt. Keine Einrichtungsgebühr, jederzeit kündbar.",
+              "Choose the model that fits your business best. No setup fees, cancel anytime.",
+            )}
           </p>
         </div>
         <div className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
@@ -114,45 +138,81 @@ function Partners() {
                 <span className="text-[10px] uppercase font-bold tracking-widest bg-[oklch(0.88_0.06_152)] text-forest px-3 py-1 rounded-full">
                   {t("Starter Paket", "Starter Plan")}
                 </span>
-                <span className="text-xs text-forest/60 font-semibold">{t("Für Restaurants", "For Restaurants")}</span>
+                <span className="text-xs text-forest/60 font-semibold">
+                  {t("Für Restaurants", "For Restaurants")}
+                </span>
               </div>
-              <h3 className="mt-4 font-display text-3xl text-forest">{t("Direktbestellungen", "Direct Ordering")}</h3>
+              <h3 className="mt-4 font-display text-3xl text-forest">
+                {t("Direktbestellungen", "Direct Ordering")}
+              </h3>
               <p className="mt-2 text-sm text-forest/70 min-h-[40px] font-medium">
-                {t("Kostenlose Kontoerstellung. 0% Provision. 100% Deins.", 
-                   "Free account creation. 0% commission. 100% yours.")}
+                {t(
+                  "Kostenlose Kontoerstellung. 0% Provision. 100% Deins.",
+                  "Free account creation. 0% commission. 100% yours.",
+                )}
               </p>
-              
+
               <div className="mt-6 flex items-baseline">
                 <span className="text-4xl font-bold font-display text-forest">€34.99</span>
                 <span className="text-forest/60 ml-2">/ {t("Monat", "month")}</span>
               </div>
-              
+
               <div className="mt-4 inline-block text-xs font-bold text-[#b28a3c] bg-[#b28a3c]/15 px-3 py-1.5 rounded-lg border border-[#b28a3c]/20">
                 ⭐ {t("Keine versteckten Gebühren", "No hidden fees")}
               </div>
-              
+
               <ul className="mt-8 space-y-4 text-sm text-forest/80">
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Eigene Website unter speisely.de/ihr-name", "Your own website under speisely.de/your-name")}</span>
+                  <span>
+                    {t(
+                      "Eigene Website unter speisely.de/ihr-name",
+                      "Your own website under speisely.de/your-name",
+                    )}
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Unbegrenzte Direktbestellungen & Tischreservierungen", "Unlimited direct orders & table reservations")}</span>
+                  <span>
+                    {t(
+                      "Unbegrenzte Direktbestellungen & Tischreservierungen",
+                      "Unlimited direct orders & table reservations",
+                    )}
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Kostenloser Eintrag im Instant Food Order Entdeckungsportal", "Free listing in the Instant Food Order discovery directory")}</span>
+                  <span>
+                    {t(
+                      "Kostenloser Eintrag im Instant Food Order Entdeckungsportal",
+                      "Free listing in the Instant Food Order discovery directory",
+                    )}
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Kitchen Display System (KDS) für das Bestellmanagement", "Kitchen Display System (KDS) for order management")}</span>
+                  <span>
+                    {t(
+                      "Kitchen Display System (KDS) für das Bestellmanagement",
+                      "Kitchen Display System (KDS) for order management",
+                    )}
+                  </span>
                 </li>
               </ul>
             </div>
-            
+
             <div className="p-8 bg-cream/30 border-t border-[#eadfce]/30">
-              <Link to="/auth" search={{ signup: "partner", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_restaurant_card", role: "restaurant_owner" })} className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md">
+              <Link
+                to="/auth"
+                search={{ signup: "partner", message: undefined, logout: undefined }}
+                onClick={() =>
+                  trackEvent("partner_cta_clicked", {
+                    location: "partners_restaurant_card",
+                    role: "restaurant_owner",
+                  })
+                }
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md"
+              >
                 {t("Jetzt starten", "Get Started")} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -165,50 +225,94 @@ function Partners() {
                 <span className="text-[10px] uppercase font-bold tracking-widest bg-[#eadfce] text-forest px-3 py-1 rounded-full">
                   {t("Marktplatz", "Marketplace")}
                 </span>
-                <span className="text-xs text-forest/60 font-semibold">{t("Für Caterer & Planer", "For Caterers & Planners")}</span>
+                <span className="text-xs text-forest/60 font-semibold">
+                  {t("Für Caterer & Planer", "For Caterers & Planners")}
+                </span>
               </div>
-              <h3 className="mt-4 font-display text-3xl text-forest">{t("Catering & Events", "Catering & Events")}</h3>
+              <h3 className="mt-4 font-display text-3xl text-forest">
+                {t("Catering & Events", "Catering & Events")}
+              </h3>
               <p className="mt-2 text-sm text-forest/70 min-h-[40px]">
-                {t("Erhalte qualifizierte B2B- & B2C-Eventanfragen über den Marktplatz.", 
-                   "Receive qualified B2B & B2C event briefs via the marketplace.")}
+                {t(
+                  "Erhalte qualifizierte B2B- & B2C-Eventanfragen über den Marktplatz.",
+                  "Receive qualified B2B & B2C event briefs via the marketplace.",
+                )}
               </p>
-              
+
               <div className="mt-6 flex items-baseline">
                 <span className="text-5xl font-bold font-display text-forest">10%</span>
-                <span className="text-forest/60 ml-2">{t("Vermittlungsprovision", "commission per booking")}</span>
+                <span className="text-forest/60 ml-2">
+                  {t("Vermittlungsprovision", "commission per booking")}
+                </span>
               </div>
-              
+
               <div className="mt-4 inline-block text-xs font-bold text-forest/60 bg-cream/70 px-3 py-1.5 rounded-lg border border-[#eadfce]/50">
                 💼 {t("Keine monatliche Grundgebühr", "No fixed monthly fees")}
               </div>
-              
+
               <ul className="mt-8 space-y-4 text-sm text-forest/80">
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Zugang zu hochvolumigen Firmen- und Hochzeits-Leads", "Access to high-volume corporate and wedding leads")}</span>
+                  <span>
+                    {t(
+                      "Zugang zu hochvolumigen Firmen- und Hochzeits-Leads",
+                      "Access to high-volume corporate and wedding leads",
+                    )}
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Eigene interaktive Zeitleiste & CRM für Event-Logistik", "Dedicated interactive timeline & CRM for event logistics")}</span>
+                  <span>
+                    {t(
+                      "Eigene interaktive Zeitleiste & CRM für Event-Logistik",
+                      "Dedicated interactive timeline & CRM for event logistics",
+                    )}
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Direktes Messaging & Angebots-Erstellung im Portal", "Direct messaging & proposal building inside the portal")}</span>
+                  <span>
+                    {t(
+                      "Direktes Messaging & Angebots-Erstellung im Portal",
+                      "Direct messaging & proposal building inside the portal",
+                    )}
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Blackout-Kalender zur Steuerung der Kapazitäten", "Blackout calendars to manage busy dates")}</span>
+                  <span>
+                    {t(
+                      "Blackout-Kalender zur Steuerung der Kapazitäten",
+                      "Blackout calendars to manage busy dates",
+                    )}
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-[oklch(0.6_0.15_152)]">✓</span>
-                  <span>{t("Sichere Anzahlungs-Abwicklung (10% Anzahlung)", "Secure deposit processing (10% deposit)")}</span>
+                  <span>
+                    {t(
+                      "Sichere Anzahlungs-Abwicklung (10% Anzahlung)",
+                      "Secure deposit processing (10% deposit)",
+                    )}
+                  </span>
                 </li>
               </ul>
             </div>
-            
+
             <div className="p-8 bg-cream/30 border-t border-[#eadfce]/30">
-              <Link to="/auth" search={{ signup: "caterer", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_caterer_card", role: "caterer" })} className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md">
-                {t("Caterer / Planer Registrierung", "Caterer / Planner Registration")} <ArrowRight className="h-4 w-4" />
+              <Link
+                to="/auth"
+                search={{ signup: "caterer", message: undefined, logout: undefined }}
+                onClick={() =>
+                  trackEvent("partner_cta_clicked", {
+                    location: "partners_caterer_card",
+                    role: "caterer",
+                  })
+                }
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] py-3.5 text-sm font-semibold hover:opacity-95 transition-opacity shadow-md"
+              >
+                {t("Caterer / Planer Registrierung", "Caterer / Planner Registration")}{" "}
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -221,7 +325,17 @@ function Partners() {
             <h2 className="font-display text-3xl sm:text-4xl">{t("p.ready.title")}</h2>
             <p className="mt-3 opacity-80 max-w-xl">{t("p.ready.body")}</p>
           </div>
-          <Link to="/auth" search={{ signup: "partner", message: undefined, logout: undefined }} onClick={() => trackEvent("partner_cta_clicked", { location: "partners_ready_banner", role: "restaurant_owner" })} className="inline-flex items-center justify-center gap-2 rounded-full bg-cream text-forest px-6 py-3.5 text-sm font-medium hover:opacity-90">
+          <Link
+            to="/auth"
+            search={{ signup: "partner", message: undefined, logout: undefined }}
+            onClick={() =>
+              trackEvent("partner_cta_clicked", {
+                location: "partners_ready_banner",
+                role: "restaurant_owner",
+              })
+            }
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-cream text-forest px-6 py-3.5 text-sm font-medium hover:opacity-90"
+          >
             {t("p.ready.cta")} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -230,11 +344,17 @@ function Partners() {
       {/* Supporting Links */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-20 text-center">
         <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
-          <Link to="/about" className="font-semibold text-forest hover:text-[#b28a3c] underline decoration-2 underline-offset-4 transition-colors">
+          <Link
+            to="/about"
+            className="font-semibold text-forest hover:text-[#b28a3c] underline decoration-2 underline-offset-4 transition-colors"
+          >
             {t("p.learn.mission")}
           </Link>
           <span className="text-forest/30">|</span>
-          <Link to="/blog" className="font-semibold text-forest hover:text-[#b28a3c] underline decoration-2 underline-offset-4 transition-colors">
+          <Link
+            to="/blog"
+            className="font-semibold text-forest hover:text-[#b28a3c] underline decoration-2 underline-offset-4 transition-colors"
+          >
             {t("p.learn.blog")}
           </Link>
         </div>

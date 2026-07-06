@@ -16,13 +16,15 @@ import { User, ShieldCheck, LogOut, ChevronDown, LayoutDashboard } from "lucide-
 export function SiteHeader() {
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
-  
+
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const checkRole = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session?.user) {
         setIsLoggedIn(true);
         const { data } = await supabase
@@ -39,7 +41,9 @@ export function SiteHeader() {
     };
     checkRole();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         checkRole();
       } else {
@@ -63,30 +67,37 @@ export function SiteHeader() {
 
   const routerState = useRouterState();
   const [scrolled, setScrolled] = useState(false);
+  const pathname = routerState.location.pathname;
 
+  // Reset scroll position tracking on every route change so header
+  // starts transparent on each new cinematic page.
   useEffect(() => {
+    setScrolled(window.scrollY > 20);
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [pathname]);
 
-  const normalizedPath = routerState.location.pathname.replace(/\/$/, "");
-  const isCinematicPage = [
+  const normalizedPath = pathname.replace(/\/$/, "");
+  // Match exact cinematic landing pages AND their sub-routes (e.g. /catering/some-slug)
+  const cinematicRoots = [
     "",
     "/about",
     "/contact",
     "/partners",
     "/instant-order",
     "/catering",
-    "/planner"
-  ].includes(normalizedPath);
+    "/planner",
+  ];
+  const isCinematicPage = cinematicRoots.some(
+    (root) => normalizedPath === root || (root !== "" && normalizedPath.startsWith(root + "/")),
+  );
   const isLight = isCinematicPage && !scrolled;
 
-  const headerBg = isLight 
-    ? "bg-transparent border-transparent" 
+  const headerBg = isLight
+    ? "bg-transparent border-transparent"
     : "bg-cream/95 backdrop-blur-md border-b border-forest/10";
 
   return (
@@ -102,12 +113,16 @@ export function SiteHeader() {
               key={item.to}
               to={item.to}
               className={`px-2.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
-                isLight ? "text-white/80 hover:text-white" : "text-forest/80 hover:text-forest"
+                isLight
+                  ? "text-white/70 hover:text-white hover:bg-white/10"
+                  : "text-forest/70 hover:text-forest hover:bg-forest/5"
               }`}
               activeProps={{
-                className: `px-2.5 py-1.5 rounded-full text-sm font-medium shadow-sm whitespace-nowrap ${
-                  isLight ? "bg-white/10 text-white" : "bg-cream text-forest"
-                }`
+                className: `px-2.5 py-1.5 rounded-full text-sm font-semibold shadow-sm whitespace-nowrap transition-colors ${
+                  isLight
+                    ? "bg-white/15 text-white border border-white/25 backdrop-blur-sm"
+                    : "bg-forest text-[oklch(0.97_0.02_92)]"
+                }`,
               }}
             >
               {item.label}
@@ -120,22 +135,33 @@ export function SiteHeader() {
           <div className="hidden sm:flex items-center gap-2">
             {isLoggedIn ? (
               <DropdownMenu>
-                <DropdownMenuTrigger className={`inline-flex items-center gap-1.5 justify-center rounded-full px-3 py-1.5 text-sm font-medium hover:opacity-90 transition outline-none ring-0 ${
-                  isLight ? "bg-white text-forest" : "bg-forest text-[oklch(0.97_0.02_92)]"
-                }`}>
+                <DropdownMenuTrigger
+                  className={`inline-flex items-center gap-1.5 justify-center rounded-full px-3 py-1.5 text-sm font-medium hover:opacity-90 transition outline-none ring-0 ${
+                    isLight ? "bg-white text-forest" : "bg-forest text-[oklch(0.97_0.02_92)]"
+                  }`}
+                >
                   <User className="h-4 w-4" />
                   <span className="hidden lg:inline">Mein Konto</span>
                   <ChevronDown className="h-3 w-3 opacity-70" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-white border border-[#e2e8e4] rounded-xl shadow-lg p-1">
-                  <DropdownMenuItem asChild className="rounded-lg hover:bg-forest/5 cursor-pointer text-forest p-2">
+                <DropdownMenuContent
+                  align="end"
+                  className="w-48 bg-white border border-[#e2e8e4] rounded-xl shadow-lg p-1"
+                >
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-lg hover:bg-forest/5 cursor-pointer text-forest p-2"
+                  >
                     <Link to="/dashboard" className="flex items-center w-full">
                       <LayoutDashboard className="mr-2 h-4 w-4 text-forest/70" />
                       <span>Dashboard</span>
                     </Link>
                   </DropdownMenuItem>
                   {isAdmin && (
-                    <DropdownMenuItem asChild className="rounded-lg hover:bg-forest/5 cursor-pointer text-forest p-2 mt-1">
+                    <DropdownMenuItem
+                      asChild
+                      className="rounded-lg hover:bg-forest/5 cursor-pointer text-forest p-2 mt-1"
+                    >
                       <Link to="/admin" className="flex items-center w-full">
                         <ShieldCheck className="mr-2 h-4 w-4 text-brand-orange" />
                         <span className="font-medium">Admin Portal</span>
@@ -143,7 +169,7 @@ export function SiteHeader() {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
-                  <DropdownMenuItem 
+                  <DropdownMenuItem
                     className="rounded-lg hover:bg-rose-50 text-rose-600 cursor-pointer p-2"
                     onClick={async () => {
                       await supabase.auth.signOut();
@@ -161,8 +187,8 @@ export function SiteHeader() {
                   to="/auth"
                   search={{ signup: undefined, message: undefined, logout: undefined }}
                   className={`inline-flex items-center justify-center rounded-full border px-3 py-1.5 text-sm font-medium transition whitespace-nowrap ${
-                    isLight 
-                      ? "border-white/20 text-white hover:bg-white/10" 
+                    isLight
+                      ? "border-white/20 text-white hover:bg-white/10"
                       : "border-forest/20 text-forest hover:bg-cream"
                   }`}
                 >
@@ -172,8 +198,8 @@ export function SiteHeader() {
                   to="/auth"
                   search={{ signup: "partner", message: undefined, logout: undefined }}
                   className={`inline-flex items-center justify-center rounded-full px-3 py-1.5 text-sm font-medium transition whitespace-nowrap ${
-                    isLight 
-                      ? "bg-white text-forest hover:bg-white/90" 
+                    isLight
+                      ? "bg-white text-forest hover:bg-white/90"
                       : "bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90"
                   }`}
                 >
@@ -189,13 +215,17 @@ export function SiteHeader() {
           <Link
             key={item.to}
             to={item.to}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium border border-transparent ${
-              isLight ? "text-white/80 hover:text-white" : "text-forest/80 hover:text-forest"
+            className={`shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium border border-transparent transition-colors ${
+              isLight
+                ? "text-white/70 hover:text-white hover:bg-white/10"
+                : "text-forest/70 hover:text-forest"
             }`}
             activeProps={{
-              className: `shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium border ${
-                isLight ? "bg-white/10 text-white border-white/20" : "bg-cream text-forest border-[#eadfce]"
-              }`
+              className: `shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold border transition-colors ${
+                isLight
+                  ? "bg-white/15 text-white border-white/25 backdrop-blur-sm"
+                  : "bg-forest text-[oklch(0.97_0.02_92)] border-forest"
+              }`,
             }}
           >
             {item.label}

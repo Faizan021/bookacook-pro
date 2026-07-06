@@ -33,9 +33,7 @@ export const Route = createFileRoute("/")({
       { property: "og:url", content: "https://speisely.de/" },
       { property: "og:type", content: "website" },
     ],
-    links: [
-      { rel: "preload", href: "/hero-cinematic.png", as: "image", fetchpriority: "high" },
-    ],
+    links: [{ rel: "preload", href: "/hero-cinematic.png", as: "image", fetchpriority: "high" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -44,7 +42,8 @@ export const Route = createFileRoute("/")({
           "@type": "WebSite",
           name: "Speisely",
           url: "https://speisely.de/",
-          description: "Speisely ist der Premium-Marktplatz für Restaurants, Catering und Event-Planung."
+          description:
+            "Speisely ist der Premium-Marktplatz für Restaurants, Catering und Event-Planung.",
         }),
       },
     ],
@@ -57,7 +56,9 @@ function Home() {
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const [mounted, setMounted] = useState(false);
-  const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">("catering");
+  const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">(
+    "catering",
+  );
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -110,7 +111,7 @@ function Home() {
       title: tt("Entdecken", "Discover"),
       body: tt(
         "Stöbere durch geprüfte Restaurants, Caterer und Event-Planer in deiner Region — kostenlos und ohne Anmeldung.",
-        "Browse vetted restaurants, caterers, and event planners in your region — free and without sign-up."
+        "Browse vetted restaurants, caterers, and event planners in your region — free and without sign-up.",
       ),
     },
     {
@@ -119,7 +120,7 @@ function Home() {
       title: tt("Anfragen", "Inquire"),
       body: tt(
         "Sende dein Catering-Briefing oder deine Event-Anfrage direkt an passende Partner — transparent und ohne Mittelsmänner.",
-        "Send your catering brief or event inquiry directly to matched partners — transparent and without middlemen."
+        "Send your catering brief or event inquiry directly to matched partners — transparent and without middlemen.",
       ),
     },
     {
@@ -128,7 +129,7 @@ function Home() {
       title: tt("Genießen", "Enjoy"),
       body: tt(
         "Erhalte Angebote, vergleiche Partner und buche direkt. Kein Overhead, keine versteckten Gebühren.",
-        "Receive offers, compare partners and book directly. No overhead, no hidden fees."
+        "Receive offers, compare partners and book directly. No overhead, no hidden fees.",
       ),
     },
   ];
@@ -141,7 +142,7 @@ function Home() {
   ];
 
   return (
-    <SiteShell>
+    <SiteShell darkHero>
       {/* ─────────────────────────────────────────────────
           HERO — Cinematic split layout
       ───────────────────────────────────────────────── */}
@@ -156,7 +157,7 @@ function Home() {
             fetchPriority="high"
             alt={tt(
               "Speisely – Premium Gastronomie & Events",
-              "Speisely – Premium Hospitality & Events"
+              "Speisely – Premium Hospitality & Events",
             )}
             className="w-full h-full object-cover object-center"
           />
@@ -180,9 +181,10 @@ function Home() {
         {/* Hero text content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 lg:pt-44 lg:pb-36">
           <div className="max-w-[42rem]">
-
             {/* Eyebrow badge */}
-            <div className={`transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <div
+              className={`transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+            >
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-white/90 shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
                 {tt("Marktplatz für Gastronomie & Events", "Marketplace for hospitality & events")}
@@ -195,8 +197,10 @@ function Home() {
                 mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
               }`}
             >
-              {tt("Der richtige", "The right")}<br />
-              {tt("Partner für", "partner for")}<br />
+              {tt("Der richtige", "The right")}
+              <br />
+              {tt("Partner für", "partner for")}
+              <br />
               <span className="text-[#b28a3c]">{tt("jedes Erlebnis.", "every experience.")}</span>
             </h1>
 
@@ -208,7 +212,7 @@ function Home() {
             >
               {tt(
                 "Speisely verbindet dich mit geprüften Restaurants, Caterern und Event-Planern — von der schnellen Bestellung bis zur perfekten Veranstaltung.",
-                "Speisely connects you with vetted restaurants, caterers, and event planners — from a quick order to a perfect event."
+                "Speisely connects you with vetted restaurants, caterers, and event planners — from a quick order to a perfect event.",
               )}
             </p>
 
@@ -228,17 +232,28 @@ function Home() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && searchQuery.trim()) {
-                      trackEvent("ai_search_clicked", { query: searchQuery, vertical: activeVertical });
+                      trackEvent("ai_search_clicked", {
+                        query: searchQuery,
+                        vertical: activeVertical,
+                      });
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       navigate({ to: current.to, search: { q: searchQuery } as any });
                     }
                   }}
                   className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-36 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/50"
-                  placeholder={tt("Was suchst du? z.B. 'Vegan Catering Berlin'", "What are you looking for? e.g. 'Vegan Catering Berlin'")}
+                  placeholder={tt(
+                    "Was suchst du? z.B. 'Vegan Catering Berlin'",
+                    "What are you looking for? e.g. 'Vegan Catering Berlin'",
+                  )}
                 />
-                <button 
+                <button
                   onClick={() => {
                     if (searchQuery.trim()) {
-                      trackEvent("ai_search_clicked", { query: searchQuery, vertical: activeVertical });
+                      trackEvent("ai_search_clicked", {
+                        query: searchQuery,
+                        vertical: activeVertical,
+                      });
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       navigate({ to: current.to, search: { q: searchQuery } as any });
                     }
                   }}
@@ -272,7 +287,9 @@ function Home() {
                     <span className="text-base leading-none">{v.emoji}</span>
                     <span>{v.label}</span>
                     {activeVertical !== v.key && (
-                      <span className="hidden sm:block text-[10px] text-white/50 font-medium">{v.sublabel}</span>
+                      <span className="hidden sm:block text-[10px] text-white/50 font-medium">
+                        {v.sublabel}
+                      </span>
                     )}
                   </button>
                 ))}
@@ -292,7 +309,9 @@ function Home() {
                 <Link
                   id="hero-partner-cta"
                   to="/partners"
-                  onClick={() => trackEvent("partner_cta_clicked", { location: "homepage_hero_secondary" })}
+                  onClick={() =>
+                    trackEvent("partner_cta_clicked", { location: "homepage_hero_secondary" })
+                  }
                   className="text-sm font-semibold text-white/65 hover:text-white transition-colors inline-flex items-center gap-1.5"
                 >
                   {tt("Partner werden", "Become a partner")}
@@ -317,7 +336,7 @@ function Home() {
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-forest/55">
+              <p className="text-sm text-white/55">
                 {tt("47+ Partner in ganz Deutschland", "47+ partners across Germany")}
               </p>
             </div>
@@ -335,7 +354,7 @@ function Home() {
               <span className="text-white font-semibold">Speisely</span>{" "}
               {tt(
                 "ist deine Premium-Plattform, um die besten Gastronomie-Partner zu entdecken – von Restaurants bis hin zu maßgeschneidertem Event-Catering.",
-                "is your premium platform to discover top hospitality partners — from restaurants to bespoke event catering."
+                "is your premium platform to discover top hospitality partners — from restaurants to bespoke event catering.",
               )}
             </p>
             <div className="flex items-center gap-2 shrink-0">
@@ -368,27 +387,29 @@ function Home() {
           THREE VERTICALS — Editorial asymmetric grid
       ───────────────────────────────────────────────── */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-
         {/* Section header */}
         <div className="mb-14">
           <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#b28a3c]">
             {tt("Drei Wege zu finden, was du brauchst", "Three ways to find what you need")}
           </span>
           <h2 className="mt-3 font-display text-4xl sm:text-5xl lg:text-6xl text-forest leading-[1.0]">
-            {tt("Restaurants.", "Restaurants.")}<br />
-            {tt("Catering.", "Catering.")}<br />
+            {tt("Restaurants.", "Restaurants.")}
+            <br />
+            {tt("Catering.", "Catering.")}
+            <br />
             {tt("Event-Planung.", "Event Planning.")}
           </h2>
         </div>
 
         {/* Primary: Catering + Event Planner — large cards */}
         <div className="grid gap-5 lg:grid-cols-3 mb-5">
-
           {/* Instant Food Order — flagship format */}
           <Link
             id="vertical-restaurants"
             to="/instant-order"
-            onClick={() => trackEvent("instant_order_cta_clicked", { location: "homepage_verticals" })}
+            onClick={() =>
+              trackEvent("instant_order_cta_clicked", { location: "homepage_verticals" })
+            }
             className="group relative overflow-hidden rounded-[2rem] bg-[#2a4d3e] text-white flex flex-col min-h-[480px] hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
           >
             <div className="absolute inset-0">
@@ -535,7 +556,9 @@ function Home() {
                 </div>
                 <div>
                   <h3 className="font-display text-2xl text-white mb-2">{item.title}</h3>
-                  <p className="text-white/70 text-[15px] leading-relaxed group-hover:text-white/85 transition-colors">{item.body}</p>
+                  <p className="text-white/70 text-[15px] leading-relaxed group-hover:text-white/85 transition-colors">
+                    {item.body}
+                  </p>
                 </div>
               </div>
             ))}

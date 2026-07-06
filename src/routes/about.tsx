@@ -9,25 +9,30 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
       { title: "Über Speisely — Kuratiert, transparent, persönlich" },
-      { name: "description", content: "Speisely verbindet Restaurant-Bestellungen, Catering und Event-Planung — kuratiert, transparent und persönlich. Made in Deutschland — für Restaurants, Caterer und Event-Profis in ganz Deutschland." },
+      {
+        name: "description",
+        content:
+          "Speisely verbindet Restaurant-Bestellungen, Catering und Event-Planung — kuratiert, transparent und persönlich. Made in Deutschland — für Restaurants, Caterer und Event-Profis in ganz Deutschland.",
+      },
       { property: "og:title", content: "Über Speisely" },
-      { property: "og:description", content: "Restaurant-Bestellungen, Catering und Event-Planung auf einer Plattform — kuratiert und persönlich." },
+      {
+        property: "og:description",
+        content:
+          "Restaurant-Bestellungen, Catering und Event-Planung auf einer Plattform — kuratiert und persönlich.",
+      },
       { property: "og:url", content: "/about" },
     ],
-    links: [
-      { rel: "preload", href: "/hero-cinematic.png", as: "image", fetchpriority: "high" },
-    ],
+    links: [{ rel: "preload", href: "/hero-cinematic.png", as: "image", fetchpriority: "high" }],
   }),
   component: About,
 });
 
-
 function About() {
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
-  
+
   return (
-    <SiteShell>
+    <SiteShell darkHero>
       {/* Cinematic Hero */}
       <section className="relative overflow-hidden min-h-screen flex items-center -mt-20 lg:-mt-24 pt-36 pb-24 lg:pt-44 lg:pb-36">
         {/* Cinematic Background */}
@@ -59,7 +64,11 @@ function About() {
             </p>
           </div>
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 aspect-[4/3] group">
-            <img src="https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&q=80" alt="Restaurant Interior" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <img
+              src="https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&q=80"
+              alt="Restaurant Interior"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-transparent to-transparent opacity-60" />
             <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20 flex items-center gap-3">
               <div className="p-2 bg-[#b28a3c]/20 rounded-lg text-[#f2d896]">
@@ -67,7 +76,9 @@ function About() {
               </div>
               <div className="text-[12px] font-bold text-white leading-none">
                 <div>{lang === "de" ? "Kuratiert" : "Curated"}</div>
-                <div className="text-[10px] text-white/60 font-medium mt-1">{lang === "de" ? "Handverlesene Partner" : "Hand-picked partners"}</div>
+                <div className="text-[10px] text-white/60 font-medium mt-1">
+                  {lang === "de" ? "Handverlesene Partner" : "Hand-picked partners"}
+                </div>
               </div>
             </div>
           </div>
@@ -77,17 +88,42 @@ function About() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 lg:py-20">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <div className="surface-card overflow-hidden">
-            <img src={wedding} alt="Banquet hall with candlelit table" className="w-full h-full object-cover" loading="lazy" width={1024} height={1024} />
+            <img
+              src={wedding}
+              alt="Banquet hall with candlelit table"
+              className="w-full h-full object-cover"
+              loading="lazy"
+              width={1024}
+              height={1024}
+            />
           </div>
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-forest/60">{t("ab.conviction")}</div>
-            <h2 className="mt-3 text-4xl sm:text-5xl font-display font-bold text-forest leading-tight">{t("ab.h2")}</h2>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-forest/60">
+              {t("ab.conviction")}
+            </div>
+            <h2 className="mt-3 text-4xl sm:text-5xl font-display font-bold text-forest leading-tight">
+              {t("ab.h2")}
+            </h2>
             <p className="mt-5 text-forest/75">{t("ab.body")}</p>
-            <p className="mt-4 text-forest/75 border-l-2 border-forest/20 pl-4 italic text-sm">{t("ab.body.catering")}</p>
+            <p className="mt-4 text-forest/75 border-l-2 border-forest/20 pl-4 italic text-sm">
+              {t("ab.body.catering")}
+            </p>
             <div className="mt-8 grid grid-cols-3 gap-3">
-              <Value icon={<Sparkles className="h-4 w-4" />} label={t("ab.v1")} desc={t("ab.v1.desc")} />
-              <Value icon={<ShieldCheck className="h-4 w-4" />} label={t("ab.v2")} desc={t("ab.v2.desc")} />
-              <Value icon={<Heart className="h-4 w-4" />} label={t("ab.v3")} desc={t("ab.v3.desc")} />
+              <Value
+                icon={<Sparkles className="h-4 w-4" />}
+                label={t("ab.v1")}
+                desc={t("ab.v1.desc")}
+              />
+              <Value
+                icon={<ShieldCheck className="h-4 w-4" />}
+                label={t("ab.v2")}
+                desc={t("ab.v2.desc")}
+              />
+              <Value
+                icon={<Heart className="h-4 w-4" />}
+                label={t("ab.v3")}
+                desc={t("ab.v3.desc")}
+              />
             </div>
           </div>
         </div>
@@ -129,7 +165,12 @@ function About() {
           </Link>
           <Link
             to="/partners"
-            onClick={() => trackEvent("partner_cta_clicked", { location: "about_hub_link", role: "restaurant_owner" })}
+            onClick={() =>
+              trackEvent("partner_cta_clicked", {
+                location: "about_hub_link",
+                role: "restaurant_owner",
+              })
+            }
             className="rounded-full bg-cream text-forest border border-forest/20 px-6 py-3 text-sm font-semibold hover:bg-forest hover:text-white transition"
           >
             {t("nav.partners")}
@@ -160,7 +201,12 @@ function About() {
             <div className="pt-6">
               <Link
                 to="/partners"
-                onClick={() => trackEvent("partner_cta_clicked", { location: "about_growth_section", role: "restaurant_owner" })}
+                onClick={() =>
+                  trackEvent("partner_cta_clicked", {
+                    location: "about_growth_section",
+                    role: "restaurant_owner",
+                  })
+                }
                 className="inline-flex items-center gap-2 rounded-full bg-[#f2d896] text-forest px-8 py-4 text-sm font-bold hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(242,216,150,0.3)]"
               >
                 {t("ab.growth.cta")} <ArrowRight className="h-4 w-4" />
