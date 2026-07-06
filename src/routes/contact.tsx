@@ -65,38 +65,83 @@ function ContactRoute() {
   return (
     <SiteShell>
       {/* Cinematic Hero */}
-      <section className="relative overflow-hidden min-h-screen flex items-center justify-center  pt-36 pb-24 lg:pt-44 lg:pb-36 text-center">
+      <section className="relative overflow-hidden min-h-[60vh] flex items-center pt-16 pb-24 lg:pt-20 lg:pb-36">
         <div className="absolute inset-0 z-0">
           <img
             src="/hero-cinematic.png"
             fetchPriority="high"
             alt="Contact Us Background"
-            className="w-full h-full object-cover object-center scale-105"
+            className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest/90 via-forest/80 to-forest/95" />
-          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" />
+          <div className="absolute inset-0 bg-black/20" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 flex flex-col items-center">
-          <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#f2d896] shadow-xl mb-6">
-            <MessageSquare className="h-7 w-7" />
+        <div className="relative z-10 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid md:grid-cols-2 gap-12 items-center mt-8 lg:mt-12">
+          <div className="space-y-6 text-left">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm">
+              <MessageSquare className="h-3.5 w-3.5 text-[#b28a3c]" />
+              {tt("Partner Support", "Partner Support")}
+            </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-white leading-[1.05] tracking-tight drop-shadow-sm">
+              {tt("Lassen Sie uns ", "Let's get in ")}
+              <span className="text-[#b28a3c]">{tt("reden.", "touch.")}</span>
+            </h1>
+            <p className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
+              {tt(
+                "Haben Sie Fragen zu unseren Partnerprogrammen für Restaurants, Caterer oder Event-Planer? Schreiben Sie uns eine Nachricht.",
+                "Have questions about our partner programs for restaurants, caterers, or event planners? Send us a message.",
+              )}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 pt-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#f2d896] border border-white/10">
+                  <Phone className="h-4 w-4" />
+                </div>
+                <div className="text-left">
+                  <div className="text-[10px] text-white/60 uppercase tracking-wider">
+                    {tt("Rufen Sie uns an", "Call us")}
+                  </div>
+                  <div className="text-sm font-semibold text-white">+49 (0) 30 123 456</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#f2d896] border border-white/10">
+                  <Mail className="h-4 w-4" />
+                </div>
+                <div className="text-left">
+                  <div className="text-[10px] text-white/60 uppercase tracking-wider">
+                    {tt("E-Mail", "Email")}
+                  </div>
+                  <div className="text-sm font-semibold text-white">hello@speisely.com</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="text-[12px] font-bold uppercase tracking-[0.2em] text-[#b28a3c] mb-4 drop-shadow-md">
-            {tt("Kontakt", "Contact")}
+
+          <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 aspect-[4/3] max-h-[360px] group">
+            <img
+              src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80"
+              alt="Hospitality Support"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-transparent to-transparent opacity-60" />
+            <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-md rounded-xl p-3 shadow-xl border border-white/20 flex items-center gap-3">
+              <div className="p-2 bg-[#b28a3c]/20 rounded-lg text-[#f2d896]">
+                <MessageSquare className="h-5 w-5" />
+              </div>
+              <div className="text-[12px] font-bold text-white leading-none">
+                <div>{tt("Schnelle Antwort", "Fast Response")}</div>
+                <div className="text-[10px] text-white/60 font-medium mt-1">
+                  {tt("Innerhalb von 24h", "Within 24 hours")}
+                </div>
+              </div>
+            </div>
           </div>
-          <h1 className="text-5xl sm:text-6xl font-display font-bold text-white leading-[1.05] tracking-tight drop-shadow-sm mb-6">
-            {tt("Lassen Sie uns reden", "Let's get in touch")}
-          </h1>
-          <p className="text-lg text-white/80 max-w-xl leading-relaxed drop-shadow-sm">
-            {tt(
-              "Haben Sie Fragen zu unseren Partnerprogrammen für Restaurants, Caterer oder Event-Planer? Schreiben Sie uns eine Nachricht.",
-              "Have questions about our partner programs for restaurants, caterers, or event planners? Send us a message.",
-            )}
-          </p>
         </div>
       </section>
 
-      <section className="relative z-20 -mt-16 lg:-mt-24 mx-auto max-w-3xl px-4 sm:px-6 pb-24">
+      <section className="relative z-20 -mt-12 lg:-mt-16 mx-auto max-w-3xl px-4 sm:px-6 pb-24">
         <div className="bg-white rounded-[2rem] p-6 md:p-10 shadow-2xl shadow-forest/10 border border-forest/10">
           {success ? (
             <div className="text-center py-12">
