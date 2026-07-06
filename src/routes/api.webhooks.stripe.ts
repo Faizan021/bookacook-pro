@@ -46,6 +46,22 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+        // --- IDEMPOTENCY CHECK ---
+        const { error: dedupError } = await supabaseAdmin
+          .from("stripe_webhook_events")
+          .insert({ id: event.id, type: event.type });
+
+        if (dedupError) {
+          // 23505 is the PostgreSQL error code for unique_violation
+          if (dedupError.code === '23505') {
+            console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id}`);
+            return new Response("Duplicate event ignored", { status: 200 });
+          }
+          console.error(`[Stripe Webhook] Error checking idempotency for ${event.id}:`, dedupError);
+          // We proceed rather than strictly failing to avoid blocking legitimate events on transient DB issues,
+          // but logging will catch anomalies.
+        }
+
         console.log(`[Stripe Webhook Received]: ${event.type}`);
 
         switch (event.type) {
@@ -114,9 +130,23 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
             }
 
             // Handle booking deposit paid via Checkout Session directly
+            // Handle booking deposit
             if (session.metadata?.type === "booking_deposit" && session.metadata?.booking_id) {
               const bookingId = session.metadata.booking_id;
               await confirmBookingDeposit(supabaseAdmin, bookingId, session.payment_intent as string, (session.amount_total || 0) / 100);
+            }
+
+            // Handle storefront order payment
+            if (session.metadata?.type === "storefront_order" && session.metadata?.order_id) {
+              const orderId = session.metadata.order_id;
+              const { error } = await supabaseAdmin
+                .from("restaurant_orders")
+                .update({ status: "confirmed" })
+                .eq("id", orderId);
+              
+              if (error) {
+                console.error("Failed to confirm storefront order:", error);
+              }
             }
 
             break;
@@ -283,6 +313,12 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
             console.log(`[Stripe Webhook] Unhandled event type: ${event.type}`);
         }
 
+        // Mark as successfully processed
+        await supabaseAdmin
+          .from("stripe_webhook_events")
+          .update({ processed_at: new Date().toISOString() })
+          .eq("id", event.id);
+
         return new Response("OK", { status: 200 });
       },
     },
@@ -296,7 +332,7 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
   // Try checking catering bookings first
   const { data: catBooking } = await supabaseAdmin
     .from("catering_bookings")
-    .select("id, booking_status")
+    .select("id, booking_status, brief_id")
     .eq("id", bookingId)
     .maybeSingle();
 
@@ -338,13 +374,27 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
     } else {
       console.log(`[Stripe Webhook] Catering booking ${bookingId} deposit paid and confirmed!`);
     }
+    
+    // 3. Update brief status to 'booked' to unlock Lead Protection
+    if (catBooking.brief_id) {
+      const { error: briefError } = await supabaseAdmin
+        .from("catering_briefs")
+        .update({ status: "booked" })
+        .eq("id", catBooking.brief_id);
+      if (briefError) {
+        console.error(`[Stripe Webhook] Error updating brief ${catBooking.brief_id} to booked:`, briefError);
+      } else {
+        console.log(`[Stripe Webhook] Catering brief ${catBooking.brief_id} updated to booked.`);
+      }
+    }
+    
     return;
   }
 
   // Check event bookings
   const { data: eventBooking } = await supabaseAdmin
     .from("event_bookings")
-    .select("id, booking_status")
+    .select("id, booking_status, brief_id")
     .eq("id", bookingId)
     .maybeSingle();
 
@@ -386,6 +436,20 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
     } else {
       console.log(`[Stripe Webhook] Event booking ${bookingId} deposit paid and confirmed!`);
     }
+
+    // 3. Update brief status to 'booked' to unlock Lead Protection
+    if (eventBooking.brief_id) {
+      const { error: briefError } = await supabaseAdmin
+        .from("catering_briefs") // Planners also use catering_briefs for now
+        .update({ status: "booked" })
+        .eq("id", eventBooking.brief_id);
+      if (briefError) {
+        console.error(`[Stripe Webhook] Error updating planner brief ${eventBooking.brief_id} to booked:`, briefError);
+      } else {
+        console.log(`[Stripe Webhook] Planner brief ${eventBooking.brief_id} updated to booked.`);
+      }
+    }
+
     return;
   }
 

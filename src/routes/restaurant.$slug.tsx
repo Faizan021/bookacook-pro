@@ -22,7 +22,8 @@ import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
 import { CategoryNav } from "@/components/ui/CategoryNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useI18n } from "@/i18n/I18nProvider";
-import { getRestaurant, mockPromoCodes, PromoCode } from "@/data/restaurants";
+import { getRestaurant } from "@/data/restaurants";
+
 import {
   Dialog,
   DialogContent,
@@ -34,19 +35,25 @@ import {
 import {
   createTableReservation,
   getRestaurantBySlug,
-  startStorefrontCheckout,
+  submitStorefrontOrder,
+  validatePromoCode,
 } from "@/lib/restaurant/public.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { UnifiedCustomerFields } from "@/components/UnifiedCustomerFields";
 import { recordPageView } from "@/lib/vendor/analytics.functions";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
+import { getPublicRestaurantReviews } from "@/lib/reviews/public.functions";
 
 export const Route = createFileRoute("/restaurant/$slug")({
   loader: async ({ params }) => {
     let dbRestaurant = null;
+    let reviewsData = null;
     try {
       const res = await getRestaurantBySlug({ data: { slug: params.slug } });
       dbRestaurant = res.restaurant;
+      if (dbRestaurant) {
+        reviewsData = await getPublicRestaurantReviews({ data: { restaurantId: dbRestaurant.id } });
+      }
     } catch (e) {
       console.error("Error loading restaurant db record", e);
     }
@@ -54,7 +61,7 @@ export const Route = createFileRoute("/restaurant/$slug")({
     if (!fullRestaurant) {
       throw notFound();
     }
-    return { dbRestaurant, fullRestaurant };
+    return { dbRestaurant, fullRestaurant, reviewsData };
   },
   head: ({ loaderData, params }) => {
     const r = loaderData?.fullRestaurant;
@@ -100,6 +107,15 @@ export const Route = createFileRoute("/restaurant/$slug")({
                   addressCountry: "DE",
                 },
                 servesCuisine: r.tags?.[0] ?? "",
+                ...(loaderData?.reviewsData?.aggregates?.count && loaderData.reviewsData.aggregates.count > 0
+                  ? {
+                      aggregateRating: {
+                        "@type": "AggregateRating",
+                        ratingValue: loaderData.reviewsData.aggregates.avgOverall,
+                        reviewCount: loaderData.reviewsData.aggregates.count,
+                      },
+                    }
+                  : {}),
               }),
             },
           ]
@@ -122,7 +138,8 @@ export const Route = createFileRoute("/restaurant/$slug")({
 function RestaurantPage() {
   const { slug } = Route.useParams();
   const { lang } = useI18n();
-  const { dbRestaurant, fullRestaurant } = Route.useLoaderData();
+  const loaderData = Route.useLoaderData() as any;
+  const { dbRestaurant, fullRestaurant, reviewsData } = loaderData;
   const isGated = useMemo(() => {
     if (!dbRestaurant) return false;
     // Only gate ordering if NO payment method is available at all
@@ -144,17 +161,17 @@ function RestaurantPage() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [filter, setFilter] = useState<"all" | "vegetarian" | "vegan" | "gluten-free">("all");
   const [promoCodeInput, setPromoCodeInput] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<{code: string, discountCents: number, freeDelivery: boolean, type: string, value: number} | null>(null);
   const [promoError, setPromoError] = useState("");
+  const [promoLoading, setPromoLoading] = useState(false);
+  const validatePromoFn = useServerFn(validatePromoCode);
   const [selectedPayment, setSelectedPayment] = useState<"cash" | "paypal" | "stripe" | null>(null);
 
   // Derive which payment methods this restaurant supports
   const paymentMethods = useMemo(
     () => ({
       cash: (dbRestaurant as any)?.accepts_cash === true,
-      paypal:
-        (dbRestaurant as any)?.accepts_paypal === true && !!(dbRestaurant as any)?.paypal_email,
-      paypalLink: (dbRestaurant as any)?.paypal_email || "",
+      paypal: (dbRestaurant as any)?.accepts_paypal === true,
       stripe: dbRestaurant?.stripe_connect_status === "connected",
     }),
     [dbRestaurant],
@@ -165,7 +182,7 @@ function RestaurantPage() {
   const [scheduleTime, setScheduleTime] = useState("");
 
   const recordView = useServerFn(recordPageView);
-  const checkoutFn = useServerFn(startStorefrontCheckout);
+  const checkoutFn = useServerFn(submitStorefrontOrder);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
@@ -190,6 +207,14 @@ function RestaurantPage() {
     reservationTime: "19:00",
     notes: "",
   });
+  const [checkoutIdentity, setCheckoutIdentity] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    deliveryAddress: "",
+  });
+  const [orderType, setOrderType] = useState<"pickup" | "delivery">("pickup");
+  const [checkoutNotes, setCheckoutNotes] = useState("");
   const [resLoading, setResLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(false);
   const [resError, setResError] = useState("");
@@ -329,8 +354,8 @@ function RestaurantPage() {
   };
 
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
-  // TODO: Connect this mock review UI to the real Supabase reviews table later
-  const reviews: any[] = [];
+  const reviews = reviewsData?.reviews || [];
+  const aggregates = reviewsData?.aggregates;
   if (!restaurant) return null;
   
   const scrollToMenu = () => {
@@ -340,7 +365,7 @@ function RestaurantPage() {
   const categories = useMemo(() => {
     const seen = new Set<string>();
     const cats: string[] = [];
-    restaurant.menu.forEach((m) => {
+    restaurant.menu.forEach((m: any) => {
       const c = m.category || "Menu";
       if (!seen.has(c)) {
         seen.add(c);
@@ -374,78 +399,53 @@ function RestaurantPage() {
     });
 
   const cartItems = Object.entries(cart).map(([name, qty]) => {
-    const item = restaurant.menu.find((m) => m.name === name)!;
+    const item = restaurant.menu.find((m: any) => m.name === name)!;
     return { ...item, qty };
   });
   const total = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
   const totalCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
 
-  const handleApplyPromo = () => {
+  const handleApplyPromo = async () => {
     setPromoError("");
-    const codes = mockPromoCodes[restaurant.id] || [];
-    const validCode = codes.find(
-      (c) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase(),
-    );
-    if (validCode) {
-      const now = new Date();
-      if (validCode.starts_at && new Date(validCode.starts_at) > now) {
-        return setPromoError(t("Dieser Code ist noch nicht gültig", "This code is not valid yet"));
+    if (!promoCodeInput.trim()) return;
+    setPromoLoading(true);
+    
+    try {
+      const itemsPayload = Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity }));
+      if (itemsPayload.length === 0) {
+        setPromoError(t("Dein Warenkorb ist leer", "Your cart is empty"));
+        setPromoLoading(false);
+        return;
       }
-      if (validCode.ends_at && new Date(validCode.ends_at) < now) {
-        return setPromoError(t("Dieser Code ist abgelaufen", "This code has expired"));
+      
+      const res = await validatePromoFn({ data: { restaurantId: dbRestaurant.id, promoCode: promoCodeInput.trim(), items: itemsPayload } });
+      if (res.success) {
+        setAppliedPromo({
+          code: res.code!,
+          discountCents: res.discountCents!,
+          freeDelivery: res.freeDelivery!,
+          type: res.discount_type!,
+          value: res.discount_value!
+        });
+        setPromoCodeInput("");
+      } else {
+        setPromoError(res.error || t("Ungültiger Code", "Invalid code"));
       }
-      if (validCode.min_order_value_cents && total * 100 < validCode.min_order_value_cents) {
-        return setPromoError(
-          t(
-            `Mindestbestellwert: €${(validCode.min_order_value_cents / 100).toFixed(2)}`,
-            `You must spend at least €${(validCode.min_order_value_cents / 100).toFixed(2)} to use this code`,
-          ),
-        );
-      }
-      setAppliedPromo(validCode);
-      setPromoCodeInput("");
-    } else {
-      setPromoError(t("Ungültiger Code", "Invalid code"));
+    } catch (e) {
+      setPromoError(t("Fehler bei der Validierung", "Error validating code"));
+    } finally {
+      setPromoLoading(false);
     }
   };
   const handleRemovePromo = () => setAppliedPromo(null);
 
   let deliveryFee = parseFloat(restaurant.fee.replace("€", ""));
-  const subtotal = total;
-  let discountAmount = 0;
-  if (appliedPromo) {
-    if ((appliedPromo as any).discount_type === "free_delivery") {
-      deliveryFee = 0;
-    } else if ((appliedPromo as any).discount_type === "free_item") {
-      const targetItem = cartItems.find((i) => i.name === (appliedPromo as any).free_item_name);
-      if (targetItem) {
-        discountAmount = targetItem.price;
-      }
-    } else if ((appliedPromo as any).discount_type === "bogo") {
-      const rq = (appliedPromo as any).required_qty || 2;
-      const appliesTo = (appliedPromo as any).applies_to_product_name;
-      const targetItem = cartItems.find((i) => i.name === appliesTo);
-      if (targetItem) {
-        const freeItems = Math.floor(targetItem.qty / rq);
-        discountAmount = freeItems * targetItem.price;
-      }
-    } else {
-      let eligibleSubtotal = subtotal;
-      if ((appliedPromo as any).applies_to_product_name) {
-        const targetItem = cartItems.find(
-          (i) => i.name === (appliedPromo as any).applies_to_product_name,
-        );
-        eligibleSubtotal = targetItem ? targetItem.price * targetItem.qty : 0;
-      }
-
-      if (appliedPromo.discount_type === "percentage") {
-        discountAmount = eligibleSubtotal * (appliedPromo.discount_value / 100);
-      } else {
-        discountAmount = appliedPromo.discount_value;
-      }
-      discountAmount = Math.min(discountAmount, eligibleSubtotal);
-    }
+  if (appliedPromo?.freeDelivery) {
+    deliveryFee = 0;
   }
+  const subtotal = total;
+  const discountAmount = appliedPromo ? appliedPromo.discountCents / 100 : 0;
+
   const finalTotal = subtotal - discountAmount + deliveryFee;
 
   const renderSidebar = (isMobile = false) => (
@@ -554,9 +554,9 @@ function RestaurantPage() {
                   {t("Gutschein", "Voucher")}: {appliedPromo.code}
                 </span>
                 <span className="text-xs">
-                  {appliedPromo.discount_type === "percentage"
-                    ? `-${appliedPromo.discount_value}%`
-                    : `-€${appliedPromo.discount_value.toFixed(2)}`}
+                  {appliedPromo.type === "percentage"
+                    ? `-${appliedPromo.value}%`
+                    : appliedPromo.type === "free_delivery" ? t("Kostenlose Lieferung", "Free delivery") : `-€${appliedPromo.value.toFixed(2)}`}
                 </span>
               </div>
               <div className="flex items-center gap-3">
@@ -597,9 +597,80 @@ function RestaurantPage() {
             <span>€{finalTotal.toFixed(2)}</span>
           </div>
 
-          {/* ── PAYMENT METHODS ─────────────────────────── */}
+          {/* ─── CUSTOMER DETAILS ─── */}
+          <div className="mt-4 pt-4 border-t border-[oklch(0.85_0.05_152)] space-y-3">
+            <p className="text-xs font-semibold text-forest/60 uppercase tracking-wide">
+              {t("Ihre Daten", "Your Details")}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setOrderType("pickup")}
+                className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
+                  orderType === "pickup"
+                    ? "bg-[#10b981] text-white shadow-sm"
+                    : "bg-[#eadfce]/30 text-forest/60 hover:bg-[#eadfce]/50"
+                }`}
+              >
+                {t("Abholung", "Pickup")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setOrderType("delivery")}
+                className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
+                  orderType === "delivery"
+                    ? "bg-[#10b981] text-white shadow-sm"
+                    : "bg-[#eadfce]/30 text-forest/60 hover:bg-[#eadfce]/50"
+                }`}
+              >
+                {t("Lieferung", "Delivery")}
+              </button>
+            </div>
+            <input
+              type="text"
+              required
+              placeholder={t("Name *", "Name *")}
+              value={checkoutIdentity.name}
+              onChange={(e) => setCheckoutIdentity({ ...checkoutIdentity, name: e.target.value })}
+              className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
+            />
+            <input
+              type="tel"
+              required
+              placeholder={t("Telefon *", "Phone *")}
+              value={checkoutIdentity.phone}
+              onChange={(e) => setCheckoutIdentity({ ...checkoutIdentity, phone: e.target.value })}
+              className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
+            />
+            <input
+              type="email"
+              placeholder={t("Email (optional)", "Email (optional)")}
+              value={checkoutIdentity.email}
+              onChange={(e) => setCheckoutIdentity({ ...checkoutIdentity, email: e.target.value })}
+              className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
+            />
+            {orderType === "delivery" && (
+              <input
+                type="text"
+                required
+                placeholder={t("Lieferadresse *", "Delivery Address *")}
+                value={checkoutIdentity.deliveryAddress}
+                onChange={(e) => setCheckoutIdentity({ ...checkoutIdentity, deliveryAddress: e.target.value })}
+                className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
+              />
+            )}
+            <input
+              type="text"
+              placeholder={t("Notizen (optional)", "Notes (optional)")}
+              value={checkoutNotes}
+              onChange={(e) => setCheckoutNotes(e.target.value)}
+              className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
+            />
+          </div>
+
+          {/* ─── PAYMENT METHODS ─── */}
           {!isGated && (
-            <div className="mt-4 space-y-2">
+            <div className="mt-4 pt-4 border-t border-[oklch(0.85_0.05_152)] space-y-2">
               <p className="text-xs font-semibold text-forest/60 uppercase tracking-wide">
                 {t("Bezahlen mit:", "Pay with:")}
               </p>
@@ -614,7 +685,7 @@ function RestaurantPage() {
                         : "border-[#aac4aa] bg-white text-forest hover:border-forest"
                     }`}
                   >
-                    <span>💵</span> {t("BAR", "CASH")}
+                    <span>💶</span> {t("BAR", "CASH")}
                   </button>
                 )}
                 {paymentMethods.paypal && (
@@ -644,7 +715,7 @@ function RestaurantPage() {
                   </button>
                 )}
               </div>
-              {selectedPayment === "paypal" && paymentMethods.paypalLink && (
+              {selectedPayment === "paypal" && (
                 <p className="text-[10px] text-muted-foreground">
                   {t(
                     "Nach der Bestellung werden Sie zu PayPal weitergeleitet.",
@@ -658,59 +729,62 @@ function RestaurantPage() {
           <button
             onClick={async () => {
               if (isGated || checkoutLoading) return;
-              if (!selectedPayment) {
-                alert(
-                  t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."),
-                );
+              if (!checkoutIdentity.name || !checkoutIdentity.phone) {
+                alert(t("Bitte füllen Sie Name und Telefonnummer aus.", "Please fill out your name and phone number."));
                 return;
               }
-              if (selectedPayment === "paypal" && paymentMethods.paypalLink) {
-                const link = paymentMethods.paypalLink.startsWith("http")
-                  ? paymentMethods.paypalLink
-                  : `https://paypal.me/${paymentMethods.paypalLink.replace(/^paypal\.me\//i, "")}/${finalTotal.toFixed(2)}EUR`;
-                window.open(link, "_blank");
-                alert(
-                  t(
-                    `Bestellung über ${totalCount} Artikel aufgegeben!`,
-                    `Order placed for ${totalCount} items!`,
-                  ),
-                );
-                if (isMobile) setMobileCartOpen(false);
-              } else if (selectedPayment === "stripe") {
-                setCheckoutLoading(true);
-                try {
-                  const res = await checkoutFn({
-                    data: {
-                      restaurantId: dbRestaurant?.id ?? "",
-                      amountCents: Math.round(finalTotal * 100),
-                      origin: window.location.origin,
-                      slug: slug,
-                    }
-                  });
+              if (orderType === "delivery" && !checkoutIdentity.deliveryAddress) {
+                alert(t("Bitte geben Sie eine Lieferadresse ein.", "Please enter a delivery address."));
+                return;
+              }
+              if (!selectedPayment) {
+                alert(t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."));
+                return;
+              }
+
+              setCheckoutLoading(true);
+              try {
+                const itemsPayload = cartItems.map(i => ({ productId: i.id, quantity: i.qty }));
+                const res = await checkoutFn({
+                  data: {
+                    restaurantId: dbRestaurant?.id ?? "",
+                    slug: slug,
+                    origin: window.location.origin,
+                    paymentMethod: selectedPayment,
+                    orderType: orderType,
+                    items: itemsPayload,
+                    promoCode: appliedPromo?.code,
+                    customerName: checkoutIdentity.name,
+                    customerPhone: checkoutIdentity.phone,
+                    customerEmail: checkoutIdentity.email || undefined,
+                    deliveryAddress: orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
+                    notes: checkoutNotes || undefined,
+                  }
+                });
+
+                if (selectedPayment === "stripe") {
                   if (res?.url) {
                     window.location.href = res.url;
                   } else {
-                    alert(
-                      t(
-                        "Fehler beim Erstellen der Zahlungssitzung.",
-                        "Failed to create checkout session.",
-                      ),
-                    );
+                    alert(t("Fehler beim Erstellen der Zahlungssitzung.", "Failed to create checkout session."));
                   }
-                } catch (err: any) {
-                  alert(t("Fehler: ", "Error: ") + (err.message || err));
-                } finally {
-                  setCheckoutLoading(false);
+                } else if (selectedPayment === "paypal") {
+                  if (res?.url) {
+                    window.open(res.url, "_blank");
+                  }
+                  alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
+                  setCart({});
+                  if (isMobile) setMobileCartOpen(false);
+                } else {
+                  // Cash
+                  alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
+                  setCart({});
+                  if (isMobile) setMobileCartOpen(false);
                 }
-              } else {
-                // Cash
-                alert(
-                  t(
-                    `Bestellung über ${totalCount} Artikel aufgegeben!`,
-                    `Order placed for ${totalCount} items!`,
-                  ),
-                );
-                if (isMobile) setMobileCartOpen(false);
+              } catch (err: any) {
+                alert(t("Fehler: ", "Error: ") + (err.message || err));
+              } finally {
+                setCheckoutLoading(false);
               }
             }}
             disabled={isGated || checkoutLoading}
@@ -722,7 +796,7 @@ function RestaurantPage() {
           >
             {checkoutLoading
               ? t("Wird geladen...", "Loading...")
-              : `${t("Zur Kasse", "Go to checkout")} · €${finalTotal.toFixed(2)}`}
+              : `${t("Zur Kasse", "Go to checkout")} • €${finalTotal.toFixed(2)}`}
           </button>
         </>
       )}
@@ -1067,7 +1141,7 @@ function RestaurantPage() {
           <div className="mt-8 space-y-10">
             {categories.map((cat) => {
               const items = restaurant.menu.filter(
-                (m) =>
+                (m: any) =>
                   (m.category || "Menu") === cat &&
                   (filter === "all" || (m.dietary ?? []).includes(filter)),
               );
@@ -1076,7 +1150,7 @@ function RestaurantPage() {
                 <div key={cat} id={`category-${cat}`} className="scroll-mt-32">
                   <h3 className="font-display text-2xl text-forest">{cat}</h3>
                   <div className="mt-4 grid gap-4">
-                    {items.map((m) => {
+                    {items.map((m: any) => {
                       const qty = cart[m.name] || 0;
                       return (
                         <div
@@ -1099,7 +1173,7 @@ function RestaurantPage() {
                                 <h4 className="font-display text-lg font-bold text-forest">
                                   {m.name}
                                 </h4>
-                                {(m.dietary ?? []).map((d) => (
+                                {(m.dietary ?? []).map((d: any) => (
                                   <span
                                     key={d}
                                     className="inline-flex items-center rounded-full bg-[#fdfaf5] text-[#16372f] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide border border-[#eadfce]/60"
@@ -1250,6 +1324,79 @@ function RestaurantPage() {
           </Sheet>
         </div>
       )}
+
+      {/* Reviews Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mb-16">
+        <h2 className="text-2xl font-display font-bold text-forest mb-8">
+          {t("Bewertungen", "Reviews")}
+        </h2>
+        
+        {aggregates && aggregates.count > 0 ? (
+          <div className="grid lg:grid-cols-[300px_1fr] gap-10">
+            <div className="bg-[#fdfaf5] p-6 rounded-2xl border border-[#eadfce]/50 h-fit">
+              <div className="flex items-end gap-3 mb-4">
+                <div className="text-5xl font-bold text-forest">{aggregates.avgOverall.toFixed(1)}</div>
+                <div className="text-forest/70 pb-1">/ 5</div>
+              </div>
+              <div className="flex text-yellow-400 mb-2 text-xl">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"} className="w-5 h-5" />
+                ))}
+              </div>
+              <div className="text-sm text-forest/70 mb-6">
+                {aggregates.count} {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
+              </div>
+              
+              <div className="space-y-3 pt-4 border-t border-[#eadfce]">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Essen", "Food")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgFood.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Schnelligkeit", "Speed")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgSpeed.toFixed(1)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              {reviews.map((r: any) => (
+                <div key={r.id} className="pb-6 border-b border-[#eadfce]/50 last:border-0">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-semibold text-forest">{r.customer_name}</div>
+                      <div className="text-xs text-forest/60">
+                        {new Date(r.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                    <div className="flex text-yellow-400">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"} className="w-4 h-4" />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-forest/80 mt-2 whitespace-pre-wrap">{r.comment}</p>
+                  
+                  {r.vendor_reply && (
+                    <div className="mt-4 bg-[#fdfaf5] p-4 rounded-xl border border-[#eadfce]/40 ml-4">
+                      <div className="text-xs font-semibold text-forest mb-1">{fullRestaurant?.name}</div>
+                      <p className="text-sm text-forest/70">{r.vendor_reply}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-[#fdfaf5] rounded-2xl border border-[#eadfce]/50">
+            <Star className="w-10 h-10 text-forest/20 mx-auto mb-3" />
+            <h3 className="font-semibold text-forest mb-1">{t("Noch keine Bewertungen", "No reviews yet")}</h3>
+            <p className="text-sm text-forest/60 max-w-sm mx-auto">
+              {t("Bestelle jetzt und sei der Erste, der dieses Restaurant bewertet.", "Order now and be the first to review this restaurant.")}
+            </p>
+          </div>
+        )}
+      </section>
 
       <MarketplacePromiseCTA vertical="restaurant" />
     </SiteShell>

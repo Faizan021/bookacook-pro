@@ -1,0 +1,7 @@
+- [x] Create `PROJECT_ROLES.md`
+- [x] Create `STORE_FRONT.md`
+- [x] Create `SEO_GEO.md`
+- [x] Create `SHARED_RULES.md`
+- [x] Create `DATA_MAP.md`
+- [x] Create `DECISIONS.md`
+- [x] Create `CONFIRMED_VS_ASSUMED.md`

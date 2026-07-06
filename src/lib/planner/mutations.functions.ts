@@ -266,6 +266,11 @@ export const updatePlannerRequestStatus = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
     const planner = await resolveOwnedPlanner(supabase, userId);
     if (!planner) throw new Error("No planner storefront for this account");
+
+    if (data.status === "booked") {
+      throw new Error("Cannot manually mark as booked. The customer must pay the platform deposit to secure the deal.");
+    }
+
     const { error } = await supabase
       .from("catering_briefs")
       .update({ status: data.status })
@@ -273,4 +278,82 @@ export const updatePlannerRequestStatus = createServerFn({ method: "POST" })
       .eq("preferred_planner_id", planner.id);
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+export const submitPlannerProposal = createServerFn({ method: "POST" })
+    .middleware([requireRole("planner")])
+    .inputValidator((input: { briefId: string; proposalCents: number; depositCents: number; notes: string; origin: string }) =>
+      z
+        .object({
+          briefId: z.string().uuid(),
+          proposalCents: z.number().min(0),
+          depositCents: z.number().min(0),
+          notes: z.string(),
+          origin: z.string(),
+        })
+        .parse(input),
+    )
+    .handler(async ({ context, data }) => {
+      const { supabase, userId } = context;
+      const planner = await resolveOwnedPlanner(supabase, userId);
+      if (!planner) throw new Error("No planner storefront for this account");
+      
+      const depositEuros = (data.depositCents / 100).toFixed(2);
+      const link = `${data.origin}/checkout/deposit/${data.briefId}`;
+      const officialMessage = `[OFFICIAL PROPOSAL]\nWe have submitted a proposal for your event.\n\nDeposit Required: €${depositEuros}\n\nTo secure this booking and reveal our contact information, please pay the platform deposit here:\n${link}\n\nVendor Notes:\n${data.notes}`;
+
+      const { error } = await supabase
+        .from("catering_briefs")
+        .update({ 
+          status: "quoted",
+          budget_cents: data.proposalCents,
+          notes: officialMessage
+        })
+        .eq("id", data.briefId)
+        .eq("preferred_planner_id", planner.id);
+      if (error) throw new Error(error.message);
+
+      // Auto-inject to SecureChat
+      await supabase.from("brief_messages").insert({
+        brief_id: data.briefId,
+        sender_id: userId,
+        message: officialMessage,
+      });
+
+      return { ok: true };
+    });
+
+export const getPlannerBriefContactDetails = createServerFn({ method: "GET" })
+  .middleware([requireRole("planner")])
+  .validator((input: { requestId: string }) => z.object({ requestId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const planner = await resolveOwnedPlanner(supabase, userId);
+    if (!planner) throw new Error("No planner storefront for this account");
+
+    // Fetch the brief to check ownership and status
+    const { data: brief, error: briefError } = await supabase
+      .from("catering_briefs")
+      .select("status, customer_id")
+      .eq("id", data.requestId)
+      .eq("preferred_planner_id", planner.id)
+      .single();
+
+    if (briefError || !brief) throw new Error("Request not found or access denied");
+
+    // LEAD PROTECTION GATE
+    if (brief.status !== "booked") {
+      throw new Error("Contact details are locked until the deal is secured (booked status required).");
+    }
+
+    // Fetch customer PII
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("first_name, last_name, email, phone")
+      .eq("id", brief.customer_id)
+      .single();
+
+    if (profileError || !profile) throw new Error("Customer profile not found");
+
+    return profile;
   });

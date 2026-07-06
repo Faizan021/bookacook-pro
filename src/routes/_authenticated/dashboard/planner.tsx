@@ -20,16 +20,28 @@ import {
   updateMyPlannerSettings,
   getPlannerRequests,
   updatePlannerRequestStatus,
+  getPlannerBriefContactDetails,
+  submitPlannerProposal,
 } from "@/lib/planner/mutations.functions";
 import { getMyPromoCodes } from "@/lib/promotions/queries.functions";
 import { createPromoCode, togglePromoCode } from "@/lib/promotions/mutations.functions";
 import { useSpeiselyPing } from "@/lib/vendor/useSpeiselyPing";
 import { MilestoneTimeline } from "@/components/vendor/MilestoneTimeline";
 import { BlackoutCalendarSection } from "@/components/vendor/BlackoutCalendarSection";
+import { SecureChat } from "@/components/SecureChat";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -1197,10 +1209,77 @@ const BRIEF_STATUSES = [
   "cancelled",
 ] as const;
 
+function CustomerContactReveal({ requestId, status }: { requestId: string; status: string }) {
+  const fetchContact = useServerFn(getPlannerBriefContactDetails);
+  
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["planner", "request", requestId, "contact"],
+    queryFn: () => fetchContact({ data: { requestId } }),
+    enabled: status === "booked",
+    retry: false
+  });
+
+  if (status !== "booked") {
+    return (
+      <div className="mt-6 p-4 rounded-xl border border-dashed border-stone-300 bg-stone-50 flex flex-col items-center justify-center text-center">
+        <div className="space-y-1">
+          <div className="flex justify-center text-stone-400 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <p className="text-sm font-medium text-stone-600">Contact Details Locked</p>
+          <p className="text-xs text-stone-500">Customer contact details will be revealed once the deal is booked.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="mt-6 p-4 rounded-xl border border-stone-200 bg-white shadow-sm flex items-center justify-center">
+        <Loader2 className="h-5 w-5 animate-spin text-forest" />
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="mt-6 p-4 rounded-xl border border-red-200 bg-red-50 text-red-600 text-sm">
+        Failed to load contact details.
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6 p-4 rounded-xl border border-forest/20 bg-forest/5 shadow-sm">
+      <h4 className="text-xs font-bold uppercase tracking-wider text-forest mb-3 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Customer Contact Info
+      </h4>
+      <div className="space-y-2 text-sm text-stone-800">
+        <div className="flex items-center gap-2">
+          <span className="text-stone-500 w-16">Name:</span>
+          <span className="font-medium">{data.first_name} {data.last_name}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-stone-500 w-16">Email:</span>
+          <a href={`mailto:${data.email}`} className="font-medium text-forest hover:underline">{data.email}</a>
+        </div>
+        {data.phone && (
+          <div className="flex items-center gap-2">
+            <span className="text-stone-500 w-16">Phone:</span>
+            <a href={`tel:${data.phone}`} className="font-medium text-forest hover:underline">{data.phone}</a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function RequestsSection() {
   const { t } = useI18n();
   const fetchRequests = useServerFn(getPlannerRequests);
   const updateStatus = useServerFn(updatePlannerRequestStatus);
+  const submitProposal = useServerFn(submitPlannerProposal);
   const qc = useQueryClient();
   const q = useSuspenseQuery({
     queryKey: ["planner", "requests"],
@@ -1210,6 +1289,30 @@ function RequestsSection() {
     mutationFn: (vars: { requestId: string; status: string }) => updateStatus({ data: vars }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["planner", "requests"] }),
   });
+
+  const [selectedBriefId, setSelectedBriefId] = useState<string | null>(
+    q.data?.requests?.[0]?.id || null,
+  );
+
+  const [proposalBrief, setProposalBrief] = useState<any | null>(null);
+  const [proposalAmount, setProposalAmount] = useState("");
+  const [depositAmount, setDepositAmount] = useState("");
+  const [proposalNotes, setProposalNotes] = useState("");
+  const proposalMut = useMutation({
+    mutationFn: (vars: {
+      briefId: string;
+      proposalCents: number;
+      depositCents: number;
+      notes: string;
+      origin: string;
+    }) => submitProposal({ data: vars }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["planner", "requests"] });
+      setProposalBrief(null);
+    },
+  });
+
+  const selectedBrief = q.data?.requests?.find((b: any) => b.id === selectedBriefId);
 
   if (!q.data?.planner) return null;
   if (q.data.requests.length === 0)
@@ -1370,6 +1473,9 @@ function RequestsSection() {
                   {b.notes && (
                     <p className="mt-3 text-sm italic text-muted-foreground">"{b.notes}"</p>
                   )}
+                  
+                  <CustomerContactReveal requestId={b.id} status={b.status} />
+                  
                 </div>
                 <div className="w-full lg:w-[400px] shrink-0 space-y-4">
                   <MilestoneTimeline
@@ -1379,6 +1485,23 @@ function RequestsSection() {
                     isVendor={true}
                   />
                   <SecureChat briefId={b.id} currentUserId={q.data.planner.owner_id} />
+                  {b.status !== "booked" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full mt-2 text-xs py-1 h-8 rounded-lg bg-forest text-white font-semibold"
+                      onClick={() => {
+                        setProposalBrief(b);
+                        setProposalAmount(
+                          b.budget_cents ? (b.budget_cents / 100).toString() : "",
+                        );
+                        setDepositAmount("0");
+                        setProposalNotes("");
+                      }}
+                    >
+                      Convert to Proposal
+                    </Button>
+                  )}
                   <div className="w-full">
                     <Label className="text-xs uppercase tracking-wider text-muted-foreground">
                       Update status
@@ -1391,7 +1514,7 @@ function RequestsSection() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {BRIEF_STATUSES.map((s) => (
+                        {BRIEF_STATUSES.filter(s => s !== "booked").map((s) => (
                           <SelectItem key={s} value={s}>
                             {s.replace(/_/g, " ")}
                           </SelectItem>
@@ -1405,6 +1528,68 @@ function RequestsSection() {
           ))}
         </div>
       </section>
+
+      {/* Proposal Dialog */}
+      <Dialog open={!!proposalBrief} onOpenChange={(open) => !open && setProposalBrief(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Send Proposal</DialogTitle>
+            <DialogDescription>
+              Submit an official proposal to the customer. This will update the request's total and
+              set its status to "Proposal Sent".
+            </DialogDescription>
+          </DialogHeader>
+          {proposalBrief && (
+            <div className="space-y-4 py-4">
+              <div className="space-y-1.5">
+                <Label>Total Proposal Amount (€)</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={proposalAmount}
+                  onChange={(e) => setProposalAmount(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Required Deposit Amount (€)</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={depositAmount}
+                  onChange={(e) => setDepositAmount(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Milestone Terms & Notes</Label>
+                <Textarea
+                  rows={4}
+                  value={proposalNotes}
+                  onChange={(e) => setProposalNotes(e.target.value)}
+                  placeholder="e.g. 50% deposit required upon booking. Final payment due 7 days prior to event."
+                />
+              </div>
+              <Button
+                className="w-full bg-forest text-white rounded-full flex-1"
+                disabled={!proposalAmount || !depositAmount || proposalMut.isPending}
+                onClick={() => {
+                  if (!proposalAmount || !depositAmount) return;
+                  proposalMut.mutate({
+                    briefId: proposalBrief.id,
+                    proposalCents: Math.round(parseFloat(proposalAmount) * 100),
+                    depositCents: Math.round(parseFloat(depositAmount) * 100),
+                    notes: proposalNotes,
+                    origin: window.location.origin,
+                  });
+                }}
+              >
+                {proposalMut.isPending ? "Sending..." : "Send Proposal"}
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

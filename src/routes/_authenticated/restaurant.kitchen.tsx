@@ -96,7 +96,7 @@ function KitchenDisplayPage() {
         <p className="text-muted-foreground mt-2 text-center max-w-sm">
           {t("Please configure your restaurant profile in the dashboard first.", "Bitte erstelle zuerst ein Restaurant-Profil im Dashboard.")}
         </p>
-        <Link to="/restaurant" className="mt-6 inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full px-5 py-2 text-sm font-medium">
+        <Link to="/restaurant" search={{ tab: undefined }} className="mt-6 inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full px-5 py-2 text-sm font-medium">
           {t("Back to Dashboard", "Zurück zum Dashboard")}
         </Link>
       </div>
@@ -107,7 +107,14 @@ function KitchenDisplayPage() {
   const activeOrders = data.orders.filter((o: any) => o.status !== "delivered" && o.status !== "cancelled");
 
   // Columns classification
-  const newOrders = activeOrders.filter((o: any) => o.status === "pending" || o.status === "confirmed");
+  const newOrders = activeOrders.filter((o: any) => {
+    // If stripe/paypal, only show if confirmed or beyond
+    if (o.payment_method === 'stripe' || o.payment_method === 'paypal') {
+      return o.status === "confirmed";
+    }
+    // If cash or legacy without payment_method, show pending and confirmed
+    return o.status === "pending" || o.status === "confirmed";
+  });
   const cookingOrders = activeOrders.filter((o: any) => o.status === "preparing");
   const readyOrders = activeOrders.filter((o: any) => o.status === "ready" || o.status === "picked_up");
 
@@ -118,6 +125,7 @@ function KitchenDisplayPage() {
         <div className="flex items-center gap-3">
           <Link
             to="/restaurant"
+            search={{ tab: undefined }}
             hash="orders"
             className="p-2 bg-white/5 hover:bg-white/10 rounded-full text-white/80 transition"
             title={t("Back to Dashboard", "Zurück zum Dashboard")}

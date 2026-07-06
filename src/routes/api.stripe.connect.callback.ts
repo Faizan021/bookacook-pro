@@ -135,7 +135,6 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
           const { error: statusError } = await supabaseAdmin
             .from("restaurants")
             .update({
-              stripe_user_id: stripeUserId, // Keep for fallback compatibility until Step 2 drop
               stripe_connect_status: "connected",
               stripe_connected_at: new Date().toISOString(),
             })

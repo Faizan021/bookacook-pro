@@ -75,7 +75,7 @@ export const upsertConsentRecord = createServerFn({ method: "POST" })
     // Upsert the main consent record
     const { data: consentRecord, error: consentError } = await supabaseAdmin
       .from("user_consents")
-      .upsert(payload, { onConflict: "email" })
+      .upsert(payload, { onConflict: "email" } as any)
       .select("id")
       .single();
 
@@ -87,37 +87,37 @@ export const upsertConsentRecord = createServerFn({ method: "POST" })
     // Insert an audit log for operational terms
     if (data.terms_acknowledged) {
       await supabaseAdmin.from("consent_logs").insert({
-        consent_id: consentRecord.id,
+        consent_id: (consentRecord as any).id,
         email: data.email,
         action_type: "acknowledged_terms",
         source: data.source,
         source_detail: data.source_detail,
         metadata: data.metadata || {},
-      });
+      } as any);
     }
 
     // Insert an audit log for marketing opt-in
     if (data.marketing_opt_in) {
       await supabaseAdmin.from("consent_logs").insert({
-        consent_id: consentRecord.id,
+        consent_id: (consentRecord as any).id,
         email: data.email,
         action_type: "granted_marketing",
         source: data.source,
         source_detail: data.source_detail,
         metadata: data.metadata || {},
-      });
+      } as any);
     }
 
     // Handle Double Opt-In Email
     if (shouldSendEmail && double_opt_in_token) {
       await supabaseAdmin.from("consent_logs").insert({
-        consent_id: consentRecord.id,
+        consent_id: (consentRecord as any).id,
         email: data.email,
         action_type: "double_opt_in_sent",
         source: data.source,
         source_detail: data.source_detail,
         metadata: { token_generated: true },
-      });
+      } as any);
 
       const { sendDoubleOptInEmail } = await import("@/lib/email.functions");
       sendDoubleOptInEmail({ data: { email: data.email, token: double_opt_in_token } }).catch(err => {
@@ -145,15 +145,15 @@ export const verifyOptInToken = createServerFn({ method: "POST" })
       return { status: "invalid" as const, message: "Invalid verification link." };
     }
 
-    if (consentRecord.double_opt_in_confirmed) {
+    if ((consentRecord as any).double_opt_in_confirmed) {
       return { status: "already_verified" as const, message: "Email is already verified." };
     }
 
-    if (consentRecord.double_opt_in_token !== data.token) {
+    if ((consentRecord as any).double_opt_in_token !== data.token) {
       return { status: "invalid" as const, message: "Invalid verification link." };
     }
 
-    if (consentRecord.token_expires_at && new Date(consentRecord.token_expires_at).getTime() < Date.now()) {
+    if ((consentRecord as any).token_expires_at && new Date((consentRecord as any).token_expires_at).getTime() < Date.now()) {
       return { status: "expired" as const, message: "This verification link has expired." };
     }
 
@@ -164,8 +164,8 @@ export const verifyOptInToken = createServerFn({ method: "POST" })
         double_opt_in_confirmed: true,
         double_opt_in_token: null,
         token_expires_at: null,
-      })
-      .eq("id", consentRecord.id);
+      } as any)
+      .eq("id", (consentRecord as any).id);
 
     if (updateError) {
       console.error("[Verify Error] Failed to update user_consents:", updateError);
@@ -174,11 +174,11 @@ export const verifyOptInToken = createServerFn({ method: "POST" })
 
     // Insert log
     await supabaseAdmin.from("consent_logs").insert({
-      consent_id: consentRecord.id,
+      consent_id: (consentRecord as any).id,
       email: data.email,
       action_type: "double_opt_in_verified",
       source: "email_link",
-    });
+    } as any);
 
     return { status: "success" as const, message: "Email verified successfully." };
   });
@@ -239,11 +239,11 @@ export const updateMyConsent = createServerFn({ method: "POST" })
       
     if (record) {
       await supabaseAdmin.from("consent_logs").insert({
-        consent_id: record.id,
+        consent_id: (record as any).id,
         email: email,
         action_type: data.marketing_opt_in ? "granted_marketing" : "revoked_marketing",
         source: source,
-      });
+      } as any);
     }
     
     return { success: true };

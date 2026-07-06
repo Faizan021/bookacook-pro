@@ -111,6 +111,9 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       seat_capacity?: number | null;
       certifications?: string | null;
       slug?: string;
+      accepts_cash?: boolean;
+      accepts_paypal?: boolean;
+      paypal_email?: string | null;
     }) =>
       z
         .object({
@@ -136,6 +139,9 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           seat_capacity: z.number().int().min(0).max(5000).optional().nullable(),
           certifications: z.string().max(1000).optional().nullable(),
           slug: z.string().max(100).optional(),
+          accepts_cash: z.boolean().optional(),
+          accepts_paypal: z.boolean().optional(),
+          paypal_email: z.string().email().optional().nullable(),
         })
         .parse(input),
   )
@@ -214,7 +220,6 @@ export const disconnectStripe = createServerFn({ method: "POST" })
     const { error: updateError } = await supabase
       .from("restaurants")
       .update({
-        stripe_user_id: null, // Keep for fallback compatibility until Step 2 drop
         stripe_connect_status: "deauthorized",
         stripe_connected_at: null,
         is_published: hasAlternative ? rest.is_published : false,

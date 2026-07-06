@@ -128,7 +128,7 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
 
     if (cErr || !caterer) return null;
 
-    const { data: menuData, error: mErr } = await (supabaseAdmin as any)
+    const { data: menuData, error: mErr } = await supabaseAdmin
       .from("caterer_menu_items")
       .select("id, category, name, description, price_cents, unit, serves, image_url, is_available")
       .eq("caterer_id", caterer.id)

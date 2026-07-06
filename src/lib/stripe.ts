@@ -211,7 +211,8 @@ export async function createStorefrontCheckoutSession(
   amountCents: number,
   restaurantName: string,
   successUrl: string,
-  cancelUrl: string
+  cancelUrl: string,
+  orderId: string
 ) {
   const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
@@ -231,6 +232,10 @@ export async function createStorefrontCheckoutSession(
     mode: 'payment',
     success_url: successUrl,
     cancel_url: cancelUrl,
+    metadata: {
+      type: 'storefront_order',
+      order_id: orderId,
+    },
   }, {
     stripeAccount: restaurantStripeUserId, // Direct Charge model: money goes directly to restaurant, fees paid by restaurant
   });

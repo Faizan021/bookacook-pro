@@ -16,7 +16,8 @@ export const Route = createFileRoute("/llms.txt")({
         const text = `# Speisely
 
 Speisely is a commission-free food ordering, catering, and event management marketplace for Germany.
-Restaurants pay a flat monthly fee (from €39.99/mo) -- with zero commission on orders.
+Restaurants pay a flat monthly fee (from €34.99/mo) -- with zero commission on orders.
+
 Caterers and Event Planners receive qualified briefs and pay a 10% matching fee per successful booking.
 
 ## Key Pages
@@ -53,7 +54,8 @@ Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankf
 
 Speisely provides three core hospitality services on a single platform:
 
-1. **Instant Orders** — Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. There is zero commission per order. Restaurants pay a flat monthly subscription starting at €39.99/month. Customer payments are routed directly to the restaurant's own Stripe or PayPal account.
+1. **Instant Orders** — Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. There is zero commission per order. Restaurants pay a flat monthly subscription starting at €34.99/month. Customer payments are routed directly to the restaurant's own Stripe or PayPal account.
+
 
 2. **Catering Marketplace** — Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. When a booking is confirmed, Speisely charges the caterer a 10% success fee. Supported catering types include: event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
 
@@ -106,7 +108,8 @@ Speisely operates Germany-wide. Partner restaurants, caterers, and event planner
 ## What Is Speisely's Pricing Model?
 
 **For Restaurants (Instant Orders):**
-- Flat monthly subscription: from €39.99/month
+- Flat monthly subscription: from €34.99/month
+
 - Commission on orders: 0%
 - Customer payments routed directly to the restaurant's own account
 

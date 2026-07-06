@@ -250,10 +250,15 @@ function mapRestaurant(r: any): Restaurant {
   };
 }
 
+function isSubscriptionBlocked(status: string | null): boolean {
+  if (status === 'canceled' || status === 'unpaid') return true;
+  return false;
+}
+
 export async function getRestaurants(): Promise<Restaurant[]> {
   const { data, error } = await supabase
     .from("restaurants")
-    .select("*, restaurant_products(*)")
+    .select("id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*)")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
@@ -261,7 +266,11 @@ export async function getRestaurants(): Promise<Restaurant[]> {
     console.error("Error fetching restaurants:", error);
   }
 
-  const liveRestaurants = (data || []).map(mapRestaurant);
+  const validData = (data || []).filter(r => {
+    return !isSubscriptionBlocked(r.subscription_status);
+  });
+
+  const liveRestaurants = validData.map(mapRestaurant);
   const MIN_DISPLAY_COUNT = 6;
   
   if (liveRestaurants.length >= MIN_DISPLAY_COUNT) {
@@ -281,11 +290,14 @@ export async function getRestaurant(slugOrId: string): Promise<Restaurant | unde
   // Try by slug first (URL-based lookup), fallback to id
   const { data, error } = await supabase
     .from("restaurants")
-    .select("*, restaurant_products(*)")
+    .select("id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*)")
     .or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
     .maybeSingle();
 
   if (!error && data) {
+    if (isSubscriptionBlocked(data.subscription_status)) {
+      return undefined;
+    }
     return mapRestaurant(data);
   }
 
@@ -296,22 +308,4 @@ export async function getRestaurant(slugOrId: string): Promise<Restaurant | unde
   return undefined;
 }
 
-export type PromoCode = {
-  code: string;
-  discount_type: "percentage" | "fixed" | "free_delivery" | "free_item" | "bogo";
-  discount_value: number;
-  applies_to_product_name?: string;
-  min_order_value_cents?: number;
-  free_item_name?: string;
-  required_qty?: number;
-  starts_at?: string;
-  ends_at?: string;
-};
 
-// Mock promo codes for Verde & Grain
-export const mockPromoCodes: Record<string, PromoCode[]> = {
-  "verde-grain": [
-    { code: "VERDE10", discount_type: "percentage", discount_value: 10 },
-    { code: "MINUS5", discount_type: "fixed", discount_value: 5 },
-  ]
-};

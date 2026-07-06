@@ -62,12 +62,14 @@ export function B2bCateringDialog({
     setSubmittingB2b(true);
     try {
       await submitB2bFn({
-        catererSlug: b2bForm.catererSlug,
-        companyName: b2bForm.companyName,
-        employees: parseInt(b2bForm.employees),
-        pattern: b2bForm.pattern,
-        startDate: b2bForm.startDate || new Date().toISOString().split("T")[0],
-        notes: b2bForm.notes,
+        data: {
+          catererSlug: b2bForm.catererSlug,
+          companyName: b2bForm.companyName,
+          employees: parseInt(b2bForm.employees),
+          pattern: b2bForm.pattern,
+          startDate: b2bForm.startDate || new Date().toISOString().split("T")[0],
+          notes: b2bForm.notes,
+        }
       });
 
       trackEvent("reservation_submitted", {

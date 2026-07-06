@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
+import { getPublicCatererReviews } from "@/lib/reviews/public.functions";
 
 const catererQueryOptions = (slug: string) =>
   queryOptions({
@@ -54,9 +55,13 @@ const catererQueryOptions = (slug: string) =>
   });
 export const Route = createFileRoute("/catering/$slug")({
   loader: async ({ params, context }) => {
-    await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
+    const profile = await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
     const fullCaterer = await getCaterer(params.slug);
-    return { fullCaterer };
+    let reviewsData = null;
+    if (profile?.id) {
+      reviewsData = await getPublicCatererReviews({ data: { catererId: profile.id } });
+    }
+    return { fullCaterer, reviewsData };
   },
   head: ({ loaderData, params }) => {
     const c = loaderData?.fullCaterer;
@@ -92,6 +97,15 @@ export const Route = createFileRoute("/catering/$slug")({
                 name: c.name,
                 image: c.img,
                 address: { "@type": "PostalAddress", addressLocality: c.area },
+                ...(loaderData?.reviewsData?.aggregates?.count && loaderData.reviewsData.aggregates.count > 0
+                  ? {
+                      aggregateRating: {
+                        "@type": "AggregateRating",
+                        ratingValue: loaderData.reviewsData.aggregates.avgOverall,
+                        reviewCount: loaderData.reviewsData.aggregates.count,
+                      },
+                    }
+                  : {}),
               }),
             },
           ]
@@ -115,10 +129,14 @@ export const Route = createFileRoute("/catering/$slug")({
 function CatererPage() {
   const { slug } = Route.useParams();
   const { lang } = useI18n();
-  const q = useSuspenseQuery(catererQueryOptions(slug));
+  const loaderData = Route.useLoaderData() as any;
+  const { fullCaterer: caterer, reviewsData } = loaderData;
+  const { data: dbCaterer } = useSuspenseQuery(catererQueryOptions(slug));
 
-  const { fullCaterer } = Route.useLoaderData();
-  const staticCaterer = fullCaterer;
+  const reviews = reviewsData?.reviews || [];
+  const aggregates = reviewsData?.aggregates;
+  const staticCaterer = caterer;
+
   const [cart, setCart] = useState<Record<string, number>>({});
   const [promoCodeInput, setPromoCodeInput] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
@@ -151,12 +169,7 @@ function CatererPage() {
   });
   const [submittingB2b, setSubmittingB2b] = useState(false);
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
-  // TODO: Connect this mock review UI to the real Supabase reviews table later
-  const reviews: any[] = [];
-
   const t = (de: string, en: string) => (lang === "de" ? de : en);
-
-  const dbCaterer = q.data as any;
 
   const handleB2bSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,7 +206,7 @@ function CatererPage() {
       }
 
       trackEvent("reservation_submitted", {
-        catererId: caterer?.id || "unknown",
+        catererId: catererProfile?.id || "unknown",
         type: "catering",
         isB2b: true,
       });
@@ -231,10 +244,10 @@ function CatererPage() {
   }
 
   // Construct a unified caterer object
-  let caterer: any = null;
+  let catererProfile: any = null;
 
   if (dbCaterer) {
-    caterer = {
+    catererProfile = {
       id: dbCaterer.id,
       name: dbCaterer.name,
       slug: dbCaterer.slug,
@@ -271,7 +284,7 @@ function CatererPage() {
       certifications: dbCaterer.certifications || "",
     };
   } else if (staticCaterer) {
-    caterer = {
+    catererProfile = {
       ...staticCaterer,
       minBudget: staticCaterer.minOrder || 0,
       certifications: (staticCaterer as any).certifications || "",
@@ -284,10 +297,10 @@ function CatererPage() {
     : `https://${dbCaterer?.slug || slug}.speisely.de`;
 
   const categories = useMemo(() => {
-    if (!caterer) return [];
+    if (!catererProfile) return [];
     const seen = new Set<string>();
     const cats: string[] = [];
-    (caterer.menu || []).forEach((m: any) => {
+    (catererProfile.menu || []).forEach((m: any) => {
       const c = m.category || "Menü";
       if (!seen.has(c)) {
         seen.add(c);
@@ -295,22 +308,22 @@ function CatererPage() {
       }
     });
     return cats;
-  }, [caterer]);
+  }, [catererProfile]);
 
   const certBadges = useMemo(() => {
-    if (!caterer?.certifications) return [];
-    return String(caterer.certifications)
+    if (!catererProfile?.certifications) return [];
+    return String(catererProfile.certifications)
       .split(",")
       .map((tag: string) => tag.trim())
       .filter((tag: string) => tag.length > 0)
       .filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
-  }, [caterer?.certifications]);
+  }, [catererProfile?.certifications]);
 
   const maxBadges = 5;
   const visibleBadges = certBadges.slice(0, maxBadges);
   const remainingCount = certBadges.length - maxBadges;
 
-  if (!caterer)
+  if (!catererProfile)
     return (
       <SiteShell>
         <div className="mx-auto max-w-3xl px-6 py-24 text-center">
@@ -339,17 +352,17 @@ function CatererPage() {
   };
 
   const cartItems = Object.entries(cart).map(([name, qty]) => {
-    const item = caterer.menu.find((m: any) => m.name === name)!;
+    const item = catererProfile.menu.find((m: any) => m.name === name)!;
     return { ...item, qty };
   });
   const subtotal = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
   const totalCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
 
-  const belowMin = subtotal > 0 && subtotal < caterer.minBudget;
+  const belowMin = subtotal > 0 && subtotal < catererProfile.minBudget;
 
   const handleApplyPromo = () => {
     setPromoError("");
-    const codes = mockPromoCodes[caterer.id] || [];
+    const codes = mockPromoCodes[catererProfile.id] || [];
     const validCode = codes.find(
       (c) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase(),
     );
@@ -499,8 +512,8 @@ function CatererPage() {
           {belowMin && (
             <p className="mt-2 text-xs text-[oklch(0.55_0.15_30)]">
               {t(
-                `Noch €${(caterer.minBudget - subtotal).toFixed(0)} bis zum Mindestbudget.`,
-                `€${(caterer.minBudget - subtotal).toFixed(0)} more to reach the min. budget.`,
+                `Noch €${(catererProfile.minBudget - subtotal).toFixed(0)} bis zum Mindestbudget.`,
+                `€${(catererProfile.minBudget - subtotal).toFixed(0)} more to reach the min. budget.`,
               )}
             </p>
           )}
@@ -508,7 +521,7 @@ function CatererPage() {
             disabled={belowMin}
             onClick={() => {
               trackEvent("reservation_submitted", {
-                catererId: caterer.id,
+                catererId: catererProfile.id,
                 type: "catering",
                 isB2b: false,
                 totalCount,
@@ -516,8 +529,8 @@ function CatererPage() {
               });
               alert(
                 t(
-                  `Anfrage über ${totalCount} Artikel gesendet. ${caterer.name} meldet sich in Kürze.`,
-                  `Inquiry sent for ${totalCount} items. ${caterer.name} will get back to you shortly.`,
+                  `Anfrage über ${totalCount} Artikel gesendet. ${catererProfile.name} meldet sich in Kürze.`,
+                  `Inquiry sent for ${totalCount} items. ${catererProfile.name} will get back to you shortly.`,
                 ),
               );
               if (isMobile) setMobileCartOpen(false);
@@ -645,9 +658,9 @@ function CatererPage() {
   return (
     <SiteShell>
       <AnnouncementBanner
-        isActive={caterer.announcement_active ?? false}
-        text={caterer.announcement_text ?? null}
-        bgColor={caterer.announcement_bg_color ?? null}
+        isActive={catererProfile.announcement_active ?? false}
+        text={catererProfile.announcement_text ?? null}
+        bgColor={catererProfile.announcement_bg_color ?? null}
       />
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-8">
         <Link
@@ -660,8 +673,8 @@ function CatererPage() {
         {/* Redesigned Full-Width Hero Banner */}
         <div className="relative mt-6 w-full h-[300px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg">
           <img
-            src={caterer.img}
-            alt={caterer.name}
+            src={catererProfile.img}
+            alt={catererProfile.name}
             className="absolute inset-0 h-full w-full object-cover object-center"
             loading="eager"
             fetchPriority="high"
@@ -679,7 +692,7 @@ function CatererPage() {
 
           {/* Top Right Actions */}
           <div className="absolute top-4 right-4 md:top-6 md:right-6 z-30 flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 sm:gap-3">
-            {caterer.verified && (
+            {catererProfile.verified && (
               <span className="rounded-full bg-[#10b981] px-4 py-2.5 text-xs md:text-sm font-bold text-white shadow-md flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4" />
                 {t("GEPRÜFT", "CHECKED")}
@@ -808,12 +821,12 @@ function CatererPage() {
           <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex flex-col md:flex-row md:items-end justify-between w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
             <div className="flex flex-col gap-2 max-w-[80%] text-left">
               <h1 className="text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-sm">
-                {caterer.name}
+                {catererProfile.name}
               </h1>
               <div className="flex flex-col gap-2 mt-2">
-                {caterer.tagline && caterer.tagline[lang] && (
+                {catererProfile.tagline && catererProfile.tagline[lang] && (
                   <span className="text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md">
-                    {caterer.tagline[lang]}
+                    {catererProfile.tagline[lang]}
                   </span>
                 )}
               </div>
@@ -847,8 +860,8 @@ function CatererPage() {
                 {t("Mindestbestellung", "Min. Order")}
               </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Users className="h-4 w-4 text-forest/40" /> {caterer.minGuests}{" "}
-                {t("Personen", "Guests")} / €{caterer.minBudget}
+                <Users className="h-4 w-4 text-forest/40" /> {catererProfile.minGuests}{" "}
+                {t("Personen", "Guests")} / €{catererProfile.minBudget}
               </dd>
             </div>
 
@@ -859,7 +872,7 @@ function CatererPage() {
                 {t("Vorlaufzeit", "Lead Time")}
               </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Clock className="h-4 w-4 text-forest/40" /> {caterer.leadTimeDays}{" "}
+                <Clock className="h-4 w-4 text-forest/40" /> {catererProfile.leadTimeDays}{" "}
                 {t("Tage", "Days")}
               </dd>
             </div>
@@ -872,7 +885,7 @@ function CatererPage() {
               </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
                 <MapPin className="h-4 w-4 text-forest/40" />{" "}
-                <span className="truncate max-w-[200px]">{caterer.area}</span>
+                <span className="truncate max-w-[200px]">{catererProfile.area}</span>
               </dd>
             </div>
           </dl>
@@ -892,13 +905,13 @@ function CatererPage() {
         </div>
 
         {/* About Text */}
-        {caterer.about && caterer.about[lang] && (
+        {catererProfile.about && catererProfile.about[lang] && (
           <div className="mt-10">
             <h2 className="text-2xl font-display font-bold text-forest mb-4">
-              {t(`Über ${caterer.name}`, `About ${caterer.name}`)}
+              {t(`Über ${catererProfile.name}`, `About ${catererProfile.name}`)}
             </h2>
             <p className="text-base text-forest/80 max-w-3xl leading-relaxed">
-              {caterer.about[lang]}
+              {catererProfile.about[lang]}
             </p>
           </div>
         )}
@@ -956,7 +969,7 @@ function CatererPage() {
               <div key={cat} id={`category-${cat}`} className="scroll-mt-32">
                 <h3 className="font-display text-2xl text-forest">{cat}</h3>
                 <div className="mt-4 grid gap-4">
-                  {caterer.menu
+                  {catererProfile.menu
                     .filter((m: any) => (m.category || "Menü") === cat)
                     .map((m: any) => {
                       const qty = cart[m.name] || 0;
@@ -1139,6 +1152,93 @@ function CatererPage() {
           </Sheet>
         </div>
       )}
+
+      {/* Reviews Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mb-16">
+        <h2 className="text-2xl font-display font-bold text-forest mb-8">
+          {t("Bewertungen", "Reviews")}
+        </h2>
+        
+        {aggregates && aggregates.count > 0 ? (
+          <div className="grid lg:grid-cols-[300px_1fr] gap-10">
+            <div className="bg-[#fdfaf5] p-6 rounded-2xl border border-[#eadfce]/50 h-fit">
+              <div className="flex items-end gap-3 mb-4">
+                <div className="text-5xl font-bold text-forest">{aggregates.avgOverall.toFixed(1)}</div>
+                <div className="text-forest/70 pb-1">/ 5</div>
+              </div>
+              <div className="flex text-yellow-400 mb-2 text-xl">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"} className="w-5 h-5" />
+                ))}
+              </div>
+              <div className="text-sm text-forest/70 mb-6">
+                {aggregates.count} {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
+              </div>
+              
+              <div className="space-y-3 pt-4 border-t border-[#eadfce]">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Essen", "Food")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgFood.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Zuverlässigkeit", "Reliability")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgReliability.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Kommunikation", "Communication")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgCommunication.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Preis-Leistung", "Value")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgValue.toFixed(1)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              {reviews.map((r: any) => (
+                <div key={r.id} className="pb-6 border-b border-[#eadfce]/50 last:border-0">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-semibold text-forest">{r.customer_name}</div>
+                      <div className="flex items-center gap-2 text-xs text-forest/60">
+                        <span>{new Date(r.created_at).toLocaleDateString()}</span>
+                        {r.event_type && (
+                          <>
+                            <span>•</span>
+                            <span className="capitalize">{r.event_type}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex text-yellow-400">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"} className="w-4 h-4" />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-forest/80 mt-2 whitespace-pre-wrap">{r.comment}</p>
+                  
+                  {r.vendor_reply && (
+                    <div className="mt-4 bg-[#fdfaf5] p-4 rounded-xl border border-[#eadfce]/40 ml-4">
+                      <div className="text-xs font-semibold text-forest mb-1">{catererProfile?.name}</div>
+                      <p className="text-sm text-forest/70">{r.vendor_reply}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-[#fdfaf5] rounded-2xl border border-[#eadfce]/50">
+            <Star className="w-10 h-10 text-forest/20 mx-auto mb-3" />
+            <h3 className="font-semibold text-forest mb-1">{t("Noch keine Bewertungen", "No reviews yet")}</h3>
+            <p className="text-sm text-forest/60 max-w-sm mx-auto">
+              {t("Sei der Erste, der diesen Caterer bewertet.", "Be the first to review this caterer.")}
+            </p>
+          </div>
+        )}
+      </section>
 
       <MarketplacePromiseCTA vertical="caterer" />
     </SiteShell>

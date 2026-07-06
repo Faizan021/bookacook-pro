@@ -156,8 +156,8 @@ function mapCaterer(r: any): Caterer {
 export async function getCaterers(): Promise<Caterer[]> {
   const { data, error } = await supabase
     .from("storefront_settings")
-    .select("*, products(*)")
-    .eq("status", "published")
+    .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*)")
+    .eq("is_active", true)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -183,9 +183,9 @@ export async function getCaterers(): Promise<Caterer[]> {
 export async function getCaterer(id: string): Promise<Caterer | undefined> {
   const { data, error } = await supabase
     .from("storefront_settings")
-    .select("*, products(*)")
+    .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*)")
     .eq("slug", id)
-    .eq("status", "published")
+    .eq("is_active", true)
     .maybeSingle();
 
   if (!error && data) {

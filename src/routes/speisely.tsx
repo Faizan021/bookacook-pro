@@ -46,7 +46,8 @@ function SpeiselyFacts() {
       subtitle: t("Für Restaurants", "For Restaurants"),
       points: [
         t("Digitaler Bestellkanal mit 0% Provision", "Digital ordering channel with 0% commission per order"),
-        t("Pauschalabo ab €39,99/Monat", "Flat-rate subscription starting at €39.99/month"),
+        t("Pauschalabo ab €34,99/Monat", "Flat-rate subscription starting at €34.99/month"),
+
         t("Direktzahlung auf eigenes Stripe- oder PayPal-Konto", "Direct payouts to your own Stripe or PayPal account"),
         t("Eigene Kundendaten und Kontaktliste", "Full ownership of your customer data"),
         t("SEO-optimiertes digitales Schaufenster", "SEO-optimized digital storefront"),
@@ -187,7 +188,8 @@ function SpeiselyFacts() {
               <ShoppingBag className="h-4 w-4" /> {t("Für Restaurants", "For Restaurants")}
             </div>
             <div className="flex items-end gap-1 mb-2">
-              <span className="text-4xl font-display font-bold text-forest">€39.99</span>
+              <span className="text-4xl font-display font-bold text-forest">€34.99</span>
+
               <span className="text-forest/60 mb-1">{t("/Monat", "/month")}</span>
             </div>
             <div className="text-sm text-forest/70 mb-6">{t("Pauschalabo — keine Provision", "Flat-rate subscription — no per-order commission")}</div>

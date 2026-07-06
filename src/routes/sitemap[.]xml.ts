@@ -4,6 +4,7 @@ import { getCaterers } from "@/data/caterers";
 import { getRestaurants } from "@/data/restaurants";
 import { getPlanners } from "@/data/planners";
 import { blogPosts } from "@/data/blog";
+import { getValidGeoLocations } from "@/lib/geo/server.functions";
 
 const BASE_URL = "https://speisely.de";
 
@@ -20,10 +21,11 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const today = new Date().toISOString().split("T")[0];
         
-        const [restaurants, caterers, planners] = await Promise.all([
+        const [restaurants, caterers, planners, validGeoLocations] = await Promise.all([
           getRestaurants(),
           getCaterers(),
-          getPlanners()
+          getPlanners(),
+          getValidGeoLocations()
         ]);
 
         const entries: SitemapEntry[] = [
@@ -59,6 +61,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             lastmod: b.date,
             changefreq: "monthly" as const,
             priority: "0.7",
+          })),
+          ...validGeoLocations.map((path) => ({
+            path,
+            lastmod: today,
+            changefreq: "weekly" as const,
+            priority: "0.8",
           })),
         ];
 

@@ -55,6 +55,11 @@ export const updateCatererBriefStatus = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
     const caterer = await resolveOwnedCaterer(supabase, userId);
     if (!caterer) throw new Error("No caterer storefront for this account");
+
+    if (data.status === "booked") {
+      throw new Error("Cannot manually mark as booked. The customer must pay the platform deposit to secure the deal.");
+    }
+
     const { error } = await supabase
       .from("catering_briefs")
       .update({ status: data.status })
@@ -62,6 +67,41 @@ export const updateCatererBriefStatus = createServerFn({ method: "POST" })
       .eq("preferred_caterer_id", caterer.id);
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+export const getBriefContactDetails = createServerFn({ method: "GET" })
+  .middleware([requireRole("caterer")])
+  .validator((input: { briefId: string }) => z.object({ briefId: z.string().uuid() }).parse(input))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const caterer = await resolveOwnedCaterer(supabase, userId);
+    if (!caterer) throw new Error("No caterer storefront for this account");
+
+    // Fetch the brief to check ownership and status
+    const { data: brief, error: briefError } = await supabase
+      .from("catering_briefs")
+      .select("status, customer_id")
+      .eq("id", data.briefId)
+      .eq("preferred_caterer_id", caterer.id)
+      .single();
+
+    if (briefError || !brief) throw new Error("Brief not found or access denied");
+
+    // LEAD PROTECTION GATE
+    if (brief.status !== "booked") {
+      throw new Error("Contact details are locked until the deal is secured (booked status required).");
+    }
+
+    // Fetch customer PII
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("first_name, last_name, email, phone")
+      .eq("id", brief.customer_id)
+      .single();
+
+    if (profileError || !profile) throw new Error("Customer profile not found");
+
+    return profile;
   });
 
 export const updateBriefMilestones = createServerFn({ method: "POST" })
@@ -101,35 +141,48 @@ export const updateBriefMilestones = createServerFn({ method: "POST" })
   });
 
 export const submitCatererProposal = createServerFn({ method: "POST" })
-  .middleware([requireRole("caterer")])
-  .inputValidator((input: { briefId: string; proposalCents: number; depositCents: number; notes: string }) =>
-    z
-      .object({
-        briefId: z.string().uuid(),
-        proposalCents: z.number().min(0),
-        depositCents: z.number().min(0),
-        notes: z.string(),
-      })
-      .parse(input),
-  )
-  .handler(async ({ context, data }) => {
-    const { supabase, userId } = context;
-    const caterer = await resolveOwnedCaterer(supabase, userId);
-    if (!caterer) throw new Error("No caterer storefront for this account");
-    
-    // We update budget_cents to the new proposal amount so the customer sees the updated total
-    const { error } = await supabase
-      .from("catering_briefs")
-      .update({ 
-        status: "quoted",
-        budget_cents: data.proposalCents,
-        notes: `[PROPOSAL SENT]\nDeposit Required: €${(data.depositCents / 100).toFixed(2)}\n\nNotes:\n${data.notes}`
-      })
-      .eq("id", data.briefId)
-      .eq("preferred_caterer_id", caterer.id);
-    if (error) throw new Error(error.message);
-    return { ok: true };
-  });
+    .middleware([requireRole("caterer")])
+    .inputValidator((input: { briefId: string; proposalCents: number; depositCents: number; notes: string; origin: string }) =>
+      z
+        .object({
+          briefId: z.string().uuid(),
+          proposalCents: z.number().min(0),
+          depositCents: z.number().min(0),
+          notes: z.string(),
+          origin: z.string(),
+        })
+        .parse(input),
+    )
+    .handler(async ({ context, data }) => {
+      const { supabase, userId } = context;
+      const caterer = await resolveOwnedCaterer(supabase, userId);
+      if (!caterer) throw new Error("No caterer storefront for this account");
+      
+      const depositEuros = (data.depositCents / 100).toFixed(2);
+      const link = `${data.origin}/checkout/deposit/${data.briefId}`;
+      const officialMessage = `[OFFICIAL PROPOSAL]\nWe have submitted a proposal for your event.\n\nDeposit Required: €${depositEuros}\n\nTo secure this booking and reveal our contact information, please pay the platform deposit here:\n${link}\n\nVendor Notes:\n${data.notes}`;
+
+      // We update budget_cents to the new proposal amount so the customer sees the updated total
+      const { error } = await supabase
+        .from("catering_briefs")
+        .update({ 
+          status: "quoted",
+          budget_cents: data.proposalCents,
+          notes: officialMessage
+        })
+        .eq("id", data.briefId)
+        .eq("preferred_caterer_id", caterer.id);
+      if (error) throw new Error(error.message);
+
+      // Auto-inject to SecureChat
+      await supabase.from("brief_messages").insert({
+        brief_id: data.briefId,
+        sender_id: userId,
+        message: officialMessage,
+      });
+
+      return { ok: true };
+    });
 
 export const updateMyCatererSettings = createServerFn({ method: "POST" })
   .middleware([requireRole("caterer")])
@@ -149,6 +202,7 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
       max_delivery_distance_km?: number;
       custom_domain?: string | null;
       certifications?: string | null;
+      slug?: string;
     }) =>
       z
         .object({
@@ -166,6 +220,7 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
           max_delivery_distance_km: z.number().optional().nullable(),
           custom_domain: z.string().optional().nullable(),
           certifications: z.string().optional().nullable(),
+          slug: z.string().max(100).optional(),
         })
         .parse(input),
   )

@@ -288,7 +288,7 @@ function mapPlanner(r: any): Planner {
 export async function getPlanners(): Promise<Planner[]> {
   const { data, error } = await supabase
     .from("planner_services")
-    .select("*")
+    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -314,7 +314,7 @@ export async function getPlanners(): Promise<Planner[]> {
 export async function getPlanner(id: string): Promise<Planner | undefined> {
   const { data, error } = await supabase
     .from("planner_services")
-    .select("*")
+    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available")
     .eq("planner_id", id)
     .maybeSingle();
 

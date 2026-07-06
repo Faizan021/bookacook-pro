@@ -29,7 +29,7 @@ export function SiteHeader() {
           .from("user_roles")
           .select("role")
           .eq("user_id", session.user.id)
-          .eq("role", "admin" as string)
+          .eq("role", "admin")
           .maybeSingle();
         setIsAdmin(!!data);
       } else {

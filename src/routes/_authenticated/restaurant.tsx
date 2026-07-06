@@ -64,6 +64,11 @@ import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
 export const Route = createFileRoute("/_authenticated/restaurant")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>): { tab?: string } => {
+    return {
+      tab: search.tab as string | undefined,
+    };
+  },
   beforeLoad: async () => {
     try {
       const profile = await getUserProfile();
@@ -228,7 +233,7 @@ function CreateRestaurantForm() {
       create({ data: vars }),
     onSuccess: async () => {
       try {
-        await saveConsent({ marketing_opt_in: marketingOptIn, source: "restaurant_signup" });
+        await saveConsent({ data: { marketing_opt_in: marketingOptIn, source: "restaurant_signup" } });
       } catch (e) {
         console.error("Failed to save marketing consent during signup:", e);
       }
@@ -1847,7 +1852,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
     trackEvent("stripe_connect_clicked");
     setLoading(true);
     try {
-      const res = await getConnectUrl({ slug: restaurant.slug, origin: window.location.origin });
+      const res = await getConnectUrl({ data: { slug: restaurant.slug, origin: window.location.origin } });
       if (res?.url) {
         window.location.href = res.url;
       }
@@ -1947,10 +1952,10 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
             </div>
             <div className="flex items-center justify-between flex-wrap gap-4 pt-2 border-t border-border">
               <p className="text-xs text-muted-foreground">
-                {tt("Verbundenes Konto: ", "Connected Account: ")}{" "}
-                <code className="font-mono bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded text-forest font-bold">
-                  {restaurant.stripe_user_id}
-                </code>
+                {tt("Status: ", "Status: ")}{" "}
+                <span className="font-mono bg-stone-100 dark:bg-stone-800 px-2 py-0.5 rounded text-forest font-bold">
+                  {tt("Aktiv", "Active")}
+                </span>
               </p>
               <Button
                 variant="outline"
@@ -2723,7 +2728,7 @@ function ReservationsSection() {
         | "cancelled"
         | "completed"
         | "no_show";
-    }) => updateStatus(vars),
+    }) => updateStatus({ data: vars }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["restaurant", "reservations"] }),
   });
 
@@ -2867,7 +2872,7 @@ function BillingSection() {
     trackEvent("subscription_checkout_started");
     setLoading(true);
     try {
-      const res = await startSubscription({ origin: window.location.origin });
+      const res = await startSubscription({ data: { origin: window.location.origin } });
       if (res?.url) {
         window.location.href = res.url;
       }
@@ -2881,7 +2886,7 @@ function BillingSection() {
   const handleOpenPortal = async () => {
     setLoading(true);
     try {
-      const res = await getPortalUrl({ origin: window.location.origin });
+      const res = await getPortalUrl({ data: { origin: window.location.origin } });
       if (res?.url) {
         window.location.href = res.url;
       }

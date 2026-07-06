@@ -20,6 +20,7 @@ import {
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
+import { getPublicPlannerReviews } from "@/lib/reviews/public.functions";
 
 export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) =>
@@ -52,12 +53,16 @@ const plannerQueryOptions = (slug: string) => queryOptions({
 
 export const Route = createFileRoute("/planner/$slug")({
   loader: async ({ params, context }) => {
-    await context.queryClient.ensureQueryData(plannerQueryOptions(params.slug));
+    const profile = await context.queryClient.ensureQueryData(plannerQueryOptions(params.slug));
     const fullPlanner = await getPlanner(params.slug);
     if (!fullPlanner) {
       throw new Error("Planner not found");
     }
-    return { fullPlanner };
+    let reviewsData = null;
+    if (profile?.id) {
+      reviewsData = await getPublicPlannerReviews({ data: { plannerId: profile.id } });
+    }
+    return { fullPlanner, reviewsData };
   },
   head: ({ loaderData, params }) => {
     const p = loaderData?.fullPlanner;
@@ -91,6 +96,15 @@ export const Route = createFileRoute("/planner/$slug")({
               name: p.name,
               image: p.img,
               address: { "@type": "PostalAddress", addressLocality: p.area },
+              ...(loaderData?.reviewsData?.aggregates?.count && loaderData.reviewsData.aggregates.count > 0
+                ? {
+                    aggregateRating: {
+                      "@type": "AggregateRating",
+                      ratingValue: loaderData.reviewsData.aggregates.avgOverall,
+                      reviewCount: loaderData.reviewsData.aggregates.count,
+                    },
+                  }
+                : {}),
             }),
           }]
         : undefined,
@@ -114,10 +128,13 @@ export const Route = createFileRoute("/planner/$slug")({
 function PlannerStorefront() {
   const { slug } = Route.useParams();
   const { lang } = useI18n();
-  const { fullPlanner } = Route.useLoaderData();
+  const loaderData = Route.useLoaderData() as any;
+  const { fullPlanner, reviewsData } = loaderData;
   const q = useSuspenseQuery(plannerQueryOptions(slug));
   const dbPlanner = q.data;
   const staticPlanner = fullPlanner;
+  const reviews = reviewsData?.reviews || [];
+  const aggregates = reviewsData?.aggregates;
 
   const t = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -149,7 +166,6 @@ function PlannerStorefront() {
   const [promoError, setPromoError] = useState("");
   const [guests, setGuests] = useState(planner?.minGuests || 10);
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
-  const reviews: any[] = [];
 
   const recordView = useServerFn(recordPageView);
 
@@ -658,6 +674,93 @@ function PlannerStorefront() {
           </Sheet>
         </div>
       )}
+
+      {/* Reviews Section */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mb-16">
+        <h2 className="text-2xl font-display font-bold text-forest mb-8">
+          {t("Bewertungen", "Reviews")}
+        </h2>
+        
+        {aggregates && aggregates.count > 0 ? (
+          <div className="grid lg:grid-cols-[300px_1fr] gap-10">
+            <div className="bg-[#fdfaf5] p-6 rounded-2xl border border-[#eadfce]/50 h-fit">
+              <div className="flex items-end gap-3 mb-4">
+                <div className="text-5xl font-bold text-forest">{aggregates.avgOverall.toFixed(1)}</div>
+                <div className="text-forest/70 pb-1">/ 5</div>
+              </div>
+              <div className="flex text-yellow-400 mb-2 text-xl">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"} className="w-5 h-5" />
+                ))}
+              </div>
+              <div className="text-sm text-forest/70 mb-6">
+                {aggregates.count} {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
+              </div>
+              
+              <div className="space-y-3 pt-4 border-t border-[#eadfce]">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Kreativität", "Creativity")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgCreativity.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Umsetzung", "Execution")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgExecution.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Kommunikation", "Communication")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgCommunication.toFixed(1)}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-forest/80">{t("Preis-Leistung", "Value")}</span>
+                  <span className="font-semibold text-forest">{aggregates.avgValue.toFixed(1)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-6">
+              {reviews.map((r: any) => (
+                <div key={r.id} className="pb-6 border-b border-[#eadfce]/50 last:border-0">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <div className="font-semibold text-forest">{r.customer_name}</div>
+                      <div className="flex items-center gap-2 text-xs text-forest/60">
+                        <span>{new Date(r.created_at).toLocaleDateString()}</span>
+                        {r.event_type && (
+                          <>
+                            <span>•</span>
+                            <span className="capitalize">{r.event_type}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex text-yellow-400">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star key={i} fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"} className="w-4 h-4" />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-forest/80 mt-2 whitespace-pre-wrap">{r.comment}</p>
+                  
+                  {r.vendor_reply && (
+                    <div className="mt-4 bg-[#fdfaf5] p-4 rounded-xl border border-[#eadfce]/40 ml-4">
+                      <div className="text-xs font-semibold text-forest mb-1">{fullPlanner?.name}</div>
+                      <p className="text-sm text-forest/70">{r.vendor_reply}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-[#fdfaf5] rounded-2xl border border-[#eadfce]/50">
+            <Star className="w-10 h-10 text-forest/20 mx-auto mb-3" />
+            <h3 className="font-semibold text-forest mb-1">{t("Noch keine Bewertungen", "No reviews yet")}</h3>
+            <p className="text-sm text-forest/60 max-w-sm mx-auto">
+              {t("Sei der Erste, der diesen Planner bewertet.", "Be the first to review this planner.")}
+            </p>
+          </div>
+        )}
+      </section>
 
       <MarketplacePromiseCTA vertical="planner" />
     </SiteShell>

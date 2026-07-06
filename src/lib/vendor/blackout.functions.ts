@@ -57,7 +57,7 @@ export const addBlackoutDate = createServerFn({ method: "POST" })
         vendor_id: vendor.id,
         blackout_date: data.date,
         reason: data.reason || null
-      });
+      } as any);
 
     if (error) throw new Error(error.message);
     return { ok: true };

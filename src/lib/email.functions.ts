@@ -124,7 +124,7 @@ ${data.message}
         await resend.emails.send({
           from: "Speisely Contact <noreply@speisely.de>",
           to: "faizan.ahmed01213@gmail.com",
-          reply_to: data.email,
+          replyTo: data.email,
           subject,
           text,
           html,

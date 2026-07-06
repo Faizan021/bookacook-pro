@@ -1,7 +1,7 @@
 "use server";
 import { createMiddleware } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { SESSION_CONFIG } from "./session.config";
 import type { UserRole } from "./get-user-profile.functions";
@@ -87,29 +87,34 @@ export const requireSupabaseAuth = () => createMiddleware({ type: 'function' }).
   },
 );
 
+type OptionalAuthContext = { supabase: SupabaseClient<Database> | null; userId: string | null };
+
 export const optionalSupabaseAuth = () => createMiddleware({ type: 'function' }).server(
   async ({ next }) => {
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
 
+    const makeNext = (supabase: SupabaseClient<Database> | null, userId: string | null) =>
+      next({ context: { supabase, userId } as OptionalAuthContext });
+
     if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-      return next({ context: { supabase: null, userId: null } });
+      return makeNext(null, null);
     }
-    
+
     const { getRequest } = await import('@tanstack/react-start/server');
     const request = getRequest();
     if (!request?.headers) {
-      return next({ context: { supabase: null, userId: null } });
+      return makeNext(null, null);
     }
 
     const authHeader = request.headers.get('authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return next({ context: { supabase: null, userId: null } });
+      return makeNext(null, null);
     }
 
     const token = authHeader.replace('Bearer ', '');
     if (!token) {
-      return next({ context: { supabase: null, userId: null } });
+      return makeNext(null, null);
     }
 
     const supabaseClient = createClient<Database>(
@@ -117,21 +122,16 @@ export const optionalSupabaseAuth = () => createMiddleware({ type: 'function' })
       SUPABASE_PUBLISHABLE_KEY,
       {
         global: {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` }
         }
       }
     );
 
     try {
       const { data: { user }, error } = await supabaseClient.auth.getUser();
-      if (error || !user) {
-        return next({ context: { supabase: supabaseClient, userId: null } });
-      }
-      return next({ context: { supabase: supabaseClient, userId: user.id } });
+      return makeNext(supabaseClient, error || !user ? null : user.id);
     } catch {
-      return next({ context: { supabase: supabaseClient, userId: null } });
+      return makeNext(supabaseClient, null);
     }
   }
 );
@@ -185,7 +185,7 @@ export const requireRole = (role: UserRole) =>
       }
 
       // Map legacy roles to unified partner role
-      if (roleList.some(r => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
+      if (roleList.some((r: string) => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
         roleList.push("partner");
       }
 

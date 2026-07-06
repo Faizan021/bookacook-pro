@@ -265,7 +265,7 @@ function PlannerPage() {
       case "review":
         return tt("Überprüfe dein Event-Briefing", "Review your event brief");
       default:
-        return STEPS[step].label;
+        return (STEPS as any[])[step]?.label || "";
     }
   };
 

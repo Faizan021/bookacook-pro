@@ -4,6 +4,8 @@ import { Sparkles, Calendar, Heart, ShieldCheck, Star, Users, ArrowRight, Utensi
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
+import { PageHero } from "@/components/PageHero";
+
 
 export const Route = createFileRoute("/catering/events")({
   head: () => ({
@@ -31,63 +33,26 @@ function EventsCatering() {
 
   return (
     <SiteShell>
-      {/* Hero Section */}
-      <section className="bg-cream/40 py-16 md:py-24 border-b border-[#eadfce]/30 overflow-hidden">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
-          <div className="space-y-6 text-left">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-forest">
-              <Sparkles className="h-3 w-3" /> {lang === "de" ? "EINMALIGE EVENTS & FEIERLICHKEITEN" : "ONE-OFF EVENTS & CELEBRATIONS"}
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-forest leading-[1.05] tracking-tight">
-              {lang === "de" ? (
-                <>Unvergessliche Momente<br />mit <span className="text-emerald-600">Premium Event-Catering.</span></>
-              ) : (
-                <>Unforgettable moments<br />with <span className="text-emerald-600">premium event catering.</span></>
-              )}
-            </h1>
-            <p className="text-base sm:text-lg text-forest/80 max-w-xl leading-relaxed">
-              {lang === "de"
-                ? "Egal ob traumhafte Hochzeit, exklusive Firmenfeier oder privates Fine Dining zu Hause – wir verbinden dich mit geprüften Food-Partnern, die deine Vision kulinarisch Wirklichkeit werden lassen."
-                : "Whether it is a dream wedding, an exclusive corporate party, or private fine dining at home – we connect you with vetted food partners who turn your culinary vision into reality."}
-            </p>
-            <div className="flex flex-wrap gap-4 pt-2">
-              <Link
-                to="/catering"
-                className="rounded-full bg-forest text-white hover:opacity-95 px-6 py-3.5 text-sm font-semibold shadow-md transition cursor-pointer flex items-center gap-2"
-              >
-                {lang === "de" ? "Event-Caterer finden" : "Discover Event Caterers"}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <button
-                onClick={() => setB2bOpen(true)}
-                className="rounded-full border border-forest/20 bg-transparent hover:bg-forest/5 text-forest px-6 py-3.5 text-sm font-semibold transition cursor-pointer"
-              >
-                {lang === "de" ? "Daily Catering Subscriptions" : "Daily Catering Subscriptions"}
-              </button>
-            </div>
-          </div>
+      <PageHero
+        eyebrow={lang === "de" ? "EINMALIGE EVENTS & FEIERLICHKEITEN" : "ONE-OFF EVENTS & CELEBRATIONS"}
+        heading={
+          lang === "de" ? (
+            <>Unvergessliche Momente<br />mit <span className="text-[#f2d896]">Premium Event-Catering.</span></>
+          ) : (
+            <>Unforgettable moments<br />with <span className="text-[#f2d896]">premium event catering.</span></>
+          )
+        }
+        subtext={
+          lang === "de"
+            ? "Egal ob traumhafte Hochzeit, exklusive Firmenfeier oder privates Fine Dining zu Hause – wir verbinden dich mit geprüften Food-Partnern, die deine Vision kulinarisch Wirklichkeit werden lassen."
+            : "Whether it is a dream wedding, an exclusive corporate party, or private fine dining at home – we connect you with vetted food partners who turn your culinary vision into reality."
+        }
+        primaryCta={{ label: lang === "de" ? "Event-Caterer finden" : "Discover Event Caterers", href: "/catering" }}
+        secondaryCta={{ label: lang === "de" ? "Daily Catering Subscriptions" : "Daily Catering Subscriptions", onClick: () => setB2bOpen(true) }}
+        imageUrl="/images/event_catering_hero.png"
+        imageAlt="Elegant Rustic Event and Wedding Tablescape"
+      />
 
-          <div className="relative">
-            <div className="absolute -inset-2 bg-gradient-to-tr from-emerald-500/10 to-transparent rounded-[2.5rem] blur-2xl -z-10" />
-            <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white aspect-[4/3]">
-              <img
-                src="/images/event_catering_hero.png"
-                alt="Elegant Rustic Event and Wedding Tablescape"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm rounded-xl p-2.5 shadow-md border border-forest/5 flex items-center gap-2">
-                <div className="p-1.5 bg-emerald-500/10 rounded-lg text-emerald-600">
-                  <ShieldCheck className="h-4 w-4" />
-                </div>
-                <div className="text-[11px] font-bold text-forest leading-none">
-                  <div>100% Vetted</div>
-                  <div className="text-[9px] text-forest/60 font-medium mt-0.5">{lang === "de" ? "Handverlesene Partner" : "Handpicked partners"}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Event Formats (Weddings, Private Plating, Business Events) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">

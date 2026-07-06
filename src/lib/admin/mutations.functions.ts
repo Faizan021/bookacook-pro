@@ -77,7 +77,7 @@ export const toggleListingPublish = createServerFn({ method: "POST" })
       // For caterers, publishing status is in storefront_settings
       const { error } = await supabaseAdmin
         .from("storefront_settings")
-        .update({ status: isPublished ? 'published' : 'draft' })
+        .update({ is_active: isPublished })
         .eq("caterer_id", listingId);
 
       if (error) throw new Error("Failed to toggle caterer publish state: " + error.message);
@@ -241,8 +241,8 @@ export const auditAllSeoContent = createServerFn({ method: "POST" })
           } else {
             demotedRecords.push({
               id: record.id,
-              title: record.title,
-              previousStatus: record.status,
+              title: record.title || "Unknown",
+              previousStatus: record.status || "Unknown",
               reasons
             });
           }

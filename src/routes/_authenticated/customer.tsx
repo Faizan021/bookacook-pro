@@ -113,7 +113,7 @@ function StatusPill({ status }: { status: string }) {
   );
 }
 
-function TimelineDot({ kind }: { kind: "order" | "brief" }) {
+function TimelineDot({ kind }: { kind: "order" | "brief" | "reservation" }) {
   return (
     <div
       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg shadow-sm ring-4 ring-cream ${
