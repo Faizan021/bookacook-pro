@@ -142,11 +142,11 @@ function Home() {
   ];
 
   return (
-    <SiteShell darkHero>
+    <SiteShell>
       {/* ─────────────────────────────────────────────────
           HERO — Cinematic split layout
       ───────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex items-center overflow-hidden -mt-20 lg:-mt-24">
+      <section className="relative min-h-screen flex items-center overflow-hidden ">
         {/* Dark forest background */}
         <div className="absolute inset-0 z-0 bg-forest" />
 
@@ -179,7 +179,7 @@ function Home() {
         </div>
 
         {/* Hero text content */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-24 lg:pt-44 lg:pb-36">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-20 lg:pb-36">
           <div className="max-w-[42rem]">
             {/* Eyebrow badge */}
             <div

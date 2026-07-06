@@ -32,9 +32,9 @@ function About() {
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
   return (
-    <SiteShell darkHero>
+    <SiteShell>
       {/* Cinematic Hero */}
-      <section className="relative overflow-hidden min-h-screen flex items-center -mt-20 lg:-mt-24 pt-36 pb-24 lg:pt-44 lg:pb-36">
+      <section className="relative overflow-hidden min-h-screen flex items-center  pt-16 pb-24 lg:pt-20 lg:pb-36">
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
