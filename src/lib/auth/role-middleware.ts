@@ -189,6 +189,13 @@ export const requireRole = (role: UserRole) =>
         roleList.push("partner");
       }
 
+      // Map unified partner role to legacy roles to satisfy existing server functions
+      if (roleList.includes("partner")) {
+        if (!roleList.includes("restaurant_owner")) roleList.push("restaurant_owner" as UserRole);
+        if (!roleList.includes("caterer")) roleList.push("caterer" as UserRole);
+        if (!roleList.includes("planner")) roleList.push("planner" as UserRole);
+      }
+
       if (!roleList.includes(role)) {
         throw new Error(`Unauthorized: Missing required role '${role}'`);
       }
