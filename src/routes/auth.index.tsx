@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { checkEmailRole } from "@/lib/auth/get-user-profile.functions";
+import { upsertConsentRecord } from "@/lib/consent.functions";
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { trackEvent } from "@/utils/posthog";
@@ -40,6 +41,7 @@ const passwordSchema = z
 function AuthPage() {
   const navigate = useNavigate();
   const checkEmailRoleFn = useServerFn(checkEmailRole);
+  const upsertConsentRecordFn = useServerFn(upsertConsentRecord);
   const { signup, message, logout } = Route.useSearch();
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
@@ -258,8 +260,7 @@ function AuthPage() {
         }
 
         trackEvent("signup_completed", { role });
-        const { upsertConsentRecord } = await import("@/lib/consent.functions");
-        await upsertConsentRecord({
+        await upsertConsentRecordFn({
           data: {
             email: values.email,
             audience_type: role === "restaurant_owner" || role === "partner" ? "restaurant" : role,
@@ -285,8 +286,10 @@ function AuthPage() {
         } catch (e) {
           checkResult = { exists: true, primaryRole: null };
         }
-
-        if (!checkResult.exists) throw new Error("profile_does_not_exist");
+        if (checkResult.exists === false && checkResult.primaryRole === null) {
+          // Log but don't block, as profiles.email might be null for valid users
+          console.log("Profile not found by email, but proceeding to auth check.");
+        }
 
         const { error } = await supabase.auth.signInWithPassword({
           email: values.email,
