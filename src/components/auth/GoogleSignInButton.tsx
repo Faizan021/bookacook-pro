@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
-export function GoogleSignInButton({ tt, role, onError }: { tt: (de:string, en:string) => string, role?: string, onError?: (err:string) => void }) {
+export function GoogleSignInButton({ tt, role, onError }: { tt: (de:string, en:string) => string, role?: string, onError?: (err: { de: string; en: string }) => void }) {
   const handleGoogleLogin = async () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
@@ -12,7 +12,7 @@ export function GoogleSignInButton({ tt, role, onError }: { tt: (de:string, en:s
       });
       if (error) throw error;
     } catch (e: any) {
-      if (onError) onError(e.message);
+      if (onError) onError({ de: "Google-Anmeldung fehlgeschlagen. Bitte erneut versuchen.", en: e.message || "Google sign-in failed. Please try again." });
     }
   };
 

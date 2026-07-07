@@ -60,8 +60,8 @@ function AuthPage() {
   modeRef.current = mode;
   const [role, setRole] = useState<Role>(initialRole);
   const [loading, setLoading] = useState(false);
-  const [globalErr, setGlobalErr] = useState<string | null>(null);
-  const [globalSuccess, setGlobalSuccess] = useState<string | null>(null);
+  const [globalErr, setGlobalErr] = useState<{ de: string; en: string } | null>(null);
+  const [globalSuccess, setGlobalSuccess] = useState<{ de: string; en: string } | null>(null);
 
   const isPartner = role !== "customer";
 
@@ -220,12 +220,10 @@ function AuthPage() {
           redirectTo: window.location.origin + "/auth/update-password",
         });
         if (error) throw error;
-        setGlobalSuccess(
-          tt(
-            "Wenn diese E-Mail existiert, haben wir einen Link zum Zurücksetzen gesendet.",
-            "If this email exists, we have sent a reset link.",
-          ),
-        );
+        setGlobalSuccess({
+          de: "Wenn diese E-Mail existiert, haben wir einen Link zum Zurücksetzen gesendet.",
+          en: "If this email exists, we have sent a reset link.",
+        });
         return;
       }
 
@@ -306,7 +304,7 @@ function AuthPage() {
       }
       navigate({ to: "/dashboard" });
     } catch (e: unknown) {
-      setGlobalErr(sanitizeAuthError(e, lang));
+      setGlobalErr(sanitizeAuthError(e));
     } finally {
       setLoading(false);
     }
@@ -319,49 +317,36 @@ function AuthPage() {
     try {
       const { error } = await supabase.auth.resend({ type: "signup", email: currentEmail });
       if (error) throw error;
-      setGlobalSuccess(
-        tt("Bestätigungs-E-Mail wurde erneut gesendet.", "Verification email resent."),
-      );
+      setGlobalSuccess({
+        de: "Bestätigungs-E-Mail wurde erneut gesendet.",
+        en: "Verification email resent.",
+      });
     } catch (e: unknown) {
-      setGlobalErr(sanitizeAuthError(e, lang));
+      setGlobalErr(sanitizeAuthError(e));
     } finally {
       setLoading(false);
     }
   };
 
-  function sanitizeAuthError(e: unknown, lang: string): string {
-    const de = (msg: string) => (lang === "de" ? msg : undefined);
+  function sanitizeAuthError(e: unknown): { de: string; en: string } {
     const err = e as Record<string, string>;
     const code: string = err?.code ?? err?.message ?? String(e);
     if (code === "profile_does_not_exist")
-      return (
-        de(
-          "Ein Profil mit dieser E-Mail-Adresse existiert nicht. Bitte registrieren Sie sich zuerst.",
-        ) ?? "No profile exists with this email. Please sign up first."
-      );
+      return {
+        de: "Ein Profil mit dieser E-Mail-Adresse existiert nicht. Bitte registrieren Sie sich zuerst.",
+        en: "No profile exists with this email. Please sign up first.",
+      };
     if (code.startsWith("incorrect_password_with_role:"))
-      return de("Falsches Passwort für dieses Konto.") ?? "Incorrect password for this account.";
+      return { de: "Falsches Passwort für dieses Konto.", en: "Incorrect password for this account." };
     if (code.includes("invalid_credentials") || code.includes("Invalid login credentials"))
-      return de("E-Mail oder Passwort ist falsch.") ?? "Incorrect email or password.";
+      return { de: "E-Mail oder Passwort ist falsch.", en: "Incorrect email or password." };
     if (code.includes("email_not_confirmed"))
-      return (
-        de("Bitte bestätige zuerst deine E-Mail-Adresse.") ??
-        "Please confirm your email address first."
-      );
+      return { de: "Bitte bestätige zuerst deine E-Mail-Adresse.", en: "Please confirm your email address first." };
     if (code.includes("user_already_exists") || code.includes("already registered"))
-      return (
-        de("Diese E-Mail-Adresse ist bereits registriert.") ??
-        "An account with this email already exists."
-      );
+      return { de: "Diese E-Mail-Adresse ist bereits registriert.", en: "An account with this email already exists." };
     if (code.includes("over_email_send_rate_limit") || code.includes("rate limit"))
-      return (
-        de("Zu viele Anfragen. Bitte warte einen Moment.") ??
-        "Too many requests. Please wait a moment."
-      );
-    return (
-      de("Ein Fehler ist aufgetreten. Bitte erneut versuchen.") ??
-      "Something went wrong. Please try again."
-    );
+      return { de: "Zu viele Anfragen. Bitte warte einen Moment.", en: "Too many requests. Please wait a moment." };
+    return { de: "Ein Fehler ist aufgetreten. Bitte erneut versuchen.", en: "Something went wrong. Please try again." };
   }
 
   if (mode === "check-email") {
@@ -385,8 +370,8 @@ function AuthPage() {
             {tt("Wir haben dir einen Bestätigungslink an", "We sent a confirmation link to")}{" "}
             <strong>{currentEmail}</strong> {tt("gesendet.", "sent.")}
           </p>
-          {globalSuccess && <p className="text-sm text-green-600 font-medium">{globalSuccess}</p>}
-          {globalErr && <p className="text-sm text-red-600 font-medium">{globalErr}</p>}
+          {globalSuccess && <p className="text-sm text-green-600 font-medium">{lang === "de" ? globalSuccess.de : globalSuccess.en}</p>}
+          {globalErr && <p className="text-sm text-red-600 font-medium">{lang === "de" ? globalErr.de : globalErr.en}</p>}
           <Button
             variant="outline"
             onClick={handleResendEmail}
@@ -459,12 +444,12 @@ function AuthPage() {
         )}
         {globalErr && (
           <div className="mb-4 p-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-700">
-            {globalErr}
+            {lang === "de" ? globalErr.de : globalErr.en}
           </div>
         )}
         {globalSuccess && (
           <div className="mb-4 p-3 rounded-md bg-green-50 border border-green-200 text-sm text-green-700">
-            {globalSuccess}
+            {lang === "de" ? globalSuccess.de : globalSuccess.en}
           </div>
         )}
 
