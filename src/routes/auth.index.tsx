@@ -19,7 +19,7 @@ import { InputPassword } from "@/components/auth/InputPassword";
 
 type Role = "customer" | "restaurant_owner" | "caterer" | "planner" | "partner";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/auth/")({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => ({
     signup: typeof s.signup === "string" ? (s.signup as string) : undefined,

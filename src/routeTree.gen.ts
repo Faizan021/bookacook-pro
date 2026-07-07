@@ -22,7 +22,6 @@ import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CateringRouteImport } from './routes/catering'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -30,6 +29,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlannerIndexRouteImport } from './routes/planner.index'
 import { Route as CateringIndexRouteImport } from './routes/catering.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
@@ -122,11 +122,6 @@ const CateringRoute = CateringRouteImport.update({
   path: '/catering',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -159,6 +154,11 @@ const CateringIndexRoute = CateringIndexRouteImport.update({
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/auth/',
+  path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RestaurantSlugRoute = RestaurantSlugRouteImport.update({
@@ -307,7 +307,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/auth': typeof AuthRouteWithChildren
   '/catering': typeof CateringRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -332,6 +331,7 @@ export interface FileRoutesByFullPath {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRoute
+  '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
   '/planner/': typeof PlannerIndexRoute
@@ -355,7 +355,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -378,6 +377,7 @@ export interface FileRoutesByTo {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRoute
+  '/auth': typeof AuthIndexRoute
   '/blog': typeof BlogIndexRoute
   '/catering': typeof CateringIndexRoute
   '/planner': typeof PlannerIndexRoute
@@ -403,7 +403,6 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/auth': typeof AuthRouteWithChildren
   '/catering': typeof CateringRouteWithChildren
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
@@ -428,6 +427,7 @@ export interface FileRoutesById {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRoute
+  '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
   '/planner/': typeof PlannerIndexRoute
@@ -453,7 +453,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/auth'
     | '/catering'
     | '/contact'
     | '/faq'
@@ -478,6 +477,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/planner/$slug'
     | '/restaurant/$slug'
+    | '/auth/'
     | '/blog/'
     | '/catering/'
     | '/planner/'
@@ -501,7 +501,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/auth'
     | '/contact'
     | '/faq'
     | '/impressum'
@@ -524,6 +523,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/planner/$slug'
     | '/restaurant/$slug'
+    | '/auth'
     | '/blog'
     | '/catering'
     | '/planner'
@@ -548,7 +548,6 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/admin'
-    | '/auth'
     | '/catering'
     | '/contact'
     | '/faq'
@@ -573,6 +572,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/planner/$slug'
     | '/restaurant/$slug'
+    | '/auth/'
     | '/blog/'
     | '/catering/'
     | '/planner/'
@@ -598,7 +598,6 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
-  AuthRoute: typeof AuthRouteWithChildren
   CateringRoute: typeof CateringRouteWithChildren
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
@@ -614,6 +613,7 @@ export interface RootRouteChildren {
   VerifyEmailRoute: typeof VerifyEmailRoute
   BlogSlugRoute: typeof BlogSlugRoute
   RestaurantSlugRoute: typeof RestaurantSlugRoute
+  AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
@@ -717,13 +717,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CateringRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -771,6 +764,13 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/restaurant/$slug': {
@@ -1020,16 +1020,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-interface AuthRouteChildren {
-  AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
-}
-
-const AuthRouteChildren: AuthRouteChildren = {
-  AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
-}
-
-const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
-
 interface CateringRouteChildren {
   CateringSlugRoute: typeof CateringSlugRoute
   CateringDailyCateringSubscriptionsRoute: typeof CateringDailyCateringSubscriptionsRoute
@@ -1073,7 +1063,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
-  AuthRoute: AuthRouteWithChildren,
   CateringRoute: CateringRouteWithChildren,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
@@ -1089,6 +1078,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyEmailRoute: VerifyEmailRoute,
   BlogSlugRoute: BlogSlugRoute,
   RestaurantSlugRoute: RestaurantSlugRoute,
+  AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
   CheckoutDepositBookingIdRoute: CheckoutDepositBookingIdRoute,
