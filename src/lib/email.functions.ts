@@ -22,33 +22,31 @@ export const sendDoubleOptInEmail = createServerFn({ method: "POST" })
       data.email
     )}&token=${encodeURIComponent(data.token)}`;
 
-    const subject = "Please verify your email for Speisely updates";
+    const subject = "Bitte bestätige deine E-Mail für Speisely-Updates 🍽️";
     const text = `
-Hello,
+Hallo,
 
-You recently requested to receive updates from Speisely.
-Please verify your email address by clicking the link below:
+Wir freuen uns sehr, dass du über Speisely auf dem Laufenden bleiben möchtest!
+Bitte bestätige kurz deine E-Mail-Adresse, indem du auf den untenstehenden Link klickst:
 
 ${verificationUrl}
 
-If you did not request this, you can safely ignore this email.
+Falls du diese E-Mail versehentlich erhalten hast, kannst du sie einfach ignorieren.
 
-Best,
-The Speisely Team
+Herzliche Grüße,
+Dein Speisely Team
     `.trim();
 
     const html = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #16372f;">
-        <h2 style="color: #16372f;">Verify your email address</h2>
-        <p>You recently requested to receive updates from Speisely.</p>
-        <p>Please click the button below to verify your email address:</p>
+        <h2 style="color: #16372f;">Willkommen in der Speisely-Familie! 🎉</h2>
+        <p>Wir freuen uns riesig, dass du über unsere neuesten Features, Restaurants und Angebote auf dem Laufenden bleiben möchtest.</p>
+        <p>Um deine Anmeldung abzuschließen, klicke einfach auf den grünen Button:</p>
         <div style="margin: 30px 0;">
-          <a href="${verificationUrl}" style="background-color: #22C55E; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Verify Email</a>
+          <a href="${verificationUrl}" style="background-color: #1A4D2E; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">E-Mail jetzt bestätigen</a>
         </div>
-        <p style="font-size: 12px; color: #666;">Or copy and paste this link into your browser:<br/>
-        <a href="${verificationUrl}" style="color: #22C55E;">${verificationUrl}</a></p>
         <hr style="border: none; border-top: 1px solid #eadfce; margin: 30px 0;" />
-        <p style="font-size: 12px; color: #999;">If you did not request this, you can safely ignore this email.</p>
+        <p style="font-size: 12px; color: #999;">Falls du dich nicht für Updates angemeldet hast, kannst du diese E-Mail sicher ignorieren.</p>
       </div>
     `;
 

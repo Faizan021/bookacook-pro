@@ -56,6 +56,8 @@ function AuthPage() {
   const [mode, setMode] = useState<"signin" | "signup" | "check-email" | "forgot-password">(
     initialMode,
   );
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
   const [role, setRole] = useState<Role>(initialRole);
   const [loading, setLoading] = useState(false);
   const [globalErr, setGlobalErr] = useState<string | null>(null);
@@ -98,15 +100,9 @@ function AuthPage() {
   const formSchema = z
     .object({
       email: z.string().email(tt("Gültige E-Mail erforderlich.", "Valid email required.")),
-      password:
-        mode === "signup"
-          ? passwordSchema
-          : z.string().min(1, tt("Passwort erforderlich.", "Password required.")),
+      password: z.string().optional(),
       confirmPassword: z.string().optional(),
-      fullName:
-        mode === "signup"
-          ? z.string().min(2, tt("Name erforderlich.", "Name required."))
-          : z.string().optional(),
+      fullName: z.string().optional(),
       termsAccepted: z.boolean().optional(),
       marketingOptIn: z.boolean().optional(),
       // Biz fields
@@ -119,7 +115,24 @@ function AuthPage() {
       service_area: z.string().optional(),
     })
     .superRefine((data, ctx) => {
-      if (mode === "signup") {
+      const currentMode = modeRef.current;
+      
+      if (currentMode === "signup") {
+        const passCheck = passwordSchema.safeParse(data.password || "");
+        if (!passCheck.success) {
+          passCheck.error.issues.forEach((issue) => {
+            ctx.addIssue({ ...issue, path: ["password"] });
+          });
+        }
+        
+        if (!data.fullName || data.fullName.length < 2) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: tt("Name erforderlich.", "Name required."),
+            path: ["fullName"],
+          });
+        }
+
         if (data.password !== data.confirmPassword) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -156,6 +169,14 @@ function AuthPage() {
               message: "Erforderlich",
               path: ["business_address"],
             });
+        }
+      } else if (currentMode === "signin") {
+        if (!data.password || data.password.length < 1) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: tt("Passwort erforderlich.", "Password required."),
+            path: ["password"],
+          });
         }
       }
     });
