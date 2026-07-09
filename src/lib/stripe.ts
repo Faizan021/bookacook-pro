@@ -96,7 +96,13 @@ export function verifyConnectState(
 
 export function getConnectOAuthUrl(restaurantSlug: string, origin: string): string {
   const clientId = getStripeConnectClientId();
-  const redirectUri = `${origin}/api/stripe/connect/callback`;
+  // Prefer a pinned redirect URI from env so it always matches the URL
+  // registered in the Stripe Connect settings, regardless of which domain
+  // the user is currently browsing (e.g. vercel preview vs. production).
+  const redirectBase = process.env.STRIPE_CONNECT_REDIRECT_URI || `${origin}/api/stripe/connect/callback`;
+  const redirectUri = redirectBase.startsWith('http')
+    ? redirectBase  // already a full URL (from env var)
+    : `${origin}${redirectBase}`;
   const state = createConnectState(restaurantSlug);
   return (
     `https://connect.stripe.com/oauth/authorize` +

@@ -141,7 +141,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           slug: z.string().max(100).optional(),
           accepts_cash: z.boolean().optional(),
           accepts_paypal: z.boolean().optional(),
-          paypal_email: z.string().email().optional().nullable(),
+          paypal_email: z.string().max(500).optional().nullable(),
         })
         .parse(input),
   )
