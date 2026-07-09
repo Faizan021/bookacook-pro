@@ -520,6 +520,15 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
       setStep("done");
       onImported();
     },
+    onError: () => {
+      setTimeout(() => {
+        const firstErrorEl = document.querySelector(".border-destructive");
+        if (firstErrorEl) {
+          firstErrorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          (firstErrorEl as HTMLElement).focus();
+        }
+      }, 50);
+    },
   });
 
   // ── File pick handler ───────────────────────────────────────────────────────
@@ -725,8 +734,32 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
             </div>
 
             {saveMut.isError && (
-              <div className="rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm px-4 py-3">
-                {(saveMut.error as any)?.message ?? tt("Speichern fehlgeschlagen", "Save failed")}
+              <div
+                role="button"
+                tabIndex={0}
+                className="rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm px-4 py-3 cursor-pointer hover:bg-destructive/20 transition-all flex items-center justify-between"
+                onClick={() => {
+                  const firstErrorEl = document.querySelector(".border-destructive");
+                  if (firstErrorEl) {
+                    firstErrorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                    (firstErrorEl as HTMLElement).focus();
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    const firstErrorEl = document.querySelector(".border-destructive");
+                    if (firstErrorEl) {
+                      firstErrorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                      (firstErrorEl as HTMLElement).focus();
+                    }
+                  }
+                }}
+              >
+                <span>{(saveMut.error as any)?.message ?? tt("Speichern fehlgeschlagen", "Save failed")}</span>
+                <span className="text-xs underline font-medium">
+                  {tt("Klicken zum ersten Fehler", "Click to jump to first error")}
+                </span>
               </div>
             )}
 
