@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 export type Dietary = "vegetarian" | "vegan" | "gluten-free";
 
 export type MenuItem = {
+  id?: string;
   name: string;
   desc: { de: string; en: string };
   price: number;
@@ -238,6 +239,7 @@ function mapRestaurant(r: any): Restaurant {
     phone: r.phone || "",
     about: { de: r.description || "", en: r.description || "" },
     menu: (r.restaurant_products || []).map((p: any) => ({
+      id: p.id,
       name: p.name,
       desc: { de: p.description || "", en: p.description || "" },
       price: (p.price_cents || 0) / 100,

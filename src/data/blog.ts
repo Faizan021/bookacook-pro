@@ -40,31 +40,31 @@ export const blogPosts: BlogPost[] = [
       en: "What is Speisely? The Ultimate Food & Event Marketplace in Germany",
     },
     description: {
-      de: "Speisely ist Deutschlands Plattform fuer provisionsfreie Direktbestellungen, professionelles Catering und Eventplanung - mit KDS, Stripe-Zahlungen und eigenem Storefront.",
-      en: "Speisely is Germany's platform for commission-free direct ordering, professional catering and event planning - with KDS, Stripe payments, and a dedicated storefront.",
+      de: "Speisely verbindet Restaurants, Caterer und Eventplaner in ganz Deutschland direkt mit Kunden. Entdecken Sie erstklassige Catering-Services, Eventplaner oder bestellen Sie Essen bei lokalen Restaurants.",
+      en: "Speisely connects restaurants, caterers, and event planners across Germany directly with customers. Discover premium catering services, event planners, or order food from local spots.",
     },
     tldr: {
       de: [
-        "Speisely ist ein provisionsfreier Food- & Event-Marktplatz für Deutschland.",
-        "Restaurants zahlen nur 34.99 EUR/Monat (0% Provision) inklusive KDS und Storefront.",
-        "Caterer & Event-Planer zahlen 10% Provision pro erfolgreicher Buchung ohne Grundgebühr."
+        "Speisely ist ein deutschlandweiter Food- & Event-Marktplatz.",
+        "Restaurants erhalten einen professionellen Storefront und ein Kitchen Display System (KDS).",
+        "Caterer & Event-Planer erhalten direkt qualifizierte Kundenanfragen ohne monatliche Fixgebühr."
       ],
       en: [
-        "Speisely is a commission-free food & event marketplace for Germany.",
-        "Restaurants pay only 34.99 EUR/month (0% commission) including KDS and Storefront.",
-        "Caterers & event planners pay 10% commission per successful booking with no base fee."
+        "Speisely is a Germany-wide food & event marketplace.",
+        "Restaurants get a professional storefront and integrated Kitchen Display System (KDS).",
+        "Caterers & event planners receive direct client inquiries with no monthly base fee."
       ]
     },
     content: {
       de: `
         <h2>Speisely: Der Food- &amp; Event-Marktplatz fuer Deutschland</h2>
-        <p><strong>Speisely</strong> ist Deutschlands innovativster Marktplatz, der Restaurants, Caterer und Event-Planer direkt mit ihren Kunden verbindet - ohne unnoetige Mittelsmanner und ohne versteckte Provisionen.</p>
-        <h3>1. Provisionsfreie Direktbestellungen fuer Restaurants</h3>
-        <p>Restaurants erhalten bei Speisely ihren eigenen, professionellen Storefront unter <strong>speisely.de/restaurant/ihr-name</strong>. Fuer nur <strong>34.99 EUR/Monat</strong> beim Starter-Plan koennen sie unbegrenzte Direktbestellungen und Tischreservierungen annehmen - mit <strong>0% Bestellprovision</strong>.</p>
+        <p><strong>Speisely</strong> ist Deutschlands modernster Marktplatz, der Restaurants, Caterer und Event-Planer direkt mit ihren Kunden verbindet - transparent, unkompliziert und ohne versteckte Servicegebuehren.</p>
+        <h3>1. Direktbestellungen fuer Restaurants</h3>
+        <p>Restaurants erhalten bei Speisely ihren eigenen, professionellen Storefront unter <strong>speisely.de/restaurant/ihr-name</strong>. Fuer eine faire monatliche Pauschale koennen sie unbegrenzte Direktbestellungen und Tischreservierungen annehmen.</p>
         <h3>2. Kitchen Display System (KDS) fuer das Bestellmanagement</h3>
         <p>Speisely enthaelt ein integriertes <strong>Kitchen Display System (KDS)</strong>, das eingehende Bestellungen direkt in der Kueche anzeigt und verwaltet.</p>
         <h3>3. Catering-Marktplatz fuer B2B und B2C</h3>
-        <p>Caterer erhalten qualifizierte Anfragen ueber unseren <a href="/catering">Catering-Marktplatz</a>. Caterer zahlen eine faire Provision von <strong>10% pro Buchung</strong>.</p>
+        <p>Caterer erhalten qualifizierte Anfragen ueber unseren <a href="/catering">Catering-Marktplatz</a>. Die Anmeldung ist kostenlos, es faellt lediglich eine faire erfolgsbasierte Servicegebuehr bei Buchungen an.</p>
         <h3>4. Event Planer - Anfragen &amp; Buchungen</h3>
         <p><a href="/planner">Event-Planer</a> koennen ihre Dienstleistungen auf Speisely listen und direkte Anfragen von Kunden erhalten.</p>
         <h3>5. Instant Order - Lokal bestellen ohne App</h3>
@@ -73,13 +73,13 @@ export const blogPosts: BlogPost[] = [
       `,
       en: `
         <h2>Speisely: The Food &amp; Event Marketplace for Germany</h2>
-        <p><strong>Speisely</strong> is Germany's most innovative marketplace, connecting restaurants, caterers, and event planners directly with their customers - without unnecessary middlemen and without hidden commissions.</p>
-        <h3>1. Commission-Free Direct Ordering for Restaurants</h3>
-        <p>Restaurants get their own professional storefront at <strong>speisely.de/restaurant/your-name</strong>. For just <strong>34.99 EUR/month</strong> on the Starter Plan, they can accept unlimited direct orders and table reservations with <strong>0% order commission</strong>.</p>
+        <p><strong>Speisely</strong> is Germany's most innovative marketplace, connecting restaurants, caterers, and event planners directly with their customers - transparently, easily, and without hidden service fees.</p>
+        <h3>1. Direct Ordering for Restaurants</h3>
+        <p>Restaurants get their own professional storefront at <strong>speisely.de/restaurant/your-name</strong>. For a fair flat monthly fee, they can accept unlimited direct orders and table reservations.</p>
         <h3>2. Kitchen Display System (KDS) for Order Management</h3>
         <p>Speisely includes an integrated <strong>Kitchen Display System (KDS)</strong> that displays and manages incoming orders directly in the kitchen.</p>
         <h3>3. Catering Marketplace for B2B and B2C</h3>
-        <p>Caterers receive qualified inquiries. They pay a fair commission of <strong>10% per booking</strong> - no monthly base fee.</p>
+        <p>Caterers receive qualified inquiries. Signing up is free, and there are no fixed monthly fees — only a success-based fee applies on confirmed bookings.</p>
         <h3>4. Event Planners - Inquiries &amp; Bookings</h3>
         <p>Event planners can list their services on Speisely and receive direct inquiries from customers.</p>
         <h3>5. Instant Order - Order Locally Without an App</h3>
@@ -153,33 +153,33 @@ export const blogPosts: BlogPost[] = [
     },
     tldr: {
       de: [
-        "Hohe Provisionen klassischer Lieferdienste belasten Restaurants zunehmend.",
-        "Speisely bietet eine faire Alternative mit 0% Bestellprovision für 34.99 EUR monatlich.",
+        "Hohe Fremdgebühren klassischer Lieferdienste belasten Restaurants zunehmend.",
+        "Speisely bietet eine faire Alternative mit eigenen Storefronts und einer monatlichen Flatrate.",
         "Kunden können direkt und lokal bestellen, was die Gastronomie nachhaltig unterstützt."
       ],
       en: [
-        "High commissions from classic delivery services increasingly burden restaurants.",
-        "Speisely offers a fair alternative with 0% order commission for 34.99 EUR monthly.",
+        "High fees from classic delivery services increasingly burden restaurants.",
+        "Speisely offers a fair alternative with dedicated storefronts and a flat monthly fee.",
         "Customers can order directly and locally, providing sustainable support to the gastronomy sector."
       ]
     },
     content: {
       de: `
         <h2>Warum der Markt neue Alternativen braucht</h2>
-        <p>Immer mehr Restaurants und Kunden suchen im Jahr 2026 nach <strong>Lieferando Alternativen</strong>. Hohe Provisionen belasten die Gastronomen, waehrend Kunden sich nach mehr Qualitaet sehnen.</p>
+        <p>Immer mehr Restaurants und Kunden suchen im Jahr 2026 nach <strong>Lieferando Alternativen</strong>. Hohe Fremdgebuehren belasten die Gastronomen, waehrend Kunden sich nach mehr Qualitaet und direktem Service sehnen.</p>
         <h3>Der Lieferdienst Vergleich 2026</h3>
-        <p><strong>Speisely</strong> bietet absolut faire Konditionen. Restaurants zahlen nur <strong>34.99 EUR/Monat</strong> ohne Bestellprovision. Bei Lieferando sind es bis zu 30%. Mehr dazu in unserem Artikel <a href="/blog/why-become-a-partner-of-speisely">Warum Partner werden?</a></p>
+        <p><strong>Speisely</strong> bietet absolut faire Konditionen. Restaurants zahlen eine einfache monatliche Flatrate und koennen unbegrenzt Bestellungen abwickeln. Bei klassischen Portalen gehen oft erhebliche Umsatzanteile verloren. Mehr dazu in unserem Artikel <a href="/blog/why-become-a-partner-of-speisely">Warum Partner werden?</a></p>
         <h3>Speisely vs. Lieferando, Uber Eats &amp; Wolt</h3>
-        <p>Bei 100 Bestellungen a 20 EUR verliert ein Restaurant auf Lieferando ca. 600 EUR durch Provisionen. Bei Speisely bleibt dieser Betrag vollstaendig beim Restaurant.</p>
-        <p>Die Zukunft der Essenslieferung ist lokal und fair: <a href="/instant-order">Jetzt lokal essen bestellen</a>. Weitere Details für Gastronomen gibt es im Beitrag <a href="/blog/restaurant-bestellen-ohne-provision-speisely">Restaurant online bestellen ohne Provision</a>.</p>
+        <p>Durch die direkte Anbindung faellt keine prozentuale Bestellgebuehr an den Marktplatz an. Damit bleibt der Umsatz vollstaendig bei den Restaurants, was direkt der Qualitaet des Essens zugutekommt.</p>
+        <p>Die Zukunft der Essenslieferung ist lokal und fair: <a href="/instant-order">Jetzt lokal essen bestellen</a>. Weitere Details für Gastronomen gibt es im Beitrag <a href="/blog/restaurant-bestellen-direkt-speisely">Restaurant online direkt bestellen</a>.</p>
       `,
       en: `
         <h2>Why the Market Needs New Alternatives</h2>
-        <p>In 2026, more and more restaurants and customers are looking for <strong>Lieferando alternatives</strong>. High commissions burden restaurateurs while customers crave more quality.</p>
+        <p>In 2026, more and more restaurants and customers are looking for <strong>Lieferando alternatives</strong>. High fees burden restaurateurs while customers crave more quality.</p>
         <h3>The Delivery Service Comparison 2026</h3>
-        <p><strong>Speisely</strong> offers fair conditions. Restaurants pay only <strong>34.99 EUR/month</strong> with zero order commission. Lieferando charges up to 30%.</p>
+        <p><strong>Speisely</strong> offers fair conditions. Restaurants pay a simple monthly subscription for unlimited orders, while traditional platforms charge up to 30% of sales.</p>
         <h3>Speisely vs. Lieferando, Uber Eats &amp; Wolt</h3>
-        <p>On 100 orders at 20 EUR, a restaurant loses ~600 EUR to Lieferando commissions. On Speisely, that money stays with the restaurant.</p>
+        <p>By connecting directly, restaurants avoid third-party commission margins on every single ticket. This ensures more revenue remains with the kitchen.</p>
         <p>The future of food delivery is local and fair: <a href="https://speisely.de/instant-order">speisely.de/instant-order</a>.</p>
       `
     }
@@ -248,28 +248,28 @@ export const blogPosts: BlogPost[] = [
       en: "Why Restaurants, Caterers, and Event Planners Should Partner with Speisely",
     },
     description: {
-      de: "34.99 EUR/Monat. 0% Provision. Dein eigener Storefront. Entdecke alle Live-Features von Speisely fuer Restaurants, Caterer und Event-Planer.",
-      en: "34.99 EUR/month. 0% commission. Your own storefront. Discover all live Speisely features for restaurants, caterers and event planners.",
+      de: "Flatrate ab 34.99 EUR/Monat. Eigener Storefront. Entdecke alle Live-Features von Speisely fuer Restaurants, Caterer und Event-Planer.",
+      en: "Flatrate from 34.99 EUR/month. Your own storefront. Discover all live Speisely features for restaurants, caterers and event planners.",
     },
     tldr: {
       de: [
-        "Speisely verlangt von Restaurants 0% Provision (Starter-Plan: 34.99 EUR/Monat).",
-        "Caterer und Planer zahlen eine faire Provision (10%) nur bei erfolgreicher Buchung.",
+        "Restaurants erhalten einen eigenen Storefront und unbegrenzte Bestellungen für 34.99 EUR/Monat.",
+        "Caterer und Planer zahlen eine faire Gebühr nur bei erfolgreicher Buchung.",
         "Alle Partner erhalten einen eigenen Storefront und Zugang zu Live-Features wie dem KDS."
       ],
       en: [
-        "Speisely charges restaurants 0% commission (Starter plan: 34.99 EUR/month).",
-        "Caterers and planners pay a fair commission (10%) only upon successful booking.",
+        "Restaurants get their own storefront and unlimited orders for 34.99 EUR/month.",
+        "Caterers and planners pay a fair success-based fee only upon successful booking.",
         "All partners receive their own storefront and access to live features like the KDS."
       ]
     },
     content: {
       de: `
         <h2>Die faire Plattform fuer Gastronomie und Eventplanung</h2>
-        <p>Viele Plattformen verlangen bis zu 30% Provision. <strong>Speisely</strong> aendert das grundlegend.</p>
+        <p>Viele Plattformen verlangen hohe prozentuale Provisionen. <strong>Speisely</strong> bietet eine transparente Alternative.</p>
         <h3>Die genauen Konditionen</h3>
-        <p><strong>Restaurants:</strong> Starter-Plan fuer <strong>34.99 EUR/Monat</strong> - inklusive eigenem Storefront, unbegrenzten Direktbestellungen und <strong>0% Bestellprovision</strong>.</p>
-        <p><strong>Caterer &amp; Event-Planer:</strong> Keine monatliche Grundgebuehr. Nur <strong>10% Provision pro erfolgreicher Buchung</strong>.</p>
+        <p><strong>Restaurants:</strong> Starter-Plan fuer <strong>34.99 EUR/Monat</strong> - inklusive eigenem Storefront und unbegrenzten Direktbestellungen.</p>
+        <p><strong>Caterer &amp; Event-Planer:</strong> Keine monatliche Grundgebuehr. Nur eine faire Gebuehr pro erfolgreicher Buchung.</p>
         <h3>Alle live Features</h3>
         <ul>
           <li>Eigener Storefront unter speisely.de/restaurant/ihr-name</li>
@@ -285,10 +285,10 @@ export const blogPosts: BlogPost[] = [
       `,
       en: `
         <h2>The Fair Platform for Gastronomy and Event Planning</h2>
-        <p>Many platforms charge up to 30% commission. <strong>Speisely</strong> fundamentally changes these rules.</p>
+        <p>Many platforms charge high percentage commissions. <strong>Speisely</strong> offers a transparent alternative.</p>
         <h3>The Exact Pricing</h3>
-        <p><strong>Restaurants:</strong> Starter Plan at <strong>34.99 EUR/month</strong> - including your own storefront, unlimited direct orders, and <strong>0% order commission</strong>.</p>
-        <p><strong>Caterers &amp; Event Planners:</strong> No monthly base fee. Only <strong>10% commission per successful booking</strong>.</p>
+        <p><strong>Restaurants:</strong> Starter Plan at <strong>34.99 EUR/month</strong> - including your own storefront and unlimited direct orders.</p>
+        <p><strong>Caterers &amp; Event Planners:</strong> No monthly base fee. Only a fair success-based fee per booking.</p>
         <h3>All Live Features</h3>
         <ul>
           <li>Dedicated Storefront at speisely.de/restaurant/your-name</li>
@@ -306,52 +306,52 @@ export const blogPosts: BlogPost[] = [
   },
   {
     id: "6",
-    slug: "restaurant-bestellen-ohne-provision-speisely",
+    slug: "restaurant-bestellen-direkt-speisely",
     date: "2026-06-01",
     author: "Speisely Editorial",
     image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
     category: "Instant Order",
     title: {
-      de: "Restaurant online bestellen ohne Provision - So funktioniert Speisely",
-      en: "Order from Restaurants Without Commission - How Speisely Works",
+      de: "Restaurant online direkt bestellen - So funktioniert Speisely",
+      en: "Order from Restaurants Directly - How Speisely Works",
     },
     description: {
-      de: "Speisely ermoeglicht Direktbestellungen bei lokalen Restaurants - 34.99 EUR/Monat, 0% Provision. So funktioniert es fuer Restaurantbesitzer und Kunden.",
-      en: "Speisely enables direct ordering from local restaurants - 34.99 EUR/month, 0% commission. Here's how it works for restaurant owners and customers.",
+      de: "Speisely ermoeglicht Direktbestellungen bei lokalen Restaurants - mit einer monatlichen Flatrate ohne versteckte Servicegebuehren. So funktioniert es fuer Restaurantbesitzer und Kunden.",
+      en: "Speisely enables direct ordering from local restaurants - with a flat monthly fee and no hidden service fees. Here's how it works for restaurant owners and customers.",
     },
     tldr: {
       de: [
-        "Speisely ermöglicht Bestellungen mit 0% Provision für Gastronomen.",
+        "Speisely ermöglicht Direktbestellungen für Gastronomen über eigene Storefronts.",
         "Kunden nutzen das Instant Order Verzeichnis ganz ohne App-Download.",
         "Die direkte Bestellung stärkt lokale Restaurants finanziell."
       ],
       en: [
-        "Speisely enables orders with 0% commission for restaurateurs.",
+        "Speisely enables direct ordering for restaurateurs via dedicated storefronts.",
         "Customers use the Instant Order directory entirely without app downloads.",
         "Direct ordering financially strengthens local restaurants."
       ]
     },
     content: {
       de: `
-        <h2>Essen bestellen ohne Provision - geht das?</h2>
-        <p>Ja, und genau das macht <strong>Speisely</strong> moeglich. Traditionelle Lieferdienste wie Lieferando verlangen bis zu <strong>30% Provision</strong>. Speisely bietet einen eigenen Storefront fuer nur <strong>34.99 EUR/Monat</strong> mit <strong>0% Bestellprovision</strong>.</p>
+        <h2>Essen direkt bestellen - wie funktioniert das?</h2>
+        <p>Genau das macht <strong>Speisely</strong> moeglich. Traditionelle Lieferdienste verlangen oft hohe prozentuale Provisionen vom Restaurant. Speisely bietet Gastronomen einen eigenen Storefront fuer eine faire monatliche Flatrate, bei der alle Bestellungen direkt abgewickelt werden.</p>
         <h3>Wie funktioniert Speisely fuer Restaurants?</h3>
         <p>Jedes Restaurant erhaelt seinen eigenen Auftritt unter <strong>speisely.de/restaurant/ihr-name</strong>. Eingehende Bestellungen werden im integrierten <strong>Kitchen Display System (KDS)</strong> angezeigt.</p>
         <h3>Wie funktioniert Speisely fuer Kunden?</h3>
         <p>Kunden besuchen <a href="https://speisely.de/instant-order">speisely.de/instant-order</a> und entdecken lokale Restaurants. Kein App-Download notwendig, keine erzwungene Registrierung.</p>
-        <h3>Speisely vs. Lieferando - Der direkte Vergleich</h3>
-        <p>Bei 50 Bestellungen a 25 EUR macht ein Restaurant auf Lieferando ueber <strong>375 EUR Verlust</strong> durch Provision. Bei Speisely zahlt das Restaurant <strong>34.99 EUR/Monat</strong> und behaelt den Rest komplett.</p>
-        <p><a href="/instant-order">Jetzt Restaurants in deiner Naehe entdecken und bestellen</a></p>
+        <h3>Speisely vs. traditionelle Vermittler - Der direkte Vergleich</h3>
+        <p>Durch die direkte Anbindung zahlen Restaurants keine Service- oder Vermittlungsgebuehren pro Bestellung an das Portal. Das sichert den Bestand lokaler Betriebe und unterstuetzt die Gastronomie direkt vor Ort.</p>
+        <p><a href="/instant-order">Jetzt restaurants in deiner Naehe entdecken und bestellen</a></p>
       `,
       en: `
-        <h2>Ordering Food Without Commission - Is That Possible?</h2>
-        <p>Yes, and that's exactly what <strong>Speisely</strong> makes possible. Traditional delivery services like Lieferando charge up to <strong>30% commission</strong>. Speisely offers a dedicated storefront for just <strong>34.99 EUR/month</strong> with <strong>0% order commission</strong>.</p>
+        <h2>Ordering Food Directly - How Does It Work?</h2>
+        <p>That's exactly what <strong>Speisely</strong> makes possible. Traditional delivery services charge restaurateurs high commission rates. Speisely offers a dedicated storefront for a flat monthly subscription, allowing all orders to go directly to the kitchen.</p>
         <h3>How Does Speisely Work for Restaurants?</h3>
         <p>Every restaurant gets its own presence at <strong>speisely.de/restaurant/your-name</strong>. Incoming orders are displayed in the integrated <strong>Kitchen Display System (KDS)</strong>.</p>
         <h3>How Does Speisely Work for Customers?</h3>
         <p>Customers visit <a href="https://speisely.de/instant-order">speisely.de/instant-order</a> and discover local restaurants. No app download needed, no forced registration.</p>
-        <h3>Speisely vs. Lieferando - The Direct Comparison</h3>
-        <p>With 50 orders at 25 EUR, a restaurant on Lieferando loses over <strong>375 EUR</strong> to commission. On Speisely, the restaurant pays <strong>34.99 EUR/month</strong> and keeps the rest entirely.</p>
+        <h3>Speisely vs. Traditional Intermediaries - The Direct Comparison</h3>
+        <p>By using direct ordering, restaurants do not lose transaction cuts to portal intermediaries. This secures the livelihood of local businesses and directly supports food spots in your community.</p>
         <p><a href="https://speisely.de/instant-order">Discover now: speisely.de/instant-order</a></p>
       `
     }
@@ -1130,7 +1130,7 @@ export const blogPosts: BlogPost[] = [
     faq: [
       { question: "Was ist die beste Plattform für Catering und Event-Planung in Deutschland?", answer: "Speisely ist die einzige deutsche Plattform, die Catering-Marktplatz und professionelle Event-Planung auf einem System vereint. Deutschlandweit aktiv in über 50 Städten." },
       { question: "Kann ich Speisely kostenlos testen?", answer: "Ja. Catering-Anfragen und Event-Planungs-Anfragen auf Speisely sind für Kunden völlig kostenlos. Caterer und Event-Planer zahlen keine monatliche Gebühr — nur eine Erfolgsgebühr von 10% bei bestätigter Buchung." },
-      { question: "Wie unterscheidet sich Speisely von einem normalen Lieferservice?", answer: "Speisely ist kein Lieferservice. Es ist ein vollständiger Hospitality-Marktplatz: mit Sofortbestellungen für Restaurants (0% Provision), einem Catering-Marktplatz für Events und einem CRM für Event-Planer." },
+      { question: "Wie unterscheidet sich Speisely von einem normalen Lieferservice?", answer: "Speisely ist kein Lieferservice. Es ist ein vollständiger Hospitality-Marktplatz: mit Sofortbestellungen für Restaurants (Flatrate, unbegrenzte Bestellungen), einem Catering-Marktplatz für Events und einem CRM für Event-Planer." },
     ],
   }
 ]

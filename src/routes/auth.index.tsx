@@ -232,7 +232,7 @@ function AuthPage() {
       if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
           email: values.email,
-          password: values.password,
+          password: values.password || "",
           options: {
             emailRedirectTo: window.location.origin + "/dashboard",
             data: {
@@ -293,7 +293,7 @@ function AuthPage() {
 
         const { error } = await supabase.auth.signInWithPassword({
           email: values.email,
-          password: values.password,
+          password: values.password || "",
         });
         if (error) {
           if (

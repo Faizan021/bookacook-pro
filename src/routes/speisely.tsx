@@ -14,7 +14,7 @@ export const Route = createFileRoute("/speisely")({
       {
         name: "description",
         content:
-          "Everything about Speisely: Instant orders for restaurants, catering marketplace, and event planning across Germany. No commission per order — fair, transparent pricing.",
+          "Discover top catering services in Germany, find event planners in Germany, and order food in Germany — including in Munich, Berlin, Hamburg, Frankfurt, Cologne.",
       },
       { property: "og:title", content: "Was ist Speisely? Services & Facts" },
       {
@@ -45,7 +45,7 @@ function SpeiselyFacts() {
       title: t("Instant Orders — Sofortbestellungen", "Instant Orders"),
       subtitle: t("Für Restaurants", "For Restaurants"),
       points: [
-        t("Digitaler Bestellkanal mit 0% Provision", "Digital ordering channel with 0% commission per order"),
+        t("Direkter digitaler Bestellkanal für lokale Speisen", "Direct digital ordering channel for local spots"),
         t("Pauschalabo ab €34,99/Monat", "Flat-rate subscription starting at €34.99/month"),
 
         t("Direktzahlung auf eigenes Stripe- oder PayPal-Konto", "Direct payouts to your own Stripe or PayPal account"),
@@ -80,7 +80,7 @@ function SpeiselyFacts() {
   ];
 
   const targetAudience = [
-    { icon: <Users className="h-5 w-5" />, title: t("Restaurants", "Restaurants"), desc: t("Die einen direkten digitalen Bestellkanal ohne hohe Provisionszahlungen suchen.", "Seeking a direct digital ordering channel without high per-order commissions.") },
+    { icon: <Users className="h-5 w-5" />, title: t("Restaurants", "Restaurants"), desc: t("Die einen direkten digitalen Bestellkanal zur besseren Kundenbindung suchen.", "Seeking a direct digital ordering channel to build closer customer relationships.") },
     { icon: <Utensils className="h-5 w-5" />, title: t("Caterer", "Caterers"), desc: t("Die qualifizierte B2B- und B2C-Catering-Anfragen aus ganz Deutschland erhalten möchten.", "Looking to receive qualified B2B and B2C catering requests nationwide.") },
     { icon: <Calendar className="h-5 w-5" />, title: t("Event-Planer", "Event Planners"), desc: t("Die Kunden für Firmenfeiern, Hochzeiten und private Veranstaltungen suchen.", "Searching for clients planning corporate events, weddings, and private functions.") },
     { icon: <ShoppingBag className="h-5 w-5" />, title: t("Unternehmen", "Companies"), desc: t("Die zuverlässiges Catering für Büros, Team-Events und Offsites benötigen.", "Requiring reliable catering for offices, team events, and offsites.") },
@@ -192,10 +192,10 @@ function SpeiselyFacts() {
 
               <span className="text-forest/60 mb-1">{t("/Monat", "/month")}</span>
             </div>
-            <div className="text-sm text-forest/70 mb-6">{t("Pauschalabo — keine Provision", "Flat-rate subscription — no per-order commission")}</div>
+            <div className="text-sm text-forest/70 mb-6">{t("Pauschalabo — Unbegrenzte Bestellungen", "Flat-rate subscription — Unlimited orders")}</div>
             <ul className="space-y-2">
               {[
-                t("0% Provision auf alle Bestellungen", "0% commission on all orders"),
+                t("Unbegrenzte Direktbestellungen", "Unlimited direct orders"),
                 t("Direktzahlung auf dein Konto", "Direct payouts to your account"),
                 t("Eigene Kundendaten", "Full ownership of customer data"),
                 t("SEO-optimiertes Schaufenster", "SEO-optimized digital storefront")

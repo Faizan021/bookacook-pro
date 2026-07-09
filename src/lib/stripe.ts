@@ -140,7 +140,7 @@ export async function createSubscriptionCheckoutSession(
           currency: 'eur',
           product_data: {
             name: `Speisely Restaurant Starter Plan - ${restaurantName}`,
-            description: 'starter subscription for direct orders (0% commission)',
+            description: 'starter subscription for unlimited direct orders',
           },
           unit_amount: 3499, // €34.99
           recurring: {

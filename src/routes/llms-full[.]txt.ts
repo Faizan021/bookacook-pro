@@ -67,9 +67,9 @@ ${ex}
 
         const text = `# Speisely — Full Context Document
 
-Speisely is a commission-free food ordering and catering marketplace for Germany.
-Restaurants pay EUR 34.99/month flat -- no commission on orders.
-Caterers and Event Planners receive qualified briefs and pay 10% per booking.
+Speisely is a Germany-wide food ordering, catering, and event planning marketplace.
+Restaurants pay a flat monthly fee -- with unlimited direct orders.
+Caterers and Event Planners receive qualified briefs and pay a success-based service fee.
 
 ## Key Pages
 

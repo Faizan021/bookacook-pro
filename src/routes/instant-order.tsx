@@ -152,8 +152,8 @@ function InstantOrder() {
         en: "What's the difference between Speisely and other delivery apps?",
       },
       answer: {
-        de: "Bei Speisely bestellen Sie provisionsfrei. Die Restaurants zahlen 0% Gebühren an uns, wodurch sie Ihnen oft bessere Preise oder größere Portionen anbieten können.",
-        en: "With Speisely, you order commission-free. Restaurants pay 0% fees to us, which often allows them to offer you better prices or larger portions.",
+        de: "Bei Speisely bestellen Sie direkt bei Ihren lokalen Restaurants. Sie zahlen keine versteckten Servicegebühren und die Zahlungen gehen direkt an das Lokal, um die Restaurants in Ihrer Region optimal zu unterstützen.",
+        en: "With Speisely, you order directly from your local restaurants. You pay no hidden service fees and payouts go directly to the venue, giving optimal support to spots in your region.",
       },
     },
     {
@@ -228,25 +228,25 @@ function InstantOrder() {
         <div className="relative z-10 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm">
-              <Zap className="h-3.5 w-3.5 text-[#b28a3c]" /> {tt("0% Provision", "0% Commission")}
+              <Zap className="h-3.5 w-3.5 text-[#b28a3c]" /> {tt("Direkte Bestellung", "Direct Ordering")}
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-white leading-[1.05] tracking-tight drop-shadow-sm">
               {tt("Lokal essen bestellen.", "Order local food.")} <br />
               <span className="text-[#b28a3c]">
-                {tt("100% provisionsfrei.", "100% commission-free.")}
+                {tt("Direkt & Schnell.", "Direct & Fast.")}
               </span>
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
               {tt(
-                "Unterstütze deine Lieblingsrestaurants direkt. Bei Speisely zahlst du keine versteckten Servicegebühren und die Restaurants zahlen 0% Provision pro Bestellung. Entdecke Top-Lokale in deiner Nähe.",
-                "Support your favorite restaurants directly. With Speisely, you pay no hidden service fees and restaurants pay 0% commission per order. Discover top spots near you.",
+                "Unterstütze deine Lieblingsrestaurants direkt in deiner Region. Entdecke Top-Catering-Services und erstklassige Restaurants in Deutschland und bestelle Essen direkt bei lokalen Anbietern ohne versteckte Servicegebühren.",
+                "Support your favorite local restaurants directly in your region. Discover top-rated catering services and restaurants in Germany, and order food directly from local spots with no hidden service fees.",
               )}
             </p>
-
+ 
             <ul className="space-y-2.5 pt-2 text-sm sm:text-base text-white/90 font-medium">
               <li className="flex items-center gap-2.5">
                 <BadgeCheck className="h-5 w-5 text-[#b28a3c] shrink-0" />
-                {tt("0% Provision für Restaurants", "0% commission for restaurants")}
+                {tt("Direktbestellungen für Restaurants", "Direct ordering for restaurants")}
               </li>
               <li className="flex items-center gap-2.5">
                 <BadgeCheck className="h-5 w-5 text-[#b28a3c] shrink-0" />

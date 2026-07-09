@@ -147,8 +147,8 @@ function Partners() {
               </h3>
               <p className="mt-2 text-sm text-forest/70 min-h-[40px] font-medium">
                 {t(
-                  "Kostenlose Kontoerstellung. 0% Provision. 100% Deins.",
-                  "Free account creation. 0% commission. 100% yours.",
+                  "Kostenlose Kontoerstellung. Unbegrenzte Bestellungen. 100% Deins.",
+                  "Free account creation. Unlimited orders. 100% yours.",
                 )}
               </p>
 

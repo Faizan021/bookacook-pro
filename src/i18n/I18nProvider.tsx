@@ -113,10 +113,10 @@ const dict: Dict = {
     de: "Verwalte Bestellungen, Catering-Anfragen, Menüs und Event-Angebote an einem einzigen, übersichtlichen Ort.",
     en: "Manage orders, catering inquiries, menus, and event requests in one single, clean location.",
   },
-  "p.f4.title": { de: "Provision & Tarife", en: "Commission & Pricing" },
+  "p.f4.title": { de: "Tarife & Gebühren", en: "Pricing & Fees" },
   "p.f4.body": {
-    de: "Direktbestellungen ab 34.99 €/Monat bei 0% Provision für Restaurants. Für Caterer & Event-Planer gilt eine faire, erfolgsbasierte Vermittlungsgebühr von 10%.",
-    en: "Direct ordering for restaurants from just €34.99/month at 0% commission. Caterers and event planners pay a fair, success-based matching fee of 10%.",
+    de: "Faire, transparente Preisgestaltung für Restaurants, Caterer und Event-Planer. Keine monatlichen Fixkosten für Dienstleister — zahlen Sie nur bei erfolgreicher Vermittlung.",
+    en: "Fair, transparent pricing for restaurants, caterers, and event planners. No fixed monthly costs for providers — only pay for successful bookings.",
   },
   "p.ready.title": { de: "Bereit, mit Speisely zu wachsen?", en: "Ready to grow with Speisely?" },
   "p.ready.body": {
@@ -136,8 +136,8 @@ const dict: Dict = {
   "ab.conviction": { de: "Unsere Überzeugung", en: "Our conviction" },
   "ab.h2": { de: "Jeder Anlass verdient das passende Erlebnis.", en: "Every occasion deserves the right experience." },
   "ab.body": {
-    de: "Ob spontane Essensbestellung bei Restaurants, Catering-Anfragen bei Caterern oder eine komplette Event-Planung mit professionellen Event-Planern: Die Suche nach dem passenden kulinarischen und organisatorischen Erlebnis sollte inspirierend sein, nicht kompliziert. Für unsere Partner schaffen wir faire Bedingungen: Restaurants zahlen ab 34,99 €/Monat bei 0 % Provision, während für Caterer und Event-Planer eine transparente, erfolgsbasierte Vermittlungsgebühr von 10 % gilt.",
-    en: "Whether it is food ordering from local restaurants, catering requests for caterers, or complete event planning with professional event planners: the search for the perfect culinary and organizational experience should be inspiring, not complicated. For our partners, we create fair terms: restaurants pay from €34.99/month at 0% commission, while caterers and event planners pay a transparent, success-based matching fee of 10%.",
+    de: "Ob spontane Essensbestellung bei Restaurants, Catering-Anfragen bei Caterern oder eine komplette Event-Planung mit professionellen Event-Planern: Die Suche nach dem passenden kulinarischen und organisatorischen Erlebnis sollte inspirierend sein, nicht kompliziert. Für unsere Partner schaffen wir faire Bedingungen: Restaurants zahlen eine einfache Flatrate für unbegrenzte Bestellungen, während für Caterer und Event-Planer eine transparente, erfolgsbasierte Vermittlungsgebühr gilt.",
+    en: "Whether it is food ordering from local restaurants, catering requests for caterers, or complete event planning with professional event planners: the search for the perfect culinary and organizational experience should be inspiring, not complicated. For our partners, we create fair terms: restaurants pay a simple flat subscription for unlimited orders, while caterers and event planners pay a transparent, success-based matching fee.",
   },
   "ab.body.catering": {
     de: "Für Caterer öffnet Speisely zwei Türen: Event-Catering für Hochzeiten, Firmenveranstaltungen und Feiern — und regelmäßiges Verpflegungsmanagement für Büros, Kitas, Krankenhäuser, Schulen und Pflegeeinrichtungen. Eine Plattform, zwei Einnahmequellen.",

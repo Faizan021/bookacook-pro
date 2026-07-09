@@ -797,8 +797,8 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
       id: 2,
       title: tt("Starter-Paket aktivieren", "Activate Starter Plan"),
       description: tt(
-        "Abonnieren Sie das €34.99/Monat Starter-Paket für 0% Provision.",
-        "Subscribe to the €34.99/month Starter Plan for 0% order commission.",
+        "Abonnieren Sie das €34.99/Monat Starter-Paket für unbegrenzte Bestellungen.",
+        "Subscribe to the €34.99/month Starter Plan for unlimited direct orders.",
       ),
       actionLabel: tt("Plan abonnieren", "Subscribe to Plan"),
       actionHash: "billing",

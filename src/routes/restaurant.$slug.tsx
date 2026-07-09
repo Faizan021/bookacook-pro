@@ -411,7 +411,12 @@ function RestaurantPage() {
     setPromoLoading(true);
     
     try {
-      const itemsPayload = Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity }));
+      const itemsPayload = Object.entries(cart)
+        .map(([name, quantity]) => {
+          const item = restaurant.menu.find((m: any) => m.name === name);
+          return item?.id ? { productId: item.id, quantity } : null;
+        })
+        .filter(Boolean) as { productId: string; quantity: number }[];
       if (itemsPayload.length === 0) {
         setPromoError(t("Dein Warenkorb ist leer", "Your cart is empty"));
         setPromoLoading(false);

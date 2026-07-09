@@ -7,7 +7,8 @@
     { "source": "/signup/customer", "destination": "/auth?signup=customer", "permanent": true },
     { "source": "/signup/caterer", "destination": "/auth?signup=caterer", "permanent": true },
     { "source": "/signup", "destination": "/auth", "permanent": true },
-    { "source": "/caterers", "destination": "/catering", "permanent": true }
+    { "source": "/caterers", "destination": "/catering", "permanent": true },
+    { "source": "/blog/restaurant-bestellen-ohne-provision-speisely", "destination": "/blog/restaurant-bestellen-direkt-speisely", "permanent": true }
   ],
   "headers": [
     {

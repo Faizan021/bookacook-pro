@@ -199,9 +199,9 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
-  id: '/update-password',
-  path: '/update-password',
-  getParentRoute: () => AuthRoute,
+  id: '/auth/update-password',
+  path: '/auth/update-password',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRestaurantRoute = AuthenticatedRestaurantRouteImport.update({
   id: '/restaurant',
@@ -611,6 +611,7 @@ export interface RootRouteChildren {
   SpeiselyRoute: typeof SpeiselyRoute
   UeberUnsRoute: typeof UeberUnsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
   RestaurantSlugRoute: typeof RestaurantSlugRoute
   AuthIndexRoute: typeof AuthIndexRoute
@@ -824,10 +825,10 @@ declare module '@tanstack/react-router' {
     }
     '/auth/update-password': {
       id: '/auth/update-password'
-      path: '/update-password'
+      path: '/auth/update-password'
       fullPath: '/auth/update-password'
       preLoaderRoute: typeof AuthUpdatePasswordRouteImport
-      parentRoute: typeof AuthRoute
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/restaurant': {
       id: '/_authenticated/restaurant'
@@ -1076,6 +1077,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpeiselyRoute: SpeiselyRoute,
   UeberUnsRoute: UeberUnsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
   RestaurantSlugRoute: RestaurantSlugRoute,
   AuthIndexRoute: AuthIndexRoute,

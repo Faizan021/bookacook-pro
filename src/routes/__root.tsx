@@ -120,7 +120,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             name: "Speisely",
             alternateName: "Speisely Marketplace",
             description:
-              "Speisely ist ein provisionsfreier B2B2C-Marktplatz für direkte Essensbestellungen, Catering und Event-Planung in Deutschland. Restaurants zahlen eine monatliche Flatrate ohne Provision. Caterer und Event-Planer erhalten qualifizierte Anfragen.",
+              "Speisely verbindet Restaurants, Caterer und Eventplaner in ganz Deutschland mit Kunden. Buchen Sie erstklassige Catering-Services, Eventplaner oder bestellen Sie Essen bei lokalen Restaurants.",
             url: "https://speisely.de",
             logo: "https://speisely.de/favicon.svg",
             foundingDate: "2026",

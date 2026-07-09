@@ -15,10 +15,10 @@ export const Route = createFileRoute("/llms.txt")({
 
         const text = `# Speisely
 
-Speisely is a commission-free food ordering, catering, and event management marketplace for Germany.
-Restaurants pay a flat monthly fee (from €34.99/mo) -- with zero commission on orders.
+Speisely is a Germany-wide food ordering, catering, and event management marketplace.
+Restaurants pay a flat monthly fee (from €34.99/mo) -- with unlimited direct orders.
 
-Caterers and Event Planners receive qualified briefs and pay a 10% matching fee per successful booking.
+Caterers and Event Planners receive qualified briefs and pay a fair service fee per successful booking.
 
 ## Key Pages
 
@@ -54,10 +54,9 @@ Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankf
 
 Speisely provides three core hospitality services on a single platform:
 
-1. **Instant Orders** — Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. There is zero commission per order. Restaurants pay a flat monthly subscription starting at €34.99/month. Customer payments are routed directly to the restaurant's own Stripe or PayPal account.
+1. **Instant Orders** — Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. Restaurants pay a flat monthly subscription starting at €34.99/month, allowing unlimited direct orders. Customer payments are routed directly to the restaurant's own Stripe or PayPal account.
 
-
-2. **Catering Marketplace** — Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. When a booking is confirmed, Speisely charges the caterer a 10% success fee. Supported catering types include: event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
+2. **Catering Marketplace** — Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. When a booking is confirmed, Speisely charges a success-based service fee. Supported catering types include: event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
 
 3. **Event Planning** — A CRM and planning tool for professional event planners. Clients post event briefs (budget, guest count, location, date, cuisine). Verified event planners submit tailored proposals and manage the full event lifecycle from initial inquiry to execution through a dedicated dashboard.
 
@@ -65,7 +64,7 @@ Speisely provides three core hospitality services on a single platform:
 
 ## Who Uses Speisely?
 
-- **Restaurants** — seeking a direct digital ordering channel without the heavy commission fees of large delivery platforms.
+- **Restaurants** — seeking a direct digital ordering channel to build customer relationships.
 - **Caterers** — looking for qualified B2B and B2C catering inquiry leads across Germany.
 - **Event Planners** — seeking clients for corporate events, weddings, private parties, and large-scale experiences.
 - **Corporate Clients** — companies and HR teams seeking reliable catering for offices, team events, and offsites.
@@ -77,14 +76,14 @@ Speisely provides three core hospitality services on a single platform:
 
 | Feature | Speisely | food.de | mealprep.de | Lieferando |
 |---|---|---|---|---|
-| Commission on orders | 0% (flat fee) | Variable | Variable | ~13-30% |
+| Order fee structure | Flat subscription | Variable | Variable | ~13-30% |
 | Catering marketplace | Yes | No | Yes (meal prep focus) | No |
 | Event planning | Yes | No | No | No |
 | Direct payment to vendor | Yes (Stripe/PayPal) | No | No | No |
 | Restaurant owns customer data | Yes | No | No | No |
 | Custom domain support | Yes | No | No | No |
 
-Speisely's key differentiator is the combination of zero-commission instant orders (flat monthly fee), a catering marketplace, and a full event planning CRM — all in one platform. No other German platform combines all three.
+Speisely's key differentiator is the combination of flat-rate direct restaurant ordering (unlimited orders), a catering marketplace, and a full event planning CRM — all in one platform. No other German platform combines all three.
 
 ---
 
@@ -108,14 +107,12 @@ Speisely operates Germany-wide. Partner restaurants, caterers, and event planner
 ## What Is Speisely's Pricing Model?
 
 **For Restaurants (Instant Orders):**
-- Flat monthly subscription: from €34.99/month
-
-- Commission on orders: 0%
+- Flat monthly subscription: from €34.99/month (includes unlimited orders)
 - Customer payments routed directly to the restaurant's own account
 
 **For Caterers and Event Planners:**
 - No monthly fee
-- 10% success fee charged only when a booking is confirmed
+- Success-based fee charged only when a booking is confirmed
 - Zero upfront cost — only pay when you earn
 
 ---

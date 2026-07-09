@@ -19,8 +19,8 @@ export function MarketplacePromiseCTA({ vertical }: { vertical?: "restaurant" | 
         </h2>
         <p className="mt-6 text-base md:text-lg text-cream/70 max-w-2xl mx-auto">
           {lang === "de"
-            ? "Immer kostenlos anfragen. Immer provisionsfrei für unsere Partner."
-            : "Always free to inquire. Always commission-free for our partners."}
+            ? "Immer kostenlos anfragen. Direkte Buchung ohne versteckte Servicegebühren."
+            : "Always free to inquire. Direct bookings with no hidden service fees."}
         </p>
 
         <div className="mt-12 grid sm:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
