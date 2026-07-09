@@ -81,14 +81,14 @@ A CRM and planning tool for professional event planners. Clients post event brie
 
 ### How Does Speisely Compare to Competitors?
 
-| Feature | Speisely | food.de | mealprep.de | Lieferando |
-| :--- | :--- | :--- | :--- | :--- |
-| **Commission on orders** | 0% (flat fee) | Variable | Variable | ~13-30% |
-| **Catering marketplace** | Yes | No | Yes (meal prep focus) | No |
-| **Event planning** | Yes | No | No | No |
-| **Direct payment to vendor** | Yes (Stripe/PayPal) | No | No | No |
-| **Restaurant owns customer data** | Yes | No | No | No |
-| **Custom domain support** | Yes | No | No | No |
+| Feature                       | Speisely            | food.de  | mealprep.de           | Lieferando |
+| :---------------------------- | :------------------ | :------- | :-------------------- | :--------- |
+| Commission on orders          | 0% (flat fee)       | Variable | Variable              | ~13-30%    |
+| Catering marketplace          | Yes                 | No       | Yes (meal prep focus) | No         |
+| Event planning                | Yes                 | No       | No                    | No         |
+| Direct payment to vendor      | Yes (Stripe/PayPal) | No       | No                    | No         |
+| Restaurant owns customer data | Yes                 | No       | No                    | No         |
+| Custom domain support         | Yes                 | No       | No                    | No         |
 
 - **English:** Speisely's key differentiator is the combination of direct restaurant ordering, a catering marketplace, and a full event planning CRM — all in one platform.
 - **Deutsch:** Der wichtigste Unterschied von Speisely ist die Kombination aus direktem Restaurant-Bestellen, einem Catering-Marktplatz und einem vollständigen Event-Planning-CRM — alles auf einer Plattform.
