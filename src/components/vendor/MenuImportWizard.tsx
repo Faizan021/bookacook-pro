@@ -21,7 +21,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useI18n } from "@/i18n/I18nProvider";
-import { bulkImportMenuItems, type ParsedMenuItem } from "@/lib/restaurant/menu-import.functions";
+import {
+  bulkImportMenuItems,
+  fetchUrlContent,
+  type ParsedMenuItem,
+} from "@/lib/restaurant/menu-import.functions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -80,8 +84,7 @@ function parseTextToItems(text: string): ReviewRow[] {
   const rows: ReviewRow[] = [];
 
   // Regex: optional number+dot, then name, optional description dots/spaces, then price
-  const lineRe =
-    /^(?:\d+[\.\)]\s*)?(.+?)\s*[.]{3,}\s*([\d,.\s€$£¥]+(?:EUR|USD)?)\s*$/i;
+  const lineRe = /^(?:\d+[\.\)]\s*)?(.+?)\s*[.]{3,}\s*([\d,.\s€$£¥]+(?:EUR|USD)?)\s*$/i;
   // Simpler "name\tprice" split
   const tabRe = /^(.+?)\t+([\d,.€$£¥\s]+)$/;
   // "name, price" split
@@ -93,7 +96,7 @@ function parseTextToItems(text: string): ReviewRow[] {
 
     let name = "";
     let priceCents = 0;
-    let description = "";
+    const description = "";
 
     const m1 = lineRe.exec(line);
     const m2 = tabRe.exec(line);
@@ -183,7 +186,9 @@ function parseCsvText(text: string): ReviewRow[] {
   const dataLines = hasHeader ? lines.slice(1) : lines;
   const colMap = hasHeader
     ? {
-        name: firstCells.findIndex((c) => ["name", "item", "dish", "artikel", "gericht"].includes(c)),
+        name: firstCells.findIndex((c) =>
+          ["name", "item", "dish", "artikel", "gericht"].includes(c),
+        ),
         description: firstCells.findIndex((c) =>
           ["description", "beschreibung", "desc"].includes(c),
         ),
@@ -197,10 +202,10 @@ function parseCsvText(text: string): ReviewRow[] {
     if (!line.trim()) continue;
     const cells = splitCsvLine(line);
 
-    const name = colMap.name >= 0 ? cells[colMap.name] ?? "" : cells[0] ?? "";
+    const name = colMap.name >= 0 ? (cells[colMap.name] ?? "") : (cells[0] ?? "");
     if (!name) continue;
 
-    const rawPrice = colMap.price >= 0 ? cells[colMap.price] ?? "" : cells[1] ?? "";
+    const rawPrice = colMap.price >= 0 ? (cells[colMap.price] ?? "") : (cells[1] ?? "");
     rows.push({
       _id: uid(),
       name: titleCase(cleanText(name)),
@@ -224,7 +229,10 @@ async function readFileAsText(file: File): Promise<string> {
 }
 
 /** Fetch website URL text via a CORS proxy fallback */
-async function fetchUrlText(url: string): Promise<string> {
+async function fetchUrlText(
+  url: string,
+  fetchUrlFn: (args: { data: { url: string } }) => Promise<{ text: string }>,
+): Promise<string> {
   // First try direct fetch (works for same-origin or CORS-enabled URLs)
   try {
     const r = await fetch(url, { mode: "cors" });
@@ -236,12 +244,9 @@ async function fetchUrlText(url: string): Promise<string> {
   } catch {
     // fall through
   }
-  // Fallback: allorigins proxy
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-  const r2 = await fetch(proxy);
-  if (!r2.ok) throw new Error("Could not fetch URL. Please try importing from a file instead.");
-  const json = await r2.json();
-  const html: string = json.contents ?? "";
+  // Fallback: server-side fetch via server function to bypass CORS
+  const res = await fetchUrlFn({ data: { url } });
+  const html = res.text ?? "";
   return html.replace(/<[^>]+>/g, " ");
 }
 
@@ -345,7 +350,11 @@ function ReviewTable({
               step="0.01"
               value={(row.price_cents / 100).toFixed(2)}
               onChange={(e) =>
-                onChange(row._id, "price_cents", Math.round(parseFloat(e.target.value || "0") * 100))
+                onChange(
+                  row._id,
+                  "price_cents",
+                  Math.round(parseFloat(e.target.value || "0") * 100),
+                )
               }
               placeholder="0.00"
             />
@@ -391,6 +400,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const qc = useQueryClient();
   const importFn = useServerFn(bulkImportMenuItems);
+  const fetchUrlFn = useServerFn(fetchUrlContent);
 
   const [step, setStep] = useState<WizardStep>("select");
   const [method, setMethod] = useState<ImportMethod | null>(null);
@@ -411,12 +421,13 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
         let parsed: ReviewRow[] = [];
 
         if (selectedMethod === "url") {
-          const text = await fetchUrlText(urlInput.trim());
+          const text = await fetchUrlText(urlInput.trim(), fetchUrlFn);
           parsed = parseTextToItems(text);
         } else if (selectedMethod === "csv" && file) {
           const text = await readFileAsText(file);
           // Detect by extension whether to use CSV parser or text parser
-          const isCsv = file.name.toLowerCase().endsWith(".csv") ||
+          const isCsv =
+            file.name.toLowerCase().endsWith(".csv") ||
             file.name.toLowerCase().endsWith(".tsv") ||
             file.type.includes("csv") ||
             file.type.includes("text");
@@ -459,22 +470,21 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
 
         setRows(parsed);
         setStep("review");
-      } catch (e: any) {
-        setParseError(e.message ?? "Parsing failed.");
+      } catch (e) {
+        const err = e as Error;
+        setParseError(err.message ?? "Parsing failed.");
         setStep("select");
       } finally {
         setIsParsing(false);
       }
     },
-    [urlInput],
+    [urlInput, fetchUrlFn],
   );
 
   // ── Row handlers ────────────────────────────────────────────────────────────
   const handleRowChange = (id: string, field: keyof ParsedMenuItem, value: string | number) => {
     setRows((prev) =>
-      prev.map((r) =>
-        r._id === id ? { ...r, [field]: value, _error: undefined } : r,
-      ),
+      prev.map((r) => (r._id === id ? { ...r, [field]: value, _error: undefined } : r)),
     );
   };
 
@@ -491,8 +501,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
       },
     ]);
 
-  const handleRemoveRow = (id: string) =>
-    setRows((prev) => prev.filter((r) => r._id !== id));
+  const handleRemoveRow = (id: string) => setRows((prev) => prev.filter((r) => r._id !== id));
 
   // ── Save mutation ───────────────────────────────────────────────────────────
   const saveMut = useMutation({
@@ -539,13 +548,16 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-label="Menu Import Wizard">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu Import Wizard"
+    >
       <div className="bg-background rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-display text-2xl">
-            {tt("Speisekarte importieren", "Import Menu")}
-          </h2>
+          <h2 className="font-display text-2xl">{tt("Speisekarte importieren", "Import Menu")}</h2>
           <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close">
             ✕
           </Button>
@@ -585,19 +597,13 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
                     id: "pdf" as ImportMethod,
                     emoji: "📄",
                     label: "PDF",
-                    desc: tt(
-                      "PDF-Speisekarte hochladen",
-                      "Upload a PDF menu file",
-                    ),
+                    desc: tt("PDF-Speisekarte hochladen", "Upload a PDF menu file"),
                   },
                   {
                     id: "image" as ImportMethod,
                     emoji: "📷",
                     label: tt("Foto / Bild", "Image / Photo"),
-                    desc: tt(
-                      "Foto Ihrer Speisekarte hochladen",
-                      "Upload a photo of your menu",
-                    ),
+                    desc: tt("Foto Ihrer Speisekarte hochladen", "Upload a photo of your menu"),
                   },
                   {
                     id: "csv" as ImportMethod,
@@ -607,7 +613,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
                       "CSV- oder Excel-Datei importieren",
                       "Import from a CSV or Excel file",
                     ),
-                  }
+                  },
                 ] as const
               ).map((opt) => (
                 <button
@@ -615,7 +621,9 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
                   type="button"
                   id={`import-method-${opt.id}`}
                   className={`text-left surface-card p-4 rounded-xl border-2 transition-all hover:border-brand-orange hover:shadow-md ${
-                    method === opt.id ? "border-brand-orange bg-brand-orange/5" : "border-transparent"
+                    method === opt.id
+                      ? "border-brand-orange bg-brand-orange/5"
+                      : "border-transparent"
                   }`}
                   onClick={() => setMethod(opt.id)}
                 >
@@ -757,7 +765,10 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
               >
                 {saveMut.isPending
                   ? tt("Wird gespeichert…", "Saving…")
-                  : tt(`${rows.length} Artikel speichern`, `Save ${rows.length} item${rows.length !== 1 ? "s" : ""}`)}
+                  : tt(
+                      `${rows.length} Artikel speichern`,
+                      `Save ${rows.length} item${rows.length !== 1 ? "s" : ""}`,
+                    )}
               </Button>
             </div>
           </div>

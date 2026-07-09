@@ -19,9 +19,7 @@ export type ParsedMenuItem = z.infer<typeof parsedItemSchema>;
 export const bulkImportMenuItems = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
   .validator((input: { items: ParsedMenuItem[] }) =>
-    z
-      .object({ items: z.array(parsedItemSchema).min(1).max(200) })
-      .parse(input),
+    z.object({ items: z.array(parsedItemSchema).min(1).max(200) }).parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context as any;
@@ -43,10 +41,34 @@ export const bulkImportMenuItems = createServerFn({ method: "POST" })
       image_url: null,
     }));
 
-    const { error } = await supabase
-      .from("restaurant_products")
-      .insert(rows as any);
+    const { error } = await supabase.from("restaurant_products").insert(rows as any);
 
     if (error) throw new Error(error.message);
     return { ok: true, count: rows.length };
+  });
+
+/**
+ * Fetches HTML/Text content of a website on the server side to bypass CORS restrictions.
+ */
+export const fetchUrlContent = createServerFn({ method: "POST" })
+  .middleware([requireRole("restaurant_owner")])
+  .validator((input: { url: string }) => z.object({ url: z.string().url() }).parse(input))
+  .handler(async ({ data }) => {
+    try {
+      const response = await fetch(data.url, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}: ${response.statusText}`);
+      }
+      const html = await response.text();
+      return { text: html };
+    } catch (e) {
+      const err = e as Error;
+      console.error("[fetchUrlContent] Error fetching url:", data.url, err);
+      throw new Error(err.message || "Failed to fetch website content");
+    }
   });
