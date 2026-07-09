@@ -1,24 +1,32 @@
-# Speisely — Catering Services & Event Planners in Germany
+# Speisely
 
-Speisely is a Germany-wide marketplace connecting local restaurants, caterers, and event planners with diners and corporate organizers. Discover top-rated catering services in Germany, find professional event planners in Germany, and order food in Germany — including in major hubs like Munich, Berlin, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
+English: Speisely is a Germany-wide marketplace for restaurants, catering, and event planning. It helps restaurants, caterers, and event planners get discovered by people looking for catering services in Germany, event planners in Germany, and food ordering options across major cities like Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
 
-Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Finde erstklassige Catering-Services in Deutschland, Eventplaner in Deutschland und bestelle Essen in Deutschland — auch in Städten wie München, Berlin, Hamburg, Frankfurt, Köln, Stuttgart, Düsseldorf, Leipzig, Nürnberg und Dresden.
+Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Die Plattform verbindet Restaurants, Caterer und Eventplaner mit Kunden, die nach catering-services in Deutschland, eventplanern in Deutschland und essen bestellen in Deutschland suchen — auch in Städten wie Berlin, München, Hamburg, Frankfurt, Köln, Stuttgart, Düsseldorf, Leipzig, Nürnberg und Dresden.
 
 Main URL: https://speisely.de
 Sitemap: https://speisely.de/sitemap.xml
 Full Documentation for LLMs: https://speisely.de/llms-full.txt
 
-## Key Core Modules
+## Key Pages
+- Homepage: https://speisely.de
+- Instant Order (restaurant discovery): https://speisely.de/instant-order
+- Catering Marketplace: https://speisely.de/catering
+- Event Planner Directory: https://speisely.de/planner
+- Partner / Pricing Page: https://speisely.de/partners
+- Blog: https://speisely.de/blog
+- About Us: https://speisely.de/about
 
-- **Catering Services in Germany / Catering-Services in Deutschland (`/catering`)**: Solutions for private event catering, daily office catering subscriptions, and institutional food services. Optimized for major cities (Catering in Munich / München, Berlin, Hamburg, Frankfurt, Cologne / Köln, Stuttgart, Düsseldorf, Leipzig, Nuremberg / Nürnberg, Dresden).
-- **Event Planner in Germany / Eventplaner in Deutschland (`/planner`)**: A step-by-step assistant for corporate and private event planning, allowing organizers to configure event briefs, seat capacity, menus, and budgets.
-- **Order Food in Germany / Essen in Deutschland bestellen (`/instant-order`)**: Real-time food ordering and menu browsing for local restaurants. Diners can order for pickup or delivery and pay via Cash, PayPal, or Stripe.
-- **Partner Dashboard (`/restaurant`, `/caterer`, `/planner`)**: Dashboards for vendors to configure menus, handle orders, manage reservations, run promotions, and connect Stripe Connect / PayPal payment settings.
+## Specialized Catering Services
+- Daily Catering Subscriptions: https://speisely.de/catering/daily-catering-subscriptions
+- Institutional Catering: https://speisely.de/catering/institutional-catering
+- Events Catering: https://speisely.de/catering/events
 
-## System Architecture & Tech Stack
+## Language & Service Area
+- Language: Default German, with English available via language toggle.
+- Service Area: Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
 
-- **Framework**: TanStack Start (React, Vite, TanStack Router)
-- **Database / Auth**: Supabase (PostgreSQL, Supabase Auth)
-- **Payment Processor**: Stripe (Stripe Connect for connected accounts) & PayPal (direct PayPal.Me/Email)
-- **Email Delivery**: Resend
-- **Analytics & Logs**: PostHog, Vercel Analytics, Sentry
+## What Services Does Speisely Offer?
+1. **Instant Orders** — Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. Routing payments to their own Stripe or PayPal accounts.
+2. **Catering Marketplace** — Post and respond to catering inquiries (corporate, private, weddings, daily office, institutional catering).
+3. **Event Planning** — CRM and planning tool for professional event planners to handle event briefs.

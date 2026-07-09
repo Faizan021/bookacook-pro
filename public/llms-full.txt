@@ -1,78 +1,193 @@
 # Speisely — Full SEO & Platform Documentation for LLMs
 
-Speisely is a Germany-wide marketplace connecting local restaurants, caterers, and event planners with diners and corporate organizers. It is optimized to help users discover top-rated catering services in Germany, find event planners in Germany, and order food in Germany — including in major hubs like Munich, Berlin, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
+English: Speisely is a Germany-wide marketplace for restaurants, catering, and event planning. It helps restaurants, caterers, and event planners get discovered by people looking for catering services in Germany, event planners in Germany, and food ordering options across major cities like Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
 
-Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Finde erstklassige Catering-Services in Deutschland, Eventplaner in Deutschland und bestelle Essen in Deutschland — auch in Städten wie München, Berlin, Hamburg, Frankfurt, Köln, Stuttgart, Düsseldorf, Leipzig, Nürnberg und Dresden.
-
-Main URL: https://speisely.de
-Sitemap: https://speisely.de/sitemap.xml
+Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Die Plattform verbindet Restaurants, Caterer und Eventplaner mit Kunden, die nach Catering-Services in Deutschland, Eventplanern in Deutschland und Essen bestellen in Deutschland suchen — auch in Städten wie Berlin, München, Hamburg, Frankfurt, Köln, Stuttgart, Düsseldorf, Leipzig, Nürnberg und Dresden.
 
 ---
 
-## 1. Core Modules & Targeted SEO Keywords
+## 1. Directory Structure & Key Pages
 
-### Catering Services in Germany / Catering-Services in Deutschland (`/catering`)
-Speisely hosts local catering partners for corporate lunches, private parties, weddings, daily office catering subscriptions, and institutional catering.
-Location-specific portals include:
-- **Catering in Munich / Catering in München** (`/catering/ort/muenchen`)
-- **Catering in Berlin** (`/catering/ort/berlin`)
-- **Catering in Hamburg** (`/catering/ort/hamburg`)
-- **Catering in Frankfurt** (`/catering/ort/frankfurt`)
-- **Catering in Cologne / Catering in Köln** (`/catering/ort/koeln`)
-- **Catering in Stuttgart** (`/catering/ort/stuttgart`)
-- **Catering in Düsseldorf** (`/catering/ort/duesseldorf`)
-- **Catering in Leipzig** (`/catering/ort/leipzig`)
-- **Catering in Nuremberg / Catering in Nürnberg** (`/catering/ort/nuernberg`)
-- **Catering in Dresden** (`/catering/ort/dresden`)
+- Homepage: https://speisely.de
+- Instant Order (restaurant discovery): https://speisely.de/instant-order
+- Catering Marketplace: https://speisely.de/catering
+- Event Planner Directory: https://speisely.de/planner
+- Partner / Pricing Page: https://speisely.de/partners
+- Blog: https://speisely.de/blog
+- About Us: https://speisely.de/about
 
-### Event Planner in Germany / Eventplaner in Deutschland (`/planner`)
-An integrated assistant for corporate and private event planning. Organizers can configure event briefs, calculate seat capacity, review catering menus, and manage event budgets.
+### Specialized Catering Services
+- Daily Catering Subscriptions: https://speisely.de/catering/daily-catering-subscriptions
+- Institutional Catering: https://speisely.de/catering/institutional-catering
+- Events Catering: https://speisely.de/catering/events
 
-### Order Food in Germany / Essen in Deutschland bestellen (`/instant-order`)
-Real-time food ordering and menu browsing from local restaurants. Diners can order for pickup or delivery with integrated card payments (Stripe) or direct links (PayPal).
-
----
-
-## 2. System Architecture & Tech Stack
-
-- **Framework**: TanStack Start (React, Vite, TanStack Router)
-- **Database / Auth**: Supabase (PostgreSQL, Supabase Auth)
-- **Payment Processor**: Stripe (Stripe Connect for connected accounts) & PayPal (direct PayPal.Me/Email)
-- **Email Delivery**: Resend
-- **Analytics & Logs**: PostHog, Vercel Analytics, Sentry
-
----
-
-## 3. Directory Structure and Page Routes
-
-- **Homepage (`/`)**: Main landing page with English and German copy highlighting our core keyword themes.
-- **Instant Order (`/instant-order`)**: Food ordering marketplace for Germany / Bestellplattform für Deutschland.
-- **Catering Portal (`/catering`)**: Landing page with sub-portals for institutional catering, daily catering subscriptions, and private events.
-- **Catering Geo Pages (`/catering/ort/:city`)**: Localized landing pages optimized for search engines in major cities.
-- **Event Planner (`/planner`)**: Multi-step corporate or private event brief assistant.
-- **Partner Dashboard (`/restaurant`, `/caterer`, `/planner`)**: Dashboards for merchant onboarding, menu creation (including automated PDF/CSV/image menu import), order tracking, and payment settings.
+### Blog Articles
+- https://speisely.de/blog/what-is-speisely
+- https://speisely.de/blog/sustainable-plant-based-catering-trends-2026
+- https://speisely.de/blog/best-food-delivery-alternatives-germany
+- https://speisely.de/blog/plan-perfect-corporate-event-germany
+- https://speisely.de/blog/why-become-a-partner-of-speisely
+- https://speisely.de/blog/restaurant-bestellen-ohne-provision-speisely
+- https://speisely.de/blog/catering-firmenevents-deutschland-2026
+- https://speisely.de/blog/kitchen-display-system-restaurant-kds
+- https://speisely.de/blog/was-kostet-ein-eventplaner
+- https://speisely.de/blog/hochzeit-planen-catering-musik-ablauf-budget
+- https://speisely.de/blog/welche-catering-art-passt-zu-welchem-anlass
+- https://speisely.de/blog/catering-anbieter-deutschland-staedte
+- https://speisely.de/blog/catering-firmenveranstaltungen-tipps
+- https://speisely.de/blog/catering-preise-vergleichen-deutschland
+- https://speisely.de/blog/alternativen-mealprep-food-de-catering
+- https://speisely.de/blog/catering-event-planung-deutschland
 
 ---
 
-## 4. Customer & Partner Payment Flows
+## 2. Localization & Service Areas
 
-- **Connected Stripe Accounts (Stripe Connect)**:
-  - Restaurant/Catering partners can click "Connect with Stripe" in their dashboard settings page.
-  - Generates a signed state token via HMAC-SHA256 to securely redirect the partner to Stripe's Connect onboarding.
-  - Charges 0% commission on Restaurant subscriptions (fixed €34.99/mo), and a 10% commission on Caterer / Event Planner transactions.
-- **PayPal Direct Payments**:
-  - Partners can toggle PayPal support and input their PayPal.Me link or PayPal email.
-  - Customers are redirected to the partner's public PayPal link directly during checkout.
-- **Cash Payments**:
-  - Diners can select cash-on-pickup or cash-on-delivery.
+- **Language Support**: 
+  - English: Default German, with English available via language toggle.
+  - Deutsch: Standardmäßig Deutsch, Englisch über den Sprachumschalter verfügbar.
+- **Service Area**: 
+  - English: Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
+  - Deutsch: Deutschlandweit. Alle großen Städte sind abgedeckt, darunter Berlin, München, Hamburg, Frankfurt, Köln, Stuttgart, Düsseldorf, Leipzig, Nürnberg und Dresden.
 
 ---
 
-## 5. Automated Menu Importer Features
+## 3. What Services Does Speisely Offer?
 
-For restaurants onboarding to Speisely, they can import their existing menus using the Menu Import Wizard:
-- **Speisebaron API Scraper**: If the restaurant's legacy site is hosted on Speisebaron, Speisely automatically scrapes the raw JSON endpoint (`https://api-green.speisebaron.de/restaurant/[domain]`) using a secure server function fallback, importing all categories and dishes with 100% accuracy.
-- **Generic URL Cleaner**: Bypasses browser CORS using a server function to fetch, clean CSS/JS code blocks, and extract clear plain text for regex-based dish name and price extraction.
-- **Spreadsheet / CSV Importer**: Custom RFC-4180-compliant CSV and Excel parser.
-- **Native PDF Text Reader**: Client-side canvas-extracted text parser.
-- **Manual Table Review**: A detailed UI allowing merchants to review and edit dish names, descriptions, prices, and categories before bulk-inserting them into the Supabase database.
+Speisely provides three core hospitality services on a single platform:
+
+### Instant Orders
+Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. Restaurants can present their food ordering options to people searching to order food in Germany, with direct payments routed through their own Stripe or PayPal account.
+*Deutsch:* Restaurants können ihre Speisekarten auf Speisely listen und erhalten direkte Abhol- und Lieferbestellungen von Kunden. So erreichen sie Menschen, die in Deutschland Essen bestellen möchten, und die Zahlungen laufen über das eigene Stripe- oder PayPal-Konto.
+
+### Catering Marketplace
+Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. Supported catering types include event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
+*Deutsch:* Kunden und Unternehmen stellen Catering-Anfragen ein, etwa für Firmenevents, private Feiern, Hochzeiten, tägliches Office-Catering oder institutionelles Catering für Schulen und Unternehmen. Verifizierte Caterer senden passende Angebote. Unterstützte Catering-Arten sind Event-Catering, tägliche Lunch-Abos, institutionelles Catering und private Veranstaltungen.
+
+### Event Planning
+A CRM and planning tool for professional event planners. Clients post event briefs (budget, guest count, location, date, cuisine). Verified event planners submit tailored proposals and manage the full event lifecycle from initial inquiry to execution through a dedicated dashboard.
+*Deutsch:* Ein CRM- und Planungstool für professionelle Eventplaner. Kunden stellen Event-Briefings ein, zum Beispiel mit Budget, Gästezahl, Ort, Datum und Küche. Verifizierte Eventplaner senden passende Angebote und managen den gesamten Ablauf über ein eigenes Dashboard.
+
+---
+
+## 4. Platform Audience & Competitor Comparison
+
+### Who Uses Speisely?
+- **Restaurants / Restaurants** — seeking a direct digital ordering channel.
+- **Caterers / Caterer** — looking for qualified B2B and B2C catering inquiry leads across Germany.
+- **Event Planners / Eventplaner** — seeking clients for corporate events, weddings, private parties, and large-scale experiences.
+- **Corporate Clients / Firmenkunden** — companies and HR teams seeking reliable catering for offices, team events, and offsites.
+- **Private Individuals / Privatpersonen** — people looking for catering for birthday parties, weddings, or other private celebrations.
+
+### How Does Speisely Compare to Competitors?
+
+| Feature | Speisely | food.de | mealprep.de | Lieferando |
+| :--- | :--- | :--- | :--- | :--- |
+| **Commission on orders** | 0% (flat fee) | Variable | Variable | ~13-30% |
+| **Catering marketplace** | Yes | No | Yes (meal prep focus) | No |
+| **Event planning** | Yes | No | No | No |
+| **Direct payment to vendor** | Yes (Stripe/PayPal) | No | No | No |
+| **Restaurant owns customer data** | Yes | No | No | No |
+| **Custom domain support** | Yes | No | No | No |
+
+- **English:** Speisely's key differentiator is the combination of direct restaurant ordering, a catering marketplace, and a full event planning CRM — all in one platform.
+- **Deutsch:** Der wichtigste Unterschied von Speisely ist die Kombination aus direktem Restaurant-Bestellen, einem Catering-Marktplatz und einem vollständigen Event-Planning-CRM — alles auf einer Plattform.
+
+---
+
+## 5. Regional Operation & Verification
+
+- **English:** Speisely operates Germany-wide. Partner restaurants, caterers, and event planners are verified across all German states (Bundesländer).
+- **Deutsch:** Speisely ist deutschlandweit aktiv. Partner-Restaurants, Caterer und Eventplaner sind in allen Bundesländern verifiziert.
+
+Covered states & key cities:
+- Bayern (Munich, Nuremberg, Augsburg)
+- Berlin
+- Brandenburg
+- Baden-Württemberg (Stuttgart, Freiburg, Karlsruhe)
+- Hamburg
+- Hessen (Frankfurt, Wiesbaden)
+- Niedersachsen (Hanover)
+- Nordrhein-Westfalen (Cologne, Düsseldorf, Dortmund, Essen)
+- Sachsen (Leipzig, Dresden)
+- And all other German states
+
+---
+
+## 6. What Is Speisely's Pricing Model?
+
+### English
+- **For Restaurants (Instant Orders):**
+  - Flat monthly subscription: from €34.99/month
+  - Commission on orders: 0%
+  - Customer payments routed directly to the restaurant's own account
+- **For Caterers and Event Planners:**
+  - No monthly fee
+  - 10% success fee charged only when a booking is confirmed
+  - Zero upfront cost — only pay when you earn
+
+### Deutsch
+- **Für Restaurants (Instant Orders):**
+  - Monatliche Pauschale: ab 34,99 €/Monat
+  - Provision auf Bestellungen: 0%
+  - Kundenzahlungen laufen direkt auf das eigene Konto des Restaurants
+- **Für Caterer und Eventplaner:**
+  - Keine monatliche Gebühr
+  - 10% Erfolgsgebühr nur bei bestätigter Buchung
+  - Keine Vorabkosten — nur zahlen, wenn man verdient
+
+---
+
+## 7. Frequently Asked Questions
+
+### Catering FAQ
+
+**Q: Was versteht man unter Cateringservice?**
+**A:** Ein Cateringservice umfasst die professionelle Zubereitung, Lieferung und oft auch die Präsentation von Speisen und Getränken für verschiedene Anlässe. Moderne Caterer gehen dabei über die reine Essenslieferung hinaus und bieten ganzheitliche kulinarische Erlebnisse an – vom einfachen Fingerfood-Drop-off für das Büro bis hin zum voll betreuten Galadinner mit Personal und Equipment.
+
+**Q: Welche Arten von Veranstaltungen bedienen Caterer?**
+**A:** Caterer decken ein breites Spektrum ab: Private Feiern wie Hochzeiten und Geburtstage, Business-Events wie Konferenzen, Tagungen und Weihnachtsfeiern, sowie das tägliche Office-Catering oder die Großverpflegung für Schulen und Kitas. Auf Speisely können Sie gezielt nach Caterern filtern, die sich auf Ihren spezifischen Anlasstyp spezialisiert haben.
+
+**Q: Was ist der Unterschied zwischen Buffet und Menü?**
+**A:** Bei einem Buffet werden alle Speisen auf einer zentralen Station angerichtet, an der sich die Gäste selbst bedienen. Das fördert die Kommunikation und bietet eine größere Auswahl. Ein Menü (Plated Dinner) wird in festgelegten Gängen direkt am Platz serviert, was formeller und eleganter wirkt, aber eine genauere Vorabplanung der Sitzordnung und Menüwahl pro Gast erfordert.
+
+**Q: Wie viele Personen kann ein Cateringbetrieb bewältigen?**
+**A:** Das hängt stark von der Spezialisierung des Caterers ab. Kleine Manufakturen fokussieren sich oft auf exklusive Runden von 10 bis 50 Personen, während große Großküchen und Event-Caterer problemlos Veranstaltungen mit mehreren tausend Gästen stemmen können. Auf Speisely sehen Sie direkt die Mindest- und Maximalkapazitäten der jeweiligen Partner.
+
+**Q: Wie früh sollte ich einen Caterer buchen?**
+**A:** Für große Events wie Hochzeiten oder Weihnachtsfeiern empfehlen wir eine Buchung von 6 bis 12 Monaten im Voraus. Für kleinere Business-Lunches oder private Partys genügen oft 2 bis 4 Wochen. Bei kurzfristigen Anfragen (weniger als 7 Tage) bieten viele Speisely-Partner spezielle, schnell umsetzbare Standardpakete an.
+
+**Q: Kann ich ein Probemenü vor der Buchung bekommen?**
+**A:** Ja, besonders bei großen Events wie Hochzeiten oder Firmengalas ist ein Probeessen absolut üblich. Die Kosten hierfür werden oft mit der finalen Auftragssumme verrechnet, falls Sie sich für den Caterer entscheiden. Klären Sie dies am besten direkt bei Ihrer Anfrage über Speisely.
+
+**Q: Was passiert, wenn Gäste absagen oder mehr kommen?**
+**A:** Die meisten Caterer haben eine vertraglich festgelegte Deadline (oft 7 bis 14 Tage vor dem Event), bis zu der Sie die finale Gästezahl kostenlos anpassen können. Danach wird in der Regel die zuletzt gemeldete Anzahl abgerechnet, da Wareneinkauf und Personalplanung bereits abgeschlossen sind.
+
+**Q: Wie viel kostet ein Catering pro Person?**
+**A:** Die Kosten variieren je nach Aufwand, Zutatenqualität und Service. Ein einfaches Business-Lunch-Buffet startet oft bei 15-25 € pro Person. Hochwertige Hochzeitsmenüs oder BBQ-Caterings inklusive Personal und Equipment liegen typischerweise zwischen 50 € und 150 € pro Person. Über Speisely können Sie Ihr Budget direkt angeben, um passende Angebote zu erhalten.
+
+**Q: Wie finde ich einen guten Catering-Service?**
+**A:** Ein guter Caterer zeichnet sich durch Transparenz, Flexibilität und nachweisbare Qualität aus. Achten Sie auf klare Kommunikation bei der Angebotserstellung, Spezialisierungen, die zu Ihrem Event passen, und die Bereitschaft, auf Ihre individuellen Wünsche einzugehen. Speisely listet ausschließlich qualitätsgeprüfte Partner, um Ihnen die Auswahl zu erleichtern.
+
+**Q: Welche Informationen sollte ich bei einer Catering-Anfrage bereithalten?**
+**A:** Für ein präzises Angebot benötigt der Caterer das Veranstaltungsdatum, den genauen Ort (oder die PLZ), die erwartete Gästezahl, das gewünschte Format (Buffet, Menü, Fingerfood) sowie ein grobes Budget pro Person. Zudem sind Informationen zu den örtlichen Gegebenheiten (gibt es eine Küche vor Ort?) sehr hilfreich.
+
+**Q: Können Caterer auf Allergien und Ernährungswünsche eingehen?**
+**A:** Absolut. Professionelle Caterer stellen sich problemlos auf vegane, glutenfreie, laktosefreie oder halal-konforme Wünsche ein. Wichtig ist, dass Sie diese Anforderungen so früh wie möglich – idealerweise direkt bei der ersten Anfrage über Speisely – kommunizieren, damit die Menüplanung entsprechend angepasst werden kann.
+
+**Q: Welche Zusatzleistungen bieten Caterer häufig an?**
+**A:** Viele Caterer agieren als Full-Service-Dienstleister. Neben dem Essen bieten sie passendes Geschirr, Besteck und Gläser zur Miete an, stellen erfahrenes Service- und Barpersonal bereit und kümmern sich um den Auf- und Abbau. Manche bringen sogar eigene Foodtrucks, Kaffeebars oder mobile Cocktail-Tresen mit.
+
+**Q: Wie funktioniert die Anfrage über Speisely?**
+**A:** Ganz einfach: Suchen Sie auf unserer Plattform nach Caterern in Ihrer Nähe, filtern Sie nach Event-Typ und Budget. Sie können sich die Profile und Beispielmenüs ansehen und dann eine unverbindliche Anfrage direkt über Speisely. Der Caterer meldet sich anschließend mit einem maßgeschneiderten Angebot bei Ihnen.
+
+### Event Planner FAQ
+
+**Q: Ist die Anfrage wirklich kostenlos?**
+**A:** Ja, die Nutzung von Speisely und die Anfragen an unsere Event-Planer sind 100% kostenlos und unverbindlich.
+
+**Q: Wie finde ich den richtigen Planer?**
+**A:** Unser Guided Briefing Wizard hilft dir dabei. Wir nutzen deine Antworten, um dir die am besten passenden Event-Planer vorzuschlagen.
+
+**Q: Arbeiten Sie mit allen Budgets?**
+**A:** Wir haben Planer für verschiedene Budgetklassen – von Premium bis Luxury. Wähle einfach dein Budget im Briefing aus.
