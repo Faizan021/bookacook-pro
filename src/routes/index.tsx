@@ -172,7 +172,10 @@ function Home() {
           <img
             src="/hero-cinematic.png"
             fetchPriority="high"
-            alt=""
+            alt={tt(
+              "Speisely – Premium Gastronomie & Events",
+              "Speisely – Premium Hospitality & Events",
+            )}
             className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-forest/85" />

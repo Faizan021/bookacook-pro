@@ -55,8 +55,7 @@ export function PageHero({
       <div className="absolute inset-0 z-0">
         <img
           src="/hero-cinematic.png"
-          alt=""
-          aria-hidden="true"
+          alt="Speisely Background"
           className="w-full h-full object-cover object-center scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/50" />
