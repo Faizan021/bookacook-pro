@@ -1244,7 +1244,7 @@ function PlannerDirectory({
                         <img
                           key={i}
                           src={img}
-                          alt=""
+                          alt={`${p.name} Preview ${i + 1}`}
                           className="h-10 w-10 rounded-md object-cover border border-[#eadfce] hover:border-forest/50 transition-colors"
                           loading="lazy"
                         />

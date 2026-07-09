@@ -12,7 +12,7 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Speisely verbindet Restaurant-Bestellungen, Catering und Event-Planung — kuratiert, transparent und persönlich. Made in Deutschland — für Restaurants, Caterer und Event-Profis in ganz Deutschland.",
+          "Speisely verbindet Restaurant-Bestellungen, Catering und Event-Planung — kuratiert, transparent, persönlich. Für Event-Profis in ganz Deutschland.",
       },
       { property: "og:title", content: "Über Speisely" },
       {

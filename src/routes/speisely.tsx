@@ -14,7 +14,7 @@ export const Route = createFileRoute("/speisely")({
       {
         name: "description",
         content:
-          "Discover top catering services in Germany, find event planners in Germany, and order food in Germany — including in Munich, Berlin, Hamburg, Frankfurt, Cologne.",
+          "Discover top catering services, find professional event planners, and order food in Germany. Explore dining and event options in major cities.",
       },
       { property: "og:title", content: "Was ist Speisely? Services & Facts" },
       {
