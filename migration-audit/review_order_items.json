@@ -1,0 +1,58 @@
+[
+  {
+    "id": "83d0a20f-c7d7-401e-87f7-853b741085c2",
+    "order_id": "310a26f9-ced9-45dc-9d28-1602daa70fb3",
+    "product_id": "72fde39c-ac7a-449f-955c-b903a397a121",
+    "product_name": "Spaghetti Napoli",
+    "quantity": 1,
+    "unit_price": 10.9,
+    "total_price": 10.9,
+    "notes": null,
+    "modifiers": {},
+    "created_at": "2026-05-11T09:48:40.103239+00:00",
+    "_review_reason": "No direct mapping to new schema. Requires human decision.",
+    "_role": "Caterer x Customer"
+  },
+  {
+    "id": "9922703d-1c60-4f04-b6f0-903bf267a463",
+    "order_id": "310a26f9-ced9-45dc-9d28-1602daa70fb3",
+    "product_id": "d1ce0e74-7607-4909-8d33-7b2e4efc9419",
+    "product_name": "Pizza Margherita",
+    "quantity": 1,
+    "unit_price": 9.9,
+    "total_price": 9.9,
+    "notes": null,
+    "modifiers": {},
+    "created_at": "2026-05-11T09:48:40.103239+00:00",
+    "_review_reason": "No direct mapping to new schema. Requires human decision.",
+    "_role": "Caterer x Customer"
+  },
+  {
+    "id": "59e58ec0-6e72-45b9-a577-c67e964f4e24",
+    "order_id": "86a2d219-59e9-4784-8b42-d1472dd8df13",
+    "product_id": "d1ce0e74-7607-4909-8d33-7b2e4efc9419",
+    "product_name": "Pizza Margherita",
+    "quantity": 1,
+    "unit_price": 9.9,
+    "total_price": 9.9,
+    "notes": null,
+    "modifiers": {},
+    "created_at": "2026-05-11T10:00:16.583541+00:00",
+    "_review_reason": "No direct mapping to new schema. Requires human decision.",
+    "_role": "Caterer x Customer"
+  },
+  {
+    "id": "5d75a677-4f03-4747-9750-8624b5deea07",
+    "order_id": "86a2d219-59e9-4784-8b42-d1472dd8df13",
+    "product_id": "72fde39c-ac7a-449f-955c-b903a397a121",
+    "product_name": "Spaghetti Napoli",
+    "quantity": 1,
+    "unit_price": 10.9,
+    "total_price": 10.9,
+    "notes": null,
+    "modifiers": {},
+    "created_at": "2026-05-11T10:00:16.583541+00:00",
+    "_review_reason": "No direct mapping to new schema. Requires human decision.",
+    "_role": "Caterer x Customer"
+  }
+]

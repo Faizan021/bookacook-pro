@@ -1,0 +1,80 @@
+{
+  "timestamp": "2026-07-06T20:08:12.462Z",
+  "legacy": {
+    "event_requests": 59,
+    "event_request_matches": 16,
+    "orders": 2,
+    "order_items": 4,
+    "packages": 1,
+    "availability": 9
+  },
+  "archive": {
+    "_archive_event_requests": 0,
+    "_archive_event_request_matches": 0,
+    "_archive_orders": 0,
+    "_archive_order_items": 0,
+    "_archive_packages": 0,
+    "_archive_availability": 0
+  },
+  "destination": {
+    "catering_briefs": 60,
+    "catering_matches": 0,
+    "catering_bookings": 0,
+    "vendor_blackout_dates": 6
+  },
+  "perTable": {
+    "event_requests": {
+      "legacy": 59,
+      "archived": 0,
+      "migrated": 59,
+      "review": 0,
+      "skipped": 0
+    },
+    "event_request_matches": {
+      "legacy": 16,
+      "archived": 16,
+      "migrated": 0,
+      "review": 16,
+      "skipped": 0
+    },
+    "orders": {
+      "legacy": 2,
+      "archived": 2,
+      "migrated": 0,
+      "review": 2,
+      "skipped": 2
+    },
+    "order_items": {
+      "legacy": 4,
+      "archived": 4,
+      "migrated": 0,
+      "review": 4,
+      "skipped": 0
+    },
+    "packages": {
+      "legacy": 1,
+      "archived": 1,
+      "migrated": 0,
+      "review": 1,
+      "skipped": 0
+    },
+    "availability": {
+      "legacy": 9,
+      "archived": 9,
+      "migrated": 0,
+      "review": 9,
+      "skipped": 3
+    }
+  },
+  "auditFiles": [
+    "failed_availability.json",
+    "failed_event_request_matches.json",
+    "migration_report.json",
+    "review_availability.json",
+    "review_event_requests.json",
+    "review_event_request_matches.json",
+    "review_orders.json",
+    "review_order_items.json",
+    "review_packages.json"
+  ]
+}
