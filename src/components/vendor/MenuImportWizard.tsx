@@ -228,28 +228,6 @@ async function readFileAsText(file: File): Promise<string> {
   });
 }
 
-/** Fetch website URL text via a CORS proxy fallback */
-async function fetchUrlText(
-  url: string,
-  fetchUrlFn: (args: { data: { url: string } }) => Promise<{ text: string }>,
-): Promise<string> {
-  // First try direct fetch (works for same-origin or CORS-enabled URLs)
-  try {
-    const r = await fetch(url, { mode: "cors" });
-    if (r.ok) {
-      const html = await r.text();
-      // Strip tags for plain text
-      return html.replace(/<[^>]+>/g, " ");
-    }
-  } catch {
-    // fall through
-  }
-  // Fallback: server-side fetch via server function to bypass CORS
-  const res = await fetchUrlFn({ data: { url } });
-  const html = res.text ?? "";
-  return html.replace(/<[^>]+>/g, " ");
-}
-
 /** Read an image file and extract text via rough OCR (canvas + heuristics).
  *  NOTE: This is a best-effort heuristic. For production consider Tesseract.js.
  */
@@ -421,8 +399,14 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
         let parsed: ReviewRow[] = [];
 
         if (selectedMethod === "url") {
-          const text = await fetchUrlText(urlInput.trim(), fetchUrlFn);
-          parsed = parseTextToItems(text);
+          const res = await fetchUrlFn({ data: { url: urlInput.trim() } });
+          if (res?.isSpeisebaron && res.items) {
+            parsed = res.items;
+          } else {
+            const html = res?.text ?? "";
+            const plainText = html.replace(/<[^>]+>/g, " ");
+            parsed = parseTextToItems(plainText);
+          }
         } else if (selectedMethod === "csv" && file) {
           const text = await readFileAsText(file);
           // Detect by extension whether to use CSV parser or text parser

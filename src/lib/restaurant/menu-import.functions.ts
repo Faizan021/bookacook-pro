@@ -65,7 +65,65 @@ export const fetchUrlContent = createServerFn({ method: "POST" })
         throw new Error(`Server returned HTTP ${response.status}: ${response.statusText}`);
       }
       const html = await response.text();
-      return { text: html };
+
+      // Check if this website is hosted on Speisebaron
+      const isSpeisebaron = html.includes("speisebaron") || html.includes("window.domain");
+      if (isSpeisebaron) {
+        // Extract domain name (e.g. window.domain="schnitzel-schmiede-mg.de";)
+        const match = html.match(/window\.domain\s*=\s*["']([^"']+)["']/);
+        const domain = match ? match[1] : new URL(data.url).hostname.replace("www.", "");
+
+        // Fetch Speisebaron structured JSON API directly using anonymous public token
+        const token =
+          "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2ZXJzaW9uIjoiMSIsImFub255bW91cyI6dHJ1ZX0.iHuZJKs4ggxRs1eojVQtuDR7A3FrpMIUqTJofjVuu9zwRkAAmDp6MVD5cj7Dbwgdx5lQV8YiZyIt22a50-M0xplo_TZ-oFND0o7XBLV93iwiF7T3AG8FSLxbRD9ZYF_Yfgf7FfFKQvLfr8QyqoJB8cUTWAS6qzrn1cukMpYxS9M";
+        const apiResponse = await fetch(`https://api-green.speisebaron.de/restaurant/${domain}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+          },
+        });
+
+        if (apiResponse.ok) {
+          const json = await apiResponse.json();
+          const shopMenu = json.restaurant?.shopMenu || [];
+          const items = [];
+
+          for (const cat of shopMenu) {
+            if (!cat.dishs) continue;
+            for (const dish of cat.dishs) {
+              if (!dish.active) continue;
+              items.push({
+                _id: Math.random().toString(36).slice(2, 10),
+                name: dish.name,
+                description: dish.description || "",
+                price_cents: dish.price || 0,
+                category: cat.name || "",
+                tags: dish.tags?.join(", ") || "",
+              });
+            }
+          }
+
+          if (items.length > 0) {
+            return { isSpeisebaron: true, items };
+          }
+        }
+      }
+
+      // Generic Fallback: Clean non-visible blocks from HTML before converting to text
+      const cleanHtml = html
+        .replace(/<script[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style[\s\S]*?<\/style>/gi, " ")
+        .replace(/<head[\s\S]*?<\/head>/gi, " ")
+        .replace(/<svg[\s\S]*?<\/svg>/gi, " ")
+        .replace(/<!--[\s\S]*?-->/gi, " ");
+
+      // Replace common closing block tags with newlines to preserve lines structure
+      const formattedHtml = cleanHtml
+        .replace(/<\/(div|p|li|tr|h1|h2|h3|h4|h5|h6|section|header|footer)>/gi, "\n")
+        .replace(/<[^>]+>/g, " ");
+
+      return { isSpeisebaron: false, text: formattedHtml };
     } catch (e) {
       const err = e as Error;
       console.error("[fetchUrlContent] Error fetching url:", data.url, err);
