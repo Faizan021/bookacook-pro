@@ -19,7 +19,7 @@ export type ParsedMenuItem = z.infer<typeof parsedItemSchema>;
 export const bulkImportMenuItems = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
   .validator((input: { items: ParsedMenuItem[] }) =>
-    z.object({ items: z.array(parsedItemSchema).min(1).max(200) }).parse(input),
+    z.object({ items: z.array(parsedItemSchema).min(1).max(1000) }).parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context as any;
@@ -34,9 +34,9 @@ export const bulkImportMenuItems = createServerFn({ method: "POST" })
 
     const rows = data.items.map((item: ParsedMenuItem) => ({
       restaurant_id: restaurant.id,
-      name: item.name.trim(),
+      name: item.name?.trim() || "",
       description: item.description?.trim() || null,
-      price_cents: item.price_cents,
+      price_cents: item.price_cents || 0,
       is_available: true,
       image_url: null,
     }));
