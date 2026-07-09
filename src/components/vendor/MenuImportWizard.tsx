@@ -302,7 +302,7 @@ function ReviewTable({
             <Label className="md:hidden text-xs mb-1 block">Name *</Label>
             <Input
               id={`import-name-${idx}`}
-              value={row.name}
+              value={row.name || ""}
               onChange={(e) => onChange(row._id, "name", e.target.value)}
               placeholder="Item name"
               className={row._error ? "border-destructive" : ""}
@@ -313,7 +313,7 @@ function ReviewTable({
             <Label className="md:hidden text-xs mb-1 block">Description</Label>
             <Textarea
               id={`import-desc-${idx}`}
-              value={row.description}
+              value={row.description || ""}
               rows={1}
               onChange={(e) => onChange(row._id, "description", e.target.value)}
               placeholder="Optional description"
@@ -326,7 +326,7 @@ function ReviewTable({
               type="number"
               min="0"
               step="0.01"
-              value={(row.price_cents / 100).toFixed(2)}
+              value={((row.price_cents || 0) / 100).toFixed(2)}
               onChange={(e) =>
                 onChange(
                   row._id,
@@ -341,7 +341,7 @@ function ReviewTable({
             <Label className="md:hidden text-xs mb-1 block">Category</Label>
             <Input
               id={`import-cat-${idx}`}
-              value={row.category}
+              value={row.category || ""}
               onChange={(e) => onChange(row._id, "category", e.target.value)}
               placeholder="e.g. Starters"
             />
@@ -493,7 +493,7 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
       // Validate
       let hasError = false;
       const validated = rows.map((r) => {
-        if (!r.name.trim()) {
+        if (!r.name?.trim()) {
           hasError = true;
           return { ...r, _error: "Name is required" };
         }
@@ -506,9 +506,9 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
       }
 
       const items = rows.map((r) => ({
-        name: r.name.trim(),
+        name: r.name?.trim() || "",
         description: r.description?.trim() || "",
-        price_cents: r.price_cents,
+        price_cents: r.price_cents || 0,
         category: r.category?.trim() || "",
         tags: r.tags?.trim() || "",
       }));

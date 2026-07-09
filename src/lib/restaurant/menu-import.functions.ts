@@ -95,7 +95,7 @@ export const fetchUrlContent = createServerFn({ method: "POST" })
               if (!dish.active) continue;
               items.push({
                 _id: Math.random().toString(36).slice(2, 10),
-                name: dish.name,
+                name: dish.name || "",
                 description: dish.description || "",
                 price_cents: dish.price || 0,
                 category: cat.name || "",
