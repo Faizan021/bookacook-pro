@@ -5,27 +5,20 @@ Speisely is a Germany-wide marketplace connecting local restaurants, caterers, a
 Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Finde erstklassige Catering-Services in Deutschland, Eventplaner in Deutschland und bestelle Essen in Deutschland — auch in Städten wie München, Berlin, Hamburg, Frankfurt, Köln, Stuttgart, Düsseldorf, Leipzig, Nürnberg und Dresden.
 
 Main URL: https://speisely.de
-Full SEO Resources & Detailed Guide: https://speisely.de/llms-full.txt
+Sitemap: https://speisely.de/sitemap.xml
+Full Documentation for LLMs: https://speisely.de/llms-full.txt
 
-## Key Core Modules (Schlüsselmodule)
+## Key Core Modules
 
-### 1. Catering Services in Germany / Catering-Services in Deutschland (`/catering`)
-Solutions for corporate lunch, private event catering, daily office catering subscriptions, and institutional food services.
-- **Catering in Munich / Catering in München**
-- **Catering in Berlin**
-- **Catering in Hamburg**
-- **Catering in Frankfurt**
-- **Catering in Cologne / Catering in Köln**
-- **Catering in Stuttgart / Düsseldorf / Leipzig / Nuremberg / Dresden**
+- **Catering Services in Germany / Catering-Services in Deutschland (`/catering`)**: Solutions for private event catering, daily office catering subscriptions, and institutional food services. Optimized for major cities (Catering in Munich / München, Berlin, Hamburg, Frankfurt, Cologne / Köln, Stuttgart, Düsseldorf, Leipzig, Nuremberg / Nürnberg, Dresden).
+- **Event Planner in Germany / Eventplaner in Deutschland (`/planner`)**: A step-by-step assistant for corporate and private event planning, allowing organizers to configure event briefs, seat capacity, menus, and budgets.
+- **Order Food in Germany / Essen in Deutschland bestellen (`/instant-order`)**: Real-time food ordering and menu browsing for local restaurants. Diners can order for pickup or delivery and pay via Cash, PayPal, or Stripe.
+- **Partner Dashboard (`/restaurant`, `/caterer`, `/planner`)**: Dashboards for vendors to configure menus, handle orders, manage reservations, run promotions, and connect Stripe Connect / PayPal payment settings.
 
-### 2. Event Planner in Germany / Eventplaner in Deutschland (`/planner`)
-A step-by-step assistant for corporate and private event planning. Organizers can configure event briefs, seat capacity, catering menus, and budgets.
+## System Architecture & Tech Stack
 
-### 3. Order Food in Germany / Essen in Deutschland bestellen (`/instant-order`)
-Real-time food ordering and menu browsing from local restaurants. Diners can order for pickup or delivery with integrated payments.
-
-## System Architecture & Integrations
-- Framework: TanStack Start (React, Vite, TanStack Router)
-- Database: Supabase
-- Payments: Stripe Connect & direct PayPal.Me
-- Email Delivery: Resend
+- **Framework**: TanStack Start (React, Vite, TanStack Router)
+- **Database / Auth**: Supabase (PostgreSQL, Supabase Auth)
+- **Payment Processor**: Stripe (Stripe Connect for connected accounts) & PayPal (direct PayPal.Me/Email)
+- **Email Delivery**: Resend
+- **Analytics & Logs**: PostHog, Vercel Analytics, Sentry

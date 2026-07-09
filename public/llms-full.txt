@@ -33,7 +33,17 @@ Real-time food ordering and menu browsing from local restaurants. Diners can ord
 
 ---
 
-## 2. Directory Structure and Page Routes
+## 2. System Architecture & Tech Stack
+
+- **Framework**: TanStack Start (React, Vite, TanStack Router)
+- **Database / Auth**: Supabase (PostgreSQL, Supabase Auth)
+- **Payment Processor**: Stripe (Stripe Connect for connected accounts) & PayPal (direct PayPal.Me/Email)
+- **Email Delivery**: Resend
+- **Analytics & Logs**: PostHog, Vercel Analytics, Sentry
+
+---
+
+## 3. Directory Structure and Page Routes
 
 - **Homepage (`/`)**: Main landing page with English and German copy highlighting our core keyword themes.
 - **Instant Order (`/instant-order`)**: Food ordering marketplace for Germany / Bestellplattform für Deutschland.
@@ -44,12 +54,25 @@ Real-time food ordering and menu browsing from local restaurants. Diners can ord
 
 ---
 
-## 3. SEO Schema & Best Practices
+## 4. Customer & Partner Payment Flows
 
-To ensure high indexing quality and crawling effectiveness, Speisely implements rich structured data:
-- **Organization Schema** on the homepage (`/`) for brand definition.
-- **LocalBusiness & Service Schema** on `/catering` and local catering pages to boost local search rankings.
-- **FAQ Schema** for common questions in both English and German.
-- **Article Schema** for blog posts and news updates.
-- **Sitemap.xml** containing auto-updated routes for all restaurants, caterers, and geo landings.
-- **Robots.txt** permitting all standard AI bot agents (GPTBot, ClaudeBot, Google-Extended) to crawl.
+- **Connected Stripe Accounts (Stripe Connect)**:
+  - Restaurant/Catering partners can click "Connect with Stripe" in their dashboard settings page.
+  - Generates a signed state token via HMAC-SHA256 to securely redirect the partner to Stripe's Connect onboarding.
+  - Charges 0% commission on Restaurant subscriptions (fixed €34.99/mo), and a 10% commission on Caterer / Event Planner transactions.
+- **PayPal Direct Payments**:
+  - Partners can toggle PayPal support and input their PayPal.Me link or PayPal email.
+  - Customers are redirected to the partner's public PayPal link directly during checkout.
+- **Cash Payments**:
+  - Diners can select cash-on-pickup or cash-on-delivery.
+
+---
+
+## 5. Automated Menu Importer Features
+
+For restaurants onboarding to Speisely, they can import their existing menus using the Menu Import Wizard:
+- **Speisebaron API Scraper**: If the restaurant's legacy site is hosted on Speisebaron, Speisely automatically scrapes the raw JSON endpoint (`https://api-green.speisebaron.de/restaurant/[domain]`) using a secure server function fallback, importing all categories and dishes with 100% accuracy.
+- **Generic URL Cleaner**: Bypasses browser CORS using a server function to fetch, clean CSS/JS code blocks, and extract clear plain text for regex-based dish name and price extraction.
+- **Spreadsheet / CSV Importer**: Custom RFC-4180-compliant CSV and Excel parser.
+- **Native PDF Text Reader**: Client-side canvas-extracted text parser.
+- **Manual Table Review**: A detailed UI allowing merchants to review and edit dish names, descriptions, prices, and categories before bulk-inserting them into the Supabase database.
