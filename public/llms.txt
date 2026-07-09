@@ -1,0 +1,22 @@
+# Speisely
+
+Speisely is a modern marketplace connecting local restaurants, caterers, and event planners with diners and organizers in Germany. It provides a seamless platform for instant food ordering, corporate & private catering, and integrated event planning.
+
+Main URL: https://speisely.de
+Sitemap: https://speisely.de/sitemap.xml
+Full Documentation for LLMs: https://speisely.de/llms-full.txt
+
+## Key Core Modules
+
+- **Instant Food Order (`/instant-order`)**: Real-time food ordering and menu browsing for local restaurants. Diners can order for pickup or delivery and pay via Cash, PayPal, or Stripe.
+- **Catering Marketplace (`/catering`)**: Solutions for private event catering, daily office catering subscriptions, and institutional food services.
+- **Event Planner (`/planner`)**: A step-by-step assistant for corporate and private event planning, allowing organizers to configure event briefs, seat capacity, menus, and budgets.
+- **Partner Dashboard (`/restaurant`, `/caterer`, `/planner`)**: Dashboards for vendors to configure menus, handle orders, manage reservations, run promotions, and connect Stripe Connect / PayPal payment settings.
+
+## System Architecture & Tech Stack
+
+- **Framework**: TanStack Start (React, Vite, TanStack Router)
+- **Database / Auth**: Supabase (PostgreSQL, Supabase Auth)
+- **Payment Processor**: Stripe (Stripe Connect for connected accounts) & PayPal (direct PayPal.Me/Email)
+- **Email Delivery**: Resend
+- **Analytics & Logs**: PostHog, Vercel Analytics, Sentry
