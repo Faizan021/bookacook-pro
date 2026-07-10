@@ -56,13 +56,12 @@ export function PrintOnboardingBanner({ type, brandName }: PrintOnboardingBanner
               {type === "thermal"
                 ? t(
                     `You can now print physical orders from ${brandName} directly to your 80mm thermal receipt printer.`,
-                    `Du kannst jetzt Bestellungen von ${brandName} direkt auf deinem 80mm Thermo-Bondrucker ausdrucken.`
+                    `Du kannst jetzt Bestellungen von ${brandName} direkt auf deinem 80mm Thermo-Bondrucker ausdrucken.`,
                   )
                 : t(
                     `Print neat event summaries from ${brandName} formatted for standard A4 clipboards, binders, or kitchen prep sheets.`,
-                    `Drucke strukturierte Veranstaltungszettel für ${brandName} optimiert für A4-Klemmbretter, Ordner oder die Küche aus.`
-                  )}
-              {" "}
+                    `Drucke strukturierte Veranstaltungszettel für ${brandName} optimiert für A4-Klemmbretter, Ordner oder die Küche aus.`,
+                  )}{" "}
               <button
                 onClick={() => setModalOpen(true)}
                 className="inline-flex items-center gap-0.5 font-semibold text-brand-orange hover:underline focus:outline-none cursor-pointer"
@@ -95,11 +94,11 @@ export function PrintOnboardingBanner({ type, brandName }: PrintOnboardingBanner
               {type === "thermal"
                 ? t(
                     "Follow these print settings in the browser dialog for perfect 80mm receipts:",
-                    "Befolge diese Schritte im Browser-Druckdialog für perfekte 80mm Quittungsbelege:"
+                    "Befolge diese Schritte im Browser-Druckdialog für perfekte 80mm Quittungsbelege:",
                   )
                 : t(
                     "Follow these print settings in your browser for premium, clean A4 event pages:",
-                    "Nutze diese Einstellungen im Browser für saubere, professionelle A4-Eventzettel:"
+                    "Nutze diese Einstellungen im Browser für saubere, professionelle A4-Eventzettel:",
                   )}
             </DialogDescription>
           </DialogHeader>
@@ -108,31 +107,52 @@ export function PrintOnboardingBanner({ type, brandName }: PrintOnboardingBanner
             {type === "thermal" ? (
               <>
                 <div className="flex gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">1</div>
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">
+                    1
+                  </div>
                   <div>
-                    <h5 className="font-semibold text-sm">{t("Set margins to None", "Ränder auf 'Keine' setzen")}</h5>
+                    <h5 className="font-semibold text-sm">
+                      {t("Set margins to None", "Ränder auf 'Keine' setzen")}
+                    </h5>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {t("Under 'More Settings', set Margins to 'None'. This ensures the print fills the 80mm roll width perfectly.", "Setze unter 'Weitere Einstellungen' die Ränder auf 'Keine', damit der Druck die 80mm Breite voll ausfüllt.")}
+                      {t(
+                        "Under 'More Settings', set Margins to 'None'. This ensures the print fills the 80mm roll width perfectly.",
+                        "Setze unter 'Weitere Einstellungen' die Ränder auf 'Keine', damit der Druck die 80mm Breite voll ausfüllt.",
+                      )}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">2</div>
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">
+                    2
+                  </div>
                   <div>
-                    <h5 className="font-semibold text-sm">{t("Turn off Headers & Footers", "Kopf- und Fußzeilen deaktivieren")}</h5>
+                    <h5 className="font-semibold text-sm">
+                      {t("Turn off Headers & Footers", "Kopf- und Fußzeilen deaktivieren")}
+                    </h5>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {t("Uncheck 'Headers and footers' to remove browser-generated URL links and dates from the receipt edge.", "Deaktiviere 'Kopf- und Fußzeilen', um unerwünschte URL-Links und Datumstexte am Rand zu entfernen.")}
+                      {t(
+                        "Uncheck 'Headers and footers' to remove browser-generated URL links and dates from the receipt edge.",
+                        "Deaktiviere 'Kopf- und Fußzeilen', um unerwünschte URL-Links und Datumstexte am Rand zu entfernen.",
+                      )}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">3</div>
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">
+                    3
+                  </div>
                   <div>
-                    <h5 className="font-semibold text-sm">{t("Choose correct paper width", "Korrekte Papierbreite auswählen")}</h5>
+                    <h5 className="font-semibold text-sm">
+                      {t("Choose correct paper width", "Korrekte Papierbreite auswählen")}
+                    </h5>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {t("Ensure paper size is set to '80mm' or 'Roll Paper' rather than Letter/A4.", "Vergewissere dich, dass das Papierformat auf '80mm' oder 'Rollenpapier' steht, nicht auf A4.")}
+                      {t(
+                        "Ensure paper size is set to '80mm' or 'Roll Paper' rather than Letter/A4.",
+                        "Vergewissere dich, dass das Papierformat auf '80mm' oder 'Rollenpapier' steht, nicht auf A4.",
+                      )}
                     </p>
                   </div>
                 </div>
@@ -140,31 +160,52 @@ export function PrintOnboardingBanner({ type, brandName }: PrintOnboardingBanner
             ) : (
               <>
                 <div className="flex gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">1</div>
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">
+                    1
+                  </div>
                   <div>
-                    <h5 className="font-semibold text-sm">{t("Enable Background Graphics", "Hintergrundgrafiken aktivieren")}</h5>
+                    <h5 className="font-semibold text-sm">
+                      {t("Enable Background Graphics", "Hintergrundgrafiken aktivieren")}
+                    </h5>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {t("Check the 'Background graphics' option in the print preview. This preserves the status badges, timelines, and grid styling.", "Aktiviere das Kontrollkästchen 'Hintergrundgrafiken' in der Druckvorschau, um Status-Badges und Tabellendesigns darzustellen.")}
+                      {t(
+                        "Check the 'Background graphics' option in the print preview. This preserves the status badges, timelines, and grid styling.",
+                        "Aktiviere das Kontrollkästchen 'Hintergrundgrafiken' in der Druckvorschau, um Status-Badges und Tabellendesigns darzustellen.",
+                      )}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">2</div>
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">
+                    2
+                  </div>
                   <div>
-                    <h5 className="font-semibold text-sm">{t("Keep margins Default or Minimum", "Standard-Ränder verwenden")}</h5>
+                    <h5 className="font-semibold text-sm">
+                      {t("Keep margins Default or Minimum", "Standard-Ränder verwenden")}
+                    </h5>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {t("Set Margins to 'Default' or 'Minimum' to give the event checklist and notes grid perfect spacing on paper.", "Belasse die Ränder auf 'Standard' oder 'Minimum', um perfekte Abstände auf dem A4-Blatt zu gewährleisten.")}
+                      {t(
+                        "Set Margins to 'Default' or 'Minimum' to give the event checklist and notes grid perfect spacing on paper.",
+                        "Belasse die Ränder auf 'Standard' oder 'Minimum', um perfekte Abstände auf dem A4-Blatt zu gewährleisten.",
+                      )}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-3">
-                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">3</div>
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[11px] font-bold text-white">
+                    3
+                  </div>
                   <div>
-                    <h5 className="font-semibold text-sm">{t("Select Portrait Layout", "Hochformat auswählen")}</h5>
+                    <h5 className="font-semibold text-sm">
+                      {t("Select Portrait Layout", "Hochformat auswählen")}
+                    </h5>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {t("Make sure the printing orientation is set to 'Portrait' layout.", "Stelle sicher, dass die Ausrichtung auf 'Hochformat' eingestellt ist.")}
+                      {t(
+                        "Make sure the printing orientation is set to 'Portrait' layout.",
+                        "Stelle sicher, dass die Ausrichtung auf 'Hochformat' eingestellt ist.",
+                      )}
                     </p>
                   </div>
                 </div>
@@ -173,7 +214,10 @@ export function PrintOnboardingBanner({ type, brandName }: PrintOnboardingBanner
           </div>
 
           <div className="mt-4 flex justify-end">
-            <Button onClick={() => setModalOpen(false)} className="rounded-full bg-forest text-white hover:opacity-90">
+            <Button
+              onClick={() => setModalOpen(false)}
+              className="rounded-full bg-forest text-white hover:opacity-90"
+            >
               <Check className="mr-1.5 h-4 w-4" /> {t("Got it", "Verstanden")}
             </Button>
           </div>

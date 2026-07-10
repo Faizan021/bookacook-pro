@@ -1,18 +1,19 @@
-import { chromium } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
+import { chromium } from "@playwright/test";
+import * as fs from "fs";
+import * as path from "path";
 
-const ARTIFACT_DIR = 'C:/Users/ahmad/.gemini/antigravity/brain/372ead1d-4ca2-4bb7-bc70-5bfca3efade5';
-const BASE_URL = 'https://speisely.de';
+const ARTIFACT_DIR =
+  "C:/Users/ahmad/.gemini/antigravity/brain/372ead1d-4ca2-4bb7-bc70-5bfca3efade5";
+const BASE_URL = "https://speisely.de";
 
 const PAGES = [
-  { name: 'home', path: '/' },
-  { name: 'about', path: '/about' },
-  { name: 'contact', path: '/contact' },
-  { name: 'partners', path: '/partners' },
-  { name: 'instant_order', path: '/instant-order' },
-  { name: 'catering', path: '/catering' },
-  { name: 'planner', path: '/planner' }
+  { name: "home", path: "/" },
+  { name: "about", path: "/about" },
+  { name: "contact", path: "/contact" },
+  { name: "partners", path: "/partners" },
+  { name: "instant_order", path: "/instant-order" },
+  { name: "catering", path: "/catering" },
+  { name: "planner", path: "/planner" },
 ];
 
 async function capture() {
@@ -31,12 +32,12 @@ async function capture() {
     {
       const context = await browser.newContext({
         viewport: { width: 1280, height: 800 },
-        deviceScaleFactor: 1
+        deviceScaleFactor: 1,
       });
       const page = await context.newPage();
-      
+
       console.log(`[Desktop] Navigating to ${url}...`);
-      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.goto(url, { waitUntil: "networkidle" });
       await page.waitForTimeout(3000); // Allow full rendering
 
       // Unscrolled
@@ -48,7 +49,7 @@ async function capture() {
       console.log(`[Desktop] Scrolling page...`);
       await page.evaluate(() => window.scrollTo(0, 150));
       await page.waitForTimeout(1000); // Allow header transition
-      
+
       const scrolledPath = path.join(ARTIFACT_DIR, `desktop_scrolled_${pageInfo.name}.png`);
       await page.screenshot({ path: scrolledPath });
       console.log(`Saved: ${scrolledPath}`);
@@ -62,12 +63,13 @@ async function capture() {
         viewport: { width: 390, height: 844 },
         deviceScaleFactor: 2,
         isMobile: true,
-        userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1'
+        userAgent:
+          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
       });
       const page = await context.newPage();
 
       console.log(`[Mobile] Navigating to ${url}...`);
-      await page.goto(url, { waitUntil: 'networkidle' });
+      await page.goto(url, { waitUntil: "networkidle" });
       await page.waitForTimeout(3000); // Allow full rendering
 
       // Unscrolled
@@ -89,10 +91,10 @@ async function capture() {
   }
 
   await browser.close();
-  console.log('\nAll screenshots captured successfully!');
+  console.log("\nAll screenshots captured successfully!");
 }
 
-capture().catch(err => {
-  console.error('Error during screenshot capture:', err);
+capture().catch((err) => {
+  console.error("Error during screenshot capture:", err);
   process.exit(1);
 });

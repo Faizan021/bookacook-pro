@@ -1,7 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { trackEvent } from "@/utils/posthog";
-import { MapPin, Star, Clock, Plus, Minus, ArrowLeft, Phone, ClipboardCheck, Users, Sparkles, Globe, ShieldCheck, CheckCircle2, ChevronRight } from "lucide-react";
+import {
+  MapPin,
+  Star,
+  Clock,
+  Plus,
+  Minus,
+  ArrowLeft,
+  Phone,
+  ClipboardCheck,
+  Users,
+  Sparkles,
+  Globe,
+  ShieldCheck,
+  CheckCircle2,
+  ChevronRight,
+} from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
 import { CategoryNav } from "@/components/ui/CategoryNav";
@@ -23,16 +38,18 @@ import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { getPublicPlannerReviews } from "@/lib/reviews/public.functions";
 
 export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
-  .inputValidator((input: { slug: string }) =>
-    z.object({ slug: z.string() }).parse(input),
-  )
+  .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: planner, error: pErr } = await supabaseAdmin
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.slug);
+    const query = supabaseAdmin
       .from("planners")
-      .select("*")
-      .eq("slug", data.slug)
-      .maybeSingle();
+      .select("*");
+
+    const { data: planner, error: pErr } = await (isUuid
+      ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`)
+      : query.eq("slug", data.slug)
+    ).maybeSingle();
 
     if (pErr || !planner) return null;
 
@@ -59,10 +76,11 @@ export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
     return { ...planner, services: services || [], promoCodes };
   });
 
-const plannerQueryOptions = (slug: string) => queryOptions({
-  queryKey: ["plannerProfile", slug],
-  queryFn: () => getPublicPlannerProfileFn({ data: { slug } }),
-});
+const plannerQueryOptions = (slug: string) =>
+  queryOptions({
+    queryKey: ["plannerProfile", slug],
+    queryFn: () => getPublicPlannerProfileFn({ data: { slug } }),
+  });
 
 export const Route = createFileRoute("/planner/$slug")({
   loader: async ({ params, context }) => {
@@ -84,10 +102,8 @@ export const Route = createFileRoute("/planner/$slug")({
       ? `${p.name} organisiert Events in ${city}. Jetzt Anfrage senden über Speisely.`
       : "Event Planer auf Speisely – professionelle Eventplanung in Deutschland.";
     const description = rawDesc.length > 160 ? rawDesc.slice(0, 157) + "..." : rawDesc;
-    const title = p
-      ? `${p.name} – Eventplanung in ${city} | Speisely`
-      : "Event Planer – Speisely";
-    const ogImage = (p && p.img) ? p.img : "https://speisely.de/og-default.jpg";
+    const title = p ? `${p.name} – Eventplanung in ${city} | Speisely` : "Event Planer – Speisely";
+    const ogImage = p && p.img ? p.img : "https://speisely.de/og-default.jpg";
     const canonicalUrl = `https://speisely.de/planner/${params.slug}`;
     return {
       meta: [
@@ -101,25 +117,28 @@ export const Route = createFileRoute("/planner/$slug")({
       ],
       links: [{ rel: "canonical", href: canonicalUrl }],
       scripts: p
-        ? [{
-            type: "application/ld+json",
-            children: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              name: p.name,
-              image: p.img,
-              address: { "@type": "PostalAddress", addressLocality: p.area },
-              ...(loaderData?.reviewsData?.aggregates?.count && loaderData.reviewsData.aggregates.count > 0
-                ? {
-                    aggregateRating: {
-                      "@type": "AggregateRating",
-                      ratingValue: loaderData.reviewsData.aggregates.avgOverall,
-                      reviewCount: loaderData.reviewsData.aggregates.count,
-                    },
-                  }
-                : {}),
-            }),
-          }]
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "LocalBusiness",
+                name: p.name,
+                image: p.img,
+                address: { "@type": "PostalAddress", addressLocality: p.area },
+                ...(loaderData?.reviewsData?.aggregates?.count &&
+                loaderData.reviewsData.aggregates.count > 0
+                  ? {
+                      aggregateRating: {
+                        "@type": "AggregateRating",
+                        ratingValue: loaderData.reviewsData.aggregates.avgOverall,
+                        reviewCount: loaderData.reviewsData.aggregates.count,
+                      },
+                    }
+                  : {}),
+              }),
+            },
+          ]
         : undefined,
     };
   },
@@ -136,7 +155,6 @@ export const Route = createFileRoute("/planner/$slug")({
     </SiteShell>
   ),
 });
-
 
 function PlannerStorefront() {
   const { slug } = Route.useParams();
@@ -169,8 +187,8 @@ function PlannerStorefront() {
     packages: staticPlanner.packages || [],
   };
 
-  const storefrontUrl = dbPlanner?.custom_domain 
-    ? `https://${dbPlanner.custom_domain}` 
+  const storefrontUrl = dbPlanner?.custom_domain
+    ? `https://${dbPlanner.custom_domain}`
     : `https://${dbPlanner?.slug || slug}.speisely.de`;
 
   const [cart, setCart] = useState<Record<string, number>>({});
@@ -184,8 +202,9 @@ function PlannerStorefront() {
 
   useEffect(() => {
     if (planner?.id) {
-      recordView({ data: { vendorId: planner.id, vendorType: "planner", url: window.location.pathname } })
-        .catch(e => console.error("Tracking error", e));
+      recordView({
+        data: { vendorId: planner.id, vendorType: "planner", url: window.location.pathname },
+      }).catch((e) => console.error("Tracking error", e));
     }
   }, [planner?.id]);
 
@@ -233,7 +252,9 @@ function PlannerStorefront() {
   const handleApplyPromo = () => {
     setPromoError("");
     const codes = dbPlanner?.promoCodes || [];
-    const validCode = codes.find((c: any) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase());
+    const validCode = codes.find(
+      (c: any) => c.code.toUpperCase() === promoCodeInput.trim().toUpperCase(),
+    );
     if (validCode) {
       const now = new Date();
       if (validCode.starts_at && new Date(validCode.starts_at) > now) {
@@ -242,8 +263,13 @@ function PlannerStorefront() {
       if (validCode.ends_at && new Date(validCode.ends_at) < now) {
         return setPromoError(t("Dieser Code ist abgelaufen", "This code has expired"));
       }
-      if (validCode.min_order_value_cents && (subtotal * 100) < validCode.min_order_value_cents) {
-        return setPromoError(t(`Mindestbestellwert: €${(validCode.min_order_value_cents/100).toFixed(2)}`, `You must spend at least €${(validCode.min_order_value_cents/100).toFixed(2)} to use this code`));
+      if (validCode.min_order_value_cents && subtotal * 100 < validCode.min_order_value_cents) {
+        return setPromoError(
+          t(
+            `Mindestbestellwert: €${(validCode.min_order_value_cents / 100).toFixed(2)}`,
+            `You must spend at least €${(validCode.min_order_value_cents / 100).toFixed(2)} to use this code`,
+          ),
+        );
       }
       setAppliedPromo(validCode);
       setPromoCodeInput("");
@@ -258,14 +284,14 @@ function PlannerStorefront() {
     if ((appliedPromo as any).discount_type === "free_delivery") {
       // Planner doesn't have delivery fee
     } else if ((appliedPromo as any).discount_type === "free_item") {
-      const targetItem = cartItems.find(i => i.name === (appliedPromo as any).free_item_name);
+      const targetItem = cartItems.find((i) => i.name === (appliedPromo as any).free_item_name);
       if (targetItem) {
         discountAmount = targetItem.startingFrom;
       }
     } else if ((appliedPromo as any).discount_type === "bogo") {
       const rq = (appliedPromo as any).required_qty || 2;
       const appliesTo = (appliedPromo as any).applies_to_product_name;
-      const targetItem = cartItems.find(i => i.name === appliesTo);
+      const targetItem = cartItems.find((i) => i.name === appliesTo);
       if (targetItem) {
         const freeItems = Math.floor(targetItem.qty / rq);
         discountAmount = freeItems * targetItem.startingFrom;
@@ -273,7 +299,9 @@ function PlannerStorefront() {
     } else {
       let eligibleSubtotal = subtotal;
       if ((appliedPromo as any).applies_to_product_name) {
-        const targetItem = cartItems.find(i => i.name === (appliedPromo as any).applies_to_product_name);
+        const targetItem = cartItems.find(
+          (i) => i.name === (appliedPromo as any).applies_to_product_name,
+        );
         eligibleSubtotal = targetItem ? targetItem.startingFrom * targetItem.qty : 0;
       }
 
@@ -297,7 +325,10 @@ function PlannerStorefront() {
       )}
       {cartItems.length === 0 ? (
         <p className="mt-4 text-sm text-forest/40 italic">
-          {t("👆 Füge Pakete hinzu, um deine Anfrage zu starten", "👆 Add packages to start your brief")}
+          {t(
+            "👆 Füge Pakete hinzu, um deine Anfrage zu starten",
+            "👆 Add packages to start your brief",
+          )}
         </p>
       ) : (
         <>
@@ -308,7 +339,9 @@ function PlannerStorefront() {
                   {i.qty}
                 </span>
                 <span className="text-sm text-forest truncate">{i.name}</span>
-                <span className="text-sm font-medium text-forest">€{(i.startingFrom * i.qty).toFixed(0)}</span>
+                <span className="text-sm font-medium text-forest">
+                  €{(i.startingFrom * i.qty).toFixed(0)}
+                </span>
               </div>
             ))}
           </div>
@@ -328,14 +361,21 @@ function PlannerStorefront() {
           {appliedPromo ? (
             <div className="mt-3 flex items-center justify-between text-sm text-[oklch(0.55_0.15_30)] bg-[oklch(0.95_0.05_30)] p-2.5 rounded-lg border border-[oklch(0.85_0.15_30)]">
               <div className="flex flex-col">
-                <span className="font-semibold">{t("Gutschein", "Voucher")}: {appliedPromo.code}</span>
+                <span className="font-semibold">
+                  {t("Gutschein", "Voucher")}: {appliedPromo.code}
+                </span>
                 <span className="text-xs">
-                  {appliedPromo.discount_type === "percentage" ? `-${appliedPromo.discount_value}%` : `-€${appliedPromo.discount_value.toFixed(2)}`}
+                  {appliedPromo.discount_type === "percentage"
+                    ? `-${appliedPromo.discount_value}%`
+                    : `-€${appliedPromo.discount_value.toFixed(2)}`}
                 </span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="font-semibold">-€{discountAmount.toFixed(2)}</span>
-                <button onClick={handleRemovePromo} className="text-[oklch(0.55_0.15_30)] hover:text-black">
+                <button
+                  onClick={handleRemovePromo}
+                  className="text-[oklch(0.55_0.15_30)] hover:text-black"
+                >
                   <Minus className="h-4 w-4" />
                 </button>
               </div>
@@ -377,7 +417,12 @@ function PlannerStorefront() {
           <button
             disabled={belowMin}
             onClick={() => {
-              trackEvent("reservation_submitted", { plannerId: planner.id, type: "planner", totalCount, finalTotal });
+              trackEvent("reservation_submitted", {
+                plannerId: planner.id,
+                type: "planner",
+                totalCount,
+                finalTotal,
+              });
               alert(
                 t(
                   `Anfrage über ${totalCount} Paket(e) gesendet. ${planner.name} meldet sich in Kürze.`,
@@ -392,7 +437,10 @@ function PlannerStorefront() {
             {t("Anfrage senden", "Inquire / Book")} · ab €{finalTotal.toFixed(0)}
           </button>
           <p className="mt-2 text-xs text-forest/60">
-            {t("Unverbindlich — der Planner bestätigt deine Anfrage.", "Non-binding — the planner confirms your request.")}
+            {t(
+              "Unverbindlich — der Planner bestätigt deine Anfrage.",
+              "Non-binding — the planner confirms your request.",
+            )}
           </p>
         </>
       )}
@@ -407,7 +455,10 @@ function PlannerStorefront() {
         bgColor={planner.announcement_bg_color ?? null}
       />
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-8">
-        <Link to="/planner" className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest">
+        <Link
+          to="/planner"
+          className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest"
+        >
           <ArrowLeft className="h-4 w-4" /> {t("Zurück zum Event Planner", "Back to Event Planner")}
         </Link>
 
@@ -423,9 +474,12 @@ function PlannerStorefront() {
             height={420}
           />
           {/* Dark gradient overlay */}
-          <div 
-            className="absolute inset-0 z-10" 
-            style={{ backgroundImage: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%)' }}
+          <div
+            className="absolute inset-0 z-10"
+            style={{
+              backgroundImage:
+                "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%)",
+            }}
           />
 
           {/* Top Right Actions */}
@@ -444,8 +498,15 @@ function PlannerStorefront() {
           </div>
 
           {/* Bottom Info Overlay */}
-          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex flex-col md:flex-row md:items-end justify-between w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
-            <div className="flex flex-col gap-2 max-w-[80%] text-left">
+          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex items-center gap-4 w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
+            {planner.logo && (
+              <img
+                src={planner.logo}
+                alt="Logo"
+                className="w-16 h-16 md:w-24 md:h-24 rounded-full border-4 border-white shadow-md bg-white object-cover flex-shrink-0"
+              />
+            )}
+            <div className="flex flex-col gap-1 max-w-[80%] text-left">
               <h1 className="text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-sm">
                 {planner.name}
               </h1>
@@ -478,38 +539,48 @@ function PlannerStorefront() {
               <ShieldCheck className="h-5 w-5" />
               <span className="text-sm font-bold">{t("Geprüftes Profil", "Checked Profile")}</span>
             </div>
-            
+
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
-            
+
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">{t("Eventgröße", "Event Size")}</dt>
+              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+                {t("Eventgröße", "Event Size")}
+              </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Users className="h-4 w-4 text-forest/40" /> {planner.minGuests} {t("Personen", "Guests")} / €{planner.minBudget}
+                <Users className="h-4 w-4 text-forest/40" /> {planner.minGuests}{" "}
+                {t("Personen", "Guests")} / €{planner.minBudget}
               </dd>
             </div>
 
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
 
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">{t("Vorlaufzeit", "Lead Time")}</dt>
+              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+                {t("Vorlaufzeit", "Lead Time")}
+              </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Clock className="h-4 w-4 text-forest/40" /> {planner.leadTimeDays} {t("Tage", "Days")}
+                <Clock className="h-4 w-4 text-forest/40" /> {planner.leadTimeDays}{" "}
+                {t("Tage", "Days")}
               </dd>
             </div>
-            
+
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
 
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">{t("Standort", "Location")}</dt>
+              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+                {t("Standort", "Location")}
+              </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <MapPin className="h-4 w-4 text-forest/40" /> <span className="truncate max-w-[200px]">{planner.address}</span>
+                <MapPin className="h-4 w-4 text-forest/40" />{" "}
+                <span className="truncate max-w-[200px]">{planner.address}</span>
               </dd>
             </div>
           </dl>
-          
+
           <div className="flex flex-wrap items-center gap-2 pt-4 md:pt-0 border-t border-[#eadfce] md:border-0 w-full md:w-auto">
             <span className="inline-flex items-center gap-1 rounded-full bg-[#fdfaf5] px-3 py-1 text-xs font-semibold text-forest border border-[#eadfce]">
-              <ShieldCheck className="h-3.5 w-3.5 text-forest" /> {t("Verifizierter Partner", "Verified Partner")}
+              <ShieldCheck className="h-3.5 w-3.5 text-forest" />{" "}
+              {t("Verifizierter Partner", "Verified Partner")}
             </span>
           </div>
         </div>
@@ -527,9 +598,14 @@ function PlannerStorefront() {
         )}
       </section>
 
-      <section id="menu" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 grid gap-8 lg:grid-cols-[1fr_22rem] pb-16 scroll-mt-24">
+      <section
+        id="menu"
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 grid gap-8 lg:grid-cols-[1fr_22rem] pb-16 scroll-mt-24"
+      >
         <div>
-          <h2 className="text-3xl font-display font-bold text-forest">{t("Service-Pakete", "Service Packages")}</h2>
+          <h2 className="text-3xl font-display font-bold text-forest">
+            {t("Service-Pakete", "Service Packages")}
+          </h2>
           <p className="mt-2 text-sm text-forest/70">
             {t(
               "Wähle Pakete aus und sende eine unverbindliche Anfrage — der Planner bestätigt innerhalb von 24 h.",
@@ -539,23 +615,39 @@ function PlannerStorefront() {
           <CategoryNav
             categories={categories}
             onSelect={(cat) => {
-              document.getElementById(`category-${cat}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              document
+                .getElementById(`category-${cat}`)
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
             }}
           />
           <div className="mt-8 mb-8 p-6 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h3 className="font-display text-lg text-forest">{t("Gästeanzahl", "Guest Count")}</h3>
-              <p className="text-sm text-forest/70">{t("Basis für das dynamische Angebot", "Baseline for your dynamic quote")}</p>
+              <h3 className="font-display text-lg text-forest">
+                {t("Gästeanzahl", "Guest Count")}
+              </h3>
+              <p className="text-sm text-forest/70">
+                {t("Basis für das dynamische Angebot", "Baseline for your dynamic quote")}
+              </p>
             </div>
             <div className="flex items-center gap-4 bg-white p-1 rounded-full shadow-sm border border-[oklch(0.85_0.05_152)]">
-              <button onClick={() => setGuests(Math.max(1, guests - 5))} className="h-10 w-10 grid place-items-center rounded-full text-forest hover:bg-[#eadfce] transition"><Minus className="h-4 w-4" /></button>
-              <input 
-                type="number" 
-                value={guests} 
+              <button
+                onClick={() => setGuests(Math.max(1, guests - 5))}
+                className="h-10 w-10 grid place-items-center rounded-full text-forest hover:bg-[#eadfce] transition"
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+              <input
+                type="number"
+                value={guests}
                 onChange={(e) => setGuests(parseInt(e.target.value) || 1)}
                 className="w-12 text-center bg-transparent border-none text-lg font-semibold text-forest focus:outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
-              <button onClick={() => setGuests(guests + 5)} className="h-10 w-10 grid place-items-center rounded-full text-forest hover:bg-[#eadfce] transition"><Plus className="h-4 w-4" /></button>
+              <button
+                onClick={() => setGuests(guests + 5)}
+                className="h-10 w-10 grid place-items-center rounded-full text-forest hover:bg-[#eadfce] transition"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
             </div>
           </div>
           <div className="mt-8 space-y-10">
@@ -563,52 +655,72 @@ function PlannerStorefront() {
               <div key={cat} id={`category-${cat}`} className="scroll-mt-32">
                 <h3 className="font-display text-2xl text-forest">{cat}</h3>
                 <div className="mt-4 grid gap-4">
-                  {planner.packages.filter((m: any) => (m.category || "Pakete") === cat).map((m: any) => {
-                    const qty = cart[m.name] || 0;
-                    return (
-                      <div key={m.name} className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group">
-                        <div className="min-w-0">
-                          <h4 className="font-display text-lg font-bold text-forest">{m.name}</h4>
-                          <p className="text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">{m.desc[lang]}</p>
-                          <div className="mt-3 flex items-center gap-3">
-                            <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-forest/60">
-                              {t("Ab", "Starting from")}
-                            </span>
-                            <p className="text-lg font-bold text-forest">
-                              €{m.startingFrom.toFixed(0)}
-                              <span className="text-sm font-medium text-forest/60 font-sans"> / {m.unit[lang]}</span>
+                  {planner.packages
+                    .filter((m: any) => (m.category || "Pakete") === cat)
+                    .map((m: any) => {
+                      const qty = cart[m.name] || 0;
+                      return (
+                        <div
+                          key={m.name}
+                          className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group"
+                        >
+                          <div className="min-w-0">
+                            <h4 className="font-display text-lg font-bold text-forest">{m.name}</h4>
+                            <p className="text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">
+                              {m.desc[lang]}
                             </p>
+                            <div className="mt-3 flex items-center gap-3">
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-forest/60">
+                                {t("Ab", "Starting from")}
+                              </span>
+                              <p className="text-lg font-bold text-forest">
+                                €{m.startingFrom.toFixed(0)}
+                                <span className="text-sm font-medium text-forest/60 font-sans">
+                                  {" "}
+                                  / {m.unit[lang]}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            {qty === 0 ? (
+                              <button
+                                onClick={() =>
+                                  updateQty(m.name, m.unit.en === "person" ? guests : 1)
+                                }
+                                className="h-10 px-5 inline-flex items-center gap-2 rounded-full bg-[#eadfce] text-forest hover:bg-forest hover:text-white transition whitespace-nowrap text-sm font-semibold pulse-btn shadow-sm hover:shadow-md"
+                                aria-label={t("Anfragen", "Inquire")}
+                              >
+                                <Plus className="h-4 w-4" /> {t("Anfragen", "Add to quote")}
+                              </button>
+                            ) : (
+                              <div className="inline-flex items-center gap-1 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10 shadow-md">
+                                <button
+                                  onClick={() => updateQty(m.name, qty - 1)}
+                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10"
+                                  aria-label="-"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </button>
+                                <input
+                                  type="number"
+                                  value={qty}
+                                  onChange={(e) => updateQty(m.name, parseInt(e.target.value) || 0)}
+                                  className="w-10 text-center bg-transparent border-none text-sm font-semibold focus:outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none text-white"
+                                />
+                                <button
+                                  onClick={() => updateQty(m.name, qty + 1)}
+                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10 pulse-btn"
+                                  aria-label="+"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <div className="flex items-center">
-                        {qty === 0 ? (
-                          <button
-                            onClick={() => updateQty(m.name, m.unit.en === 'person' ? guests : 1)}
-                            className="h-10 px-5 inline-flex items-center gap-2 rounded-full bg-[#eadfce] text-forest hover:bg-forest hover:text-white transition whitespace-nowrap text-sm font-semibold pulse-btn shadow-sm hover:shadow-md"
-                            aria-label={t("Anfragen", "Inquire")}
-                          >
-                            <Plus className="h-4 w-4" /> {t("Anfragen", "Add to quote")}
-                          </button>
-                        ) : (
-                          <div className="inline-flex items-center gap-1 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10 shadow-md">
-                            <button onClick={() => updateQty(m.name, qty - 1)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10" aria-label="-">
-                              <Minus className="h-4 w-4" />
-                            </button>
-                            <input 
-                              type="number" 
-                              value={qty} 
-                              onChange={(e) => updateQty(m.name, parseInt(e.target.value) || 0)}
-                              className="w-10 text-center bg-transparent border-none text-sm font-semibold focus:outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none text-white"
-                            />
-                            <button onClick={() => updateQty(m.name, qty + 1)} className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10 pulse-btn" aria-label="+">
-                              <Plus className="h-4 w-4" />
-                            </button>
-                          </div>
-                        )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
               </div>
             ))}
@@ -636,36 +748,63 @@ function PlannerStorefront() {
       {/* Process Section */}
       <section className="bg-[#fdfaf5] border-y border-[#eadfce]/50 py-16 mt-8 mb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-          <h2 className="text-2xl font-display font-bold text-forest text-center mb-10">{t("So einfach funktioniert's", "How it works")}</h2>
+          <h2 className="text-2xl font-display font-bold text-forest text-center mb-10">
+            {t("So einfach funktioniert's", "How it works")}
+          </h2>
           <div className="grid md:grid-cols-3 gap-8 relative">
             <div className="hidden md:block absolute top-6 left-[16%] right-[16%] h-px bg-forest/10" />
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">1</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">
+                1
+              </div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Auswählen", "Choose")}</h3>
-              <p className="text-sm text-forest/70 max-w-xs">{t("Stelle dein Wunsch-Paket für dein Event zusammen.", "Put together your desired package for your event.")}</p>
+              <p className="text-sm text-forest/70 max-w-xs">
+                {t(
+                  "Stelle dein Wunsch-Paket für dein Event zusammen.",
+                  "Put together your desired package for your event.",
+                )}
+              </p>
             </div>
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">2</div>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">
+                2
+              </div>
               <h3 className="font-bold text-forest text-lg mb-2">{t("Anfragen", "Request")}</h3>
-              <p className="text-sm text-forest/70 max-w-xs">{t("Sende eine unverbindliche Anfrage direkt an den Planner.", "Send a non-binding request directly to the planner.")}</p>
+              <p className="text-sm text-forest/70 max-w-xs">
+                {t(
+                  "Sende eine unverbindliche Anfrage direkt an den Planner.",
+                  "Send a non-binding request directly to the planner.",
+                )}
+              </p>
             </div>
             <div className="relative text-center flex flex-col items-center">
-              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">3</div>
-              <h3 className="font-bold text-forest text-lg mb-2">{t("Planen & Genießen", "Plan & Enjoy")}</h3>
-              <p className="text-sm text-forest/70 max-w-xs">{t("Details klären, sicher buchen und ein tolles Event erleben.", "Clarify details, book securely and enjoy a great event.")}</p>
+              <div className="w-12 h-12 bg-white rounded-full border border-[#eadfce] shadow-sm flex items-center justify-center text-xl font-bold text-forest mb-4 z-10">
+                3
+              </div>
+              <h3 className="font-bold text-forest text-lg mb-2">
+                {t("Planen & Genießen", "Plan & Enjoy")}
+              </h3>
+              <p className="text-sm text-forest/70 max-w-xs">
+                {t(
+                  "Details klären, sicher buchen und ein tolles Event erleben.",
+                  "Clarify details, book securely and enjoy a great event.",
+                )}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-
-
       {/* Mobile Sticky Bottom Cart Bar */}
       {totalCount > 0 && (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#eadfce] p-4 z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] flex items-center justify-between pb-safe">
           <div className="text-forest">
-            <div className="font-semibold text-sm">{totalCount} {totalCount === 1 ? t("Paket", "Package") : t("Pakete", "Packages")}</div>
-            <div className="text-xs text-forest/70">{t("Gesamt", "Total")}: ab €{finalTotal.toFixed(0)}</div>
+            <div className="font-semibold text-sm">
+              {totalCount} {totalCount === 1 ? t("Paket", "Package") : t("Pakete", "Packages")}
+            </div>
+            <div className="text-xs text-forest/70">
+              {t("Gesamt", "Total")}: ab €{finalTotal.toFixed(0)}
+            </div>
           </div>
           <Sheet open={mobileCartOpen} onOpenChange={setMobileCartOpen}>
             <SheetTrigger asChild>
@@ -673,16 +812,17 @@ function PlannerStorefront() {
                 {t("Angebot anzeigen", "View order")}
               </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="h-[85vh] bg-[#fdfaf5] text-forest border-t border-[#eadfce] rounded-t-2xl px-4 py-6 overflow-y-auto">
+            <SheetContent
+              side="bottom"
+              className="h-[85vh] bg-[#fdfaf5] text-forest border-t border-[#eadfce] rounded-t-2xl px-4 py-6 overflow-y-auto"
+            >
               <SheetHeader className="text-left mb-4">
                 <SheetTitle className="flex items-center gap-2 font-display text-xl text-forest">
                   <ClipboardCheck className="h-5 w-5 text-forest" />
                   {t("Deine Anfrage", "Your Inquiry")}
                 </SheetTitle>
               </SheetHeader>
-              <div className="py-2 pb-10">
-                {renderSidebar(true)}
-              </div>
+              <div className="py-2 pb-10">{renderSidebar(true)}</div>
             </SheetContent>
           </Sheet>
         </div>
@@ -693,43 +833,58 @@ function PlannerStorefront() {
         <h2 className="text-2xl font-display font-bold text-forest mb-8">
           {t("Bewertungen", "Reviews")}
         </h2>
-        
+
         {aggregates && aggregates.count > 0 ? (
           <div className="grid lg:grid-cols-[300px_1fr] gap-10">
             <div className="bg-[#fdfaf5] p-6 rounded-2xl border border-[#eadfce]/50 h-fit">
               <div className="flex items-end gap-3 mb-4">
-                <div className="text-5xl font-bold text-forest">{aggregates.avgOverall.toFixed(1)}</div>
+                <div className="text-5xl font-bold text-forest">
+                  {aggregates.avgOverall.toFixed(1)}
+                </div>
                 <div className="text-forest/70 pb-1">/ 5</div>
               </div>
               <div className="flex text-yellow-400 mb-2 text-xl">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"} className="w-5 h-5" />
+                  <Star
+                    key={i}
+                    fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"}
+                    className="w-5 h-5"
+                  />
                 ))}
               </div>
               <div className="text-sm text-forest/70 mb-6">
-                {aggregates.count} {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
+                {aggregates.count}{" "}
+                {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
               </div>
-              
+
               <div className="space-y-3 pt-4 border-t border-[#eadfce]">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Kreativität", "Creativity")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgCreativity.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgCreativity.toFixed(1)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Umsetzung", "Execution")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgExecution.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgExecution.toFixed(1)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Kommunikation", "Communication")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgCommunication.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgCommunication.toFixed(1)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Preis-Leistung", "Value")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgValue.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgValue.toFixed(1)}
+                  </span>
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-6">
               {reviews.map((r: any) => (
                 <div key={r.id} className="pb-6 border-b border-[#eadfce]/50 last:border-0">
@@ -748,15 +903,21 @@ function PlannerStorefront() {
                     </div>
                     <div className="flex text-yellow-400">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"} className="w-4 h-4" />
+                        <Star
+                          key={i}
+                          fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"}
+                          className="w-4 h-4"
+                        />
                       ))}
                     </div>
                   </div>
                   <p className="text-forest/80 mt-2 whitespace-pre-wrap">{r.comment}</p>
-                  
+
                   {r.vendor_reply && (
                     <div className="mt-4 bg-[#fdfaf5] p-4 rounded-xl border border-[#eadfce]/40 ml-4">
-                      <div className="text-xs font-semibold text-forest mb-1">{fullPlanner?.name}</div>
+                      <div className="text-xs font-semibold text-forest mb-1">
+                        {fullPlanner?.name}
+                      </div>
                       <p className="text-sm text-forest/70">{r.vendor_reply}</p>
                     </div>
                   )}
@@ -767,9 +928,14 @@ function PlannerStorefront() {
         ) : (
           <div className="text-center py-12 bg-[#fdfaf5] rounded-2xl border border-[#eadfce]/50">
             <Star className="w-10 h-10 text-forest/20 mx-auto mb-3" />
-            <h3 className="font-semibold text-forest mb-1">{t("Noch keine Bewertungen", "No reviews yet")}</h3>
+            <h3 className="font-semibold text-forest mb-1">
+              {t("Noch keine Bewertungen", "No reviews yet")}
+            </h3>
             <p className="text-sm text-forest/60 max-w-sm mx-auto">
-              {t("Sei der Erste, der diesen Planner bewertet.", "Be the first to review this planner.")}
+              {t(
+                "Sei der Erste, der diesen Planner bewertet.",
+                "Be the first to review this planner.",
+              )}
             </p>
           </div>
         )}

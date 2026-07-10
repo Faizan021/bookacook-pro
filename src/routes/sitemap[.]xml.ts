@@ -20,12 +20,12 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async () => {
         const today = new Date().toISOString().split("T")[0];
-        
+
         const [restaurants, caterers, planners, validGeoLocations] = await Promise.all([
           getRestaurants(),
           getCaterers(),
           getPlanners(),
-          getValidGeoLocations()
+          getValidGeoLocations(),
         ]);
 
         const entries: SitemapEntry[] = [

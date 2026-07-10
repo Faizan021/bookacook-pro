@@ -44,7 +44,7 @@ export function MilestoneTimeline({
 
   const toggleMilestone = (id: string) => {
     const updated = items.map((m) =>
-      m.id === id ? { ...m, completed: !m.completed, updated_at: new Date().toISOString() } : m
+      m.id === id ? { ...m, completed: !m.completed, updated_at: new Date().toISOString() } : m,
     );
     saveMilestones(updated);
   };
@@ -105,7 +105,9 @@ export function MilestoneTimeline({
               )}
             </button>
             <div className="flex-1">
-              <p className={`text-sm font-medium ${m.completed ? "line-through text-muted-foreground" : ""}`}>
+              <p
+                className={`text-sm font-medium ${m.completed ? "line-through text-muted-foreground" : ""}`}
+              >
                 {m.title}
               </p>
               {m.updated_at && (
@@ -128,7 +130,9 @@ export function MilestoneTimeline({
         ))}
 
         {items.length === 0 && isVendor && (
-          <p className="text-sm text-muted-foreground italic">No milestones added yet. Add your first milestone below.</p>
+          <p className="text-sm text-muted-foreground italic">
+            No milestones added yet. Add your first milestone below.
+          </p>
         )}
 
         {isVendor && (
@@ -141,7 +145,12 @@ export function MilestoneTimeline({
               onChange={(e) => setNewTitle(e.target.value)}
               disabled={saving}
             />
-            <Button type="submit" size="sm" className="h-8 shrink-0" disabled={saving || !newTitle.trim()}>
+            <Button
+              type="submit"
+              size="sm"
+              className="h-8 shrink-0"
+              disabled={saving || !newTitle.trim()}
+            >
               <Plus className="w-4 h-4 mr-1" /> Add
             </Button>
           </form>

@@ -47,13 +47,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Speisely ist ein deutschlandweiter Food- & Event-Marktplatz.",
         "Restaurants erhalten einen professionellen Storefront und ein Kitchen Display System (KDS).",
-        "Caterer & Event-Planer erhalten direkt qualifizierte Kundenanfragen ohne monatliche Fixgebühr."
+        "Caterer & Event-Planer erhalten direkt qualifizierte Kundenanfragen ohne monatliche Fixgebühr.",
       ],
       en: [
         "Speisely is a Germany-wide food & event marketplace.",
         "Restaurants get a professional storefront and integrated Kitchen Display System (KDS).",
-        "Caterers & event planners receive direct client inquiries with no monthly base fee."
-      ]
+        "Caterers & event planners receive direct client inquiries with no monthly base fee.",
+      ],
     },
     content: {
       de: `
@@ -85,8 +85,8 @@ export const blogPosts: BlogPost[] = [
         <h3>5. Instant Order - Order Locally Without an App</h3>
         <p>Customers discover local restaurants via the <strong>Instant Order directory</strong> at speisely.de/instant-order.</p>
         <p><a href="https://speisely.de/instant-order">Discover now at speisely.de/instant-order</a></p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "2",
@@ -107,13 +107,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Nachhaltigkeit und Zero Waste sind die zentralen Catering-Trends in 2026.",
         "Plant-Based Catering (rein pflanzlich) etabliert sich zunehmend als Standard für Events.",
-        "Regionale Lebensmittel und kurze Lieferketten stehen im Fokus."
+        "Regionale Lebensmittel und kurze Lieferketten stehen im Fokus.",
       ],
       en: [
         "Sustainability and zero waste are the core catering trends in 2026.",
         "Plant-based catering is increasingly establishing itself as the standard for events.",
-        "The focus is on regional food and short supply chains."
-      ]
+        "The focus is on regional food and short supply chains.",
+      ],
     },
     content: {
       de: `
@@ -133,8 +133,8 @@ export const blogPosts: BlogPost[] = [
         <h3>Zero Waste &amp; Regional Food</h3>
         <p><strong>Zero Waste Catering</strong> has become essential. Caterers on Speisely work increasingly with local farms.</p>
         <p>Find sustainable caterers at <a href="https://speisely.de/catering">speisely.de/catering</a>.</p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "3",
@@ -155,13 +155,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Hohe Fremdgebühren klassischer Lieferdienste belasten Restaurants zunehmend.",
         "Speisely bietet eine faire Alternative mit eigenen Storefronts und einer monatlichen Flatrate.",
-        "Kunden können direkt und lokal bestellen, was die Gastronomie nachhaltig unterstützt."
+        "Kunden können direkt und lokal bestellen, was die Gastronomie nachhaltig unterstützt.",
       ],
       en: [
         "High fees from classic delivery services increasingly burden restaurants.",
         "Speisely offers a fair alternative with dedicated storefronts and a flat monthly fee.",
-        "Customers can order directly and locally, providing sustainable support to the gastronomy sector."
-      ]
+        "Customers can order directly and locally, providing sustainable support to the gastronomy sector.",
+      ],
     },
     content: {
       de: `
@@ -181,8 +181,8 @@ export const blogPosts: BlogPost[] = [
         <h3>Speisely vs. Lieferando, Uber Eats &amp; Wolt</h3>
         <p>By connecting directly, restaurants avoid third-party commission margins on every single ticket. This ensures more revenue remains with the kitchen.</p>
         <p>The future of food delivery is local and fair: <a href="https://speisely.de/instant-order">speisely.de/instant-order</a>.</p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "4",
@@ -203,13 +203,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Eine frühzeitige Planung und Location-Suche ist für Firmenevents entscheidend.",
         "Ab 50 Personen lohnt sich oft die Beauftragung eines professionellen Eventplaners.",
-        "Moderne Catering-Formate wie Flying Dinners oder Food-Stationen ersetzen klassische Buffets."
+        "Moderne Catering-Formate wie Flying Dinners oder Food-Stationen ersetzen klassische Buffets.",
       ],
       en: [
         "Early planning and location scouting are crucial for corporate events.",
         "For 50+ people, hiring a professional event planner is often worthwhile.",
-        "Modern catering formats like flying dinners or food stations are replacing classic buffets."
-      ]
+        "Modern catering formats like flying dinners or food stations are replacing classic buffets.",
+      ],
     },
     content: {
       de: `
@@ -233,8 +233,8 @@ export const blogPosts: BlogPost[] = [
         <h3>Booking Catering via the Speisely Marketplace</h3>
         <p>At <a href="https://speisely.de/catering">speisely.de/catering</a>, you can request qualified caterers directly. A <strong>10% deposit</strong> secures your booking.</p>
         <p>Speisely caterers are available nationwide.</p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "5",
@@ -255,13 +255,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Restaurants erhalten einen eigenen Storefront und unbegrenzte Bestellungen für 34.99 EUR/Monat.",
         "Caterer und Planer zahlen eine faire Gebühr nur bei erfolgreicher Buchung.",
-        "Alle Partner erhalten einen eigenen Storefront und Zugang zu Live-Features wie dem KDS."
+        "Alle Partner erhalten einen eigenen Storefront und Zugang zu Live-Features wie dem KDS.",
       ],
       en: [
         "Restaurants get their own storefront and unlimited orders for 34.99 EUR/month.",
         "Caterers and planners pay a fair success-based fee only upon successful booking.",
-        "All partners receive their own storefront and access to live features like the KDS."
-      ]
+        "All partners receive their own storefront and access to live features like the KDS.",
+      ],
     },
     content: {
       de: `
@@ -301,8 +301,8 @@ export const blogPosts: BlogPost[] = [
           <li>Analytics Dashboard with revenue overview</li>
         </ul>
         <p><a href="https://speisely.de/partners">Become a partner at speisely.de/partners</a></p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "6",
@@ -323,13 +323,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Speisely ermöglicht Direktbestellungen für Gastronomen über eigene Storefronts.",
         "Kunden nutzen das Instant Order Verzeichnis ganz ohne App-Download.",
-        "Die direkte Bestellung stärkt lokale Restaurants finanziell."
+        "Die direkte Bestellung stärkt lokale Restaurants finanziell.",
       ],
       en: [
         "Speisely enables direct ordering for restaurateurs via dedicated storefronts.",
         "Customers use the Instant Order directory entirely without app downloads.",
-        "Direct ordering financially strengthens local restaurants."
-      ]
+        "Direct ordering financially strengthens local restaurants.",
+      ],
     },
     content: {
       de: `
@@ -353,8 +353,8 @@ export const blogPosts: BlogPost[] = [
         <h3>Speisely vs. Traditional Intermediaries - The Direct Comparison</h3>
         <p>By using direct ordering, restaurants do not lose transaction cuts to portal intermediaries. This secures the livelihood of local businesses and directly supports food spots in your community.</p>
         <p><a href="https://speisely.de/instant-order">Discover now: speisely.de/instant-order</a></p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "7",
@@ -375,13 +375,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Messe- und Business-Catering verzeichnen deutschlandweit eine stark wachsende Nachfrage.",
         "Veganes Streetfood und moderne Konzepte ergänzen klassische Buffets.",
-        "Über Speisely können Event-Caterer direkt mit 10% Anzahlung gebucht werden."
+        "Über Speisely können Event-Caterer direkt mit 10% Anzahlung gebucht werden.",
       ],
       en: [
         "Fair and business catering are experiencing strong demand growth across Germany.",
         "Vegan street food and modern concepts complement classic buffets.",
-        "Via Speisely, event caterers can be booked directly with a 10% deposit."
-      ]
+        "Via Speisely, event caterers can be booked directly with a 10% deposit.",
+      ],
     },
     content: {
       de: `
@@ -407,8 +407,8 @@ export const blogPosts: BlogPost[] = [
         <h3>How to Book Catering via Speisely</h3>
         <p>At <a href="https://speisely.de/catering">speisely.de/catering</a>, submit a catering inquiry in a few steps. A <strong>10% deposit</strong> secures your date.</p>
         <p><a href="https://speisely.de/catering">Request catering: speisely.de/catering</a></p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "8",
@@ -429,13 +429,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Ein KDS digitalisiert die Küchenkommunikation und ersetzt fehleranfällige Papierbons.",
         "Das Speisely KDS ist vollständig in das Restaurant-Dashboard integriert.",
-        "Es bietet Echtzeit-Anzeigen und klare Status-Workflows für jede Bestellgröße."
+        "Es bietet Echtzeit-Anzeigen und klare Status-Workflows für jede Bestellgröße.",
       ],
       en: [
         "A KDS digitizes kitchen communication and replaces error-prone paper tickets.",
         "The Speisely KDS is fully integrated into the restaurant dashboard.",
-        "It offers real-time displays and clear status workflows for any order volume."
-      ]
+        "It offers real-time displays and clear status workflows for any order volume.",
+      ],
     },
     content: {
       de: `
@@ -471,8 +471,8 @@ export const blogPosts: BlogPost[] = [
           <li>Included free in the Speisely Starter Plan (34.99 EUR/month)</li>
         </ul>
         <p><a href="https://speisely.de/partners">Become a partner and use the KDS: speisely.de/partners</a></p>
-      `
-    }
+      `,
+    },
   },
   {
     id: "9",
@@ -493,13 +493,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Eventplaner in Deutschland kosten durchschnittlich 60 € bis 150 € pro Stunde.",
         "Bei Budgetmodellen werden häufig 10 % bis 20 % des Event-Budgets als Honorar berechnet.",
-        "Professionelle Planer sparen durch ihr Netzwerk und bessere Konditionen oft Zeit und Geld."
+        "Professionelle Planer sparen durch ihr Netzwerk und bessere Konditionen oft Zeit und Geld.",
       ],
       en: [
         "Event planners in Germany cost between 60 € and 150 € per hour on average.",
         "For budget models, 10% to 20% of the event budget is often charged as a fee.",
-        "Professional planners often save time and money through their networks and better rates."
-      ]
+        "Professional planners often save time and money through their networks and better rates.",
+      ],
     },
     content: {
       de: `
@@ -526,26 +526,30 @@ export const blogPosts: BlogPost[] = [
         
         <h3>What billing models exist?</h3>
         <p>The most common are the percentage model (usually 15% of the budget), hourly rates (for partial planning), and flat-rate packages (like day-of-coordination).</p>
-      `
+      `,
     },
     faq: [
       {
         question: "Wie viel kostet ein Eventplaner im Durchschnitt?",
-        answer: "Ein professioneller Eventplaner kostet in Deutschland durchschnittlich 80 bis 150 Euro pro Stunde. Bei einem prozentualen Honorarmodell berechnen die meisten Planer zwischen 10 % und 20 % des Gesamtbudgets der Veranstaltung."
+        answer:
+          "Ein professioneller Eventplaner kostet in Deutschland durchschnittlich 80 bis 150 Euro pro Stunde. Bei einem prozentualen Honorarmodell berechnen die meisten Planer zwischen 10 % und 20 % des Gesamtbudgets der Veranstaltung.",
       },
       {
         question: "Was ist in den Kosten eines Eventplaners enthalten?",
-        answer: "Das Leistungspaket umfasst meist die Konzeption, Location-Suche, Dienstleister-Vermittlung (Catering, Musik, Deko), Budgetüberwachung sowie die Koordination am Veranstaltungstag selbst. Bei Teilplanungen können Sie Leistungen auch einzeln buchen."
+        answer:
+          "Das Leistungspaket umfasst meist die Konzeption, Location-Suche, Dienstleister-Vermittlung (Catering, Musik, Deko), Budgetüberwachung sowie die Koordination am Veranstaltungstag selbst. Bei Teilplanungen können Sie Leistungen auch einzeln buchen.",
       },
       {
         question: "Lohnt sich ein Eventplaner für private Feiern?",
-        answer: "Ja, besonders bei großen Hochzeiten oder runden Geburtstagen spart ein Planer enorm viel Stress. Zudem verfügen Eventplaner über ein großes Netzwerk und können oft bessere Konditionen bei Catering und Locations aushandeln, was die eigenen Kosten wieder senken kann."
+        answer:
+          "Ja, besonders bei großen Hochzeiten oder runden Geburtstagen spart ein Planer enorm viel Stress. Zudem verfügen Eventplaner über ein großes Netzwerk und können oft bessere Konditionen bei Catering und Locations aushandeln, was die eigenen Kosten wieder senken kann.",
       },
       {
         question: "Was kostet eine reine Tagesbetreuung (Day-of-Coordination)?",
-        answer: "Wenn Sie die Planung selbst übernehmen und den Eventplaner nur für den reibungslosen Ablauf am Veranstaltungstag benötigen, liegen die Kosten hierfür als Festpreis meist zwischen 800 € und 1.500 €."
-      }
-    ]
+        answer:
+          "Wenn Sie die Planung selbst übernehmen und den Eventplaner nur für den reibungslosen Ablauf am Veranstaltungstag benötigen, liegen die Kosten hierfür als Festpreis meist zwischen 800 € und 1.500 €.",
+      },
+    ],
   },
   {
     id: "10",
@@ -566,13 +570,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Eine Hochzeit mit 80 Gästen kostet in Deutschland im Schnitt 15.000 € bis 25.000 €.",
         "Location und Catering beanspruchen dabei den größten Budgetanteil (ca. 40-50 %).",
-        "Gute Ablaufpläne lassen ausreichend Puffer für das Dinner und Reden."
+        "Gute Ablaufpläne lassen ausreichend Puffer für das Dinner und Reden.",
       ],
       en: [
         "A wedding with 80 guests in Germany costs on average 15,000 € to 25,000 €.",
         "Location and catering claim the largest budget share (approx. 40-50%).",
-        "Good schedules leave sufficient buffers for dinner and speeches."
-      ]
+        "Good schedules leave sufficient buffers for dinner and speeches.",
+      ],
     },
     content: {
       de: `
@@ -597,26 +601,30 @@ export const blogPosts: BlogPost[] = [
         <p>Planning a wedding is an exciting project that ideally starts 12 to 18 months before the big day. The most important pillars are the location, the catering, the music, and the schedule.</p>
         <h3>1. Budgeting properly</h3>
         <p>An average wedding with 80 guests costs around 15,000 to 25,000 euros in Germany. Location and catering take up 40-50%.</p>
-      `
+      `,
     },
     faq: [
       {
         question: "Wie viel Budget sollte man für eine Hochzeit mit 80 Personen einplanen?",
-        answer: "In Deutschland rechnen Brautpaare im Durchschnitt mit 15.000 € bis 25.000 € für eine Hochzeit mit 80 Personen. Dies entspricht etwa 180 € bis 300 € pro Gast, wobei Location und Catering den Löwenanteil ausmachen."
+        answer:
+          "In Deutschland rechnen Brautpaare im Durchschnitt mit 15.000 € bis 25.000 € für eine Hochzeit mit 80 Personen. Dies entspricht etwa 180 € bis 300 € pro Gast, wobei Location und Catering den Löwenanteil ausmachen.",
       },
       {
         question: "Was ist besser für eine Hochzeit: Buffet oder Menü?",
-        answer: "Beide Varianten haben Vorteile. Ein Menü wirkt festlicher und verhindert Warteschlangen, während ein Buffet günstiger ist und eine größere Auswahl für verschiedene Geschmäcker und Allergiker bietet. Alternativ empfiehlt sich ein 'Family-Style'-Catering am Tisch."
+        answer:
+          "Beide Varianten haben Vorteile. Ein Menü wirkt festlicher und verhindert Warteschlangen, während ein Buffet günstiger ist und eine größere Auswahl für verschiedene Geschmäcker und Allergiker bietet. Alternativ empfiehlt sich ein 'Family-Style'-Catering am Tisch.",
       },
       {
         question: "Wie viel kostet ein Hochzeits-Catering pro Person?",
-        answer: "Die Preise variieren stark nach Region und Umfang. Ein einfaches Buffet startet bei ca. 35 € pro Person, während ein hochwertiges 4-Gänge-Menü schnell 80 € bis 120 € kosten kann (oft ohne Getränke)."
+        answer:
+          "Die Preise variieren stark nach Region und Umfang. Ein einfaches Buffet startet bei ca. 35 € pro Person, während ein hochwertiges 4-Gänge-Menü schnell 80 € bis 120 € kosten kann (oft ohne Getränke).",
       },
       {
         question: "Wie finde ich passende Dienstleister für meine Hochzeit?",
-        answer: "Beginnen Sie die Suche mindestens 12 Monate im Voraus. Nutzen Sie Plattformen wie Speisely, um regionale Caterer und Eventplaner zu vergleichen, prüfen Sie Referenzen und vereinbaren Sie immer ein Probeessen."
-      }
-    ]
+        answer:
+          "Beginnen Sie die Suche mindestens 12 Monate im Voraus. Nutzen Sie Plattformen wie Speisely, um regionale Caterer und Eventplaner zu vergleichen, prüfen Sie Referenzen und vereinbaren Sie immer ein Probeessen.",
+      },
+    ],
   },
   {
     id: "11",
@@ -637,13 +645,13 @@ export const blogPosts: BlogPost[] = [
       de: [
         "Buffets bieten die größte Vielfalt und sind ideal für budgetbewusste Großveranstaltungen.",
         "Flying Dinners eignen sich perfekt für Stehempfänge und Networking-Events.",
-        "Plated Dinners (gesetzte Menüs) schaffen eine sehr formelle, elegante Atmosphäre."
+        "Plated Dinners (gesetzte Menüs) schaffen eine sehr formelle, elegante Atmosphäre.",
       ],
       en: [
         "Buffets offer the greatest variety and are ideal for budget-conscious large events.",
         "Flying dinners are perfect for standing receptions and networking events.",
-        "Plated dinners create a very formal, elegant atmosphere."
-      ]
+        "Plated dinners create a very formal, elegant atmosphere.",
+      ],
     },
     content: {
       de: `
@@ -672,26 +680,30 @@ export const blogPosts: BlogPost[] = [
         <p>The type of catering shapes the atmosphere of your entire event. The right decision depends on the number of guests, the location, the budget, and the desired mood.</p>
         <h3>Popular Styles</h3>
         <p>Buffet is best for large parties. Flying Dinner is ideal for networking. Plated dinner suits formal galas, and food trucks bring a relaxed festival vibe.</p>
-      `
+      `,
     },
     faq: [
       {
         question: "Welches Catering eignet sich am besten für Stehempfänge?",
-        answer: "Für Stehempfänge ist ein sogenanntes 'Flying Dinner' oder Fingerfood ideal. Hierbei serviert das Personal kleine, mundgerechte Portionen direkt zu den Gästen. Es werden weder Tische noch Besteck benötigt, was das Networking erleichtert."
+        answer:
+          "Für Stehempfänge ist ein sogenanntes 'Flying Dinner' oder Fingerfood ideal. Hierbei serviert das Personal kleine, mundgerechte Portionen direkt zu den Gästen. Es werden weder Tische noch Besteck benötigt, was das Networking erleichtert.",
       },
       {
         question: "Was ist der Vorteil von Foodtruck-Catering?",
-        answer: "Foodtrucks sorgen für eine lockere, ungezwungene Atmosphäre und eignen sich hervorragend für Outdoor-Events, Sommerfeste oder Festival-Hochzeiten. Zudem benötigen sie oft keine externe Küche, da die Speisen direkt im Wagen frisch zubereitet werden."
+        answer:
+          "Foodtrucks sorgen für eine lockere, ungezwungene Atmosphäre und eignen sich hervorragend für Outdoor-Events, Sommerfeste oder Festival-Hochzeiten. Zudem benötigen sie oft keine externe Küche, da die Speisen direkt im Wagen frisch zubereitet werden.",
       },
       {
         question: "Welche Catering-Art ist am günstigsten?",
-        answer: "Das Drop-Off-Catering (Lieferung von fertigen Platten ohne Servicepersonal vor Ort) ist am günstigsten. Wenn warmes Essen gewünscht ist, ist ein klassisches Buffet in der Regel preiswerter als ein gesetztes Menü, da weniger Servicekräfte benötigt werden."
+        answer:
+          "Das Drop-Off-Catering (Lieferung von fertigen Platten ohne Servicepersonal vor Ort) ist am günstigsten. Wenn warmes Essen gewünscht ist, ist ein klassisches Buffet in der Regel preiswerter als ein gesetztes Menü, da weniger Servicekräfte benötigt werden.",
       },
       {
         question: "Worauf muss ich bei der Catering-Planung achten?",
-        answer: "Achten Sie auf die räumlichen Gegebenheiten der Location (Strom, Platz für ein Buffet, Zugang zur Küche). Zudem ist es essenziell, vorab Allergien und Ernährungspräferenzen (z.B. vegetarisch/vegan) Ihrer Gäste abzufragen."
-      }
-    ]
+        answer:
+          "Achten Sie auf die räumlichen Gegebenheiten der Location (Strom, Platz für ein Buffet, Zugang zur Küche). Zudem ist es essenziell, vorab Allergien und Ernährungspräferenzen (z.B. vegetarisch/vegan) Ihrer Gäste abzufragen.",
+      },
+    ],
   },
   {
     id: "7",
@@ -831,9 +843,21 @@ export const blogPosts: BlogPost[] = [
       `,
     },
     faq: [
-      { question: "In welchen deutschen Städten ist Speisely aktiv?", answer: "Speisely ist deutschlandweit aktiv — von Metropolen wie Berlin, München, Hamburg, Köln und Frankfurt bis zu mittelgroßen Städten wie Dortmund, Paderborn, Mönchengladbach, Halle (Saale), Erfurt, Rostock und vielen mehr." },
-      { question: "Wie finde ich einen Catering-Anbieter in meiner Stadt?", answer: "Stellen Sie einfach eine kostenlose Catering-Anfrage auf Speisely. Verifizierte Caterer aus Ihrer Region senden Ihnen innerhalb von 24 Stunden individuelle Angebote." },
-      { question: "Ist Speisely auch in kleinen Städten verfügbar?", answer: "Ja. Speisely ist nicht nur in Großstädten, sondern auch in kleineren Städten wie Paderborn, Mönchengladbach, Halle (Saale), Cottbus, Dessau, Jena, Greifswald und vielen weiteren Orten aktiv." },
+      {
+        question: "In welchen deutschen Städten ist Speisely aktiv?",
+        answer:
+          "Speisely ist deutschlandweit aktiv — von Metropolen wie Berlin, München, Hamburg, Köln und Frankfurt bis zu mittelgroßen Städten wie Dortmund, Paderborn, Mönchengladbach, Halle (Saale), Erfurt, Rostock und vielen mehr.",
+      },
+      {
+        question: "Wie finde ich einen Catering-Anbieter in meiner Stadt?",
+        answer:
+          "Stellen Sie einfach eine kostenlose Catering-Anfrage auf Speisely. Verifizierte Caterer aus Ihrer Region senden Ihnen innerhalb von 24 Stunden individuelle Angebote.",
+      },
+      {
+        question: "Ist Speisely auch in kleinen Städten verfügbar?",
+        answer:
+          "Ja. Speisely ist nicht nur in Großstädten, sondern auch in kleineren Städten wie Paderborn, Mönchengladbach, Halle (Saale), Cottbus, Dessau, Jena, Greifswald und vielen weiteren Orten aktiv.",
+      },
     ],
   },
   {
@@ -907,10 +931,26 @@ export const blogPosts: BlogPost[] = [
       `,
     },
     faq: [
-      { question: "Was kostet Catering für eine Firmenveranstaltung?", answer: "Die Kosten variieren je nach Service-Level: Drop-Off/Lunchboxen €8–€20 pro Person, Fingerfood/Stehbuffet €20–€45, Sitzbuffet mit Service €35–€65, Gala-Dinner €60–€120+ pro Person." },
-      { question: "Wie früh sollte ich Firmen-Catering buchen?", answer: "Für Events bis 50 Personen empfehlen wir mindestens 3–4 Wochen Vorlaufzeit. Bei größeren Events (100+ Personen) sollten Sie 6–8 Wochen einplanen, besonders für beliebte Termine wie Jahresende oder Sommerfeste." },
-      { question: "Welches Catering eignet sich am besten für ein Networking-Event?", answer: "Fingerfood und Flying-Dinner-Konzepte sind ideal für Networking-Events, da Gäste sich frei bewegen und gleichzeitig essen können. Stehbuffets mit kleinen Häppchen fördern das Gespräch und erleichtern das Kennenlernen." },
-      { question: "Wie finde ich einen guten Caterer für mein Firmenevent?", answer: "Mit Speisely stellen Sie einfach eine kostenlose Anfrage mit Ihren Anforderungen (Gästezahl, Budget, Datum, Ort). Verifizierte Caterer senden Ihnen innerhalb von 24 Stunden individuelle Angebote." },
+      {
+        question: "Was kostet Catering für eine Firmenveranstaltung?",
+        answer:
+          "Die Kosten variieren je nach Service-Level: Drop-Off/Lunchboxen €8–€20 pro Person, Fingerfood/Stehbuffet €20–€45, Sitzbuffet mit Service €35–€65, Gala-Dinner €60–€120+ pro Person.",
+      },
+      {
+        question: "Wie früh sollte ich Firmen-Catering buchen?",
+        answer:
+          "Für Events bis 50 Personen empfehlen wir mindestens 3–4 Wochen Vorlaufzeit. Bei größeren Events (100+ Personen) sollten Sie 6–8 Wochen einplanen, besonders für beliebte Termine wie Jahresende oder Sommerfeste.",
+      },
+      {
+        question: "Welches Catering eignet sich am besten für ein Networking-Event?",
+        answer:
+          "Fingerfood und Flying-Dinner-Konzepte sind ideal für Networking-Events, da Gäste sich frei bewegen und gleichzeitig essen können. Stehbuffets mit kleinen Häppchen fördern das Gespräch und erleichtern das Kennenlernen.",
+      },
+      {
+        question: "Wie finde ich einen guten Caterer für mein Firmenevent?",
+        answer:
+          "Mit Speisely stellen Sie einfach eine kostenlose Anfrage mit Ihren Anforderungen (Gästezahl, Budget, Datum, Ort). Verifizierte Caterer senden Ihnen innerhalb von 24 Stunden individuelle Angebote.",
+      },
     ],
   },
   {
@@ -977,9 +1017,21 @@ export const blogPosts: BlogPost[] = [
       `,
     },
     faq: [
-      { question: "Was kostet Catering pro Person in Deutschland?", answer: "Catering-Preise in Deutschland reichen von ca. €8–€20 für Drop-Off-Catering/Lunchboxen bis hin zu €80–€150+ für ein mehrgängiges Gala-Dinner mit vollständigem Service. Ein klassisches Buffet kostet im Schnitt €25–€55 pro Person." },
-      { question: "Wie kann ich Catering-Preise vergleichen?", answer: "Auf Speisely können Sie kostenlos eine Catering-Anfrage stellen und Angebote von mehreren verifizierten Caterern erhalten und direkt vergleichen." },
-      { question: "Ist Catering in München teurer als in anderen deutschen Städten?", answer: "Ja, in Großstädten wie München, Frankfurt oder Hamburg sind Catering-Preise im Schnitt 15–30% höher als in mittelgroßen Städten wie Halle, Erfurt, Chemnitz oder Paderborn." },
+      {
+        question: "Was kostet Catering pro Person in Deutschland?",
+        answer:
+          "Catering-Preise in Deutschland reichen von ca. €8–€20 für Drop-Off-Catering/Lunchboxen bis hin zu €80–€150+ für ein mehrgängiges Gala-Dinner mit vollständigem Service. Ein klassisches Buffet kostet im Schnitt €25–€55 pro Person.",
+      },
+      {
+        question: "Wie kann ich Catering-Preise vergleichen?",
+        answer:
+          "Auf Speisely können Sie kostenlos eine Catering-Anfrage stellen und Angebote von mehreren verifizierten Caterern erhalten und direkt vergleichen.",
+      },
+      {
+        question: "Ist Catering in München teurer als in anderen deutschen Städten?",
+        answer:
+          "Ja, in Großstädten wie München, Frankfurt oder Hamburg sind Catering-Preise im Schnitt 15–30% höher als in mittelgroßen Städten wie Halle, Erfurt, Chemnitz oder Paderborn.",
+      },
     ],
   },
   {
@@ -1057,9 +1109,21 @@ export const blogPosts: BlogPost[] = [
       `,
     },
     faq: [
-      { question: "Was ist die beste Alternative zu mealprep.de für Event-Catering?", answer: "Für echtes Event-Catering ist Speisely die beste Alternative. mealprep.de bietet Meal-Prep-Aboboxen für Privatpersonen, aber keinen Catering-Marktplatz für Events. Speisely vermittelt verifizierte Caterer für Firmenevents, Hochzeiten und private Feiern in ganz Deutschland." },
-      { question: "Was ist die beste Alternative zu food.de für Catering-Anfragen?", answer: "food.de ist ein Restaurant-Lieferportal und kein Catering-Marktplatz. Für professionelles Catering mit individuellen Angeboten ist Speisely die richtige Plattform: kostenlose Anfragen, verifizierte Caterer, deutschlandweite Abdeckung." },
-      { question: "Welche Catering-Plattformen gibt es in Deutschland?", answer: "Die wichtigsten Catering-Plattformen in Deutschland sind: Speisely (Catering + Event-Planung + Instant Orders), getcater.de (Catering-Marktplatz), und allgemeine Plattformen wie Lieferando (nur Restaurant-Lieferung) oder mealprep.de (nur Meal-Prep-Abos)." },
+      {
+        question: "Was ist die beste Alternative zu mealprep.de für Event-Catering?",
+        answer:
+          "Für echtes Event-Catering ist Speisely die beste Alternative. mealprep.de bietet Meal-Prep-Aboboxen für Privatpersonen, aber keinen Catering-Marktplatz für Events. Speisely vermittelt verifizierte Caterer für Firmenevents, Hochzeiten und private Feiern in ganz Deutschland.",
+      },
+      {
+        question: "Was ist die beste Alternative zu food.de für Catering-Anfragen?",
+        answer:
+          "food.de ist ein Restaurant-Lieferportal und kein Catering-Marktplatz. Für professionelles Catering mit individuellen Angeboten ist Speisely die richtige Plattform: kostenlose Anfragen, verifizierte Caterer, deutschlandweite Abdeckung.",
+      },
+      {
+        question: "Welche Catering-Plattformen gibt es in Deutschland?",
+        answer:
+          "Die wichtigsten Catering-Plattformen in Deutschland sind: Speisely (Catering + Event-Planung + Instant Orders), getcater.de (Catering-Marktplatz), und allgemeine Plattformen wie Lieferando (nur Restaurant-Lieferung) oder mealprep.de (nur Meal-Prep-Abos).",
+      },
     ],
   },
   {
@@ -1128,9 +1192,21 @@ export const blogPosts: BlogPost[] = [
       `,
     },
     faq: [
-      { question: "Was ist die beste Plattform für Catering und Event-Planung in Deutschland?", answer: "Speisely ist die einzige deutsche Plattform, die Catering-Marktplatz und professionelle Event-Planung auf einem System vereint. Deutschlandweit aktiv in über 50 Städten." },
-      { question: "Kann ich Speisely kostenlos testen?", answer: "Ja. Catering-Anfragen und Event-Planungs-Anfragen auf Speisely sind für Kunden völlig kostenlos. Caterer und Event-Planer zahlen keine monatliche Gebühr — nur eine Erfolgsgebühr von 10% bei bestätigter Buchung." },
-      { question: "Wie unterscheidet sich Speisely von einem normalen Lieferservice?", answer: "Speisely ist kein Lieferservice. Es ist ein vollständiger Hospitality-Marktplatz: mit Sofortbestellungen für Restaurants (Flatrate, unbegrenzte Bestellungen), einem Catering-Marktplatz für Events und einem CRM für Event-Planer." },
+      {
+        question: "Was ist die beste Plattform für Catering und Event-Planung in Deutschland?",
+        answer:
+          "Speisely ist die einzige deutsche Plattform, die Catering-Marktplatz und professionelle Event-Planung auf einem System vereint. Deutschlandweit aktiv in über 50 Städten.",
+      },
+      {
+        question: "Kann ich Speisely kostenlos testen?",
+        answer:
+          "Ja. Catering-Anfragen und Event-Planungs-Anfragen auf Speisely sind für Kunden völlig kostenlos. Caterer und Event-Planer zahlen keine monatliche Gebühr — nur eine Erfolgsgebühr von 10% bei bestätigter Buchung.",
+      },
+      {
+        question: "Wie unterscheidet sich Speisely von einem normalen Lieferservice?",
+        answer:
+          "Speisely ist kein Lieferservice. Es ist ein vollständiger Hospitality-Marktplatz: mit Sofortbestellungen für Restaurants (Flatrate, unbegrenzte Bestellungen), einem Catering-Marktplatz für Events und einem CRM für Event-Planer.",
+      },
     ],
-  }
-]
+  },
+];

@@ -50,9 +50,10 @@ function DepositCheckoutPage() {
               source_detail: window.location.pathname,
               metadata: { bookingId: booking.id, vendorName: booking.vendorName },
               user_id: userData.user.id,
-              pref_language: typeof window !== 'undefined' ? localStorage.getItem("lang") || "de" : "de",
-              pref_interests: ['orders'],
-            }
+              pref_language:
+                typeof window !== "undefined" ? localStorage.getItem("lang") || "de" : "de",
+              pref_interests: ["orders"],
+            },
           });
         }
       }
@@ -61,7 +62,7 @@ function DepositCheckoutPage() {
         data: {
           bookingId: booking.id,
           origin: window.location.origin,
-        }
+        },
       });
       if (res?.url) {
         window.location.href = res.url;
@@ -81,7 +82,9 @@ function DepositCheckoutPage() {
         <div className="mx-auto max-w-md px-6 py-24 text-center space-y-6">
           <div className="text-6xl text-rose-500">⚠️</div>
           <h1 className="text-2xl font-display text-forest font-bold">Error loading booking</h1>
-          <p className="text-muted-foreground">{error || "The booking details could not be found."}</p>
+          <p className="text-muted-foreground">
+            {error || "The booking details could not be found."}
+          </p>
           <Button asChild className="rounded-full bg-forest text-white">
             <Link to="/customer">Back to Activity</Link>
           </Button>
@@ -113,17 +116,21 @@ function DepositCheckoutPage() {
                 Secure your booking with {booking.vendorName}
               </h1>
               <p className="text-sm text-muted-foreground">
-                To confirm this event, a 10% platform deposit is required. The remaining 90% will be settled directly with the vendor off-platform.
+                To confirm this event, a 10% platform deposit is required. The remaining 90% will be
+                settled directly with the vendor off-platform.
               </p>
             </div>
 
             {/* Event Details Card */}
             <div className="bg-[#eadfce]/20 border border-[#eadfce]/40 rounded-2xl p-6 grid gap-6 md:grid-cols-2">
               <div className="space-y-4">
-                <h3 className="font-semibold text-forest text-sm uppercase tracking-wider">Event Details</h3>
+                <h3 className="font-semibold text-forest text-sm uppercase tracking-wider">
+                  Event Details
+                </h3>
                 <div className="space-y-2.5 text-sm text-forest/80">
                   <p className="flex items-center gap-2">
-                    <span className="font-medium text-forest">Type:</span> {booking.eventType || "Event"}
+                    <span className="font-medium text-forest">Type:</span>{" "}
+                    {booking.eventType || "Event"}
                   </p>
                   {booking.eventDate && (
                     <p className="flex items-center gap-2">
@@ -152,7 +159,9 @@ function DepositCheckoutPage() {
               </div>
 
               <div className="space-y-4 border-t md:border-t-0 md:border-l border-[#eadfce]/40 pt-4 md:pt-0 md:pl-6">
-                <h3 className="font-semibold text-forest text-sm uppercase tracking-wider">Financial Summary</h3>
+                <h3 className="font-semibold text-forest text-sm uppercase tracking-wider">
+                  Financial Summary
+                </h3>
                 <div className="space-y-2 text-sm text-forest/80">
                   <div className="flex justify-between">
                     <span>Quoted Amount:</span>
@@ -163,7 +172,9 @@ function DepositCheckoutPage() {
                     <span>€{booking.depositAmount.toFixed(2)}</span>
                   </div>
                   <p className="text-[10px] text-muted-foreground italic mt-2">
-                    * The remaining €{(booking.quotedAmount - booking.depositAmount).toFixed(2)} (90%) will be invoiced directly to you by {booking.vendorName} prior to the event.
+                    * The remaining €{(booking.quotedAmount - booking.depositAmount).toFixed(2)}{" "}
+                    (90%) will be invoiced directly to you by {booking.vendorName} prior to the
+                    event.
                   </p>
                 </div>
               </div>
@@ -175,9 +186,14 @@ function DepositCheckoutPage() {
                 <ShieldCheck className="h-12 w-12 text-forest" />
                 <h3 className="text-lg font-bold">Deposit Paid & Booking Confirmed!</h3>
                 <p className="text-sm max-w-md">
-                  Thank you! Your 10% platform deposit of €{booking.depositAmount.toFixed(2)} has been successfully captured. {booking.vendorName} has been notified and your event is officially scheduled.
+                  Thank you! Your 10% platform deposit of €{booking.depositAmount.toFixed(2)} has
+                  been successfully captured. {booking.vendorName} has been notified and your event
+                  is officially scheduled.
                 </p>
-                <Button asChild className="mt-2 bg-forest hover:bg-forest/90 text-white rounded-full">
+                <Button
+                  asChild
+                  className="mt-2 bg-forest hover:bg-forest/90 text-white rounded-full"
+                >
                   <Link to="/customer">Go to Activity Dashboard</Link>
                 </Button>
               </div>
@@ -193,7 +209,8 @@ function DepositCheckoutPage() {
                       className="mt-1 h-4 w-4 rounded border-[#eadfce] text-forest focus:ring-forest"
                     />
                     <span className="text-sm text-forest/80">
-                      I agree to the deposit payment terms and platform service agreement.<span className="text-red-500 ml-1">*</span>
+                      I agree to the deposit payment terms and platform service agreement.
+                      <span className="text-red-500 ml-1">*</span>
                     </span>
                   </label>
                   <label className="flex items-start gap-3 cursor-pointer">
@@ -204,7 +221,8 @@ function DepositCheckoutPage() {
                       className="mt-1 h-4 w-4 rounded border-[#eadfce] text-forest focus:ring-forest"
                     />
                     <span className="text-sm text-forest/80">
-                      Yes, I want to receive product updates, offers, and promotional emails from Speisely. I can unsubscribe at any time.
+                      Yes, I want to receive product updates, offers, and promotional emails from
+                      Speisely. I can unsubscribe at any time.
                     </span>
                   </label>
                 </div>

@@ -284,15 +284,9 @@
     "budget_per_person": null,
     "planning_stage": null,
     "special_requests": null,
-    "cuisine_preferences": [
-      "Turkish"
-    ],
-    "dietary_requirements": [
-      "Halal"
-    ],
-    "extra_services": [
-      "Staff"
-    ],
+    "cuisine_preferences": ["Turkish"],
+    "dietary_requirements": ["Halal"],
+    "extra_services": ["Staff"],
     "status": "draft",
     "created_at": "2026-04-11T23:33:24.67786+00:00",
     "updated_at": "2026-04-11T23:33:58.17207+00:00",
@@ -320,19 +314,9 @@
     "budget_per_person": null,
     "planning_stage": null,
     "special_requests": null,
-    "cuisine_preferences": [
-      "Italian",
-      "Arabic"
-    ],
-    "dietary_requirements": [
-      "Halal",
-      "Vegetarian",
-      "Gluten-free"
-    ],
-    "extra_services": [
-      "Drinks",
-      "Staff"
-    ],
+    "cuisine_preferences": ["Italian", "Arabic"],
+    "dietary_requirements": ["Halal", "Vegetarian", "Gluten-free"],
+    "extra_services": ["Drinks", "Staff"],
     "status": "draft",
     "created_at": "2026-04-11T23:36:53.879606+00:00",
     "updated_at": "2026-04-11T23:37:18.421346+00:00",
@@ -360,15 +344,9 @@
     "budget_per_person": null,
     "planning_stage": null,
     "special_requests": null,
-    "cuisine_preferences": [
-      "Arabic"
-    ],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
-    "extra_services": [
-      "Setup & Cleanup"
-    ],
+    "cuisine_preferences": ["Arabic"],
+    "dietary_requirements": ["Vegetarian"],
+    "extra_services": ["Setup & Cleanup"],
     "status": "draft",
     "created_at": "2026-04-11T23:41:01.969907+00:00",
     "updated_at": "2026-04-11T23:41:40.043362+00:00",
@@ -817,9 +795,7 @@
     "planning_stage": null,
     "special_requests": "Business lunch for 45 people in Berlin, modern buffet, vegetarian options, about €30 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-28T14:53:14.46435+00:00",
@@ -849,9 +825,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste, vegetarisch, elegantes Buffet, ca. €45 pro Person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-28T00:48:16.508206+00:00",
@@ -881,9 +855,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste, vegetarisch, elegantes Buffet, ca. €45 pro Person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-27T22:18:14.024741+00:00",
@@ -913,9 +885,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste, vegetarisch, elegantes Buffet, ca. €45 pro Person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-28T09:48:48.869904+00:00",
@@ -945,9 +915,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste, vegetarisch, elegantes Buffet, ca. €45 pro Person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-28T09:49:51.430948+00:00",
@@ -977,9 +945,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-28T14:34:46.904494+00:00",
@@ -1009,9 +975,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-28T14:51:38.641662+00:00",
@@ -1041,9 +1005,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-28T15:45:07.632621+00:00",
@@ -1103,9 +1065,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T08:21:47.073042+00:00",
@@ -1164,9 +1124,7 @@
     "budget_per_person": 45,
     "planning_stage": null,
     "special_requests": "Birthday party for 65 guests in Dresden, fine dining, €45 per person",
-    "cuisine_preferences": [
-      "Fine Dining"
-    ],
+    "cuisine_preferences": ["Fine Dining"],
     "dietary_requirements": [],
     "extra_services": [],
     "status": "draft",
@@ -1197,9 +1155,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T09:16:23.399695+00:00",
@@ -1229,9 +1185,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 75 Gäste in Berlin, vegetarisch, elegantes Buffet, €45 p.P.",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T11:10:22.526787+00:00",
@@ -1261,9 +1215,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T11:11:49.165214+00:00",
@@ -1293,9 +1245,7 @@
     "planning_stage": null,
     "special_requests": "Business lunch for 45 people in Berlin, modern buffet, vegetarian options, about €30 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T11:12:33.209633+00:00",
@@ -1325,9 +1275,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T11:13:11.173268+00:00",
@@ -1357,9 +1305,7 @@
     "planning_stage": null,
     "special_requests": "Wedding for 80 guests in Berlin, vegetarian, elegant buffet, about €45 per person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T11:34:44.182534+00:00",
@@ -1389,9 +1335,7 @@
     "planning_stage": null,
     "special_requests": "Business Lunch für 45 Personen in Berlin, modernes Buffet, vegetarische Optionen, ca. €30 pro Person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-04-29T11:48:42.80519+00:00",
@@ -1421,9 +1365,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste in Berlin, vegetarisch, elegantes Buffet, €45 p.P.",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-05-01T12:17:21.360539+00:00",
@@ -1453,9 +1395,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste in Berlin, vegetarisch, elegantes Buffet, €45 p.P.",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-05-01T12:17:37.061231+00:00",
@@ -1575,9 +1515,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste in Berlin, vegetarisch, elegantes Buffet, €45 p.P.",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-05-03T15:03:14.00156+00:00",
@@ -1607,9 +1545,7 @@
     "planning_stage": null,
     "special_requests": "Hochzeit für 80 Gäste in Berlin, vegetarisch, elegantes Buffet, ca. €45 pro Person",
     "cuisine_preferences": [],
-    "dietary_requirements": [
-      "Vegetarian"
-    ],
+    "dietary_requirements": ["Vegetarian"],
     "extra_services": [],
     "status": "draft",
     "created_at": "2026-05-03T15:03:58.388307+00:00",

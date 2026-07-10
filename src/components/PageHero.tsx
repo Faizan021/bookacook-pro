@@ -84,8 +84,8 @@ export function PageHero({
           {/* CTAs */}
           {(primaryCta || secondaryCta) && (
             <div className="mt-8 flex flex-wrap gap-4">
-              {primaryCta && (
-                primaryCta.href ? (
+              {primaryCta &&
+                (primaryCta.href ? (
                   <Link
                     to={primaryCta.href as any}
                     className="inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-7 py-3.5 text-sm font-bold shadow-xl shadow-[#b28a3c]/20 transition-all hover:bg-[#9a7633] hover:scale-105"
@@ -99,10 +99,9 @@ export function PageHero({
                   >
                     {primaryCta.label} <ArrowRight className="h-4 w-4" />
                   </button>
-                )
-              )}
-              {secondaryCta && (
-                secondaryCta.href ? (
+                ))}
+              {secondaryCta &&
+                (secondaryCta.href ? (
                   <Link
                     to={secondaryCta.href as any}
                     className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm text-white px-7 py-3.5 text-sm font-semibold transition-all hover:bg-white/20"
@@ -116,8 +115,7 @@ export function PageHero({
                   >
                     {secondaryCta.label}
                   </button>
-                )
-              )}
+                ))}
             </div>
           )}
         </div>

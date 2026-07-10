@@ -10,10 +10,10 @@ import { toast } from "sonner";
 export function CommunicationPreferences() {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
-  
+
   const fetchConsent = useServerFn(getMyConsent);
   const saveConsent = useServerFn(updateMyConsent);
-  
+
   const [optIn, setOptIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -39,8 +39,8 @@ export function CommunicationPreferences() {
       toast.success(
         tt(
           "Kommunikationseinstellungen erfolgreich aktualisiert!",
-          "Communication preferences updated successfully!"
-        )
+          "Communication preferences updated successfully!",
+        ),
       );
     } catch (e: any) {
       toast.error(e.message || "Failed to update preferences");
@@ -68,7 +68,7 @@ export function CommunicationPreferences() {
         <p className="text-xs text-muted-foreground">
           {tt(
             "Verwalten Sie, wie wir Sie kontaktieren und welche E-Mails Sie erhalten.",
-            "Manage how we contact you and the emails you receive from us."
+            "Manage how we contact you and the emails you receive from us.",
           )}
         </p>
       </div>
@@ -82,16 +82,19 @@ export function CommunicationPreferences() {
             className="mt-1 border-forest/20 text-forest data-[state=checked]:bg-forest data-[state=checked]:border-forest"
           />
           <div className="grid gap-1.5 leading-none">
-            <Label htmlFor="marketing-opt" className="text-sm font-medium text-forest cursor-pointer">
+            <Label
+              htmlFor="marketing-opt"
+              className="text-sm font-medium text-forest cursor-pointer"
+            >
               {tt(
                 "Ja, ich möchte Updates, Branchen-Tipps und Angebote von Speisely erhalten",
-                "Yes, I want to receive updates, industry tips, and promotions from Speisely"
+                "Yes, I want to receive updates, industry tips, and promotions from Speisely",
               )}
             </Label>
             <p className="text-xs text-muted-foreground">
               {tt(
                 "Sie können diese Einwilligung jederzeit widerrufen, indem Sie dieses Häkchen entfernen.",
-                "You can withdraw your consent at any time by unchecking this box."
+                "You can withdraw your consent at any time by unchecking this box.",
               )}
             </p>
           </div>

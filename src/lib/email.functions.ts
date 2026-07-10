@@ -8,18 +8,16 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 const APP_URL =
-  process.env.VITE_APP_URL ||
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  "http://localhost:5173";
+  process.env.VITE_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:5173";
 
 export const sendDoubleOptInEmail = createServerFn({ method: "POST" })
   .validator((input: { email: string; token: string }) =>
-    z.object({ email: z.string().email(), token: z.string().min(1) }).parse(input)
+    z.object({ email: z.string().email(), token: z.string().min(1) }).parse(input),
   )
   .handler(async ({ data }) => {
     // Build verification URL — never log this value, it contains a one-time token
     const verificationUrl = `${APP_URL}/verify-email?email=${encodeURIComponent(
-      data.email
+      data.email,
     )}&token=${encodeURIComponent(data.token)}`;
 
     const subject = "Bitte bestätige deine E-Mail für Speisely-Updates 🍽️";
@@ -63,14 +61,16 @@ Dein Speisely Team
         console.log(`[Email] Double opt-in email dispatched to ${data.email}`);
       } catch (err: any) {
         // Log the error category, not the full object which may contain request headers
-        console.error(`[Email Error] Failed to dispatch double opt-in email: ${err?.code ?? err?.message ?? "unknown"}`);
+        console.error(
+          `[Email Error] Failed to dispatch double opt-in email: ${err?.code ?? err?.message ?? "unknown"}`,
+        );
       }
     } else {
       // SEC-4: In dev/test with no Resend key, log intent only — NOT the URL or token.
       // Use `stripe listen` / Supabase email dev mode for local token testing.
       console.log(
         `[Email Dev] RESEND_API_KEY not set. Double opt-in email NOT sent to ${data.email}. ` +
-        `Check the database user_consents.double_opt_in_token to retrieve the token for local testing.`
+          `Check the database user_consents.double_opt_in_token to retrieve the token for local testing.`,
       );
     }
 
@@ -78,15 +78,25 @@ Dein Speisely Team
   });
 
 export const sendContactEmail = createServerFn({ method: "POST" })
-  .validator((input: { name: string; email: string; message: string; reason: string; company?: string; phone?: string }) =>
-    z.object({
-      name: z.string().min(1, "Name is required"),
-      email: z.string().email("Valid email is required"),
-      reason: z.string().min(1, "Contact reason is required"),
-      company: z.string().optional(),
-      phone: z.string().optional(),
-      message: z.string().min(10, "Message must be at least 10 characters")
-    }).parse(input)
+  .validator(
+    (input: {
+      name: string;
+      email: string;
+      message: string;
+      reason: string;
+      company?: string;
+      phone?: string;
+    }) =>
+      z
+        .object({
+          name: z.string().min(1, "Name is required"),
+          email: z.string().email("Valid email is required"),
+          reason: z.string().min(1, "Contact reason is required"),
+          company: z.string().optional(),
+          phone: z.string().optional(),
+          message: z.string().min(10, "Message must be at least 10 characters"),
+        })
+        .parse(input),
   )
   .handler(async ({ data }) => {
     const subject = `[${data.reason}] Contact Form Submission from ${data.name}`;
@@ -133,11 +143,15 @@ ${data.message}
         }
         console.log(`[Email] Contact form submitted by ${data.email}`);
       } catch (err: any) {
-        console.error(`[Email Error] Failed to send contact email: ${err?.code ?? err?.message ?? "unknown"}`);
+        console.error(
+          `[Email Error] Failed to send contact email: ${err?.code ?? err?.message ?? "unknown"}`,
+        );
         throw new Error("Failed to send message. Please try again later.");
       }
     } else {
-      console.log(`[Email Dev] Contact form email NOT sent (no Resend key) from ${data.email}. Message: ${data.message}`);
+      console.log(
+        `[Email Dev] Contact form email NOT sent (no Resend key) from ${data.email}. Message: ${data.message}`,
+      );
     }
 
     return { success: true };
@@ -145,12 +159,14 @@ ${data.message}
 
 export const sendPartnerNotificationEmail = createServerFn({ method: "POST" })
   .validator((input: { to: string; subject: string; text: string; html: string }) =>
-    z.object({
-      to: z.string().email(),
-      subject: z.string().min(1),
-      text: z.string().min(1),
-      html: z.string().min(1)
-    }).parse(input)
+    z
+      .object({
+        to: z.string().email(),
+        subject: z.string().min(1),
+        text: z.string().min(1),
+        html: z.string().min(1),
+      })
+      .parse(input),
   )
   .handler(async ({ data }) => {
     if (resend) {
@@ -168,10 +184,14 @@ export const sendPartnerNotificationEmail = createServerFn({ method: "POST" })
         }
         console.log(`[Email] Partner notification sent to ${data.to}`);
       } catch (err: any) {
-        console.error(`[Email Error] Failed to send partner notification: ${err?.code ?? err?.message ?? "unknown"}`);
+        console.error(
+          `[Email Error] Failed to send partner notification: ${err?.code ?? err?.message ?? "unknown"}`,
+        );
       }
     } else {
-      console.log(`[Email Dev] Partner notification NOT sent (no Resend key) to ${data.to}. Subject: ${data.subject}`);
+      console.log(
+        `[Email Dev] Partner notification NOT sent (no Resend key) to ${data.to}. Subject: ${data.subject}`,
+      );
     }
     return { success: true };
   });

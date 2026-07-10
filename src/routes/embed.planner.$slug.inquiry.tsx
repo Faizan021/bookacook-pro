@@ -24,11 +24,15 @@ export const getPublicPlannerProfile = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: planner, error: pErr } = await supabaseAdmin
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.slug);
+    const query = supabaseAdmin
       .from("planners")
-      .select("id, name, slug")
-      .eq("slug", data.slug)
-      .maybeSingle();
+      .select("id, name, slug");
+
+    const { data: planner, error: pErr } = await (isUuid
+      ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`)
+      : query.eq("slug", data.slug)
+    ).maybeSingle();
 
     if (pErr || !planner) return null;
     return planner;
@@ -75,6 +79,24 @@ export const submitPublicPlannerBrief = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { userId } = context as { userId: string };
+
+    // Verify Planner is approved and available for bookings
+    const { data: plannerData, error: planError } = await supabaseAdmin
+      .from("planners")
+      .select("id, approval_status, available_for_bookings")
+      .eq("id", data.plannerId)
+      .maybeSingle();
+
+    if (planError || !plannerData) {
+      throw new Error("Event Planner profile not found");
+    }
+
+    if (plannerData.approval_status !== "approved") {
+      throw new Error("This event planner storefront is currently under review or inactive.");
+    }
+    if (plannerData.available_for_bookings === false) {
+      throw new Error("This event planner is currently not accepting new bookings.");
+    }
 
     const { error } = await supabaseAdmin.from("catering_briefs").insert({
       customer_id: userId,
@@ -125,8 +147,8 @@ export const submitPublicPlannerBrief = createServerFn({ method: "POST" })
                      <li><strong>Ort:</strong> ${data.location}</li>
                      <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
                    </ul>
-                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`
-          }
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+          },
         });
       }
     }

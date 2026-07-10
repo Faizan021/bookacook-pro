@@ -3,10 +3,23 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { getRestaurantOrders, updateRestaurantOrderStatus, type OrderStatus } from "@/lib/restaurant/queries.functions";
+import {
+  getRestaurantOrders,
+  updateRestaurantOrderStatus,
+  type OrderStatus,
+} from "@/lib/restaurant/queries.functions";
 import { printReceipt } from "@/utils/printReceipt";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Printer, Clock, ArrowLeft, RotateCw, Play, CheckCircle2, ChevronRight, MessageSquareCode } from "lucide-react";
+import {
+  Printer,
+  Clock,
+  ArrowLeft,
+  RotateCw,
+  Play,
+  CheckCircle2,
+  ChevronRight,
+  MessageSquareCode,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/restaurant/kitchen")({
   ssr: false,
@@ -54,7 +67,7 @@ function KitchenDisplayPage() {
         () => {
           playAudio();
           ordersQ.refetch();
-        }
+        },
       )
       .subscribe();
 
@@ -83,7 +96,9 @@ function KitchenDisplayPage() {
     return (
       <div className="min-h-screen bg-[#090a0f] text-white flex items-center justify-center flex-col gap-3 font-sans">
         <div className="w-10 h-10 border-4 border-[#22C55E] border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-muted-foreground">{t("Loading kitchen screen...", "Lade KDS-Bildschirm...")}</p>
+        <p className="text-muted-foreground">
+          {t("Loading kitchen screen...", "Lade KDS-Bildschirm...")}
+        </p>
       </div>
     );
   }
@@ -92,11 +107,20 @@ function KitchenDisplayPage() {
   if (!data?.restaurant) {
     return (
       <div className="min-h-screen bg-[#090a0f] text-white flex items-center justify-center flex-col p-6 font-sans">
-        <h2 className="text-xl font-bold text-rose-500">{t("Storefront Not Found", "Storefront nicht gefunden")}</h2>
+        <h2 className="text-xl font-bold text-rose-500">
+          {t("Storefront Not Found", "Storefront nicht gefunden")}
+        </h2>
         <p className="text-muted-foreground mt-2 text-center max-w-sm">
-          {t("Please configure your restaurant profile in the dashboard first.", "Bitte erstelle zuerst ein Restaurant-Profil im Dashboard.")}
+          {t(
+            "Please configure your restaurant profile in the dashboard first.",
+            "Bitte erstelle zuerst ein Restaurant-Profil im Dashboard.",
+          )}
         </p>
-        <Link to="/restaurant" search={{ tab: undefined }} className="mt-6 inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full px-5 py-2 text-sm font-medium">
+        <Link
+          to="/restaurant"
+          search={{ tab: undefined }}
+          className="mt-6 inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-full px-5 py-2 text-sm font-medium"
+        >
           {t("Back to Dashboard", "Zurück zum Dashboard")}
         </Link>
       </div>
@@ -104,19 +128,23 @@ function KitchenDisplayPage() {
   }
 
   // Filter out delivered and cancelled orders for KDS
-  const activeOrders = data.orders.filter((o: any) => o.status !== "delivered" && o.status !== "cancelled");
+  const activeOrders = data.orders.filter(
+    (o: any) => o.status !== "delivered" && o.status !== "cancelled",
+  );
 
   // Columns classification
   const newOrders = activeOrders.filter((o: any) => {
     // If stripe/paypal, only show if confirmed or beyond
-    if (o.payment_method === 'stripe' || o.payment_method === 'paypal') {
+    if (o.payment_method === "stripe" || o.payment_method === "paypal") {
       return o.status === "confirmed";
     }
     // If cash or legacy without payment_method, show pending and confirmed
     return o.status === "pending" || o.status === "confirmed";
   });
   const cookingOrders = activeOrders.filter((o: any) => o.status === "preparing");
-  const readyOrders = activeOrders.filter((o: any) => o.status === "ready" || o.status === "picked_up");
+  const readyOrders = activeOrders.filter(
+    (o: any) => o.status === "ready" || o.status === "picked_up",
+  );
 
   return (
     <div className="min-h-screen bg-[#0c0d12] text-white flex flex-col font-sans select-none overflow-hidden">
@@ -145,7 +173,9 @@ function KitchenDisplayPage() {
 
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <span className="text-2xl font-black font-mono text-[#22C55E]">{activeOrders.length}</span>
+            <span className="text-2xl font-black font-mono text-[#22C55E]">
+              {activeOrders.length}
+            </span>
             <span className="text-xs text-muted-foreground ml-1.5 uppercase font-medium">
               {t("Active Orders", "Aktive Bestellungen")}
             </span>
@@ -193,7 +223,9 @@ function KitchenDisplayPage() {
                 </button>
               </OrderCard>
             ))}
-            {newOrders.length === 0 && <EmptyColumnMessage text={t("No new orders", "Keine neuen Bestellungen")} />}
+            {newOrders.length === 0 && (
+              <EmptyColumnMessage text={t("No new orders", "Keine neuen Bestellungen")} />
+            )}
           </div>
         </section>
 
@@ -227,7 +259,9 @@ function KitchenDisplayPage() {
                 </button>
               </OrderCard>
             ))}
-            {cookingOrders.length === 0 && <EmptyColumnMessage text={t("No active cooking tasks", "Keine aktiven Aufgaben")} />}
+            {cookingOrders.length === 0 && (
+              <EmptyColumnMessage text={t("No active cooking tasks", "Keine aktiven Aufgaben")} />
+            )}
           </div>
         </section>
 
@@ -261,7 +295,9 @@ function KitchenDisplayPage() {
                 </button>
               </OrderCard>
             ))}
-            {readyOrders.length === 0 && <EmptyColumnMessage text={t("No completed items here", "Keine fertigen Gerichte")} />}
+            {readyOrders.length === 0 && (
+              <EmptyColumnMessage text={t("No completed items here", "Keine fertigen Gerichte")} />
+            )}
           </div>
         </section>
       </main>
@@ -319,7 +355,9 @@ function OrderCard({
         <ul className="space-y-1 text-sm font-mono text-white/90">
           {items.map((it: any, i: number) => (
             <li key={i} className="flex justify-between">
-              <span>{it.qty ?? 1}x {it.name}</span>
+              <span>
+                {it.qty ?? 1}x {it.name}
+              </span>
             </li>
           ))}
         </ul>

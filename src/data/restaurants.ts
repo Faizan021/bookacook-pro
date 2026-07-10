@@ -1,4 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
+import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
+import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
 
 export type Dietary = "vegetarian" | "vegan" | "gluten-free";
 
@@ -21,6 +23,8 @@ export type Restaurant = {
   time: string;
   fee: string;
   img: string;
+  logo?: string;
+  use_generated_branding?: boolean;
   status: "Open" | "Closed";
   area: string;
   address: string;
@@ -60,8 +64,11 @@ export const fallbackRestaurants: Restaurant[] = [
     menu: [
       {
         name: "Tuscan Kale & Pecorino",
-        desc: { de: "Bio-Grünkohl, Pecorino, Pinienkerne", en: "Organic kale, pecorino, pine nuts" },
-        price: 14.50,
+        desc: {
+          de: "Bio-Grünkohl, Pecorino, Pinienkerne",
+          en: "Organic kale, pecorino, pine nuts",
+        },
+        price: 14.5,
         img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=400&fit=crop",
         category: "Bowls",
         dietary: ["vegetarian", "gluten-free"],
@@ -69,15 +76,18 @@ export const fallbackRestaurants: Restaurant[] = [
       {
         name: "Mediterranean Quinoa",
         desc: { de: "Quinoa, Gurke, Tomate, Tahini", en: "Quinoa, cucumber, tomato, tahini" },
-        price: 15.50,
+        price: 15.5,
         img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop",
         category: "Bowls",
         dietary: ["vegan", "gluten-free"],
       },
       {
         name: "Fig & Prosciutto",
-        desc: { de: "Feigen, Prosciutto, Rucola, Balsamico", en: "Figs, prosciutto, arugula, balsamic" },
-        price: 17.00,
+        desc: {
+          de: "Feigen, Prosciutto, Rucola, Balsamico",
+          en: "Figs, prosciutto, arugula, balsamic",
+        },
+        price: 17.0,
         img: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=400&fit=crop",
         category: "Salads",
         dietary: ["gluten-free"],
@@ -85,7 +95,7 @@ export const fallbackRestaurants: Restaurant[] = [
       {
         name: "Roasted Beet & Goat Cheese",
         desc: { de: "Rote Bete, Ziegenkäse, Walnüsse", en: "Roasted beets, goat cheese, walnuts" },
-        price: 13.50,
+        price: 13.5,
         img: "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?w=400&h=400&fit=crop",
         category: "Salads",
         dietary: ["vegetarian", "gluten-free"],
@@ -93,7 +103,7 @@ export const fallbackRestaurants: Restaurant[] = [
       {
         name: "Cold Pressed Green Juice",
         desc: { de: "Sellerie, Apfel, Ingwer, Zitrone", en: "Celery, apple, ginger, lemon" },
-        price: 6.50,
+        price: 6.5,
         img: "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=400&h=400&fit=crop",
         category: "Drinks",
         dietary: ["vegan", "gluten-free"],
@@ -121,8 +131,11 @@ export const fallbackRestaurants: Restaurant[] = [
     menu: [
       {
         name: "Cacio e Pepe",
-        desc: { de: "Tonnarelli, Pecorino Romano, schwarzer Pfeffer", en: "Tonnarelli, Pecorino Romano, black pepper" },
-        price: 13.90,
+        desc: {
+          de: "Tonnarelli, Pecorino Romano, schwarzer Pfeffer",
+          en: "Tonnarelli, Pecorino Romano, black pepper",
+        },
+        price: 13.9,
         img: "https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=400&h=400&fit=crop",
         category: "Pasta",
         dietary: ["vegetarian"],
@@ -130,21 +143,21 @@ export const fallbackRestaurants: Restaurant[] = [
       {
         name: "Tagliatelle al Ragù",
         desc: { de: "Bolognese-Ragù, Parmigiano", en: "Bolognese ragù, Parmigiano" },
-        price: 15.90,
+        price: 15.9,
         img: "https://images.unsplash.com/photo-1572441713132-c542fc4fe282?w=400&h=400&fit=crop",
         category: "Pasta",
       },
       {
         name: "Antipasti Misti",
         desc: { de: "Wurstwaren, Oliven, Focaccia", en: "Cured meats, olives, focaccia" },
-        price: 16.50,
+        price: 16.5,
         img: "https://images.unsplash.com/photo-1626202373052-9cb1490ff7e8?w=400&h=400&fit=crop",
         category: "Antipasti",
       },
       {
         name: "Burrata Pugliese",
         desc: { de: "Burrata, Kirschtomaten, Basilikum", en: "Burrata, cherry tomatoes, basil" },
-        price: 12.00,
+        price: 12.0,
         img: "https://images.unsplash.com/photo-1633437756091-3acff8d92b62?w=400&h=400&fit=crop",
         category: "Antipasti",
         dietary: ["vegetarian", "gluten-free"],
@@ -152,7 +165,7 @@ export const fallbackRestaurants: Restaurant[] = [
       {
         name: "Tiramisu Classico",
         desc: { de: "Mascarpone, Espresso, Savoiardi", en: "Mascarpone, espresso, ladyfingers" },
-        price: 7.50,
+        price: 7.5,
         img: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&h=400&fit=crop",
         category: "Dolci",
         dietary: ["vegetarian"],
@@ -181,21 +194,21 @@ export const fallbackRestaurants: Restaurant[] = [
       {
         name: "Tonkotsu Ramen",
         desc: { de: "Schweinebrühe, Chashu, weiches Ei", en: "Pork broth, chashu, soft egg" },
-        price: 15.90,
+        price: 15.9,
         img: "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?w=400&h=400&fit=crop",
         category: "Ramen",
       },
       {
         name: "Spicy Miso Ramen",
         desc: { de: "Miso-Brühe, Chili-Öl, Mais", en: "Miso broth, chili oil, corn" },
-        price: 14.90,
+        price: 14.9,
         img: "https://images.unsplash.com/photo-1623341214825-9f4f963727da?w=400&h=400&fit=crop",
         category: "Ramen",
       },
       {
         name: "Salmon Nigiri (6 St.)",
         desc: { de: "Sashimi-Lachs, Sushi-Reis", en: "Sashimi salmon, sushi rice" },
-        price: 12.50,
+        price: 12.5,
         img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&h=400&fit=crop",
         category: "Sushi",
         dietary: ["gluten-free"],
@@ -203,14 +216,14 @@ export const fallbackRestaurants: Restaurant[] = [
       {
         name: "Spicy Tuna Maki",
         desc: { de: "Gelbflossen-Thunfisch, Chili-Mayo", en: "Yellowfin tuna, chili mayo" },
-        price: 11.00,
+        price: 11.0,
         img: "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=400&h=400&fit=crop",
         category: "Sushi",
       },
       {
         name: "Edamame",
         desc: { de: "Meersalz, Sesam", en: "Sea salt, sesame" },
-        price: 5.50,
+        price: 5.5,
         img: "https://images.unsplash.com/photo-1564844536311-de546a28c87d?w=400&h=400&fit=crop",
         category: "Sides",
         dietary: ["vegan", "gluten-free"],
@@ -220,6 +233,22 @@ export const fallbackRestaurants: Restaurant[] = [
 ];
 
 function mapRestaurant(r: any): Restaurant {
+  const isGenerated = BRANDING_ASSISTANT_ENABLED && r.use_generated_branding;
+  const isBannerMissing = !r.banner_image_url;
+  const isLogoMissing = !r.logo_url;
+
+  const resolvedBanner = (isGenerated || isBannerMissing)
+    ? generateSvgBanner(r.name || r.business_name || "Restaurant", r.cuisine_type || "Speisely Partner")
+    : (r.banner_image_url.startsWith("http")
+        ? r.banner_image_url
+        : supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url).data.publicUrl);
+
+  const resolvedLogo = (isGenerated || isLogoMissing)
+    ? generateSvgLogo(r.name || r.business_name || "Restaurant", r.cuisine_type || "Speisely Partner")
+    : (r.logo_url.startsWith("http")
+        ? r.logo_url
+        : supabase.storage.from("storefront-assets").getPublicUrl(r.logo_url).data.publicUrl);
+
   return {
     id: r.id,
     slug: r.slug,
@@ -231,9 +260,9 @@ function mapRestaurant(r: any): Restaurant {
     minOrder: Number(r.min_order_amount ?? 10),
     distanceKm: 2.0,
     status: r.is_active ? "Open" : "Closed",
-    img: r.banner_image_url 
-      ? (r.banner_image_url.startsWith('http') ? r.banner_image_url : supabase.storage.from('storefront-assets').getPublicUrl(r.banner_image_url).data.publicUrl)
-      : "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200",
+    img: resolvedBanner,
+    logo: resolvedLogo,
+    use_generated_branding: r.use_generated_branding || false,
     area: r.city || "Berlin",
     address: r.business_address || "",
     phone: r.phone || "",
@@ -243,8 +272,10 @@ function mapRestaurant(r: any): Restaurant {
       name: p.name,
       desc: { de: p.description || "", en: p.description || "" },
       price: (p.price_cents || 0) / 100,
-      img: p.image_url 
-        ? (p.image_url.startsWith('http') ? p.image_url : supabase.storage.from('restaurant-products').getPublicUrl(p.image_url).data.publicUrl)
+      img: p.image_url
+        ? p.image_url.startsWith("http")
+          ? p.image_url
+          : supabase.storage.from("restaurant-products").getPublicUrl(p.image_url).data.publicUrl
         : null,
       category: p.category || "Menu",
       dietary: p.dietary_tags || [],
@@ -253,36 +284,39 @@ function mapRestaurant(r: any): Restaurant {
 }
 
 function isSubscriptionBlocked(status: string | null): boolean {
-  if (status === 'canceled' || status === 'unpaid') return true;
+  if (status === "canceled" || status === "unpaid") return true;
   return false;
 }
 
 export async function getRestaurants(): Promise<Restaurant[]> {
   const { data, error } = await supabase
     .from("restaurants")
-    .select("id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*)")
+    .select(
+      "id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*), approval_status, owner_id, business_address, use_generated_branding",
+    )
     .eq("is_active", true)
+    .eq("approval_status", "approved")
     .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching restaurants:", error);
   }
 
-  const validData = (data || []).filter(r => {
+  const validData = (data || []).filter((r) => {
     return !isSubscriptionBlocked(r.subscription_status);
   });
 
   const liveRestaurants = validData.map(mapRestaurant);
   const MIN_DISPLAY_COUNT = 6;
-  
+
   if (liveRestaurants.length >= MIN_DISPLAY_COUNT) {
     return liveRestaurants;
   }
 
   const needed = MIN_DISPLAY_COUNT - liveRestaurants.length;
-  const showcaseItems = fallbackRestaurants.slice(0, needed).map(r => ({
+  const showcaseItems = fallbackRestaurants.slice(0, needed).map((r) => ({
     ...r,
-    isShowcase: true
+    isShowcase: true,
   }));
 
   return [...liveRestaurants, ...showcaseItems];
@@ -290,15 +324,27 @@ export async function getRestaurants(): Promise<Restaurant[]> {
 
 export async function getRestaurant(slugOrId: string): Promise<Restaurant | undefined> {
   // Try by slug first (URL-based lookup), fallback to id
-  const { data, error } = await supabase
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);
+  const query = supabase
     .from("restaurants")
-    .select("id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*)")
-    .or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
-    .maybeSingle();
+    .select(
+      "id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*), approval_status, owner_id, business_address, use_generated_branding",
+    );
+
+  const { data, error } = await (isUuid
+    ? query.or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
+    : query.eq("slug", slugOrId)
+  ).maybeSingle();
 
   if (!error && data) {
     if (isSubscriptionBlocked(data.subscription_status)) {
       return undefined;
+    }
+    if (data.approval_status !== "approved") {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.id !== data.owner_id) {
+        return undefined;
+      }
     }
     return mapRestaurant(data);
   }
@@ -309,5 +355,3 @@ export async function getRestaurant(slugOrId: string): Promise<Restaurant | unde
   }
   return undefined;
 }
-
-

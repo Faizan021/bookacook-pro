@@ -24,7 +24,9 @@ export type ProcessIdentityResult = {
   isGuest: boolean;
 };
 
-export async function processUnifiedIdentity(input: ProcessIdentityInput): Promise<ProcessIdentityResult> {
+export async function processUnifiedIdentity(
+  input: ProcessIdentityInput,
+): Promise<ProcessIdentityResult> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const normalizedEmail = input.customerEmail.trim().toLowerCase();
 
@@ -49,7 +51,7 @@ export async function processUnifiedIdentity(input: ProcessIdentityInput): Promi
       // But looking at the previous file (embed.catering.$slug.brief-intake.tsx):
       // it fell back to searching profiles by email, which means there is an email column or a guest table.
       // Let's assume guest profiles are stored in `profiles` with a generated UUID for `id`?
-      // No, `id` is a foreign key to `auth.users(id)`. 
+      // No, `id` is a foreign key to `auth.users(id)`.
       // If the `email` column doesn't exist on `profiles`, wait, let's check `user_consents` instead.
       // Since `user_consents` has a `user_id`, we can just use the provided fallback ID or generate one.
       // Let's look at what embed.catering.$slug.brief-intake.tsx did:
@@ -84,7 +86,7 @@ export async function processUnifiedIdentity(input: ProcessIdentityInput): Promi
       pref_language: input.prefLanguage,
       pref_interests: input.prefInterests,
       user_id: customerId,
-    }
+    },
   });
 
   // 3. Fetch final consent state to return

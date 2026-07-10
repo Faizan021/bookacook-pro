@@ -12,7 +12,7 @@ function maskContactInfo(text: string) {
   // Mask email addresses
   let masked = text.replace(
     /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi,
-    "[EMAIL HIDDEN]"
+    "[EMAIL HIDDEN]",
   );
 
   // Mask phone numbers (7–15 digit numeric strings with optional formatting)
@@ -21,7 +21,7 @@ function maskContactInfo(text: string) {
     (match) => {
       const digitsOnly = match.replace(/\D/g, "");
       return digitsOnly.length >= 7 ? "[PHONE HIDDEN]" : match;
-    }
+    },
   );
 
   return masked;
@@ -32,11 +32,7 @@ function maskContactInfo(text: string) {
 // Returns the brief row on success, throws a safe 403-style error on failure.
 // Used by both read and write handlers to enforce the same ownership rule.
 // ---------------------------------------------------------------------------
-async function requireBriefParticipant(
-  supabase: any,
-  briefId: string,
-  userId: string
-) {
+async function requireBriefParticipant(supabase: any, briefId: string, userId: string) {
   const { data: brief, error } = await supabase
     .from("catering_briefs")
     .select("id, customer_id, preferred_caterer_id, preferred_planner_id")
@@ -56,9 +52,7 @@ async function requireBriefParticipant(
 
   if (!participants.includes(userId)) {
     // Log server-side for monitoring, return a generic message to the caller
-    console.warn(
-      `[Chat] Unauthorized access attempt: user=${userId} brief=${briefId}`
-    );
+    console.warn(`[Chat] Unauthorized access attempt: user=${userId} brief=${briefId}`);
     throw new Error("Unauthorized: You are not a participant in this brief");
   }
 
@@ -114,7 +108,7 @@ export const sendBriefMessage = createServerFn({ method: "POST" })
     z.object({
       briefId: z.string().uuid(),
       content: z.string().min(1).max(2000),
-    })
+    }),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;

@@ -1,5 +1,5 @@
-import Stripe from 'stripe';
-import { createHmac, randomBytes } from 'crypto';
+import Stripe from "stripe";
+import { createHmac, randomBytes } from "crypto";
 
 // ─── Hard-fail on missing secrets ───────────────────────────────────────────
 // Never fall back to mock/placeholder values. If a required secret is absent
@@ -11,22 +11,22 @@ function requireEnv(name: string): string {
   if (!value) {
     throw new Error(
       `[Stripe] Missing required environment variable: ${name}. ` +
-      `Set this in your Vercel project environment variables.`
+        `Set this in your Vercel project environment variables.`,
     );
   }
   return value;
 }
 
 function getStripeSecretKey(): string {
-  return requireEnv('STRIPE_SECRET_KEY');
+  return requireEnv("STRIPE_SECRET_KEY");
 }
 
 function getStripeConnectClientId(): string {
-  return requireEnv('STRIPE_CONNECT_CLIENT_ID');
+  return requireEnv("STRIPE_CONNECT_CLIENT_ID");
 }
 
 function getStripeStateSecret(): string {
-  return requireEnv('STRIPE_CONNECT_STATE_SECRET');
+  return requireEnv("STRIPE_CONNECT_STATE_SECRET");
 }
 
 // Initialize stripe lazily to avoid loading issues in client contexts
@@ -34,7 +34,7 @@ let stripeInstance: Stripe | null = null;
 function getStripe() {
   if (!stripeInstance) {
     stripeInstance = new Stripe(getStripeSecretKey(), {
-      apiVersion: '2025-02-24' as any,
+      apiVersion: "2025-02-24" as any,
     });
   }
   return stripeInstance;
@@ -50,47 +50,47 @@ const STATE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 
 export function createConnectState(restaurantSlug: string): string {
   const secret = getStripeStateSecret();
-  const nonce = randomBytes(16).toString('hex');
+  const nonce = randomBytes(16).toString("hex");
   const ts = Date.now().toString();
   const payload = `${restaurantSlug}:${ts}:${nonce}`;
-  const sig = createHmac('sha256', secret).update(payload).digest('hex');
+  const sig = createHmac("sha256", secret).update(payload).digest("hex");
   // Encode as base64 so it survives URL transit safely
-  return Buffer.from(`${payload}:${sig}`).toString('base64url');
+  return Buffer.from(`${payload}:${sig}`).toString("base64url");
 }
 
 export function verifyConnectState(
-  state: string
+  state: string,
 ): { valid: true; slug: string } | { valid: false; reason: string } {
   try {
     const secret = getStripeStateSecret();
-    const decoded = Buffer.from(state, 'base64url').toString('utf8');
-    const parts = decoded.split(':');
-    if (parts.length !== 4) return { valid: false, reason: 'Malformed state' };
+    const decoded = Buffer.from(state, "base64url").toString("utf8");
+    const parts = decoded.split(":");
+    if (parts.length !== 4) return { valid: false, reason: "Malformed state" };
 
     const [slug, ts, nonce, sig] = parts;
     const payload = `${slug}:${ts}:${nonce}`;
-    const expectedSig = createHmac('sha256', secret).update(payload).digest('hex');
+    const expectedSig = createHmac("sha256", secret).update(payload).digest("hex");
 
     // Constant-time comparison to prevent timing attacks
-    const sigBuf = Buffer.from(sig, 'hex');
-    const expectedBuf = Buffer.from(expectedSig, 'hex');
-    if (sigBuf.length !== expectedBuf.length) return { valid: false, reason: 'Invalid signature' };
+    const sigBuf = Buffer.from(sig, "hex");
+    const expectedBuf = Buffer.from(expectedSig, "hex");
+    if (sigBuf.length !== expectedBuf.length) return { valid: false, reason: "Invalid signature" };
 
     let mismatch = 0;
     for (let i = 0; i < sigBuf.length; i++) {
       mismatch |= sigBuf[i] ^ expectedBuf[i];
     }
-    if (mismatch !== 0) return { valid: false, reason: 'Invalid signature' };
+    if (mismatch !== 0) return { valid: false, reason: "Invalid signature" };
 
     // Check token age
     const issuedAt = parseInt(ts, 10);
     if (isNaN(issuedAt) || Date.now() - issuedAt > STATE_TTL_MS) {
-      return { valid: false, reason: 'State token expired' };
+      return { valid: false, reason: "State token expired" };
     }
 
     return { valid: true, slug };
   } catch {
-    return { valid: false, reason: 'State verification error' };
+    return { valid: false, reason: "State verification error" };
   }
 }
 
@@ -99,9 +99,10 @@ export function getConnectOAuthUrl(restaurantSlug: string, origin: string): stri
   // Prefer a pinned redirect URI from env so it always matches the URL
   // registered in the Stripe Connect settings, regardless of which domain
   // the user is currently browsing (e.g. vercel preview vs. production).
-  const redirectBase = process.env.STRIPE_CONNECT_REDIRECT_URI || `${origin}/api/stripe/connect/callback`;
-  const redirectUri = redirectBase.startsWith('http')
-    ? redirectBase  // already a full URL (from env var)
+  const redirectBase =
+    process.env.STRIPE_CONNECT_REDIRECT_URI || `${origin}/api/stripe/connect/callback`;
+  const redirectUri = redirectBase.startsWith("http")
+    ? redirectBase // already a full URL (from env var)
     : `${origin}${redirectBase}`;
   const state = createConnectState(restaurantSlug);
   return (
@@ -117,7 +118,7 @@ export function getConnectOAuthUrl(restaurantSlug: string, origin: string): stri
 export async function exchangeCodeForUser(code: string) {
   const stripe = getStripe();
   const response = await stripe.oauth.token({
-    grant_type: 'authorization_code',
+    grant_type: "authorization_code",
     code,
   });
   return {
@@ -129,44 +130,41 @@ export async function createSubscriptionCheckoutSession(
   restaurantId: string,
   restaurantName: string,
   customerEmail: string,
-  origin: string
+  origin: string,
 ) {
   const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
+    payment_method_types: ["card"],
     line_items: [
       {
         price_data: {
-          currency: 'eur',
+          currency: "eur",
           product_data: {
             name: `Speisely Restaurant Starter Plan - ${restaurantName}`,
-            description: 'starter subscription for unlimited direct orders',
+            description: "starter subscription for unlimited direct orders",
           },
           unit_amount: 3499, // €34.99
           recurring: {
-            interval: 'month',
+            interval: "month",
           },
         },
         quantity: 1,
       },
     ],
-    mode: 'subscription',
+    mode: "subscription",
     success_url: `${origin}/_authenticated/restaurant?billing_success=true&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/_authenticated/restaurant?billing_cancel=true`,
     customer_email: customerEmail,
     metadata: {
       restaurant_id: restaurantId,
-      type: 'restaurant_subscription',
+      type: "restaurant_subscription",
     },
   });
 
   return { url: session.url };
 }
 
-export async function createBillingPortalSession(
-  stripeCustomerId: string,
-  origin: string
-) {
+export async function createBillingPortalSession(stripeCustomerId: string, origin: string) {
   const stripe = getStripe();
   const session = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,
@@ -181,31 +179,31 @@ export async function createDepositCheckoutSession(
   amountCents: number,
   vendorName: string,
   customerEmail: string,
-  origin: string
+  origin: string,
 ) {
   const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
+    payment_method_types: ["card"],
     line_items: [
       {
         price_data: {
-          currency: 'eur',
+          currency: "eur",
           product_data: {
             name: `Booking Deposit for ${vendorName}`,
-            description: '10% Platform Service Fee paid to Speisely',
+            description: "10% Platform Service Fee paid to Speisely",
           },
           unit_amount: amountCents,
         },
         quantity: 1,
       },
     ],
-    mode: 'payment',
+    mode: "payment",
     success_url: `${origin}/checkout/deposit/success?booking_id=${bookingId}&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/checkout/deposit/cancel?booking_id=${bookingId}`,
     customer_email: customerEmail,
     metadata: {
       booking_id: bookingId,
-      type: 'booking_deposit',
+      type: "booking_deposit",
     },
   });
 
@@ -218,34 +216,36 @@ export async function createStorefrontCheckoutSession(
   restaurantName: string,
   successUrl: string,
   cancelUrl: string,
-  orderId: string
+  orderId: string,
 ) {
   const stripe = getStripe();
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price_data: {
-          currency: 'eur',
-          product_data: {
-            name: `Order from ${restaurantName}`,
+  const session = await stripe.checkout.sessions.create(
+    {
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "eur",
+            product_data: {
+              name: `Order from ${restaurantName}`,
+            },
+            unit_amount: amountCents,
           },
-          unit_amount: amountCents,
+          quantity: 1,
         },
-        quantity: 1,
+      ],
+      mode: "payment",
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata: {
+        type: "storefront_order",
+        order_id: orderId,
       },
-    ],
-    mode: 'payment',
-    success_url: successUrl,
-    cancel_url: cancelUrl,
-    metadata: {
-      type: 'storefront_order',
-      order_id: orderId,
     },
-  }, {
-    stripeAccount: restaurantStripeUserId, // Direct Charge model: money goes directly to restaurant, fees paid by restaurant
-  });
+    {
+      stripeAccount: restaurantStripeUserId, // Direct Charge model: money goes directly to restaurant, fees paid by restaurant
+    },
+  );
 
   return session;
 }
-

@@ -48,19 +48,30 @@ export default {
         const url = new URL(request.url);
         let isSpeiselySubdomain = false;
         let targetSlug: string | null = null;
-        
+
         // Skip API routes and assets
-        if (!url.pathname.startsWith("/_server") && !url.pathname.startsWith("/_build") && !url.pathname.startsWith("/_assets") && !url.pathname.startsWith("/public")) {
+        if (
+          !url.pathname.startsWith("/_server") &&
+          !url.pathname.startsWith("/_build") &&
+          !url.pathname.startsWith("/_assets") &&
+          !url.pathname.startsWith("/public")
+        ) {
           const host = url.hostname;
-          const currentAppHost = process.env.VITE_APP_URL ? new URL(process.env.VITE_APP_URL).host : "localhost:3000";
-          const isCustomDomain = 
-            host !== "localhost:3000" && 
-            host !== currentAppHost && 
-            !host.includes("speisely.de") && 
+          const currentAppHost = process.env.VITE_APP_URL
+            ? new URL(process.env.VITE_APP_URL).host
+            : "localhost:3000";
+          const isCustomDomain =
+            host !== "localhost:3000" &&
+            host !== currentAppHost &&
+            !host.includes("speisely.de") &&
             !host.includes("vercel.app");
 
           // Handle Wildcard Subdomains (e.g., pizzeria-napoli.speisely.de)
-          isSpeiselySubdomain = host.endsWith(".speisely.de") && host !== "www.speisely.de" && host !== "app.speisely.de" && host !== "speisely.de";
+          isSpeiselySubdomain =
+            host.endsWith(".speisely.de") &&
+            host !== "www.speisely.de" &&
+            host !== "app.speisely.de" &&
+            host !== "speisely.de";
           let searchColumn = "custom_domain";
           let searchValue = host;
 
@@ -70,14 +81,22 @@ export default {
             searchValue = targetSlug;
           }
           const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-          const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || "";
-          
+          const supabaseKey =
+            process.env.SUPABASE_SERVICE_ROLE_KEY ||
+            process.env.VITE_SUPABASE_ANON_KEY ||
+            process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+            process.env.SUPABASE_PUBLISHABLE_KEY ||
+            "";
+
           let targetPath = null;
-          
+
           // Check restaurants
-          let res = await fetch(`${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`, {
-            headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
-          });
+          let res = await fetch(
+            `${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`,
+            {
+              headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
+            },
+          );
           let data = await res.json();
           if (data && data.length > 0) {
             targetPath = `/restaurant/${data[0].slug}`;
@@ -85,9 +104,12 @@ export default {
 
           // Check caterers
           if (!targetPath) {
-            res = await fetch(`${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`, {
-              headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
-            });
+            res = await fetch(
+              `${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`,
+              {
+                headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
+              },
+            );
             data = await res.json();
             if (data && data.length > 0) {
               targetPath = `/catering/${data[0].slug}`;
@@ -96,9 +118,12 @@ export default {
 
           // Check planners
           if (!targetPath) {
-            res = await fetch(`${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`, {
-              headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }
-            });
+            res = await fetch(
+              `${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`,
+              {
+                headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
+              },
+            );
             data = await res.json();
             if (data && data.length > 0) {
               targetPath = `/planner/${data[0].slug}`;
@@ -108,7 +133,7 @@ export default {
           if (targetPath) {
             const newUrl = new URL(targetPath, request.url);
             newUrl.search = url.search;
-            
+
             // Rewrite the request internally for SSR
             currentRequest = new Request(newUrl, request);
           }
@@ -121,14 +146,16 @@ export default {
           const { getRestaurants } = await import("./data/restaurants");
           const { getCaterers } = await import("./data/caterers");
           const { getPlanners } = await import("./data/planners");
-          
+
           const restaurants = await getRestaurants();
           const caterers = await getCaterers();
           const planners = await getPlanners();
-          
-          if (restaurants.find(r => r.id === targetSlug)) staticPath = `/restaurant/${targetSlug}`;
-          else if (caterers.find(r => r.id === targetSlug)) staticPath = `/catering/${targetSlug}`;
-          else if (planners.find(r => r.id === targetSlug)) staticPath = `/planner/${targetSlug}`;
+
+          if (restaurants.find((r) => r.id === targetSlug))
+            staticPath = `/restaurant/${targetSlug}`;
+          else if (caterers.find((r) => r.id === targetSlug))
+            staticPath = `/catering/${targetSlug}`;
+          else if (planners.find((r) => r.id === targetSlug)) staticPath = `/planner/${targetSlug}`;
 
           if (staticPath) {
             const newUrl = new URL(staticPath, request.url);
@@ -141,7 +168,7 @@ export default {
       }
 
       const response = await handler.fetch(currentRequest, env, ctx);
-      
+
       // Inject __TENANT_PATH__ if request was rewritten and response is HTML
       let finalResponse = await normalizeCatastrophicSsrResponse(response);
       if (currentRequest !== request) {
@@ -151,8 +178,8 @@ export default {
           const html = await finalResponse.text();
           const baseUrl = process.env.VITE_APP_URL || "https://www.speisely.de";
           const injected = html.replace(
-            '<script',
-            `<script>window.__TENANT_PATH__=${JSON.stringify(rewrittenPath)}; window.__TSS_SERVER_BASE_URL__=${JSON.stringify(baseUrl)};</script>\n<script`
+            "<script",
+            `<script>window.__TENANT_PATH__=${JSON.stringify(rewrittenPath)}; window.__TSS_SERVER_BASE_URL__=${JSON.stringify(baseUrl)};</script>\n<script`,
           );
           finalResponse = new Response(injected, {
             status: finalResponse.status,

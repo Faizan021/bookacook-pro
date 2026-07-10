@@ -756,7 +756,9 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
                   }
                 }}
               >
-                <span>{(saveMut.error as any)?.message ?? tt("Speichern fehlgeschlagen", "Save failed")}</span>
+                <span>
+                  {(saveMut.error as any)?.message ?? tt("Speichern fehlgeschlagen", "Save failed")}
+                </span>
                 <span className="text-xs underline font-medium">
                   {tt("Klicken zum ersten Fehler", "Click to jump to first error")}
                 </span>

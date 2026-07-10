@@ -119,13 +119,18 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: caterer, error: cErr } = await supabaseAdmin
+    
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.slug);
+    const query = supabaseAdmin
       .from("caterers")
       .select(
         "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
-      )
-      .eq("slug", data.slug)
-      .maybeSingle();
+      );
+
+    const { data: caterer, error: cErr } = await (isUuid
+      ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`)
+      : query.eq("slug", data.slug)
+    ).maybeSingle();
 
     if (cErr || !caterer) return null;
 
@@ -279,8 +284,8 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
                      <li><strong>Budget:</strong> ${budgetStr}</li>
                      <li><strong>Ort:</strong> ${data.location}</li>
                    </ul>
-                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`
-          }
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+          },
         });
       }
     }
@@ -314,11 +319,15 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
 
     // Resolve the caterer UUID by slug
-    const { data: caterer } = await supabase
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.catererSlug);
+    const query = supabase
       .from("caterers")
-      .select("id")
-      .eq("slug", data.catererSlug)
-      .maybeSingle();
+      .select("id");
+
+    const { data: caterer } = await (isUuid
+      ? query.or(`slug.eq.${data.catererSlug},id.eq.${data.catererSlug}`)
+      : query.eq("slug", data.catererSlug)
+    ).maybeSingle();
 
     if (!caterer) {
       throw new Error("Caterer not found for the provided slug");
@@ -375,8 +384,8 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
                      <li><strong>Rhythmus:</strong> ${data.pattern}</li>
                      <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
                    </ul>
-                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`
-          }
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+          },
         });
       }
     }

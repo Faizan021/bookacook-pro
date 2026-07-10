@@ -20,23 +20,16 @@ export const getUserProfile = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
 
     // 1. Fetch profile, roles, and auth user in parallel
-    const [{ data: profile }, { data: roles }, { data: authData }] =
-      await Promise.all([
-        supabase
-          .from("profiles")
-          .select("id, full_name")
-          .eq("id", userId)
-          .maybeSingle(),
-        supabase.from("user_roles").select("role").eq("user_id", userId),
-        supabase.auth.getUser(),
-      ]);
+    const [{ data: profile }, { data: roles }, { data: authData }] = await Promise.all([
+      supabase.from("profiles").select("id, full_name").eq("id", userId).maybeSingle(),
+      supabase.from("user_roles").select("role").eq("user_id", userId),
+      supabase.auth.getUser(),
+    ]);
 
     let roleList = (roles ?? []).map((r) => r.role as UserRole);
 
     const metaRole = authData?.user?.user_metadata?.role as string | undefined;
-    const { supabaseAdmin } = await import(
-      "@/integrations/supabase/client.server"
-    );
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // 2. Check partner_profiles table as the source of truth
     const { data: partnerProfile } = await supabaseAdmin
@@ -52,16 +45,18 @@ export const getUserProfile = createServerFn({ method: "GET" })
           .from("user_roles")
           .insert({ user_id: userId, role: partnerRole as any });
         roleList.push(partnerRole);
-        console.log(`[Role] Self-healed missing partner role "${partnerRole}" from partner_profiles for user=${userId}`);
+        console.log(
+          `[Role] Self-healed missing partner role "${partnerRole}" from partner_profiles for user=${userId}`,
+        );
       }
     } else if (metaRole && metaRole !== "customer" && !roleList.includes(metaRole as UserRole)) {
       // Fallback to metadata role if no partner profile exists yet (e.g. during fresh signup)
       if (SELF_HEALABLE_ROLES.includes(metaRole as UserRole)) {
-        await supabaseAdmin
-          .from("user_roles")
-          .insert({ user_id: userId, role: metaRole as any });
+        await supabaseAdmin.from("user_roles").insert({ user_id: userId, role: metaRole as any });
         roleList.push(metaRole as UserRole);
-        console.log(`[Role] Self-healed missing role "${metaRole}" from metadata for user=${userId}`);
+        console.log(
+          `[Role] Self-healed missing role "${metaRole}" from metadata for user=${userId}`,
+        );
       }
     }
 
@@ -70,21 +65,18 @@ export const getUserProfile = createServerFn({ method: "GET" })
       roleList = ["customer"];
     }
 
-    const priority: UserRole[] = [
-      "partner",
-      "restaurant_owner",
-      "caterer",
-      "planner",
-      "customer",
-    ];
+    const priority: UserRole[] = ["partner", "restaurant_owner", "caterer", "planner", "customer"];
     let primary = priority.find((r) => roleList.includes(r)) ?? "customer";
-    
+
     // Map legacy roles to unified partner role
     if (["restaurant_owner", "caterer", "planner"].includes(primary)) {
       primary = "partner";
     }
-    
-    if (roleList.some(r => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
+
+    if (
+      roleList.some((r) => ["restaurant_owner", "caterer", "planner"].includes(r)) &&
+      !roleList.includes("partner")
+    ) {
       roleList.push("partner");
     }
 
@@ -98,7 +90,7 @@ export const getUserProfile = createServerFn({ method: "GET" })
 
 export const checkEmailRole = createServerFn({ method: "POST" })
   .inputValidator((input: { email: string }) =>
-    z.object({ email: z.string().email() }).parse(input)
+    z.object({ email: z.string().email() }).parse(input),
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -141,20 +133,17 @@ export const checkEmailRole = createServerFn({ method: "POST" })
       roleList.push("customer");
     }
 
-    const priority: UserRole[] = [
-      "partner",
-      "restaurant_owner",
-      "caterer",
-      "planner",
-      "customer",
-    ];
+    const priority: UserRole[] = ["partner", "restaurant_owner", "caterer", "planner", "customer"];
     let primary = priority.find((r) => roleList.includes(r)) ?? "customer";
-    
+
     if (["restaurant_owner", "caterer", "planner"].includes(primary)) {
       primary = "partner";
     }
 
-    if (roleList.some(r => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
+    if (
+      roleList.some((r) => ["restaurant_owner", "caterer", "planner"].includes(r)) &&
+      !roleList.includes("partner")
+    ) {
       roleList.push("partner");
     }
 
@@ -164,5 +153,3 @@ export const checkEmailRole = createServerFn({ method: "POST" })
       primaryRole: primary as UserRole,
     };
   });
-
-

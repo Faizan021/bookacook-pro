@@ -3,7 +3,10 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
 
-const supabase = createClient("https://athwccvgdovglcpluwnu.supabase.co", process.env.SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createClient(
+  "https://athwccvgdovglcpluwnu.supabase.co",
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
+);
 
 async function main() {
   const sql = `
@@ -27,7 +30,7 @@ async function main() {
     END;
     $$;
   `;
-  
+
   // Since we don't have direct SQL execution from supabase-js, we can use an Edge Function or rpc.
   // Wait, supabase-js doesn't have a generic `query` method.
   console.log("SQL to execute:");

@@ -552,7 +552,7 @@ function Catering() {
               <Link
                 key={c.id}
                 to="/catering/$slug"
-                params={{ slug: c.id }}
+                params={{ slug: c.slug || c.id }}
                 className="surface-card overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-3xl border border-[#eadfce]/40 hover:border-forest/30 group text-left"
               >
                 <div className="overflow-hidden aspect-[4/3] relative">

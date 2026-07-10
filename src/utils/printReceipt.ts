@@ -23,7 +23,7 @@ export function printReceipt(order: any, restaurantName: string) {
         <span>${it.qty ?? 1}x ${it.name}</span>
         <span>${it.price_cents ? formatPrice(it.price_cents * (it.qty ?? 1)) : ""}</span>
       </div>
-    `
+    `,
     )
     .join("");
 

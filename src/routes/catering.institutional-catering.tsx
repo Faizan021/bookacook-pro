@@ -1,11 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sparkles, ShieldCheck, Heart, Award, GraduationCap, CheckCircle2, ArrowRight } from "lucide-react";
+import {
+  Sparkles,
+  ShieldCheck,
+  Heart,
+  Award,
+  GraduationCap,
+  CheckCircle2,
+  ArrowRight,
+} from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
 import { PageHero } from "@/components/PageHero";
-
 
 export const Route = createFileRoute("/catering/institutional-catering")({
   head: () => ({
@@ -13,12 +20,17 @@ export const Route = createFileRoute("/catering/institutional-catering")({
       { title: "Gesunde Großverpflegung für Kitas, Schulen & Kliniken — Speisely" },
       {
         name: "description",
-        content: "Zuverlässige, nährstoffreiche Großverpflegung nach höchsten Qualitäts- und Hygienestandards. DGE-konforme Menüpläne für Kitas, Schulen, Kliniken und Pflegeeinrichtungen.",
+        content:
+          "Zuverlässige, nährstoffreiche Großverpflegung nach höchsten Qualitäts- und Hygienestandards. DGE-konforme Menüpläne für Kitas, Schulen, Kliniken und Pflegeeinrichtungen.",
       },
-      { property: "og:title", content: "Gesunde Großverpflegung & Institutional Catering — Speisely" },
+      {
+        property: "og:title",
+        content: "Gesunde Großverpflegung & Institutional Catering — Speisely",
+      },
       {
         property: "og:description",
-        content: "Ausgewogene Mahlzeiten für Schulen, Kitas und Heime. Zertifizierte Frischeküche, kindgerechte Rezepturen und zuverlässige Logistik.",
+        content:
+          "Ausgewogene Mahlzeiten für Schulen, Kitas und Heime. Zertifizierte Frischeküche, kindgerechte Rezepturen und zuverlässige Logistik.",
       },
       { property: "og:url", content: "/catering/institutional-catering" },
     ],
@@ -37,9 +49,17 @@ function InstitutionalCatering() {
         eyebrow={lang === "de" ? "GROSSVERPFLEGUNG & BETREUUNG" : "LARGE SCALE & CARE DINING"}
         heading={
           lang === "de" ? (
-            <>Ausgewogene Ernährung für<br /><span className="text-[#f2d896]">Schulen, Kitas &amp; Pflege.</span></>
+            <>
+              Ausgewogene Ernährung für
+              <br />
+              <span className="text-[#f2d896]">Schulen, Kitas &amp; Pflege.</span>
+            </>
           ) : (
-            <>Balanced nutrition for<br /><span className="text-[#f2d896]">schools, daycares &amp; care.</span></>
+            <>
+              Balanced nutrition for
+              <br />
+              <span className="text-[#f2d896]">schools, daycares &amp; care.</span>
+            </>
           )
         }
         subtext={
@@ -47,19 +67,28 @@ function InstitutionalCatering() {
             ? "Wir sichern eine gesunde und leckere Versorgung für deine Institution. DGE-konforme Menülinien, frische regionale Zutaten und allergikersichere Zubereitung kombiniert mit logistischer Zuverlässigkeit."
             : "We secure healthy and tasty nutrition for your institution. DGE-compliant menus, fresh regional ingredients, and allergen-safe preparation combined with absolute logistical reliability."
         }
-        primaryCta={{ label: lang === "de" ? "Konzept anfordern" : "Request a Concept", onClick: () => setB2bOpen(true) }}
-        secondaryCta={{ label: lang === "de" ? "Großcaterer entdecken" : "Discover Caterers", href: "/catering" }}
+        primaryCta={{
+          label: lang === "de" ? "Konzept anfordern" : "Request a Concept",
+          onClick: () => setB2bOpen(true),
+        }}
+        secondaryCta={{
+          label: lang === "de" ? "Großcaterer entdecken" : "Discover Caterers",
+          href: "/catering",
+        }}
         imageUrl="/images/institutional_catering_hero.png"
         imageAlt="Nutritious institutional meal serving tray set"
       />
 
-
       {/* Target Audiences (Schools, Kitas, Care Homes) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "EINRICHTUNGEN" : "INSTITUTIONS"}</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">
+            {lang === "de" ? "EINRICHTUNGEN" : "INSTITUTIONS"}
+          </span>
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">
-            {lang === "de" ? "Spezialisierte Konzepte für jede Altersgruppe" : "Specialized Concepts for Every Age Group"}
+            {lang === "de"
+              ? "Spezialisierte Konzepte für jede Altersgruppe"
+              : "Specialized Concepts for Every Age Group"}
           </h2>
           <p className="text-sm text-forest/70 leading-relaxed">
             {lang === "de"
@@ -130,7 +159,9 @@ function InstitutionalCatering() {
               <Award className="h-3 w-3 fill-current" /> QUALITY & CERTIFICATION
             </span>
             <h2 className="font-display text-3xl sm:text-4xl text-mint leading-tight">
-              {lang === "de" ? "DGE-zertifizierte Menülinien für deine Einrichtung" : "DGE-Certified Menus for Your Institution"}
+              {lang === "de"
+                ? "DGE-zertifizierte Menülinien für deine Einrichtung"
+                : "DGE-Certified Menus for Your Institution"}
             </h2>
             <p className="text-cream/80 text-sm sm:text-base leading-relaxed">
               {lang === "de"
@@ -175,18 +206,39 @@ function InstitutionalCatering() {
               />
             </div>
             <div className="space-y-6">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "HYGIENE & NÄHRSTOFFE" : "SAFETY & HEALTH"}</span>
-              <h2 className="text-3xl font-display font-bold text-forest">{lang === "de" ? "Höchste Standards bei Hygiene und Qualität" : "Highest Hygiene and Quality Standards"}</h2>
-              <p className="text-sm text-forest/70 leading-relaxed">{lang === "de" ? "Unsere Partner-Caterer befolgen strikt die HACCP-Richtlinien und sind DGE-geschult, um eine gesunde und sichere Verpflegung zu gewährleisten." : "Our partner caterers strictly comply with HACCP guidelines and are DGE-trained to guarantee secure and healthy meals."}</p>
-              
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">
+                {lang === "de" ? "HYGIENE & NÄHRSTOFFE" : "SAFETY & HEALTH"}
+              </span>
+              <h2 className="text-3xl font-display font-bold text-forest">
+                {lang === "de"
+                  ? "Höchste Standards bei Hygiene und Qualität"
+                  : "Highest Hygiene and Quality Standards"}
+              </h2>
+              <p className="text-sm text-forest/70 leading-relaxed">
+                {lang === "de"
+                  ? "Unsere Partner-Caterer befolgen strikt die HACCP-Richtlinien und sind DGE-geschult, um eine gesunde und sichere Verpflegung zu gewährleisten."
+                  : "Our partner caterers strictly comply with HACCP guidelines and are DGE-trained to guarantee secure and healthy meals."}
+              </p>
+
               <ul className="space-y-3.5">
                 {[
-                  lang === "de" ? "HACCP-konforme Warmhalte-Logistik bis zur Ausgabe" : "HACCP-compliant temperature-controlled distribution logistics",
-                  lang === "de" ? "Transparente Allergenkennzeichnung und Nährwerttabellen" : "Transparent allergen labeling and full nutritional sheets",
-                  lang === "de" ? "Regelmäßige mikrobiologische Qualitätskontrollen" : "Regular microbiological quality controls",
-                  lang === "de" ? "Regionale Bio-Zutaten und Verzicht auf Zusatzstoffe" : "Regional organic ingredients and zero artificial additives"
+                  lang === "de"
+                    ? "HACCP-konforme Warmhalte-Logistik bis zur Ausgabe"
+                    : "HACCP-compliant temperature-controlled distribution logistics",
+                  lang === "de"
+                    ? "Transparente Allergenkennzeichnung und Nährwerttabellen"
+                    : "Transparent allergen labeling and full nutritional sheets",
+                  lang === "de"
+                    ? "Regelmäßige mikrobiologische Qualitätskontrollen"
+                    : "Regular microbiological quality controls",
+                  lang === "de"
+                    ? "Regionale Bio-Zutaten und Verzicht auf Zusatzstoffe"
+                    : "Regional organic ingredients and zero artificial additives",
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-sm text-forest/80 font-medium">
+                  <li
+                    key={idx}
+                    className="flex items-start gap-2.5 text-sm text-forest/80 font-medium"
+                  >
                     <CheckCircle2 className="h-5 w-5 text-forest shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -201,7 +253,9 @@ function InstitutionalCatering() {
       <section className="bg-cream/40 py-16 border-t border-[#eadfce]/30 text-center">
         <div className="mx-auto max-w-3xl px-4 space-y-6">
           <h2 className="text-3xl font-display font-bold text-forest">
-            {lang === "de" ? "Sichere Versorgung für deine Institution." : "Secure Reliable Dining for Your Institution."}
+            {lang === "de"
+              ? "Sichere Versorgung für deine Institution."
+              : "Secure Reliable Dining for Your Institution."}
           </h2>
           <p className="text-sm text-forest/75 max-w-lg mx-auto">
             {lang === "de"

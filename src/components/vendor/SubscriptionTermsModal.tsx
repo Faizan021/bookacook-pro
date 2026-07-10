@@ -39,7 +39,7 @@ export function SubscriptionTermsModal({
           <DialogDescription>
             {tt(
               "Bitte besttigen Sie die Bedingungen Ihres Starter-Pakets.",
-              "Please review and confirm the terms for your Starter Plan."
+              "Please review and confirm the terms for your Starter Plan.",
             )}
           </DialogDescription>
         </DialogHeader>
@@ -47,16 +47,16 @@ export function SubscriptionTermsModal({
         <div className="bg-stone-50 border border-stone-100 rounded-xl p-4 my-4 space-y-3 text-sm">
           <div className="flex justify-between border-b border-stone-200 pb-2">
             <span className="text-muted-foreground">{tt("Plan", "Plan")}</span>
-            <span className="font-semibold text-forest">
-              {tt("Starter-Paket", "Starter Plan")}
-            </span>
+            <span className="font-semibold text-forest">{tt("Starter-Paket", "Starter Plan")}</span>
           </div>
           <div className="flex justify-between border-b border-stone-200 pb-2">
             <span className="text-muted-foreground">{tt("Preis", "Price")}</span>
             <span className="font-semibold text-forest">€34.99 / {tt("Monat", "month")}</span>
           </div>
           <div className="flex justify-between border-b border-stone-200 pb-2">
-            <span className="text-muted-foreground">{tt("Abrechnungszyklus", "Billing Cycle")}</span>
+            <span className="text-muted-foreground">
+              {tt("Abrechnungszyklus", "Billing Cycle")}
+            </span>
             <span className="font-semibold text-forest">
               {tt("Automatische monatliche Verlngerung", "Auto-renews monthly")}
             </span>
@@ -82,7 +82,7 @@ export function SubscriptionTermsModal({
           >
             {tt(
               "Ich stimme den Nutzungsbedingungen zu und autorisiere Speisely, den oben genannten Betrag monatlich wiederkehrend abzubuchen, bis das Abonnement gekndigt wird.",
-              "I agree to the Terms of Service and authorize Speisely to charge my payment method for the recurring amount above on a monthly basis until canceled."
+              "I agree to the Terms of Service and authorize Speisely to charge my payment method for the recurring amount above on a monthly basis until canceled.",
             )}
           </Label>
         </div>

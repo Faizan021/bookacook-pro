@@ -1,6 +1,6 @@
 # Speisely Storefront Architecture & Routing Map
 
-*Last verified against code, commit `4381605`, 2026-07-05.*
+_Last verified against code, commit `4381605`, 2026-07-05._
 
 This document provides a strictly structured map of all public storefront routes, their underlying data sources, SEO strategies, and anti-fraud booking rules.
 
@@ -9,6 +9,7 @@ This document provides a strictly structured map of all public storefront routes
 ## 1. Directory & Discovery Routes
 
 ### Homepage
+
 - **Route:** `/index.tsx`
 - **Purpose:** Primary landing page for the Speisely platform. Funnels traffic into the three core verticals.
 - **Audience:** All incoming public traffic.
@@ -17,6 +18,7 @@ This document provides a strictly structured map of all public storefront routes
 - **Status:** `Built` (static).
 
 ### Instant Order Directory
+
 - **Route:** `/instant-order.tsx`
 - **Purpose:** Browse restaurants offering instant takeaway/delivery.
 - **Audience:** Customers wanting immediate food.
@@ -26,6 +28,7 @@ This document provides a strictly structured map of all public storefront routes
 - **Status:** `Built`.
 
 ### Catering Directories
+
 - **Route:** `/catering.index.tsx` (and sub-routes: `/catering/events`, `/catering/institutional-catering`, `/catering/daily-catering-subscriptions`)
 - **Purpose:** Browse and discover event and B2B caterers based on event type.
 - **Audience:** Private event hosts, B2B office managers.
@@ -39,6 +42,7 @@ This document provides a strictly structured map of all public storefront routes
 ## 2. Partner Storefront Routes (Booking Origins)
 
 ### Restaurant Storefront
+
 - **Route:** `/restaurant/$slug.tsx`
 - **Purpose:** Display a restaurant's menu, hours, and accept instant orders or table reservations.
 - **Audience:** Diners and delivery customers.
@@ -59,6 +63,7 @@ This document provides a strictly structured map of all public storefront routes
 - **Status:** `Built`, with the promo-mock and reviews-mock caveats above.
 
 ### Caterer Storefront
+
 - **Route:** `/caterer/$slug.tsx` (and `/catering/$slug.tsx`)
 - **Purpose:** Display catering packages and capture detailed event briefs.
 - **Audience:** Event hosts.
@@ -72,6 +77,7 @@ This document provides a strictly structured map of all public storefront routes
 - **Status:** `Built`.
 
 ### Event Planner Storefront
+
 - **Route:** `/planner/$slug.tsx`
 - **Purpose:** Showcase portfolio and services, capture event leads.
 - **Audience:** Event hosts looking for organization/decoration.

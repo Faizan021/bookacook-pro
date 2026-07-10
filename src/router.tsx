@@ -4,8 +4,8 @@ import { parseHref } from "@tanstack/history";
 import { routeTree } from "./routeTree.gen";
 
 function createAppHistory() {
-  if (typeof window === 'undefined') {
-    return createMemoryHistory({ initialEntries: ['/'] });
+  if (typeof window === "undefined") {
+    return createMemoryHistory({ initialEntries: ["/"] });
   }
 
   const tenantPath = (window as any).__TENANT_PATH__;
@@ -16,20 +16,20 @@ function createAppHistory() {
     const history = createBrowserHistory({
       parseLocation: () => {
         let path = window.location.pathname;
-        if (path === '/') {
+        if (path === "/") {
           path = tenantPath;
         }
         return parseHref(
           path + window.location.search + window.location.hash,
-          window.history.state
+          window.history.state,
         );
       },
       createHref: (path: string) => {
         if (path === tenantPath) {
-          return '/';
+          return "/";
         }
         return path;
-      }
+      },
     });
 
     // Intercept push/replace to redirect off-tenant navigations
@@ -40,7 +40,7 @@ function createAppHistory() {
 
     const guardNav = (path: string) => {
       // Extract just the pathname (path may include ?search and #hash)
-      const pathname = path.split('?')[0].split('#')[0];
+      const pathname = path.split("?")[0].split("#")[0];
       if (pathname !== tenantPath) {
         window.location.href = baseUrl + path;
         return true; // blocked

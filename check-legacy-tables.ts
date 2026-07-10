@@ -3,7 +3,10 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "https://athwccvgdovglcpluwnu.supabase.co";
+const supabaseUrl =
+  process.env.VITE_SUPABASE_URL ||
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  "https://athwccvgdovglcpluwnu.supabase.co";
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
@@ -25,14 +28,16 @@ const legacyTables = [
   "event_requests",
   "event_request_matches",
   "availability",
-  "reviews"
+  "reviews",
 ];
 
 async function checkTables() {
   console.log("Checking legacy tables row counts...");
   for (const table of legacyTables) {
     try {
-      const { count, error } = await supabase.from(table).select("*", { count: "exact", head: true });
+      const { count, error } = await supabase
+        .from(table)
+        .select("*", { count: "exact", head: true });
       if (error) {
         console.error(`Error querying ${table}: ${error.message}`);
       } else {

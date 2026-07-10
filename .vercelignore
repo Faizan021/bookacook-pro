@@ -1,0 +1,13 @@
+test-results/
+playwright-report/
+.agents/
+.github/
+.git/
+node_modules/
+dist/
+.vercel/
+scratch/
+*.zip
+*.log
+*.bak
+*.local

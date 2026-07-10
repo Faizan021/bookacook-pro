@@ -2,10 +2,10 @@ import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useSuspenseQuery, useMutation, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { 
-  getVendorCatererReviews, 
-  submitCatererVendorReply, 
-  flagCatererReview 
+import {
+  getVendorCatererReviews,
+  submitCatererVendorReply,
+  flagCatererReview,
 } from "@/lib/reviews/vendor.functions";
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 import { VendorLayout } from "@/components/vendor/VendorLayout";
@@ -86,7 +86,7 @@ function ReviewCard({ review }: { review: any }) {
           <span>{review.overall_rating} / 5</span>
         </div>
       </div>
-      
+
       <p className="text-forest/80 italic border-l-2 border-forest/20 pl-4 py-1">
         "{review.comment}"
       </p>
@@ -131,12 +131,19 @@ function ReviewCard({ review }: { review: any }) {
                     <MessageSquare className="h-4 w-4 mr-2" />
                     {t("Antworten", "Reply")}
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     className="text-red-600 hover:bg-red-50"
                     onClick={() => {
-                      if (confirm(t("Möchten Sie diese Bewertung zur Moderation melden?", "Are you sure you want to flag this review for moderation?"))) {
+                      if (
+                        confirm(
+                          t(
+                            "Möchten Sie diese Bewertung zur Moderation melden?",
+                            "Are you sure you want to flag this review for moderation?",
+                          ),
+                        )
+                      ) {
                         flagMutation.mutate();
                       }
                     }}
@@ -149,7 +156,10 @@ function ReviewCard({ review }: { review: any }) {
               ) : (
                 <div className="flex flex-col gap-2">
                   <Textarea
-                    placeholder={t("Ihre Antwort wird öffentlich sichtbar sein...", "Your reply will be publicly visible...")}
+                    placeholder={t(
+                      "Ihre Antwort wird öffentlich sichtbar sein...",
+                      "Your reply will be publicly visible...",
+                    )}
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     className="min-h-[100px]"
@@ -158,12 +168,14 @@ function ReviewCard({ review }: { review: any }) {
                     <Button variant="ghost" size="sm" onClick={() => setShowReplyForm(false)}>
                       {t("Abbrechen", "Cancel")}
                     </Button>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       onClick={() => replyMutation.mutate(replyText)}
                       disabled={!replyText.trim() || replyMutation.isPending}
                     >
-                      {replyMutation.isPending ? t("Wird gesendet...", "Sending...") : t("Senden", "Submit")}
+                      {replyMutation.isPending
+                        ? t("Wird gesendet...", "Sending...")
+                        : t("Senden", "Submit")}
                     </Button>
                   </div>
                 </div>
@@ -203,7 +215,10 @@ function CatererReviewsDashboard() {
               {t("Noch keine Bewertungen", "No reviews yet")}
             </h3>
             <p className="text-forest/70">
-              {t("Sobald Kunden Bewertungen hinterlassen, erscheinen sie hier.", "Once customers leave reviews, they will appear here.")}
+              {t(
+                "Sobald Kunden Bewertungen hinterlassen, erscheinen sie hier.",
+                "Once customers leave reviews, they will appear here.",
+              )}
             </p>
           </div>
         ) : (
@@ -214,7 +229,9 @@ function CatererReviewsDashboard() {
                   <AlertTriangle className="h-5 w-5 text-amber-500" />
                   {t("In Prüfung / Gemeldet", "Under Review / Flagged")}
                 </h3>
-                {pendingOrFlagged.map((r: any) => <ReviewCard key={r.id} review={r} />)}
+                {pendingOrFlagged.map((r: any) => (
+                  <ReviewCard key={r.id} review={r} />
+                ))}
               </section>
             )}
 
@@ -224,7 +241,9 @@ function CatererReviewsDashboard() {
                 {t("Veröffentlichte Bewertungen", "Published Reviews")}
               </h3>
               {published.length === 0 ? (
-                <p className="text-forest/60 italic">{t("Keine veröffentlichten Bewertungen.", "No published reviews.")}</p>
+                <p className="text-forest/60 italic">
+                  {t("Keine veröffentlichten Bewertungen.", "No published reviews.")}
+                </p>
               ) : (
                 published.map((r: any) => <ReviewCard key={r.id} review={r} />)
               )}

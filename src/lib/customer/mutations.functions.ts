@@ -4,9 +4,7 @@ import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 export const acceptProposal = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth()])
-  .validator((input: { briefId: string }) =>
-    z.object({ briefId: z.string().uuid() }).parse(input)
-  )
+  .validator((input: { briefId: string }) => z.object({ briefId: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -32,7 +30,7 @@ export const acceptProposal = createServerFn({ method: "POST" })
 
     // Deposit is 10% of the quoted amount (budget_cents)
     const quotedAmountCents = brief.budget_cents || 0;
-    const depositAmountCents = Math.round(quotedAmountCents * 0.10); // 10%
+    const depositAmountCents = Math.round(quotedAmountCents * 0.1); // 10%
     const quotedAmountEuros = quotedAmountCents / 100;
     const depositAmountEuros = depositAmountCents / 100;
 
@@ -59,7 +57,6 @@ export const acceptProposal = createServerFn({ method: "POST" })
 
       if (bookingError) throw new Error(bookingError.message);
       bookingId = booking.id;
-
     } else if (brief.preferred_planner_id) {
       // Create event booking
       const { data: booking, error: bookingError } = await supabaseAdmin
@@ -99,7 +96,7 @@ export const acceptProposal = createServerFn({ method: "POST" })
 export const getBookingDetails = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth()])
   .validator((input: { bookingId: string }) =>
-    z.object({ bookingId: z.string().uuid() }).parse(input)
+    z.object({ bookingId: z.string().uuid() }).parse(input),
   )
   .handler(async ({ context, data }) => {
     const { userId } = context;
@@ -126,7 +123,7 @@ export const getBookingDetails = createServerFn({ method: "GET" })
           quotedAmount: catBooking.quoted_amount,
           depositAmount: catBooking.deposit_amount,
           status: catBooking.booking_status,
-        }
+        },
       };
     }
 
@@ -151,7 +148,7 @@ export const getBookingDetails = createServerFn({ method: "GET" })
           quotedAmount: eventBooking.quoted_amount,
           depositAmount: eventBooking.deposit_amount,
           status: eventBooking.booking_status,
-        }
+        },
       };
     }
 
@@ -161,7 +158,7 @@ export const getBookingDetails = createServerFn({ method: "GET" })
 export const startDepositCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth()])
   .validator((input: { bookingId: string; origin: string }) =>
-    z.object({ bookingId: z.string().uuid(), origin: z.string() }).parse(input)
+    z.object({ bookingId: z.string().uuid(), origin: z.string() }).parse(input),
   )
   .handler(async ({ context, data }) => {
     const { userId } = context;
@@ -214,7 +211,7 @@ export const startDepositCheckout = createServerFn({ method: "POST" })
       amountCents,
       bookingDetails.vendorName,
       bookingDetails.email,
-      data.origin
+      data.origin,
     );
 
     return { url: session.url };

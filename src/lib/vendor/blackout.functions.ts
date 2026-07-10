@@ -5,7 +5,9 @@ import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 // Gets blackout dates for the logged-in vendor
 export const getMyBlackoutDates = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth()])
-  .validator((input: { vendorType: "caterer" | "planner" }) => z.object({ vendorType: z.enum(["caterer", "planner"]) }).parse(input))
+  .validator((input: { vendorType: "caterer" | "planner" }) =>
+    z.object({ vendorType: z.enum(["caterer", "planner"]) }).parse(input),
+  )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
@@ -32,11 +34,13 @@ export const getMyBlackoutDates = createServerFn({ method: "GET" })
 export const addBlackoutDate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth()])
   .inputValidator((input: { vendorType: "caterer" | "planner"; date: string; reason?: string }) =>
-    z.object({
-      vendorType: z.enum(["caterer", "planner"]),
-      date: z.string(), // YYYY-MM-DD
-      reason: z.string().optional(),
-    }).parse(input)
+    z
+      .object({
+        vendorType: z.enum(["caterer", "planner"]),
+        date: z.string(), // YYYY-MM-DD
+        reason: z.string().optional(),
+      })
+      .parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
@@ -50,14 +54,12 @@ export const addBlackoutDate = createServerFn({ method: "POST" })
 
     if (!vendor) throw new Error("No storefront found for this account");
 
-    const { error } = await supabase
-      .from("vendor_blackout_dates")
-      .insert({
-        vendor_type: data.vendorType,
-        vendor_id: vendor.id,
-        blackout_date: data.date,
-        reason: data.reason || null
-      } as any);
+    const { error } = await supabase.from("vendor_blackout_dates").insert({
+      vendor_type: data.vendorType,
+      vendor_id: vendor.id,
+      blackout_date: data.date,
+      reason: data.reason || null,
+    } as any);
 
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -66,7 +68,7 @@ export const addBlackoutDate = createServerFn({ method: "POST" })
 export const removeBlackoutDate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth()])
   .inputValidator((input: { blackoutId: string }) =>
-    z.object({ blackoutId: z.string().uuid() }).parse(input)
+    z.object({ blackoutId: z.string().uuid() }).parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase } = context;

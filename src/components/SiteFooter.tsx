@@ -87,12 +87,7 @@ export function SiteFooter() {
         </div>
 
         {/* Top Locations */}
-        {cityLinks.length > 0 && (
-          <FooterCol
-            title="Städte"
-            items={cityLinks}
-          />
-        )}
+        {cityLinks.length > 0 && <FooterCol title="Städte" items={cityLinks} />}
 
         {/* Legal & Newsletter */}
         <div>
@@ -163,7 +158,10 @@ function FooterCol({ title, items }: { title: string; items: { label: string; to
 function FooterLink({ to, label }: { to: string; label: string }) {
   return (
     <li>
-      <Link to={to} className="text-[oklch(0.97_0.02_92)]/80 hover:text-[oklch(0.97_0.02_92)] transition-colors">
+      <Link
+        to={to}
+        className="text-[oklch(0.97_0.02_92)]/80 hover:text-[oklch(0.97_0.02_92)] transition-colors"
+      >
         {label}
       </Link>
     </li>

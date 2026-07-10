@@ -12,7 +12,10 @@ const dict: Dict = {
   "nav.contact": { de: "Kontakt", en: "Contact" },
   "nav.register": { de: "Registrieren", en: "Register" },
 
-  "home.eyebrow": { de: "Ein Marktplatz. Drei Wege zu genießen.", en: "One marketplace. Three ways to enjoy." },
+  "home.eyebrow": {
+    de: "Ein Marktplatz. Drei Wege zu genießen.",
+    en: "One marketplace. Three ways to enjoy.",
+  },
   "home.title": { de: "Worauf hast du<br/>heute Lust?", en: "What would you<br/>like today?" },
   "home.subtitle": {
     de: "Bestelle dein Lieblingsessen sofort, finde das perfekte Catering oder plane dein Event mit einem professionellen Event-Planer.",
@@ -25,7 +28,10 @@ const dict: Dict = {
   "home.cta.order": { de: "Sofort bestellen", en: "Order instantly" },
   "home.cta.catering": { de: "Catering finden", en: "Find catering" },
   "home.cta.planner": { de: "Event planen", en: "Plan event" },
-  "home.hero.alt": { de: "Miniatur-Diorama mit Essen, Catering und Event-Planung", en: "Miniature diorama with food, catering and event planning" },
+  "home.hero.alt": {
+    de: "Miniatur-Diorama mit Essen, Catering und Event-Planung",
+    en: "Miniature diorama with food, catering and event planning",
+  },
 
   "home.pillar.instant.eyebrow": { de: "Jetzt essen", en: "Eat now" },
   "home.pillar.instant.title": { de: "Essen sofort bestellen", en: "Instant Food Order" },
@@ -75,7 +81,10 @@ const dict: Dict = {
   "io.popular": { de: "Beliebt", en: "Popular" },
 
   "cat.eyebrow": { de: "Speisely Catering-Marktplatz", en: "Speisely Catering Marketplace" },
-  "cat.title": { de: "Dein Event.<br/>Dein perfektes Menü.", en: "Your event.<br/>Your perfect menu." },
+  "cat.title": {
+    de: "Dein Event.<br/>Dein perfektes Menü.",
+    en: "Your event.<br/>Your perfect menu.",
+  },
   "cat.subtitle": {
     de: "Entdecke geprüfte Caterer, vergleiche Angebote und frage deinen Wunschtermin direkt an.",
     en: "Discover vetted caterers, compare offers and request your preferred date directly.",
@@ -91,8 +100,14 @@ const dict: Dict = {
   "cat.filter.private": { de: "Privates Dinner", en: "Private Dinner" },
   "cat.requestMenu": { de: "Menü ansehen →", en: "View menu →" },
 
-  "p.eyebrow": { de: "Für Restaurants, Caterer & Event-Planer", en: "For restaurants, caterers & event planners" },
-  "p.title": { de: "Dein Angebot<br/>verdient mehr<br/>Sichtbarkeit.", en: "Your offer<br/>deserves more<br/>visibility." },
+  "p.eyebrow": {
+    de: "Für Restaurants, Caterer & Event-Planer",
+    en: "For restaurants, caterers & event planners",
+  },
+  "p.title": {
+    de: "Dein Angebot<br/>verdient mehr<br/>Sichtbarkeit.",
+    en: "Your offer<br/>deserves more<br/>visibility.",
+  },
   "p.subtitle": {
     de: "Speisely bringt Restaurants, Caterer und Event-Planer mit den passenden Gästen zusammen — von spontanen Bestellungen bis zu großen Firmenveranstaltungen.",
     en: "Speisely helps restaurants, caterers, and event planners connect with the right guests — from spontaneous orders to large corporate events.",
@@ -123,18 +138,27 @@ const dict: Dict = {
     de: "Werde Teil des fairen, wachsenden Marktplatzes für Restaurants, Caterer und Event-Profis in ganz Deutschland.",
     en: "Join the growing, fair marketplace for restaurants, caterers, and event professionals across Germany.",
   },
-  "p.learn.mission": { de: "Mehr über unsere Mission erfahren", en: "Learn more about our mission" },
+  "p.learn.mission": {
+    de: "Mehr über unsere Mission erfahren",
+    en: "Learn more about our mission",
+  },
   "p.learn.blog": { de: "Aktuelles aus unserem Blog", en: "Latest updates from our blog" },
   "p.ready.cta": { de: "Partner werden", en: "Become a partner" },
 
   "ab.eyebrow": { de: "Über Speisely", en: "About Speisely" },
-  "ab.title": { de: "Wir machen gute Erlebnisse leichter entdeckbar.", en: "We make great experiences easier to discover." },
+  "ab.title": {
+    de: "Wir machen gute Erlebnisse leichter entdeckbar.",
+    en: "We make great experiences easier to discover.",
+  },
   "ab.subtitle": {
     de: "Speisely verbindet spontane Restaurantbestellungen, besondere Catering-Momente und professionelle Event-Planung auf einer Plattform — sorgfältig kuratiert, transparent und persönlich. Made in Deutschland — für Restaurants, Caterer und Event-Profis in ganz Deutschland.",
     en: "Speisely connects spontaneous restaurant orders, special catering moments and professional event planning on one platform — carefully curated, transparent and personal. Made in Germany — for restaurants, caterers, and event professionals nationwide.",
   },
   "ab.conviction": { de: "Unsere Überzeugung", en: "Our conviction" },
-  "ab.h2": { de: "Jeder Anlass verdient das passende Erlebnis.", en: "Every occasion deserves the right experience." },
+  "ab.h2": {
+    de: "Jeder Anlass verdient das passende Erlebnis.",
+    en: "Every occasion deserves the right experience.",
+  },
   "ab.body": {
     de: "Ob spontane Essensbestellung bei Restaurants, Catering-Anfragen bei Caterern oder eine komplette Event-Planung mit professionellen Event-Planern: Die Suche nach dem passenden kulinarischen und organisatorischen Erlebnis sollte inspirierend sein, nicht kompliziert. Für unsere Partner schaffen wir faire Bedingungen: Restaurants zahlen eine einfache Flatrate für unbegrenzte Bestellungen, während für Caterer und Event-Planer eine transparente, erfolgsbasierte Vermittlungsgebühr gilt.",
     en: "Whether it is food ordering from local restaurants, catering requests for caterers, or complete event planning with professional event planners: the search for the perfect culinary and organizational experience should be inspiring, not complicated. For our partners, we create fair terms: restaurants pay a simple flat subscription for unlimited orders, while caterers and event planners pay a transparent, success-based matching fee.",
@@ -144,11 +168,20 @@ const dict: Dict = {
     en: "For caterers, Speisely opens two doors: event catering for weddings, corporate events, and celebrations — and recurring institutional catering for offices, daycare centers, hospitals, schools, and care homes. One platform, two revenue streams.",
   },
   "ab.v1": { de: "Kuratiert", en: "Curated" },
-  "ab.v1.desc": { de: "Jeder Partner wird vor der Aufnahme geprüft.", en: "Every partner is reviewed before joining our marketplace." },
+  "ab.v1.desc": {
+    de: "Jeder Partner wird vor der Aufnahme geprüft.",
+    en: "Every partner is reviewed before joining our marketplace.",
+  },
   "ab.v2": { de: "Zuverlässig", en: "Reliable" },
-  "ab.v2.desc": { de: "Transparente Preise, keine versteckten Kosten.", en: "Transparent pricing, no hidden fees." },
+  "ab.v2.desc": {
+    de: "Transparente Preise, keine versteckten Kosten.",
+    en: "Transparent pricing, no hidden fees.",
+  },
   "ab.v3": { de: "Persönlich", en: "Personal" },
-  "ab.v3.desc": { de: "Echte Empfehlungen, abgestimmt auf dein Event.", en: "Real recommendations, tailored to your event." },
+  "ab.v3.desc": {
+    de: "Echte Empfehlungen, abgestimmt auf dein Event.",
+    en: "Real recommendations, tailored to your event.",
+  },
   "ab.stat.restaurants": { de: "Restaurants", en: "Restaurants" },
   "ab.stat.caterers": { de: "Caterer", en: "Caterers" },
   "ab.stat.planners": { de: "Event-Planer", en: "Event Planners" },
@@ -180,10 +213,10 @@ const dict: Dict = {
   "footer.terms": { de: "AGB", en: "Terms" },
 };
 
-const Ctx = createContext<{ 
-  lang: Lang; 
-  setLang: (l: Lang) => void; 
-  t: (k: any, fallback?: any) => string 
+const Ctx = createContext<{
+  lang: Lang;
+  setLang: (l: Lang) => void;
+  t: (k: any, fallback?: any) => string;
 }>({
   lang: "de",
   setLang: () => {},

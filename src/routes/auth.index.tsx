@@ -22,10 +22,16 @@ type Role = "customer" | "restaurant_owner" | "caterer" | "planner" | "partner";
 
 export const Route = createFileRoute("/auth/")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => ({
+  validateSearch: (s: Record<string, unknown>): {
+    signup?: string;
+    message?: string;
+    logout?: string;
+    redirect?: string;
+  } => ({
     signup: typeof s.signup === "string" ? (s.signup as string) : undefined,
     message: typeof s.message === "string" ? (s.message as string) : undefined,
     logout: typeof s.logout === "string" ? (s.logout as string) : undefined,
+    redirect: typeof s.redirect === "string" ? (s.redirect as string) : undefined,
   }),
   head: () => ({ meta: [{ title: "Login — Speisely" }, { name: "robots", content: "noindex" }] }),
   component: AuthPage,
@@ -42,7 +48,7 @@ function AuthPage() {
   const navigate = useNavigate();
   const checkEmailRoleFn = useServerFn(checkEmailRole);
   const upsertConsentRecordFn = useServerFn(upsertConsentRecord);
-  const { signup, message, logout } = Route.useSearch();
+  const { signup, message, logout, redirect } = Route.useSearch();
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -87,16 +93,22 @@ function AuthPage() {
       supabase.auth.signOut().then(() => {
         navigate({
           to: "/auth",
-          search: { message, signup: undefined, logout: undefined },
+          search: { message, signup: undefined, logout: undefined, redirect },
           replace: true,
         });
       });
       return;
     }
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/dashboard" });
+      if (data.user) {
+        if (redirect) {
+          window.location.href = redirect;
+        } else {
+          navigate({ to: "/dashboard" });
+        }
+      }
     });
-  }, [navigate, logout, message]);
+  }, [navigate, logout, message, redirect]);
 
   // Unified Form Schema
   const formSchema = z
@@ -118,7 +130,7 @@ function AuthPage() {
     })
     .superRefine((data, ctx) => {
       const currentMode = modeRef.current;
-      
+
       if (currentMode === "signup") {
         const passCheck = passwordSchema.safeParse(data.password || "");
         if (!passCheck.success) {
@@ -126,7 +138,7 @@ function AuthPage() {
             ctx.addIssue({ ...issue, path: ["password"] });
           });
         }
-        
+
         if (!data.fullName || data.fullName.length < 2) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -305,7 +317,11 @@ function AuthPage() {
           throw error;
         }
       }
-      navigate({ to: "/dashboard" });
+      if (redirect) {
+        window.location.href = redirect;
+      } else {
+        navigate({ to: "/dashboard" });
+      }
     } catch (e: unknown) {
       setGlobalErr(sanitizeAuthError(e));
     } finally {
@@ -340,16 +356,31 @@ function AuthPage() {
         en: "No profile exists with this email. Please sign up first.",
       };
     if (code.startsWith("incorrect_password_with_role:"))
-      return { de: "Falsches Passwort für dieses Konto.", en: "Incorrect password for this account." };
+      return {
+        de: "Falsches Passwort für dieses Konto.",
+        en: "Incorrect password for this account.",
+      };
     if (code.includes("invalid_credentials") || code.includes("Invalid login credentials"))
       return { de: "E-Mail oder Passwort ist falsch.", en: "Incorrect email or password." };
     if (code.includes("email_not_confirmed"))
-      return { de: "Bitte bestätige zuerst deine E-Mail-Adresse.", en: "Please confirm your email address first." };
+      return {
+        de: "Bitte bestätige zuerst deine E-Mail-Adresse.",
+        en: "Please confirm your email address first.",
+      };
     if (code.includes("user_already_exists") || code.includes("already registered"))
-      return { de: "Diese E-Mail-Adresse ist bereits registriert.", en: "An account with this email already exists." };
+      return {
+        de: "Diese E-Mail-Adresse ist bereits registriert.",
+        en: "An account with this email already exists.",
+      };
     if (code.includes("over_email_send_rate_limit") || code.includes("rate limit"))
-      return { de: "Zu viele Anfragen. Bitte warte einen Moment.", en: "Too many requests. Please wait a moment." };
-    return { de: "Ein Fehler ist aufgetreten. Bitte erneut versuchen.", en: "Something went wrong. Please try again." };
+      return {
+        de: "Zu viele Anfragen. Bitte warte einen Moment.",
+        en: "Too many requests. Please wait a moment.",
+      };
+    return {
+      de: "Ein Fehler ist aufgetreten. Bitte erneut versuchen.",
+      en: "Something went wrong. Please try again.",
+    };
   }
 
   if (mode === "check-email") {
@@ -373,8 +404,16 @@ function AuthPage() {
             {tt("Wir haben dir einen Bestätigungslink an", "We sent a confirmation link to")}{" "}
             <strong>{currentEmail}</strong> {tt("gesendet.", "sent.")}
           </p>
-          {globalSuccess && <p className="text-sm text-green-600 font-medium">{lang === "de" ? globalSuccess.de : globalSuccess.en}</p>}
-          {globalErr && <p className="text-sm text-red-600 font-medium">{lang === "de" ? globalErr.de : globalErr.en}</p>}
+          {globalSuccess && (
+            <p className="text-sm text-green-600 font-medium">
+              {lang === "de" ? globalSuccess.de : globalSuccess.en}
+            </p>
+          )}
+          {globalErr && (
+            <p className="text-sm text-red-600 font-medium">
+              {lang === "de" ? globalErr.de : globalErr.en}
+            </p>
+          )}
           <Button
             variant="outline"
             onClick={handleResendEmail}

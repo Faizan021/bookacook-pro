@@ -10,7 +10,7 @@ function requireWebhookEnv(name: string): string {
   if (!value) {
     throw new Error(
       `[Stripe Webhook] Missing required environment variable: ${name}. ` +
-      `Configure this in your Vercel project environment variables.`
+        `Configure this in your Vercel project environment variables.`,
     );
   }
   return value;
@@ -23,8 +23,8 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
         // Require both secrets — throw at startup if either is absent.
         // This means a misconfigured deployment surfaces a 500 error
         // on the first webhook call rather than silently accepting forged events.
-        const stripeSecretKey = requireWebhookEnv('STRIPE_SECRET_KEY');
-        const endpointSecret = requireWebhookEnv('STRIPE_WEBHOOK_SECRET');
+        const stripeSecretKey = requireWebhookEnv("STRIPE_SECRET_KEY");
+        const endpointSecret = requireWebhookEnv("STRIPE_WEBHOOK_SECRET");
 
         const stripe = new Stripe(stripeSecretKey, {
           apiVersion: "2025-02-24" as any,
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
 
         if (dedupError) {
           // 23505 is the PostgreSQL error code for unique_violation
-          if (dedupError.code === '23505') {
+          if (dedupError.code === "23505") {
             console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id}`);
             return new Response("Duplicate event ignored", { status: 200 });
           }
@@ -69,9 +69,12 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
           // ==================== SUBSCRIPTION EVENTS ====================
           case "checkout.session.completed": {
             const session = event.data.object as Stripe.Checkout.Session;
-            
+
             // Handle restaurant subscription checkout
-            if (session.metadata?.type === "restaurant_subscription" && session.metadata?.restaurant_id) {
+            if (
+              session.metadata?.type === "restaurant_subscription" &&
+              session.metadata?.restaurant_id
+            ) {
               const restaurantId = session.metadata.restaurant_id;
               const stripeSubscriptionId = session.subscription as string;
               const stripeCustomerId = session.customer as string;
@@ -96,9 +99,8 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
               }
 
               // 1. Create or update subscription record
-              const { error: subError } = await supabaseAdmin
-                .from("subscriptions")
-                .upsert({
+              const { error: subError } = await supabaseAdmin.from("subscriptions").upsert(
+                {
                   restaurant_id: restaurantId,
                   stripe_customer_id: stripeCustomerId,
                   stripe_subscription_id: stripeSubscriptionId,
@@ -106,7 +108,9 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
                   plan: "starter",
                   current_period_start: currentPeriodStart,
                   current_period_end: currentPeriodEnd,
-                }, { onConflict: "restaurant_id" });
+                },
+                { onConflict: "restaurant_id" },
+              );
 
               if (subError) {
                 console.error("[Stripe Webhook] Error updating subscriptions table:", subError);
@@ -123,18 +127,28 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
                 .eq("id", restaurantId);
 
               if (restError) {
-                console.error("[Stripe Webhook] Error updating restaurant subscription status:", restError);
+                console.error(
+                  "[Stripe Webhook] Error updating restaurant subscription status:",
+                  restError,
+                );
                 return new Response("Database Error", { status: 500 });
               }
 
-              console.log(`[Stripe Webhook] Subscription successfully created for restaurant ${restaurantId}`);
+              console.log(
+                `[Stripe Webhook] Subscription successfully created for restaurant ${restaurantId}`,
+              );
             }
 
             // Handle booking deposit paid via Checkout Session directly
             // Handle booking deposit
             if (session.metadata?.type === "booking_deposit" && session.metadata?.booking_id) {
               const bookingId = session.metadata.booking_id;
-              await confirmBookingDeposit(supabaseAdmin, bookingId, session.payment_intent as string, (session.amount_total || 0) / 100);
+              await confirmBookingDeposit(
+                supabaseAdmin,
+                bookingId,
+                session.payment_intent as string,
+                (session.amount_total || 0) / 100,
+              );
             }
 
             // Handle storefront order payment
@@ -144,17 +158,19 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
                 .from("restaurant_orders")
                 .update({ status: "confirmed" })
                 .eq("id", orderId);
-              
+
               if (error) {
                 console.error("Failed to confirm storefront order:", error);
               } else {
                 // Fetch order details for email
                 const { data: order } = await supabaseAdmin
                   .from("restaurant_orders")
-                  .select(`
+                  .select(
+                    `
                     id, customer_name, customer_email, order_type, total_cents,
                     restaurant_id
-                  `)
+                  `,
+                  )
                   .eq("id", orderId)
                   .single();
 
@@ -164,9 +180,11 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
                     .select("name, owner_id")
                     .eq("id", order.restaurant_id)
                     .single();
-                  
+
                   if (rest?.owner_id) {
-                    const { data: user } = await supabaseAdmin.auth.admin.getUserById(rest.owner_id);
+                    const { data: user } = await supabaseAdmin.auth.admin.getUserById(
+                      rest.owner_id,
+                    );
                     if (user?.user?.email) {
                       const totalStr = `€${(order.total_cents / 100).toFixed(2)}`;
                       await sendPartnerNotificationEmail({
@@ -180,8 +198,8 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
                                    <li><strong>Typ:</strong> ${order.order_type}</li>
                                    <li><strong>Betrag:</strong> ${totalStr}</li>
                                  </ul>
-                                 <p>Melden Sie sich in Ihrem Dashboard an, um die Bestelldetails zu sehen.</p>`
-                        }
+                                 <p>Melden Sie sich in Ihrem Dashboard an, um die Bestelldetails zu sehen.</p>`,
+                        },
                       });
                     }
                   }
@@ -211,7 +229,9 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
               .maybeSingle();
 
             if (subFetchError || !subRow || !subRow.restaurant_id) {
-              console.warn(`[Stripe Webhook] Subscription ${stripeSubscriptionId} not found in database or missing restaurant_id.`);
+              console.warn(
+                `[Stripe Webhook] Subscription ${stripeSubscriptionId} not found in database or missing restaurant_id.`,
+              );
               break;
             }
 
@@ -246,10 +266,15 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
               .eq("id", subRow.restaurant_id as string);
 
             if (restUpdateError) {
-              console.error("[Stripe Webhook] Error updating restaurant subscription:", restUpdateError);
+              console.error(
+                "[Stripe Webhook] Error updating restaurant subscription:",
+                restUpdateError,
+              );
             }
 
-            console.log(`[Stripe Webhook] Subscription ${stripeSubscriptionId} status updated to ${status}. Restaurant: ${subRow.restaurant_id}`);
+            console.log(
+              `[Stripe Webhook] Subscription ${stripeSubscriptionId} status updated to ${status}. Restaurant: ${subRow.restaurant_id}`,
+            );
             break;
           }
 
@@ -278,7 +303,9 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
                 .update({ subscription_status: "past_due" })
                 .eq("id", subRow.restaurant_id as string);
 
-              console.log(`[Stripe Webhook] Invoice payment failed for subscription ${stripeSubscriptionId}. Marked as past_due.`);
+              console.log(
+                `[Stripe Webhook] Invoice payment failed for subscription ${stripeSubscriptionId}. Marked as past_due.`,
+              );
             }
 
             break;
@@ -366,7 +393,12 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
 });
 
 // Helper function to confirm booking deposit and write payments record
-async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paymentIntentId: string, amountEuros: number) {
+async function confirmBookingDeposit(
+  supabaseAdmin: any,
+  bookingId: string,
+  paymentIntentId: string,
+  amountEuros: number,
+) {
   const now = new Date().toISOString();
 
   // Try checking catering bookings first
@@ -397,24 +429,22 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
     }
 
     // 2. Insert payment
-    const { error: pError } = await supabaseAdmin
-      .from("payments")
-      .insert({
-        booking_id: bookingId,
-        catering_booking_id: bookingId,
-        stripe_payment_intent_id: paymentIntentId,
-        amount_total: amountEuros,
-        platform_fee_amount: amountEuros, // Full deposit amount goes to platform fee (10%)
-        currency: "EUR",
-        status: "captured",
-      });
+    const { error: pError } = await supabaseAdmin.from("payments").insert({
+      booking_id: bookingId,
+      catering_booking_id: bookingId,
+      stripe_payment_intent_id: paymentIntentId,
+      amount_total: amountEuros,
+      platform_fee_amount: amountEuros, // Full deposit amount goes to platform fee (10%)
+      currency: "EUR",
+      status: "captured",
+    });
 
     if (pError) {
       console.error("[Stripe Webhook] Error creating catering payment record:", pError);
     } else {
       console.log(`[Stripe Webhook] Catering booking ${bookingId} deposit paid and confirmed!`);
     }
-    
+
     // 3. Update brief status to 'booked' to unlock Lead Protection
     if (catBooking.brief_id) {
       const { error: briefError } = await supabaseAdmin
@@ -422,12 +452,15 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
         .update({ status: "booked" })
         .eq("id", catBooking.brief_id);
       if (briefError) {
-        console.error(`[Stripe Webhook] Error updating brief ${catBooking.brief_id} to booked:`, briefError);
+        console.error(
+          `[Stripe Webhook] Error updating brief ${catBooking.brief_id} to booked:`,
+          briefError,
+        );
       } else {
         console.log(`[Stripe Webhook] Catering brief ${catBooking.brief_id} updated to booked.`);
       }
     }
-    
+
     return;
   }
 
@@ -459,17 +492,15 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
     }
 
     // 2. Insert payment
-    const { error: pError } = await supabaseAdmin
-      .from("payments")
-      .insert({
-        booking_id: bookingId,
-        event_booking_id: bookingId,
-        stripe_payment_intent_id: paymentIntentId,
-        amount_total: amountEuros,
-        platform_fee_amount: amountEuros, // Full deposit amount is the platform fee
-        currency: "EUR",
-        status: "captured",
-      });
+    const { error: pError } = await supabaseAdmin.from("payments").insert({
+      booking_id: bookingId,
+      event_booking_id: bookingId,
+      stripe_payment_intent_id: paymentIntentId,
+      amount_total: amountEuros,
+      platform_fee_amount: amountEuros, // Full deposit amount is the platform fee
+      currency: "EUR",
+      status: "captured",
+    });
 
     if (pError) {
       console.error("[Stripe Webhook] Error creating event payment record:", pError);
@@ -484,7 +515,10 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
         .update({ status: "booked" })
         .eq("id", eventBooking.brief_id);
       if (briefError) {
-        console.error(`[Stripe Webhook] Error updating planner brief ${eventBooking.brief_id} to booked:`, briefError);
+        console.error(
+          `[Stripe Webhook] Error updating planner brief ${eventBooking.brief_id} to booked:`,
+          briefError,
+        );
       } else {
         console.log(`[Stripe Webhook] Planner brief ${eventBooking.brief_id} updated to booked.`);
       }
@@ -493,5 +527,7 @@ async function confirmBookingDeposit(supabaseAdmin: any, bookingId: string, paym
     return;
   }
 
-  console.error(`[Stripe Webhook] Booking ${bookingId} not found in catering_bookings or event_bookings.`);
+  console.error(
+    `[Stripe Webhook] Booking ${bookingId} not found in catering_bookings or event_bookings.`,
+  );
 }

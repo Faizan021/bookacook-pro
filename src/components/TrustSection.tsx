@@ -15,16 +15,16 @@ export interface TrustSectionProps {
 
 export function TrustSection({ badgeText, headline, items, className = "" }: TrustSectionProps) {
   return (
-    <section className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30 ${className}`}>
+    <section
+      className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30 ${className}`}
+    >
       <div className="text-center max-w-2xl mx-auto space-y-4">
         {badgeText && (
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">
             {badgeText}
           </span>
         )}
-        <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">
-          {headline}
-        </h2>
+        <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">{headline}</h2>
       </div>
 
       <div className="mt-12 md:mt-16 grid sm:grid-cols-3 gap-8 md:gap-12">
@@ -36,9 +36,7 @@ export function TrustSection({ badgeText, headline, items, className = "" }: Tru
                 <Icon className="h-8 w-8" />
               </div>
               <h3 className="text-xl font-display font-bold text-forest">{item.title}</h3>
-              <p className="text-sm text-forest/70 leading-relaxed max-w-sm">
-                {item.description}
-              </p>
+              <p className="text-sm text-forest/70 leading-relaxed max-w-sm">{item.description}</p>
             </div>
           );
         })}

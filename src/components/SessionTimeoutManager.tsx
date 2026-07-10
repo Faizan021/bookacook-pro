@@ -51,13 +51,13 @@ export function SessionTimeoutManager({ children }: { children: React.ReactNode 
   const handleLogout = useCallback(async () => {
     if (isLoggingOut.current) return;
     isLoggingOut.current = true;
-    
+
     try {
       localStorage.removeItem(SESSION_CONFIG.STORAGE_KEY);
     } catch (e) {
       // Ignore
     }
-    
+
     await supabase.auth.signOut();
     navigate({
       to: "/auth",
@@ -73,7 +73,7 @@ export function SessionTimeoutManager({ children }: { children: React.ReactNode 
   // Listen for user activity
   useEffect(() => {
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
-    
+
     // Throttle activity updates to at most once per second
     let timeout: any;
     const handleActivity = () => {
@@ -105,7 +105,7 @@ export function SessionTimeoutManager({ children }: { children: React.ReactNode 
       if (e.key === SESSION_CONFIG.STORAGE_KEY && e.newValue) {
         const newTime = parseInt(e.newValue, 10);
         memoryLastActivity = newTime;
-        
+
         // If another tab updated activity, we might need to close the warning
         if (Date.now() - newTime < SESSION_CONFIG.WARNING_THRESHOLD_MS) {
           setShowWarning(false);
@@ -120,7 +120,7 @@ export function SessionTimeoutManager({ children }: { children: React.ReactNode 
   useEffect(() => {
     const checkIdleStatus = () => {
       if (isLoggingOut.current) return;
-      
+
       const now = Date.now();
       const lastActive = getLastActivity();
       const idleTime = now - lastActive;
@@ -153,7 +153,8 @@ export function SessionTimeoutManager({ children }: { children: React.ReactNode 
           <AlertDialogHeader>
             <AlertDialogTitle>Session Expiring Soon</AlertDialogTitle>
             <AlertDialogDescription>
-              You've been inactive for a while. For your security, you will be automatically signed out in {timeString}.
+              You've been inactive for a while. For your security, you will be automatically signed
+              out in {timeString}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

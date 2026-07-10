@@ -17,7 +17,11 @@ interface UnifiedCustomerFieldsProps {
   hidePhone?: boolean; // Sometimes phone isn't strictly required, but usually it is for these forms
 }
 
-export function UnifiedCustomerFields({ value, onChange, hidePhone = false }: UnifiedCustomerFieldsProps) {
+export function UnifiedCustomerFields({
+  value,
+  onChange,
+  hidePhone = false,
+}: UnifiedCustomerFieldsProps) {
   const { lang } = useI18n();
   const t = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -78,7 +82,7 @@ export function UnifiedCustomerFields({ value, onChange, hidePhone = false }: Un
           <Label htmlFor="terms-accept" className="text-sm text-forest/80 leading-tight">
             {t(
               "Ich akzeptiere die Nutzungsbedingungen und Datenschutzbestimmungen.",
-              "I accept the Terms of Service and Privacy Policy."
+              "I accept the Terms of Service and Privacy Policy.",
             )}
             <span className="text-red-500 ml-1">*</span>
           </Label>
@@ -93,7 +97,7 @@ export function UnifiedCustomerFields({ value, onChange, hidePhone = false }: Un
           <Label htmlFor="marketing-optin" className="text-sm text-forest/80 leading-tight">
             {t(
               "Ja, ich möchte gelegentliche Updates und Angebote von Speisely erhalten (Jederzeit widerrufbar).",
-              "Yes, I would like to receive occasional updates and offers from Speisely (unsubscribe at any time)."
+              "Yes, I would like to receive occasional updates and offers from Speisely (unsubscribe at any time).",
             )}
           </Label>
         </div>

@@ -1,24 +1,24 @@
-const fs = require('fs');
-let code = fs.readFileSync('src/routes/_authenticated/dashboard/planner.tsx', 'utf8');
+const fs = require("fs");
+let code = fs.readFileSync("src/routes/_authenticated/dashboard/planner.tsx", "utf8");
 
 code = code.replace(
   /function PromotionsSection\(\{ vertical \}: \{ vertical: "restaurants" \| "caterers" \| "planners" \}\) \{/,
-  'function PromotionsSection({ vertical, availableItems = [] }: { vertical: "restaurants" | "caterers" | "planners"; availableItems?: string[] }) {'
+  'function PromotionsSection({ vertical, availableItems = [] }: { vertical: "restaurants" | "caterers" | "planners"; availableItems?: string[] }) {',
 );
 
 code = code.replace(
   'const [value, setValue] = useState("");\n  const [promote, setPromote] = useState(true);',
-  'const [value, setValue] = useState("");\n  const [appliesTo, setAppliesTo] = useState("");\n  const [promote, setPromote] = useState(true);'
+  'const [value, setValue] = useState("");\n  const [appliesTo, setAppliesTo] = useState("");\n  const [promote, setPromote] = useState(true);',
 );
 
 code = code.replace(
   /promote_on_storefront: promote,\n\s+vertical\n\s+\}\}\);/,
-  'promote_on_storefront: promote,\n        vertical,\n        applies_to_product_name: (appliesTo && appliesTo !== "all") ? appliesTo : undefined\n      }});'
+  'promote_on_storefront: promote,\n        vertical,\n        applies_to_product_name: (appliesTo && appliesTo !== "all") ? appliesTo : undefined\n      }});',
 );
 
 code = code.replace(
   'setCode("");\n      setValue("");\n      qc.invalidateQueries',
-  'setCode("");\n      setValue("");\n      setAppliesTo("");\n      qc.invalidateQueries'
+  'setCode("");\n      setValue("");\n      setAppliesTo("");\n      qc.invalidateQueries',
 );
 
 const selectHtml = `          <div className="space-y-1.5 mt-3">
@@ -35,20 +35,17 @@ const selectHtml = `          <div className="space-y-1.5 mt-3">
           </div>
           <div className="pt-2 pb-1`;
 
-code = code.replace(
-  '<div className="pt-2 pb-1',
-  selectHtml
-);
+code = code.replace('<div className="pt-2 pb-1', selectHtml);
 
 code = code.replace(
   /<h4 className="font-bold font-mono text-lg">\{c.code\}<\/h4>/,
-  '<h4 className="font-bold font-mono text-lg">{c.code} {c.applies_to_product_name && <span className="text-sm font-normal text-muted-foreground ml-2">({c.applies_to_product_name})</span>}</h4>'
+  '<h4 className="font-bold font-mono text-lg">{c.code} {c.applies_to_product_name && <span className="text-sm font-normal text-muted-foreground ml-2">({c.applies_to_product_name})</span>}</h4>',
 );
 
 code = code.replace(
   /<PromotionsSection vertical="planners" \/>/,
-  '<PromotionsSection vertical="planners" availableItems={(q.data.services || []).map((s: any) => s.name)} />'
+  '<PromotionsSection vertical="planners" availableItems={(q.data.services || []).map((s: any) => s.name)} />',
 );
 
-fs.writeFileSync('src/routes/_authenticated/dashboard/planner.tsx', code);
-console.log('planner.tsx patched');
+fs.writeFileSync("src/routes/_authenticated/dashboard/planner.tsx", code);
+console.log("planner.tsx patched");

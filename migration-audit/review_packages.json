@@ -17,17 +17,8 @@
     "updated_at": "2026-03-29T12:07:01.332865+00:00",
     "is_published": true,
     "short_summary": "Premium halal catering for weddings",
-    "dietary_options": [
-      "Halal",
-      "Vegetarisch",
-      "Vegan",
-      "Glutenfrei",
-      "vegetarian",
-      "dairy_free"
-    ],
-    "service_area": [
-      "Berlin"
-    ],
+    "dietary_options": ["Halal", "Vegetarisch", "Vegan", "Glutenfrei", "vegetarian", "dairy_free"],
+    "service_area": ["Berlin"],
     "includes": [],
     "add_ons": [],
     "booking_notice_days": 1,
@@ -42,9 +33,7 @@
     "deposit_percentage": null,
     "gallery_images": [],
     "keywords": [],
-    "event_types": [
-      "wedding"
-    ],
+    "event_types": ["wedding"],
     "featured": false,
     "images": [],
     "included_items": [],

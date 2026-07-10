@@ -88,16 +88,23 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
+  * {
+    border-color: var(--color-border);
+  }
 
-  html, body {
+  html,
+  body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4, .font-display {
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
     font-family: var(--font-display);
     font-weight: 700;
     letter-spacing: -0.02em;
@@ -114,14 +121,22 @@
     background-color: var(--color-cream);
     color: var(--color-cream-foreground);
     border-radius: 1.5rem;
-    box-shadow: 0 2px 0 oklch(0.85 0.05 152), 0 24px 40px -28px oklch(0.27 0.06 152 / 0.25);
+    box-shadow:
+      0 2px 0 oklch(0.85 0.05 152),
+      0 24px 40px -28px oklch(0.27 0.06 152 / 0.25);
   }
 
   /* Custom storefront animations */
   @keyframes pulse-once {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.18); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.18);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .pulse-btn {
@@ -134,9 +149,15 @@
 
   /* Hero gradient background animation */
   @keyframes gradient-drift {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   .hero-gradient-bg {
@@ -152,4 +173,3 @@
     animation: gradient-drift 12s ease infinite;
   }
 }
-

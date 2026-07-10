@@ -1,3 +1,7 @@
+import { supabase } from "@/integrations/supabase/client";
+import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
+import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
+
 export type ServicePackage = {
   name: string;
   desc: { de: string; en: string };
@@ -13,8 +17,20 @@ export type Planner = {
   rating: number;
   reviewCount: number;
   since: number;
-  cat: "wedding" | "corporate" | "private" | "ramadan" | "christmas" | "festival" | "conference" | "seminar" | "concert" | "trade-show";
+  cat:
+    | "wedding"
+    | "corporate"
+    | "private"
+    | "ramadan"
+    | "christmas"
+    | "festival"
+    | "conference"
+    | "seminar"
+    | "concert"
+    | "trade-show";
   img: string | null;
+  logo?: string;
+  use_generated_branding?: boolean;
   gallery: string[];
   area: string | null;
   address: string | null;
@@ -64,13 +80,19 @@ export const fallbackPlanners: Planner[] = [
     packages: [
       {
         name: "Full-Service Wedding Planning",
-        desc: { de: "Designgetriebene Eventplanung für Hochzeiten — von Konzept bis Cleanup.", en: "Design-driven event planning for weddings — from concept to cleanup." },
+        desc: {
+          de: "Designgetriebene Eventplanung für Hochzeiten — von Konzept bis Cleanup.",
+          en: "Design-driven event planning for weddings — from concept to cleanup.",
+        },
         startingFrom: 4900,
         unit: { de: "ab", en: "from" },
       },
       {
         name: "Month-of Coordination",
-        desc: { de: "Übernahme 4 Wochen vor dem Event, vollständige Koordination am Tag.", en: "Takeover 4 weeks before the event, full coordination on the day." },
+        desc: {
+          de: "Übernahme 4 Wochen vor dem Event, vollständige Koordination am Tag.",
+          en: "Takeover 4 weeks before the event, full coordination on the day.",
+        },
         startingFrom: 1800,
         unit: { de: "ab", en: "from" },
       },
@@ -104,13 +126,19 @@ export const fallbackPlanners: Planner[] = [
     packages: [
       {
         name: "Conference Production",
-        desc: { de: "Bühne, AV, Run-of-show, Lieferanten. End-to-end Produktion für Corporate Events.", en: "Stage, AV, run-of-show, suppliers. End-to-end production for corporate events." },
+        desc: {
+          de: "Bühne, AV, Run-of-show, Lieferanten. End-to-end Produktion für Corporate Events.",
+          en: "Stage, AV, run-of-show, suppliers. End-to-end production for corporate events.",
+        },
         startingFrom: 7500,
         unit: { de: "ab", en: "from" },
       },
       {
         name: "Product Launch Event",
-        desc: { de: "Kreativkonzept, Location, Medien für Ihren perfekten Produktlaunch.", en: "Creative concept, location, media for your perfect product launch." },
+        desc: {
+          de: "Kreativkonzept, Location, Medien für Ihren perfekten Produktlaunch.",
+          en: "Creative concept, location, media for your perfect product launch.",
+        },
         startingFrom: 6200,
         unit: { de: "ab", en: "from" },
       },
@@ -125,9 +153,7 @@ export const fallbackPlanners: Planner[] = [
     since: 2021,
     cat: "private",
     img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop",
-    gallery: [
-      "https://images.unsplash.com/photo-1555244162-803834f70033?w=800&fit=crop",
-    ],
+    gallery: ["https://images.unsplash.com/photo-1555244162-803834f70033?w=800&fit=crop"],
     area: "Berlin",
     address: "Torstraße 100, 10119 Berlin",
     phone: "+49 30 3456 7890",
@@ -143,13 +169,19 @@ export const fallbackPlanners: Planner[] = [
     packages: [
       {
         name: "Curated Private Dinner",
-        desc: { de: "Intime, kuratierte Privatdinner — Konzept, Caterer-Matching und Tag-Koordination.", en: "Intimate, curated private dinners — concept, caterer matching and day coordination." },
+        desc: {
+          de: "Intime, kuratierte Privatdinner — Konzept, Caterer-Matching und Tag-Koordination.",
+          en: "Intimate, curated private dinners — concept, caterer matching and day coordination.",
+        },
         startingFrom: 1800,
         unit: { de: "ab", en: "from" },
       },
       {
         name: "Milestone Birthday Party",
-        desc: { de: "Themed Setup mit Entertainment für besondere runde Geburtstage.", en: "Themed setup with entertainment for special milestone birthdays." },
+        desc: {
+          de: "Themed Setup mit Entertainment für besondere runde Geburtstage.",
+          en: "Themed setup with entertainment for special milestone birthdays.",
+        },
         startingFrom: 2400,
         unit: { de: "ab", en: "from" },
       },
@@ -183,7 +215,10 @@ export const fallbackPlanners: Planner[] = [
     packages: [
       {
         name: "Full Conference Management",
-        desc: { de: "Komplette Organisation von Kongressen inklusive Speaker-Management.", en: "Complete organization of congresses including speaker management." },
+        desc: {
+          de: "Komplette Organisation von Kongressen inklusive Speaker-Management.",
+          en: "Complete organization of congresses including speaker management.",
+        },
         startingFrom: 15000,
         unit: { de: "ab", en: "from" },
       },
@@ -217,7 +252,10 @@ export const fallbackPlanners: Planner[] = [
     packages: [
       {
         name: "Live Show Production",
-        desc: { de: "Komplette technische und organisatorische Umsetzung.", en: "Complete technical and organizational implementation." },
+        desc: {
+          de: "Komplette technische und organisatorische Umsetzung.",
+          en: "Complete technical and organizational implementation.",
+        },
         startingFrom: 20000,
         unit: { de: "ab", en: "from" },
       },
@@ -251,26 +289,47 @@ export const fallbackPlanners: Planner[] = [
     packages: [
       {
         name: "Seminar Planning",
-        desc: { de: "Location-Scouting, Catering und technisches Setup für Seminare.", en: "Location scouting, catering, and technical setup for seminars." },
+        desc: {
+          de: "Location-Scouting, Catering und technisches Setup für Seminare.",
+          en: "Location scouting, catering, and technical setup for seminars.",
+        },
         startingFrom: 1500,
         unit: { de: "ab", en: "from" },
       },
     ],
-  }
+  },
 ];
 
-import { supabase } from "@/integrations/supabase/client";
-
 function mapPlanner(r: any): Planner {
+  const pData = r.planners || {};
+  const isGenerated = BRANDING_ASSISTANT_ENABLED && pData.use_generated_branding;
+  const isBannerMissing = !pData.banner_image_url;
+  const isLogoMissing = !pData.logo_url;
+
+  const resolvedBanner = (isGenerated || isBannerMissing)
+    ? generateSvgBanner(pData.business_name || r.title || "Event Planner", pData.category || "Event Services")
+    : (pData.banner_image_url.startsWith("http")
+        ? pData.banner_image_url
+        : supabase.storage.from("storefront-assets").getPublicUrl(pData.banner_image_url).data.publicUrl);
+
+  const resolvedLogo = (isGenerated || isLogoMissing)
+    ? generateSvgLogo(pData.business_name || r.title || "Event Planner", pData.category || "Event Services")
+    : (pData.logo_url && pData.logo_url.startsWith("http")
+        ? pData.logo_url
+        : (pData.logo_url ? supabase.storage.from("storefront-assets").getPublicUrl(pData.logo_url).data.publicUrl : undefined));
+
   return {
     id: r.planner_id || r.id,
-    name: r.business_name || "Event Planner",
+    slug: pData.slug,
+    name: pData.business_name || r.title || "Event Planner",
     tagline: { de: r.description || "Event Planner", en: r.description || "Event Planner" },
     rating: 4.8,
     reviewCount: 0,
     since: 2024,
     cat: r.category || "wedding",
-    img: r.banner_image_url || "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200",
+    img: resolvedBanner,
+    logo: resolvedLogo,
+    use_generated_branding: pData.use_generated_branding || false,
     gallery: r.gallery_images || [],
     area: r.service_area || "Berlin",
     address: r.address || "",
@@ -288,24 +347,25 @@ function mapPlanner(r: any): Planner {
 export async function getPlanners(): Promise<Planner[]> {
   const { data, error } = await supabase
     .from("planner_services")
-    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available")
+    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)")
     .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error fetching planners:", error);
   }
 
-  const livePlanners = (data || []).map(mapPlanner);
+  const approvedPlanners = (data || []).filter((r: any) => r.planners?.approval_status === "approved");
+  const livePlanners = approvedPlanners.map(mapPlanner);
   const MIN_DISPLAY_COUNT = fallbackPlanners.length; // Show all mock data if needed
-  
+
   if (livePlanners.length >= MIN_DISPLAY_COUNT) {
     return livePlanners;
   }
 
   const needed = MIN_DISPLAY_COUNT - livePlanners.length;
-  const showcaseItems = fallbackPlanners.slice(0, needed).map(p => ({
+  const showcaseItems = fallbackPlanners.slice(0, needed).map((p) => ({
     ...p,
-    isShowcase: true
+    isShowcase: true,
   }));
 
   return [...livePlanners, ...showcaseItems];
@@ -314,11 +374,18 @@ export async function getPlanners(): Promise<Planner[]> {
 export async function getPlanner(id: string): Promise<Planner | undefined> {
   const { data, error } = await supabase
     .from("planner_services")
-    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available")
+    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, owner_id, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)")
     .eq("planner_id", id)
     .maybeSingle();
 
   if (!error && data) {
+    const parentPlanner = (data as any).planners;
+    if (parentPlanner?.approval_status !== "approved") {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.id !== parentPlanner?.owner_id) {
+        return undefined;
+      }
+    }
     return mapPlanner(data);
   }
 
@@ -346,5 +413,5 @@ export const mockPromoCodes: Record<string, PromoCode[]> = {
   "lumen-events": [
     { code: "LUMEN10", discount_type: "percentage", discount_value: 10 },
     { code: "EARLYBIRD", discount_type: "fixed", discount_value: 100 },
-  ]
+  ],
 };

@@ -1,3 +1,7 @@
+import { supabase } from "@/integrations/supabase/client";
+import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
+import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
+
 export type Caterer = {
   id: string;
   name: string;
@@ -10,6 +14,8 @@ export type Caterer = {
   time: string;
   tags: string[];
   img: string;
+  logo?: string;
+  use_generated_branding?: boolean;
   status: "available" | "busy";
   area: string;
   address: string;
@@ -55,8 +61,22 @@ export const fallbackCaterers: Caterer[] = [
     announcement_text: "Available for last-minute bookings this weekend! 🥂",
     packages: [],
     menu: [
-      { name: "6-Gänge Fine Dining", desc: { de: "Saisonales Menü", en: "Seasonal menu" }, price: 85, unit: { de: "Person", en: "person" }, serves: 1, category: "Menü" },
-      { name: "Weinbegleitung", desc: { de: "Passende Weine", en: "Matching wines" }, price: 45, unit: { de: "Person", en: "person" }, serves: 1, category: "Getränke" },
+      {
+        name: "6-Gänge Fine Dining",
+        desc: { de: "Saisonales Menü", en: "Seasonal menu" },
+        price: 85,
+        unit: { de: "Person", en: "person" },
+        serves: 1,
+        category: "Menü",
+      },
+      {
+        name: "Weinbegleitung",
+        desc: { de: "Passende Weine", en: "Matching wines" },
+        price: 45,
+        unit: { de: "Person", en: "person" },
+        serves: 1,
+        category: "Getränke",
+      },
     ],
   },
   {
@@ -84,8 +104,22 @@ export const fallbackCaterers: Caterer[] = [
     },
     packages: [],
     menu: [
-      { name: "Sharing Bowl: Levantine", desc: { de: "Hummus, Falafel, Tabbouleh", en: "Hummus, falafel, tabbouleh" }, price: 25, unit: { de: "Person", en: "person" }, serves: 1, category: "Bowls" },
-      { name: "Sharing Bowl: Asian", desc: { de: "Edamame, Teriyaki, Reis", en: "Edamame, teriyaki, rice" }, price: 28, unit: { de: "Person", en: "person" }, serves: 1, category: "Bowls" },
+      {
+        name: "Sharing Bowl: Levantine",
+        desc: { de: "Hummus, Falafel, Tabbouleh", en: "Hummus, falafel, tabbouleh" },
+        price: 25,
+        unit: { de: "Person", en: "person" },
+        serves: 1,
+        category: "Bowls",
+      },
+      {
+        name: "Sharing Bowl: Asian",
+        desc: { de: "Edamame, Teriyaki, Reis", en: "Edamame, teriyaki, rice" },
+        price: 28,
+        unit: { de: "Person", en: "person" },
+        serves: 1,
+        category: "Bowls",
+      },
     ],
   },
   {
@@ -113,17 +147,47 @@ export const fallbackCaterers: Caterer[] = [
     },
     packages: [],
     menu: [
-      { name: "Hochzeitsbuffet Premium", desc: { de: "Vollständiges Buffet mit Grillstation", en: "Full buffet with grill station" }, price: 45, unit: { de: "Person", en: "person" }, serves: 1, category: "Buffet" },
-      { name: "Mezze Platte", desc: { de: "Verschiedene Mezze Variationen", en: "Various mezze variations" }, price: 18, unit: { de: "Person", en: "person" }, serves: 1, category: "Vorspeisen" },
+      {
+        name: "Hochzeitsbuffet Premium",
+        desc: { de: "Vollständiges Buffet mit Grillstation", en: "Full buffet with grill station" },
+        price: 45,
+        unit: { de: "Person", en: "person" },
+        serves: 1,
+        category: "Buffet",
+      },
+      {
+        name: "Mezze Platte",
+        desc: { de: "Verschiedene Mezze Variationen", en: "Various mezze variations" },
+        price: 18,
+        unit: { de: "Person", en: "person" },
+        serves: 1,
+        category: "Vorspeisen",
+      },
     ],
   },
 ];
 
-import { supabase } from "@/integrations/supabase/client";
-
 function mapCaterer(r: any): Caterer {
+  const cData = r.caterers || {};
+  const isGenerated = BRANDING_ASSISTANT_ENABLED && cData.use_generated_branding;
+  const isBannerMissing = !r.banner_image_url;
+  const isLogoMissing = !cData.logo_url;
+
+  const resolvedBanner = (isGenerated || isBannerMissing)
+    ? generateSvgBanner(r.business_name || "Caterer", "Catering Service")
+    : (r.banner_image_url.startsWith("http")
+        ? r.banner_image_url
+        : supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url).data.publicUrl);
+
+  const resolvedLogo = (isGenerated || isLogoMissing)
+    ? generateSvgLogo(r.business_name || "Caterer", "Catering Service")
+    : (cData.logo_url && cData.logo_url.startsWith("http")
+        ? cData.logo_url
+        : (cData.logo_url ? supabase.storage.from("storefront-assets").getPublicUrl(cData.logo_url).data.publicUrl : undefined));
+
   return {
     id: r.slug || r.id,
+    slug: r.slug,
     name: r.business_name || "Caterer",
     tagline: { de: r.description || "Premium Catering", en: r.description || "Premium Catering" },
     rating: 4.8,
@@ -133,7 +197,9 @@ function mapCaterer(r: any): Caterer {
     perPerson: 25,
     time: "3 Tage Vorlauf",
     tags: r.cuisine_type ? [r.cuisine_type] : ["Catering"],
-    img: r.banner_image_url || "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200",
+    img: resolvedBanner,
+    logo: resolvedLogo,
+    use_generated_branding: cData.use_generated_branding || false,
     status: r.is_active || r.status === "published" ? "available" : "busy",
     area: r.city || "Berlin",
     address: r.business_address || "",
@@ -156,7 +222,9 @@ function mapCaterer(r: any): Caterer {
 export async function getCaterers(): Promise<Caterer[]> {
   const { data, error } = await supabase
     .from("storefront_settings")
-    .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*)")
+    .select(
+      "id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*), caterers(approval_status, use_generated_branding, logo_url)",
+    )
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
@@ -164,31 +232,46 @@ export async function getCaterers(): Promise<Caterer[]> {
     console.error("Error fetching caterers:", error);
   }
 
-  const liveCaterers = (data || []).map(mapCaterer);
+  const approvedCaterers = (data || []).filter((r: any) => r.caterers?.approval_status === "approved");
+  const liveCaterers = approvedCaterers.map(mapCaterer);
   const MIN_DISPLAY_COUNT = 3; // Keep the threshold low for caterers since there's fewer
-  
+
   if (liveCaterers.length >= MIN_DISPLAY_COUNT) {
     return liveCaterers;
   }
 
   const needed = MIN_DISPLAY_COUNT - liveCaterers.length;
-  const showcaseItems = fallbackCaterers.slice(0, needed).map(c => ({
+  const showcaseItems = fallbackCaterers.slice(0, needed).map((c) => ({
     ...c,
-    isShowcase: true
+    isShowcase: true,
   }));
 
   return [...liveCaterers, ...showcaseItems];
 }
 
 export async function getCaterer(id: string): Promise<Caterer | undefined> {
-  const { data, error } = await supabase
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  const query = supabase
     .from("storefront_settings")
-    .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*)")
-    .eq("slug", id)
+    .select(
+      "id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*), caterers(approval_status, owner_id, use_generated_branding, logo_url)",
+    );
+
+  const { data, error } = await (isUuid
+    ? query.or(`slug.eq.${id},id.eq.${id}`)
+    : query.eq("slug", id)
+  )
     .eq("is_active", true)
     .maybeSingle();
 
   if (!error && data) {
+    const parentCaterer = (data as any).caterers;
+    if (parentCaterer?.approval_status !== "approved") {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.id !== parentCaterer?.owner_id) {
+        return undefined;
+      }
+    }
     return mapCaterer(data);
   }
 
@@ -216,5 +299,5 @@ export const mockPromoCodes: Record<string, PromoCode[]> = {
   "maison-verde": [
     { code: "CATERING15", discount_type: "percentage", discount_value: 15 },
     { code: "WELCOME", discount_type: "fixed", discount_value: 50 },
-  ]
+  ],
 };

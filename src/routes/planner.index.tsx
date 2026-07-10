@@ -1199,7 +1199,7 @@ function PlannerDirectory({
               <Link
                 key={p.id}
                 to="/planner/$slug"
-                params={{ slug: p.id }}
+                params={{ slug: p.slug || p.id }}
                 className="surface-card group bg-cream border border-[#eadfce]/40 overflow-hidden flex flex-col transition-all duration-300 hover:ring-2 hover:ring-forest hover:shadow-lg focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2 focus-visible:outline-none"
               >
                 <div className="overflow-hidden relative w-full aspect-[16/10]">

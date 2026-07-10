@@ -22,7 +22,7 @@ async function runTest() {
       subject: "Test replyTo",
       text: "This is a test to see if replyTo works.",
     } as any);
-    
+
     if (error) {
       console.error("replyTo error:", error);
     } else {
@@ -41,7 +41,7 @@ async function runTest() {
       subject: "Test reply_to",
       text: "This is a test to see if reply_to works.",
     } as any);
-    
+
     if (error) {
       console.error("reply_to error:", error);
     } else {

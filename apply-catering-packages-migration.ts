@@ -18,32 +18,40 @@ async function count(table: string): Promise<number> {
 }
 
 async function main() {
-  if (!SERVICE_KEY) { console.error("Missing SUPABASE_SERVICE_ROLE_KEY"); process.exit(1); }
+  if (!SERVICE_KEY) {
+    console.error("Missing SUPABASE_SERVICE_ROLE_KEY");
+    process.exit(1);
+  }
 
   // -- Step 1: Verify catering_packages table already exists or needs SQL --
   console.log("=== Step 1: Checking catering_packages table ===");
   const { error: checkErr } = await supabase.from("catering_packages").select("id").limit(1);
-  
+
   if (checkErr && checkErr.message.includes("does not exist")) {
-    console.error("\nTable does not exist yet. Please run this SQL in the Supabase dashboard first:");
+    console.error(
+      "\nTable does not exist yet. Please run this SQL in the Supabase dashboard first:",
+    );
     console.error("https://supabase.com/dashboard/project/qvjqwnlkygyrudlakece/sql/new\n");
-    const sql = fs.readFileSync("supabase/migrations/20260706200000_create_catering_packages.sql", "utf-8");
+    const sql = fs.readFileSync(
+      "supabase/migrations/20260706200000_create_catering_packages.sql",
+      "utf-8",
+    );
     console.log(sql);
     process.exit(1);
   } else if (checkErr) {
     console.error("Unexpected error checking table:", checkErr.message);
     process.exit(1);
   }
-  
+
   const existingCount = await count("catering_packages");
   console.log(`  catering_packages exists. Current rows: ${existingCount}`);
 
   // -- Step 2: Read the package from audit file --
   console.log("\n=== Step 2: Reading package from audit file ===");
   const packages = JSON.parse(
-    fs.readFileSync("migration-audit/review_packages.json", "utf-8")
+    fs.readFileSync("migration-audit/review_packages.json", "utf-8"),
   ) as Record<string, unknown>[];
-  
+
   const pkg = packages[0];
   console.log(`  Package: "${pkg.title}" (id: ${pkg.id})`);
   console.log(`  Caterer: ${pkg.caterer_id}`);
@@ -58,14 +66,14 @@ async function main() {
     .maybeSingle();
 
   if (existing) {
-    console.log(`\n  Package already exists in catering_packages — skipping insert (idempotent).`);
+    console.log(`\n  Package already exists in catering_packages ï¿½ skipping insert (idempotent).`);
   } else {
     // -- Step 4: Insert into catering_packages --
     console.log("\n=== Step 3: Inserting into catering_packages ===");
-    
+
     // Strip audit metadata fields
     const { _review_reason, _role, _suggested_actions, ...cleanPkg } = pkg;
-    
+
     const { error: insertErr } = await supabase.from("catering_packages").insert([cleanPkg]);
     if (insertErr) {
       console.error(`  FAILED: ${insertErr.message}`);
@@ -79,7 +87,7 @@ async function main() {
   const legacyCount = await count("packages");
   const newCount = await count("catering_packages");
   const archiveCount = await count("_archive_packages");
-  
+
   console.log(`  Legacy packages table:       ${legacyCount} rows (intact, not yet dropped)`);
   console.log(`  Archive _archive_packages:   ${archiveCount} rows (safety backup)`);
   console.log(`  New catering_packages table: ${newCount} rows`);
@@ -87,7 +95,9 @@ async function main() {
   // Verify the migrated row is readable
   const { data: migrated } = await supabase
     .from("catering_packages")
-    .select("id, title, caterer_id, price_type, price_amount, min_guests, max_guests, is_published, status")
+    .select(
+      "id, title, caterer_id, price_type, price_amount, min_guests, max_guests, is_published, status",
+    )
     .eq("id", pkg.id as string)
     .maybeSingle();
 
@@ -105,10 +115,15 @@ async function main() {
     console.log("  _archive_packages: 1 row (safety copy)");
     console.log("  catering_packages: 1 row (migrated)");
     console.log("\n  The packages table is now SAFE TO DROP once the drop migration is approved.");
-    console.log("  Legacy source tables remain untouched until drop migration is explicitly applied.");
+    console.log(
+      "  Legacy source tables remain untouched until drop migration is explicitly applied.",
+    );
   } else {
-    console.error("  Count mismatch — do not proceed with drop migration.");
+    console.error("  Count mismatch ï¿½ do not proceed with drop migration.");
   }
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

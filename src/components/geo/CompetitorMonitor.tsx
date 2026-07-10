@@ -10,7 +10,7 @@ import {
   Clock,
   ChevronRight,
   Sparkles,
-  Save
+  Save,
 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { saveSeoDraft } from "@/lib/admin/mutations.functions";
@@ -56,13 +56,48 @@ const COMPETITOR_DB: Record<string, CompetitorData> = {
     accentColor: "bg-orange-500",
     targetAudience: "Home cooks looking for recipe inspiration",
     comparisonRows: [
-      { feature: "B2B Catering Orders", speisely: "✅ Full platform", competitor: "❌ Not available", speiselyWins: true },
-      { feature: "Corporate Catering", speisely: "✅ Event Planner", competitor: "❌ Recipe-only", speiselyWins: true },
-      { feature: "Vendor Marketplace", speisely: "✅ 100+ partners", competitor: "❌ No ordering", speiselyWins: true },
-      { feature: "Recipe Content", speisely: "⚡ Curated tips", competitor: "✅ Extensive library", speiselyWins: false },
-      { feature: "Platform Support", speisely: "✅ Responsive Web", competitor: "✅ iOS & Android", speiselyWins: false },
-      { feature: "Dietary Filters", speisely: "✅ 14 filter types", competitor: "✅ Basic filters", speiselyWins: true },
-      { feature: "Invoice & Billing", speisely: "✅ Automated PDF", competitor: "❌ None", speiselyWins: true },
+      {
+        feature: "B2B Catering Orders",
+        speisely: "✅ Full platform",
+        competitor: "❌ Not available",
+        speiselyWins: true,
+      },
+      {
+        feature: "Corporate Catering",
+        speisely: "✅ Event Planner",
+        competitor: "❌ Recipe-only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Vendor Marketplace",
+        speisely: "✅ 100+ partners",
+        competitor: "❌ No ordering",
+        speiselyWins: true,
+      },
+      {
+        feature: "Recipe Content",
+        speisely: "⚡ Curated tips",
+        competitor: "✅ Extensive library",
+        speiselyWins: false,
+      },
+      {
+        feature: "Platform Support",
+        speisely: "✅ Responsive Web",
+        competitor: "✅ iOS & Android",
+        speiselyWins: false,
+      },
+      {
+        feature: "Dietary Filters",
+        speisely: "✅ 14 filter types",
+        competitor: "✅ Basic filters",
+        speiselyWins: true,
+      },
+      {
+        feature: "Invoice & Billing",
+        speisely: "✅ Automated PDF",
+        competitor: "❌ None",
+        speiselyWins: true,
+      },
     ],
     differentiators: [
       "Speisely is a **full-stack ordering platform** — not just content. Customers can browse, order, and pay in minutes.",
@@ -88,14 +123,54 @@ const COMPETITOR_DB: Record<string, CompetitorData> = {
     accentColor: "bg-forest",
     targetAudience: "Fitness-focused individuals wanting pre-portioned weekly kits",
     comparisonRows: [
-      { feature: "On-Demand Ordering", speisely: "✅ Order anytime", competitor: "❌ Weekly subscription only", speiselyWins: true },
-      { feature: "Corporate / Group Orders", speisely: "✅ Up to 500 pax", competitor: "❌ Individual only", speiselyWins: true },
-      { feature: "Cuisine Variety", speisely: "✅ 12+ cuisines", competitor: "⚡ Health-focused only", speiselyWins: true },
-      { feature: "No Lock-in Contract", speisely: "✅ Cancel anytime", competitor: "⚠️ Weekly auto-renew", speiselyWins: true },
-      { feature: "Live Vendor Chat", speisely: "✅ In-app messaging", competitor: "❌ Email only", speiselyWins: true },
-      { feature: "Dietary Requirements", speisely: "✅ 14+ Filters", competitor: "✅ Strict macros", speiselyWins: false },
-      { feature: "Delivery Speed", speisely: "✅ Same-day available", competitor: "❌ Next-week only", speiselyWins: true },
-      { feature: "Custom Branding (white-label)", speisely: "✅ Available", competitor: "❌ Not available", speiselyWins: true },
+      {
+        feature: "On-Demand Ordering",
+        speisely: "✅ Order anytime",
+        competitor: "❌ Weekly subscription only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Corporate / Group Orders",
+        speisely: "✅ Up to 500 pax",
+        competitor: "❌ Individual only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Cuisine Variety",
+        speisely: "✅ 12+ cuisines",
+        competitor: "⚡ Health-focused only",
+        speiselyWins: true,
+      },
+      {
+        feature: "No Lock-in Contract",
+        speisely: "✅ Cancel anytime",
+        competitor: "⚠️ Weekly auto-renew",
+        speiselyWins: true,
+      },
+      {
+        feature: "Live Vendor Chat",
+        speisely: "✅ In-app messaging",
+        competitor: "❌ Email only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Dietary Requirements",
+        speisely: "✅ 14+ Filters",
+        competitor: "✅ Strict macros",
+        speiselyWins: false,
+      },
+      {
+        feature: "Delivery Speed",
+        speisely: "✅ Same-day available",
+        competitor: "❌ Next-week only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Custom Branding (white-label)",
+        speisely: "✅ Available",
+        competitor: "❌ Not available",
+        speiselyWins: true,
+      },
     ],
     differentiators: [
       "**No subscription lock-in** — Speisely gives you total flexibility. Order once, daily, or weekly on your schedule.",
@@ -121,20 +196,60 @@ const COMPETITOR_DB: Record<string, CompetitorData> = {
     accentColor: "bg-purple-600",
     targetAudience: "Event planners booking one-off catering for parties and weddings",
     comparisonRows: [
-      { feature: "Daily Office Catering", speisely: "✅ Recurring orders", competitor: "⚠️ Event-only focus", speiselyWins: true },
-      { feature: "Instant Booking", speisely: "✅ Book in 2 min", competitor: "⚡ Quote-based (48h)", speiselyWins: true },
-      { feature: "Transparent Pricing", speisely: "✅ Live menu prices", competitor: "❌ Hidden until quote", speiselyWins: true },
-      { feature: "Vendor Count (DE)", speisely: "✅ 100+ nationwide", competitor: "⚡ ~60 vendors", speiselyWins: true },
-      { feature: "Wedding Catering", speisely: "✅ Available", competitor: "✅ Specialist focus", speiselyWins: false },
-      { feature: "Order Management Dashboard", speisely: "✅ Full analytics", competitor: "⚡ Basic history", speiselyWins: true },
-      { feature: "Dietary Requirement Mgmt", speisely: "✅ Per-person config", competitor: "⚡ Notes field only", speiselyWins: true },
-      { feature: "Integration (Slack/Teams)", speisely: "✅ Native webhooks", competitor: "❌ None", speiselyWins: true },
+      {
+        feature: "Daily Office Catering",
+        speisely: "✅ Recurring orders",
+        competitor: "⚠️ Event-only focus",
+        speiselyWins: true,
+      },
+      {
+        feature: "Instant Booking",
+        speisely: "✅ Book in 2 min",
+        competitor: "⚡ Quote-based (48h)",
+        speiselyWins: true,
+      },
+      {
+        feature: "Transparent Pricing",
+        speisely: "✅ Live menu prices",
+        competitor: "❌ Hidden until quote",
+        speiselyWins: true,
+      },
+      {
+        feature: "Vendor Count (DE)",
+        speisely: "✅ 100+ nationwide",
+        competitor: "⚡ ~60 vendors",
+        speiselyWins: true,
+      },
+      {
+        feature: "Wedding Catering",
+        speisely: "✅ Available",
+        competitor: "✅ Specialist focus",
+        speiselyWins: false,
+      },
+      {
+        feature: "Order Management Dashboard",
+        speisely: "✅ Full analytics",
+        competitor: "⚡ Basic history",
+        speiselyWins: true,
+      },
+      {
+        feature: "Dietary Requirement Mgmt",
+        speisely: "✅ Per-person config",
+        competitor: "⚡ Notes field only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Integration (Slack/Teams)",
+        speisely: "✅ Native webhooks",
+        competitor: "❌ None",
+        speiselyWins: true,
+      },
     ],
     differentiators: [
       "**Instant pricing, no quote waiting** — Speisely shows live vendor prices so you can book in under 2 minutes.",
       "**Daily recurring orders** are a Speisely specialty; getcater.de is optimised for one-off events only.",
       "**Per-person dietary configuration** means no more allergy spreadsheets — handled directly in the order flow.",
-      "**Digital Invoicing** lets office managers order lunch without manual expense reports."
+      "**Digital Invoicing** lets office managers order lunch without manual expense reports.",
     ],
     weaknesses: [
       "getcater.de requires 48-hour quote turnaround — unsuitable for urgent orders",
@@ -154,14 +269,54 @@ const COMPETITOR_DB: Record<string, CompetitorData> = {
     accentColor: "bg-amber-700",
     targetAudience: "Diners looking for upscale restaurant reservations",
     comparisonRows: [
-      { feature: "Delivery & Catering", speisely: "✅ Full fulfilment", competitor: "❌ Dine-in only", speiselyWins: true },
-      { feature: "B2B Corporate Accounts", speisely: "✅ Dedicated portal", competitor: "❌ Consumer-only", speiselyWins: true },
-      { feature: "Group Ordering (20+ pax)", speisely: "✅ Native support", competitor: "❌ Call-only", speiselyWins: true },
-      { feature: "Restaurant Partnerships (DE)", speisely: "✅ 100+ vendors", competitor: "✅ 500+ listings", speiselyWins: false },
-      { feature: "Reservation System", speisely: "❌ None", competitor: "✅ Native", speiselyWins: false },
-      { feature: "Delivery Service", speisely: "✅ Direct to office", competitor: "❌ No delivery", speiselyWins: true },
-      { feature: "Custom Menu Curation", speisely: "✅ Event menus", competitor: "❌ Fixed restaurant menus", speiselyWins: true },
-      { feature: "Flat-fee Pricing Model", speisely: "✅ No hidden fees", competitor: "⚡ Commission-based", speiselyWins: true },
+      {
+        feature: "Delivery & Catering",
+        speisely: "✅ Full fulfilment",
+        competitor: "❌ Dine-in only",
+        speiselyWins: true,
+      },
+      {
+        feature: "B2B Corporate Accounts",
+        speisely: "✅ Dedicated portal",
+        competitor: "❌ Consumer-only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Group Ordering (20+ pax)",
+        speisely: "✅ Native support",
+        competitor: "❌ Call-only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Restaurant Partnerships (DE)",
+        speisely: "✅ 100+ vendors",
+        competitor: "✅ 500+ listings",
+        speiselyWins: false,
+      },
+      {
+        feature: "Reservation System",
+        speisely: "❌ None",
+        competitor: "✅ Native",
+        speiselyWins: false,
+      },
+      {
+        feature: "Delivery Service",
+        speisely: "✅ Direct to office",
+        competitor: "❌ No delivery",
+        speiselyWins: true,
+      },
+      {
+        feature: "Custom Menu Curation",
+        speisely: "✅ Event menus",
+        competitor: "❌ Fixed restaurant menus",
+        speiselyWins: true,
+      },
+      {
+        feature: "Flat-fee Pricing Model",
+        speisely: "✅ No hidden fees",
+        competitor: "⚡ Commission-based",
+        speiselyWins: true,
+      },
     ],
     differentiators: [
       "**Delivery and catering fulfilment** — gourmet.de is a discovery platform only; Speisely handles the full supply chain.",
@@ -187,16 +342,66 @@ const COMPETITOR_DB: Record<string, CompetitorData> = {
     accentColor: "bg-red-600",
     targetAudience: "Consumers ordering individual takeaway meals",
     comparisonRows: [
-      { feature: "B2B / Corporate Catering", speisely: "✅ Full B2B platform", competitor: "❌ Consumer-only", speiselyWins: true },
-      { feature: "Group Orders (50+ pax)", speisely: "✅ Native bulk tools", competitor: "⚠️ Workarounds needed", speiselyWins: true },
-      { feature: "Vendor Commission Fees", speisely: "✅ Low flat fee", competitor: "❌ Up to 30% per order", speiselyWins: true },
-      { feature: "Custom Catering Menus", speisely: "✅ Event-specific menus", competitor: "❌ Standard menus only", speiselyWins: true },
-      { feature: "Market Reach (DE)", speisely: "⚡ Growing", competitor: "✅ Market leader", speiselyWins: false },
-      { feature: "Restaurant Count", speisely: "⚡ 100+ curated", competitor: "✅ 15,000+ listings", speiselyWins: false },
-      { feature: "Invoice & PO Support", speisely: "✅ Automated invoicing", competitor: "❌ No PO support", speiselyWins: true },
-      { feature: "Dedicated Account Manager", speisely: "✅ For B2B clients", competitor: "❌ No B2B support", speiselyWins: true },
-      { feature: "Dietary Config (per person)", speisely: "✅ Granular settings", competitor: "❌ Note field only", speiselyWins: true },
-      { feature: "White-Label Options", speisely: "✅ Available", competitor: "❌ Not available", speiselyWins: true },
+      {
+        feature: "B2B / Corporate Catering",
+        speisely: "✅ Full B2B platform",
+        competitor: "❌ Consumer-only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Group Orders (50+ pax)",
+        speisely: "✅ Native bulk tools",
+        competitor: "⚠️ Workarounds needed",
+        speiselyWins: true,
+      },
+      {
+        feature: "Vendor Commission Fees",
+        speisely: "✅ Low flat fee",
+        competitor: "❌ Up to 30% per order",
+        speiselyWins: true,
+      },
+      {
+        feature: "Custom Catering Menus",
+        speisely: "✅ Event-specific menus",
+        competitor: "❌ Standard menus only",
+        speiselyWins: true,
+      },
+      {
+        feature: "Market Reach (DE)",
+        speisely: "⚡ Growing",
+        competitor: "✅ Market leader",
+        speiselyWins: false,
+      },
+      {
+        feature: "Restaurant Count",
+        speisely: "⚡ 100+ curated",
+        competitor: "✅ 15,000+ listings",
+        speiselyWins: false,
+      },
+      {
+        feature: "Invoice & PO Support",
+        speisely: "✅ Automated invoicing",
+        competitor: "❌ No PO support",
+        speiselyWins: true,
+      },
+      {
+        feature: "Dedicated Account Manager",
+        speisely: "✅ For B2B clients",
+        competitor: "❌ No B2B support",
+        speiselyWins: true,
+      },
+      {
+        feature: "Dietary Config (per person)",
+        speisely: "✅ Granular settings",
+        competitor: "❌ Note field only",
+        speiselyWins: true,
+      },
+      {
+        feature: "White-Label Options",
+        speisely: "✅ Available",
+        competitor: "❌ Not available",
+        speiselyWins: true,
+      },
     ],
     differentiators: [
       "**Built for business, not consumers** — Speisely's entire platform is designed around the needs of companies, not individual takeaway orders.",
@@ -236,9 +441,7 @@ function buildMarkdownPost(domain: string, data: CompetitorData): string {
     .map((r) => `| ${r.feature} | ${r.speisely} | ${r.competitor} |`)
     .join("\n");
 
-  const differentiatorList = data.differentiators
-    .map((d, i) => `${i + 1}. ${d}`)
-    .join("\n");
+  const differentiatorList = data.differentiators.map((d, i) => `${i + 1}. ${d}`).join("\n");
 
   const weaknessList = data.weaknesses.map((w) => `- ${w}`).join("\n");
 
@@ -346,13 +549,7 @@ function StatusBadge({ status }: { status: Status }) {
 // Competitor avatar
 // ─────────────────────────────────────────────
 
-function CompetitorAvatar({
-  domain,
-  accentColor,
-}: {
-  domain: string;
-  accentColor?: string;
-}) {
+function CompetitorAvatar({ domain, accentColor }: { domain: string; accentColor?: string }) {
   const letter = domain.charAt(0).toUpperCase();
   const color = accentColor ?? "bg-slate-500";
   return (
@@ -424,9 +621,7 @@ function ComparisonTablePreview({ rows }: { rows: ComparisonRow[] }) {
                 i % 2 === 0 ? "bg-white/70" : "bg-cream/40"
               } ${row.speiselyWins ? "" : "opacity-80"}`}
             >
-              <td className="px-4 py-2.5 text-forest/80 font-medium">
-                {row.feature}
-              </td>
+              <td className="px-4 py-2.5 text-forest/80 font-medium">{row.feature}</td>
               <td
                 className={`px-4 py-2.5 font-semibold ${
                   row.speiselyWins ? "text-forest" : "text-forest/60"
@@ -436,9 +631,7 @@ function ComparisonTablePreview({ rows }: { rows: ComparisonRow[] }) {
               </td>
               <td
                 className={`px-4 py-2.5 ${
-                  !row.speiselyWins
-                    ? "font-semibold text-forest"
-                    : "text-red-500"
+                  !row.speiselyWins ? "font-semibold text-forest" : "text-red-500"
                 }`}
               >
                 {row.competitor}
@@ -479,7 +672,7 @@ export function CompetitorMonitor() {
     if (COMPETITOR_DB[cleaned]) return [cleaned, COMPETITOR_DB[cleaned]];
 
     const partialKey = Object.keys(COMPETITOR_DB).find(
-      (k) => cleaned.includes(k) || k.includes(cleaned)
+      (k) => cleaned.includes(k) || k.includes(cleaned),
     );
     if (partialKey) return [partialKey, COMPETITOR_DB[partialKey]];
 
@@ -499,9 +692,7 @@ export function CompetitorMonitor() {
     setTimeout(() => {
       const resolved = resolveDomain(raw);
       if (!resolved) {
-        const fakeDomain = raw
-          .replace(/^https?:\/\//, "")
-          .replace(/^www\./, "");
+        const fakeDomain = raw.replace(/^https?:\/\//, "").replace(/^www\./, "");
         const genericData: CompetitorData = {
           displayName: fakeDomain,
           tagline: "Competitor food platform",
@@ -509,12 +700,42 @@ export function CompetitorMonitor() {
           accentColor: "bg-slate-500",
           targetAudience: "General food market customers",
           comparisonRows: [
-            { feature: "B2B Corporate Catering", speisely: "✅ Full platform", competitor: "❓ Unknown", speiselyWins: true },
-            { feature: "Instant Online Ordering", speisely: "✅ 2-minute booking", competitor: "❓ Unknown", speiselyWins: true },
-            { feature: "Transparent Pricing", speisely: "✅ Live prices", competitor: "❓ Unknown", speiselyWins: true },
-            { feature: "Invoice & PO Support", speisely: "✅ Automated", competitor: "❓ Unknown", speiselyWins: true },
-            { feature: "Dietary Config (per pax)", speisely: "✅ 14 filter types", competitor: "❓ Unknown", speiselyWins: true },
-            { feature: "Dedicated Account Manager", speisely: "✅ For B2B clients", competitor: "❓ Unknown", speiselyWins: true },
+            {
+              feature: "B2B Corporate Catering",
+              speisely: "✅ Full platform",
+              competitor: "❓ Unknown",
+              speiselyWins: true,
+            },
+            {
+              feature: "Instant Online Ordering",
+              speisely: "✅ 2-minute booking",
+              competitor: "❓ Unknown",
+              speiselyWins: true,
+            },
+            {
+              feature: "Transparent Pricing",
+              speisely: "✅ Live prices",
+              competitor: "❓ Unknown",
+              speiselyWins: true,
+            },
+            {
+              feature: "Invoice & PO Support",
+              speisely: "✅ Automated",
+              competitor: "❓ Unknown",
+              speiselyWins: true,
+            },
+            {
+              feature: "Dietary Config (per pax)",
+              speisely: "✅ 14 filter types",
+              competitor: "❓ Unknown",
+              speiselyWins: true,
+            },
+            {
+              feature: "Dedicated Account Manager",
+              speisely: "✅ For B2B clients",
+              competitor: "❓ Unknown",
+              speiselyWins: true,
+            },
           ],
           differentiators: [
             "Speisely is purpose-built for **B2B catering** — most competitors focus on consumer delivery.",
@@ -564,7 +785,7 @@ export function CompetitorMonitor() {
 
   const handleSaveDraft = useCallback(async () => {
     if (!activeData || !activeDomain || !markdown) return;
-    
+
     setIsSaving(true);
     try {
       const slug = activeDomain.replace(/\./g, "-");
@@ -578,8 +799,8 @@ export function CompetitorMonitor() {
           meta_description: `${activeData.displayName} ist eine ${activeData.category}-Lösung – aber für Gastronomen und B2B-Kunden bietet Speisely klare Vorteile. Hier ist der Vergleich.`,
           content: markdown,
           cta_text: activeData.ctaHeadline,
-          internal_links: []
-        }
+          internal_links: [],
+        },
       });
       toast.success("Draft saved successfully to the Review Queue");
       setCopied(true); // Re-using copied state for success UI
@@ -591,8 +812,7 @@ export function CompetitorMonitor() {
     }
   }, [activeData, activeDomain, markdown]);
 
-  const speiselyWinCount =
-    activeData?.comparisonRows.filter((r) => r.speiselyWins).length ?? 0;
+  const speiselyWinCount = activeData?.comparisonRows.filter((r) => r.speiselyWins).length ?? 0;
   const totalRows = activeData?.comparisonRows.length ?? 0;
 
   return (
@@ -605,12 +825,10 @@ export function CompetitorMonitor() {
               <BarChart2 size={12} />
               Competitor Intelligence
             </div>
-            <h1 className="font-display text-3xl font-bold text-forest">
-              Competitor Map
-            </h1>
+            <h1 className="font-display text-3xl font-bold text-forest">Competitor Map</h1>
             <p className="mt-1 text-sm text-forest/60">
-              Generate an "Alternative to [Competitor]" blog post in seconds —
-              powered by Speisely's competitive intelligence engine.
+              Generate an "Alternative to [Competitor]" blog post in seconds — powered by Speisely's
+              competitive intelligence engine.
             </p>
           </div>
           <StatusBadge status={status} />
@@ -618,9 +836,7 @@ export function CompetitorMonitor() {
 
         {/* ── Input panel ── */}
         <div className="surface-card rounded-2xl border border-forest/10 bg-white p-6 shadow-sm">
-          <label className="mb-2 block text-sm font-semibold text-forest">
-            Competitor Domain
-          </label>
+          <label className="mb-2 block text-sm font-semibold text-forest">Competitor Domain</label>
           <div className="flex gap-3">
             <div className="relative flex-1">
               <Globe
@@ -666,12 +882,7 @@ export function CompetitorMonitor() {
           </h2>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {Object.entries(COMPETITOR_DB).map(([domain, data]) => (
-              <PresetCard
-                key={domain}
-                domain={domain}
-                data={data}
-                onSelect={handlePresetSelect}
-              />
+              <PresetCard key={domain} domain={domain} data={data} onSelect={handlePresetSelect} />
             ))}
           </div>
         </div>
@@ -685,9 +896,7 @@ export function CompetitorMonitor() {
               <Sparkles size={24} className="relative z-10 text-forest" />
             </div>
             <div>
-              <p className="font-display text-lg font-semibold text-forest">
-                Generating Post…
-              </p>
+              <p className="font-display text-lg font-semibold text-forest">Generating Post…</p>
               <p className="mt-1 text-sm text-forest/50">
                 Building comparison table, differentiators &amp; CTA
               </p>
@@ -705,219 +914,203 @@ export function CompetitorMonitor() {
         )}
 
         {/* ── Results panel ── */}
-        {(status === "generated" || status === "action-required") &&
-          activeData &&
-          activeDomain && (
-            <div className="space-y-6">
-              {/* Result header */}
-              <div className="flex flex-col gap-4 rounded-2xl border border-forest/10 bg-white p-6 shadow-sm sm:flex-row sm:items-center">
-                <CompetitorAvatar
-                  domain={activeDomain}
-                  accentColor={activeData.accentColor}
-                />
-                <div className="flex-1">
-                  <h2 className="font-display text-xl font-bold text-forest">
-                    Alternative to {activeData.displayName}
-                  </h2>
-                  <p className="text-sm text-forest/55">
-                    {activeData.tagline} · {activeData.category}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  {unknownDomain && (
-                    <span className="rounded-full border border-amber-300 bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">
-                      Generic Template Used
-                    </span>
-                  )}
-                  <div className="flex items-center gap-2 rounded-full bg-cream px-3 py-1.5">
-                    <ShieldCheck size={14} className="text-forest" />
-                    <span className="text-xs font-semibold text-forest">
-                      Speisely wins {speiselyWinCount}/{totalRows} features
-                    </span>
-                  </div>
-                </div>
+        {(status === "generated" || status === "action-required") && activeData && activeDomain && (
+          <div className="space-y-6">
+            {/* Result header */}
+            <div className="flex flex-col gap-4 rounded-2xl border border-forest/10 bg-white p-6 shadow-sm sm:flex-row sm:items-center">
+              <CompetitorAvatar domain={activeDomain} accentColor={activeData.accentColor} />
+              <div className="flex-1">
+                <h2 className="font-display text-xl font-bold text-forest">
+                  Alternative to {activeData.displayName}
+                </h2>
+                <p className="text-sm text-forest/55">
+                  {activeData.tagline} · {activeData.category}
+                </p>
               </div>
-
-              {/* Score strip */}
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  {
-                    label: "Speisely Wins",
-                    value: speiselyWinCount,
-                    color: "text-forest",
-                    bg: "bg-cream border-forest/20",
-                  },
-                  {
-                    label: "Competitor Wins",
-                    value: totalRows - speiselyWinCount,
-                    color: "text-red-600",
-                    bg: "bg-red-50 border-red-200",
-                  },
-                  {
-                    label: "Win Rate",
-                    value: `${Math.round((speiselyWinCount / totalRows) * 100)}%`,
-                    color: "text-forest",
-                    bg: "bg-cream border-forest/15",
-                  },
-                ].map((s) => (
-                  <div
-                    key={s.label}
-                    className={`rounded-xl border ${s.bg} px-4 py-3 text-center`}
-                  >
-                    <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-                    <p className="text-xs text-forest/50">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Tab switcher */}
-              <div className="flex gap-1 rounded-xl border border-forest/10 bg-cream/60 p-1">
-                {(["preview", "markdown"] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`flex-1 rounded-lg py-2 text-sm font-semibold capitalize transition-all ${
-                      activeTab === tab
-                        ? "bg-white text-forest shadow-sm"
-                        : "text-forest/50 hover:text-forest"
-                    }`}
-                  >
-                    {tab === "preview" ? "📊 Visual Preview" : "📝 Markdown Source"}
-                  </button>
-                ))}
-              </div>
-
-              {/* Tab content */}
-              {activeTab === "preview" ? (
-                <div className="space-y-6">
-                  {/* Comparison table */}
-                  <div className="rounded-2xl border border-forest/10 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 flex items-center gap-2 font-display text-lg font-bold text-forest">
-                      <BarChart2 size={18} />
-                      Feature Comparison
-                    </h3>
-                    <ComparisonTablePreview rows={activeData.comparisonRows} />
-                  </div>
-
-                  {/* Key differentiators */}
-                  <div className="rounded-2xl border border-forest/10 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 font-display text-lg font-bold text-forest">
-                      🏆 Key Differentiators
-                    </h3>
-                    <ol className="space-y-3">
-                      {activeData.differentiators.map((d, i) => (
-                        <li key={i} className="flex gap-3">
-                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[10px] font-bold text-white">
-                            {i + 1}
-                          </span>
-                          <p
-                            className="text-sm text-forest/75 leading-relaxed"
-                            dangerouslySetInnerHTML={{
-                              __html: d.replace(
-                                /\*\*(.+?)\*\*/g,
-                                '<strong class="text-forest font-semibold">$1</strong>'
-                              ),
-                            }}
-                          />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-
-                  {/* CTA section */}
-                  <div className="rounded-2xl border border-forest/20 bg-forest p-6 text-white shadow-sm">
-                    <h3 className="font-display text-xl font-bold">
-                      {activeData.ctaHeadline}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/75">
-                      {activeData.ctaBody}
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-3">
-                      <a
-                        href="https://speisely.de/auth?signup=partner"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-sm font-semibold text-forest transition hover:opacity-90"
-                      >
-                        Jetzt kostenlos starten
-                      </a>
-                      <a
-                        href="https://speisely.de/catering"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
-                      >
-                        Demo anfragen
-                      </a>
-                    </div>
-                  </div>
+              <div className="flex flex-col items-end gap-2">
+                {unknownDomain && (
+                  <span className="rounded-full border border-amber-300 bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">
+                    Generic Template Used
+                  </span>
+                )}
+                <div className="flex items-center gap-2 rounded-full bg-cream px-3 py-1.5">
+                  <ShieldCheck size={14} className="text-forest" />
+                  <span className="text-xs font-semibold text-forest">
+                    Speisely wins {speiselyWinCount}/{totalRows} features
+                  </span>
                 </div>
-              ) : (
-                /* Markdown source */
-                <div className="rounded-2xl border border-forest/10 bg-[#0d1117] shadow-sm">
-                  <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
-                    <div className="flex items-center gap-2">
-                      <span className="h-3 w-3 rounded-full bg-red-500/70" />
-                      <span className="h-3 w-3 rounded-full bg-yellow-400/70" />
-                      <span className="h-3 w-3 rounded-full bg-green-500/70" />
-                      <span className="ml-2 font-mono text-xs text-white/40">
-                        alternative-zu-{activeDomain?.replace(/\./g, "-")}.md
-                      </span>
-                    </div>
-                    <button
-                      onClick={handleSaveDraft}
-                      disabled={isSaving}
-                      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition disabled:opacity-50 ${
-                        copied
-                          ? "bg-forest text-white"
-                          : "bg-forest text-white hover:bg-forest"
-                      }`}
-                    >
-                      {copied ? (
-                        <>
-                          <Check size={12} />
-                          Saved!
-                        </>
-                      ) : (
-                        <>
-                          <Save size={12} />
-                          {isSaving ? "Saving..." : "Save Draft"}
-                        </>
-                      )}
-                    </button>
-                  </div>
-                  <pre className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-mint whitespace-pre">
-                    <code>{markdown}</code>
-                  </pre>
-                </div>
-              )}
-
-              {/* Save button (always visible below) */}
-              <div className="flex justify-end">
-                <button
-                  onClick={handleSaveDraft}
-                  disabled={isSaving}
-                  className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm transition disabled:opacity-50 ${
-                    copied
-                      ? "bg-forest text-white"
-                      : "bg-forest text-white hover:opacity-90"
-                  }`}
-                >
-                  {copied ? (
-                    <>
-                      <Check size={15} />
-                      Saved to Draft Queue
-                    </>
-                  ) : (
-                    <>
-                      <Save size={15} />
-                      {isSaving ? "Saving..." : "Save to Draft Queue"}
-                    </>
-                  )}
-                </button>
               </div>
             </div>
-          )}
+
+            {/* Score strip */}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                {
+                  label: "Speisely Wins",
+                  value: speiselyWinCount,
+                  color: "text-forest",
+                  bg: "bg-cream border-forest/20",
+                },
+                {
+                  label: "Competitor Wins",
+                  value: totalRows - speiselyWinCount,
+                  color: "text-red-600",
+                  bg: "bg-red-50 border-red-200",
+                },
+                {
+                  label: "Win Rate",
+                  value: `${Math.round((speiselyWinCount / totalRows) * 100)}%`,
+                  color: "text-forest",
+                  bg: "bg-cream border-forest/15",
+                },
+              ].map((s) => (
+                <div key={s.label} className={`rounded-xl border ${s.bg} px-4 py-3 text-center`}>
+                  <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
+                  <p className="text-xs text-forest/50">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Tab switcher */}
+            <div className="flex gap-1 rounded-xl border border-forest/10 bg-cream/60 p-1">
+              {(["preview", "markdown"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 rounded-lg py-2 text-sm font-semibold capitalize transition-all ${
+                    activeTab === tab
+                      ? "bg-white text-forest shadow-sm"
+                      : "text-forest/50 hover:text-forest"
+                  }`}
+                >
+                  {tab === "preview" ? "📊 Visual Preview" : "📝 Markdown Source"}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab content */}
+            {activeTab === "preview" ? (
+              <div className="space-y-6">
+                {/* Comparison table */}
+                <div className="rounded-2xl border border-forest/10 bg-white p-6 shadow-sm">
+                  <h3 className="mb-4 flex items-center gap-2 font-display text-lg font-bold text-forest">
+                    <BarChart2 size={18} />
+                    Feature Comparison
+                  </h3>
+                  <ComparisonTablePreview rows={activeData.comparisonRows} />
+                </div>
+
+                {/* Key differentiators */}
+                <div className="rounded-2xl border border-forest/10 bg-white p-6 shadow-sm">
+                  <h3 className="mb-4 font-display text-lg font-bold text-forest">
+                    🏆 Key Differentiators
+                  </h3>
+                  <ol className="space-y-3">
+                    {activeData.differentiators.map((d, i) => (
+                      <li key={i} className="flex gap-3">
+                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-forest text-[10px] font-bold text-white">
+                          {i + 1}
+                        </span>
+                        <p
+                          className="text-sm text-forest/75 leading-relaxed"
+                          dangerouslySetInnerHTML={{
+                            __html: d.replace(
+                              /\*\*(.+?)\*\*/g,
+                              '<strong class="text-forest font-semibold">$1</strong>',
+                            ),
+                          }}
+                        />
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+
+                {/* CTA section */}
+                <div className="rounded-2xl border border-forest/20 bg-forest p-6 text-white shadow-sm">
+                  <h3 className="font-display text-xl font-bold">{activeData.ctaHeadline}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/75">{activeData.ctaBody}</p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <a
+                      href="https://speisely.de/auth?signup=partner"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-cream px-5 py-2.5 text-sm font-semibold text-forest transition hover:opacity-90"
+                    >
+                      Jetzt kostenlos starten
+                    </a>
+                    <a
+                      href="https://speisely.de/catering"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                    >
+                      Demo anfragen
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Markdown source */
+              <div className="rounded-2xl border border-forest/10 bg-[#0d1117] shadow-sm">
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+                  <div className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full bg-red-500/70" />
+                    <span className="h-3 w-3 rounded-full bg-yellow-400/70" />
+                    <span className="h-3 w-3 rounded-full bg-green-500/70" />
+                    <span className="ml-2 font-mono text-xs text-white/40">
+                      alternative-zu-{activeDomain?.replace(/\./g, "-")}.md
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleSaveDraft}
+                    disabled={isSaving}
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition disabled:opacity-50 ${
+                      copied ? "bg-forest text-white" : "bg-forest text-white hover:bg-forest"
+                    }`}
+                  >
+                    {copied ? (
+                      <>
+                        <Check size={12} />
+                        Saved!
+                      </>
+                    ) : (
+                      <>
+                        <Save size={12} />
+                        {isSaving ? "Saving..." : "Save Draft"}
+                      </>
+                    )}
+                  </button>
+                </div>
+                <pre className="overflow-x-auto p-5 font-mono text-xs leading-relaxed text-mint whitespace-pre">
+                  <code>{markdown}</code>
+                </pre>
+              </div>
+            )}
+
+            {/* Save button (always visible below) */}
+            <div className="flex justify-end">
+              <button
+                onClick={handleSaveDraft}
+                disabled={isSaving}
+                className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm transition disabled:opacity-50 ${
+                  copied ? "bg-forest text-white" : "bg-forest text-white hover:opacity-90"
+                }`}
+              >
+                {copied ? (
+                  <>
+                    <Check size={15} />
+                    Saved to Draft Queue
+                  </>
+                ) : (
+                  <>
+                    <Save size={15} />
+                    {isSaving ? "Saving..." : "Save to Draft Queue"}
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -97,7 +97,8 @@ export const Route = createFileRoute("/catering/$slug")({
                 name: c.name,
                 image: c.img,
                 address: { "@type": "PostalAddress", addressLocality: c.area },
-                ...(loaderData?.reviewsData?.aggregates?.count && loaderData.reviewsData.aggregates.count > 0
+                ...(loaderData?.reviewsData?.aggregates?.count &&
+                loaderData.reviewsData.aggregates.count > 0
                   ? {
                       aggregateRating: {
                         "@type": "AggregateRating",
@@ -818,8 +819,15 @@ function CatererPage() {
           </div>
 
           {/* Bottom Info Overlay */}
-          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex flex-col md:flex-row md:items-end justify-between w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
-            <div className="flex flex-col gap-2 max-w-[80%] text-left">
+          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex items-center gap-4 w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
+            {catererProfile.logo && (
+              <img
+                src={catererProfile.logo}
+                alt="Logo"
+                className="w-16 h-16 md:w-24 md:h-24 rounded-full border-4 border-white shadow-md bg-white object-cover flex-shrink-0"
+              />
+            )}
+            <div className="flex flex-col gap-1 max-w-[80%] text-left">
               <h1 className="text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-sm">
                 {catererProfile.name}
               </h1>
@@ -1158,23 +1166,30 @@ function CatererPage() {
         <h2 className="text-2xl font-display font-bold text-forest mb-8">
           {t("Bewertungen", "Reviews")}
         </h2>
-        
+
         {aggregates && aggregates.count > 0 ? (
           <div className="grid lg:grid-cols-[300px_1fr] gap-10">
             <div className="bg-[#fdfaf5] p-6 rounded-2xl border border-[#eadfce]/50 h-fit">
               <div className="flex items-end gap-3 mb-4">
-                <div className="text-5xl font-bold text-forest">{aggregates.avgOverall.toFixed(1)}</div>
+                <div className="text-5xl font-bold text-forest">
+                  {aggregates.avgOverall.toFixed(1)}
+                </div>
                 <div className="text-forest/70 pb-1">/ 5</div>
               </div>
               <div className="flex text-yellow-400 mb-2 text-xl">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"} className="w-5 h-5" />
+                  <Star
+                    key={i}
+                    fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"}
+                    className="w-5 h-5"
+                  />
                 ))}
               </div>
               <div className="text-sm text-forest/70 mb-6">
-                {aggregates.count} {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
+                {aggregates.count}{" "}
+                {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
               </div>
-              
+
               <div className="space-y-3 pt-4 border-t border-[#eadfce]">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Essen", "Food")}</span>
@@ -1182,19 +1197,25 @@ function CatererPage() {
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Zuverlässigkeit", "Reliability")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgReliability.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgReliability.toFixed(1)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Kommunikation", "Communication")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgCommunication.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgCommunication.toFixed(1)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Preis-Leistung", "Value")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgValue.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgValue.toFixed(1)}
+                  </span>
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-6">
               {reviews.map((r: any) => (
                 <div key={r.id} className="pb-6 border-b border-[#eadfce]/50 last:border-0">
@@ -1213,15 +1234,21 @@ function CatererPage() {
                     </div>
                     <div className="flex text-yellow-400">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"} className="w-4 h-4" />
+                        <Star
+                          key={i}
+                          fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"}
+                          className="w-4 h-4"
+                        />
                       ))}
                     </div>
                   </div>
                   <p className="text-forest/80 mt-2 whitespace-pre-wrap">{r.comment}</p>
-                  
+
                   {r.vendor_reply && (
                     <div className="mt-4 bg-[#fdfaf5] p-4 rounded-xl border border-[#eadfce]/40 ml-4">
-                      <div className="text-xs font-semibold text-forest mb-1">{catererProfile?.name}</div>
+                      <div className="text-xs font-semibold text-forest mb-1">
+                        {catererProfile?.name}
+                      </div>
                       <p className="text-sm text-forest/70">{r.vendor_reply}</p>
                     </div>
                   )}
@@ -1232,9 +1259,14 @@ function CatererPage() {
         ) : (
           <div className="text-center py-12 bg-[#fdfaf5] rounded-2xl border border-[#eadfce]/50">
             <Star className="w-10 h-10 text-forest/20 mx-auto mb-3" />
-            <h3 className="font-semibold text-forest mb-1">{t("Noch keine Bewertungen", "No reviews yet")}</h3>
+            <h3 className="font-semibold text-forest mb-1">
+              {t("Noch keine Bewertungen", "No reviews yet")}
+            </h3>
             <p className="text-sm text-forest/60 max-w-sm mx-auto">
-              {t("Sei der Erste, der diesen Caterer bewertet.", "Be the first to review this caterer.")}
+              {t(
+                "Sei der Erste, der diesen Caterer bewertet.",
+                "Be the first to review this caterer.",
+              )}
             </p>
           </div>
         )}

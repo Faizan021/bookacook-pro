@@ -22,7 +22,12 @@ export const createMyRestaurant = createServerFn({ method: "POST" })
     // Removed implicit role upgrade - user must ALREADY have the role via the middleware.
     const { data: row, error } = await supabase
       .from("restaurants")
-      .insert({ owner_id: userId, name: data.name, slug: data.slug, custom_domain: data.custom_domain })
+      .insert({
+        owner_id: userId,
+        name: data.name,
+        slug: data.slug,
+        custom_domain: data.custom_domain,
+      })
       .select("id, name, slug")
       .single();
     if (error) throw new Error(error.message);
@@ -38,6 +43,8 @@ export const upsertRestaurantProduct = createServerFn({ method: "POST" })
       description?: string;
       price_cents: number;
       is_available?: boolean;
+      category?: string;
+      dietary_tags?: string[];
     }) =>
       z
         .object({
@@ -47,6 +54,8 @@ export const upsertRestaurantProduct = createServerFn({ method: "POST" })
           price_cents: z.number().int().min(0).max(10_000_00),
           image_url: z.string().max(500).nullable().optional(),
           is_available: z.boolean().optional(),
+          category: z.string().max(120).optional(),
+          dietary_tags: z.array(z.string()).optional(),
         })
         .parse(input),
   )
@@ -67,6 +76,8 @@ export const upsertRestaurantProduct = createServerFn({ method: "POST" })
           price_cents: data.price_cents,
           image_url: data.image_url ?? null,
           is_available: data.is_available ?? true,
+          category: data.category ?? null,
+          dietary_tags: data.dietary_tags ?? null,
         } as any)
         .eq("id", data.id)
         .eq("restaurant_id", r.id);
@@ -79,6 +90,8 @@ export const upsertRestaurantProduct = createServerFn({ method: "POST" })
         price_cents: data.price_cents,
         image_url: data.image_url ?? null,
         is_available: data.is_available ?? true,
+        category: data.category ?? null,
+        dietary_tags: data.dietary_tags ?? null,
       } as any);
       if (error) throw new Error(error.message);
     }
@@ -114,6 +127,8 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       accepts_cash?: boolean;
       accepts_paypal?: boolean;
       paypal_email?: string | null;
+      accepts_orders?: boolean;
+      use_generated_branding?: boolean;
     }) =>
       z
         .object({
@@ -142,6 +157,8 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           accepts_cash: z.boolean().optional(),
           accepts_paypal: z.boolean().optional(),
           paypal_email: z.string().max(500).optional().nullable(),
+          accepts_orders: z.boolean().optional(),
+          use_generated_branding: z.boolean().optional(),
         })
         .parse(input),
   )
@@ -166,13 +183,29 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       const hasPaymentMethod = cashEnabled || paypalEnabled || stripeConnected;
 
       if (!rest || !hasPaymentMethod) {
-        throw new Error("Please enable at least one payment method (Cash, PayPal, or Stripe) before publishing your storefront.");
+        throw new Error(
+          "Please enable at least one payment method (Cash, PayPal, or Stripe) before publishing your storefront.",
+        );
       }
+    }
+
+    // Check current approval status
+    const { data: restStatus } = await supabase
+      .from("restaurants")
+      .select("approval_status")
+      .eq("owner_id", userId)
+      .maybeSingle();
+
+    const updatePayload: any = { ...data };
+    if (restStatus?.approval_status === "rejected") {
+      updatePayload.approval_status = "pending";
+      updatePayload.rejection_reason = null;
+      console.log(`[Review Queue] Resetting rejected restaurant status back to pending due to profile update for owner=${userId}`);
     }
 
     const { error } = await supabase
       .from("restaurants")
-      .update(data as any)
+      .update(updatePayload)
       .eq("owner_id", userId);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -181,7 +214,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
 export const getStripeConnectUrl = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
   .validator((input: { slug: string; origin: string }) =>
-    z.object({ slug: z.string(), origin: z.string() }).parse(input)
+    z.object({ slug: z.string(), origin: z.string() }).parse(input),
   )
   .handler(async ({ data }) => {
     const { getConnectOAuthUrl } = await import("@/lib/stripe");
@@ -230,15 +263,12 @@ export const disconnectStripe = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-
 export const startStarterSubscription = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .validator((input: { origin: string }) =>
-    z.object({ origin: z.string() }).parse(input)
-  )
+  .validator((input: { origin: string }) => z.object({ origin: z.string() }).parse(input))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
-    
+
     const { data: rest, error: restErr } = await supabase
       .from("restaurants")
       .select("id, name")
@@ -249,25 +279,20 @@ export const startStarterSubscription = createServerFn({ method: "POST" })
       throw new Error(restErr?.message || "No restaurant found for this account");
     }
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     const email = user?.email || "";
 
     const { createSubscriptionCheckoutSession } = await import("@/lib/stripe");
-    const session = await createSubscriptionCheckoutSession(
-      rest.id,
-      rest.name,
-      email,
-      data.origin
-    );
+    const session = await createSubscriptionCheckoutSession(rest.id, rest.name, email, data.origin);
 
     return { url: session.url };
   });
 
 export const openBillingPortal = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
-  .validator((input: { origin: string }) =>
-    z.object({ origin: z.string() }).parse(input)
-  )
+  .validator((input: { origin: string }) => z.object({ origin: z.string() }).parse(input))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 

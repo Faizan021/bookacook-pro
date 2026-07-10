@@ -21,23 +21,36 @@ export const Route = createFileRoute("/planner/ort/$city")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
     const { seoData, indexStatus, location, searchParams } = loaderData;
-    
+
     const isFiltered = Object.keys(searchParams).length > 0;
-    const finalIndexStatus = isFiltered ? "noindex, follow" : (indexStatus === "index" ? "index, follow" : "noindex, follow");
-    
-    const canonicalUrl = `/planner/ort/${location.name.toLowerCase().replace(/\s+/g, '-')}`;
+    const finalIndexStatus = isFiltered
+      ? "noindex, follow"
+      : indexStatus === "index"
+        ? "index, follow"
+        : "noindex, follow";
+
+    const canonicalUrl = `/planner/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
 
     return {
       meta: [
         { title: seoData?.meta_title || `Event-Planer in ${location.name} - Speisely` },
-        { name: "description", content: seoData?.meta_description || `Finde die besten Event-Planer in ${location.name}.` },
+        {
+          name: "description",
+          content:
+            seoData?.meta_description || `Finde die besten Event-Planer in ${location.name}.`,
+        },
         { name: "robots", content: finalIndexStatus },
-        { property: "og:title", content: seoData?.meta_title || `Event-Planer in ${location.name}` },
-        { property: "og:description", content: seoData?.meta_description || `Finde die besten Event-Planer in ${location.name}.` },
+        {
+          property: "og:title",
+          content: seoData?.meta_title || `Event-Planer in ${location.name}`,
+        },
+        {
+          property: "og:description",
+          content:
+            seoData?.meta_description || `Finde die besten Event-Planer in ${location.name}.`,
+        },
       ],
-      links: [
-        { rel: "canonical", href: canonicalUrl }
-      ]
+      links: [{ rel: "canonical", href: canonicalUrl }],
     };
   },
   component: GeoPlannerPage,
@@ -45,55 +58,60 @@ export const Route = createFileRoute("/planner/ort/$city")({
     <SiteShell>
       <div className="mx-auto max-w-3xl px-6 py-24 text-center">
         <h1 className="font-display text-4xl text-forest mb-4">Stadt nicht gefunden</h1>
-        <p className="text-leaf">Wir konnten diesen Ort leider nicht in unserer Datenbank finden.</p>
+        <p className="text-leaf">
+          Wir konnten diesen Ort leider nicht in unserer Datenbank finden.
+        </p>
       </div>
     </SiteShell>
-  )
+  ),
 });
 
 function GeoPlannerPage() {
-  const { location, seoData, vendors, aggregateRating, searchParams } = Route.useLoaderData() as any;
+  const { location, seoData, vendors, aggregateRating, searchParams } =
+    Route.useLoaderData() as any;
   const router = useRouter();
 
   // Client-side filtering states synced with URL
   const [query, setQuery] = useState("");
-  
+
   const currentService = searchParams.service || "all";
-  
+
   const setServiceFilter = (service: string) => {
     router.navigate({
       search: { service: service === "all" ? undefined : service, sort: searchParams.sort } as any,
-      replace: true
+      replace: true,
     });
   };
 
   const filteredVendors = vendors.filter((v: any) => {
     const qMatch = !query || v.name.toLowerCase().includes(query.toLowerCase());
-    const sMatch = currentService === "all" || (v.description && v.description.toLowerCase().includes(currentService));
+    const sMatch =
+      currentService === "all" ||
+      (v.description && v.description.toLowerCase().includes(currentService));
     return qMatch && sMatch;
   });
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": seoData?.meta_title || `Event-Planer in ${location.name}`,
-    "description": seoData?.meta_description,
-    "mainEntity": {
+    name: seoData?.meta_title || `Event-Planer in ${location.name}`,
+    description: seoData?.meta_description,
+    mainEntity: {
       "@type": "ItemList",
-      "itemListElement": filteredVendors.map((v: any, index: number) => ({
+      itemListElement: filteredVendors.map((v: any, index: number) => ({
         "@type": "ListItem",
-        "position": index + 1,
-        "item": {
+        position: index + 1,
+        item: {
           "@type": "ProfessionalService",
-          "name": v.name,
-          "image": v.logo_url || v.banner_image_url,
-          "address": {
+          name: v.name,
+          image: v.logo_url || v.banner_image_url,
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": location.name
-          }
-        }
-      }))
-    }
+            addressLocality: location.name,
+          },
+        },
+      })),
+    },
   };
 
   const isFiltered = filteredVendors.length !== vendors.length;
@@ -101,8 +119,8 @@ function GeoPlannerPage() {
   if (aggregateRating && aggregateRating.count > 0 && !isFiltered) {
     (jsonLd as any).aggregateRating = {
       "@type": "AggregateRating",
-      "ratingValue": aggregateRating.average,
-      "reviewCount": aggregateRating.count
+      ratingValue: aggregateRating.average,
+      reviewCount: aggregateRating.count,
     };
   }
 
@@ -110,13 +128,16 @@ function GeoPlannerPage() {
     { id: "all", label: "Alle" },
     { id: "hochzeit", label: "Hochzeiten" },
     { id: "firmen", label: "Firmenevents" },
-    { id: "party", label: "Private Feiern" }
+    { id: "party", label: "Private Feiern" },
   ];
 
   return (
     <SiteShell>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Hero Section */}
       <section className="relative overflow-hidden py-16 lg:py-24">
         {/* Cinematic Background */}
@@ -125,7 +146,9 @@ function GeoPlannerPage() {
             src="/planner-hero.jpg"
             alt="Background"
             className="w-full h-full object-cover object-center scale-105"
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" />
           <div className="absolute inset-0 bg-black/20" />
@@ -133,7 +156,9 @@ function GeoPlannerPage() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
           <div className="flex items-center gap-2 text-sm text-[oklch(0.97_0.02_92)]/80 mb-6">
-            <Link to="/planner" className="hover:text-white transition">Event-Planer</Link>
+            <Link to="/planner" className="hover:text-white transition">
+              Event-Planer
+            </Link>
             <ChevronRight className="h-4 w-4" />
             <span className="text-white font-medium">{location.name}</span>
           </div>
@@ -142,16 +167,21 @@ function GeoPlannerPage() {
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl mb-6">
               {seoData?.meta_title || `Event-Planer in ${location.name}`}
             </h1>
-            
+
             {aggregateRating && aggregateRating.count > 0 && !isFiltered && (
               <div className="flex items-center gap-2 mb-6">
                 <Star className="h-5 w-5 fill-[#F5B82E] text-[#F5B82E]" />
-                <span className="font-semibold text-white">{aggregateRating.average.toFixed(1)}</span>
-                <span className="text-[oklch(0.97_0.02_92)]/80">({aggregateRating.count} Bewertungen)</span>
+                <span className="font-semibold text-white">
+                  {aggregateRating.average.toFixed(1)}
+                </span>
+                <span className="text-[oklch(0.97_0.02_92)]/80">
+                  ({aggregateRating.count} Bewertungen)
+                </span>
               </div>
             )}
             <p className="text-lg opacity-90 max-w-xl">
-              {seoData?.meta_description || `Entdecke professionelle Event-Planer in ${location.name} für perfekte Veranstaltungen.`}
+              {seoData?.meta_description ||
+                `Entdecke professionelle Event-Planer in ${location.name} für perfekte Veranstaltungen.`}
             </p>
           </div>
         </div>
@@ -175,7 +205,9 @@ function GeoPlannerPage() {
               key={f.id}
               onClick={() => setServiceFilter(f.id)}
               className={`rounded-full px-5 py-2.5 text-sm font-medium transition ${
-                currentService === f.id ? "bg-forest text-[oklch(0.97_0.02_92)]" : "bg-cream text-forest hover:bg-[#eadfce]"
+                currentService === f.id
+                  ? "bg-forest text-[oklch(0.97_0.02_92)]"
+                  : "bg-cream text-forest hover:bg-[#eadfce]"
               }`}
             >
               {f.label}
@@ -192,9 +224,14 @@ function GeoPlannerPage() {
               <CalendarHeart className="h-7 w-7" />
             </div>
             <h3 className="mt-5 font-display text-2xl text-forest">Keine Event-Planer gefunden</h3>
-            <p className="mt-2 text-sm text-forest/70">Versuche eine andere Suche oder passe deine Filter an.</p>
+            <p className="mt-2 text-sm text-forest/70">
+              Versuche eine andere Suche oder passe deine Filter an.
+            </p>
             <button
-              onClick={() => { setQuery(""); setServiceFilter("all"); }}
+              onClick={() => {
+                setQuery("");
+                setServiceFilter("all");
+              }}
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-cream text-forest border border-[#eadfce] px-5 py-2.5 text-sm font-semibold hover:bg-[#eadfce]"
             >
               <X className="h-4 w-4" /> Filter zurücksetzen
@@ -233,7 +270,8 @@ function GeoPlannerPage() {
                     <h3 className="font-display text-lg text-forest line-clamp-1">{v.name}</h3>
                   </div>
                   <p className="mt-1 text-sm text-forest/70 line-clamp-2">
-                    {v.description || "Professionelle Eventplanung für Hochzeiten, Firmen-Events und Feiern."}
+                    {v.description ||
+                      "Professionelle Eventplanung für Hochzeiten, Firmen-Events und Feiern."}
                   </p>
                 </div>
               </Link>
@@ -245,7 +283,10 @@ function GeoPlannerPage() {
       {/* SEO Text Hydration */}
       {seoData?.content && (
         <section className="mx-auto max-w-4xl px-4 sm:px-6 py-16">
-          <div className="prose prose-lg prose-forest max-w-none prose-headings:font-display" dangerouslySetInnerHTML={{ __html: seoData.content }} />
+          <div
+            className="prose prose-lg prose-forest max-w-none prose-headings:font-display"
+            dangerouslySetInnerHTML={{ __html: seoData.content }}
+          />
         </section>
       )}
     </SiteShell>

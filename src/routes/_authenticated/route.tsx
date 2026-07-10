@@ -7,13 +7,13 @@ export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async ({ location }) => {
     const { data, error } = await supabase.auth.getUser();
-    
+
     if (error || !data.user) {
       if (error) console.error("Supabase auth error, clearing session:", error);
       await supabase.auth.signOut();
       throw redirect({
         to: "/auth",
-        search: { signup: undefined, message: "Please sign in to continue.", logout: undefined },
+        search: { signup: undefined, message: "Please sign in to continue.", logout: undefined } as any,
       });
     }
 
@@ -27,7 +27,11 @@ export const Route = createFileRoute("/_authenticated")({
         await supabase.auth.signOut();
         throw redirect({
           to: "/auth",
-          search: { signup: undefined, message: "Your session has expired. Please sign in again.", logout: undefined },
+          search: {
+            signup: undefined,
+            message: "Your session has expired. Please sign in again.",
+            logout: undefined,
+          } as any,
         });
       }
     }

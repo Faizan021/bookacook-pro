@@ -41,9 +41,13 @@ async function run() {
   });
 
   if (checkRes.status === 404) {
-    console.log("exec_sql RPC not available - will use direct SQL via pg connection string approach");
+    console.log(
+      "exec_sql RPC not available - will use direct SQL via pg connection string approach",
+    );
     console.log("\nThe archive tables must be created manually in the Supabase SQL Editor.");
-    console.log("\nCopy and paste the following SQL into https://supabase.com/dashboard/project/qvjqwnlkygyrudlakece/sql/new :\n");
+    console.log(
+      "\nCopy and paste the following SQL into https://supabase.com/dashboard/project/qvjqwnlkygyrudlakece/sql/new :\n",
+    );
 
     for (const t of tables) {
       const archiveTable = `_archive_${t}`;
@@ -53,7 +57,9 @@ async function run() {
       console.log(`ALTER TABLE public.${archiveTable}`);
       console.log(`  ADD COLUMN IF NOT EXISTS _archived_at timestamptz DEFAULT now();`);
       console.log(`ALTER TABLE public.${archiveTable} DISABLE ROW LEVEL SECURITY;`);
-      console.log(`COMMENT ON TABLE public.${archiveTable} IS 'Archive backup before legacy migration. Do not drop until drop migration is approved.';`);
+      console.log(
+        `COMMENT ON TABLE public.${archiveTable} IS 'Archive backup before legacy migration. Do not drop until drop migration is approved.';`,
+      );
       console.log("");
     }
     process.exit(0);
@@ -63,4 +69,7 @@ async function run() {
   console.log("Existing archive tables:", text);
 }
 
-run().catch((e) => { console.error(e); process.exit(1); });
+run().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

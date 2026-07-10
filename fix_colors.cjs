@@ -2,12 +2,12 @@ const fs = require("fs");
 const files = [
   "src/routes/_authenticated/restaurant.tsx",
   "src/routes/_authenticated/caterer.tsx",
-  "src/routes/_authenticated/dashboard/planner.tsx"
+  "src/routes/_authenticated/dashboard/planner.tsx",
 ];
 
 for (const file of files) {
   let code = fs.readFileSync(file, "utf8");
-  
+
   code = code.replace(/text-orange-600/g, "text-forest");
   code = code.replace(/focus:border-orange-500/g, "focus:border-forest");
   code = code.replace(/focus:ring-orange-500/g, "focus:ring-forest");
@@ -18,4 +18,3 @@ for (const file of files) {
   fs.writeFileSync(file, code);
   console.log("Patched " + file);
 }
-

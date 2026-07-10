@@ -2,7 +2,7 @@ const fs = require("fs");
 const files = [
   "src/routes/_authenticated/restaurant.tsx",
   "src/routes/_authenticated/caterer.tsx",
-  "src/routes/_authenticated/dashboard/planner.tsx"
+  "src/routes/_authenticated/dashboard/planner.tsx",
 ];
 
 for (const file of files) {
@@ -10,7 +10,7 @@ for (const file of files) {
   const icons = ["Plus", "Loader2", "Tag", "Ticket"];
   const lucideRegex = /import\s+\{([^}]+)\}\s+from\s+["']lucide-react["']/;
   const match = code.match(lucideRegex);
-  
+
   if (match) {
     let existingImports = match[1];
     let toAdd = [];
@@ -33,4 +33,3 @@ for (const file of files) {
     console.log(`Added lucide-react import to ${file}`);
   }
 }
-

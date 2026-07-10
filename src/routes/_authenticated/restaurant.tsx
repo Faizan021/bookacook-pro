@@ -13,6 +13,8 @@ import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tansta
 import React, { useState, Component } from "react";
 import { trackEvent } from "@/utils/posthog";
 import { supabase } from "@/integrations/supabase/client";
+import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
+import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
 import { updateMyConsent } from "@/lib/consent.functions";
 // Imports consolidated below
 import {
@@ -64,9 +66,21 @@ import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
 export const Route = createFileRoute("/_authenticated/restaurant")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>): { tab?: string } => {
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): {
+    tab?: string;
+    connect_success?: string;
+    connect_error?: string;
+    billing_success?: string;
+    billing_cancel?: string;
+  } => {
     return {
       tab: search.tab as string | undefined,
+      connect_success: search.connect_success as string | undefined,
+      connect_error: search.connect_error as string | undefined,
+      billing_success: search.billing_success as string | undefined,
+      billing_cancel: search.billing_cancel as string | undefined,
     };
   },
   beforeLoad: async () => {
@@ -79,7 +93,7 @@ export const Route = createFileRoute("/_authenticated/restaurant")({
             signup: undefined,
             message: `Please sign in with a Business Partner account.`,
             logout: "true",
-          },
+          } as any,
         });
       }
     } catch (err) {
@@ -93,7 +107,7 @@ export const Route = createFileRoute("/_authenticated/restaurant")({
           signup: undefined,
           message: "Session expired or unauthorized. Please sign in again.",
           logout: "true",
-        },
+        } as any,
       });
     }
   },
@@ -233,7 +247,9 @@ function CreateRestaurantForm() {
       create({ data: vars }),
     onSuccess: async () => {
       try {
-        await saveConsent({ data: { marketing_opt_in: marketingOptIn, source: "restaurant_signup" } });
+        await saveConsent({
+          data: { marketing_opt_in: marketingOptIn, source: "restaurant_signup" },
+        });
       } catch (e) {
         console.error("Failed to save marketing consent during signup:", e);
       }
@@ -506,6 +522,8 @@ function ProductsSection() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
+  const [dietaryTags, setDietaryTags] = useState("");
   const [imagePath, setImagePath] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -521,12 +539,16 @@ function ProductsSection() {
       description: string;
       price_cents: number;
       image_url: string | null;
+      category?: string;
+      dietary_tags?: string[];
     }) => upsert({ data: vars }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["restaurant", "products"] });
       setName("");
       setDescription("");
       setPrice("");
+      setCategory("");
+      setDietaryTags("");
       setImagePath(null);
       setImagePreview(null);
       setEditingId(null);
@@ -633,6 +655,8 @@ function ProductsSection() {
                         setName(p.name);
                         setDescription(p.description || "");
                         setPrice((p.price_cents / 100).toString());
+                        setCategory(p.category || "");
+                        setDietaryTags((p.dietary_tags || []).join(", "));
                         setImagePath(p.image_url);
                         setImagePreview(p.image_signed_url);
                         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -658,6 +682,8 @@ function ProductsSection() {
               description,
               price_cents: cents,
               image_url: imagePath,
+              category: category || undefined,
+              dietary_tags: dietaryTags ? dietaryTags.split(",").map((t) => t.trim()).filter(Boolean) : [],
             });
           }}
         >
@@ -690,6 +716,30 @@ function ProductsSection() {
               onChange={(e) => setPrice(e.target.value)}
               required
             />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="pcategory">{tt("Kategorie", "Category")}</Label>
+            <Input
+              id="pcategory"
+              placeholder={tt("z.B. Pizza, Nudeln, Vorspeisen, Desserts", "e.g. Pizza, Pasta, Starters, Desserts")}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="pdietary">{tt("Eigenschaften (Kommagetrennt)", "Dietary & Labels (Comma-separated)")}</Label>
+            <Input
+              id="pdietary"
+              placeholder={tt("z.B. Halal, Vegan, Vegetarisch, Rind, Huhn, Fisch", "e.g. Halal, Vegan, Vegetarian, Beef, Chicken, Fish")}
+              value={dietaryTags}
+              onChange={(e) => setDietaryTags(e.target.value)}
+            />
+            <p className="text-[10px] text-muted-foreground leading-tight">
+              {tt(
+                "Wird als Filter auf Ihrem Storefront angezeigt.",
+                "Will be shown as filters on your storefront.",
+              )}
+            </p>
           </div>
           <div className="space-y-1.5">
             <Label>{tt("Bild (Optional)", "Image (Optional)")}</Label>
@@ -762,11 +812,12 @@ function ProductsSection() {
 function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const navigate = useNavigate({ from: Route.fullPath });
 
   const stripeConnected = kpis.stripeConnectStatus === "connected";
   const subActive = kpis.subscriptionStatus === "active";
   const published = kpis.isPublished;
-  const hasPaymentMethod = stripeConnected;
+  const hasPaymentMethod = stripeConnected || kpis.acceptsCash || kpis.acceptsPaypal;
 
   const getStepStatus = (stepId: number) => {
     if (stepId === 1) {
@@ -791,7 +842,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
         "Connect Stripe or enable Cash/PayPal in profile settings to accept payments.",
       ),
       actionLabel: tt("Zahlungsmethoden einrichten", "Set up Payment Methods"),
-      actionHash: "profile",
+      actionTab: "settings-payments",
     },
     {
       id: 2,
@@ -801,7 +852,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
         "Subscribe to the €34.99/month Starter Plan for unlimited direct orders.",
       ),
       actionLabel: tt("Plan abonnieren", "Subscribe to Plan"),
-      actionHash: "billing",
+      actionTab: "settings-billing",
     },
     {
       id: 3,
@@ -811,7 +862,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
         "Make your storefront live so customers can place orders.",
       ),
       actionLabel: tt("Zum Profil & Veröffentlichen", "Go to Profile & Publish"),
-      actionHash: "profile",
+      actionTab: "settings-general",
       disabledText: tt("Erfordert aktives Abonnement", "Requires active subscription"),
     },
   ];
@@ -902,7 +953,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
                 ) : isCurrent ? (
                   <Button
                     onClick={() => {
-                      window.location.hash = step.actionHash;
+                      navigate({ search: { tab: step.actionTab } });
                     }}
                     className="w-full bg-forest hover:bg-forest/90 text-cream text-xs font-bold py-2.5 rounded-full transition-all duration-200 cursor-pointer shadow-sm"
                   >
@@ -957,8 +1008,13 @@ function OverviewSection() {
       </div>
     );
 
-  const navigateTo = (hash: string) => {
-    window.location.hash = hash;
+  const navigate = useNavigate({ from: Route.fullPath });
+  const navigateTo = (tab: string) => {
+    let targetTab = tab;
+    if (targetTab === "profile") {
+      targetTab = "settings-general";
+    }
+    navigate({ search: { tab: targetTab } });
   };
 
   const hasUrgentActions =
@@ -1228,6 +1284,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
   const [logoPath, setLogoPath] = useState(restaurant.logo_url || null);
   const [bannerPath, setBannerPath] = useState(restaurant.banner_image_url || null);
   const [certifications, setCertifications] = useState((restaurant as any).certifications || "");
+  const [useGeneratedBranding, setUseGeneratedBranding] = useState(restaurant.use_generated_branding || false);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -1274,6 +1331,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
           logo_url: logoPath,
           banner_image_url: bannerPath,
           certifications,
+          use_generated_branding: useGeneratedBranding,
         },
       });
       toast.success(
@@ -1365,29 +1423,29 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
             </div>
 
             {/* Logo & Banner Upload Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+              <div className="space-y-2 flex flex-col items-start">
                 <Label>{tt("Logo Bild", "Logo Image")}</Label>
                 <div
                   onClick={() => !uploading && logoRef.current?.click()}
-                  className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
+                  className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-full p-1 flex items-center justify-center w-32 h-32 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
                 >
                   {logoPreview ? (
                     <>
                       <img
                         src={logoPreview}
-                        className="object-cover w-full h-full rounded-xl"
+                        className="object-cover w-full h-full rounded-full"
                         alt="Logo"
                       />
-                      <div className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-xs font-semibold rounded-2xl">
-                        {tt("Bild ändern", "Change Image")}
+                      <div className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-[10px] font-semibold rounded-full">
+                        {tt("Ändern", "Change")}
                       </div>
                     </>
                   ) : (
                     <div className="text-center space-y-1">
-                      <span className="text-2xl block">📸</span>
-                      <span className="text-[10px] font-semibold text-forest/70 block">
-                        {tt("Bild wählen", "Choose Logo")}
+                      <span className="text-xl block">📸</span>
+                      <span className="text-[9px] font-semibold text-forest/70 block">
+                        {tt("Logo wählen", "Choose Logo")}
                       </span>
                     </div>
                   )}
@@ -1399,19 +1457,20 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     onChange={(e) => e.target.files?.[0] && handleImage(e.target.files[0], "logo")}
                   />
                 </div>
+                <p className="text-[10px] text-muted-foreground mt-1">Recommended size: 512x512 px (Square)</p>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 md:col-span-2">
                 <Label>{tt("Banner Bild", "Banner Image")}</Label>
                 <div
                   onClick={() => !uploading && bannerRef.current?.click()}
-                  className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-2xl p-4 flex flex-col items-center justify-center h-28 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
+                  className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-2xl p-1 flex flex-col items-center justify-center w-full h-32 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
                 >
                   {bannerPreview ? (
                     <>
                       <img
                         src={bannerPreview}
-                        className="object-cover w-full h-full rounded-xl"
+                        className="object-cover w-full h-full rounded-2xl"
                         alt="Banner"
                       />
                       <div className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-xs font-semibold rounded-2xl">
@@ -1422,7 +1481,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     <div className="text-center space-y-1">
                       <span className="text-2xl block">🖼️</span>
                       <span className="text-[10px] font-semibold text-forest/70 block">
-                        {tt("Bild wählen", "Choose Banner")}
+                        {tt("Banner wählen", "Choose Banner")}
                       </span>
                     </div>
                   )}
@@ -1436,8 +1495,107 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     }
                   />
                 </div>
+                <p className="text-[10px] text-muted-foreground mt-1">Recommended size: 1200x400 px (3:1 Aspect Ratio)</p>
               </div>
             </div>
+
+            {BRANDING_ASSISTANT_ENABLED && (
+              <div className="mt-6 p-5 bg-stone-50 border border-stone-200 rounded-xl space-y-4 text-left">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-forest">
+                      {tt("Speisely Branding-Assistent", "Speisely Branding Assistant")}
+                    </h4>
+                    <p className="text-xs text-forest/70 mt-0.5">
+                      {tt(
+                        "Wähle zwischen deinen hochgeladenen Bildern oder einem sauberen, professionell generierten Speisely-Branding.",
+                        "Choose between your uploaded storefront images or a clean, professionally generated Speisely default branding.",
+                      )}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div
+                    onClick={() => setUseGeneratedBranding(false)}
+                    className={`cursor-pointer p-4 rounded-lg border-2 text-left transition-all ${
+                      !useGeneratedBranding
+                        ? "border-forest bg-white shadow-sm"
+                        : "border-stone-200 bg-stone-100/50 hover:bg-stone-100"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="radio"
+                        checked={!useGeneratedBranding}
+                        onChange={() => setUseGeneratedBranding(false)}
+                        className="mt-1 accent-forest"
+                      />
+                      <div>
+                        <span className="text-xs font-bold block text-forest">
+                          {tt("Hochgeladenes Branding", "My Uploaded Branding")}
+                        </span>
+                        <span className="text-[10px] text-forest/70 block mt-1">
+                          {tt(
+                            "Verwendet deine hochgeladenen Bilddateien. Falls keine Bilder vorhanden sind, wird automatisch das Speisely-Branding als Fallback verwendet.",
+                            "Uses your manually uploaded image files. If assets are missing, Speisely fallbacks are used automatically.",
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setUseGeneratedBranding(true)}
+                    className={`cursor-pointer p-4 rounded-lg border-2 text-left transition-all ${
+                      useGeneratedBranding
+                        ? "border-forest bg-white shadow-sm"
+                        : "border-stone-200 bg-stone-100/50 hover:bg-stone-100"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="radio"
+                        checked={useGeneratedBranding}
+                        onChange={() => setUseGeneratedBranding(true)}
+                        className="mt-1 accent-forest"
+                      />
+                      <div>
+                        <span className="text-xs font-bold block text-forest">
+                          {tt("Generiertes Speisely-Branding", "Speisely-Generated Branding")}
+                        </span>
+                        <span className="text-[10px] text-forest/70 block mt-1">
+                          {tt(
+                            "Generiert automatisch ein minimalistisches, perfekt passendes Logo und Banner basierend auf deinem Namen.",
+                            "Generates a polished geometric logo monogram and gradient banner matching your name and style.",
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {useGeneratedBranding && (
+                  <div className="p-3 bg-white border border-stone-200 rounded-lg space-y-3">
+                    <div className="text-[11px] font-bold text-forest/50 uppercase tracking-wider">
+                      {tt("Live-Vorschau des generierten Brandings", "Live Preview of Generated Branding")}
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-4 items-center">
+                      <img
+                        src={generateSvgLogo(name || "Restaurant", restaurant.cuisine_type || "Cuisine")}
+                        className="w-16 h-16 rounded-full border border-stone-200 shadow-sm"
+                        alt="Generated Logo Preview"
+                      />
+                      <img
+                        src={generateSvgBanner(name || "Restaurant", restaurant.cuisine_type || "Cuisine")}
+                        className="w-full sm:w-64 h-16 rounded-lg object-cover border border-stone-200 shadow-sm"
+                        alt="Generated Banner Preview"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -1468,6 +1626,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
 
   const [acceptsPickup, setAcceptsPickup] = useState(restaurant.accepts_pickup ?? true);
   const [acceptsDelivery, setAcceptsDelivery] = useState(restaurant.accepts_delivery ?? true);
+  const [acceptsOrders, setAcceptsOrders] = useState(restaurant.accepts_orders ?? true);
   const [deliveryRadius, setDeliveryRadius] = useState(
     restaurant.delivery_radius_km?.toString() || "5",
   );
@@ -1491,6 +1650,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
           name: restaurant.name,
           accepts_pickup: acceptsPickup,
           accepts_delivery: acceptsDelivery,
+          accepts_orders: acceptsOrders,
           delivery_radius_km: parseFloat(deliveryRadius) || 0,
           min_order_amount: parseFloat(minOrder) || 0,
           delivery_fee: parseFloat(deliveryFee) || 0,
@@ -1541,6 +1701,25 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
 
         <div className="grid gap-6 md:grid-cols-2">
           <div className="space-y-6">
+            <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+              <div>
+                <Label htmlFor="accepts-orders" className="font-semibold text-forest">
+                  {tt("Bestellungen annehmen", "Accept Orders")}
+                </Label>
+                <p className="text-[10px] text-muted-foreground mt-0.5">
+                  {tt(
+                    "Ermöglicht Kunden das Aufgeben von Online-Bestellungen",
+                    "Allows customers to place online orders",
+                  )}
+                </p>
+              </div>
+              <Switch
+                id="accepts-orders"
+                checked={acceptsOrders}
+                onCheckedChange={setAcceptsOrders}
+              />
+            </div>
+
             <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
               <div>
                 <Label htmlFor="accepts-pickup" className="font-semibold text-forest">
@@ -1832,7 +2011,13 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
   );
 }
 
-function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
+function SettingsPaymentsSection({
+  restaurant,
+  isStripeConfigured = true,
+}: {
+  restaurant: any;
+  isStripeConfigured?: boolean;
+}) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const qc = useQueryClient();
@@ -1852,7 +2037,9 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
     trackEvent("stripe_connect_clicked");
     setLoading(true);
     try {
-      const res = await getConnectUrl({ data: { slug: restaurant.slug, origin: window.location.origin } });
+      const res = await getConnectUrl({
+        data: { slug: restaurant.slug, origin: window.location.origin },
+      });
       if (res?.url) {
         window.location.href = res.url;
       }
@@ -1886,6 +2073,15 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
   }
 
   async function handleSave() {
+    if (acceptsPaypal && !paypalEmail.trim()) {
+      toast.error(
+        tt(
+          "Bitte geben Sie einen PayPal.Me Link oder Ihre PayPal-E-Mail-Adresse ein.",
+          "Please enter a PayPal.Me link or your PayPal email address.",
+        ),
+      );
+      return;
+    }
     setSaving(true);
     try {
       await upsert({
@@ -1970,6 +2166,25 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
           </div>
         ) : (
           <div className="space-y-4">
+            {!isStripeConfigured && (
+              <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-2xl text-xs leading-relaxed mb-2">
+                <span className="text-base leading-none">⚠️</span>
+                <div>
+                  <p className="font-bold">
+                    {tt(
+                      "Stripe Connect ist nicht konfiguriert",
+                      "Stripe Connect is not configured",
+                    )}
+                  </p>
+                  <p className="mt-1 text-amber-700/90 font-medium">
+                    {tt(
+                      "Die Umgebungsvariablen STRIPE_SECRET_KEY und STRIPE_CONNECT_CLIENT_ID fehlen auf dem Server. Bitte konfigurieren Sie diese in Ihren Vercel-Umgebungsvariablen.",
+                      "The STRIPE_SECRET_KEY and STRIPE_CONNECT_CLIENT_ID environment variables are missing on the server. Please set them in your Vercel environment variables.",
+                    )}
+                  </p>
+                </div>
+              </div>
+            )}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-border">
               <p className="text-xs text-muted-foreground leading-relaxed max-w-md">
                 {tt(
@@ -1979,7 +2194,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
               </p>
               <Button
                 className="bg-[#635BFF] hover:bg-[#635BFF]/90 text-white font-semibold flex items-center gap-2 rounded-full px-6 py-2.5 text-xs shadow-sm transition shrink-0"
-                disabled={loading}
+                disabled={loading || !isStripeConfigured}
                 onClick={handleConnectStripe}
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -2019,6 +2234,12 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
                     "Customers pay in cash upon pickup or delivery.",
                   )}
                 </p>
+                {acceptsCash && (
+                  <div className="mt-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-forest">
+                    <span className="h-1.5 w-1.5 rounded-full bg-forest animate-pulse" />
+                    <span>{tt("Aktiv", "Active")}</span>
+                  </div>
+                )}
               </div>
             </div>
             <Switch id="accepts-cash" checked={acceptsCash} onCheckedChange={setAcceptsCash} />
@@ -2028,7 +2249,7 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
           <div className="border border-border/50 rounded-2xl p-4 bg-[#f8faf9] space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-2xl">🅿️</span>
+                <span className="text-2xl">🅿️ </span>
                 <div>
                   <p className="font-semibold text-forest">PayPal</p>
                   <p className="text-xs text-muted-foreground">
@@ -2037,6 +2258,12 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
                       "Customers pay via your PayPal.Me link at checkout.",
                     )}
                   </p>
+                  {acceptsPaypal && paypalEmail.trim() !== "" && (
+                    <div className="mt-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-forest">
+                      <span className="h-1.5 w-1.5 rounded-full bg-forest animate-pulse" />
+                      <span>{tt("Aktiv", "Active")}</span>
+                    </div>
+                  )}
                 </div>
               </div>
               <Switch
@@ -2045,6 +2272,19 @@ function SettingsPaymentsSection({ restaurant }: { restaurant: any }) {
                 onCheckedChange={setAcceptsPaypal}
               />
             </div>
+
+            {acceptsPaypal && paypalEmail.trim() !== "" && (
+              <div className="flex items-center gap-2.5 text-forest bg-forest/5 p-4 rounded-2xl border border-forest/10 text-sm font-semibold">
+                <span className="h-2 w-2 rounded-full bg-forest animate-pulse" />
+                <p>
+                  {tt(
+                    "PayPal ist verbunden und aktiv. Kunden bezahlen direkt auf Ihr Konto.",
+                    "PayPal is connected and active. Customers pay directly to your account.",
+                  )}
+                </p>
+              </div>
+            )}
+
             {acceptsPaypal && (
               <div className="space-y-3 pt-3 border-t border-border/50">
                 <Label className="text-xs font-semibold text-forest">
@@ -2180,12 +2420,23 @@ function SettingsReservationsSection({ restaurant }: { restaurant: any }) {
   );
 }
 
-function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; restaurant: any }) {
+function SettingsShell({
+  activeSubtab,
+  restaurant,
+  isStripeConfigured,
+}: {
+  activeSubtab: string;
+  restaurant: any;
+  isStripeConfigured?: boolean;
+}) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
   const isGeneralPending =
-    !restaurant.logo_path || !restaurant.phone || !restaurant.description || !restaurant.business_address;
+    !restaurant.logo_url ||
+    !restaurant.phone ||
+    !restaurant.description ||
+    !restaurant.business_address;
   const isStorefrontPending = !restaurant.is_published;
   const isPaymentsPending =
     !restaurant.accepts_cash &&
@@ -2259,7 +2510,7 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
             return (
               <Link
                 key={tab.id}
-                to="."
+                to="/restaurant"
                 search={{ tab: tab.id }}
                 className={`pb-4 text-sm font-medium transition-all border-b-2 relative flex items-center gap-2 ${
                   isActive
@@ -2290,7 +2541,10 @@ function SettingsShell({ activeSubtab, restaurant }: { activeSubtab: string; res
           <SettingsOperationsSection restaurant={restaurant} />
         )}
         {activeSubtab === "settings-payments" && (
-          <SettingsPaymentsSection restaurant={restaurant} />
+          <SettingsPaymentsSection
+            restaurant={restaurant}
+            isStripeConfigured={isStripeConfigured}
+          />
         )}
         {activeSubtab === "settings-reservations" && (
           <SettingsReservationsSection restaurant={restaurant} />
@@ -3118,6 +3372,7 @@ function BillingSection() {
 }
 
 function RestaurantDashboardInner() {
+  const { lang } = useI18n();
   const fetchProducts = useServerFn(getRestaurantProducts);
   const qc = useQueryClient();
   const q = useSuspenseQuery({
@@ -3125,6 +3380,59 @@ function RestaurantDashboardInner() {
     queryFn: () => fetchProducts(),
     retry: false,
   });
+
+  const location = useLocation();
+  const searchParams = React.useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const rawTab = searchParams.get("tab") || (location.hash || "#overview").replace("#", "");
+
+  React.useEffect(() => {
+    const connectSuccess = searchParams.get("connect_success");
+    const connectError = searchParams.get("connect_error");
+    const billingSuccess = searchParams.get("billing_success");
+    const billingCancel = searchParams.get("billing_cancel");
+    const tt = (de: string, en: string) => (lang === "de" ? de : en);
+
+    if (connectSuccess) {
+      toast.success(
+        tt(
+          "Stripe Connect wurde erfolgreich verknüpft!",
+          "Stripe Connect has been successfully linked!",
+        ),
+      );
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname + (rawTab ? `?tab=${rawTab}` : ""),
+      );
+    }
+    if (connectError) {
+      toast.error(
+        tt("Stripe-Verbindung fehlgeschlagen: ", "Stripe connection failed: ") +
+          decodeURIComponent(connectError),
+      );
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname + (rawTab ? `?tab=${rawTab}` : ""),
+      );
+    }
+    if (billingSuccess) {
+      toast.success(tt("Abonnement erfolgreich gestartet!", "Subscription successfully started!"));
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname + (rawTab ? `?tab=${rawTab}` : ""),
+      );
+    }
+    if (billingCancel) {
+      toast.error(tt("Abonnement-Zahlung abgebrochen.", "Subscription payment cancelled."));
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname + (rawTab ? `?tab=${rawTab}` : ""),
+      );
+    }
+  }, [searchParams, lang, rawTab]);
 
   React.useEffect(() => {
     trackEvent("restaurant_onboarding_started");
@@ -3175,10 +3483,6 @@ function RestaurantDashboardInner() {
     };
   }, [q.data?.restaurant, qc]);
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const rawTab = searchParams.get("tab") || (location.hash || "#overview").replace("#", "");
-
   // Normalize settings tabs
   let currentTab = rawTab;
   if (currentTab === "profile" || currentTab === "settings") {
@@ -3227,7 +3531,11 @@ function RestaurantDashboardInner() {
           />
         )}
         {currentTab.startsWith("settings-") && (
-          <SettingsShell activeSubtab={currentTab} restaurant={q.data.restaurant} />
+          <SettingsShell
+            activeSubtab={currentTab}
+            restaurant={q.data.restaurant}
+            isStripeConfigured={q.data.isStripeConfigured}
+          />
         )}
       </React.Suspense>
     </VendorLayout>

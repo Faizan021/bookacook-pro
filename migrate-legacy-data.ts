@@ -42,7 +42,13 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 const AUDIT_DIR = path.join(".", "migration-audit");
 if (!fs.existsSync(AUDIT_DIR)) fs.mkdirSync(AUDIT_DIR, { recursive: true });
 
-type ReportEntry = { legacy: number; archived: number; migrated: number; review: number; skipped: number };
+type ReportEntry = {
+  legacy: number;
+  archived: number;
+  migrated: number;
+  review: number;
+  skipped: number;
+};
 const report: Record<string, ReportEntry> = {};
 function initReport(key: string) {
   report[key] = { legacy: 0, archived: 0, migrated: 0, review: 0, skipped: 0 };
@@ -54,33 +60,54 @@ function writeAudit(filename: string, rows: unknown[]) {
 }
 
 const EVENT_STATUS_MAP: Record<string, string> = {
-  draft: "draft", pending: "submitted", matched: "matched", quoted: "quoted",
-  accepted: "accepted", rejected: "rejected", active: "booked",
-  submitted: "submitted", reviewing: "reviewing", booked: "booked",
+  draft: "draft",
+  pending: "submitted",
+  matched: "matched",
+  quoted: "quoted",
+  accepted: "accepted",
+  rejected: "rejected",
+  active: "booked",
+  submitted: "submitted",
+  reviewing: "reviewing",
+  booked: "booked",
 };
 const ORDER_STATUS_MAP: Record<string, string> = {
-  confirmed: "confirmed", completed: "completed",
-  pending: "pending", cancelled: "cancelled",
+  confirmed: "confirmed",
+  completed: "completed",
+  pending: "pending",
+  cancelled: "cancelled",
 };
 
 // ---- PHASE 0: Archive tables ----
 async function phase0_createArchives() {
   console.log("\n=== PHASE 0: Creating archive tables ===");
   const tables = [
-    "event_requests", "event_request_matches",
-    "orders", "order_items", "packages", "availability"
+    "event_requests",
+    "event_request_matches",
+    "orders",
+    "order_items",
+    "packages",
+    "availability",
   ];
   for (const t of tables) {
     const archiveTable = `_archive_${t}`;
     const { data, error } = await supabase.from(t).select("*");
-    if (error) { console.error(`  Cannot read ${t}: ${error.message}`); continue; }
-    if (!data || data.length === 0) { console.log(`  ${t}: 0 rows.`); continue; }
+    if (error) {
+      console.error(`  Cannot read ${t}: ${error.message}`);
+      continue;
+    }
+    if (!data || data.length === 0) {
+      console.log(`  ${t}: 0 rows.`);
+      continue;
+    }
     // Try upsert into archive table (must exist in DB)
     const { error: archErr } = await supabase.from(archiveTable).upsert(data, { onConflict: "id" });
     if (archErr) {
       console.warn(`  WARNING: Could not upsert to ${archiveTable}: ${archErr.message}`);
       console.warn(`  Run this SQL in Supabase dashboard to create it:`);
-      console.warn(`  CREATE TABLE IF NOT EXISTS public.${archiveTable} AS SELECT * FROM public.${t} LIMIT 0;`);
+      console.warn(
+        `  CREATE TABLE IF NOT EXISTS public.${archiveTable} AS SELECT * FROM public.${t} LIMIT 0;`,
+      );
     } else {
       console.log(`  ${t}: ${data.length} rows archived -> ${archiveTable}`);
     }
@@ -107,7 +134,11 @@ async function phase1_eventRequests(rows: Record<string, unknown>[]) {
     if (!row.customer_id) {
       report["event_requests"].archived++;
       report["event_requests"].skipped++;
-      reviewRows.push({ ...row, _skip_reason: "customer_id is null - catering_briefs.customer_id NOT NULL", _role: "Customer" });
+      reviewRows.push({
+        ...row,
+        _skip_reason: "customer_id is null - catering_briefs.customer_id NOT NULL",
+        _role: "Customer",
+      });
       console.log(`  Row ${row.id}: customer_id null - archived, skipped.`);
       continue;
     }
@@ -116,27 +147,39 @@ async function phase1_eventRequests(rows: Record<string, unknown>[]) {
     if (!mappedStatus) {
       report["event_requests"].archived++;
       report["event_requests"].review++;
-      reviewRows.push({ ...row, _review_reason: `Unknown status: '${row.status}'`, _role: "Customer" });
+      reviewRows.push({
+        ...row,
+        _review_reason: `Unknown status: '${row.status}'`,
+        _role: "Customer",
+      });
       console.log(`  Row ${row.id}: status='${row.status}' unknown - archived + review.`);
       continue;
     }
     // ASSUMPTION: budget_total in euros * 100 = budget_cents
     // ASSUMPTION: city -> location; special_requests -> notes; storefront_slug -> caterer_slug
     toMigrate.push({
-      id: row.id, customer_id: row.customer_id,
+      id: row.id,
+      customer_id: row.customer_id,
       budget_cents: row.budget_total ? Math.round((row.budget_total as number) * 100) : null,
-      event_date: row.event_date ?? null, event_type: row.event_type ?? null,
-      guest_count: row.guest_count ?? null, preferred_caterer_id: row.preferred_caterer_id ?? null,
-      location: row.city ?? null, notes: row.special_requests ?? null,
-      caterer_slug: row.storefront_slug ?? null, status: mappedStatus,
-      created_at: row.created_at, updated_at: row.updated_at ?? new Date().toISOString(),
+      event_date: row.event_date ?? null,
+      event_type: row.event_type ?? null,
+      guest_count: row.guest_count ?? null,
+      preferred_caterer_id: row.preferred_caterer_id ?? null,
+      location: row.city ?? null,
+      notes: row.special_requests ?? null,
+      caterer_slug: row.storefront_slug ?? null,
+      status: mappedStatus,
+      created_at: row.created_at,
+      updated_at: row.updated_at ?? new Date().toISOString(),
     });
   }
 
   if (reviewRows.length > 0) writeAudit("review_event_requests.json", reviewRows);
 
   if (toMigrate.length > 0) {
-    const { error } = await supabase.from("catering_briefs").upsert(toMigrate, { onConflict: "id" });
+    const { error } = await supabase
+      .from("catering_briefs")
+      .upsert(toMigrate, { onConflict: "id" });
     if (error) {
       console.error(`  catering_briefs insert failed: ${error.message}`);
       writeAudit("failed_event_requests.json", toMigrate);
@@ -165,31 +208,48 @@ async function phase2_matches(rows: Record<string, unknown>[]) {
     report["event_request_matches"].archived++;
     if (!briefIds.has(row.event_request_id as string)) {
       report["event_request_matches"].skipped++;
-      reviewRows.push({ ...row, _skip_reason: `Parent brief ${row.event_request_id} not migrated (orphan)`, _role: "Caterer" });
+      reviewRows.push({
+        ...row,
+        _skip_reason: `Parent brief ${row.event_request_id} not migrated (orphan)`,
+        _role: "Caterer",
+      });
       console.log(`  Row ${row.id}: orphaned parent - archived + skipped.`);
       continue;
     }
     let matchReasons: string[] = [];
     try {
       const raw = row.match_reasons;
-      if (Array.isArray(raw)) matchReasons = raw.map((r: unknown) => typeof r === "string" ? r : JSON.stringify(r));
-      else if (typeof raw === "object" && raw !== null) matchReasons = Object.values(raw as Record<string, unknown>).map(String);
+      if (Array.isArray(raw))
+        matchReasons = raw.map((r: unknown) => (typeof r === "string" ? r : JSON.stringify(r)));
+      else if (typeof raw === "object" && raw !== null)
+        matchReasons = Object.values(raw as Record<string, unknown>).map(String);
     } catch {
       report["event_request_matches"].review++;
-      reviewRows.push({ ...row, _review_reason: "Could not cast match_reasons to string[]", _role: "Caterer" });
+      reviewRows.push({
+        ...row,
+        _review_reason: "Could not cast match_reasons to string[]",
+        _role: "Caterer",
+      });
       continue;
     }
     // ASSUMPTION: status defaults to 'pending'; warnings defaults to []
     toMigrate.push({
-      id: row.id, brief_id: row.event_request_id, caterer_id: row.caterer_id,
-      match_score: row.match_score ?? 0, match_reasons: matchReasons,
-      status: "suggested", warnings: [], created_at: row.created_at,
+      id: row.id,
+      brief_id: row.event_request_id,
+      caterer_id: row.caterer_id,
+      match_score: row.match_score ?? 0,
+      match_reasons: matchReasons,
+      status: "suggested",
+      warnings: [],
+      created_at: row.created_at,
     });
   }
 
   if (reviewRows.length > 0) writeAudit("review_event_request_matches.json", reviewRows);
   if (toMigrate.length > 0) {
-    const { error } = await supabase.from("catering_matches").upsert(toMigrate, { onConflict: "id" });
+    const { error } = await supabase
+      .from("catering_matches")
+      .upsert(toMigrate, { onConflict: "id" });
     if (error) {
       console.error(`  catering_matches failed: ${error.message}`);
       writeAudit("failed_event_request_matches.json", toMigrate);
@@ -213,9 +273,14 @@ async function phase3_orders(orders: Record<string, unknown>[], items: Record<st
   // ALL order_items go to audit - no direct destination table
   report["order_items"].archived = items.length;
   report["order_items"].review = items.length;
-  writeAudit("review_order_items.json", items.map(i => ({
-    ...i, _review_reason: "No direct mapping to new schema. Requires human decision.", _role: "Caterer x Customer"
-  })));
+  writeAudit(
+    "review_order_items.json",
+    items.map((i) => ({
+      ...i,
+      _review_reason: "No direct mapping to new schema. Requires human decision.",
+      _role: "Caterer x Customer",
+    })),
+  );
   console.log(`  All ${items.length} order_items written to audit - manual review required.`);
 
   const itemsByOrder: Record<string, unknown[]> = {};
@@ -237,7 +302,8 @@ async function phase3_orders(orders: Record<string, unknown>[], items: Record<st
       report["orders"].review++;
       report["orders"].skipped++;
       reviewRows.push({
-        ...order, _order_items: itemsByOrder[order.id as string] ?? [],
+        ...order,
+        _order_items: itemsByOrder[order.id as string] ?? [],
         _review_reason: `order_type='${order.order_type}' - not a catering order. Belongs to ${orderType === "restaurant" ? "Restaurant" : "Unknown"} role.`,
         _role: orderType === "restaurant" ? "Restaurant" : "Unknown",
       });
@@ -249,8 +315,12 @@ async function phase3_orders(orders: Record<string, unknown>[], items: Record<st
     if (!order.customer_id) {
       report["orders"].review++;
       report["orders"].skipped++;
-      reviewRows.push({ ...order, _order_items: itemsByOrder[order.id as string] ?? [],
-        _review_reason: "customer_id null - catering_bookings.customer_id NOT NULL", _role: "Caterer x Customer" });
+      reviewRows.push({
+        ...order,
+        _order_items: itemsByOrder[order.id as string] ?? [],
+        _review_reason: "customer_id null - catering_bookings.customer_id NOT NULL",
+        _role: "Caterer x Customer",
+      });
       console.log(`  Order ${order.id}: customer_id null - archived + review.`);
       continue;
     }
@@ -259,26 +329,40 @@ async function phase3_orders(orders: Record<string, unknown>[], items: Record<st
     if (!mappedStatus) {
       report["orders"].review++;
       report["orders"].skipped++;
-      reviewRows.push({ ...order, _order_items: itemsByOrder[order.id as string] ?? [],
-        _review_reason: `Unknown status: '${order.status}'`, _role: "Caterer x Customer" });
+      reviewRows.push({
+        ...order,
+        _order_items: itemsByOrder[order.id as string] ?? [],
+        _review_reason: `Unknown status: '${order.status}'`,
+        _role: "Caterer x Customer",
+      });
       console.log(`  Order ${order.id}: status='${order.status}' unknown - archived + review.`);
       continue;
     }
 
-    const location = [order.delivery_address, order.delivery_city].filter(Boolean).join(", ") || null;
+    const location =
+      [order.delivery_address, order.delivery_city].filter(Boolean).join(", ") || null;
     // ASSUMPTION: total_amount (euros) = quoted_amount; currency=EUR; deposit_amount=0; brief_id=null
     toMigrate.push({
-      id: order.id, caterer_id: order.caterer_id, customer_id: order.customer_id,
-      booking_status: mappedStatus, quoted_amount: order.total_amount ?? 0,
-      currency: "EUR", deposit_amount: 0, location, brief_id: null,
-      created_at: order.created_at, updated_at: order.updated_at ?? new Date().toISOString(),
+      id: order.id,
+      caterer_id: order.caterer_id,
+      customer_id: order.customer_id,
+      booking_status: mappedStatus,
+      quoted_amount: order.total_amount ?? 0,
+      currency: "EUR",
+      deposit_amount: 0,
+      location,
+      brief_id: null,
+      created_at: order.created_at,
+      updated_at: order.updated_at ?? new Date().toISOString(),
       cancellation_reason: mappedStatus === "cancelled" ? (order.notes ?? null) : null,
     });
   }
 
   if (reviewRows.length > 0) writeAudit("review_orders.json", reviewRows);
   if (toMigrate.length > 0) {
-    const { error } = await supabase.from("catering_bookings").upsert(toMigrate, { onConflict: "id" });
+    const { error } = await supabase
+      .from("catering_bookings")
+      .upsert(toMigrate, { onConflict: "id" });
     if (error) {
       console.error(`  catering_bookings failed: ${error.message}`);
       writeAudit("failed_orders.json", toMigrate);
@@ -300,17 +384,23 @@ async function phase4_packages(rows: Record<string, unknown>[]) {
   report["packages"].archived = rows.length;
   report["packages"].review = rows.length;
 
-  writeAudit("review_packages.json", rows.map(r => ({
-    ...r,
-    _review_reason: "packages schema (30+ fields) does not map cleanly to caterer_menu_items. Likely a full catering package. Requires human decision.",
-    _role: "Caterer",
-    _suggested_actions: [
-      "Option A: Insert as caterer_menu_items (partial field mapping, data loss on unmapped fields)",
-      "Option B: Keep in a new dedicated catering_packages table (requires schema migration)",
-      "Option C: Merge fields into caterer storefront settings manually",
-    ],
-  })));
-  console.log(`  All ${rows.length} package(s) -> migration-audit/review_packages.json. No automated migration.`);
+  writeAudit(
+    "review_packages.json",
+    rows.map((r) => ({
+      ...r,
+      _review_reason:
+        "packages schema (30+ fields) does not map cleanly to caterer_menu_items. Likely a full catering package. Requires human decision.",
+      _role: "Caterer",
+      _suggested_actions: [
+        "Option A: Insert as caterer_menu_items (partial field mapping, data loss on unmapped fields)",
+        "Option B: Keep in a new dedicated catering_packages table (requires schema migration)",
+        "Option C: Merge fields into caterer storefront settings manually",
+      ],
+    })),
+  );
+  console.log(
+    `  All ${rows.length} package(s) -> migration-audit/review_packages.json. No automated migration.`,
+  );
   console.log(`  Summary:`, report["packages"]);
 }
 
@@ -327,15 +417,20 @@ async function phase5_availability(rows: Record<string, unknown>[]) {
     report["availability"].archived++;
     if (row.is_available === false) {
       // ASSUMPTION: vendor_type = 'caterer' for all legacy availability rows
-      toMigrate.push({ vendor_id: row.caterer_id, vendor_type: "caterer", blackout_date: row.available_date });
+      toMigrate.push({
+        vendor_id: row.caterer_id,
+        vendor_type: "caterer",
+        blackout_date: row.available_date,
+      });
     } else {
       report["availability"].review++;
       report["availability"].skipped++;
       reviewRows.push({
         ...row,
-        _review_reason: row.is_available === null
-          ? "is_available is null - intent unclear"
-          : "is_available=true - no equivalent in vendor_blackout_dates (only blocked dates stored)",
+        _review_reason:
+          row.is_available === null
+            ? "is_available is null - intent unclear"
+            : "is_available=true - no equivalent in vendor_blackout_dates (only blocked dates stored)",
         _role: "Caterer",
       });
       console.log(`  Row ${row.id}: is_available=${row.is_available} - archived + review.`);
@@ -369,8 +464,10 @@ async function phase6_verify() {
   const legacy = {
     event_requests: await count("event_requests"),
     event_request_matches: await count("event_request_matches"),
-    orders: await count("orders"), order_items: await count("order_items"),
-    packages: await count("packages"), availability: await count("availability"),
+    orders: await count("orders"),
+    order_items: await count("order_items"),
+    packages: await count("packages"),
+    availability: await count("availability"),
   };
   const archive = {
     _archive_event_requests: await count("_archive_event_requests"),
@@ -398,8 +495,11 @@ async function phase6_verify() {
 
   const fullReport = {
     timestamp: new Date().toISOString(),
-    legacy, archive, destination, perTable: report,
-    auditFiles: fs.readdirSync(AUDIT_DIR).filter(f => f.endsWith(".json")),
+    legacy,
+    archive,
+    destination,
+    perTable: report,
+    auditFiles: fs.readdirSync(AUDIT_DIR).filter((f) => f.endsWith(".json")),
   };
   const rPath = path.join(AUDIT_DIR, "migration_report.json");
   fs.writeFileSync(rPath, JSON.stringify(fullReport, null, 2), "utf-8");
@@ -433,4 +533,7 @@ async function main() {
   await phase6_verify();
 }
 
-main().catch(err => { console.error("Migration failed:", err); process.exit(1); });
+main().catch((err) => {
+  console.error("Migration failed:", err);
+  process.exit(1);
+});

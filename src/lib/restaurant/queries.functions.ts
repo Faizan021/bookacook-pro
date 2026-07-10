@@ -22,7 +22,6 @@ async function resolveOwnedRestaurant(supabase: any, userId: string) {
   return data;
 }
 
-
 export const getRestaurantOrders = createServerFn({ method: "GET" })
   .middleware([requireRole("restaurant_owner")])
   .handler(async ({ context }) => {
@@ -43,10 +42,15 @@ export const getRestaurantProducts = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
     const restaurant = await resolveOwnedRestaurant(supabase, userId);
-    if (!restaurant) return { restaurant: null, products: [] as any[] };
+    if (!restaurant) return { restaurant: null, products: [] as any[], isStripeConfigured: false };
+
+    const isStripeConfigured = !!(
+      process.env.STRIPE_SECRET_KEY && process.env.STRIPE_CONNECT_CLIENT_ID
+    );
+
     const { data, error } = await supabase
       .from("restaurant_products")
-      .select("id, name, description, price_cents, image_url, is_available, created_at")
+      .select("id, name, description, price_cents, image_url, is_available, created_at, category, dietary_tags")
       .eq("restaurant_id", restaurant.id)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -54,15 +58,14 @@ export const getRestaurantProducts = createServerFn({ method: "GET" })
     const products = await Promise.all(
       (data ?? []).map(async (p: any) => {
         if (!p.image_url) return { ...p, image_signed_url: null as string | null };
-        if (/^https?:\/\//i.test(p.image_url))
-          return { ...p, image_signed_url: p.image_url };
+        if (/^https?:\/\//i.test(p.image_url)) return { ...p, image_signed_url: p.image_url };
         const { data: signed } = await supabase.storage
           .from("restaurant-products")
           .createSignedUrl(p.image_url, 60 * 60);
         return { ...p, image_signed_url: signed?.signedUrl ?? null };
       }),
     );
-    return { restaurant, products };
+    return { restaurant, products, isStripeConfigured };
   });
 
 export const updateRestaurantOrderStatus = createServerFn({ method: "POST" })
@@ -124,13 +127,18 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
     const pendingOrders = orders?.filter((o: any) => o.status === "pending") || [];
     const ordersTodayList = orders?.filter((o: any) => new Date(o.created_at) >= today) || [];
     const revenueTodayCents = ordersTodayList
-      .filter((o: any) => o.status === "completed" || o.status === "delivered" || o.status === "picked_up")
+      .filter(
+        (o: any) =>
+          o.status === "completed" || o.status === "delivered" || o.status === "picked_up",
+      )
       .reduce((sum: number, o: any) => sum + o.total_cents, 0);
 
     const pendingReservations = reservations?.filter((r: any) => r.status === "pending") || [];
-    const reservationsTodayList = reservations?.filter((r: any) => new Date(r.created_at) >= today) || [];
+    const reservationsTodayList =
+      reservations?.filter((r: any) => new Date(r.created_at) >= today) || [];
 
-    const isProfileIncomplete = !restaurant.logo_url || !restaurant.description || !restaurant.phone;
+    const isProfileIncomplete =
+      !restaurant.logo_url || !restaurant.description || !restaurant.phone;
 
     return {
       isActive: restaurant.is_active,
@@ -167,7 +175,9 @@ export const getRestaurantActivityFeed = createServerFn({ method: "GET" })
 
     const { data: reservations } = await supabase
       .from("table_reservations")
-      .select("id, first_name, last_name, guest_count, reservation_date, reservation_time, status, created_at")
+      .select(
+        "id, first_name, last_name, guest_count, reservation_date, reservation_time, status, created_at",
+      )
       .eq("restaurant_id", restaurant.id)
       .order("created_at", { ascending: false })
       .limit(10);
@@ -180,7 +190,7 @@ export const getRestaurantActivityFeed = createServerFn({ method: "GET" })
       .limit(10);
 
     const events: any[] = [];
-    
+
     (orders || []).forEach((o: any) => {
       events.push({
         id: `order-${o.id}`,
@@ -232,11 +242,34 @@ export const getRestaurantReservations = createServerFn({ method: "GET" })
 
 export const updateReservationStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth()])
-  .inputValidator((input: { reservationId: string; status: "pending" | "confirmed" | "declined" | "approved" | "rejected" | "cancelled" | "completed" | "no_show" }) =>
-    z.object({
-      reservationId: z.string().uuid(),
-      status: z.enum(["pending", "confirmed", "declined", "approved", "rejected", "cancelled", "completed", "no_show"]),
-    }).parse(input)
+  .inputValidator(
+    (input: {
+      reservationId: string;
+      status:
+        | "pending"
+        | "confirmed"
+        | "declined"
+        | "approved"
+        | "rejected"
+        | "cancelled"
+        | "completed"
+        | "no_show";
+    }) =>
+      z
+        .object({
+          reservationId: z.string().uuid(),
+          status: z.enum([
+            "pending",
+            "confirmed",
+            "declined",
+            "approved",
+            "rejected",
+            "cancelled",
+            "completed",
+            "no_show",
+          ]),
+        })
+        .parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
@@ -250,4 +283,3 @@ export const updateReservationStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
-

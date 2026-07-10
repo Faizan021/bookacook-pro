@@ -4,11 +4,7 @@ import { requireRole } from "@/lib/auth/role-middleware";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
 async function resolveOwnedPlanner(supabase: any, userId: string) {
-  const { data } = await supabase
-    .from("planners")
-    .select("*")
-    .eq("owner_id", userId)
-    .maybeSingle();
+  const { data } = await supabase.from("planners").select("*").eq("owner_id", userId).maybeSingle();
   return data;
 }
 
@@ -36,8 +32,7 @@ export const getMyPlannerServices = createServerFn({ method: "GET" })
     const services = await Promise.all(
       (data ?? []).map(async (s: any) => {
         if (!s.image_url) return { ...s, image_signed_url: null as string | null };
-        if (/^https?:\/\//i.test(s.image_url))
-          return { ...s, image_signed_url: s.image_url };
+        if (/^https?:\/\//i.test(s.image_url)) return { ...s, image_signed_url: s.image_url };
         const { data: signed } = await supabase.storage
           .from("planner-services")
           .createSignedUrl(s.image_url, 60 * 60);
@@ -67,7 +62,12 @@ export const createMyPlanner = createServerFn({ method: "POST" })
     // Removed implicit role upgrade - user must ALREADY have the role via the middleware.
     const { data: row, error } = await supabase
       .from("planners")
-      .insert({ owner_id: userId, name: data.name, slug: data.slug, custom_domain: data.custom_domain })
+      .insert({
+        owner_id: userId,
+        name: data.name,
+        slug: data.slug,
+        custom_domain: data.custom_domain,
+      })
       .select("id, name, slug")
       .single();
     if (error) throw new Error(error.message);
@@ -125,9 +125,7 @@ export const upsertPlannerService = createServerFn({ method: "POST" })
 
 export const deletePlannerService = createServerFn({ method: "POST" })
   .middleware([requireRole("planner")])
-  .inputValidator((input: { id: string }) =>
-    z.object({ id: z.string().uuid() }).parse(input),
-  )
+  .inputValidator((input: { id: string }) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
     const planner = await resolveOwnedPlanner(supabase, userId);
@@ -159,6 +157,8 @@ export const updateMyPlannerSettings = createServerFn({ method: "POST" })
       max_delivery_distance_km?: number;
       custom_domain?: string | null;
       slug?: string;
+      available_for_bookings?: boolean;
+      use_generated_branding?: boolean;
     }) =>
       z
         .object({
@@ -176,14 +176,31 @@ export const updateMyPlannerSettings = createServerFn({ method: "POST" })
           max_delivery_distance_km: z.number().optional().nullable(),
           custom_domain: z.string().max(100).optional().nullable(),
           slug: z.string().max(100).optional(),
+          available_for_bookings: z.boolean().optional(),
+          use_generated_branding: z.boolean().optional(),
         })
         .parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
+
+    // Check current status
+    const { data: plannerStatus } = await supabase
+      .from("planners")
+      .select("approval_status")
+      .eq("owner_id", userId)
+      .maybeSingle();
+
+    const updatePayload: any = { ...data };
+    if (plannerStatus?.approval_status === "rejected") {
+      updatePayload.approval_status = "pending";
+      updatePayload.rejection_reason = null;
+      console.log(`[Review Queue] Resetting rejected planner status back to pending due to profile update for owner=${userId}`);
+    }
+
     const { error } = await supabase
       .from("planners")
-      .update(data as any)
+      .update(updatePayload)
       .eq("owner_id", userId);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -209,9 +226,12 @@ export const getPlannerKPIs = createServerFn({ method: "GET" })
       .eq("vendor_id", planner.id);
 
     const completed = requests?.filter((r: any) => r.status === "completed") || [];
-    const pending = requests?.filter((r: any) => !["completed", "cancelled", "rejected"].includes(r.status)) || [];
-    
-    const cancelled = requests?.filter((r: any) => ["cancelled", "rejected"].includes(r.status)) || [];
+    const pending =
+      requests?.filter((r: any) => !["completed", "cancelled", "rejected"].includes(r.status)) ||
+      [];
+
+    const cancelled =
+      requests?.filter((r: any) => ["cancelled", "rejected"].includes(r.status)) || [];
     const totalOrders = completed.length;
     const revenueCents = completed.reduce((sum: number, r: any) => sum + (r.budget_cents || 0), 0);
     const averageOrderCents = totalOrders > 0 ? Math.round(revenueCents / totalOrders) : 0;
@@ -228,12 +248,12 @@ export const getPlannerKPIs = createServerFn({ method: "GET" })
       pendingOrders: pending.length,
       averageOrderCents,
       popularDish: "Full Wedding Package", // Renamed logically
-      isActive: true, 
+      isActive: true,
       cancelledOrders,
       conversionRate,
       customerRetentionRate,
       avgDeliveryTimeMins,
-      profileViews: profileViews || 0
+      profileViews: profileViews || 0,
     };
   });
 
@@ -257,10 +277,12 @@ export const getPlannerRequests = createServerFn({ method: "GET" })
 export const updatePlannerRequestStatus = createServerFn({ method: "POST" })
   .middleware([requireRole("planner")])
   .inputValidator((input: { requestId: string; status: string }) =>
-    z.object({
+    z
+      .object({
         requestId: z.string().uuid(),
         status: z.string(),
-      }).parse(input),
+      })
+      .parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
@@ -268,7 +290,9 @@ export const updatePlannerRequestStatus = createServerFn({ method: "POST" })
     if (!planner) throw new Error("No planner storefront for this account");
 
     if (data.status === "booked") {
-      throw new Error("Cannot manually mark as booked. The customer must pay the platform deposit to secure the deal.");
+      throw new Error(
+        "Cannot manually mark as booked. The customer must pay the platform deposit to secure the deal.",
+      );
     }
 
     const { error } = await supabase
@@ -281,8 +305,15 @@ export const updatePlannerRequestStatus = createServerFn({ method: "POST" })
   });
 
 export const submitPlannerProposal = createServerFn({ method: "POST" })
-    .middleware([requireRole("planner")])
-    .inputValidator((input: { briefId: string; proposalCents: number; depositCents: number; notes: string; origin: string }) =>
+  .middleware([requireRole("planner")])
+  .inputValidator(
+    (input: {
+      briefId: string;
+      proposalCents: number;
+      depositCents: number;
+      notes: string;
+      origin: string;
+    }) =>
       z
         .object({
           briefId: z.string().uuid(),
@@ -292,40 +323,42 @@ export const submitPlannerProposal = createServerFn({ method: "POST" })
           origin: z.string(),
         })
         .parse(input),
-    )
-    .handler(async ({ context, data }) => {
-      const { supabase, userId } = context;
-      const planner = await resolveOwnedPlanner(supabase, userId);
-      if (!planner) throw new Error("No planner storefront for this account");
-      
-      const depositEuros = (data.depositCents / 100).toFixed(2);
-      const link = `${data.origin}/checkout/deposit/${data.briefId}`;
-      const officialMessage = `[OFFICIAL PROPOSAL]\nWe have submitted a proposal for your event.\n\nDeposit Required: €${depositEuros}\n\nTo secure this booking and reveal our contact information, please pay the platform deposit here:\n${link}\n\nVendor Notes:\n${data.notes}`;
+  )
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const planner = await resolveOwnedPlanner(supabase, userId);
+    if (!planner) throw new Error("No planner storefront for this account");
 
-      const { error } = await supabase
-        .from("catering_briefs")
-        .update({ 
-          status: "quoted",
-          budget_cents: data.proposalCents,
-          notes: officialMessage
-        })
-        .eq("id", data.briefId)
-        .eq("preferred_planner_id", planner.id);
-      if (error) throw new Error(error.message);
+    const depositEuros = (data.depositCents / 100).toFixed(2);
+    const link = `${data.origin}/checkout/deposit/${data.briefId}`;
+    const officialMessage = `[OFFICIAL PROPOSAL]\nWe have submitted a proposal for your event.\n\nDeposit Required: €${depositEuros}\n\nTo secure this booking and reveal our contact information, please pay the platform deposit here:\n${link}\n\nVendor Notes:\n${data.notes}`;
 
-      // Auto-inject to SecureChat
-      await supabase.from("brief_messages").insert({
-        brief_id: data.briefId,
-        sender_id: userId,
-        message: officialMessage,
-      });
+    const { error } = await supabase
+      .from("catering_briefs")
+      .update({
+        status: "quoted",
+        budget_cents: data.proposalCents,
+        notes: officialMessage,
+      })
+      .eq("id", data.briefId)
+      .eq("preferred_planner_id", planner.id);
+    if (error) throw new Error(error.message);
 
-      return { ok: true };
+    // Auto-inject to SecureChat
+    await supabase.from("brief_messages").insert({
+      brief_id: data.briefId,
+      sender_id: userId,
+      message: officialMessage,
     });
+
+    return { ok: true };
+  });
 
 export const getPlannerBriefContactDetails = createServerFn({ method: "GET" })
   .middleware([requireRole("planner")])
-  .validator((input: { requestId: string }) => z.object({ requestId: z.string().uuid() }).parse(input))
+  .validator((input: { requestId: string }) =>
+    z.object({ requestId: z.string().uuid() }).parse(input),
+  )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
     const planner = await resolveOwnedPlanner(supabase, userId);
@@ -343,7 +376,9 @@ export const getPlannerBriefContactDetails = createServerFn({ method: "GET" })
 
     // LEAD PROTECTION GATE
     if (brief.status !== "booked") {
-      throw new Error("Contact details are locked until the deal is secured (booked status required).");
+      throw new Error(
+        "Contact details are locked until the deal is secured (booked status required).",
+      );
     }
 
     // Fetch customer PII

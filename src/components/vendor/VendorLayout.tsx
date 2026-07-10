@@ -19,7 +19,6 @@ import {
   CreditCard,
 } from "lucide-react";
 
-
 interface VendorLayoutProps {
   children: React.ReactNode;
   vertical: "restaurant" | "caterer" | "planner";
@@ -33,15 +32,24 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
+  const basePath = {
+    restaurant: "/restaurant",
+    caterer: "/caterer",
+    planner: "/dashboard/planner",
+  }[vertical];
+
   const getWorkspaces = useServerFn(getPartnerWorkspaces);
-  const { data: workspaces } = useQuery({ 
-    queryKey: ["partner-workspaces"], 
-    queryFn: () => getWorkspaces() 
+  const { data: workspaces } = useQuery({
+    queryKey: ["partner-workspaces"],
+    queryFn: () => getWorkspaces(),
   });
 
   async function signOut() {
     await supabase.auth.signOut();
-    router.navigate({ to: "/auth", search: { signup: undefined, message: undefined, logout: undefined } });
+    router.navigate({
+      to: "/auth",
+      search: { signup: undefined, message: undefined, logout: undefined },
+    });
   }
 
   // Navigation config based on vertical
@@ -79,7 +87,10 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-[#e2e8e4] bg-cream/80 backdrop-blur-md">
         <div className="flex h-16 items-center px-6 border-b border-[#e2e8e4]">
-          <Link to="/" className="flex items-center gap-2 text-forest hover:opacity-80 transition-opacity">
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-forest hover:opacity-80 transition-opacity"
+          >
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-forest text-cream font-bold">
               S
             </div>
@@ -98,23 +109,27 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
             {navItems.map((item) => {
               // We'll use hash routing for tabs since the existing components use Radix Tabs
               // which read the value. Wait, Radix Tabs don't automatically sync with the URL hash unless coded to.
-              // For a true SaaS feel, we should update the URL hash or use search params.
+              // For a SaaS feel, we should update the URL hash or use search params.
               // For now, we'll just emit an event or rely on the parent component mapping the active tab.
-              // Actually, since we are wrapping the existing Tabs, we can just render the Sidebar buttons 
+              // Actually, since we are wrapping the existing Tabs, we can just render the Sidebar buttons
               // and let the parent control the active tab via state or hash.
-              
+
               // We'll pass the `id` to the URL search param or hash so the parent can read it.
               const searchParams = new URLSearchParams(location.search);
               const cleanTab = searchParams.get("tab") || (location.hash || "").replace("#", "");
               let isActive = cleanTab === item.id || (!cleanTab && item.id === "overview");
-              if (item.id === "settings-general" && cleanTab.startsWith("settings-") && cleanTab !== "settings-billing") {
+              if (
+                item.id === "settings-general" &&
+                cleanTab.startsWith("settings-") &&
+                cleanTab !== "settings-billing"
+              ) {
                 isActive = true;
               }
-              
+
               return (
                 <Link
                   key={item.id}
-                  to="."
+                  to={basePath}
                   search={{ tab: item.id }}
                   className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                     isActive
@@ -133,13 +148,21 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
         <div className="border-t border-[#e2e8e4] p-4 space-y-2">
           {storefrontSlug && (
             <Button variant="outline" className="w-full justify-start gap-2 bg-white/50" asChild>
-              <a href={`${vertical === "caterer" ? "/catering" : vertical === "planner" ? "/planner" : "/restaurant"}/${storefrontSlug}`} target="_blank" rel="noopener noreferrer">
+              <a
+                href={`${vertical === "caterer" ? "/catering" : vertical === "planner" ? "/planner" : "/restaurant"}/${storefrontSlug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Store className="h-4 w-4" />
                 {tt("Mein Storefront", "My Storefront")}
               </a>
             </Button>
           )}
-          <Button variant="ghost" className="w-full justify-start gap-2 text-rose-600 hover:bg-rose-50 hover:text-rose-700" onClick={signOut}>
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-2 text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+            onClick={signOut}
+          >
             <LogOut className="h-4 w-4" />
             {tt("Abmelden", "Sign out")}
           </Button>
@@ -153,18 +176,38 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
           <div className="flex items-center gap-4">
             <h1 className="font-display text-xl">{title}</h1>
             {workspaces && (
-               <div className="ml-4 flex items-center gap-2">
-                 {workspaces.restaurant && vertical !== "restaurant" && (
-                   <Link to="/restaurant" className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition">{tt("Restaurant", "Restaurant")}</Link>
-                 )}
-                 {workspaces.caterer && vertical !== "caterer" && (
-                   <Link to="/caterer" className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition">{tt("Catering", "Catering")}</Link>
-                 )}
-                 {workspaces.planner && vertical !== "planner" && (
-                   <Link to="/dashboard/planner" className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition">{tt("Event Planner", "Event Planner")}</Link>
-                 )}
-                 <Link to="/dashboard" className="text-xs font-medium border border-[#b28a3c] text-[#b28a3c] px-2 py-1 rounded-md hover:bg-[#b28a3c]/10 transition">{tt("Hub", "Hub")}</Link>
-               </div>
+              <div className="ml-4 flex items-center gap-2">
+                {workspaces.restaurant && vertical !== "restaurant" && (
+                  <Link
+                    to="/restaurant"
+                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition"
+                  >
+                    {tt("Restaurant", "Restaurant")}
+                  </Link>
+                )}
+                {workspaces.caterer && vertical !== "caterer" && (
+                  <Link
+                    to="/caterer"
+                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition"
+                  >
+                    {tt("Catering", "Catering")}
+                  </Link>
+                )}
+                {workspaces.planner && vertical !== "planner" && (
+                  <Link
+                    to="/dashboard/planner"
+                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition"
+                  >
+                    {tt("Event Planner", "Event Planner")}
+                  </Link>
+                )}
+                <Link
+                  to="/dashboard"
+                  className="text-xs font-medium border border-[#b28a3c] text-[#b28a3c] px-2 py-1 rounded-md hover:bg-[#b28a3c]/10 transition"
+                >
+                  {tt("Hub", "Hub")}
+                </Link>
+              </div>
             )}
           </div>
           <div className="flex items-center gap-4">
@@ -174,16 +217,20 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
 
         {/* Page Content */}
         <main className="flex-1 p-8">
-          <div className="mx-auto max-w-5xl">
-            {children}
-          </div>
+          <div className="mx-auto max-w-5xl">{children}</div>
         </main>
       </div>
     </div>
   );
 }
 
-export function DashboardSkeleton({ vertical, title }: { vertical: "restaurant" | "caterer" | "planner", title: string }) {
+export function DashboardSkeleton({
+  vertical,
+  title,
+}: {
+  vertical: "restaurant" | "caterer" | "planner";
+  title: string;
+}) {
   return (
     <VendorLayout vertical={vertical} title={title}>
       <div className="space-y-6 animate-pulse">

@@ -32,11 +32,12 @@ export const getAdminOverview = createServerFn({ method: "GET" })
 
     // Calculate MRR
     let currentMRR = 0;
-    const activeSubs = subscriptions?.filter(s => s.status === 'active' || s.status === 'trialing') || [];
-    activeSubs.forEach(s => {
-      if (s.plan === 'starter') currentMRR += 34.99;
-      else if (s.plan === 'growth') currentMRR += 59;
-      else if (s.plan === 'premium') currentMRR += 99;
+    const activeSubs =
+      subscriptions?.filter((s) => s.status === "active" || s.status === "trialing") || [];
+    activeSubs.forEach((s) => {
+      if (s.plan === "starter") currentMRR += 34.99;
+      else if (s.plan === "growth") currentMRR += 59;
+      else if (s.plan === "premium") currentMRR += 99;
     });
 
     // 6-Month MRR Trend Calculation
@@ -45,25 +46,25 @@ export const getAdminOverview = createServerFn({ method: "GET" })
     const now = new Date();
     for (let i = 5; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthLabel = d.toLocaleString('en-US', { month: 'short' });
+      const monthLabel = d.toLocaleString("en-US", { month: "short" });
       const year = d.getFullYear();
       const monthIndex = d.getMonth(); // 0-11
       const monthEnd = new Date(year, monthIndex + 1, 0, 23, 59, 59, 999);
 
       // Sum active plans created on or before this month end
       let monthMRR = 0;
-      subscriptions?.forEach(s => {
+      subscriptions?.forEach((s) => {
         const createdDate = new Date(s.created_at || s.current_period_start || "");
-        if (createdDate <= monthEnd && (s.status === 'active' || s.status === 'trialing')) {
-          if (s.plan === 'starter') monthMRR += 34.99;
-          else if (s.plan === 'growth') monthMRR += 59;
-          else if (s.plan === 'premium') monthMRR += 99;
+        if (createdDate <= monthEnd && (s.status === "active" || s.status === "trialing")) {
+          if (s.plan === "starter") monthMRR += 34.99;
+          else if (s.plan === "growth") monthMRR += 59;
+          else if (s.plan === "premium") monthMRR += 99;
         }
       });
 
       trendData.push({
         month: monthLabel,
-        mrr: monthMRR
+        mrr: monthMRR,
       });
     }
 
@@ -75,7 +76,10 @@ export const getAdminOverview = createServerFn({ method: "GET" })
 
     if (pError) throw new Error("Failed to fetch payments: " + pError.message);
 
-    const totalCommissions = (payments || []).reduce((acc, p) => acc + Number(p.platform_fee_amount || 0), 0);
+    const totalCommissions = (payments || []).reduce(
+      (acc, p) => acc + Number(p.platform_fee_amount || 0),
+      0,
+    );
 
     // 3. Fetch KPI Counts
     const [
@@ -85,7 +89,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       { count: totalPlanners },
       { count: totalRestOrders },
       { count: totalCatBookings },
-      { count: totalEventBookings }
+      { count: totalEventBookings },
     ] = await Promise.all([
       supabaseAdmin.from("profiles").select("*", { count: "exact", head: true }),
       supabaseAdmin.from("restaurants").select("*", { count: "exact", head: true }),
@@ -93,10 +97,11 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       supabaseAdmin.from("planners").select("*", { count: "exact", head: true }),
       supabaseAdmin.from("restaurant_orders").select("*", { count: "exact", head: true }),
       supabaseAdmin.from("catering_bookings").select("*", { count: "exact", head: true }),
-      supabaseAdmin.from("event_bookings").select("*", { count: "exact", head: true })
+      supabaseAdmin.from("event_bookings").select("*", { count: "exact", head: true }),
     ]);
 
-    const totalOrders = (totalRestOrders || 0) + (totalCatBookings || 0) + (totalEventBookings || 0);
+    const totalOrders =
+      (totalRestOrders || 0) + (totalCatBookings || 0) + (totalEventBookings || 0);
 
     return {
       mrr: currentMRR,
@@ -108,9 +113,9 @@ export const getAdminOverview = createServerFn({ method: "GET" })
         caterers: totalCaterers || 0,
         planners: totalPlanners || 0,
         orders: totalOrders || 0,
-        subscriptions: activeSubs.length
+        subscriptions: activeSubs.length,
       },
-      recentPayments: (payments || []).slice(0, 10)
+      recentPayments: (payments || []).slice(0, 10),
     };
   });
 
@@ -125,24 +130,28 @@ export const getAdminUsers = createServerFn({ method: "GET" })
     // Fetch all profiles and their app roles
     const [{ data: profiles, error: pError }, { data: roles, error: rError }] = await Promise.all([
       supabaseAdmin.from("profiles").select("*").order("created_at", { ascending: false }),
-      supabaseAdmin.from("user_roles").select("*")
+      supabaseAdmin.from("user_roles").select("*"),
     ]);
 
     if (pError) throw new Error("Failed to fetch profiles: " + pError.message);
     if (rError) throw new Error("Failed to fetch roles: " + rError.message);
 
     // Map profiles with their roles
-    return (profiles || []).map(p => {
-      const userRoles = (roles || []).filter(r => r.user_id === p.id).map(r => r.role);
-      const primaryRole = (userRoles as string[]).includes("admin") ? "admin" 
-                        : userRoles.includes("caterer") ? "caterer"
-                        : userRoles.includes("restaurant_owner") ? "restaurant_owner"
-                        : userRoles.includes("planner") ? "planner"
-                        : "customer";
+    return (profiles || []).map((p) => {
+      const userRoles = (roles || []).filter((r) => r.user_id === p.id).map((r) => r.role);
+      const primaryRole = (userRoles as string[]).includes("admin")
+        ? "admin"
+        : userRoles.includes("caterer")
+          ? "caterer"
+          : userRoles.includes("restaurant_owner")
+            ? "restaurant_owner"
+            : userRoles.includes("planner")
+              ? "planner"
+              : "customer";
       return {
         ...p,
         role: primaryRole, // Override the deprecated profiles.role
-        roles: userRoles
+        roles: userRoles,
       };
     });
   });
@@ -161,13 +170,13 @@ export const getAdminListings = createServerFn({ method: "GET" })
       { data: caterers, error: cError },
       { data: planners, error: plError },
       { data: subscriptions },
-      { data: profiles }
+      { data: profiles },
     ] = await Promise.all([
       supabaseAdmin.from("restaurants").select("*").order("created_at", { ascending: false }),
       supabaseAdmin.from("caterers").select("*").order("created_at", { ascending: false }),
       supabaseAdmin.from("planners").select("*").order("created_at", { ascending: false }),
       supabaseAdmin.from("subscriptions").select("*"),
-      supabaseAdmin.from("profiles").select("id, full_name, email")
+      supabaseAdmin.from("profiles").select("id, full_name, email"),
     ]);
 
     if (rError) throw new Error("Failed to fetch restaurants: " + rError.message);
@@ -176,15 +185,17 @@ export const getAdminListings = createServerFn({ method: "GET" })
 
     // Helper mapping profiles
     const getOwner = (ownerId: string) => {
-      const owner = profiles?.find(p => p.id === ownerId);
-      return owner ? { name: owner.full_name || "Unknown", email: owner.email || "No Email" } : { name: "Unknown", email: "No Email" };
+      const owner = profiles?.find((p) => p.id === ownerId);
+      return owner
+        ? { name: owner.full_name || "Unknown", email: owner.email || "No Email" }
+        : { name: "Unknown", email: "No Email" };
     };
 
     // Process restaurants
-    const mappedRestaurants = (restaurants || []).map(r => {
-      const sub = subscriptions?.find(s => s.restaurant_id === r.id);
-      const hasStripe = r.stripe_connect_status === 'connected';
-      const hasSubscription = sub && (sub.status === 'active' || sub.status === 'trialing');
+    const mappedRestaurants = (restaurants || []).map((r) => {
+      const sub = subscriptions?.find((s) => s.restaurant_id === r.id);
+      const hasStripe = r.stripe_connect_status === "connected";
+      const hasSubscription = sub && (sub.status === "active" || sub.status === "trialing");
       const isPublished = r.is_published;
 
       // Determine onboarding step
@@ -203,30 +214,30 @@ export const getAdminListings = createServerFn({ method: "GET" })
         ...r,
         owner: getOwner(r.owner_id),
         subscription: sub ? { plan: sub.plan, status: sub.status } : null,
-        onboardingStep
+        onboardingStep,
       };
     });
 
     // Process caterers
-    const mappedCaterers = (caterers || []).map(c => {
+    const mappedCaterers = (caterers || []).map((c) => {
       return {
         ...c,
-        owner: getOwner(c.owner_id)
+        owner: getOwner(c.owner_id),
       };
     });
 
     // Process planners
-    const mappedPlanners = (planners || []).map(p => {
+    const mappedPlanners = (planners || []).map((p) => {
       return {
         ...p,
-        owner: getOwner(p.owner_id)
+        owner: getOwner(p.owner_id),
       };
     });
 
     return {
       restaurants: mappedRestaurants,
       caterers: mappedCaterers,
-      planners: mappedPlanners
+      planners: mappedPlanners,
     };
   });
 
@@ -246,7 +257,7 @@ export const getAdminOrders = createServerFn({ method: "GET" })
       { data: restaurants },
       { data: caterers },
       { data: planners },
-      { data: profiles }
+      { data: profiles },
     ] = await Promise.all([
       supabaseAdmin.from("restaurant_orders").select("*").order("created_at", { ascending: false }),
       supabaseAdmin.from("catering_bookings").select("*").order("created_at", { ascending: false }),
@@ -254,7 +265,7 @@ export const getAdminOrders = createServerFn({ method: "GET" })
       supabaseAdmin.from("restaurants").select("id, name"),
       supabaseAdmin.from("caterers").select("id, name"),
       supabaseAdmin.from("planners").select("id, name"),
-      supabaseAdmin.from("profiles").select("id, full_name, email")
+      supabaseAdmin.from("profiles").select("id, full_name, email"),
     ]);
 
     if (roError) throw new Error("Failed to fetch restaurant orders: " + roError.message);
@@ -262,15 +273,15 @@ export const getAdminOrders = createServerFn({ method: "GET" })
     if (ebError) throw new Error("Failed to fetch event bookings: " + ebError.message);
 
     const getCustomerName = (id: string) => {
-      const p = profiles?.find(prof => prof.id === id);
+      const p = profiles?.find((prof) => prof.id === id);
       return p?.full_name || "Guest Customer";
     };
 
     // Unified format mapping
     const ordersList: any[] = [];
 
-    restOrders?.forEach(o => {
-      const rest = restaurants?.find(r => r.id === o.restaurant_id);
+    restOrders?.forEach((o) => {
+      const rest = restaurants?.find((r) => r.id === o.restaurant_id);
       ordersList.push({
         id: o.id,
         type: "Restaurant Order",
@@ -279,12 +290,12 @@ export const getAdminOrders = createServerFn({ method: "GET" })
         date: o.created_at,
         amount: Number(o.total_cents || 0) / 100,
         status: o.status,
-        currency: "EUR"
+        currency: "EUR",
       });
     });
 
-    cateringBookings?.forEach(cb => {
-      const cat = caterers?.find(c => c.id === cb.caterer_id);
+    cateringBookings?.forEach((cb) => {
+      const cat = caterers?.find((c) => c.id === cb.caterer_id);
       ordersList.push({
         id: cb.id,
         type: "Catering Booking",
@@ -293,12 +304,12 @@ export const getAdminOrders = createServerFn({ method: "GET" })
         date: cb.created_at,
         amount: Number(cb.deposit_amount || cb.quoted_amount || 0),
         status: cb.booking_status,
-        currency: cb.currency || "EUR"
+        currency: cb.currency || "EUR",
       });
     });
 
-    eventBookings?.forEach(eb => {
-      const plan = planners?.find(p => p.id === eb.planner_id);
+    eventBookings?.forEach((eb) => {
+      const plan = planners?.find((p) => p.id === eb.planner_id);
       ordersList.push({
         id: eb.id,
         type: "Event Booking",
@@ -307,7 +318,7 @@ export const getAdminOrders = createServerFn({ method: "GET" })
         date: eb.created_at,
         amount: Number(eb.deposit_amount || eb.quoted_amount || 0),
         status: eb.booking_status,
-        currency: eb.currency || "EUR"
+        currency: eb.currency || "EUR",
       });
     });
 
@@ -327,12 +338,14 @@ export const getSeoDrafts = createServerFn({ method: "GET" })
 
     const { data, error } = await supabaseAdmin
       .from("seo_content_pages")
-      .select(`
+      .select(
+        `
         *,
         author:last_edited_by (
           email
         )
-      `)
+      `,
+      )
       .order("updated_at", { ascending: false });
 
     if (error) throw new Error("Failed to fetch SEO drafts: " + error.message);

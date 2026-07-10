@@ -70,12 +70,15 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
             callerId = data?.user?.id ?? null;
           }
 
-          // Fetch the restaurant and verify ownership
-          const { data: restaurant, error: fetchError } = await supabaseAdmin
+          const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+          const query = supabaseAdmin
             .from("restaurants")
-            .select("id, owner_id")
-            .eq("slug", slug)
-            .maybeSingle();
+            .select("id, owner_id");
+
+          const { data: restaurant, error: fetchError } = await (isUuid
+            ? query.or(`slug.eq.${slug},id.eq.${slug}`)
+            : query.eq("slug", slug)
+          ).maybeSingle();
 
           if (fetchError || !restaurant) {
             console.error("[Stripe Connect Callback] Restaurant not found for slug:", slug);
@@ -93,7 +96,7 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
           // proves the request originated from our server within 15 minutes.
           if (callerId && callerId !== restaurant.owner_id) {
             console.error(
-              `[Stripe Connect Callback] Ownership mismatch: caller=${callerId} owner=${restaurant.owner_id} slug=${slug}`
+              `[Stripe Connect Callback] Ownership mismatch: caller=${callerId} owner=${restaurant.owner_id} slug=${slug}`,
             );
             return new Response(null, {
               status: 302,
@@ -106,7 +109,7 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
           if (!callerId) {
             console.warn(
               `[Stripe Connect Callback] No auth header present for slug=${slug}. ` +
-              `State HMAC verified — proceeding. Consider enforcing auth on this callback.`
+                `State HMAC verified — proceeding. Consider enforcing auth on this callback.`,
             );
           }
 
@@ -121,11 +124,14 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
           // Write to the private secure table
           const { error: dbError } = await supabaseAdmin
             .from("restaurant_stripe_accounts" as any)
-            .upsert({
-              restaurant_id: restaurant.id,
-              stripe_user_id: stripeUserId,
-              stripe_connected_at: new Date().toISOString(),
-            }, { onConflict: "restaurant_id" });
+            .upsert(
+              {
+                restaurant_id: restaurant.id,
+                stripe_user_id: stripeUserId,
+                stripe_connected_at: new Date().toISOString(),
+              },
+              { onConflict: "restaurant_id" },
+            );
 
           if (dbError) {
             throw dbError;
@@ -144,9 +150,8 @@ export const Route = createFileRoute("/api/stripe/connect/callback")({
             throw statusError;
           }
 
-
           console.log(
-            `[Stripe Connect] Account ${stripeUserId} connected for restaurant slug=${slug} id=${restaurant.id}`
+            `[Stripe Connect] Account ${stripeUserId} connected for restaurant slug=${slug} id=${restaurant.id}`,
           );
 
           return new Response(null, {

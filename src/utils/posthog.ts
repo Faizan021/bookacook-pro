@@ -13,7 +13,7 @@ export const initPostHog = () => {
       capture_heatmaps: true,
       persistence: "cookie",
       opt_out_capturing_by_default: true, // GDPR opt-in compliance
-      disable_session_recording: true,    // Prevent recording before consent
+      disable_session_recording: true, // Prevent recording before consent
       enable_recording_console_log: false, // Disable console log recording to prevent leak of debug data
     });
 
@@ -35,7 +35,7 @@ export const initPostHog = () => {
 
 export const trackEvent = (eventName: string, properties?: Record<string, any>) => {
   if (typeof window === "undefined") return;
-  
+
   // Safely check if PostHog has been initialized
   const key = import.meta.env.VITE_POSTHOG_KEY;
   if (key) {

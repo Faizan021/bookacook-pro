@@ -13,7 +13,6 @@ export type UnifiedActivityItem =
       restaurant_slug: string | null;
       items: Array<{ name?: string; qty?: number; price_cents?: number }>;
       notes: string | null;
-
     }
   | {
       kind: "reservation";
@@ -65,7 +64,7 @@ export const getCustomerUnifiedActivity = createServerFn({ method: "GET" })
       supabase
         .from("table_reservations")
         .select(
-          "id, status, created_at, reservation_date, reservation_time, guest_count, restaurants(name, slug)"
+          "id, status, created_at, reservation_date, reservation_time, guest_count, restaurants(name, slug)",
         )
         .eq("customer_id", userId)
         .order("created_at", { ascending: false }),
@@ -125,6 +124,11 @@ export const getCustomerUnifiedActivity = createServerFn({ method: "GET" })
       briefs,
       reservations,
       timeline,
-      counts: { orders: orders.length, briefs: briefs.length, reservations: reservations.length, total: timeline.length },
+      counts: {
+        orders: orders.length,
+        briefs: briefs.length,
+        reservations: reservations.length,
+        total: timeline.length,
+      },
     };
   });

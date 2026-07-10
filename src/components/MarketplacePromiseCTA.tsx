@@ -3,7 +3,11 @@ import { Link } from "@tanstack/react-router";
 import { useI18n } from "@/i18n/I18nProvider";
 import { UtensilsCrossed, PartyPopper, CalendarDays } from "lucide-react";
 
-export function MarketplacePromiseCTA({ vertical }: { vertical?: "restaurant" | "caterer" | "planner" | string }) {
+export function MarketplacePromiseCTA({
+  vertical,
+}: {
+  vertical?: "restaurant" | "caterer" | "planner" | string;
+}) {
   const { lang } = useI18n();
 
   return (
@@ -29,24 +33,36 @@ export function MarketplacePromiseCTA({ vertical }: { vertical?: "restaurant" | 
             className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
           >
             <UtensilsCrossed className="h-6 w-6 text-mint" />
-            <h3 className="font-display font-semibold text-lg">{lang === "de" ? "Essen sofort bestellen" : "Instant Food Order"}</h3>
-            <p className="text-sm text-cream/60">{lang === "de" ? "Restaurants in der Nähe" : "Nearby restaurants"}</p>
+            <h3 className="font-display font-semibold text-lg">
+              {lang === "de" ? "Essen sofort bestellen" : "Instant Food Order"}
+            </h3>
+            <p className="text-sm text-cream/60">
+              {lang === "de" ? "Restaurants in der Nähe" : "Nearby restaurants"}
+            </p>
           </Link>
           <Link
             to="/catering"
             className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
           >
             <PartyPopper className="h-6 w-6 text-mint" />
-            <h3 className="font-display font-semibold text-lg">{lang === "de" ? "Catering" : "Catering"}</h3>
-            <p className="text-sm text-cream/60">{lang === "de" ? "Büro & Event Verpflegung" : "Office & Event food"}</p>
+            <h3 className="font-display font-semibold text-lg">
+              {lang === "de" ? "Catering" : "Catering"}
+            </h3>
+            <p className="text-sm text-cream/60">
+              {lang === "de" ? "Büro & Event Verpflegung" : "Office & Event food"}
+            </p>
           </Link>
           <Link
             to="/planner"
             className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
           >
             <CalendarDays className="h-6 w-6 text-mint" />
-            <h3 className="font-display font-semibold text-lg">{lang === "de" ? "Event Planner" : "Event Planner"}</h3>
-            <p className="text-sm text-cream/60">{lang === "de" ? "Kostenlos planen lassen" : "Free concierge planning"}</p>
+            <h3 className="font-display font-semibold text-lg">
+              {lang === "de" ? "Event Planner" : "Event Planner"}
+            </h3>
+            <p className="text-sm text-cream/60">
+              {lang === "de" ? "Kostenlos planen lassen" : "Free concierge planning"}
+            </p>
           </Link>
         </div>
       </div>

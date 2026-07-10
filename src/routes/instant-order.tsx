@@ -228,13 +228,12 @@ function InstantOrder() {
         <div className="relative z-10 w-full mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm">
-              <Zap className="h-3.5 w-3.5 text-[#b28a3c]" /> {tt("Direkte Bestellung", "Direct Ordering")}
+              <Zap className="h-3.5 w-3.5 text-[#b28a3c]" />{" "}
+              {tt("Direkte Bestellung", "Direct Ordering")}
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-white leading-[1.05] tracking-tight drop-shadow-sm">
               {tt("Lokal essen bestellen.", "Order local food.")} <br />
-              <span className="text-[#b28a3c]">
-                {tt("Direkt & Schnell.", "Direct & Fast.")}
-              </span>
+              <span className="text-[#b28a3c]">{tt("Direkt & Schnell.", "Direct & Fast.")}</span>
             </h1>
             <p className="text-base sm:text-lg text-white/80 max-w-xl leading-relaxed">
               {tt(
@@ -242,7 +241,7 @@ function InstantOrder() {
                 "Support your favorite local restaurants directly in your region. Discover top-rated catering services and restaurants in Germany, and order food directly from local spots with no hidden service fees.",
               )}
             </p>
- 
+
             <ul className="space-y-2.5 pt-2 text-sm sm:text-base text-white/90 font-medium">
               <li className="flex items-center gap-2.5">
                 <BadgeCheck className="h-5 w-5 text-[#b28a3c] shrink-0" />
@@ -476,7 +475,7 @@ function InstantOrder() {
               <Link
                 key={r.id}
                 to="/restaurant/$slug"
-                params={{ slug: r.id }}
+                params={{ slug: r.slug || r.id }}
                 className="group flex flex-col surface-card p-3 transition hover:shadow-md hover:ring-[#b28a3c]/30"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-forest/5 rounded-2xl">

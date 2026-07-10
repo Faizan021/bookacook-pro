@@ -1,12 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Building } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -69,7 +64,7 @@ export function B2bCateringDialog({
           pattern: b2bForm.pattern,
           startDate: b2bForm.startDate || new Date().toISOString().split("T")[0],
           notes: b2bForm.notes,
-        }
+        },
       });
 
       trackEvent("reservation_submitted", {
@@ -82,7 +77,7 @@ export function B2bCateringDialog({
       alert(
         lang === "de"
           ? "Ihre Anfrage für ein wiederkehrendes Catering-Programm wurde erfolgreich übermittelt! Der ausgewählte Partner wird sich in Kürze mit einem Angebot bei Ihnen melden."
-          : "Your recurring catering program request has been successfully submitted! The chosen partner will get in touch with an offer shortly."
+          : "Your recurring catering program request has been successfully submitted! The chosen partner will get in touch with an offer shortly.",
       );
       onOpenChange(false);
       setB2bForm({
@@ -98,7 +93,7 @@ export function B2bCateringDialog({
         alert(
           lang === "de"
             ? "Bitte melde dich an oder registriere dich, um eine Anfrage zu senden."
-            : "Please sign in or register to submit your request."
+            : "Please sign in or register to submit your request.",
         );
       } else {
         alert("Error: " + err.message);
@@ -132,9 +127,7 @@ export function B2bCateringDialog({
               required
               className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
               value={b2bForm.companyName}
-              onChange={(e) =>
-                setB2bForm((prev) => ({ ...prev, companyName: e.target.value }))
-              }
+              onChange={(e) => setB2bForm((prev) => ({ ...prev, companyName: e.target.value }))}
               placeholder="Acme Corp GmbH"
             />
           </div>
@@ -150,9 +143,7 @@ export function B2bCateringDialog({
                 min="1"
                 className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
                 value={b2bForm.employees}
-                onChange={(e) =>
-                  setB2bForm((prev) => ({ ...prev, employees: e.target.value }))
-                }
+                onChange={(e) => setB2bForm((prev) => ({ ...prev, employees: e.target.value }))}
               />
             </div>
             <div className="space-y-1.5">
@@ -161,9 +152,7 @@ export function B2bCateringDialog({
               </Label>
               <Select
                 value={b2bForm.pattern}
-                onValueChange={(v) =>
-                  setB2bForm((prev) => ({ ...prev, pattern: v }))
-                }
+                onValueChange={(v) => setB2bForm((prev) => ({ ...prev, pattern: v }))}
               >
                 <SelectTrigger
                   id="pattern"
@@ -195,9 +184,7 @@ export function B2bCateringDialog({
             </Label>
             <Select
               value={b2bForm.catererSlug || undefined}
-              onValueChange={(v) =>
-                setB2bForm((prev) => ({ ...prev, catererSlug: v }))
-              }
+              onValueChange={(v) => setB2bForm((prev) => ({ ...prev, catererSlug: v }))}
             >
               <SelectTrigger
                 id="catererSelect"
@@ -225,9 +212,7 @@ export function B2bCateringDialog({
               required
               className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
               value={b2bForm.startDate}
-              onChange={(e) =>
-                setB2bForm((prev) => ({ ...prev, startDate: e.target.value }))
-              }
+              onChange={(e) => setB2bForm((prev) => ({ ...prev, startDate: e.target.value }))}
             />
           </div>
           <div className="space-y-1.5">
@@ -239,9 +224,7 @@ export function B2bCateringDialog({
               rows={3}
               className="bg-white border-[#eadfce] focus-visible:ring-forest rounded-xl"
               value={b2bForm.notes}
-              onChange={(e) =>
-                setB2bForm((prev) => ({ ...prev, notes: e.target.value }))
-              }
+              onChange={(e) => setB2bForm((prev) => ({ ...prev, notes: e.target.value }))}
               placeholder={
                 lang === "de"
                   ? "z.B. vegetarische/vegane Anteile, Budgetvorgaben..."
@@ -259,8 +242,8 @@ export function B2bCateringDialog({
                 ? "Wird gesendet..."
                 : "Sending..."
               : lang === "de"
-              ? "B2B-Anfrage absenden"
-              : "Submit B2B Request"}
+                ? "B2B-Anfrage absenden"
+                : "Submit B2B Request"}
           </button>
         </form>
       </DialogContent>

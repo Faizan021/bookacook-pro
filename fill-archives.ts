@@ -9,16 +9,16 @@ dotenv.config({ path: ".env.local" });
 
 const supabase = createClient(
   "https://athwccvgdovglcpluwnu.supabase.co",
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
 const PAIRS = [
-  { src: "event_requests",        dst: "_archive_event_requests" },
+  { src: "event_requests", dst: "_archive_event_requests" },
   { src: "event_request_matches", dst: "_archive_event_request_matches" },
-  { src: "orders",                dst: "_archive_orders" },
-  { src: "order_items",           dst: "_archive_order_items" },
-  { src: "packages",              dst: "_archive_packages" },
-  { src: "availability",          dst: "_archive_availability" },
+  { src: "orders", dst: "_archive_orders" },
+  { src: "order_items", dst: "_archive_order_items" },
+  { src: "packages", dst: "_archive_packages" },
+  { src: "availability", dst: "_archive_availability" },
 ];
 
 async function count(table: string): Promise<number> {
@@ -32,16 +32,19 @@ async function main() {
   for (const { src, dst } of PAIRS) {
     // Step 1: read all rows from source
     const { data, error: readErr } = await supabase.from(src).select("*");
-    if (readErr) { console.error(`  Cannot read ${src}: ${readErr.message}`); continue; }
+    if (readErr) {
+      console.error(`  Cannot read ${src}: ${readErr.message}`);
+      continue;
+    }
     if (!data || data.length === 0) {
-      console.log(`  ${src}: 0 rows — nothing to archive.`);
+      console.log(`  ${src}: 0 rows ï¿½ nothing to archive.`);
       continue;
     }
 
     // Step 2: check if archive already has data (idempotency guard)
     const existingCount = await count(dst);
     if (existingCount > 0) {
-      console.log(`  ${dst}: already has ${existingCount} rows — skipping to avoid duplicates.`);
+      console.log(`  ${dst}: already has ${existingCount} rows ï¿½ skipping to avoid duplicates.`);
       continue;
     }
 
@@ -70,4 +73,7 @@ async function main() {
   }
 }
 
-main().catch(e => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

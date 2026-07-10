@@ -17,8 +17,9 @@ export function printEventBrief(brief: any, brandName: string, type: "caterer" |
   const budgetStr = brief.budget_cents != null ? `€${(brief.budget_cents / 100).toFixed(2)}` : "—";
   const milestones = Array.isArray(brief.milestones) ? brief.milestones : [];
 
-  const milestonesHtml = milestones.length > 0 
-    ? `
+  const milestonesHtml =
+    milestones.length > 0
+      ? `
       <div class="section-title">Milestones / Projektverlauf</div>
       <table class="milestones-table">
         <thead>
@@ -37,13 +38,13 @@ export function printEventBrief(brief: any, brandName: string, type: "caterer" |
               <td><strong>${m.title || m.status || "Statusänderung"}</strong>${m.notes ? ` - <span class="notes-text">${m.notes}</span>` : ""}</td>
               <td style="text-align: right;">${new Date(m.created_at || m.timestamp).toLocaleDateString("de-DE")}</td>
             </tr>
-          `
+          `,
             )
             .join("")}
         </tbody>
       </table>
     `
-    : "";
+      : "";
 
   const htmlContent = `
     <!DOCTYPE html>

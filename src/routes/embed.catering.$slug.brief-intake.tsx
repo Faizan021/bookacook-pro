@@ -43,7 +43,16 @@ export const submitPublicCateringBrief = createServerFn({ method: "POST" })
           customerEmail: z.string().email(),
           customerPhone: z.string().min(1),
           eventType: z.string().min(1),
-          eventDate: z.string(),
+          eventDate: z.string().refine(
+            (dateStr) => {
+              const parsed = new Date(dateStr);
+              if (isNaN(parsed.getTime())) return false;
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return parsed >= today;
+            },
+            { message: "Event date cannot be in the past" }
+          ),
           guestCount: z.number().min(1),
           budgetCents: z.number().min(0),
           location: z.string().min(1),
@@ -54,6 +63,24 @@ export const submitPublicCateringBrief = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { userId } = context as { userId: string };
+
+    // Verify Caterer is approved and accepting inquiries
+    const { data: catererData, error: catError } = await supabaseAdmin
+      .from("caterers")
+      .select("id, approval_status, accepts_inquiries")
+      .eq("id", data.catererId)
+      .maybeSingle();
+
+    if (catError || !catererData) {
+      throw new Error("Caterer profile not found");
+    }
+
+    if (catererData.approval_status !== "approved") {
+      throw new Error("This caterer storefront is currently under review or inactive.");
+    }
+    if (catererData.accepts_inquiries === false) {
+      throw new Error("This caterer is currently not accepting new inquiries.");
+    }
 
     const { error } = await supabaseAdmin.from("catering_briefs").insert({
       customer_id: userId,
@@ -104,8 +131,8 @@ export const submitPublicCateringBrief = createServerFn({ method: "POST" })
                      <li><strong>Ort:</strong> ${data.location}</li>
                      <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
                    </ul>
-                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`
-          }
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+          },
         });
       }
     }

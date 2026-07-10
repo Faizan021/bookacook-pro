@@ -47,14 +47,22 @@ function Shell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   async function signOut() {
     await supabase.auth.signOut();
-    router.navigate({ to: "/auth", search: { signup: undefined, message: undefined, logout: undefined } });
+    router.navigate({
+      to: "/auth",
+      search: { signup: undefined, message: undefined, logout: undefined },
+    });
   }
   return (
     <div className="min-h-screen bg-mint-dotted">
       <header className="border-b border-border/60 bg-cream/60 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <div>
-            <Link to="/" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-forest">← Main page</Link>
+            <Link
+              to="/"
+              className="text-xs uppercase tracking-widest text-muted-foreground hover:text-forest"
+            >
+              ← Main page
+            </Link>
             <h1 className="font-display text-2xl">My Activity</h1>
           </div>
           <div className="flex items-center gap-2">
@@ -65,7 +73,10 @@ function Shell({ children }: { children: React.ReactNode }) {
               variant="outline"
               onClick={async () => {
                 await supabase.auth.signOut();
-                router.navigate({ to: "/auth", search: { signup: undefined, message: undefined, logout: undefined } });
+                router.navigate({
+                  to: "/auth",
+                  search: { signup: undefined, message: undefined, logout: undefined },
+                });
               }}
             >
               Sign out
@@ -117,15 +128,16 @@ function TimelineDot({ kind }: { kind: "order" | "brief" | "reservation" }) {
   return (
     <div
       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg shadow-sm ring-4 ring-cream ${
-        kind === "order" ? "bg-amber-100 text-amber-900" : 
-        kind === "reservation" ? "bg-sky-100 text-sky-900" :
-        "bg-mint text-forest"
+        kind === "order"
+          ? "bg-amber-100 text-amber-900"
+          : kind === "reservation"
+            ? "bg-sky-100 text-sky-900"
+            : "bg-mint text-forest"
       }`}
       aria-hidden
     >
       {kind === "order" ? "🍽️" : kind === "reservation" ? "📅" : "📋"}
     </div>
-
   );
 }
 
@@ -134,7 +146,7 @@ function getGoogleCalendarUrl(item: Extract<UnifiedActivityItem, { kind: "reserv
   const details = encodeURIComponent(`Table for ${item.guest_count} guests.`);
   const startDate = new Date(`${item.reservation_date}T${item.reservation_time}`);
   const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
-  
+
   const formatDate = (date: Date) => date.toISOString().replace(/-|:|\.\d\d\d/g, "");
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${formatDate(startDate)}/${formatDate(endDate)}&details=${details}`;
 }
@@ -143,7 +155,7 @@ function getIcsDataUrl(item: Extract<UnifiedActivityItem, { kind: "reservation" 
   const startDate = new Date(`${item.reservation_date}T${item.reservation_time}`);
   const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
   const formatDate = (date: Date) => date.toISOString().replace(/-|:|\.\d\d\d/g, "");
-  
+
   const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
@@ -156,11 +168,17 @@ END:VCALENDAR`;
   return `data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`;
 }
 
-function ReservationCard({ item }: { item: Extract<UnifiedActivityItem, { kind: "reservation" }> }) {
+function ReservationCard({
+  item,
+}: {
+  item: Extract<UnifiedActivityItem, { kind: "reservation" }>;
+}) {
   const isAccepted = item.status === "approved" || item.status === "accepted";
-  
+
   return (
-    <article className={`surface-card p-5 ${isAccepted ? 'ring-2 ring-emerald-400 bg-cream/20' : ''}`}>
+    <article
+      className={`surface-card p-5 ${isAccepted ? "ring-2 ring-emerald-400 bg-cream/20" : ""}`}
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
@@ -185,7 +203,7 @@ function ReservationCard({ item }: { item: Extract<UnifiedActivityItem, { kind: 
           )}
         </div>
       </div>
-      
+
       {isAccepted && (
         <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">
           <Button asChild variant="secondary" size="sm">
@@ -215,7 +233,6 @@ function ReservationCard({ item }: { item: Extract<UnifiedActivityItem, { kind: 
 }
 
 function OrderCard({ item }: { item: Extract<UnifiedActivityItem, { kind: "order" }> }) {
-  
   return (
     <article className="surface-card p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -242,9 +259,7 @@ function OrderCard({ item }: { item: Extract<UnifiedActivityItem, { kind: "order
         </ul>
       )}
 
-      {item.notes && (
-        <p className="mt-2 text-sm italic text-muted-foreground">"{item.notes}"</p>
-      )}
+      {item.notes && <p className="mt-2 text-sm italic text-muted-foreground">"{item.notes}"</p>}
       {item.restaurant_slug && (
         <div className="mt-4">
           <Button asChild variant="outline" size="sm">
@@ -258,7 +273,13 @@ function OrderCard({ item }: { item: Extract<UnifiedActivityItem, { kind: "order
   );
 }
 
-function BriefCard({ item, onUpdate }: { item: Extract<UnifiedActivityItem, { kind: "brief" }>; onUpdate: () => void }) {
+function BriefCard({
+  item,
+  onUpdate,
+}: {
+  item: Extract<UnifiedActivityItem, { kind: "brief" }>;
+  onUpdate: () => void;
+}) {
   const [accepting, setAccepting] = useState(false);
   const acceptFn = useServerFn(acceptProposal);
   const router = useRouter();
@@ -321,21 +342,20 @@ function BriefCard({ item, onUpdate }: { item: Extract<UnifiedActivityItem, { ki
           </div>
         )}
       </dl>
-      {item.notes && (
-        <p className="mt-3 text-sm italic text-muted-foreground">"{item.notes}"</p>
-      )}
-      
+      {item.notes && <p className="mt-3 text-sm italic text-muted-foreground">"{item.notes}"</p>}
+
       {item.status === "quoted" && (
         <div className="mt-4 p-4 rounded-xl bg-[#eadfce]/30 border border-[#eadfce] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
             <h4 className="font-semibold text-forest text-sm">Proposal Received</h4>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Pay the 10% booking deposit of {price((item.budget_cents || 0) * 0.10)} to secure this service.
+              Pay the 10% booking deposit of {price((item.budget_cents || 0) * 0.1)} to secure this
+              service.
             </p>
           </div>
-          <Button 
-            onClick={handleAccept} 
-            disabled={accepting} 
+          <Button
+            onClick={handleAccept}
+            disabled={accepting}
             className="rounded-full bg-forest text-white hover:bg-forest/90 font-bold text-xs"
           >
             {accepting ? "Processing..." : "Accept & Pay Deposit"}
@@ -355,11 +375,11 @@ function BriefCard({ item, onUpdate }: { item: Extract<UnifiedActivityItem, { ki
 
       {item.milestones && item.milestones.length > 0 && (
         <div className="mt-6 border-t border-border pt-4">
-          <MilestoneTimeline 
-            briefId={item.id} 
-            milestones={item.milestones} 
-            onUpdate={onUpdate} 
-            isVendor={false} 
+          <MilestoneTimeline
+            briefId={item.id}
+            milestones={item.milestones}
+            onUpdate={onUpdate}
+            isVendor={false}
           />
         </div>
       )}
@@ -413,9 +433,11 @@ function CustomerDashboard() {
                     {item.kind === "order" && <OrderCard item={item} />}
                     {item.kind === "reservation" && <ReservationCard item={item} />}
                     {item.kind === "brief" && (
-                      <BriefCard 
-                        item={item} 
-                        onUpdate={() => qc.invalidateQueries({ queryKey: ["customer", "activity"] })} 
+                      <BriefCard
+                        item={item}
+                        onUpdate={() =>
+                          qc.invalidateQueries({ queryKey: ["customer", "activity"] })
+                        }
                       />
                     )}
                   </div>

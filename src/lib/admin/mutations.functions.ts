@@ -40,18 +40,18 @@ export const updateUserRole = createServerFn({ method: "POST" })
       .delete()
       .eq("user_id", targetUserId);
 
-    if (deleteRolesError) throw new Error("Failed to clean old user roles: " + deleteRolesError.message);
+    if (deleteRolesError)
+      throw new Error("Failed to clean old user roles: " + deleteRolesError.message);
 
     // Only insert if it is a valid app_role enum
     const validAppRoles = ["customer", "restaurant_owner", "caterer", "planner", "admin"];
     if (validAppRoles.includes(newRole)) {
-      const { error: insertRoleError } = await supabaseAdmin
-        .from("user_roles")
-        .insert({
-          user_id: targetUserId,
-          role: newRole as "customer" | "restaurant_owner" | "caterer" | "planner" | "admin"
-        });
-      if (insertRoleError) throw new Error("Failed to insert new role mapping: " + insertRoleError.message);
+      const { error: insertRoleError } = await supabaseAdmin.from("user_roles").insert({
+        user_id: targetUserId,
+        role: newRole as "customer" | "restaurant_owner" | "caterer" | "planner" | "admin",
+      });
+      if (insertRoleError)
+        throw new Error("Failed to insert new role mapping: " + insertRoleError.message);
     }
 
     return { success: true };
@@ -66,14 +66,14 @@ export const toggleListingPublish = createServerFn({ method: "POST" })
 
     await verifyAdmin(supabaseAdmin, userId);
 
-    if (listingType === 'restaurant') {
+    if (listingType === "restaurant") {
       const { error } = await supabaseAdmin
         .from("restaurants")
         .update({ is_published: isPublished })
         .eq("id", listingId);
 
       if (error) throw new Error("Failed to toggle restaurant publish state: " + error.message);
-    } else if (listingType === 'caterer') {
+    } else if (listingType === "caterer") {
       // For caterers, publishing status is in storefront_settings
       const { error } = await supabaseAdmin
         .from("storefront_settings")
@@ -86,19 +86,101 @@ export const toggleListingPublish = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+export const updateListingApproval = createServerFn({ method: "POST" })
+  .validator((d: {
+    listingType: "restaurant" | "caterer" | "planner";
+    listingId: string;
+    status: "pending" | "approved" | "rejected" | "suspended";
+    rejectionReason?: string;
+  }) => d)
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context, data: { listingType, listingId, status, rejectionReason } }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const tableMap = {
+      restaurant: "restaurants",
+      caterer: "caterers",
+      planner: "planners",
+    };
+    const table = tableMap[listingType];
+    if (!table) throw new Error("Invalid listing type");
+
+    // Fetch current status
+    const { data: current, error: fetchErr } = await supabaseAdmin
+      .from(table as any)
+      .select("approval_status")
+      .eq("id", listingId)
+      .single();
+
+    if (fetchErr || !current) throw new Error(`Listing not found: ${fetchErr?.message || ""}`);
+
+    const oldStatus = (current as any).approval_status || "pending";
+    const newStatus = status;
+
+    // Validate state transitions
+    // Allowed transitions:
+    // - pending -> approved | rejected
+    // - rejected -> approved | pending (usually partner resubmits, but admin can toggle back)
+    // - approved -> suspended | rejected
+    // - suspended -> approved | rejected
+    let allowed = false;
+    if (oldStatus === newStatus) {
+      allowed = true;
+    } else if (oldStatus === "pending" && (newStatus === "approved" || newStatus === "rejected")) {
+      allowed = true;
+    } else if (oldStatus === "rejected" && (newStatus === "approved" || newStatus === "pending")) {
+      allowed = true;
+    } else if (oldStatus === "approved" && (newStatus === "suspended" || newStatus === "rejected")) {
+      allowed = true;
+    } else if (oldStatus === "suspended" && (newStatus === "approved" || newStatus === "rejected")) {
+      allowed = true;
+    }
+
+    if (!allowed) {
+      throw new Error(`Invalid status transition: ${oldStatus} -> ${newStatus}`);
+    }
+
+    // Update with metadata
+    const updateObj: any = {
+      approval_status: newStatus,
+      rejection_reason: newStatus === "rejected" ? rejectionReason || null : null,
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: userId,
+    };
+
+    const { error: updateErr } = await supabaseAdmin
+      .from(table as any)
+      .update(updateObj)
+      .eq("id", listingId);
+
+    if (updateErr) throw new Error(`Failed to update approval status: ${updateErr.message}`);
+
+    // Audit Logging
+    console.log(
+      `[Audit Log] [Partner Approval] Status changed for ${listingType} (id: ${listingId}) by admin ${userId}: ${oldStatus} -> ${newStatus}. Rejection reason: ${rejectionReason || "None"}`
+    );
+
+    return { success: true };
+  });
+
 // SEO Content Pipeline
 export const saveSeoDraft = createServerFn({ method: "POST" })
-  .validator((d: { 
-    type: string; 
-    target_keyword: string; 
-    title: string; 
-    slug: string; 
-    meta_title: string; 
-    meta_description: string; 
-    content: string; 
-    cta_text: string; 
-    internal_links: string[]; 
-  }) => d)
+  .validator(
+    (d: {
+      type: string;
+      target_keyword: string;
+      title: string;
+      slug: string;
+      meta_title: string;
+      meta_description: string;
+      content: string;
+      cta_text: string;
+      internal_links: string[];
+    }) => d,
+  )
   .middleware([requireSupabaseAuth()])
   .handler(async ({ context, data }) => {
     const { userId } = context;
@@ -106,20 +188,23 @@ export const saveSeoDraft = createServerFn({ method: "POST" })
 
     await verifyAdmin(supabaseAdmin, userId);
 
-    const { error } = await supabaseAdmin
-      .from("seo_content_pages")
-      .insert({
-        ...data,
-        status: "draft",
-        last_edited_by: userId
-      });
+    const { error } = await supabaseAdmin.from("seo_content_pages").insert({
+      ...data,
+      status: "draft",
+      last_edited_by: userId,
+    });
 
     if (error) throw new Error("Failed to save SEO draft: " + error.message);
     return { success: true };
   });
 
 export const updateSeoStatus = createServerFn({ method: "POST" })
-  .validator((d: { id: string; status: "draft" | "in_review" | "approved" | "published" | "rejected" | "archived" }) => d)
+  .validator(
+    (d: {
+      id: string;
+      status: "draft" | "in_review" | "approved" | "published" | "rejected" | "archived";
+    }) => d,
+  )
   .middleware([requireSupabaseAuth()])
   .handler(async ({ context, data: { id, status } }) => {
     const { userId } = context;
@@ -135,36 +220,37 @@ export const updateSeoStatus = createServerFn({ method: "POST" })
         .select("content")
         .eq("id", id)
         .single();
-        
+
       if (currentDraft?.content) {
         const verification = verifyDraftContent(currentDraft.content);
         if (!verification.isValid) {
-          const reasons = verification.flaggedPhrases.map(f => `'${f.phrase}'`).join(", ");
-          throw new Error(`Verification Failed: Draft contains unsupported claims: ${reasons}. Please edit the content.`);
+          const reasons = verification.flaggedPhrases.map((f) => `'${f.phrase}'`).join(", ");
+          throw new Error(
+            `Verification Failed: Draft contains unsupported claims: ${reasons}. Please edit the content.`,
+          );
         }
       }
-      
+
       updateData.published_at = new Date().toISOString();
     }
 
-    const { error } = await supabaseAdmin
-      .from("seo_content_pages")
-      .update(updateData)
-      .eq("id", id);
+    const { error } = await supabaseAdmin.from("seo_content_pages").update(updateData).eq("id", id);
 
     if (error) throw new Error(`Failed to update SEO status to ${status}: ` + error.message);
     return { success: true };
   });
 
 export const updateSeoContent = createServerFn({ method: "POST" })
-  .validator((d: { 
-    id: string; 
-    title: string; 
-    slug: string; 
-    meta_title: string; 
-    meta_description: string; 
-    content: string; 
-  }) => d)
+  .validator(
+    (d: {
+      id: string;
+      title: string;
+      slug: string;
+      meta_title: string;
+      meta_description: string;
+      content: string;
+    }) => d,
+  )
   .middleware([requireSupabaseAuth()])
   .handler(async ({ context, data }) => {
     const { userId } = context;
@@ -180,7 +266,7 @@ export const updateSeoContent = createServerFn({ method: "POST" })
         meta_title: data.meta_title,
         meta_description: data.meta_description,
         content: data.content,
-        last_edited_by: userId
+        last_edited_by: userId,
       })
       .eq("id", data.id);
 
@@ -221,15 +307,20 @@ export const auditAllSeoContent = createServerFn({ method: "POST" })
 
     if (fetchError) throw new Error("Failed to fetch seo content for audit: " + fetchError.message);
 
-    const demotedRecords: Array<{ id: string; title: string; previousStatus: string; reasons: string }> = [];
+    const demotedRecords: Array<{
+      id: string;
+      title: string;
+      previousStatus: string;
+      reasons: string;
+    }> = [];
 
     // 2. Audit each record
     for (const record of allContent || []) {
       if (record.content) {
         const verification = verifyDraftContent(record.content);
         if (!verification.isValid) {
-          const reasons = verification.flaggedPhrases.map(f => `'${f.phrase}'`).join(", ");
-          
+          const reasons = verification.flaggedPhrases.map((f) => `'${f.phrase}'`).join(", ");
+
           // Demote the record
           const { error: updateError } = await supabaseAdmin
             .from("seo_content_pages")
@@ -243,7 +334,7 @@ export const auditAllSeoContent = createServerFn({ method: "POST" })
               id: record.id,
               title: record.title || "Unknown",
               previousStatus: record.status || "Unknown",
-              reasons
+              reasons,
             });
           }
         }
@@ -252,4 +343,3 @@ export const auditAllSeoContent = createServerFn({ method: "POST" })
 
     return { success: true, totalAudited: allContent?.length || 0, demotedRecords };
   });
-

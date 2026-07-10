@@ -12,7 +12,11 @@ export function useSpeiselyPing(vendorId: string | undefined, tablesToWatch: str
     const playPing = () => {
       try {
         const audio = new Audio("/speisely_alert.mp3");
-        audio.play().catch(e => console.error("Audio playback failed (browser may require interaction):", e));
+        audio
+          .play()
+          .catch((e) =>
+            console.error("Audio playback failed (browser may require interaction):", e),
+          );
       } catch (e) {
         // ignore audio errors
       }
@@ -24,14 +28,10 @@ export function useSpeiselyPing(vendorId: string | undefined, tablesToWatch: str
     tablesToWatch.forEach((table) => {
       // In a real production app, we would add filters: .on("postgres_changes", { event: "INSERT", schema: "public", table, filter: `vendor_id=eq.${vendorId}` })
       // For simplicity in this implementation, we just listen to INSERTs on the relevant tables for this session
-      channel.on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table },
-        (payload) => {
-          // Play the custom speisely german woman 24-25 accent ping
-          playPing();
-        }
-      );
+      channel.on("postgres_changes", { event: "INSERT", schema: "public", table }, (payload) => {
+        // Play the custom speisely german woman 24-25 accent ping
+        playPing();
+      });
     });
 
     channel.subscribe();

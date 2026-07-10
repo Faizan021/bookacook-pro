@@ -9,9 +9,7 @@ export const Route = createFileRoute("/llms.txt")({
   server: {
     handlers: {
       GET: async () => {
-        const blogUrls = blogPosts
-          .map((b) => `- ${BASE}/blog/${b.slug}`)
-          .join("\n");
+        const blogUrls = blogPosts.map((b) => `- ${BASE}/blog/${b.slug}`).join("\n");
 
         const text = `# Speisely
 

@@ -3,16 +3,11 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
 
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL!,
-  process.env.VITE_SUPABASE_ANON_KEY!
-);
+const supabase = createClient(process.env.VITE_SUPABASE_URL!, process.env.VITE_SUPABASE_ANON_KEY!);
 
 async function main() {
   console.log("Verifying legacy reviews table...");
-  const { data, error, count } = await supabase
-    .from("reviews")
-    .select("*", { count: "exact" });
+  const { data, error, count } = await supabase.from("reviews").select("*", { count: "exact" });
 
   if (error) {
     console.error("Error querying reviews table:", error);

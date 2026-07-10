@@ -1,11 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sparkles, Building, Utensils, CheckCircle2, ShieldCheck, ArrowRight, Clock, Star } from "lucide-react";
+import {
+  Sparkles,
+  Building,
+  Utensils,
+  CheckCircle2,
+  ShieldCheck,
+  ArrowRight,
+  Clock,
+  Star,
+} from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
 import { PageHero } from "@/components/PageHero";
-
 
 export const Route = createFileRoute("/catering/daily-catering-subscriptions")({
   head: () => ({
@@ -13,12 +21,14 @@ export const Route = createFileRoute("/catering/daily-catering-subscriptions")({
       { title: "Flexible Büro-Mittagsverpflegung & Team-Lunch — Speisely" },
       {
         name: "description",
-        content: "Unterstütze dein Team mit leckerem, gesundem Mittagessen im Büro. Flexible tägliche oder wöchentliche Pläne, pünktliche Lieferung und konsolidierte monatliche Rechnungsstellung.",
+        content:
+          "Unterstütze dein Team mit leckerem, gesundem Mittagessen im Büro. Flexible tägliche oder wöchentliche Pläne, pünktliche Lieferung und konsolidierte monatliche Rechnungsstellung.",
       },
       { property: "og:title", content: "Daily Office Catering Subscriptions — Speisely" },
       {
         property: "og:description",
-        content: "Warmes, frisches Mittagessen direkt geliefert für dein Büro. Konfiguriere deinen wöchentlichen oder täglichen Essensplan.",
+        content:
+          "Warmes, frisches Mittagessen direkt geliefert für dein Büro. Konfiguriere deinen wöchentlichen oder täglichen Essensplan.",
       },
       { property: "og:url", content: "/catering/daily-catering-subscriptions" },
     ],
@@ -37,9 +47,17 @@ function DailySubscriptions() {
         eyebrow={lang === "de" ? "WIEDERKEHRENDE BÜRO-VERPFLEGUNG" : "RECURRING TEAM CATERING"}
         heading={
           lang === "de" ? (
-            <>Das flexible Food-Abo<br />für dein <span className="text-[#f2d896]">Office &amp; Team.</span></>
+            <>
+              Das flexible Food-Abo
+              <br />
+              für dein <span className="text-[#f2d896]">Office &amp; Team.</span>
+            </>
           ) : (
-            <>The flexible meal plan<br />for your <span className="text-[#f2d896]">office &amp; team.</span></>
+            <>
+              The flexible meal plan
+              <br />
+              for your <span className="text-[#f2d896]">office &amp; team.</span>
+            </>
           )
         }
         subtext={
@@ -47,19 +65,28 @@ function DailySubscriptions() {
             ? "Steigere Mitarbeiterzufriedenheit und Produktivität mit gesundem Mittagessen. Ohne feste Kantinenbindung. Plane euer Lunch-Programm flexibel (täglich bis monatlich) mit monatlicher Sammelrechnung."
             : "Boost employee satisfaction and productivity with healthy lunches. Without fixed canteen commitments. Plan your lunch program flexibly (daily to monthly) with consolidated monthly invoicing."
         }
-        primaryCta={{ label: lang === "de" ? "Büro-Abo anfragen" : "Request Office Catering", onClick: () => setB2bOpen(true) }}
-        secondaryCta={{ label: lang === "de" ? "Partner-Caterer ansehen" : "Discover Caterers", href: "/catering" }}
+        primaryCta={{
+          label: lang === "de" ? "Büro-Abo anfragen" : "Request Office Catering",
+          onClick: () => setB2bOpen(true),
+        }}
+        secondaryCta={{
+          label: lang === "de" ? "Partner-Caterer ansehen" : "Discover Caterers",
+          href: "/catering",
+        }}
         imageUrl="/images/office_catering_hero.png"
         imageAlt="Corporate Office Lunch Buffet Plating Setup"
       />
 
-
       {/* Subscription Features (Invoicing, Logistics, Dietaries) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 md:py-24 border-b border-[#eadfce]/30">
         <div className="text-center max-w-2xl mx-auto space-y-4">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "VORTEILE" : "BENEFITS"}</span>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">
+            {lang === "de" ? "VORTEILE" : "BENEFITS"}
+          </span>
           <h2 className="text-3xl sm:text-4xl font-display font-bold text-forest">
-            {lang === "de" ? "Entlastung für Office Manager & HR" : "Relief for Office Managers & HR"}
+            {lang === "de"
+              ? "Entlastung für Office Manager & HR"
+              : "Relief for Office Managers & HR"}
           </h2>
           <p className="text-sm text-forest/70 leading-relaxed">
             {lang === "de"
@@ -130,7 +157,9 @@ function DailySubscriptions() {
               <Star className="h-3 w-3 fill-amber-400 text-amber-400" /> B2B OFFICE PLANS
             </span>
             <h2 className="font-display text-3xl sm:text-4xl text-mint leading-tight">
-              {lang === "de" ? "Starte dein unverbindliches Lunch-Abo Briefing" : "Configure Your Custom Lunch Plan"}
+              {lang === "de"
+                ? "Starte dein unverbindliches Lunch-Abo Briefing"
+                : "Configure Your Custom Lunch Plan"}
             </h2>
             <p className="text-cream/80 text-sm sm:text-base leading-relaxed">
               {lang === "de"
@@ -169,18 +198,39 @@ function DailySubscriptions() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">{lang === "de" ? "UNSER VERSPRECHEN" : "OUR COMMITMENT"}</span>
-              <h2 className="text-3xl font-display font-bold text-forest">{lang === "de" ? "Sorgenfreie Verpflegung garantiert" : "Worry-Free Catering Guaranteed"}</h2>
-              <p className="text-sm text-forest/70 leading-relaxed">{lang === "de" ? "Wir stellen sicher, dass eure Essenslieferung pünktlich ankommt, perfekt verpackt ist und die höchsten Hygienestandards erfüllt." : "We ensure your meal delivery arrives on time, is perfectly packaged, and meets the highest hygiene guidelines."}</p>
-              
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-forest">
+                {lang === "de" ? "UNSER VERSPRECHEN" : "OUR COMMITMENT"}
+              </span>
+              <h2 className="text-3xl font-display font-bold text-forest">
+                {lang === "de"
+                  ? "Sorgenfreie Verpflegung garantiert"
+                  : "Worry-Free Catering Guaranteed"}
+              </h2>
+              <p className="text-sm text-forest/70 leading-relaxed">
+                {lang === "de"
+                  ? "Wir stellen sicher, dass eure Essenslieferung pünktlich ankommt, perfekt verpackt ist und die höchsten Hygienestandards erfüllt."
+                  : "We ensure your meal delivery arrives on time, is perfectly packaged, and meets the highest hygiene guidelines."}
+              </p>
+
               <ul className="space-y-3.5">
                 {[
-                  lang === "de" ? "Pünktliche Anlieferung und fachgerechte Ausrüstung (Chafing Dishes)" : "On-time delivery and professional equipment (chafing dishes)",
-                  lang === "de" ? "Monatlich wechselnde Menüpläne für maximale kulinarische Abwechslung" : "Monthly rotating menus for ultimate culinary variety",
-                  lang === "de" ? "Kurzfristige Stornierungen von Portionen bei Homeoffice-Tagen" : "Flexible portion changes to support work-from-home schedules",
-                  lang === "de" ? "Direkter persönlicher Support bei Fragen oder Wünschen" : "Direct personal account support for changes or requests"
+                  lang === "de"
+                    ? "Pünktliche Anlieferung und fachgerechte Ausrüstung (Chafing Dishes)"
+                    : "On-time delivery and professional equipment (chafing dishes)",
+                  lang === "de"
+                    ? "Monatlich wechselnde Menüpläne für maximale kulinarische Abwechslung"
+                    : "Monthly rotating menus for ultimate culinary variety",
+                  lang === "de"
+                    ? "Kurzfristige Stornierungen von Portionen bei Homeoffice-Tagen"
+                    : "Flexible portion changes to support work-from-home schedules",
+                  lang === "de"
+                    ? "Direkter persönlicher Support bei Fragen oder Wünschen"
+                    : "Direct personal account support for changes or requests",
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-sm text-forest/80 font-medium">
+                  <li
+                    key={idx}
+                    className="flex items-start gap-2.5 text-sm text-forest/80 font-medium"
+                  >
                     <CheckCircle2 className="h-5 w-5 text-forest shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -202,7 +252,9 @@ function DailySubscriptions() {
       <section className="bg-cream/40 py-16 border-t border-[#eadfce]/30 text-center">
         <div className="mx-auto max-w-3xl px-4 space-y-6">
           <h2 className="text-3xl font-display font-bold text-forest">
-            {lang === "de" ? "Bereit für das neue Team-Lunch Erlebnis?" : "Ready for a Smarter Office Lunch?"}
+            {lang === "de"
+              ? "Bereit für das neue Team-Lunch Erlebnis?"
+              : "Ready for a Smarter Office Lunch?"}
           </h2>
           <p className="text-sm text-forest/75 max-w-lg mx-auto">
             {lang === "de"

@@ -14,67 +14,63 @@ const SELF_HEALABLE_ROLES: UserRole[] = [
   "partner",
 ];
 
-export const requireSupabaseAuth = () => createMiddleware({ type: 'function' }).server(
-  async ({ next }) => {
+export const requireSupabaseAuth = () =>
+  createMiddleware({ type: "function" }).server(async ({ next }) => {
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
 
     if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
       const missing = [
-        ...(!SUPABASE_URL ? ['SUPABASE_URL'] : []),
-        ...(!SUPABASE_PUBLISHABLE_KEY ? ['SUPABASE_PUBLISHABLE_KEY'] : []),
+        ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),
+        ...(!SUPABASE_PUBLISHABLE_KEY ? ["SUPABASE_PUBLISHABLE_KEY"] : []),
       ];
-      const message = `Missing Supabase environment variable(s): ${missing.join(', ')}. Connect Supabase in Lovable Cloud.`;
+      const message = `Missing Supabase environment variable(s): ${missing.join(", ")}. Connect Supabase in Lovable Cloud.`;
       console.error(`[Supabase] ${message}`);
       throw new Error(message);
     }
-    
-    const { getRequest } = await import('@tanstack/react-start/server');
+
+    const { getRequest } = await import("@tanstack/react-start/server");
     const request = getRequest();
 
     if (!request?.headers) {
-      throw new Error('Unauthorized: No request headers available');
+      throw new Error("Unauthorized: No request headers available");
     }
 
-    const authHeader = request.headers.get('authorization');
+    const authHeader = request.headers.get("authorization");
 
     if (!authHeader) {
-      throw new Error('Unauthorized: No authorization header provided');
+      throw new Error("Unauthorized: No authorization header provided");
     }
 
-    if (!authHeader.startsWith('Bearer ')) {
-      throw new Error('Unauthorized: Only Bearer tokens are supported');
+    if (!authHeader.startsWith("Bearer ")) {
+      throw new Error("Unauthorized: Only Bearer tokens are supported");
     }
 
-    const token = authHeader.replace('Bearer ', '');
+    const token = authHeader.replace("Bearer ", "");
     if (!token) {
-      throw new Error('Unauthorized: No token provided');
+      throw new Error("Unauthorized: No token provided");
     }
 
-    const supabaseClient = createClient<Database>(
-      SUPABASE_URL!,
-      SUPABASE_PUBLISHABLE_KEY!,
-      {
-        global: {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    const supabaseClient = createClient<Database>(SUPABASE_URL!, SUPABASE_PUBLISHABLE_KEY!, {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        auth: {
-          storage: undefined,
-          persistSession: false,
-          autoRefreshToken: false,
-        },
-      }
-    );
+      },
+      auth: {
+        storage: undefined,
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
 
     const { data, error } = await supabaseClient.auth.getClaims(token);
     if (error || !data?.claims) {
-      throw new Error('Unauthorized: Invalid token');
+      throw new Error("Unauthorized: Invalid token");
     }
 
     if (!data.claims.sub) {
-      throw new Error('Unauthorized: No user ID found in token');
+      throw new Error("Unauthorized: No user ID found in token");
     }
 
     return next({
@@ -84,13 +80,12 @@ export const requireSupabaseAuth = () => createMiddleware({ type: 'function' }).
         claims: data.claims,
       },
     });
-  },
-);
+  });
 
 type OptionalAuthContext = { supabase: SupabaseClient<Database> | null; userId: string | null };
 
-export const optionalSupabaseAuth = () => createMiddleware({ type: 'function' }).server(
-  async ({ next }) => {
+export const optionalSupabaseAuth = () =>
+  createMiddleware({ type: "function" }).server(async ({ next }) => {
     const SUPABASE_URL = process.env.SUPABASE_URL;
     const SUPABASE_PUBLISHABLE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
 
@@ -101,40 +96,38 @@ export const optionalSupabaseAuth = () => createMiddleware({ type: 'function' })
       return makeNext(null, null);
     }
 
-    const { getRequest } = await import('@tanstack/react-start/server');
+    const { getRequest } = await import("@tanstack/react-start/server");
     const request = getRequest();
     if (!request?.headers) {
       return makeNext(null, null);
     }
 
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return makeNext(null, null);
     }
 
-    const token = authHeader.replace('Bearer ', '');
+    const token = authHeader.replace("Bearer ", "");
     if (!token) {
       return makeNext(null, null);
     }
 
-    const supabaseClient = createClient<Database>(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        global: {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      }
-    );
+    const supabaseClient = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+      global: {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    });
 
     try {
-      const { data: { user }, error } = await supabaseClient.auth.getUser();
+      const {
+        data: { user },
+        error,
+      } = await supabaseClient.auth.getUser();
       return makeNext(supabaseClient, error || !user ? null : user.id);
     } catch {
       return makeNext(supabaseClient, null);
     }
-  }
-);
+  });
 
 export const requireRole = (role: UserRole) =>
   createMiddleware({ type: "function" })
@@ -154,7 +147,9 @@ export const requireRole = (role: UserRole) =>
         const lastSignIn = new Date(authData.user.last_sign_in_at).getTime();
         const hoursSinceSignIn = (Date.now() - lastSignIn) / (1000 * 60 * 60);
         if (hoursSinceSignIn > SESSION_CONFIG.ABSOLUTE_MAX_SESSION_HOURS) {
-          throw new Error("Unauthorized: Absolute session lifetime exceeded. Please sign in again.");
+          throw new Error(
+            "Unauthorized: Absolute session lifetime exceeded. Please sign in again.",
+          );
         }
       }
 
@@ -165,17 +160,15 @@ export const requireRole = (role: UserRole) =>
 
         if (SELF_HEALABLE_ROLES.includes(metaRole as UserRole)) {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          await supabaseAdmin
-            .from("user_roles")
-            .insert({ user_id: userId, role: metaRole as any });
+          await supabaseAdmin.from("user_roles").insert({ user_id: userId, role: metaRole as any });
           roleList = [metaRole as UserRole];
 
           console.log(
-            `[Role] Self-healed user_roles from metadata for user=${userId} role=${metaRole}`
+            `[Role] Self-healed user_roles from metadata for user=${userId} role=${metaRole}`,
           );
         } else {
           console.warn(
-            `[Role] Rejected metadata role "${metaRole}" for user=${userId}: not in SELF_HEALABLE_ROLES`
+            `[Role] Rejected metadata role "${metaRole}" for user=${userId}: not in SELF_HEALABLE_ROLES`,
           );
         }
       }
@@ -185,7 +178,10 @@ export const requireRole = (role: UserRole) =>
       }
 
       // Map legacy roles to unified partner role
-      if (roleList.some((r: string) => ["restaurant_owner", "caterer", "planner"].includes(r)) && !roleList.includes("partner")) {
+      if (
+        roleList.some((r: string) => ["restaurant_owner", "caterer", "planner"].includes(r)) &&
+        !roleList.includes("partner")
+      ) {
         roleList.push("partner");
       }
 

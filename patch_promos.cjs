@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const newComponent = `function PromotionsSection({ vertical, availableItems = [] }: { vertical: "restaurants" | "caterers" | "planners"; availableItems?: string[] }) {
   const { lang } = useI18n();
@@ -250,23 +250,23 @@ const newComponent = `function PromotionsSection({ vertical, availableItems = []
 }`;
 
 const files = [
-  'src/routes/_authenticated/restaurant.tsx',
-  'src/routes/_authenticated/caterer.tsx',
-  'src/routes/_authenticated/dashboard/planner.tsx'
+  "src/routes/_authenticated/restaurant.tsx",
+  "src/routes/_authenticated/caterer.tsx",
+  "src/routes/_authenticated/dashboard/planner.tsx",
 ];
 
 for (const file of files) {
   const filePath = path.resolve(file);
-  let code = fs.readFileSync(filePath, 'utf8');
-  const startIdx = code.indexOf('function PromotionsSection(');
+  let code = fs.readFileSync(filePath, "utf8");
+  const startIdx = code.indexOf("function PromotionsSection(");
   if (startIdx === -1) {
-    console.error('Could not find PromotionsSection in ' + file);
+    console.error("Could not find PromotionsSection in " + file);
     continue;
   }
-  let nextFunc = code.indexOf('function ', startIdx + 1);
+  let nextFunc = code.indexOf("function ", startIdx + 1);
   if (nextFunc === -1) nextFunc = code.length;
-  
-  code = code.slice(0, startIdx) + newComponent + '\n\n' + code.slice(nextFunc);
+
+  code = code.slice(0, startIdx) + newComponent + "\n\n" + code.slice(nextFunc);
   fs.writeFileSync(filePath, code);
-  console.log('Patched ' + file);
+  console.log("Patched " + file);
 }

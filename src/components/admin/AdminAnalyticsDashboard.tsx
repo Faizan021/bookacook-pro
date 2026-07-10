@@ -2,17 +2,27 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { fetchAnalyticsData } from "@/lib/admin/analytics.functions";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { 
-  Users, 
-  MousePointerClick, 
-  Clock, 
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  Users,
+  MousePointerClick,
+  Clock,
   Calendar,
   Globe,
   Link,
   MapPin,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
 export function AdminAnalyticsDashboard() {
@@ -27,11 +37,16 @@ export function AdminAnalyticsDashboard() {
 
   const getDaysLabel = () => {
     switch (dateRange) {
-      case "-7d": return "Last 7 Days";
-      case "-14d": return "Last 14 Days";
-      case "-30d": return "Last 30 Days";
-      case "-90d": return "Last 90 Days";
-      default: return "Last 30 Days";
+      case "-7d":
+        return "Last 7 Days";
+      case "-14d":
+        return "Last 14 Days";
+      case "-30d":
+        return "Last 30 Days";
+      case "-90d":
+        return "Last 90 Days";
+      default:
+        return "Last 30 Days";
     }
   };
 
@@ -44,7 +59,8 @@ export function AdminAnalyticsDashboard() {
           <p className="text-sm text-red-700 mt-1">{error.message}</p>
         </div>
         <p className="text-xs text-red-600 max-w-md">
-          Make sure POSTHOG_PROJECT_ID and POSTHOG_PERSONAL_API_KEY are correctly set in the environment variables.
+          Make sure POSTHOG_PROJECT_ID and POSTHOG_PERSONAL_API_KEY are correctly set in the
+          environment variables.
         </p>
       </div>
     );
@@ -56,22 +72,20 @@ export function AdminAnalyticsDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-xl font-bold font-display text-forest flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-forest" /> 
+            <TrendingUp className="w-5 h-5 text-forest" />
             Traffic & Analytics
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
-            Live insights powered by PostHog
-          </p>
+          <p className="text-sm text-gray-500 mt-1">Live insights powered by PostHog</p>
         </div>
-        
+
         <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
           {(["-7d", "-14d", "-30d", "-90d"] as const).map((range) => (
             <button
               key={range}
               onClick={() => setDateRange(range)}
               className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                dateRange === range 
-                  ? "bg-white text-gray-900 shadow-sm" 
+                dateRange === range
+                  ? "bg-white text-gray-900 shadow-sm"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -102,7 +116,7 @@ export function AdminAnalyticsDashboard() {
                 <Users className="w-6 h-6" />
               </div>
             </div>
-            
+
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Pageviews</p>
@@ -130,7 +144,9 @@ export function AdminAnalyticsDashboard() {
 
           {/* Main Chart */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-lg font-bold text-gray-900 mb-6 font-heading">Traffic Trend ({getDaysLabel()})</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-6 font-heading">
+              Traffic Trend ({getDaysLabel()})
+            </h3>
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
@@ -138,22 +154,42 @@ export function AdminAnalyticsDashboard() {
                   margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                  <XAxis 
-                    dataKey="date" 
-                    stroke="#9CA3AF" 
-                    fontSize={12} 
+                  <XAxis
+                    dataKey="date"
+                    stroke="#9CA3AF"
+                    fontSize={12}
                     tickLine={false}
                     tickFormatter={(val) => {
                       const date = new Date(val);
-                      return `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+                      return `${date.getDate()} ${date.toLocaleString("default", { month: "short" })}`;
                     }}
                   />
                   <YAxis stroke="#9CA3AF" fontSize={12} tickLine={false} axisLine={false} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  <Tooltip
+                    contentStyle={{
+                      borderRadius: "12px",
+                      border: "none",
+                      boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                    }}
                   />
-                  <Line type="monotone" name="Pageviews" dataKey="pageviews" stroke="#3B82F6" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
-                  <Line type="monotone" name="Visitors" dataKey="visitors" stroke="#10B981" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                  <Line
+                    type="monotone"
+                    name="Pageviews"
+                    dataKey="pageviews"
+                    stroke="#3B82F6"
+                    strokeWidth={3}
+                    dot={false}
+                    activeDot={{ r: 6 }}
+                  />
+                  <Line
+                    type="monotone"
+                    name="Visitors"
+                    dataKey="visitors"
+                    stroke="#10B981"
+                    strokeWidth={3}
+                    dot={false}
+                    activeDot={{ r: 6 }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -161,7 +197,6 @@ export function AdminAnalyticsDashboard() {
 
           {/* Breakdowns */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
             {/* Top Pages */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
               <div className="p-5 border-b border-gray-100 bg-gray-50 flex items-center gap-2">
@@ -177,25 +212,39 @@ export function AdminAnalyticsDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
-                    {data.topPages.length > 0 ? data.topPages.map((page: any, i: number) => {
-                      try {
-                        const url = new URL(page.name);
-                        return (
-                          <tr key={i} className="hover:bg-gray-50/50">
-                            <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px]">{url.pathname}</td>
-                            <td className="px-5 py-3 text-gray-600 text-right">{page.count.toLocaleString()}</td>
-                          </tr>
-                        );
-                      } catch {
-                        return (
-                          <tr key={i} className="hover:bg-gray-50/50">
-                            <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px]">{page.name}</td>
-                            <td className="px-5 py-3 text-gray-600 text-right">{page.count.toLocaleString()}</td>
-                          </tr>
-                        );
-                      }
-                    }) : (
-                      <tr><td colSpan={2} className="px-5 py-8 text-center text-gray-500">No page data found.</td></tr>
+                    {data.topPages.length > 0 ? (
+                      data.topPages.map((page: any, i: number) => {
+                        try {
+                          const url = new URL(page.name);
+                          return (
+                            <tr key={i} className="hover:bg-gray-50/50">
+                              <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px]">
+                                {url.pathname}
+                              </td>
+                              <td className="px-5 py-3 text-gray-600 text-right">
+                                {page.count.toLocaleString()}
+                              </td>
+                            </tr>
+                          );
+                        } catch {
+                          return (
+                            <tr key={i} className="hover:bg-gray-50/50">
+                              <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px]">
+                                {page.name}
+                              </td>
+                              <td className="px-5 py-3 text-gray-600 text-right">
+                                {page.count.toLocaleString()}
+                              </td>
+                            </tr>
+                          );
+                        }
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan={2} className="px-5 py-8 text-center text-gray-500">
+                          No page data found.
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
@@ -211,16 +260,28 @@ export function AdminAnalyticsDashboard() {
               <div className="p-0 overflow-y-auto max-h-[190px]">
                 <table className="w-full text-sm text-left">
                   <tbody className="divide-y divide-gray-50">
-                    {data.referrers.length > 0 ? data.referrers.map((ref: any, i: number) => {
-                      const domain = ref.name.replace("https://", "").replace("http://", "").split("/")[0] || "Direct";
-                      return (
-                        <tr key={i} className="hover:bg-gray-50/50">
-                          <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px]">{domain === "$direct" ? "Direct / None" : domain}</td>
-                          <td className="px-5 py-3 text-gray-600 text-right">{ref.count.toLocaleString()}</td>
-                        </tr>
-                      );
-                    }) : (
-                      <tr><td colSpan={2} className="px-5 py-8 text-center text-gray-500">No referrer data found.</td></tr>
+                    {data.referrers.length > 0 ? (
+                      data.referrers.map((ref: any, i: number) => {
+                        const domain =
+                          ref.name.replace("https://", "").replace("http://", "").split("/")[0] ||
+                          "Direct";
+                        return (
+                          <tr key={i} className="hover:bg-gray-50/50">
+                            <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px]">
+                              {domain === "$direct" ? "Direct / None" : domain}
+                            </td>
+                            <td className="px-5 py-3 text-gray-600 text-right">
+                              {ref.count.toLocaleString()}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan={2} className="px-5 py-8 text-center text-gray-500">
+                          No referrer data found.
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
@@ -233,19 +294,28 @@ export function AdminAnalyticsDashboard() {
               <div className="p-0 overflow-y-auto max-h-[190px]">
                 <table className="w-full text-sm text-left">
                   <tbody className="divide-y divide-gray-50">
-                    {data.sources.length > 0 ? data.sources.map((src: any, i: number) => (
-                      <tr key={i} className="hover:bg-gray-50/50">
-                        <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px] capitalize">{src.name}</td>
-                        <td className="px-5 py-3 text-gray-600 text-right">{src.count.toLocaleString()}</td>
+                    {data.sources.length > 0 ? (
+                      data.sources.map((src: any, i: number) => (
+                        <tr key={i} className="hover:bg-gray-50/50">
+                          <td className="px-5 py-3 text-gray-900 font-medium truncate max-w-[200px] capitalize">
+                            {src.name}
+                          </td>
+                          <td className="px-5 py-3 text-gray-600 text-right">
+                            {src.count.toLocaleString()}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={2} className="px-5 py-8 text-center text-gray-500">
+                          No UTM source data found.
+                        </td>
                       </tr>
-                    )) : (
-                      <tr><td colSpan={2} className="px-5 py-8 text-center text-gray-500">No UTM source data found.</td></tr>
                     )}
                   </tbody>
                 </table>
               </div>
             </div>
-
           </div>
         </>
       ) : null}

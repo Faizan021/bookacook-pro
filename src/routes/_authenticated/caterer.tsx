@@ -11,6 +11,8 @@ import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tansta
 import React, { useState } from "react";
 import { Sparkles, Plus, Loader2, Tag, Ticket } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
+import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
 import {
   Select,
   SelectContent,
@@ -280,12 +282,12 @@ function StatusPill({ status }: { status: BriefStatus }) {
 
 function CustomerContactReveal({ briefId, status }: { briefId: string; status: BriefStatus }) {
   const fetchContact = useServerFn(getBriefContactDetails);
-  
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["caterer", "brief", briefId, "contact"],
     queryFn: () => fetchContact({ data: { briefId } }),
     enabled: status === "booked",
-    retry: false
+    retry: false,
   });
 
   if (status !== "booked") {
@@ -293,10 +295,25 @@ function CustomerContactReveal({ briefId, status }: { briefId: string; status: B
       <div className="mt-6 p-4 rounded-xl border border-dashed border-stone-300 bg-stone-50 flex flex-col items-center justify-center text-center">
         <div className="space-y-1">
           <div className="flex justify-center text-stone-400 mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
           </div>
           <p className="text-sm font-medium text-stone-600">Contact Details Locked</p>
-          <p className="text-xs text-stone-500">Customer contact details will be revealed once the deal is booked.</p>
+          <p className="text-xs text-stone-500">
+            Customer contact details will be revealed once the deal is booked.
+          </p>
         </div>
       </div>
     );
@@ -321,22 +338,40 @@ function CustomerContactReveal({ briefId, status }: { briefId: string; status: B
   return (
     <div className="mt-6 p-4 rounded-xl border border-forest/20 bg-forest/5 shadow-sm">
       <h4 className="text-xs font-bold uppercase tracking-wider text-forest mb-3 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
         Customer Contact Info
       </h4>
       <div className="space-y-2 text-sm text-stone-800">
         <div className="flex items-center gap-2">
           <span className="text-stone-500 w-16">Name:</span>
-          <span className="font-medium">{data.first_name} {data.last_name}</span>
+          <span className="font-medium">
+            {data.first_name} {data.last_name}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-stone-500 w-16">Email:</span>
-          <a href={`mailto:${data.email}`} className="font-medium text-forest hover:underline">{data.email}</a>
+          <a href={`mailto:${data.email}`} className="font-medium text-forest hover:underline">
+            {data.email}
+          </a>
         </div>
         {data.phone && (
           <div className="flex items-center gap-2">
             <span className="text-stone-500 w-16">Phone:</span>
-            <a href={`tel:${data.phone}`} className="font-medium text-forest hover:underline">{data.phone}</a>
+            <a href={`tel:${data.phone}`} className="font-medium text-forest hover:underline">
+              {data.phone}
+            </a>
           </div>
         )}
       </div>
@@ -654,7 +689,10 @@ function BriefsSection() {
                       </div>
                     )}
 
-                    <CustomerContactReveal briefId={selectedBrief.id} status={selectedBrief.status as BriefStatus} />
+                    <CustomerContactReveal
+                      briefId={selectedBrief.id}
+                      status={selectedBrief.status as BriefStatus}
+                    />
 
                     <div className="border-t border-border/40 pt-4">
                       <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">
@@ -685,7 +723,7 @@ function BriefsSection() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {BRIEF_STATUSES.filter(s => s !== "booked").map((s) => (
+                          {BRIEF_STATUSES.filter((s) => s !== "booked").map((s) => (
                             <SelectItem key={s} value={s} className="text-xs">
                               {s.replace(/_/g, " ")}
                             </SelectItem>
@@ -1432,6 +1470,7 @@ function BusinessProfileSection() {
   const [bannerPreview, setBannerPreview] = useState(caterer?.banner_image_url || null);
   const [logoPath, setLogoPath] = useState(caterer?.logo_url || null);
   const [bannerPath, setBannerPath] = useState(caterer?.banner_image_url || null);
+  const [useGeneratedBranding, setUseGeneratedBranding] = useState(caterer?.use_generated_branding || false);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [serviceAreas, setServiceAreas] = useState((caterer as any).service_areas || "");
@@ -1483,6 +1522,7 @@ function BusinessProfileSection() {
           banner_image_url: bannerPath,
           service_areas: serviceAreas,
           certifications,
+          use_generated_branding: useGeneratedBranding,
         },
       });
       toast.success("Settings saved successfully!");
@@ -1549,6 +1589,87 @@ function BusinessProfileSection() {
             />
           </div>
         </div>
+
+        {BRANDING_ASSISTANT_ENABLED && (
+          <div className="p-4 bg-muted/40 border border-border rounded-lg space-y-4 text-left">
+            <div>
+              <h4 className="text-sm font-bold text-foreground">Speisely Branding Assistant</h4>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Choose between your manually uploaded images or a clean Speisely-generated logo and banner.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                onClick={() => setUseGeneratedBranding(false)}
+                className={`cursor-pointer p-3 rounded-lg border-2 text-left transition-all ${
+                  !useGeneratedBranding
+                    ? "border-primary bg-background shadow-sm"
+                    : "border-border bg-muted/50 hover:bg-muted"
+                }`}
+              >
+                <div className="flex items-start gap-2.5">
+                  <input
+                    type="radio"
+                    checked={!useGeneratedBranding}
+                    onChange={() => setUseGeneratedBranding(false)}
+                    className="mt-0.5 accent-primary"
+                  />
+                  <div>
+                    <span className="text-xs font-bold block text-foreground">My Uploaded Branding</span>
+                    <span className="text-[10px] text-muted-foreground block mt-0.5">
+                      Uses uploaded files. Automatically falls back to Speisely default design if files are missing.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                onClick={() => setUseGeneratedBranding(true)}
+                className={`cursor-pointer p-3 rounded-lg border-2 text-left transition-all ${
+                  useGeneratedBranding
+                    ? "border-primary bg-background shadow-sm"
+                    : "border-border bg-muted/50 hover:bg-muted"
+                }`}
+              >
+                <div className="flex items-start gap-2.5">
+                  <input
+                    type="radio"
+                    checked={useGeneratedBranding}
+                    onChange={() => setUseGeneratedBranding(true)}
+                    className="mt-0.5 accent-primary"
+                  />
+                  <div>
+                    <span className="text-xs font-bold block text-foreground">Speisely-Generated Branding</span>
+                    <span className="text-[10px] text-muted-foreground block mt-0.5">
+                      Automatically generates a clean logo monogram and geometric banner background using your name.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {useGeneratedBranding && (
+              <div className="p-3 bg-background border border-border rounded-lg space-y-3">
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                  Live Preview of Generated Branding
+                </div>
+                <div className="flex flex-col sm:flex-row gap-4 items-center">
+                  <img
+                    src={generateSvgLogo(name || "Caterer", "Catering")}
+                    className="w-14 h-14 rounded-full border border-border shadow-sm"
+                    alt="Generated Logo Preview"
+                  />
+                  <img
+                    src={generateSvgBanner(name || "Caterer", "Catering")}
+                    className="w-full sm:w-60 h-14 rounded-lg object-cover border border-border shadow-sm"
+                    alt="Generated Banner Preview"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="space-y-4 pt-4 border-t border-border">
           <div className="space-y-1.5">
@@ -2018,6 +2139,7 @@ function LogisticsSection() {
   const [deliveryFee, setDeliveryFee] = useState(((caterer as any)?.delivery_fee_cents || 0) / 100);
   const [minDelivery, setMinDelivery] = useState(((caterer as any)?.min_delivery_cents || 0) / 100);
   const [maxDistance, setMaxDistance] = useState((caterer as any)?.max_delivery_distance_km || 0);
+  const [acceptsInquiries, setAcceptsInquiries] = useState((caterer as any)?.accepts_inquiries ?? true);
   const [saving, setSaving] = useState(false);
 
   if (!caterer) return null;
@@ -2032,6 +2154,7 @@ function LogisticsSection() {
           delivery_fee_cents: Math.round(deliveryFee * 100),
           min_delivery_cents: Math.round(minDelivery * 100),
           max_delivery_distance_km: maxDistance,
+          accepts_inquiries: acceptsInquiries,
         },
       });
       toast.success("Logistics settings saved successfully!");
@@ -2052,6 +2175,22 @@ function LogisticsSection() {
         </p>
       </div>
       <div className="surface-card p-6 space-y-8 max-w-3xl">
+        <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+          <div>
+            <Label htmlFor="accepts-inquiries" className="font-semibold text-forest">
+              Accept Inquiries
+            </Label>
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              Allows customers to submit new catering event inquiries.
+            </p>
+          </div>
+          <Switch
+            id="accepts-inquiries"
+            checked={acceptsInquiries}
+            onCheckedChange={setAcceptsInquiries}
+          />
+        </div>
+
         <div className="space-y-4">
           <h3 className="font-semibold text-lg flex items-center gap-2">
             <span className="text-forest">📍</span> Service Areas / Postal Codes

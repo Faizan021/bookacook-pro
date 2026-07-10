@@ -10,12 +10,9 @@ import {
   getAdminOverview,
   getAdminUsers,
   getAdminListings,
-  getAdminOrders
+  getAdminOrders,
 } from "@/lib/admin/queries.functions";
-import {
-  updateUserRole,
-  toggleListingPublish
-} from "@/lib/admin/mutations.functions";
+import { updateUserRole, toggleListingPublish, updateListingApproval } from "@/lib/admin/mutations.functions";
 import { CompetitorMonitor } from "@/components/geo/CompetitorMonitor";
 import { GeoTargetingEngine } from "@/components/geo/GeoTargetingEngine";
 import { SitemapMonitor } from "@/components/geo/SitemapMonitor";
@@ -28,7 +25,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from "recharts";
 import {
   Users,
@@ -43,13 +40,13 @@ import {
   RefreshCw,
   LogOut,
   Globe,
-  MousePointerClick
+  MousePointerClick,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
   head: () => ({ meta: [{ title: "Admin Portal — Speisely" }] }),
-  component: AdminPage
+  component: AdminPage,
 });
 
 function AdminPage() {
@@ -65,12 +62,16 @@ function AdminPage() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   // Active Tab
-  const [activeTab, setActiveTab] = useState<"overview" | "analytics" | "users" | "listings" | "orders" | "ai-tools">("overview");
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "analytics" | "users" | "listings" | "orders" | "ai-tools"
+  >("overview");
   const [aiSubTab, setAiSubTab] = useState<"drafts" | "sitemap" | "competitor" | "geo">("drafts");
   const [searchTerm, setSearchTerm] = useState("");
 
   // Sub-tab for listings
-  const [listingSubTab, setListingSubTab] = useState<"restaurants" | "caterers" | "planners">("restaurants");
+  const [listingSubTab, setListingSubTab] = useState<"restaurants" | "caterers" | "planners">(
+    "restaurants",
+  );
 
   // Server functions
   const fetchOverview = useServerFn(getAdminOverview);
@@ -80,6 +81,7 @@ function AdminPage() {
 
   const mutateRole = useServerFn(updateUserRole);
   const mutatePublish = useServerFn(toggleListingPublish);
+  const mutateApproval = useServerFn(updateListingApproval);
 
   // Load auth state
   useEffect(() => {
@@ -92,7 +94,9 @@ function AdminPage() {
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session?.user) {
         checkAdminRole(session.user.id);
@@ -130,25 +134,25 @@ function AdminPage() {
   const overviewQuery = useQuery({
     queryKey: ["admin", "overview"],
     queryFn: () => fetchOverview(),
-    enabled: !!isAdmin
+    enabled: !!isAdmin,
   });
 
   const usersQuery = useQuery({
     queryKey: ["admin", "users"],
     queryFn: () => fetchUsers(),
-    enabled: !!isAdmin
+    enabled: !!isAdmin,
   });
 
   const listingsQuery = useQuery({
     queryKey: ["admin", "listings"],
     queryFn: () => fetchListings(),
-    enabled: !!isAdmin
+    enabled: !!isAdmin,
   });
 
   const ordersQuery = useQuery({
     queryKey: ["admin", "orders"],
     queryFn: () => fetchOrders(),
-    enabled: !!isAdmin
+    enabled: !!isAdmin,
   });
 
   // Mutations
@@ -157,7 +161,7 @@ function AdminPage() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin", "users"] });
       qc.invalidateQueries({ queryKey: ["admin", "listings"] });
-    }
+    },
   });
 
   const togglePublishMutation = useMutation({
@@ -165,7 +169,19 @@ function AdminPage() {
       mutatePublish({ data: vars }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin", "listings"] });
-    }
+    },
+  });
+
+  const updateApprovalMutation = useMutation({
+    mutationFn: (vars: {
+      listingType: "restaurant" | "caterer" | "planner";
+      listingId: string;
+      status: "pending" | "approved" | "rejected" | "suspended";
+      rejectionReason?: string;
+    }) => mutateApproval({ data: vars }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin", "listings"] });
+    },
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -224,7 +240,7 @@ function AdminPage() {
                 className="mt-1"
                 placeholder="admin@speisely.de"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
@@ -235,7 +251,7 @@ function AdminPage() {
                 className="mt-1"
                 placeholder="••••••••"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
@@ -297,19 +313,21 @@ function AdminPage() {
   const orders = ordersQuery.data || [];
 
   // Filtered users
-  const filteredUsers = users.filter(u =>
-    (u.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (u.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.id.includes(searchTerm)
+  const filteredUsers = users.filter(
+    (u) =>
+      (u.full_name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (u.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      u.id.includes(searchTerm),
   );
 
   // Filtered listings
   const filterListings = (list: any[]) => {
-    return list.filter(l =>
-      (l.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (l.slug || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (l.owner?.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (l.owner?.email || "").toLowerCase().includes(searchTerm.toLowerCase())
+    return list.filter(
+      (l) =>
+        (l.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (l.slug || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (l.owner?.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (l.owner?.email || "").toLowerCase().includes(searchTerm.toLowerCase()),
     );
   };
 
@@ -346,7 +364,10 @@ function AdminPage() {
         {/* Navigation Tabs */}
         <div className="flex border-b border-gray-200 mb-8 overflow-x-auto gap-2">
           <button
-            onClick={() => { setActiveTab("overview"); setSearchTerm(""); }}
+            onClick={() => {
+              setActiveTab("overview");
+              setSearchTerm("");
+            }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "overview"
                 ? "border-forest text-forest"
@@ -357,7 +378,10 @@ function AdminPage() {
             <span>Overview & Revenue</span>
           </button>
           <button
-            onClick={() => { setActiveTab("analytics"); setSearchTerm(""); }}
+            onClick={() => {
+              setActiveTab("analytics");
+              setSearchTerm("");
+            }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "analytics"
                 ? "border-forest text-forest"
@@ -368,7 +392,10 @@ function AdminPage() {
             <span>Traffic & Analytics</span>
           </button>
           <button
-            onClick={() => { setActiveTab("users"); setSearchTerm(""); }}
+            onClick={() => {
+              setActiveTab("users");
+              setSearchTerm("");
+            }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "users"
                 ? "border-forest text-forest"
@@ -379,7 +406,10 @@ function AdminPage() {
             <span>Users</span>
           </button>
           <button
-            onClick={() => { setActiveTab("listings"); setSearchTerm(""); }}
+            onClick={() => {
+              setActiveTab("listings");
+              setSearchTerm("");
+            }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "listings"
                 ? "border-forest text-forest"
@@ -390,7 +420,10 @@ function AdminPage() {
             <span>Listing Management</span>
           </button>
           <button
-            onClick={() => { setActiveTab("orders"); setSearchTerm(""); }}
+            onClick={() => {
+              setActiveTab("orders");
+              setSearchTerm("");
+            }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "orders"
                 ? "border-forest text-forest"
@@ -401,7 +434,10 @@ function AdminPage() {
             <span>Orders & Bookings</span>
           </button>
           <button
-            onClick={() => { setActiveTab("ai-tools"); setSearchTerm(""); }}
+            onClick={() => {
+              setActiveTab("ai-tools");
+              setSearchTerm("");
+            }}
             className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
               activeTab === "ai-tools"
                 ? "border-forest text-forest"
@@ -420,7 +456,9 @@ function AdminPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-400">Monthly Recurring Revenue (MRR)</p>
+                  <p className="text-sm font-medium text-gray-400">
+                    Monthly Recurring Revenue (MRR)
+                  </p>
                   <h3 className="text-3xl font-bold text-gray-900 mt-1 font-heading">
                     €{(overview?.mrr || 0).toLocaleString()}
                   </h3>
@@ -457,7 +495,9 @@ function AdminPage() {
 
             {/* MRR Month-by-Month Trend Line Chart */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900 mb-6 font-heading">6-Month MRR Trend</h3>
+              <h3 className="text-lg font-bold text-gray-900 mb-6 font-heading">
+                6-Month MRR Trend
+              </h3>
               <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart
@@ -471,9 +511,9 @@ function AdminPage() {
                       fontSize={12}
                       tickLine={false}
                       axisLine={false}
-                      tickFormatter={val => `€${val}`}
+                      tickFormatter={(val) => `€${val}`}
                     />
-                    <Tooltip formatter={val => [`€${val}`, "MRR"]} />
+                    <Tooltip formatter={(val) => [`€${val}`, "MRR"]} />
                     <Line
                       type="monotone"
                       dataKey="mrr"
@@ -491,7 +531,9 @@ function AdminPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Platform Metrics */}
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 font-heading">Platform Scale</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 font-heading">
+                  Platform Scale
+                </h3>
                 <div className="divide-y divide-gray-100">
                   <div className="py-3 flex justify-between">
                     <span className="text-gray-500 font-medium">Total Registered Users</span>
@@ -499,15 +541,21 @@ function AdminPage() {
                   </div>
                   <div className="py-3 flex justify-between">
                     <span className="text-gray-500 font-medium">Active Restaurants</span>
-                    <span className="font-semibold text-gray-900">{overview?.metrics?.restaurants}</span>
+                    <span className="font-semibold text-gray-900">
+                      {overview?.metrics?.restaurants}
+                    </span>
                   </div>
                   <div className="py-3 flex justify-between">
                     <span className="text-gray-500 font-medium">Active Caterers</span>
-                    <span className="font-semibold text-gray-900">{overview?.metrics?.caterers}</span>
+                    <span className="font-semibold text-gray-900">
+                      {overview?.metrics?.caterers}
+                    </span>
                   </div>
                   <div className="py-3 flex justify-between">
                     <span className="text-gray-500 font-medium">Active Event Planners</span>
-                    <span className="font-semibold text-gray-900">{overview?.metrics?.planners}</span>
+                    <span className="font-semibold text-gray-900">
+                      {overview?.metrics?.planners}
+                    </span>
                   </div>
                   <div className="py-3 flex justify-between">
                     <span className="text-gray-500 font-medium">Total Orders & Bookings</span>
@@ -518,7 +566,9 @@ function AdminPage() {
 
               {/* Recent Commissions */}
               <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 font-heading">Recent Commission Income</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-4 font-heading">
+                  Recent Commission Income
+                </h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
                     <thead>
@@ -534,7 +584,9 @@ function AdminPage() {
                         <tr key={idx}>
                           <td className="py-2.5">{new Date(p.created_at).toLocaleDateString()}</td>
                           <td className="py-2.5">€{Number(p.amount_total).toFixed(2)}</td>
-                          <td className="py-2.5 text-forest font-medium">€{Number(p.platform_fee_amount).toFixed(2)}</td>
+                          <td className="py-2.5 text-forest font-medium">
+                            €{Number(p.platform_fee_amount).toFixed(2)}
+                          </td>
                           <td className="py-2.5">
                             <span className="px-2 py-0.5 bg-cream text-forest text-xs font-medium rounded-full">
                               {p.status}
@@ -558,23 +610,23 @@ function AdminPage() {
         )}
 
         {/* Tab 2: Analytics */}
-        {activeTab === "analytics" && (
-          <AdminAnalyticsDashboard />
-        )}
+        {activeTab === "analytics" && <AdminAnalyticsDashboard />}
 
         {/* Tab 3: Users */}
         {activeTab === "users" && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             {/* Search Filters */}
             <div className="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h3 className="text-lg font-bold text-gray-900 font-heading">User Roles & Accounts</h3>
+              <h3 className="text-lg font-bold text-gray-900 font-heading">
+                User Roles & Accounts
+              </h3>
               <div className="relative max-w-sm w-full">
                 <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
                 <Input
                   type="text"
                   placeholder="Search users name, email..."
                   value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-9"
                 />
               </div>
@@ -600,12 +652,19 @@ function AdminPage() {
                       </td>
                       <td className="px-6 py-4">{u.email}</td>
                       <td className="px-6 py-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                          u.role === 'admin' ? 'bg-purple-50 text-purple-700' :
-                          u.role === 'restaurant_owner' ? 'bg-orange-50 text-orange-700' :
-                          u.role === 'caterer' ? 'bg-cream text-forest' :
-                          u.role === 'planner' ? 'bg-blue-50 text-blue-700' : 'bg-gray-50 text-gray-500'
-                        }`}>
+                        <span
+                          className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                            u.role === "admin"
+                              ? "bg-purple-50 text-purple-700"
+                              : u.role === "restaurant_owner"
+                                ? "bg-orange-50 text-orange-700"
+                                : u.role === "caterer"
+                                  ? "bg-cream text-forest"
+                                  : u.role === "planner"
+                                    ? "bg-blue-50 text-blue-700"
+                                    : "bg-gray-50 text-gray-500"
+                          }`}
+                        >
                           {u.role}
                         </span>
                       </td>
@@ -613,9 +672,16 @@ function AdminPage() {
                       <td className="px-6 py-4 text-right">
                         <select
                           value={u.role || "customer"}
-                          onChange={e => {
-                            if (window.confirm(`Are you sure you want to change role of ${u.email} to ${e.target.value}?`)) {
-                              updateRoleMutation.mutate({ targetUserId: u.id, newRole: e.target.value });
+                          onChange={(e) => {
+                            if (
+                              window.confirm(
+                                `Are you sure you want to change role of ${u.email} to ${e.target.value}?`,
+                              )
+                            ) {
+                              updateRoleMutation.mutate({
+                                targetUserId: u.id,
+                                newRole: e.target.value,
+                              });
                             }
                           }}
                           className="text-xs bg-white border border-gray-200 rounded p-1 text-gray-700 font-medium"
@@ -648,7 +714,10 @@ function AdminPage() {
             {/* Listing Segment Sub-Tabs */}
             <div className="flex border-b border-gray-200 gap-1 bg-white p-2 rounded-2xl border border-gray-100">
               <button
-                onClick={() => { setListingSubTab("restaurants"); setSearchTerm(""); }}
+                onClick={() => {
+                  setListingSubTab("restaurants");
+                  setSearchTerm("");
+                }}
                 className={`py-2 px-4 rounded-xl font-medium text-xs transition ${
                   listingSubTab === "restaurants"
                     ? "bg-forest text-white shadow-sm"
@@ -658,7 +727,10 @@ function AdminPage() {
                 Restaurants ({listings.restaurants.length})
               </button>
               <button
-                onClick={() => { setListingSubTab("caterers"); setSearchTerm(""); }}
+                onClick={() => {
+                  setListingSubTab("caterers");
+                  setSearchTerm("");
+                }}
                 className={`py-2 px-4 rounded-xl font-medium text-xs transition ${
                   listingSubTab === "caterers"
                     ? "bg-forest text-white shadow-sm"
@@ -668,7 +740,10 @@ function AdminPage() {
                 Caterers ({listings.caterers.length})
               </button>
               <button
-                onClick={() => { setListingSubTab("planners"); setSearchTerm(""); }}
+                onClick={() => {
+                  setListingSubTab("planners");
+                  setSearchTerm("");
+                }}
                 className={`py-2 px-4 rounded-xl font-medium text-xs transition ${
                   listingSubTab === "planners"
                     ? "bg-forest text-white shadow-sm"
@@ -691,7 +766,7 @@ function AdminPage() {
                     type="text"
                     placeholder="Search listings..."
                     value={searchTerm}
-                    onChange={e => setSearchTerm(e.target.value)}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-9"
                   />
                 </div>
@@ -709,6 +784,7 @@ function AdminPage() {
                           <th className="px-6 py-3">Stripe Status</th>
                           <th className="px-6 py-3">Subscription</th>
                           <th className="px-6 py-3">Onboarding Step</th>
+                          <th className="px-6 py-3">Approval Status</th>
                           <th className="px-6 py-3 text-right">Publishing Status</th>
                         </tr>
                       </thead>
@@ -717,53 +793,109 @@ function AdminPage() {
                           <tr key={r.id}>
                             <td className="px-6 py-4 font-semibold text-gray-900">
                               <div>{r.name || "Unnamed"}</div>
-                              <div className="text-xs text-gray-400 font-normal">slug: {r.slug}</div>
+                              <div className="text-xs text-gray-400 font-normal">
+                                slug: {r.slug}
+                              </div>
                             </td>
                             <td className="px-6 py-4">
                               <div>{r.owner.name}</div>
                               <div className="text-xs text-gray-400">{r.owner.email}</div>
                             </td>
                             <td className="px-6 py-4">
-                              <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                                r.stripe_connect_status === 'connected'
-                                  ? 'bg-cream text-forest'
-                                  : 'bg-red-50 text-red-700'
-                              }`}>
+                              <span
+                                className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                  r.stripe_connect_status === "connected"
+                                    ? "bg-cream text-forest"
+                                    : "bg-red-50 text-red-700"
+                                }`}
+                              >
                                 {r.stripe_connect_status}
                               </span>
                             </td>
                             <td className="px-6 py-4">
                               {r.subscription ? (
                                 <div>
-                                  <span className="font-medium text-gray-700 uppercase">{r.subscription.plan}</span>
-                                  <span className="ml-1 text-xs text-forest">({r.subscription.status})</span>
+                                  <span className="font-medium text-gray-700 uppercase">
+                                    {r.subscription.plan}
+                                  </span>
+                                  <span className="ml-1 text-xs text-forest">
+                                    ({r.subscription.status})
+                                  </span>
                                 </div>
                               ) : (
                                 <span className="text-gray-400">None</span>
                               )}
                             </td>
                             <td className="px-6 py-4">
-                              <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                                r.onboardingStep.includes('Complete') ? 'bg-cream text-forest' :
-                                r.onboardingStep.includes('Publish') ? 'bg-blue-50 text-blue-700' :
-                                r.onboardingStep.includes('Subscription') ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
-                              }`}>
+                              <span
+                                className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                                  r.onboardingStep.includes("Complete")
+                                    ? "bg-cream text-forest"
+                                    : r.onboardingStep.includes("Publish")
+                                      ? "bg-blue-50 text-blue-700"
+                                      : r.onboardingStep.includes("Subscription")
+                                        ? "bg-amber-50 text-amber-700"
+                                        : "bg-red-50 text-red-700"
+                                }`}
+                              >
                                 {r.onboardingStep}
                               </span>
                             </td>
+                            <td className="px-6 py-4">
+                              <div className="flex flex-col gap-1">
+                                <select
+                                  value={r.approval_status || "pending"}
+                                  onChange={(e) => {
+                                    const val = e.target.value as any;
+                                    let reason = "";
+                                    if (val === "rejected") {
+                                      reason = window.prompt("Please enter a rejection reason:") || "";
+                                      if (!reason) return;
+                                    }
+                                    updateApprovalMutation.mutate({
+                                      listingType: "restaurant",
+                                      listingId: r.id,
+                                      status: val,
+                                      rejectionReason: reason || undefined,
+                                    });
+                                  }}
+                                  className={`text-xs font-semibold px-2 py-1 rounded-md border border-gray-200 focus:ring-2 focus:ring-forest ${
+                                    r.approval_status === "approved"
+                                      ? "bg-cream text-forest"
+                                      : r.approval_status === "rejected"
+                                        ? "bg-red-50 text-red-700"
+                                        : r.approval_status === "suspended"
+                                          ? "bg-gray-100 text-gray-700"
+                                          : "bg-amber-50 text-amber-700"
+                                  }`}
+                                >
+                                  <option value="pending">Pending</option>
+                                  <option value="approved">Approved</option>
+                                  <option value="rejected">Rejected</option>
+                                  <option value="suspended">Suspended</option>
+                                </select>
+                                {r.rejection_reason && (
+                                  <span className="text-[10px] text-red-500 max-w-[150px] truncate block" title={r.rejection_reason}>
+                                    Reason: {r.rejection_reason}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
                             <td className="px-6 py-4 text-right">
                               <div className="flex items-center justify-end gap-2">
-                                <span className={`text-xs ${r.is_published ? "text-forest font-semibold" : "text-gray-400"}`}>
+                                <span
+                                  className={`text-xs ${r.is_published ? "text-forest font-semibold" : "text-gray-400"}`}
+                                >
                                   {r.is_published ? "Published" : "Draft"}
                                 </span>
                                 <input
                                   type="checkbox"
                                   checked={r.is_published}
-                                  onChange={e => {
+                                  onChange={(e) => {
                                     togglePublishMutation.mutate({
                                       listingType: "restaurant",
                                       listingId: r.id,
-                                      isPublished: e.target.checked
+                                      isPublished: e.target.checked,
                                     });
                                   }}
                                   className="w-4 h-4 text-forest bg-gray-100 border-gray-300 rounded focus:ring-forest"
@@ -784,6 +916,7 @@ function AdminPage() {
                           <th className="px-6 py-3">Owner</th>
                           <th className="px-6 py-3">Location</th>
                           <th className="px-6 py-3">Joined Date</th>
+                          <th className="px-6 py-3">Approval Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100 text-sm text-gray-600">
@@ -791,14 +924,58 @@ function AdminPage() {
                           <tr key={c.id}>
                             <td className="px-6 py-4 font-semibold text-gray-900">
                               <div>{c.name || "Unnamed"}</div>
-                              <div className="text-xs text-gray-400 font-normal">slug: {c.slug}</div>
+                              <div className="text-xs text-gray-400 font-normal">
+                                slug: {c.slug}
+                              </div>
                             </td>
                             <td className="px-6 py-4">
                               <div>{c.owner.name}</div>
                               <div className="text-xs text-gray-400">{c.owner.email}</div>
                             </td>
                             <td className="px-6 py-4">{c.service_areas || "Not set"}</td>
-                            <td className="px-6 py-4">{new Date(c.created_at).toLocaleDateString()}</td>
+                            <td className="px-6 py-4">
+                              {new Date(c.created_at).toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex flex-col gap-1">
+                                <select
+                                  value={c.approval_status || "pending"}
+                                  onChange={(e) => {
+                                    const val = e.target.value as any;
+                                    let reason = "";
+                                    if (val === "rejected") {
+                                      reason = window.prompt("Please enter a rejection reason:") || "";
+                                      if (!reason) return;
+                                    }
+                                    updateApprovalMutation.mutate({
+                                      listingType: "caterer",
+                                      listingId: c.id,
+                                      status: val,
+                                      rejectionReason: reason || undefined,
+                                    });
+                                  }}
+                                  className={`text-xs font-semibold px-2 py-1 rounded-md border border-gray-200 focus:ring-2 focus:ring-forest ${
+                                    c.approval_status === "approved"
+                                      ? "bg-cream text-forest"
+                                      : c.approval_status === "rejected"
+                                        ? "bg-red-50 text-red-700"
+                                        : c.approval_status === "suspended"
+                                          ? "bg-gray-100 text-gray-700"
+                                          : "bg-amber-50 text-amber-700"
+                                  }`}
+                                >
+                                  <option value="pending">Pending</option>
+                                  <option value="approved">Approved</option>
+                                  <option value="rejected">Rejected</option>
+                                  <option value="suspended">Suspended</option>
+                                </select>
+                                {c.rejection_reason && (
+                                  <span className="text-[10px] text-red-500 max-w-[150px] truncate block" title={c.rejection_reason}>
+                                    Reason: {c.rejection_reason}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -813,6 +990,7 @@ function AdminPage() {
                           <th className="px-6 py-3">Owner</th>
                           <th className="px-6 py-3">Service Areas</th>
                           <th className="px-6 py-3">Joined Date</th>
+                          <th className="px-6 py-3">Approval Status</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100 text-sm text-gray-600">
@@ -820,14 +998,58 @@ function AdminPage() {
                           <tr key={p.id}>
                             <td className="px-6 py-4 font-semibold text-gray-900">
                               <div>{p.name || "Unnamed"}</div>
-                              <div className="text-xs text-gray-400 font-normal">slug: {p.slug}</div>
+                              <div className="text-xs text-gray-400 font-normal">
+                                slug: {p.slug}
+                              </div>
                             </td>
                             <td className="px-6 py-4">
                               <div>{p.owner.name}</div>
                               <div className="text-xs text-gray-400">{p.owner.email}</div>
                             </td>
                             <td className="px-6 py-4">{p.service_areas || "Not set"}</td>
-                            <td className="px-6 py-4">{new Date(p.created_at).toLocaleDateString()}</td>
+                            <td className="px-6 py-4">
+                              {new Date(p.created_at).toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex flex-col gap-1">
+                                <select
+                                  value={p.approval_status || "pending"}
+                                  onChange={(e) => {
+                                    const val = e.target.value as any;
+                                    let reason = "";
+                                    if (val === "rejected") {
+                                      reason = window.prompt("Please enter a rejection reason:") || "";
+                                      if (!reason) return;
+                                    }
+                                    updateApprovalMutation.mutate({
+                                      listingType: "planner",
+                                      listingId: p.id,
+                                      status: val,
+                                      rejectionReason: reason || undefined,
+                                    });
+                                  }}
+                                  className={`text-xs font-semibold px-2 py-1 rounded-md border border-gray-200 focus:ring-2 focus:ring-forest ${
+                                    p.approval_status === "approved"
+                                      ? "bg-cream text-forest"
+                                      : p.approval_status === "rejected"
+                                        ? "bg-red-50 text-red-700"
+                                        : p.approval_status === "suspended"
+                                          ? "bg-gray-100 text-gray-700"
+                                          : "bg-amber-50 text-amber-700"
+                                  }`}
+                                >
+                                  <option value="pending">Pending</option>
+                                  <option value="approved">Approved</option>
+                                  <option value="rejected">Rejected</option>
+                                  <option value="suspended">Suspended</option>
+                                </select>
+                                {p.rejection_reason && (
+                                  <span className="text-[10px] text-red-500 max-w-[150px] truncate block" title={p.rejection_reason}>
+                                    Reason: {p.rejection_reason}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -851,7 +1073,7 @@ function AdminPage() {
                   type="text"
                   placeholder="Search orders customer, merchant..."
                   value={searchTerm}
-                  onChange={e => setSearchTerm(e.target.value)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-9"
                 />
               </div>
@@ -872,11 +1094,12 @@ function AdminPage() {
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-sm text-gray-600">
                   {orders
-                    .filter((o: any) =>
-                      o.merchantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                      o.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                      o.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                      o.type.toLowerCase().includes(searchTerm.toLowerCase())
+                    .filter(
+                      (o: any) =>
+                        o.merchantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        o.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        o.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        o.type.toLowerCase().includes(searchTerm.toLowerCase()),
                     )
                     .map((o: any) => (
                       <tr key={o.id} className="hover:bg-gray-50/50">
@@ -886,13 +1109,17 @@ function AdminPage() {
                         <td className="px-6 py-4">{o.customerName}</td>
                         <td className="px-6 py-4 font-semibold">€{o.amount.toFixed(2)}</td>
                         <td className="px-6 py-4">
-                          <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                            o.status === 'confirmed' || o.status === 'delivered' || o.status === 'completed'
-                              ? 'bg-cream text-forest'
-                              : o.status === 'cancelled' || o.status === 'failed'
-                              ? 'bg-red-50 text-red-700'
-                              : 'bg-amber-50 text-amber-700'
-                          }`}>
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                              o.status === "confirmed" ||
+                              o.status === "delivered" ||
+                              o.status === "completed"
+                                ? "bg-cream text-forest"
+                                : o.status === "cancelled" || o.status === "failed"
+                                  ? "bg-red-50 text-red-700"
+                                  : "bg-amber-50 text-amber-700"
+                            }`}
+                          >
                             {o.status}
                           </span>
                         </td>
@@ -918,7 +1145,9 @@ function AdminPage() {
               <button
                 onClick={() => setAiSubTab("drafts")}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                  aiSubTab === "drafts" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                  aiSubTab === "drafts"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 Draft Review Queue
@@ -926,7 +1155,9 @@ function AdminPage() {
               <button
                 onClick={() => setAiSubTab("sitemap")}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                  aiSubTab === "sitemap" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                  aiSubTab === "sitemap"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 Sitemap Monitor
@@ -934,7 +1165,9 @@ function AdminPage() {
               <button
                 onClick={() => setAiSubTab("competitor")}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                  aiSubTab === "competitor" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                  aiSubTab === "competitor"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 Competitor Intelligence
@@ -942,7 +1175,9 @@ function AdminPage() {
               <button
                 onClick={() => setAiSubTab("geo")}
                 className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
-                  aiSubTab === "geo" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                  aiSubTab === "geo"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 Geo-Targeting Engine

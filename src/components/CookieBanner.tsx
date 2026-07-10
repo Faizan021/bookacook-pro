@@ -47,7 +47,7 @@ export function CookieBanner() {
           <span>
             {t(
               "We use cookies to improve our website and provide you with a better experience.",
-              "Wir verwenden Cookies, um unsere Website zu verbessern und dir ein besseres Erlebnis zu bieten."
+              "Wir verwenden Cookies, um unsere Website zu verbessern und dir ein besseres Erlebnis zu bieten.",
             )}
           </span>{" "}
           <a

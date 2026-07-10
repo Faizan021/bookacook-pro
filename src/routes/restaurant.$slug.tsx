@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { z } from "zod";
 import { useMemo, useState, useEffect } from "react";
 import { trackEvent } from "@/utils/posthog";
 import {
@@ -23,6 +24,8 @@ import { CategoryNav } from "@/components/ui/CategoryNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getRestaurant } from "@/data/restaurants";
+import { supabase } from "@/integrations/supabase/client";
+import { upsertConsentRecord } from "@/lib/consent.functions";
 
 import {
   Dialog,
@@ -44,7 +47,16 @@ import { recordPageView } from "@/lib/vendor/analytics.functions";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { getPublicRestaurantReviews } from "@/lib/reviews/public.functions";
 
+const searchSchema = z.object({
+  order_success: z.string().optional(),
+  order_cancel: z.string().optional(),
+  claimable: z.string().optional(),
+  email: z.string().optional(),
+  name: z.string().optional(),
+});
+
 export const Route = createFileRoute("/restaurant/$slug")({
+  validateSearch: (search) => searchSchema.parse(search),
   loader: async ({ params }) => {
     let dbRestaurant = null;
     let reviewsData = null;
@@ -107,7 +119,8 @@ export const Route = createFileRoute("/restaurant/$slug")({
                   addressCountry: "DE",
                 },
                 servesCuisine: r.tags?.[0] ?? "",
-                ...(loaderData?.reviewsData?.aggregates?.count && loaderData.reviewsData.aggregates.count > 0
+                ...(loaderData?.reviewsData?.aggregates?.count &&
+                loaderData.reviewsData.aggregates.count > 0
                   ? {
                       aggregateRating: {
                         "@type": "AggregateRating",
@@ -137,6 +150,7 @@ export const Route = createFileRoute("/restaurant/$slug")({
 
 function RestaurantPage() {
   const { slug } = Route.useParams();
+  const { order_success, claimable, email, name: customerName } = Route.useSearch();
   const { lang } = useI18n();
   const loaderData = Route.useLoaderData() as any;
   const { dbRestaurant, fullRestaurant, reviewsData } = loaderData;
@@ -144,7 +158,9 @@ function RestaurantPage() {
     if (!dbRestaurant) return false;
     // Only gate ordering if NO payment method is available at all
     const hasStripe = dbRestaurant.stripe_connect_status === "connected";
-    return !hasStripe;
+    const acceptsCash = dbRestaurant.accepts_cash === true;
+    const acceptsPaypal = dbRestaurant.accepts_paypal === true && !!dbRestaurant.paypal_email;
+    return !(hasStripe || acceptsCash || acceptsPaypal);
   }, [dbRestaurant]);
   const restaurant = useMemo(() => {
     if (!fullRestaurant) return null;
@@ -159,13 +175,60 @@ function RestaurantPage() {
     : `https://${dbRestaurant?.slug || slug}.speisely.de`;
 
   const [cart, setCart] = useState<Record<string, number>>({});
-  const [filter, setFilter] = useState<"all" | "vegetarian" | "vegan" | "gluten-free">("all");
+  const [filter, setFilter] = useState<string>("all");
+  
+  const availableTags = useMemo(() => {
+    const tagsSet = new Set<string>();
+    restaurant?.menu?.forEach((item: any) => {
+      if (Array.isArray(item.dietary)) {
+        item.dietary.forEach((tag: string) => {
+          if (tag && tag.trim()) {
+            tagsSet.add(tag.trim());
+          }
+        });
+      }
+    });
+    return Array.from(tagsSet);
+  }, [restaurant]);
   const [promoCodeInput, setPromoCodeInput] = useState("");
-  const [appliedPromo, setAppliedPromo] = useState<{code: string, discountCents: number, freeDelivery: boolean, type: string, value: number} | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<{
+    code: string;
+    discountCents: number;
+    freeDelivery: boolean;
+    type: string;
+    value: number;
+  } | null>(null);
   const [promoError, setPromoError] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
   const validatePromoFn = useServerFn(validatePromoCode);
   const [selectedPayment, setSelectedPayment] = useState<"cash" | "paypal" | "stripe" | null>(null);
+
+  const [claimPassword, setClaimPassword] = useState("");
+  const [claimLoading, setClaimLoading] = useState(false);
+  const [claimSuccess, setClaimSuccess] = useState(false);
+
+  async function handleClaimAccount(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email || !claimPassword) return;
+    setClaimLoading(true);
+    try {
+      const { error } = await supabase.auth.signUp({
+        email: email,
+        password: claimPassword,
+        options: {
+          data: {
+            full_name: customerName || "Customer",
+          }
+        }
+      });
+      if (error) throw error;
+      setClaimSuccess(true);
+    } catch (err: any) {
+      alert(t("Fehler bei der Registrierung: ", "Failed to claim account: ") + (err.message || err));
+    } finally {
+      setClaimLoading(false);
+    }
+  }
 
   // Derive which payment methods this restaurant supports
   const paymentMethods = useMemo(
@@ -183,7 +246,53 @@ function RestaurantPage() {
 
   const recordView = useServerFn(recordPageView);
   const checkoutFn = useServerFn(submitStorefrontOrder);
+  const upsertConsentFn = useServerFn(upsertConsentRecord);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [marketingAccepted, setMarketingAccepted] = useState(false);
+  const [infoCorrect, setInfoCorrect] = useState(false);
+  const [authPopupOpen, setAuthPopupOpen] = useState(false);
+
+  useEffect(() => {
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setCurrentUser(session.user);
+        const { data } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+        setUserRole(data?.role || "customer");
+      } else {
+        setCurrentUser(null);
+        setUserRole(null);
+      }
+    };
+    getSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setCurrentUser(session.user);
+        supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .maybeSingle()
+          .then(({ data }) => {
+            setUserRole(data?.role || "customer");
+          });
+      } else {
+        setCurrentUser(null);
+        setUserRole(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (restaurant?.id) {
@@ -192,6 +301,17 @@ function RestaurantPage() {
       }).catch((e) => console.error("Tracking error", e));
     }
   }, [restaurant?.id]);
+
+  useEffect(() => {
+    if (currentUser && userRole === "customer") {
+      setCheckoutIdentity((prev) => ({
+        ...prev,
+        email: prev.email || currentUser.email || "",
+        name: prev.name || currentUser.user_metadata?.full_name || "",
+        phone: prev.phone || currentUser.user_metadata?.phone || prev.phone || "",
+      }));
+    }
+  }, [currentUser, userRole]);
 
   const [resModalOpen, setResModalOpen] = useState(false);
   const [identity, setIdentity] = useState({
@@ -357,7 +477,7 @@ function RestaurantPage() {
   const reviews = reviewsData?.reviews || [];
   const aggregates = reviewsData?.aggregates;
   if (!restaurant) return null;
-  
+
   const scrollToMenu = () => {
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -409,7 +529,7 @@ function RestaurantPage() {
     setPromoError("");
     if (!promoCodeInput.trim()) return;
     setPromoLoading(true);
-    
+
     try {
       const itemsPayload = Object.entries(cart)
         .map(([name, quantity]) => {
@@ -422,15 +542,21 @@ function RestaurantPage() {
         setPromoLoading(false);
         return;
       }
-      
-      const res = await validatePromoFn({ data: { restaurantId: dbRestaurant.id, promoCode: promoCodeInput.trim(), items: itemsPayload } });
+
+      const res = await validatePromoFn({
+        data: {
+          restaurantId: dbRestaurant.id,
+          promoCode: promoCodeInput.trim(),
+          items: itemsPayload,
+        },
+      });
       if (res.success) {
         setAppliedPromo({
           code: res.code!,
           discountCents: res.discountCents!,
           freeDelivery: res.freeDelivery!,
           type: res.discount_type!,
-          value: res.discount_value!
+          value: res.discount_value!,
         });
         setPromoCodeInput("");
       } else {
@@ -465,8 +591,8 @@ function RestaurantPage() {
         <div className="mt-4 p-3 rounded-lg bg-rose-50 text-rose-800 text-xs border border-rose-200 text-left font-medium">
           ⚠️{" "}
           {t(
-            "Online-Bestellungen sind für dieses Restaurant vorübergehend deaktiviert (Abonnement inaktiv oder Zahlungsverbindung fehlt).",
-            "Online ordering is temporarily disabled for this restaurant (inactive subscription or missing payment connection).",
+            "Dieses Restaurant nimmt zurzeit keine Bestellungen entgegen.",
+            "This restaurant is not taking orders at the moment.",
           )}
         </div>
       )}
@@ -487,7 +613,24 @@ function RestaurantPage() {
         </>
       ) : (
         <>
-          <div className="mt-4 mb-2 bg-[#fdfaf5] border border-[#eadfce] rounded-xl p-3 shadow-sm">
+          <div className="mt-3 p-2.5 bg-[#fdfaf5] border border-[#eadfce]/75 rounded-xl flex items-center justify-between text-left">
+            <span className="text-[10px] font-bold text-forest/50 uppercase tracking-wider">
+              {t("Zahlungsmethoden:", "Accepted Payments:")}
+            </span>
+            <div className="flex gap-1.5 items-center">
+              {paymentMethods.cash && (
+                <span title={t("Barzahlung", "Cash")} className="text-sm">💶</span>
+              )}
+              {paymentMethods.paypal && (
+                <span title="PayPal" className="text-[8px] font-black text-[#003087] bg-blue-50 px-1 py-0.5 rounded border border-blue-200 leading-none">PayPal</span>
+              )}
+              {paymentMethods.stripe && (
+                <span title={t("Kreditkarte", "Credit Card")} className="text-sm">💳</span>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-3 mb-2 bg-[#fdfaf5] border border-[#eadfce] rounded-xl p-3 shadow-sm">
             <div className="flex items-center bg-white rounded-lg border border-[#eadfce]/60 p-1 mb-3 shadow-sm">
               <button
                 type="button"
@@ -561,7 +704,9 @@ function RestaurantPage() {
                 <span className="text-xs">
                   {appliedPromo.type === "percentage"
                     ? `-${appliedPromo.value}%`
-                    : appliedPromo.type === "free_delivery" ? t("Kostenlose Lieferung", "Free delivery") : `-€${appliedPromo.value.toFixed(2)}`}
+                    : appliedPromo.type === "free_delivery"
+                      ? t("Kostenlose Lieferung", "Free delivery")
+                      : `-€${appliedPromo.value.toFixed(2)}`}
                 </span>
               </div>
               <div className="flex items-center gap-3">
@@ -649,7 +794,8 @@ function RestaurantPage() {
             />
             <input
               type="email"
-              placeholder={t("Email (optional)", "Email (optional)")}
+              required
+              placeholder={t("Email *", "Email *")}
               value={checkoutIdentity.email}
               onChange={(e) => setCheckoutIdentity({ ...checkoutIdentity, email: e.target.value })}
               className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
@@ -660,17 +806,67 @@ function RestaurantPage() {
                 required
                 placeholder={t("Lieferadresse *", "Delivery Address *")}
                 value={checkoutIdentity.deliveryAddress}
-                onChange={(e) => setCheckoutIdentity({ ...checkoutIdentity, deliveryAddress: e.target.value })}
+                onChange={(e) =>
+                  setCheckoutIdentity({ ...checkoutIdentity, deliveryAddress: e.target.value })
+                }
                 className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
               />
             )}
-            <input
+             <input
               type="text"
               placeholder={t("Notizen (optional)", "Notes (optional)")}
               value={checkoutNotes}
               onChange={(e) => setCheckoutNotes(e.target.value)}
               className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
             />
+            
+            {/* Consent & Opt-ins Checkboxes */}
+            <div className="space-y-2 mt-3 pt-2 border-t border-[oklch(0.85_0.05_152)]/30 text-left">
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-gray-300 text-forest focus:ring-forest cursor-pointer"
+                />
+                <span className="text-[11px] text-forest/75 leading-snug">
+                  {t(
+                    "Ich stimme zu, dass meine Daten zur Bearbeitung der Bestellung verarbeitet werden (Double Opt-In). *",
+                    "I consent to having my data processed to handle my order (Double Opt-in). *"
+                  )}
+                </span>
+              </label>
+
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={marketingAccepted}
+                  onChange={(e) => setMarketingAccepted(e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-gray-300 text-forest focus:ring-forest cursor-pointer"
+                />
+                <span className="text-[11px] text-forest/75 leading-snug">
+                  {t(
+                    "Ich möchte E-Mails über Angebote und Rabatte erhalten (Optional).",
+                    "I would like to receive emails about offers and discounts (Optional)."
+                  )}
+                </span>
+              </label>
+
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={infoCorrect}
+                  onChange={(e) => setInfoCorrect(e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-gray-300 text-forest focus:ring-forest cursor-pointer"
+                />
+                <span className="text-[11px] text-forest/75 leading-snug">
+                  {t(
+                    "Ich bestätige, dass alle von mir gemachten Angaben korrekt sind. *",
+                    "I confirm that all information provided is correct. *"
+                  )}
+                </span>
+              </label>
+            </div>
           </div>
 
           {/* ─── PAYMENT METHODS ─── */}
@@ -734,22 +930,77 @@ function RestaurantPage() {
           <button
             onClick={async () => {
               if (isGated || checkoutLoading) return;
+              
+              if (currentUser && userRole !== "customer") {
+                setAuthPopupOpen(true);
+                return;
+              }
+
               if (!checkoutIdentity.name || !checkoutIdentity.phone) {
-                alert(t("Bitte füllen Sie Name und Telefonnummer aus.", "Please fill out your name and phone number."));
+                alert(
+                  t(
+                    "Bitte füllen Sie Name und Telefonnummer aus.",
+                    "Please fill out your name and phone number.",
+                  ),
+                );
+                return;
+              }
+              if (!checkoutIdentity.email) {
+                alert(
+                  t(
+                    "Bitte füllen Sie Ihre E-Mail-Adresse aus.",
+                    "Please fill out your email address."
+                  )
+                );
                 return;
               }
               if (orderType === "delivery" && !checkoutIdentity.deliveryAddress) {
-                alert(t("Bitte geben Sie eine Lieferadresse ein.", "Please enter a delivery address."));
+                alert(
+                  t("Bitte geben Sie eine Lieferadresse ein.", "Please enter a delivery address."),
+                );
+                return;
+              }
+              if (!termsAccepted) {
+                alert(
+                  t(
+                    "Bitte akzeptieren Sie die Datenverarbeitung (Double Opt-In).",
+                    "Please accept the data processing consent (Double Opt-in)."
+                  )
+                );
+                return;
+              }
+              if (!infoCorrect) {
+                alert(
+                  t(
+                    "Bitte bestätigen Sie, dass alle Ihre Angaben korrekt sind.",
+                    "Please confirm that all your details are correct."
+                  )
+                );
                 return;
               }
               if (!selectedPayment) {
-                alert(t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."));
+                alert(
+                  t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."),
+                );
                 return;
               }
 
               setCheckoutLoading(true);
               try {
-                const itemsPayload = cartItems.map(i => ({ productId: i.id, quantity: i.qty }));
+                // Upsert customer consent in parallel/background
+                await upsertConsentFn({
+                  data: {
+                    email: checkoutIdentity.email || currentUser?.email || "",
+                    audience_type: "customer",
+                    marketing_opt_in: marketingAccepted,
+                    terms_acknowledged: termsAccepted,
+                    source: "storefront_checkout",
+                    source_detail: slug,
+                    user_id: currentUser?.id,
+                  }
+                }).catch(e => console.error("Error saving consent", e));
+
+                const itemsPayload = cartItems.map((i) => ({ productId: i.id, quantity: i.qty }));
                 const res = await checkoutFn({
                   data: {
                     restaurantId: dbRestaurant?.id ?? "",
@@ -761,30 +1012,38 @@ function RestaurantPage() {
                     promoCode: appliedPromo?.code,
                     customerName: checkoutIdentity.name,
                     customerPhone: checkoutIdentity.phone,
-                    customerEmail: checkoutIdentity.email || undefined,
-                    deliveryAddress: orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
+                    customerEmail: checkoutIdentity.email,
+                    deliveryAddress:
+                      orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
                     notes: checkoutNotes || undefined,
-                  }
+                    marketingConsent: marketingAccepted,
+                  },
                 });
+
+                const successQuery = `?order_success=true&claimable=${res?.accountClaimable ? "true" : "false"}&email=${encodeURIComponent(checkoutIdentity.email)}&name=${encodeURIComponent(checkoutIdentity.name)}`;
+                
+                setCart({});
+                if (isMobile) setMobileCartOpen(false);
 
                 if (selectedPayment === "stripe") {
                   if (res?.url) {
                     window.location.href = res.url;
                   } else {
-                    alert(t("Fehler beim Erstellen der Zahlungssitzung.", "Failed to create checkout session."));
+                    alert(
+                      t(
+                        "Fehler beim Erstellen der Zahlungssitzung.",
+                        "Failed to create checkout session.",
+                      ),
+                    );
                   }
                 } else if (selectedPayment === "paypal") {
                   if (res?.url) {
                     window.open(res.url, "_blank");
                   }
-                  alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
-                  setCart({});
-                  if (isMobile) setMobileCartOpen(false);
+                  window.location.href = window.location.origin + window.location.pathname + successQuery;
                 } else {
                   // Cash
-                  alert(t(`Bestellung über ${totalCount} Artikel aufgegeben!`, `Order placed for ${totalCount} items!`));
-                  setCart({});
-                  if (isMobile) setMobileCartOpen(false);
+                  window.location.href = window.location.origin + window.location.pathname + successQuery;
                 }
               } catch (err: any) {
                 alert(t("Fehler: ", "Error: ") + (err.message || err));
@@ -807,6 +1066,92 @@ function RestaurantPage() {
       )}
     </>
   );
+
+  if (order_success === "true") {
+    return (
+      <SiteShell>
+        <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+          <div className="bg-white border border-[#eadfce] rounded-2xl p-8 shadow-sm space-y-6 text-left">
+            <div className="text-center space-y-2">
+              <span className="text-5xl">🎉</span>
+              <h1 className="text-3xl font-display font-bold text-forest mt-2">
+                {t("Bestellung erfolgreich aufgegeben!", "Order placed successfully!")}
+              </h1>
+              <p className="text-sm text-forest/70 max-w-md mx-auto">
+                {t(
+                  `Vielen Dank für Ihre Bestellung bei ${restaurant?.name || "uns"}! Die Küche bereitet Ihre Speisen frisch zu.`,
+                  `Thank you for your order at ${restaurant?.name || "us"}! The kitchen is preparing your fresh dishes.`
+                )}
+              </p>
+            </div>
+
+            {/* Account Claiming Section */}
+            {claimable === "true" && email && (
+              <div className="mt-8 p-6 bg-muted/40 border border-border rounded-xl space-y-4 text-left animate-in fade-in duration-300">
+                {claimSuccess ? (
+                  <div className="text-center py-4 space-y-2">
+                    <span className="text-3xl">🛡️</span>
+                    <h4 className="text-base font-bold text-foreground">
+                      {t("Konto erfolgreich aktiviert!", "Account successfully claimed!")}
+                    </h4>
+                    <p className="text-xs text-muted-foreground">
+                      {t(
+                        "Sie sind nun registriert. Sie können sich ab sofort mit Ihrem Passwort anmelden, um Bestellungen zu verfolgen.",
+                        "You are now registered. You can log in using your password to track future orders."
+                      )}
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleClaimAccount} className="space-y-3">
+                    <div>
+                      <h4 className="text-sm font-bold text-foreground">
+                        {t("Speisely-Konto aktivieren 🌟", "Claim your Speisely Account 🌟")}
+                      </h4>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {t(
+                          `Für Ihre E-Mail (${email}) wurde ein CRM-Profil angelegt. Setzen Sie jetzt ein Passwort, um Ihr Konto zu aktivieren und Ihre Bestellungen zu speichern!`,
+                          `A CRM profile has been created for your email (${email}). Set a password below to claim your account and save your order history!`
+                        )}
+                      </p>
+                    </div>
+                    <div className="space-y-1.5">
+                      <input
+                        type="password"
+                        required
+                        placeholder={t("Passwort wählen *", "Choose a password *")}
+                        value={claimPassword}
+                        onChange={(e) => setClaimPassword(e.target.value)}
+                        className="w-full rounded-md border border-[oklch(0.85_0.05_152)] bg-white px-3 py-2 text-sm focus:border-forest focus:outline-none"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={claimLoading}
+                      className="w-full rounded-full bg-forest text-white py-2.5 text-xs font-bold hover:opacity-90 disabled:opacity-50 transition-opacity"
+                    >
+                      {claimLoading
+                        ? t("Wird aktiviert...", "Activating...")
+                        : t("Konto jetzt aktivieren", "Activate Account Now")}
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
+
+            <div className="pt-4 border-t border-border flex justify-center">
+              <Link
+                to="/restaurant/$slug"
+                params={{ slug }}
+                className="inline-flex items-center gap-2 rounded-full bg-[#eadfce] px-6 py-2.5 text-sm font-semibold text-forest hover:bg-[#eadfce]/80 transition-colors"
+              >
+                <ArrowLeft className="h-4 w-4" /> {t("Zurück zum Restaurant", "Back to restaurant")}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </SiteShell>
+    );
+  }
 
   return (
     <SiteShell>
@@ -1008,14 +1353,21 @@ function RestaurantPage() {
           </div>
 
           {/* Bottom Info Overlay */}
-          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex flex-col md:flex-row md:items-end justify-between w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
-            <div className="flex flex-col gap-2 max-w-[80%] text-left">
+          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex items-center gap-4 w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
+            {restaurant.logo && (
+              <img
+                src={restaurant.logo}
+                alt="Logo"
+                className="w-16 h-16 md:w-24 md:h-24 rounded-full border-4 border-white shadow-md bg-white object-cover flex-shrink-0"
+              />
+            )}
+            <div className="flex flex-col gap-1 max-w-[80%] text-left">
               <h1 className="text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-sm">
                 {restaurant.name}
               </h1>
               {restaurant.id && (
                 <a
-                  href={`https://${restaurant.id}.speisely.de`}
+                  href={storefrontUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-sm text-mint hover:text-white transition-colors mt-0.5 font-semibold drop-shadow-sm w-fit"
@@ -1034,6 +1386,25 @@ function RestaurantPage() {
             <div className="flex items-center gap-2 text-forest">
               <ShieldCheck className="h-5 w-5" />
               <span className="text-sm font-bold">{t("Geprüftes Profil", "Checked Profile")}</span>
+            </div>
+
+            <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
+
+            <div className="flex flex-col">
+              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+                {t("Zahlungsarten", "Payments")}
+              </dt>
+              <dd className="text-sm font-semibold text-forest flex items-center gap-2 m-0 mt-0.5">
+                {paymentMethods.cash && (
+                  <span title={t("Barzahlung", "Cash")} className="cursor-help text-base">💶</span>
+                )}
+                {paymentMethods.paypal && (
+                  <span title="PayPal" className="cursor-help text-xs font-black text-[#003087] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">PayPal</span>
+                )}
+                {paymentMethods.stripe && (
+                  <span title={t("Kreditkarte", "Credit Card")} className="cursor-help text-base">💳</span>
+                )}
+              </dd>
             </div>
 
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
@@ -1107,32 +1478,38 @@ function RestaurantPage() {
             {t("Speisekarte", "Menu")}
           </h2>
 
-          <div className="mt-5 flex flex-wrap gap-2">
-            {(
-              [
-                { key: "all", label: t("Alle", "All") },
-                { key: "vegetarian", label: t("Vegetarisch", "Vegetarian") },
-                { key: "vegan", label: "Vegan" },
-                { key: "gluten-free", label: t("Glutenfrei", "Gluten-free") },
-              ] as const
-            ).map((f) => {
-              const active = filter === f.key;
-              return (
-                <button
-                  key={f.key}
-                  type="button"
-                  onClick={() => setFilter(f.key)}
-                  className={
-                    active
-                      ? "rounded-full bg-[#b28a3c] text-[#16372f] px-4 py-1.5 text-xs font-semibold shadow-sm"
-                      : "rounded-full bg-[#eadfce]/60 text-[#16372f] px-4 py-1.5 text-xs font-medium border border-[#16372f]/15 hover:bg-[#eadfce]"
-                  }
-                >
-                  {f.label}
-                </button>
-              );
-            })}
-          </div>
+          {availableTags.length > 0 && (
+            <div className="mt-5 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setFilter("all")}
+                className={
+                  filter === "all"
+                    ? "rounded-full bg-[#b28a3c] text-[#16372f] px-4 py-1.5 text-xs font-semibold shadow-sm"
+                    : "rounded-full bg-[#eadfce]/60 text-[#16372f] px-4 py-1.5 text-xs font-medium border border-[#16372f]/15 hover:bg-[#eadfce]"
+                }
+              >
+                {t("Alle", "All")}
+              </button>
+              {availableTags.map((tag) => {
+                const active = filter.toLowerCase() === tag.toLowerCase();
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => setFilter(tag)}
+                    className={
+                      active
+                        ? "rounded-full bg-[#b28a3c] text-[#16372f] px-4 py-1.5 text-xs font-semibold shadow-sm"
+                        : "rounded-full bg-[#eadfce]/60 text-[#16372f] px-4 py-1.5 text-xs font-medium border border-[#16372f]/15 hover:bg-[#eadfce]"
+                    }
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           <CategoryNav
             categories={categories}
@@ -1148,7 +1525,7 @@ function RestaurantPage() {
               const items = restaurant.menu.filter(
                 (m: any) =>
                   (m.category || "Menu") === cat &&
-                  (filter === "all" || (m.dietary ?? []).includes(filter)),
+                  (filter === "all" || (m.dietary ?? []).some((tag: string) => tag.toLowerCase() === filter.toLowerCase())),
               );
               if (items.length === 0) return null;
               return (
@@ -1236,7 +1613,7 @@ function RestaurantPage() {
         </div>
         {/* Sidebar Section */}
         <aside id="sidebar-section" className="hidden lg:block h-fit sticky top-24 w-full">
-          <div className="bg-white rounded-2xl border border-[#eadfce] shadow-xl shadow-forest/5 p-6">
+          <div className="bg-white rounded-2xl border border-[#eadfce] shadow-xl shadow-forest/5 p-6 max-h-[calc(100vh-140px)] overflow-y-auto custom-scrollbar">
             {renderSidebar()}
             <div className="mt-6 flex flex-col gap-2 pt-6 border-t border-[#eadfce]/60">
               <div className="flex items-center gap-2 text-xs font-medium text-forest/70">
@@ -1335,23 +1712,30 @@ function RestaurantPage() {
         <h2 className="text-2xl font-display font-bold text-forest mb-8">
           {t("Bewertungen", "Reviews")}
         </h2>
-        
+
         {aggregates && aggregates.count > 0 ? (
           <div className="grid lg:grid-cols-[300px_1fr] gap-10">
             <div className="bg-[#fdfaf5] p-6 rounded-2xl border border-[#eadfce]/50 h-fit">
               <div className="flex items-end gap-3 mb-4">
-                <div className="text-5xl font-bold text-forest">{aggregates.avgOverall.toFixed(1)}</div>
+                <div className="text-5xl font-bold text-forest">
+                  {aggregates.avgOverall.toFixed(1)}
+                </div>
                 <div className="text-forest/70 pb-1">/ 5</div>
               </div>
               <div className="flex text-yellow-400 mb-2 text-xl">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"} className="w-5 h-5" />
+                  <Star
+                    key={i}
+                    fill={i < Math.round(aggregates.avgOverall) ? "currentColor" : "none"}
+                    className="w-5 h-5"
+                  />
                 ))}
               </div>
               <div className="text-sm text-forest/70 mb-6">
-                {aggregates.count} {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
+                {aggregates.count}{" "}
+                {aggregates.count === 1 ? t("Bewertung", "Review") : t("Bewertungen", "Reviews")}
               </div>
-              
+
               <div className="space-y-3 pt-4 border-t border-[#eadfce]">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Essen", "Food")}</span>
@@ -1359,11 +1743,13 @@ function RestaurantPage() {
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-forest/80">{t("Schnelligkeit", "Speed")}</span>
-                  <span className="font-semibold text-forest">{aggregates.avgSpeed.toFixed(1)}</span>
+                  <span className="font-semibold text-forest">
+                    {aggregates.avgSpeed.toFixed(1)}
+                  </span>
                 </div>
               </div>
             </div>
-            
+
             <div className="space-y-6">
               {reviews.map((r: any) => (
                 <div key={r.id} className="pb-6 border-b border-[#eadfce]/50 last:border-0">
@@ -1376,15 +1762,21 @@ function RestaurantPage() {
                     </div>
                     <div className="flex text-yellow-400">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"} className="w-4 h-4" />
+                        <Star
+                          key={i}
+                          fill={i < Math.round(r.overall_rating) ? "currentColor" : "none"}
+                          className="w-4 h-4"
+                        />
                       ))}
                     </div>
                   </div>
                   <p className="text-forest/80 mt-2 whitespace-pre-wrap">{r.comment}</p>
-                  
+
                   {r.vendor_reply && (
                     <div className="mt-4 bg-[#fdfaf5] p-4 rounded-xl border border-[#eadfce]/40 ml-4">
-                      <div className="text-xs font-semibold text-forest mb-1">{fullRestaurant?.name}</div>
+                      <div className="text-xs font-semibold text-forest mb-1">
+                        {fullRestaurant?.name}
+                      </div>
                       <p className="text-sm text-forest/70">{r.vendor_reply}</p>
                     </div>
                   )}
@@ -1395,15 +1787,51 @@ function RestaurantPage() {
         ) : (
           <div className="text-center py-12 bg-[#fdfaf5] rounded-2xl border border-[#eadfce]/50">
             <Star className="w-10 h-10 text-forest/20 mx-auto mb-3" />
-            <h3 className="font-semibold text-forest mb-1">{t("Noch keine Bewertungen", "No reviews yet")}</h3>
+            <h3 className="font-semibold text-forest mb-1">
+              {t("Noch keine Bewertungen", "No reviews yet")}
+            </h3>
             <p className="text-sm text-forest/60 max-w-sm mx-auto">
-              {t("Bestelle jetzt und sei der Erste, der dieses Restaurant bewertet.", "Order now and be the first to review this restaurant.")}
+              {t(
+                "Bestelle jetzt und sei der Erste, der dieses Restaurant bewertet.",
+                "Order now and be the first to review this restaurant.",
+              )}
             </p>
           </div>
         )}
       </section>
 
       <MarketplacePromiseCTA vertical="restaurant" />
+
+      <Dialog open={authPopupOpen} onOpenChange={setAuthPopupOpen}>
+        <DialogContent className="sm:max-w-md bg-[#fdfaf5] text-forest border-[#eadfce] p-6 text-center">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold font-display text-forest flex items-center justify-center gap-2">
+              🔒 {t("Anmeldung erforderlich", "Sign In Required")}
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-forest/80 leading-relaxed mt-4">
+            {t(
+              "Bitte melden Sie sich als Kunde an, um eine Bestellung aufzugeben. Partner-Konten können keine Bestellungen aufgeben.",
+              "Please sign in as a customer to place an order. Partner accounts cannot place orders."
+            )}
+          </p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={() => setAuthPopupOpen(false)}
+              className="px-5 py-2 rounded-full border border-forest/30 text-forest font-bold text-sm hover:bg-forest/5 transition cursor-pointer"
+            >
+              {t("Abbrechen", "Cancel")}
+            </button>
+            <Link
+              to="/auth"
+              search={{ redirect: typeof window !== "undefined" ? window.location.href : undefined }}
+              className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-forest text-white font-bold text-sm hover:opacity-90 transition cursor-pointer"
+            >
+              {t("Jetzt anmelden", "Sign In Now")}
+            </Link>
+          </div>
+        </DialogContent>
+      </Dialog>
     </SiteShell>
   );
 }

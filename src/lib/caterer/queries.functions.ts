@@ -16,11 +16,7 @@ export const BRIEF_STATUSES = [
 export type BriefStatus = (typeof BRIEF_STATUSES)[number];
 
 async function resolveOwnedCaterer(supabase: any, userId: string) {
-  const { data } = await supabase
-    .from("caterers")
-    .select("*")
-    .eq("owner_id", userId)
-    .maybeSingle();
+  const { data } = await supabase.from("caterers").select("*").eq("owner_id", userId).maybeSingle();
   return data;
 }
 
@@ -57,7 +53,9 @@ export const updateCatererBriefStatus = createServerFn({ method: "POST" })
     if (!caterer) throw new Error("No caterer storefront for this account");
 
     if (data.status === "booked") {
-      throw new Error("Cannot manually mark as booked. The customer must pay the platform deposit to secure the deal.");
+      throw new Error(
+        "Cannot manually mark as booked. The customer must pay the platform deposit to secure the deal.",
+      );
     }
 
     const { error } = await supabase
@@ -89,7 +87,9 @@ export const getBriefContactDetails = createServerFn({ method: "GET" })
 
     // LEAD PROTECTION GATE
     if (brief.status !== "booked") {
-      throw new Error("Contact details are locked until the deal is secured (booked status required).");
+      throw new Error(
+        "Contact details are locked until the deal is secured (booked status required).",
+      );
     }
 
     // Fetch customer PII
@@ -119,18 +119,22 @@ export const updateBriefMilestones = createServerFn({ method: "POST" })
     const caterer = await resolveOwnedCaterer(supabase, userId);
     // Planners can also use this, but for now we enforce caterer ownership
     if (!caterer) {
-        // Check if planner
-        const { data: planner } = await supabase.from("planners").select("id").eq("owner_id", userId).maybeSingle();
-        if (!planner) throw new Error("No vendor storefront for this account");
-        const { error } = await supabase
-          .from("catering_briefs")
-          .update({ milestones: data.milestones })
-          .eq("id", data.briefId)
-          .eq("preferred_planner_id", planner.id);
-        if (error) throw new Error(error.message);
-        return { ok: true };
+      // Check if planner
+      const { data: planner } = await supabase
+        .from("planners")
+        .select("id")
+        .eq("owner_id", userId)
+        .maybeSingle();
+      if (!planner) throw new Error("No vendor storefront for this account");
+      const { error } = await supabase
+        .from("catering_briefs")
+        .update({ milestones: data.milestones })
+        .eq("id", data.briefId)
+        .eq("preferred_planner_id", planner.id);
+      if (error) throw new Error(error.message);
+      return { ok: true };
     }
-    
+
     const { error } = await supabase
       .from("catering_briefs")
       .update({ milestones: data.milestones })
@@ -141,8 +145,15 @@ export const updateBriefMilestones = createServerFn({ method: "POST" })
   });
 
 export const submitCatererProposal = createServerFn({ method: "POST" })
-    .middleware([requireRole("caterer")])
-    .inputValidator((input: { briefId: string; proposalCents: number; depositCents: number; notes: string; origin: string }) =>
+  .middleware([requireRole("caterer")])
+  .inputValidator(
+    (input: {
+      briefId: string;
+      proposalCents: number;
+      depositCents: number;
+      notes: string;
+      origin: string;
+    }) =>
       z
         .object({
           briefId: z.string().uuid(),
@@ -152,37 +163,37 @@ export const submitCatererProposal = createServerFn({ method: "POST" })
           origin: z.string(),
         })
         .parse(input),
-    )
-    .handler(async ({ context, data }) => {
-      const { supabase, userId } = context;
-      const caterer = await resolveOwnedCaterer(supabase, userId);
-      if (!caterer) throw new Error("No caterer storefront for this account");
-      
-      const depositEuros = (data.depositCents / 100).toFixed(2);
-      const link = `${data.origin}/checkout/deposit/${data.briefId}`;
-      const officialMessage = `[OFFICIAL PROPOSAL]\nWe have submitted a proposal for your event.\n\nDeposit Required: €${depositEuros}\n\nTo secure this booking and reveal our contact information, please pay the platform deposit here:\n${link}\n\nVendor Notes:\n${data.notes}`;
+  )
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const caterer = await resolveOwnedCaterer(supabase, userId);
+    if (!caterer) throw new Error("No caterer storefront for this account");
 
-      // We update budget_cents to the new proposal amount so the customer sees the updated total
-      const { error } = await supabase
-        .from("catering_briefs")
-        .update({ 
-          status: "quoted",
-          budget_cents: data.proposalCents,
-          notes: officialMessage
-        })
-        .eq("id", data.briefId)
-        .eq("preferred_caterer_id", caterer.id);
-      if (error) throw new Error(error.message);
+    const depositEuros = (data.depositCents / 100).toFixed(2);
+    const link = `${data.origin}/checkout/deposit/${data.briefId}`;
+    const officialMessage = `[OFFICIAL PROPOSAL]\nWe have submitted a proposal for your event.\n\nDeposit Required: €${depositEuros}\n\nTo secure this booking and reveal our contact information, please pay the platform deposit here:\n${link}\n\nVendor Notes:\n${data.notes}`;
 
-      // Auto-inject to SecureChat
-      await supabase.from("brief_messages").insert({
-        brief_id: data.briefId,
-        sender_id: userId,
-        message: officialMessage,
-      });
+    // We update budget_cents to the new proposal amount so the customer sees the updated total
+    const { error } = await supabase
+      .from("catering_briefs")
+      .update({
+        status: "quoted",
+        budget_cents: data.proposalCents,
+        notes: officialMessage,
+      })
+      .eq("id", data.briefId)
+      .eq("preferred_caterer_id", caterer.id);
+    if (error) throw new Error(error.message);
 
-      return { ok: true };
+    // Auto-inject to SecureChat
+    await supabase.from("brief_messages").insert({
+      brief_id: data.briefId,
+      sender_id: userId,
+      message: officialMessage,
     });
+
+    return { ok: true };
+  });
 
 export const updateMyCatererSettings = createServerFn({ method: "POST" })
   .middleware([requireRole("caterer")])
@@ -203,6 +214,8 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
       custom_domain?: string | null;
       certifications?: string | null;
       slug?: string;
+      accepts_inquiries?: boolean;
+      use_generated_branding?: boolean;
     }) =>
       z
         .object({
@@ -221,14 +234,31 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
           custom_domain: z.string().optional().nullable(),
           certifications: z.string().optional().nullable(),
           slug: z.string().max(100).optional(),
+          accepts_inquiries: z.boolean().optional(),
+          use_generated_branding: z.boolean().optional(),
         })
         .parse(input),
   )
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
+
+    // Check current status
+    const { data: catStatus } = await supabase
+      .from("caterers")
+      .select("approval_status")
+      .eq("owner_id", userId)
+      .maybeSingle();
+
+    const updatePayload: any = { ...data };
+    if (catStatus?.approval_status === "rejected") {
+      updatePayload.approval_status = "pending";
+      updatePayload.rejection_reason = null;
+      console.log(`[Review Queue] Resetting rejected caterer status back to pending due to profile update for owner=${userId}`);
+    }
+
     const { error } = await supabase
       .from("caterers")
-      .update(data as any)
+      .update(updatePayload)
       .eq("owner_id", userId);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -255,7 +285,7 @@ export const getCatererKPIs = createServerFn({ method: "GET" })
 
     const completed = briefs?.filter((b: any) => b.status === "booked") || [];
     const pending = briefs?.filter((b: any) => !["booked", "cancelled"].includes(b.status)) || [];
-    
+
     const cancelled = briefs?.filter((b: any) => b.status === "cancelled") || [];
     const totalOrders = completed.length;
     const revenueCents = completed.reduce((sum: number, b: any) => sum + (b.budget_cents || 0), 0);
@@ -278,7 +308,7 @@ export const getCatererKPIs = createServerFn({ method: "GET" })
       conversionRate,
       customerRetentionRate,
       avgDeliveryTimeMins,
-      profileViews: profileViews || 0
+      profileViews: profileViews || 0,
     };
   });
 
@@ -302,7 +332,12 @@ export const createMyCaterer = createServerFn({ method: "POST" })
     // Removed implicit role upgrade - user must ALREADY have the role via the middleware.
     const { data: row, error } = await supabase
       .from("caterers")
-      .insert({ owner_id: userId, name: data.name, slug: data.slug, custom_domain: data.custom_domain })
+      .insert({
+        owner_id: userId,
+        name: data.name,
+        slug: data.slug,
+        custom_domain: data.custom_domain,
+      })
       .select("id, name, slug")
       .single();
     if (error) throw new Error(error.message);
