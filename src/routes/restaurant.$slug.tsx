@@ -303,7 +303,8 @@ function RestaurantPage() {
   }, [restaurant?.id]);
 
   useEffect(() => {
-    if (currentUser && userRole === "customer") {
+    const isOwner = dbRestaurant && currentUser && currentUser.id === dbRestaurant.owner_id;
+    if (currentUser && userRole === "customer" && !isOwner) {
       setCheckoutIdentity((prev) => ({
         ...prev,
         email: prev.email || currentUser.email || "",
@@ -311,7 +312,7 @@ function RestaurantPage() {
         phone: prev.phone || currentUser.user_metadata?.phone || prev.phone || "",
       }));
     }
-  }, [currentUser, userRole]);
+  }, [currentUser, userRole, dbRestaurant]);
 
   const [resModalOpen, setResModalOpen] = useState(false);
   const [identity, setIdentity] = useState({
