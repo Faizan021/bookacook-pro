@@ -53,6 +53,9 @@ const searchSchema = z.object({
   claimable: z.union([z.string(), z.boolean()]).optional(),
   email: z.string().optional(),
   name: z.string().optional(),
+  payment_method: z.string().optional(),
+  paypal_url: z.string().optional(),
+  amount: z.string().optional(),
 });
 
 export const Route = createFileRoute("/restaurant/$slug")({
@@ -150,7 +153,7 @@ export const Route = createFileRoute("/restaurant/$slug")({
 
 function RestaurantPage() {
   const { slug } = Route.useParams();
-  const { order_success, claimable, email, name: customerName } = Route.useSearch();
+  const { order_success, claimable, email, name: customerName, payment_method, paypal_url, amount } = Route.useSearch();
   const { lang } = useI18n();
   const loaderData = Route.useLoaderData() as any;
   const { dbRestaurant, fullRestaurant, reviewsData } = loaderData;
@@ -1021,7 +1024,10 @@ function RestaurantPage() {
                   },
                 });
 
-                const successQuery = `?order_success=true&claimable=${res?.accountClaimable ? "true" : "false"}&email=${encodeURIComponent(checkoutIdentity.email)}&name=${encodeURIComponent(checkoutIdentity.name)}`;
+                let successQuery = `?order_success=true&claimable=${res?.accountClaimable ? "true" : "false"}&email=${encodeURIComponent(checkoutIdentity.email)}&name=${encodeURIComponent(checkoutIdentity.name)}`;
+                if (selectedPayment === "paypal" && res?.url) {
+                  successQuery += `&payment_method=paypal&paypal_url=${encodeURIComponent(res.url)}&amount=${encodeURIComponent(finalTotal.toFixed(2))}`;
+                }
                 
                 setCart({});
                 if (isMobile) setMobileCartOpen(false);
@@ -1038,9 +1044,6 @@ function RestaurantPage() {
                     );
                   }
                 } else if (selectedPayment === "paypal") {
-                  if (res?.url) {
-                    window.open(res.url, "_blank");
-                  }
                   window.location.href = window.location.origin + window.location.pathname + successQuery;
                 } else {
                   // Cash
@@ -1085,6 +1088,35 @@ function RestaurantPage() {
                 )}
               </p>
             </div>
+
+            {/* PayPal Payment Instructions */}
+            {payment_method === "paypal" && paypal_url && (
+              <div className="p-6 bg-[#003087]/5 border border-[#003087]/20 rounded-xl space-y-4 text-left animate-in fade-in duration-300">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl mt-0.5">💳</span>
+                  <div>
+                    <h4 className="text-sm font-bold text-[#003087]">
+                      {t("PayPal-Zahlung abschließen", "Complete PayPal Payment")}
+                    </h4>
+                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                      {t(
+                        `Bitte klicken Sie auf den untenstehenden Button, um Ihre Zahlung von €${amount || ""} abzuschließen.`,
+                        `Please click the button below to complete your payment of €${amount || ""}.`
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={paypal_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#0070ba] text-white py-3 text-xs font-bold hover:bg-[#005ea6] transition-colors"
+                >
+                  <span className="font-semibold text-white">PayPal</span>
+                  <span>{t("Jetzt bezahlen", "Pay Now")}</span>
+                </a>
+              </div>
+            )}
 
             {/* Account Claiming Section */}
             {(claimable === "true" || claimable === true) && email && (
