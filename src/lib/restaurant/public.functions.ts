@@ -520,17 +520,28 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         }
 
         const rawPaypal = (rest as any).paypal_email.trim();
-        // Restrict to safe PayPal.me patterns
-        if (rawPaypal.startsWith("http")) {
+        const amountStr = (finalTotalCents / 100).toFixed(2);
+
+        if (rawPaypal.includes("@")) {
+          // If configured as an email address, redirect to standard PayPal transfer URL
+          const itemName = `Bestellung bei ${(rest as any).name || "Speisely Restaurant"}`;
+          redirectUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(rawPaypal)}&amount=${amountStr}&currency_code=EUR&item_name=${encodeURIComponent(itemName)}`;
+        } else if (rawPaypal.startsWith("http")) {
           if (!rawPaypal.startsWith("https://paypal.me/")) {
             throw new Error(
               "Invalid PayPal URL configured by merchant. Only paypal.me links are allowed.",
             );
           }
-          redirectUrl = rawPaypal;
+          // Append amount if not already there
+          if (!rawPaypal.includes(amountStr)) {
+            const base = rawPaypal.endsWith("/") ? rawPaypal.slice(0, -1) : rawPaypal;
+            redirectUrl = `${base}/${amountStr}EUR`;
+          } else {
+            redirectUrl = rawPaypal;
+          }
         } else {
           const cleanHandle = rawPaypal.replace(/^paypal\.me\//i, "").split("/")[0];
-          redirectUrl = `https://paypal.me/${cleanHandle}/${(finalTotalCents / 100).toFixed(2)}EUR`;
+          redirectUrl = `https://paypal.me/${cleanHandle}/${amountStr}EUR`;
         }
       }
 
