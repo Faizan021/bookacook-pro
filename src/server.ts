@@ -181,9 +181,11 @@ export default {
             "<script",
             `<script>window.__TENANT_PATH__=${JSON.stringify(rewrittenPath)}; window.__TSS_SERVER_BASE_URL__=${JSON.stringify(baseUrl)};</script>\n<script`,
           );
+          const newHeaders = new Headers(finalResponse.headers);
+          newHeaders.delete("content-length");
           finalResponse = new Response(injected, {
             status: finalResponse.status,
-            headers: finalResponse.headers,
+            headers: newHeaders,
           });
         }
       }
