@@ -48,9 +48,9 @@ import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { getPublicRestaurantReviews } from "@/lib/reviews/public.functions";
 
 const searchSchema = z.object({
-  order_success: z.string().optional(),
-  order_cancel: z.string().optional(),
-  claimable: z.string().optional(),
+  order_success: z.union([z.string(), z.boolean()]).optional(),
+  order_cancel: z.union([z.string(), z.boolean()]).optional(),
+  claimable: z.union([z.string(), z.boolean()]).optional(),
   email: z.string().optional(),
   name: z.string().optional(),
 });
@@ -1068,7 +1068,7 @@ function RestaurantPage() {
     </>
   );
 
-  if (order_success === "true") {
+  if (order_success === "true" || order_success === true) {
     return (
       <SiteShell>
         <div className="mx-auto max-w-2xl px-4 py-16 text-center">
@@ -1087,7 +1087,7 @@ function RestaurantPage() {
             </div>
 
             {/* Account Claiming Section */}
-            {claimable === "true" && email && (
+            {(claimable === "true" || claimable === true) && email && (
               <div className="mt-8 p-6 bg-muted/40 border border-border rounded-xl space-y-4 text-left animate-in fade-in duration-300">
                 {claimSuccess ? (
                   <div className="text-center py-4 space-y-2">
