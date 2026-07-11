@@ -55,7 +55,7 @@ const searchSchema = z.object({
   name: z.string().optional(),
   payment_method: z.string().optional(),
   paypal_url: z.string().optional(),
-  amount: z.string().optional(),
+  amount: z.union([z.string(), z.number()]).optional(),
 });
 
 export const Route = createFileRoute("/restaurant/$slug")({
