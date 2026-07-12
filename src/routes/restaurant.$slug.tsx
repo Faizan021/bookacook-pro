@@ -574,7 +574,7 @@ function RestaurantPage() {
   };
   const handleRemovePromo = () => setAppliedPromo(null);
 
-  let deliveryFee = parseFloat(restaurant.fee.replace("€", ""));
+  let deliveryFee = orderType === "delivery" ? parseFloat(restaurant.fee.replace("€", "")) : 0;
   if (appliedPromo?.freeDelivery) {
     deliveryFee = 0;
   }
@@ -694,10 +694,12 @@ function RestaurantPage() {
             <span>{t("Zwischensumme", "Subtotal")}</span>
             <span>€{subtotal.toFixed(2)}</span>
           </div>
-          <div className="mt-1 flex items-center justify-between text-sm text-forest/70">
-            <span>{t("Liefergebühr", "Delivery fee")}</span>
-            <span>{restaurant.fee}</span>
-          </div>
+          {orderType === "delivery" && (
+            <div className="mt-1 flex items-center justify-between text-sm text-forest/70">
+              <span>{t("Liefergebühr", "Delivery fee")}</span>
+              <span>{appliedPromo?.freeDelivery ? "€0.00" : restaurant.fee}</span>
+            </div>
+          )}
 
           {appliedPromo ? (
             <div className="mt-3 flex items-center justify-between text-sm text-[oklch(0.55_0.15_30)] bg-[oklch(0.95_0.05_30)] p-2.5 rounded-lg border border-[oklch(0.85_0.15_30)]">

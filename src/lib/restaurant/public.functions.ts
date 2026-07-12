@@ -369,8 +369,12 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
 
     // 4. Calculate delivery fee
     let deliveryFeeCents = 0;
-    if (data.orderType === "delivery" && rest.delivery_fee !== null && rest.delivery_fee !== undefined) {
-      deliveryFeeCents = Math.round(rest.delivery_fee * 100);
+    if (data.orderType === "delivery") {
+      if (rest.delivery_fee !== null && rest.delivery_fee !== undefined) {
+        deliveryFeeCents = Math.round(rest.delivery_fee * 100);
+      }
+    } else {
+      deliveryFeeCents = 0;
     }
     // If promo is free_delivery, waive fee
     if (promoResult.freeDelivery) {
@@ -459,6 +463,7 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         customer_phone: data.customerPhone,
         customer_email: cleanEmail,
         delivery_address: data.deliveryAddress || null,
+        delivery_fee_cents: deliveryFeeCents,
         order_type: data.orderType,
         payment_method: data.paymentMethod,
         items: validatedItems as any,
