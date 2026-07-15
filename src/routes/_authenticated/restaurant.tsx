@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
 import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
 import { updateMyConsent } from "@/lib/consent.functions";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 // Imports consolidated below
 import {
   createMyRestaurant,
@@ -1186,6 +1187,31 @@ function OverviewSection() {
               {q.data.profileViewsToday}
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* SECTION 2.5: REFERRAL BREAKDOWN */}
+      <div className="space-y-4">
+        <h2 className="font-display text-xl text-forest">
+          {tt("Bestellherkunft (letzte 6 Monate)", "Order Source (last 6 months)")}
+        </h2>
+        <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md h-[300px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={q.data.referralData.slice().reverse()}
+              margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+            >
+              <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#4a5568' }} tickLine={false} axisLine={false} />
+              <YAxis tick={{ fontSize: 12, fill: '#4a5568' }} tickLine={false} axisLine={false} />
+              <Tooltip 
+                cursor={{ fill: '#f8faf9' }}
+                contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8e4', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+              />
+              <Legend wrapperStyle={{ paddingTop: '20px' }} />
+              <Bar dataKey="direct" name={tt("Eigener Storefront", "Direct Storefront")} stackId="a" fill="#22c55e" radius={[0, 0, 4, 4]} />
+              <Bar dataKey="marketplace" name={tt("Speisely Marketplace", "Speisely Marketplace")} stackId="a" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
