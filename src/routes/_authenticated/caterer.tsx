@@ -64,6 +64,7 @@ import { updateMyConsent } from "@/lib/consent.functions";
 import { CommunicationPreferences } from "@/components/vendor/CommunicationPreferences";
 import { printEventBrief } from "@/utils/printEventBrief";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
+import { MarketingSEOSection } from "@/components/vendor/MarketingSEOSection";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
@@ -2578,23 +2579,27 @@ function CatererDashboard() {
         {activeTab === "calendar" && <BlackoutCalendarSection vendorType="caterer" />}
         {activeTab === "menu" && <CatererMenuSection />}
         {activeTab === "promotions" && <PromotionsSection vertical="caterers" />}
+        {activeTab === "marketing-seo" && (
+          <MarketingSEOSection
+            entity={q.data.caterer}
+            onSave={async (slug, domain, seoTitle, seoDescription) => {
+              const { updateMyCatererSettings } = await import("@/lib/caterer/queries.functions");
+              await updateMyCatererSettings({
+                data: {
+                  name: q.data.caterer.name,
+                  slug,
+                  custom_domain: domain,
+                  seo_title: seoTitle,
+                  seo_description: seoDescription,
+                },
+              });
+              qc.invalidateQueries({ queryKey: ["caterer"] });
+            }}
+          />
+        )}
         {activeTab === "logistics" && <LogisticsSection />}
         {activeTab === "profile" && (
           <div className="space-y-10">
-            <CustomDomainSection
-              entity={q.data.caterer}
-              onSave={async (slug, domain) => {
-                const { updateMyCatererSettings } = await import("@/lib/caterer/queries.functions");
-                await updateMyCatererSettings({
-                  data: {
-                    name: q.data.caterer.name,
-                    slug: slug,
-                    custom_domain: domain,
-                  },
-                });
-                qc.invalidateQueries({ queryKey: ["caterer", "briefs"] });
-              }}
-            />
             <BusinessProfileSection />
           </div>
         )}

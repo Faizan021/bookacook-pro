@@ -129,6 +129,15 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       paypal_email?: string | null;
       accepts_orders?: boolean;
       use_generated_branding?: boolean;
+      show_in_marketplace?: boolean;
+      seo_title?: string | null;
+      seo_description?: string | null;
+      seo_primary_keyword?: string | null;
+      seo_secondary_keywords?: string[] | null;
+      seo_cuisine_target?: string | null;
+      seo_signature_dishes?: string[] | null;
+      seo_local_intro?: string | null;
+      seo_nearby_landmarks?: string[] | null;
     }) =>
       z
         .object({
@@ -148,17 +157,31 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           delivery_fee: z.number().optional().nullable(),
           accepts_pickup: z.boolean().optional().nullable(),
           accepts_delivery: z.boolean().optional().nullable(),
-          service_areas: z.string().optional().nullable(),
+          service_areas: z.string().max(1000).optional().nullable(),
           operating_hours: z.any().optional(),
           custom_domain: z.string().max(100).optional().nullable(),
-          seat_capacity: z.number().int().min(0).max(5000).optional().nullable(),
+          seat_capacity: z.number().int().min(1).optional().nullable(),
           certifications: z.string().max(1000).optional().nullable(),
-          slug: z.string().max(100).optional(),
+          slug: z
+            .string()
+            .min(2)
+            .max(60)
+            .regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers and dashes only")
+            .optional(),
           accepts_cash: z.boolean().optional(),
           accepts_paypal: z.boolean().optional(),
-          paypal_email: z.string().max(500).optional().nullable(),
+          paypal_email: z.string().email().optional().nullable(),
           accepts_orders: z.boolean().optional(),
           use_generated_branding: z.boolean().optional(),
+          show_in_marketplace: z.boolean().optional(),
+          seo_title: z.string().max(60).optional().nullable(),
+          seo_description: z.string().max(160).optional().nullable(),
+          seo_primary_keyword: z.string().max(200).optional().nullable(),
+          seo_secondary_keywords: z.array(z.string().max(100)).optional().nullable(),
+          seo_cuisine_target: z.string().max(100).optional().nullable(),
+          seo_signature_dishes: z.array(z.string().max(100)).optional().nullable(),
+          seo_local_intro: z.string().max(2000).optional().nullable(),
+          seo_nearby_landmarks: z.array(z.string().max(100)).optional().nullable(),
         })
         .parse(input),
   )

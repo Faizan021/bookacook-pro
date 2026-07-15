@@ -57,6 +57,7 @@ import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
 import { useI18n } from "@/i18n/I18nProvider";
 import { printEventBrief } from "@/utils/printEventBrief";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
+import { MarketingSEOSection } from "@/components/vendor/MarketingSEOSection";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
@@ -1778,24 +1779,28 @@ function PlannerDashboard() {
             availableItems={(q.data.services || []).map((s: any) => s.name)}
           />
         )}
+        {activeTab === "marketing-seo" && (
+          <MarketingSEOSection
+            entity={q.data.planner}
+            onSave={async (slug, domain, seoTitle, seoDescription) => {
+              const { updateMyPlannerSettings } =
+                await import("@/lib/planner/mutations.functions");
+              await updateMyPlannerSettings({
+                data: {
+                  name: q.data.planner.name,
+                  slug,
+                  custom_domain: domain,
+                  seo_title: seoTitle,
+                  seo_description: seoDescription,
+                },
+              });
+              qc.invalidateQueries({ queryKey: ["planner"] });
+            }}
+          />
+        )}
         {activeTab === "logistics" && <LogisticsSection />}
         {activeTab === "profile" && (
           <div className="space-y-10">
-            <CustomDomainSection
-              entity={q.data.planner}
-              onSave={async (slug, domain) => {
-                const { updateMyPlannerSettings } =
-                  await import("@/lib/planner/mutations.functions");
-                await updateMyPlannerSettings({
-                  data: {
-                    name: q.data.planner.name,
-                    slug: slug,
-                    custom_domain: domain,
-                  },
-                });
-                qc.invalidateQueries({ queryKey: ["planner", "services"] });
-              }}
-            />
             <BusinessProfileSection />
           </div>
         )}

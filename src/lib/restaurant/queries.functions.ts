@@ -103,7 +103,7 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
 
     const { data: orders, error } = await supabase
       .from("restaurant_orders")
-      .select("id, total_cents, status, created_at")
+      .select("id, total_cents, status, created_at, referral_source")
       .eq("restaurant_id", restaurant.id);
 
     if (error) throw new Error(error.message);
@@ -140,6 +140,28 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
     const isProfileIncomplete =
       !restaurant.logo_url || !restaurant.description || !restaurant.phone;
 
+    // Calculate monthly referral breakdown
+    const last6Months: string[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - i);
+      last6Months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+    }
+
+    const referralData = last6Months.map((monthStr) => {
+      return { month: monthStr, direct: 0, marketplace: 0 };
+    });
+
+    (orders || []).forEach((o: any) => {
+      const d = new Date(o.created_at);
+      const mStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      const rItem = referralData.find((x) => x.month === mStr);
+      if (rItem) {
+        if (o.referral_source === "marketplace") rItem.marketplace += 1;
+        else rItem.direct += 1;
+      }
+    });
+
     return {
       isActive: restaurant.is_active,
       pendingOrders: pendingOrders.length,
@@ -156,6 +178,7 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
       slug: restaurant.slug,
       acceptsCash: (restaurant as any).accepts_cash,
       acceptsPaypal: (restaurant as any).accepts_paypal,
+      referralData,
     };
   });
 

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { trackEvent } from "@/utils/posthog";
 import {
@@ -61,7 +61,10 @@ export const Route = createFileRoute("/catering/$slug")({
     if (profile?.id) {
       reviewsData = await getPublicCatererReviews({ data: { catererId: profile.id } });
     }
-    return { fullCaterer, reviewsData };
+    if (profile?.custom_domain) {
+      throw redirect({ href: `https://${profile.custom_domain}`, statusCode: 301 });
+    }
+    return { fullCaterer, reviewsData, profile };
   },
   head: ({ loaderData, params }) => {
     const c = loaderData?.fullCaterer;
@@ -72,7 +75,7 @@ export const Route = createFileRoute("/catering/$slug")({
     const description = rawDesc.length > 160 ? rawDesc.slice(0, 157) + "..." : rawDesc;
     const title = c ? `${c.name} – Catering in ${city} | Speisely` : "Catering – Speisely";
     const ogImage = c?.img ?? "https://speisely.de/og-default.jpg";
-    const canonicalUrl = `https://speisely.de/catering/${params.slug}`;
+    const canonicalUrl = (c as any)?.custom_domain ? `https://${(c as any).custom_domain}` : `https://speisely.de/catering/${params.slug}`;
     return {
       meta: [
         { title },
@@ -93,10 +96,13 @@ export const Route = createFileRoute("/catering/$slug")({
               type: "application/ld+json",
               children: JSON.stringify({
                 "@context": "https://schema.org",
-                "@type": "FoodEstablishment",
+                "@type": "FoodService",
                 name: c.name,
                 image: c.img,
-                address: { "@type": "PostalAddress", addressLocality: c.area },
+                address: { "@type": "PostalAddress", addressLocality: city },
+                areaServed: (c as any)?.seo_service_areas?.length ? (c as any).seo_service_areas : city,
+                ...((c as any)?.seo_event_types_target?.length || (c as any)?.seo_catering_styles?.length ? { knowsAbout: [...((c as any)?.seo_event_types_target || []), ...((c as any)?.seo_catering_styles || [])] } : {}),
+                ...((c as any)?.seo_menu_or_packages_intro ? { makesOffer: { "@type": "Offer", description: (c as any).seo_menu_or_packages_intro } } : {}),
                 ...(loaderData?.reviewsData?.aggregates?.count &&
                 loaderData.reviewsData.aggregates.count > 0
                   ? {
@@ -132,7 +138,8 @@ function CatererPage() {
   const { lang } = useI18n();
   const loaderData = Route.useLoaderData() as any;
   const { fullCaterer: caterer, reviewsData } = loaderData;
-  const { data: dbCaterer } = useSuspenseQuery(catererQueryOptions(slug));
+  const { data: dbCatererOrig } = useSuspenseQuery(catererQueryOptions(slug));
+  const dbCaterer = dbCatererOrig as any;
 
   const reviews = reviewsData?.reviews || [];
   const aggregates = reviewsData?.aggregates;
@@ -664,12 +671,22 @@ function CatererPage() {
         bgColor={catererProfile.announcement_bg_color ?? null}
       />
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-8">
-        <Link
-          to="/catering"
-          className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest"
-        >
-          <ArrowLeft className="h-4 w-4" /> {t("Zurück zu Catering", "Back to catering")}
-        </Link>
+        {dbCaterer?.city ? (
+          <Link
+            to="/catering/ort/$city"
+            params={{ city: dbCaterer.city.toLowerCase() }}
+            className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest"
+          >
+            <ArrowLeft className="h-4 w-4" /> {t("Zurück", "Back")}
+          </Link>
+        ) : (
+          <Link
+            to="/catering"
+            className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest"
+          >
+            <ArrowLeft className="h-4 w-4" /> {t("Zurück", "Back")}
+          </Link>
+        )}
 
         {/* Redesigned Full-Width Hero Banner */}
         <div className="relative mt-6 w-full h-[300px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg">
@@ -831,6 +848,20 @@ function CatererPage() {
               <h1 className="text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-sm">
                 {catererProfile.name}
               </h1>
+              {catererProfile?.seo_event_types_target && catererProfile.seo_event_types_target.length > 0 && (
+                <p className="text-lg md:text-xl font-medium drop-shadow-md text-white/90">
+                  {catererProfile.seo_event_types_target.join(" · ")}
+                </p>
+              )}
+              {catererProfile?.seo_catering_styles && catererProfile.seo_catering_styles.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {catererProfile.seo_catering_styles.map((style: string, i: number) => (
+                    <span key={i} className="text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white">
+                      {style}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="flex flex-col gap-2 mt-2">
                 {catererProfile.tagline && catererProfile.tagline[lang] && (
                   <span className="text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md">
@@ -889,11 +920,16 @@ function CatererPage() {
 
             <div className="flex flex-col">
               <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
-                {t("Standort", "Location")}
+                {t("Liefergebiet", "Service Area")}
               </dt>
-              <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <MapPin className="h-4 w-4 text-forest/40" />{" "}
-                <span className="truncate max-w-[200px]">{catererProfile.area}</span>
+              <dd className="text-sm font-semibold text-forest flex flex-col items-start gap-1 m-0">
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-4 w-4 text-forest/40" />{" "}
+                  <span className="truncate max-w-[200px]">{catererProfile?.seo_service_areas?.join(", ") || catererProfile.area}</span>
+                </div>
+                {catererProfile?.seo_service_radius_km && (
+                  <span className="text-xs text-forest/60">Bis {catererProfile.seo_service_radius_km} km Radius</span>
+                )}
               </dd>
             </div>
           </dl>
@@ -913,14 +949,28 @@ function CatererPage() {
         </div>
 
         {/* About Text */}
-        {catererProfile.about && catererProfile.about[lang] && (
+        {(dbCaterer?.seo_local_intro || (catererProfile.about && catererProfile.about[lang])) && (
           <div className="mt-10">
             <h2 className="text-2xl font-display font-bold text-forest mb-4">
               {t(`Über ${catererProfile.name}`, `About ${catererProfile.name}`)}
             </h2>
-            <p className="text-base text-forest/80 max-w-3xl leading-relaxed">
-              {catererProfile.about[lang]}
+            <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap">
+              {dbCaterer?.seo_local_intro || catererProfile.about[lang]}
             </p>
+            {dbCaterer?.seo_nearby_landmarks && dbCaterer.seo_nearby_landmarks.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="text-sm font-semibold text-forest/70">{t("In der Nähe:", "Nearby:")}</span>
+                {dbCaterer.seo_nearby_landmarks.map((lm: string, i: number) => (
+                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1"><MapPin className="h-3 w-3" />{lm}</span>
+                ))}
+              </div>
+            )}
+            {dbCaterer?.seo_logistics_details && (
+              <div className="mt-6 p-4 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)]">
+                <h4 className="font-semibold text-forest text-sm mb-2">{t("Catering & Logistik Details", "Catering & Logistics Details")}</h4>
+                <p className="text-sm text-forest/80 whitespace-pre-wrap">{dbCaterer.seo_logistics_details}</p>
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -930,6 +980,11 @@ function CatererPage() {
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 grid gap-8 lg:grid-cols-[1fr_22rem] pb-16 scroll-mt-24"
       >
         <div>
+          {dbCaterer?.seo_menu_or_packages_intro && (
+            <div className="mb-6">
+              <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap">{dbCaterer.seo_menu_or_packages_intro}</p>
+            </div>
+          )}
           <h2 className="text-3xl font-display font-bold text-forest">
             {t("Speisekarte", "Menu")}
           </h2>

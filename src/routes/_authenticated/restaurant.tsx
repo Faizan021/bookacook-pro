@@ -52,7 +52,7 @@ import { createPromoCode, togglePromoCode } from "@/lib/promotions/mutations.fun
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSpeiselyPing } from "@/lib/vendor/useSpeiselyPing";
-import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
+import { MarketingSEOSection } from "@/components/vendor/MarketingSEOSection";
 import { VendorLayout, DashboardSkeleton } from "@/components/vendor/VendorLayout";
 import { printReceipt } from "@/utils/printReceipt";
 import { toast } from "sonner";
@@ -1672,21 +1672,6 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
 
   return (
     <div className="space-y-6">
-      {/* Custom Domain Component */}
-      <CustomDomainSection
-        entity={restaurant}
-        onSave={async (slug, domain) => {
-          await upsert({
-            data: {
-              name: restaurant.name,
-              slug: slug,
-              custom_domain: domain,
-            },
-          });
-          qc.invalidateQueries({ queryKey: ["restaurant"] });
-        }}
-      />
-
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
           <h3 className="font-display text-xl text-forest">
@@ -3537,6 +3522,13 @@ function RestaurantDashboardInner() {
           <PromotionsSection
             vertical="restaurants"
             availableItems={(q.data.restaurant?.restaurant_products || []).map((p: any) => p.name)}
+          />
+        )}
+        {currentTab === "marketing-seo" && (
+          <MarketingSEOSection
+            entity={q.data.restaurant}
+            upsertFn={updateMyRestaurantSettings}
+            vertical="restaurant"
           />
         )}
         {currentTab.startsWith("settings-") && (

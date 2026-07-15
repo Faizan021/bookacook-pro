@@ -216,6 +216,18 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
       slug?: string;
       accepts_inquiries?: boolean;
       use_generated_branding?: boolean;
+      seo_title?: string | null;
+      seo_description?: string | null;
+      seo_primary_keyword?: string | null;
+      seo_secondary_keywords?: string[] | null;
+      seo_event_types_target?: string[] | null;
+      seo_catering_styles?: string[] | null;
+      seo_service_areas?: string[] | null;
+      seo_service_radius_km?: number | null;
+      seo_logistics_details?: string | null;
+      seo_local_intro?: string | null;
+      seo_nearby_landmarks?: string[] | null;
+      seo_menu_or_packages_intro?: string | null;
     }) =>
       z
         .object({
@@ -236,6 +248,18 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
           slug: z.string().max(100).optional(),
           accepts_inquiries: z.boolean().optional(),
           use_generated_branding: z.boolean().optional(),
+          seo_title: z.string().max(200).optional().nullable(),
+          seo_description: z.string().max(1000).optional().nullable(),
+          seo_primary_keyword: z.string().max(200).optional().nullable(),
+          seo_secondary_keywords: z.array(z.string().max(100)).optional().nullable(),
+          seo_event_types_target: z.array(z.string().max(100)).optional().nullable(),
+          seo_catering_styles: z.array(z.string().max(100)).optional().nullable(),
+          seo_service_areas: z.array(z.string().max(100)).optional().nullable(),
+          seo_service_radius_km: z.number().int().optional().nullable(),
+          seo_logistics_details: z.string().max(2000).optional().nullable(),
+          seo_local_intro: z.string().max(2000).optional().nullable(),
+          seo_nearby_landmarks: z.array(z.string().max(100)).optional().nullable(),
+          seo_menu_or_packages_intro: z.string().max(2000).optional().nullable(),
         })
         .parse(input),
   )

@@ -17,6 +17,7 @@ import {
   LogOut,
   Store,
   CreditCard,
+  Globe,
 } from "lucide-react";
 
 interface VendorLayoutProps {
@@ -60,6 +61,7 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
       { id: "reservations", label: tt("Reservierungen", "Reservations"), icon: CalendarDays },
       { id: "menu", label: tt("Speisekarte", "Menu"), icon: UtensilsCrossed },
       { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },
+      { id: "marketing-seo", label: tt("Marketing & SEO", "Marketing & SEO"), icon: Globe },
       { id: "settings-billing", label: tt("Abonnement", "Subscription"), icon: CreditCard },
       { id: "settings-general", label: tt("Einstellungen", "Settings"), icon: Settings },
     ],
@@ -69,11 +71,13 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
       { id: "calendar", label: tt("Kalender", "Calendar"), icon: CalendarDays },
       { id: "menu", label: tt("Pakete", "Packages"), icon: ShoppingBag },
       { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },
+      { id: "marketing-seo", label: tt("Marketing & SEO", "Marketing & SEO"), icon: Globe },
       { id: "profile", label: tt("Einstellungen", "Settings"), icon: Settings },
     ],
     planner: [
       { id: "overview", label: tt("Übersicht", "Overview"), icon: LayoutDashboard },
       { id: "briefs", label: tt("Anfragen & Leads", "Briefs & Leads"), icon: CalendarDays },
+      { id: "marketing-seo", label: tt("Marketing & SEO", "Marketing & SEO"), icon: Globe },
       { id: "calendar", label: tt("Kalender", "Calendar"), icon: CalendarDays },
       { id: "packages", label: tt("Dienstleistungen", "Services"), icon: ShoppingBag },
       { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },

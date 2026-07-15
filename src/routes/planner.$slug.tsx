@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { trackEvent } from "@/utils/posthog";
 import {
@@ -93,10 +93,14 @@ export const Route = createFileRoute("/planner/$slug")({
     if (profile?.id) {
       reviewsData = await getPublicPlannerReviews({ data: { plannerId: profile.id } });
     }
-    return { fullPlanner, reviewsData };
+    if (profile?.custom_domain) {
+      throw redirect({ href: `https://${profile.custom_domain}`, statusCode: 301 });
+    }
+    return { fullPlanner, reviewsData, profile };
   },
   head: ({ loaderData, params }) => {
     const p = loaderData?.fullPlanner;
+    const profile = loaderData?.profile;
     const city = p?.area ?? "Deutschland";
     const rawDesc = p
       ? `${p.name} organisiert Events in ${city}. Jetzt Anfrage senden über Speisely.`
@@ -104,7 +108,7 @@ export const Route = createFileRoute("/planner/$slug")({
     const description = rawDesc.length > 160 ? rawDesc.slice(0, 157) + "..." : rawDesc;
     const title = p ? `${p.name} – Eventplanung in ${city} | Speisely` : "Event Planer – Speisely";
     const ogImage = p && p.img ? p.img : "https://speisely.de/og-default.jpg";
-    const canonicalUrl = `https://speisely.de/planner/${params.slug}`;
+    const canonicalUrl = profile?.custom_domain ? `https://${profile.custom_domain}` : `https://speisely.de/planner/${params.slug}`;
     return {
       meta: [
         { title },
@@ -122,10 +126,13 @@ export const Route = createFileRoute("/planner/$slug")({
               type: "application/ld+json",
               children: JSON.stringify({
                 "@context": "https://schema.org",
-                "@type": "LocalBusiness",
+                "@type": "ProfessionalService",
                 name: p.name,
                 image: p.img,
-                address: { "@type": "PostalAddress", addressLocality: p.area },
+                address: { "@type": "PostalAddress", addressLocality: city },
+                areaServed: (profile as any)?.seo_service_areas?.length ? (profile as any).seo_service_areas : city,
+                ...((profile as any)?.seo_venue_expertise?.length || (profile as any)?.seo_vendor_specialties?.length ? { knowsAbout: [...((profile as any)?.seo_venue_expertise || []), ...((profile as any)?.seo_vendor_specialties || [])] } : {}),
+                ...((profile as any)?.seo_planning_scope?.length ? { serviceType: (profile as any).seo_planning_scope } : {}),
                 ...(loaderData?.reviewsData?.aggregates?.count &&
                 loaderData.reviewsData.aggregates.count > 0
                   ? {
@@ -160,9 +167,10 @@ function PlannerStorefront() {
   const { slug } = Route.useParams();
   const { lang } = useI18n();
   const loaderData = Route.useLoaderData() as any;
-  const { fullPlanner, reviewsData } = loaderData;
+  const { fullPlanner, reviewsData, profile: origProfile } = loaderData;
+  const profile = origProfile as any;
   const q = useSuspenseQuery(plannerQueryOptions(slug));
-  const dbPlanner = q.data;
+  const dbPlanner = q.data as any;
   const staticPlanner = fullPlanner;
   const reviews = reviewsData?.reviews || [];
   const aggregates = reviewsData?.aggregates;
@@ -455,12 +463,22 @@ function PlannerStorefront() {
         bgColor={planner.announcement_bg_color ?? null}
       />
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-8">
-        <Link
-          to="/planner"
-          className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest"
-        >
-          <ArrowLeft className="h-4 w-4" /> {t("Zurück zum Event Planner", "Back to Event Planner")}
-        </Link>
+        {planner?.city ? (
+          <Link
+            to="/planner/ort/$city"
+            params={{ city: planner.city.toLowerCase() }}
+            className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest"
+          >
+            <ArrowLeft className="h-4 w-4" /> {t("Zurück", "Back")}
+          </Link>
+        ) : (
+          <Link
+            to="/planner"
+            className="inline-flex items-center gap-2 text-sm text-forest/70 hover:text-forest"
+          >
+            <ArrowLeft className="h-4 w-4" /> {t("Zurück", "Back")}
+          </Link>
+        )}
 
         {/* Redesigned Full-Width Hero Banner */}
         <div className="relative mt-6 w-full h-[300px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg">
@@ -510,6 +528,20 @@ function PlannerStorefront() {
               <h1 className="text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-sm">
                 {planner.name}
               </h1>
+              {profile?.seo_planning_scope && profile.seo_planning_scope.length > 0 && (
+                <p className="text-lg md:text-xl font-medium drop-shadow-md text-white/90">
+                  {profile.seo_planning_scope.join(" · ")}
+                </p>
+              )}
+              {profile?.seo_venue_expertise && profile.seo_venue_expertise.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {profile.seo_venue_expertise.map((exp: string, i: number) => (
+                    <span key={i} className="text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white">
+                      {exp}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="flex flex-col gap-2 mt-2">
                 {planner.tagline && planner.tagline[lang] && (
                   <span className="text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md">
@@ -568,11 +600,11 @@ function PlannerStorefront() {
 
             <div className="flex flex-col">
               <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
-                {t("Standort", "Location")}
+                {t("Liefergebiet", "Service Area")}
               </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
                 <MapPin className="h-4 w-4 text-forest/40" />{" "}
-                <span className="truncate max-w-[200px]">{planner.address}</span>
+                <span className="truncate max-w-[200px]">{profile?.seo_service_areas?.join(", ") || planner.address}</span>
               </dd>
             </div>
           </dl>
@@ -586,14 +618,34 @@ function PlannerStorefront() {
         </div>
 
         {/* About Text */}
-        {planner.about && planner.about[lang] && (
+        {(profile?.seo_local_intro || (planner.about && planner.about[lang])) && (
           <div className="mt-10">
             <h2 className="text-2xl font-display font-bold text-forest mb-4">
               {t(`Über ${planner.name}`, `About ${planner.name}`)}
             </h2>
-            <p className="text-base text-forest/80 max-w-3xl leading-relaxed">
-              {planner.about[lang]}
+            <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap">
+              {profile?.seo_local_intro || planner.about[lang]}
             </p>
+            {profile?.seo_nearby_landmarks && profile.seo_nearby_landmarks.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="text-sm font-semibold text-forest/70">{t("In der Nähe:", "Nearby:")}</span>
+                {profile.seo_nearby_landmarks.map((lm: string, i: number) => (
+                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1"><MapPin className="h-3 w-3" />{lm}</span>
+                ))}
+              </div>
+            )}
+            {profile?.seo_vendor_specialties && profile.seo_vendor_specialties.length > 0 && (
+              <div className="mt-6">
+                <h4 className="font-semibold text-forest text-sm mb-2">{t("Netzwerk & Spezialisierung", "Network & Specialization")}</h4>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {profile.seo_vendor_specialties.map((spec: string, i: number) => (
+                    <span key={i} className="text-xs font-semibold bg-forest/5 text-forest px-2.5 py-1 rounded-full border border-forest/10">
+                      {spec}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </section>
