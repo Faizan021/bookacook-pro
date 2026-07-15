@@ -47,20 +47,39 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        // --- IDEMPOTENCY CHECK ---
+        // --- IDEMPOTENCY CHECK (processing/done model) ---
+        // Semantics:
+        //   - No row exists          → first delivery, insert and process
+        //   - Row exists, processed_at IS NOT NULL → already completed, skip (true duplicate)
+        //   - Row exists, processed_at IS NULL     → in-flight or crashed, re-process for recovery
+        //
+        // This prevents the insert-once-skip-forever failure mode where a crash between
+        // the dedup insert and processed_at write causes a Stripe retry to be silently dropped.
         const { error: dedupError } = await supabaseAdmin
           .from("stripe_webhook_events")
           .insert({ id: event.id, type: event.type });
 
         if (dedupError) {
-          // 23505 is the PostgreSQL error code for unique_violation
           if (dedupError.code === "23505") {
-            console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id}`);
-            return new Response("Duplicate event ignored", { status: 200 });
+            // Row already exists — check whether it completed or crashed
+            const { data: existingEvent } = await supabaseAdmin
+              .from("stripe_webhook_events")
+              .select("processed_at")
+              .eq("id", event.id)
+              .single();
+
+            if (existingEvent?.processed_at) {
+              // processed_at is set — this event fully completed. Safe to skip.
+              console.log(`[Stripe Webhook] Duplicate event fully processed, ignoring: ${event.id}`);
+              return new Response("Duplicate event ignored", { status: 200 });
+            }
+
+            // processed_at is NULL — prior attempt crashed. Fall through and re-process.
+            console.warn(`[Stripe Webhook] Re-processing crashed event: ${event.id}`);
+          } else {
+            // Unexpected DB error — log but proceed rather than blocking legitimate events.
+            console.error(`[Stripe Webhook] Error checking idempotency for ${event.id}:`, dedupError);
           }
-          console.error(`[Stripe Webhook] Error checking idempotency for ${event.id}:`, dedupError);
-          // We proceed rather than strictly failing to avoid blocking legitimate events on transient DB issues,
-          // but logging will catch anomalies.
         }
 
         console.log(`[Stripe Webhook Received]: ${event.type}`);
