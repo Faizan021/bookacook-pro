@@ -1635,6 +1635,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
   const [deliveryFee, setDeliveryFee] = useState(restaurant.delivery_fee?.toString() || "2.5");
   const [serviceAreas, setServiceAreas] = useState(restaurant.service_areas || "");
   const [isPublished, setIsPublished] = useState(restaurant.is_published ?? false);
+  const [showInMarketplace, setShowInMarketplace] = useState(restaurant.show_in_marketplace ?? false);
   const [saving, setSaving] = useState(false);
 
   // Check if payments are configured
@@ -1657,6 +1658,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
           delivery_fee: parseFloat(deliveryFee) || 0,
           service_areas: serviceAreas,
           is_published: isPublished,
+          show_in_marketplace: showInMarketplace,
         },
       });
       toast.success(
@@ -1841,6 +1843,37 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
                 </p>
               )}
             </div>
+
+            {/* Marketplace Discovery Section */}
+            <div className="flex flex-col gap-3 p-4 border border-[#e2e8e4] rounded-2xl bg-[#fdfaf5] shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="show-in-marketplace" className="font-semibold text-forest flex items-center gap-1.5">
+                    <Tag className="h-4 w-4" />
+                    {tt("Marketplace Discovery", "Marketplace Discovery")}
+                  </Label>
+                  <p className="text-[10px] text-muted-foreground mt-0.5 max-w-[250px]">
+                    {tt(
+                      "Werden Sie im Speisely Food-Marketplace gelistet und erhalten Sie neue Kunden. (Erhöhte Servicegebühr bei Marketplace-Bestellungen).",
+                      "Get listed on the Speisely food marketplace and acquire new customers. (Increased service fee on marketplace orders).",
+                    )}
+                  </p>
+                </div>
+                <Switch
+                  id="show-in-marketplace"
+                  checked={showInMarketplace}
+                  onCheckedChange={(val) => {
+                    setShowInMarketplace(val);
+                    if (val) {
+                      trackEvent("marketplace_optin_enabled");
+                    } else {
+                      trackEvent("marketplace_optin_disabled");
+                    }
+                  }}
+                />
+              </div>
+            </div>
+
           </div>
         </div>
 
