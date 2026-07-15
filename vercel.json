@@ -4,6 +4,8 @@
   "installCommand": "npm install",
   "outputDirectory": "dist",
   "redirects": [
+    { "source": "/catering/ort/:city", "destination": "/catering/:city", "permanent": true },
+    { "source": "/planner/ort/:city", "destination": "/planner/:city", "permanent": true },
     { "source": "/signup/customer", "destination": "/auth?signup=customer", "permanent": true },
     { "source": "/signup/caterer", "destination": "/auth?signup=caterer", "permanent": true },
     { "source": "/signup", "destination": "/auth", "permanent": true },
