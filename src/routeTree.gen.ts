@@ -13,6 +13,7 @@ import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
 import { Route as SpeiselyRouteImport } from './routes/speisely'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RestaurantsRouteImport } from './routes/restaurants'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
@@ -76,6 +77,11 @@ const SpeiselyRoute = SpeiselyRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RestaurantsRoute = RestaurantsRouteImport.update({
+  id: '/restaurants',
+  path: '/restaurants',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlannerRoute = PlannerRouteImport.update({
@@ -322,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/llms.txt': typeof LlmsDottxtRoute
   '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRouteWithChildren
+  '/restaurants': typeof RestaurantsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speisely': typeof SpeiselyRoute
   '/ueber-uns': typeof UeberUnsRoute
@@ -369,6 +376,7 @@ export interface FileRoutesByTo {
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/partners': typeof PartnersRoute
+  '/restaurants': typeof RestaurantsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speisely': typeof SpeiselyRoute
   '/ueber-uns': typeof UeberUnsRoute
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/llms.txt': typeof LlmsDottxtRoute
   '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRouteWithChildren
+  '/restaurants': typeof RestaurantsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speisely': typeof SpeiselyRoute
   '/ueber-uns': typeof UeberUnsRoute
@@ -471,6 +480,7 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/partners'
     | '/planner'
+    | '/restaurants'
     | '/sitemap.xml'
     | '/speisely'
     | '/ueber-uns'
@@ -518,6 +528,7 @@ export interface FileRouteTypes {
     | '/llms-full.txt'
     | '/llms.txt'
     | '/partners'
+    | '/restaurants'
     | '/sitemap.xml'
     | '/speisely'
     | '/ueber-uns'
@@ -568,6 +579,7 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/partners'
     | '/planner'
+    | '/restaurants'
     | '/sitemap.xml'
     | '/speisely'
     | '/ueber-uns'
@@ -619,6 +631,7 @@ export interface RootRouteChildren {
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   PartnersRoute: typeof PartnersRoute
   PlannerRoute: typeof PlannerRouteWithChildren
+  RestaurantsRoute: typeof RestaurantsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SpeiselyRoute: typeof SpeiselyRoute
   UeberUnsRoute: typeof UeberUnsRoute
@@ -666,6 +679,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/restaurants': {
+      id: '/restaurants'
+      path: '/restaurants'
+      fullPath: '/restaurants'
+      preLoaderRoute: typeof RestaurantsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planner': {
@@ -1093,6 +1113,7 @@ const rootRouteChildren: RootRouteChildren = {
   LlmsDottxtRoute: LlmsDottxtRoute,
   PartnersRoute: PartnersRoute,
   PlannerRoute: PlannerRouteWithChildren,
+  RestaurantsRoute: RestaurantsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SpeiselyRoute: SpeiselyRoute,
   UeberUnsRoute: UeberUnsRoute,

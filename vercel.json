@@ -12,6 +12,11 @@
       "source": "/blog/restaurant-bestellen-ohne-provision-speisely",
       "destination": "/blog/restaurant-bestellen-direkt-speisely",
       "permanent": true
+    },
+    {
+      "source": "/order",
+      "destination": "/",
+      "permanent": true
     }
   ],
   "headers": [

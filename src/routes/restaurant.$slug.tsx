@@ -120,6 +120,77 @@ export const Route = createFileRoute("/restaurant/$slug")({
       ? `https://${dbR.custom_domain}`
       : `https://speisely.de/restaurant/${params.slug}`;
 
+    const googleAnalyticsId = dbR?.google_analytics_id?.trim();
+    const metaPixelId = dbR?.meta_pixel_id?.trim();
+    const isValidGA = googleAnalyticsId && /^(G|UA|AW)-[A-Z0-9-]+$/.test(googleAnalyticsId);
+    const isValidPixel = metaPixelId && /^\d{10,20}$/.test(metaPixelId);
+
+    const scripts: any[] = [];
+    if (r) {
+      scripts.push({
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FoodEstablishment",
+          name: r.name,
+          image: r.img || "https://speisely.de/og-default.jpg",
+          description: description,
+          url: canonicalUrl,
+          telephone: dbR?.phone || undefined,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: dbR?.business_address || undefined,
+            addressLocality: city,
+            postalCode: dbR?.postal_code || undefined,
+            addressCountry: "DE",
+          },
+          servesCuisine: dbR?.seo_cuisine_target || r.tags?.[0] || "",
+          hasMenu: `${canonicalUrl}#menu`,
+          ...(dbR?.seo_signature_dishes?.length ? { hasOfferCatalog: { "@type": "OfferCatalog", name: "Signature Dishes", itemListElement: dbR.seo_signature_dishes.map((dish: string) => ({ "@type": "Offer", itemOffered: { "@type": "Product", name: dish } })) } } : {}),
+          potentialAction: {
+            "@type": "OrderAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${canonicalUrl}`,
+              inLanguage: "de-DE",
+              actionPlatform: [
+                "http://schema.org/DesktopWebPlatform",
+                "http://schema.org/MobileWebPlatform"
+              ]
+            },
+            deliveryMethod: [
+              "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"
+            ]
+          },
+          ...(loaderData?.reviewsData?.aggregates?.count &&
+          loaderData.reviewsData.aggregates.count > 0
+            ? {
+                aggregateRating: {
+                  "@type": "AggregateRating",
+                  ratingValue: loaderData.reviewsData.aggregates.avgOverall,
+                  reviewCount: loaderData.reviewsData.aggregates.count,
+                },
+              }
+            : {}),
+        }),
+      });
+    }
+
+    if (isValidGA) {
+      scripts.push(
+        { src: `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`, async: true },
+        {
+          children: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${googleAnalyticsId}');`,
+        }
+      );
+    }
+
+    if (isValidPixel) {
+      scripts.push({
+        children: `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '${metaPixelId}');fbq('track', 'PageView');`,
+      });
+    }
+
     return {
       meta: [
         { title },
@@ -134,57 +205,7 @@ export const Route = createFileRoute("/restaurant/$slug")({
         { property: "og:type", content: "website" },
       ],
       links: [{ rel: "canonical", href: canonicalUrl }],
-      scripts: r
-        ? [
-            {
-              type: "application/ld+json",
-              children: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "FoodEstablishment",
-                name: r.name,
-                image: r.img || "https://speisely.de/og-default.jpg",
-                description: description,
-                url: canonicalUrl,
-                telephone: dbR?.phone || undefined,
-                address: {
-                  "@type": "PostalAddress",
-                  streetAddress: dbR?.business_address || undefined,
-                  addressLocality: city,
-                  postalCode: dbR?.postal_code || undefined,
-                  addressCountry: "DE",
-                },
-                servesCuisine: dbR?.seo_cuisine_target || r.tags?.[0] || "",
-                hasMenu: `${canonicalUrl}#menu`,
-                ...(dbR?.seo_signature_dishes?.length ? { hasOfferCatalog: { "@type": "OfferCatalog", name: "Signature Dishes", itemListElement: dbR.seo_signature_dishes.map((dish: string) => ({ "@type": "Offer", itemOffered: { "@type": "Product", name: dish } })) } } : {}),
-                potentialAction: {
-                  "@type": "OrderAction",
-                  target: {
-                    "@type": "EntryPoint",
-                    urlTemplate: `${canonicalUrl}`,
-                    inLanguage: "de-DE",
-                    actionPlatform: [
-                      "http://schema.org/DesktopWebPlatform",
-                      "http://schema.org/MobileWebPlatform"
-                    ]
-                  },
-                  deliveryMethod: [
-                    "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"
-                  ]
-                },
-                ...(loaderData?.reviewsData?.aggregates?.count &&
-                loaderData.reviewsData.aggregates.count > 0
-                  ? {
-                      aggregateRating: {
-                        "@type": "AggregateRating",
-                        ratingValue: loaderData.reviewsData.aggregates.avgOverall,
-                        reviewCount: loaderData.reviewsData.aggregates.count,
-                      },
-                    }
-                  : {}),
-              }),
-            },
-          ]
-        : undefined,
+      scripts: scripts.length > 0 ? scripts : undefined,
     };
   },
   component: RestaurantPage,

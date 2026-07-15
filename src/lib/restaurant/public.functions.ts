@@ -154,6 +154,27 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
     return { restaurant: rest, promoCodes };
   });
 
+export const getMarketplaceRestaurants = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Fetch restaurants that are published and opted into the marketplace
+    // Selecting fields needed for the directory cards.
+    const { data: restaurants, error } = await supabaseAdmin
+      .from("restaurants")
+      // @ts-ignore - show_in_marketplace is added via recent migration, might not be in types.ts
+      .select("id, name, slug, custom_domain, is_published, show_in_marketplace, logo_url, banner_image_url, city, cuisine_type")
+      .eq("is_published", true)
+      .eq("show_in_marketplace", true);
+
+    if (error) {
+      console.error("[getMarketplaceRestaurants] Error fetching marketplace restaurants:", error);
+      throw new Error(error.message);
+    }
+
+    return { restaurants: restaurants || [] };
+  });
+
 async function calculatePromoDiscount(
   supabaseAdmin: any,
   ownerId: string,

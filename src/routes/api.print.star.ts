@@ -20,6 +20,7 @@
  */
 
 import { createFileRoute } from "@tanstack/react-router";
+import iconv from "iconv-lite";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -33,10 +34,13 @@ function formatEscPosReceipt(order: {
   items: Array<{ name: string; quantity: number; price_cents: number; line_total_cents: number }>;
   notes: string | null;
   delivery_address: string | null;
-  total_cents: number;
-  created_at: string;
-}): string {
-  const line = "--------------------------------";
+    total_cents: number;
+    created_at: string;
+  },
+  paperWidth: number = 80
+): Buffer {
+  const maxChars = paperWidth === 80 ? 48 : 32;
+  const line = "-".repeat(maxChars);
   const shortId = order.id.slice(0, 8).toUpperCase();
   const time = new Date(order.created_at).toLocaleTimeString("de-DE", {
     hour: "2-digit",
@@ -54,8 +58,8 @@ function formatEscPosReceipt(order: {
       const itemTotal = `€${(item.line_total_cents / 100).toFixed(2)}`;
       const name =
         item.quantity > 1 ? `${item.quantity}x ${item.name}` : item.name;
-      // Pad name and price on the same line up to 32 chars
-      const padLen = Math.max(0, 32 - name.length - itemTotal.length);
+      // Pad name and price on the same line up to maxChars
+      const padLen = Math.max(0, maxChars - name.length - itemTotal.length);
       return `${name}${" ".repeat(padLen)}${itemTotal}`;
     })
     .join("\n");
@@ -63,6 +67,7 @@ function formatEscPosReceipt(order: {
   const totalStr = `€${(order.total_cents / 100).toFixed(2)}`;
 
   let receipt = `\x1B\x40`; // ESC @ — initialize printer
+  receipt += `\x1B\x74\x11`; // ESC t 17 — Code Page 858 (includes € and German Umlauts)
   receipt += `\x1B\x61\x01`; // ESC a 1 — center alignment
   receipt += `\x1B\x21\x10`; // ESC ! — double height
   receipt += `SPEISELY\n`;
@@ -79,7 +84,7 @@ function formatEscPosReceipt(order: {
   receipt += `${itemLines}\n`;
   receipt += `${line}\n`;
   receipt += `\x1B\x61\x02`; // right align
-  const totalPad = 32 - 8 - totalStr.length;
+  const totalPad = maxChars - 8 - totalStr.length;
   receipt += `${" ".repeat(Math.max(0, totalPad))}GESAMT: ${totalStr}\n`;
   receipt += `\x1B\x61\x01`; // center
   if (order.notes) {
@@ -89,7 +94,7 @@ function formatEscPosReceipt(order: {
   receipt += `${line}\n`;
   receipt += `\n\n\n`; // feed before cut
   receipt += `\x1D\x56\x42\x00`; // GS V B 0 — full cut
-  return receipt;
+  return iconv.encode(receipt, "cp858");
 }
 
 // ---------------------------------------------------------------------------
@@ -293,10 +298,18 @@ export const Route = createFileRoute("/api/print/star")({
           return new Response("Order not found", { status: 404 });
         }
 
-        const escPosData = formatEscPosReceipt(order as any);
+        // Fetch printer settings for paper width
+        const { data: printer } = await supabaseAdmin
+          .from("restaurant_printers")
+          .select("paper_width")
+          .eq("restaurant_id", job.restaurant_id)
+          .maybeSingle();
+
+        const paperWidth = printer?.paper_width ?? 80;
+        const escPosData = formatEscPosReceipt(order as any, paperWidth);
 
         console.log(
-          `[CloudPRNT GET] Serving ESC/POS data for job ${jobToken}, order ${job.order_id} (status=${job.status})`,
+          `[CloudPRNT GET] Serving ESC/POS data for job ${jobToken}, order ${job.order_id} (width=${paperWidth}, status=${job.status})`,
         );
 
         // Return ESC/POS binary — idempotent, status remains unchanged until DELETE confirms
@@ -304,7 +317,7 @@ export const Route = createFileRoute("/api/print/star")({
           status: 200,
           headers: {
             "Content-Type": "application/vnd.star.starprnt",
-            "Content-Length": String(Buffer.byteLength(escPosData, "binary")),
+            "Content-Length": String(escPosData.length),
           },
         });
       },

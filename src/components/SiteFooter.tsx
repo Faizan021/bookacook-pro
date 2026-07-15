@@ -43,6 +43,7 @@ export function SiteFooter() {
         <FooterCol
           title={t("footer.discover")}
           items={[
+            { label: "Lokale Restaurants", to: "/restaurants" },
             { label: t("nav.instant"), to: "/instant-order" },
             { label: t("nav.catering"), to: "/catering" },
             { label: t("Event-Planer", "Event Planner"), to: "/planner" },

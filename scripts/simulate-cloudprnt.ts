@@ -11,6 +11,11 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SU
 
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
+// Parse CLI args
+const args = process.argv.slice(2);
+const simulateError = args.includes("--error-code") ? parseInt(args[args.indexOf("--error-code") + 1] || "4", 10) : 0;
+const paperWidth = args.includes("--width") && args.includes("58") ? 58 : 80;
+
 async function setupTestData() {
   if (!supabase) return;
   console.log("🛠️  Setting up test data...");
@@ -29,8 +34,9 @@ async function setupTestData() {
     mac_address: PRINTER_MAC,
     status: "offline",
     poll_interval_seconds: 5,
+    paper_width: paperWidth
   }, { onConflict: "restaurant_id" });
-  console.log(`✅ Registered printer ${PRINTER_MAC} to restaurant ${rId}`);
+  console.log(`✅ Registered printer ${PRINTER_MAC} to restaurant ${rId} (Width: ${paperWidth}mm)`);
 
   // 3. Insert a mock order and print job
   const mockOrderId = crypto.randomUUID();
@@ -77,7 +83,7 @@ async function simulateCloudPRNT() {
         },
         body: JSON.stringify({
           printerMAC: PRINTER_MAC,
-          statusCode: "",
+          statusCode: simulateError === 0 ? "200" : String(simulateError),
           clientAction: null,
           printingInProgress: false
         })
@@ -114,6 +120,11 @@ async function simulateCloudPRNT() {
         console.log("🖨️  Simulating 2 seconds of printing...");
         await new Promise(r => setTimeout(r, 2000));
         
+        if (simulateError !== 0) {
+          console.log(`⚠️  Hardware error simulation active (code ${simulateError}). Not sending DELETE.`);
+          process.exit(1);
+        }
+
         // DELETE
         console.log(`\n🗑️  Confirming job printed with DELETE for token: ${jobToken}...`);
         const delRes = await fetch(`${SERVER_URL}?jobToken=${jobToken}`, {

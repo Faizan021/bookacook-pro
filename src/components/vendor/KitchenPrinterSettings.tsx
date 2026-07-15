@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { Printer, Wifi, WifiOff, Loader2, FlaskConical } from "lucide-react";
 
@@ -31,6 +32,7 @@ interface PrinterRow {
   poll_interval_seconds: number;
   last_heartbeat_at: string | null;
   status: "online" | "offline";
+  paper_width: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -107,6 +109,14 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
 
   const [macInput, setMacInput] = useState("");
   const [macError, setMacError] = useState<string | null>(null);
+  const [paperWidthInput, setPaperWidthInput] = useState<"58" | "80">("80");
+
+  React.useEffect(() => {
+    if (printer) {
+      setMacInput(printer.mac_address);
+      setPaperWidthInput(printer.paper_width === 58 ? "58" : "80");
+    }
+  }, [printer]);
 
   // -------------------------------------------------------------------------
   // Load existing printer for this restaurant
@@ -131,14 +141,14 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
   // Save / upsert printer MAC
   // -------------------------------------------------------------------------
   const saveMutation = useMutation({
-    mutationFn: async (mac: string) => {
+    mutationFn: async (payload: { mac: string; width: number }) => {
       const { error } = await supabase
         .from("restaurant_printers" as any)
         .upsert(
           {
             restaurant_id: restaurantId,
-            mac_address: mac,
-            // Reset status to offline on save — the printer will heartbeat and flip to online
+            mac_address: payload.mac,
+            paper_width: payload.width,
             status: "offline",
             last_heartbeat_at: null,
           },
@@ -149,7 +159,6 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
     onSuccess: () => {
       toast.success(tt("Drucker gespeichert!", "Printer saved!"));
       qc.invalidateQueries({ queryKey: ["restaurant-printer", restaurantId] });
-      setMacInput("");
     },
     onError: (err: any) => {
       toast.error(err.message ?? tt("Speichern fehlgeschlagen", "Failed to save printer"));
@@ -225,7 +234,7 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
       );
       return;
     }
-    saveMutation.mutate(mac);
+    saveMutation.mutate({ mac, width: Number(paperWidthInput) });
   }
 
   // -------------------------------------------------------------------------
@@ -290,7 +299,7 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
               ? tt("MAC-Adresse aktualisieren", "Update MAC Address")
               : tt("MAC-Adresse eingeben", "Enter MAC Address")}
           </Label>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-4">
             <Input
               id="printer-mac-input"
               placeholder="AA:BB:CC:DD:EE:FF"
@@ -302,12 +311,37 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
               className="font-mono text-sm max-w-xs"
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-forest">
+                {tt("Papierbreite", "Paper Width")}
+              </Label>
+              <RadioGroup
+                value={paperWidthInput}
+                onValueChange={(val: "58" | "80") => setPaperWidthInput(val)}
+                className="flex gap-6"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="80" id="w-80" />
+                  <Label htmlFor="w-80" className="font-normal cursor-pointer">
+                    80mm ({tt("Standard", "Default")})
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="58" id="w-58" />
+                  <Label htmlFor="w-58" className="font-normal cursor-pointer">
+                    58mm
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
+
             <Button
               id="printer-save-btn"
               onClick={handleSave}
               disabled={!macInput.trim() || saveMutation.isPending}
               size="sm"
-              className="bg-forest text-white hover:bg-forest/90 shrink-0"
+              className="bg-forest text-white hover:bg-forest/90 w-fit shrink-0"
             >
               {saveMutation.isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
