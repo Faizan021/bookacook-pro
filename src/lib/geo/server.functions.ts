@@ -184,7 +184,11 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
     const hasEnoughVendors = vendorCount >= minVendors;
 
     if (hasEnoughVendors || hasUniqueText) {
-      validPaths.push(`/${page.slug}`);
+      let finalSlug = page.slug;
+      if (finalSlug && finalSlug.startsWith("restaurants/ort/")) {
+        finalSlug = finalSlug.replace("restaurants/ort/", "restaurant/ort/");
+      }
+      validPaths.push(`/${finalSlug}`);
     }
   }
 

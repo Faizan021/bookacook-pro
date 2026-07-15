@@ -23,11 +23,10 @@ export const Route = createFileRoute("/planner/ort/$city")({
     const { seoData, indexStatus, location, searchParams } = loaderData;
 
     const isFiltered = Object.keys(searchParams).length > 0;
-    const finalIndexStatus = isFiltered
+    const meetsThreshold = (loaderData?.vendors?.length ?? 0) >= 3 && ((seoData as any)?.intro_md?.length ?? 0) >= 150;
+    const finalIndexStatus = isFiltered || !meetsThreshold || indexStatus !== "index"
       ? "noindex, follow"
-      : indexStatus === "index"
-        ? "index, follow"
-        : "noindex, follow";
+      : "index, follow";
 
     const canonicalUrl = `/planner/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
 
@@ -179,8 +178,8 @@ function GeoPlannerPage() {
                 </span>
               </div>
             )}
-            <p className="text-lg opacity-90 max-w-xl">
-              {seoData?.meta_description ||
+            <p className="text-lg opacity-90 max-w-xl whitespace-pre-wrap">
+              {seoData?.hero_copy || seoData?.meta_description ||
                 `Entdecke professionelle Event-Planer in ${location.name} für perfekte Veranstaltungen.`}
             </p>
           </div>
@@ -281,11 +280,22 @@ function GeoPlannerPage() {
       </section>
 
       {/* SEO Text Hydration */}
-      {seoData?.content && (
+      {((seoData as any)?.intro_md || seoData?.content) && (
         <section className="mx-auto max-w-4xl px-4 sm:px-6 py-16">
           <div
-            className="prose prose-lg prose-forest max-w-none prose-headings:font-display"
-            dangerouslySetInnerHTML={{ __html: seoData.content }}
+            className="prose prose-lg prose-forest max-w-none prose-headings:font-display whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: (seoData as any).intro_md || seoData.content }}
+          />
+        </section>
+      )}
+
+      {/* FAQ Section */}
+      {seoData?.faq_md && (
+        <section className="mx-auto max-w-4xl px-4 sm:px-6 py-8 border-t border-forest/10">
+          <h2 className="font-display text-3xl text-forest mb-6">Häufig gestellte Fragen (FAQ)</h2>
+          <div
+            className="prose prose-forest max-w-none whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: seoData.faq_md }}
           />
         </section>
       )}

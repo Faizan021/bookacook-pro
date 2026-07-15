@@ -284,6 +284,7 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
       deliveryAddress?: string;
       notes?: string;
       marketingConsent?: boolean;
+      referralSource?: string;
     }) =>
       z
         .object({
@@ -302,6 +303,7 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
           deliveryAddress: z.string().optional(),
           notes: z.string().optional(),
           marketingConsent: z.boolean().optional(),
+          referralSource: z.string().optional(),
         })
         .refine((data) => data.orderType !== "delivery" || !!data.deliveryAddress, {
           message: "Delivery address is required for delivery orders",
@@ -471,6 +473,7 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         status: "pending",
         total_cents: finalTotalCents,
         applied_promo_code: data.promoCode ? data.promoCode.toUpperCase() : null,
+        referral_source: data.referralSource || "direct",
       } as any)
       .select("id")
       .single();
@@ -550,12 +553,41 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         }
       }
 
-      // We should ideally leave it as "pending" for the kitchen to accept,
-      // or "confirmed" automatically. Let's auto-confirm for now just like reservations do.
+      // Auto-confirm the order immediately for Cash/PayPal (no async payment gateway).
       await supabaseAdmin
         .from("restaurant_orders")
         .update({ status: "confirmed" })
         .eq("id", order.id);
+
+      // --- KITCHEN PRINT JOB ENQUEUE ---
+      // Scope: Restaurant orders ONLY. Print is async and must never block order confirmation.
+      // restaurant_id is re-read from the confirmed order row (not from client input) to match
+      // the same defensive pattern used in the Stripe webhook enqueue path.
+      try {
+        const { data: confirmedOrder } = await supabaseAdmin
+          .from("restaurant_orders")
+          .select("restaurant_id")
+          .eq("id", order.id)
+          .single();
+
+        if (confirmedOrder?.restaurant_id) {
+          await supabaseAdmin
+            .from("restaurant_print_jobs")
+            .insert({
+              order_id: order.id,
+              restaurant_id: confirmedOrder.restaurant_id,
+              status: "pending",
+            })
+            .throwOnError();
+          console.log(`[Print Queue] Enqueued print job for order ${order.id} (${data.paymentMethod})`);
+        }
+      } catch (printErr: any) {
+        // A duplicate insert (order_id unique conflict) or any DB error must NOT
+        // fail the checkout response. The manual print fallback remains available.
+        if (printErr?.code !== "23505") {
+          console.error(`[Print Queue] Failed to enqueue print job for order ${order.id}:`, printErr?.message);
+        }
+      }
 
       // Notify Restaurant via Email
       const { data: user } = await supabaseAdmin.auth.admin.getUserById((rest as any).owner_id);

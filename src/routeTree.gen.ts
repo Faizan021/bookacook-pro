@@ -43,11 +43,12 @@ import { Route as AuthenticatedCustomerRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedCatererRouteImport } from './routes/_authenticated/caterer'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as ReviewIntakeTokenRouteImport } from './routes/review.intake.$token'
-import { Route as RestaurantsOrtCityRouteImport } from './routes/restaurants.ort.$city'
+import { Route as RestaurantOrtCityRouteImport } from './routes/restaurant.ort.$city'
 import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
 import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
+import { Route as ApiPrintStarRouteImport } from './routes/api.print.star'
 import { Route as AuthenticatedRestaurantReviewsRouteImport } from './routes/_authenticated/restaurant.reviews'
 import { Route as AuthenticatedRestaurantKitchenRouteImport } from './routes/_authenticated/restaurant.kitchen'
 import { Route as AuthenticatedDashboardPlannerRouteImport } from './routes/_authenticated/dashboard/planner'
@@ -229,9 +230,9 @@ const ReviewIntakeTokenRoute = ReviewIntakeTokenRouteImport.update({
   path: '/review/intake/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RestaurantsOrtCityRoute = RestaurantsOrtCityRouteImport.update({
-  id: '/restaurants/ort/$city',
-  path: '/restaurants/ort/$city',
+const RestaurantOrtCityRoute = RestaurantOrtCityRouteImport.update({
+  id: '/restaurant/ort/$city',
+  path: '/restaurant/ort/$city',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlannerOrtCityRoute = PlannerOrtCityRouteImport.update({
@@ -339,11 +340,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
   '/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
+  '/api/print/star': typeof ApiPrintStarRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
-  '/restaurants/ort/$city': typeof RestaurantsOrtCityRoute
+  '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/planner/reviews': typeof AuthenticatedDashboardPlannerReviewsRoute
@@ -385,11 +387,12 @@ export interface FileRoutesByTo {
   '/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
   '/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
+  '/api/print/star': typeof ApiPrintStarRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
-  '/restaurants/ort/$city': typeof RestaurantsOrtCityRoute
+  '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/planner/reviews': typeof AuthenticatedDashboardPlannerReviewsRoute
@@ -435,11 +438,12 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
   '/_authenticated/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/_authenticated/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
+  '/api/print/star': typeof ApiPrintStarRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
-  '/restaurants/ort/$city': typeof RestaurantsOrtCityRoute
+  '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/planner/reviews': typeof AuthenticatedDashboardPlannerReviewsRoute
@@ -485,11 +489,12 @@ export interface FileRouteTypes {
     | '/dashboard/planner'
     | '/restaurant/kitchen'
     | '/restaurant/reviews'
+    | '/api/print/star'
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
     | '/planner/ort/$city'
-    | '/restaurants/ort/$city'
+    | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/dashboard/'
     | '/dashboard/planner/reviews'
@@ -531,11 +536,12 @@ export interface FileRouteTypes {
     | '/dashboard/planner'
     | '/restaurant/kitchen'
     | '/restaurant/reviews'
+    | '/api/print/star'
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
     | '/planner/ort/$city'
-    | '/restaurants/ort/$city'
+    | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/dashboard'
     | '/dashboard/planner/reviews'
@@ -580,11 +586,12 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/planner'
     | '/_authenticated/restaurant/kitchen'
     | '/_authenticated/restaurant/reviews'
+    | '/api/print/star'
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
     | '/planner/ort/$city'
-    | '/restaurants/ort/$city'
+    | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/planner/reviews'
@@ -616,9 +623,10 @@ export interface RootRouteChildren {
   RestaurantSlugRoute: typeof RestaurantSlugRoute
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  ApiPrintStarRoute: typeof ApiPrintStarRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
-  RestaurantsOrtCityRoute: typeof RestaurantsOrtCityRoute
+  RestaurantOrtCityRoute: typeof RestaurantOrtCityRoute
   ReviewIntakeTokenRoute: typeof ReviewIntakeTokenRoute
   ApiStripeConnectCallbackRoute: typeof ApiStripeConnectCallbackRoute
   EmbedCateringSlugBriefIntakeRoute: typeof EmbedCateringSlugBriefIntakeRoute
@@ -865,11 +873,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReviewIntakeTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/restaurants/ort/$city': {
-      id: '/restaurants/ort/$city'
-      path: '/restaurants/ort/$city'
-      fullPath: '/restaurants/ort/$city'
-      preLoaderRoute: typeof RestaurantsOrtCityRouteImport
+    '/restaurant/ort/$city': {
+      id: '/restaurant/ort/$city'
+      path: '/restaurant/ort/$city'
+      fullPath: '/restaurant/ort/$city'
+      preLoaderRoute: typeof RestaurantOrtCityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planner/ort/$city': {
@@ -1082,9 +1090,10 @@ const rootRouteChildren: RootRouteChildren = {
   RestaurantSlugRoute: RestaurantSlugRoute,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  ApiPrintStarRoute: ApiPrintStarRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
   CheckoutDepositBookingIdRoute: CheckoutDepositBookingIdRoute,
-  RestaurantsOrtCityRoute: RestaurantsOrtCityRoute,
+  RestaurantOrtCityRoute: RestaurantOrtCityRoute,
   ReviewIntakeTokenRoute: ReviewIntakeTokenRoute,
   ApiStripeConnectCallbackRoute: ApiStripeConnectCallbackRoute,
   EmbedCateringSlugBriefIntakeRoute: EmbedCateringSlugBriefIntakeRoute,

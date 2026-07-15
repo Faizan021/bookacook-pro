@@ -25,8 +25,8 @@ export function SiteFooter() {
   ];
 
   const cityLinks = topCities
-    .filter((city) => validLocs.includes(`/restaurants/ort/${city.slug}`))
-    .map((city) => ({ label: `Restaurants in ${city.name}`, to: `/restaurants/ort/${city.slug}` }));
+    .filter((city) => validLocs.includes(`/restaurant/ort/${city.slug}`))
+    .map((city) => ({ label: `Restaurants in ${city.name}`, to: `/restaurant/ort/${city.slug}` }));
 
   return (
     <footer className="mt-24 bg-forest text-[oklch(0.97_0.02_92)]">
