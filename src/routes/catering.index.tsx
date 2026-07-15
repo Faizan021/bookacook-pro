@@ -28,6 +28,7 @@ import { B2bCateringDialog } from "@/components/B2bCateringDialog";
 import { trackEvent } from "@/utils/posthog";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { TrustSection } from "@/components/TrustSection";
+import { LeadCaptureForm } from "@/components/vendor/LeadCaptureForm";
 
 import { z } from "zod";
 
@@ -849,6 +850,25 @@ function Catering() {
           },
         ]}
       />
+
+      {/* Manual Inquiry / Concierge */}
+      <section className="bg-forest/5 py-16 border-y border-[#eadfce]/30">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-forest mb-4">
+              {lang === "de"
+                ? "Nicht das Passende gefunden?"
+                : "Didn't find what you were looking for?"}
+            </h2>
+            <p className="text-forest/70 max-w-xl mx-auto">
+              {lang === "de"
+                ? "Nutze unseren kostenlosen Concierge-Service. Wir finden den perfekten Caterer für dein Event."
+                : "Use our free concierge service. We will find the perfect caterer for your event."}
+            </p>
+          </div>
+          <LeadCaptureForm defaultCity={city} sourceRoute="/catering" />
+        </div>
+      </section>
 
       {/* Visible FAQ Section */}
       <section className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-10 py-16">

@@ -6,6 +6,7 @@ import { getGeoMarkdown } from "@/lib/geo/markdown.server";
 import { MapPin, ArrowRight, ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
 import { isValidCateringCity } from "@/data/geo/taxonomy";
 import { Button } from "@/components/ui/button";
+import { LeadCaptureForm } from "@/components/vendor/LeadCaptureForm";
 
 const loadCateringGeoData = createServerFn({ method: "GET" })
   .validator(z.object({ citySlug: z.string() }))
@@ -150,30 +151,14 @@ function CateringCityPage() {
 
         {/* Sidebar / Lead Gen Sticky Form */}
         <div className="md:col-span-4">
-          <div className="sticky top-24 bg-card border rounded-2xl p-6 shadow-sm" id="quote">
-            <h3 className="text-xl font-medium mb-2">Unverbindliches Angebot</h3>
-            <p className="text-sm text-muted-foreground mb-6">Erhalten Sie passgenaue Catering-Angebote für Ihr Event in {content.areaServed}.</p>
-            
-            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Lead capture flow integrated here."); }}>
-              <div>
-                <label className="text-sm font-medium mb-1 block">Art des Events</label>
-                <select className="w-full h-10 px-3 rounded-md border bg-background">
-                  <option>Firmenfeier</option>
-                  <option>Hochzeit</option>
-                  <option>Geburtstag</option>
-                  <option>Sonstiges</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1 block">Gästeanzahl (ca.)</label>
-                <input type="number" placeholder="z.B. 50" className="w-full h-10 px-3 rounded-md border bg-background" />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1 block">Datum</label>
-                <input type="date" className="w-full h-10 px-3 rounded-md border bg-background" />
-              </div>
-              <Button type="submit" className="w-full" size="lg">Jetzt anfragen</Button>
-            </form>
+          <div className="sticky top-24" id="quote">
+            <LeadCaptureForm 
+              title="Unverbindliches Angebot"
+              subtitle={`Erhalten Sie passgenaue Catering-Angebote für Ihr Event in ${content.areaServed}.`}
+              buttonText="Jetzt anfragen"
+              city={content.areaServed}
+              origin="Catering City Geo Page"
+            />
           </div>
         </div>
       </div>
