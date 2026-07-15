@@ -256,6 +256,11 @@ const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
   path: '/api/webhooks/stripe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPrintStarRoute = ApiPrintStarRouteImport.update({
+  id: '/api/print/star',
+  path: '/api/print/star',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRestaurantReviewsRoute =
   AuthenticatedRestaurantReviewsRouteImport.update({
     id: '/reviews',
@@ -906,6 +911,13 @@ declare module '@tanstack/react-router' {
       path: '/api/webhooks/stripe'
       fullPath: '/api/webhooks/stripe'
       preLoaderRoute: typeof ApiWebhooksStripeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/print/star': {
+      id: '/api/print/star'
+      path: '/api/print/star'
+      fullPath: '/api/print/star'
+      preLoaderRoute: typeof ApiPrintStarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/restaurant/reviews': {

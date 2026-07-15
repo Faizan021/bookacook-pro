@@ -181,6 +181,38 @@ export const Route = createFileRoute("/api/webhooks/stripe")({
               if (error) {
                 console.error("Failed to confirm storefront order:", error);
               } else {
+                // --- KITCHEN PRINT JOB ENQUEUE (Stripe path) ---
+                // Scope: restaurant_orders ONLY. Print is async and out-of-band.
+                // ON CONFLICT (order_id) DO NOTHING is the idempotency anchor for webhook retries.
+                // A failed enqueue must NEVER cause this webhook handler to return non-200.
+                try {
+                  const { data: orderForPrint } = await supabaseAdmin
+                    .from("restaurant_orders")
+                    .select("restaurant_id")
+                    .eq("id", orderId)
+                    .single();
+
+                  if (orderForPrint?.restaurant_id) {
+                    const { error: printErr } = await (supabaseAdmin as any)
+                      .from("restaurant_print_jobs")
+                      .insert({
+                        order_id: orderId,
+                        restaurant_id: orderForPrint.restaurant_id,
+                        status: "pending",
+                      });
+
+                    // code 23505 = unique_violation = already enqueued (duplicate webhook). Safe to ignore.
+                    if (printErr && (printErr as any).code !== "23505") {
+                      console.error(`[Print Queue] Failed to enqueue print job for order ${orderId}:`, printErr.message);
+                    } else if (!printErr) {
+                      console.log(`[Print Queue] Enqueued print job for order ${orderId} (stripe)`);
+                    }
+                  }
+                } catch (printEnqueueErr: any) {
+                  // Swallow all errors — print queue failure must not affect webhook acknowledgement
+                  console.error(`[Print Queue] Unexpected error enqueueing print job for order ${orderId}:`, printEnqueueErr?.message);
+                }
+
                 // Fetch order details for email
                 const { data: order } = await supabaseAdmin
                   .from("restaurant_orders")

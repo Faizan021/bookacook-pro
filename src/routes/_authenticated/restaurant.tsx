@@ -63,6 +63,7 @@ import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
 import { SubscriptionTermsModal } from "@/components/vendor/SubscriptionTermsModal";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
+import { KitchenPrinterSettings } from "@/components/vendor/KitchenPrinterSettings";
 
 export const Route = createFileRoute("/_authenticated/restaurant")({
   ssr: false,
@@ -2007,6 +2008,14 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
             : tt("Öffnungszeiten speichern", "Save Operating Hours")}
         </Button>
       </div>
+
+      {/* Kitchen Printer Settings — Restaurant scope only.
+           Reads/writes restaurant_printers and restaurant_print_jobs via supabase client.
+           No catering or planner tables are referenced. */}
+      <KitchenPrinterSettings
+        restaurantId={restaurant.id}
+        lang={lang}
+      />
     </div>
   );
 }
