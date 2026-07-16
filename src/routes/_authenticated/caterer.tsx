@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createFileRoute,
   Link,
@@ -70,6 +71,11 @@ import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
 export const Route = createFileRoute("/_authenticated/caterer")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>): { tab?: string } => {
+    return {
+      tab: search.tab as string | undefined,
+    };
+  },
   beforeLoad: async () => {
     try {
       const profile = await getUserProfile();
@@ -1471,7 +1477,9 @@ function BusinessProfileSection() {
   const [bannerPreview, setBannerPreview] = useState(caterer?.banner_image_url || null);
   const [logoPath, setLogoPath] = useState(caterer?.logo_url || null);
   const [bannerPath, setBannerPath] = useState(caterer?.banner_image_url || null);
-  const [useGeneratedBranding, setUseGeneratedBranding] = useState(caterer?.use_generated_branding || false);
+  const [useGeneratedBranding, setUseGeneratedBranding] = useState(
+    caterer?.use_generated_branding || false,
+  );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [serviceAreas, setServiceAreas] = useState((caterer as any).service_areas || "");
@@ -1596,7 +1604,8 @@ function BusinessProfileSection() {
             <div>
               <h4 className="text-sm font-bold text-foreground">Speisely Branding Assistant</h4>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Choose between your manually uploaded images or a clean Speisely-generated logo and banner.
+                Choose between your manually uploaded images or a clean Speisely-generated logo and
+                banner.
               </p>
             </div>
 
@@ -1617,9 +1626,12 @@ function BusinessProfileSection() {
                     className="mt-0.5 accent-primary"
                   />
                   <div>
-                    <span className="text-xs font-bold block text-foreground">My Uploaded Branding</span>
+                    <span className="text-xs font-bold block text-foreground">
+                      My Uploaded Branding
+                    </span>
                     <span className="text-[10px] text-muted-foreground block mt-0.5">
-                      Uses uploaded files. Automatically falls back to Speisely default design if files are missing.
+                      Uses uploaded files. Automatically falls back to Speisely default design if
+                      files are missing.
                     </span>
                   </div>
                 </div>
@@ -1641,9 +1653,12 @@ function BusinessProfileSection() {
                     className="mt-0.5 accent-primary"
                   />
                   <div>
-                    <span className="text-xs font-bold block text-foreground">Speisely-Generated Branding</span>
+                    <span className="text-xs font-bold block text-foreground">
+                      Speisely-Generated Branding
+                    </span>
                     <span className="text-[10px] text-muted-foreground block mt-0.5">
-                      Automatically generates a clean logo monogram and geometric banner background using your name.
+                      Automatically generates a clean logo monogram and geometric banner background
+                      using your name.
                     </span>
                   </div>
                 </div>
@@ -2140,7 +2155,9 @@ function LogisticsSection() {
   const [deliveryFee, setDeliveryFee] = useState(((caterer as any)?.delivery_fee_cents || 0) / 100);
   const [minDelivery, setMinDelivery] = useState(((caterer as any)?.min_delivery_cents || 0) / 100);
   const [maxDistance, setMaxDistance] = useState((caterer as any)?.max_delivery_distance_km || 0);
-  const [acceptsInquiries, setAcceptsInquiries] = useState((caterer as any)?.accepts_inquiries ?? true);
+  const [acceptsInquiries, setAcceptsInquiries] = useState(
+    (caterer as any)?.accepts_inquiries ?? true,
+  );
   const [saving, setSaving] = useState(false);
 
   if (!caterer) return null;
@@ -2446,13 +2463,15 @@ function CatererDashboard() {
   });
 
   useSpeiselyPing(q.data?.caterer?.id, ["catering_briefs", "brief_messages"]);
-
-  const { hash } = useLocation();
-  const activeTab = (hash || "#overview").replace("#", "");
-
+  const search = Route.useSearch();
+  const activeTab = search.tab || "overview";
   if (!q.data?.caterer) {
     return (
-      <VendorLayout vertical="caterer" title={t("Caterer-Dashboard", "Caterer Dashboard")}>
+      <VendorLayout
+        vertical="caterer"
+        title={t("Caterer-Dashboard", "Caterer Dashboard")}
+        activeTab={activeTab}
+      >
         <div className="max-w-5xl mx-auto space-y-10 py-6">
           {/* Guided Split-Onboarding Block */}
           <div className="surface-card p-6 border border-[#eadfce]/50 bg-cream/15 rounded-3xl shadow-sm grid md:grid-cols-[1.1fr_0.9fr] gap-6 items-start">
@@ -2565,7 +2584,8 @@ function CatererDashboard() {
     <VendorLayout
       vertical="caterer"
       title={`${q.data.caterer.name} ${t("Dashboard", "Dashboard")}`}
-      storefrontSlug={q.data.caterer.slug}
+      storefrontSlug={q.data.caterer.slug || q.data.caterer.id}
+      activeTab={activeTab}
     >
       <React.Suspense
         fallback={

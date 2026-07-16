@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,13 +12,23 @@ import {
   getAdminUsers,
   getAdminListings,
   getAdminOrders,
+  getMonetizationListings,
+  getFeaturedSlotLimits,
 } from "@/lib/admin/queries.functions";
-import { updateUserRole, toggleListingPublish, updateListingApproval } from "@/lib/admin/mutations.functions";
+import {
+  updateUserRole,
+  toggleListingPublish,
+  updateListingApproval,
+  updateListingVisibility,
+  updateRankingBoost,
+  upsertFeaturedSlotLimit,
+} from "@/lib/admin/mutations.functions";
 import { CompetitorMonitor } from "@/components/geo/CompetitorMonitor";
 import { GeoTargetingEngine } from "@/components/geo/GeoTargetingEngine";
 import { SitemapMonitor } from "@/components/geo/SitemapMonitor";
 import { DraftReviewQueue } from "@/components/geo/DraftReviewQueue";
 import { AdminAnalyticsDashboard } from "@/components/admin/AdminAnalyticsDashboard";
+import { MonetizationPanel } from "@/components/admin/MonetizationPanel";
 import {
   LineChart,
   Line,
@@ -82,6 +93,11 @@ function AdminPage() {
   const mutateRole = useServerFn(updateUserRole);
   const mutatePublish = useServerFn(toggleListingPublish);
   const mutateApproval = useServerFn(updateListingApproval);
+  const mutateVisibility = useServerFn(updateListingVisibility);
+  const mutateBoost = useServerFn(updateRankingBoost);
+  const mutateSlotLimit = useServerFn(upsertFeaturedSlotLimit);
+  const fetchMonetizationListings = useServerFn(getMonetizationListings);
+  const fetchSlotLimits = useServerFn(getFeaturedSlotLimits);
 
   // Load auth state
   useEffect(() => {
@@ -849,7 +865,8 @@ function AdminPage() {
                                     const val = e.target.value as any;
                                     let reason = "";
                                     if (val === "rejected") {
-                                      reason = window.prompt("Please enter a rejection reason:") || "";
+                                      reason =
+                                        window.prompt("Please enter a rejection reason:") || "";
                                       if (!reason) return;
                                     }
                                     updateApprovalMutation.mutate({
@@ -875,7 +892,10 @@ function AdminPage() {
                                   <option value="suspended">Suspended</option>
                                 </select>
                                 {r.rejection_reason && (
-                                  <span className="text-[10px] text-red-500 max-w-[150px] truncate block" title={r.rejection_reason}>
+                                  <span
+                                    className="text-[10px] text-red-500 max-w-[150px] truncate block"
+                                    title={r.rejection_reason}
+                                  >
                                     Reason: {r.rejection_reason}
                                   </span>
                                 )}
@@ -944,7 +964,8 @@ function AdminPage() {
                                     const val = e.target.value as any;
                                     let reason = "";
                                     if (val === "rejected") {
-                                      reason = window.prompt("Please enter a rejection reason:") || "";
+                                      reason =
+                                        window.prompt("Please enter a rejection reason:") || "";
                                       if (!reason) return;
                                     }
                                     updateApprovalMutation.mutate({
@@ -970,7 +991,10 @@ function AdminPage() {
                                   <option value="suspended">Suspended</option>
                                 </select>
                                 {c.rejection_reason && (
-                                  <span className="text-[10px] text-red-500 max-w-[150px] truncate block" title={c.rejection_reason}>
+                                  <span
+                                    className="text-[10px] text-red-500 max-w-[150px] truncate block"
+                                    title={c.rejection_reason}
+                                  >
                                     Reason: {c.rejection_reason}
                                   </span>
                                 )}
@@ -1018,7 +1042,8 @@ function AdminPage() {
                                     const val = e.target.value as any;
                                     let reason = "";
                                     if (val === "rejected") {
-                                      reason = window.prompt("Please enter a rejection reason:") || "";
+                                      reason =
+                                        window.prompt("Please enter a rejection reason:") || "";
                                       if (!reason) return;
                                     }
                                     updateApprovalMutation.mutate({
@@ -1044,7 +1069,10 @@ function AdminPage() {
                                   <option value="suspended">Suspended</option>
                                 </select>
                                 {p.rejection_reason && (
-                                  <span className="text-[10px] text-red-500 max-w-[150px] truncate block" title={p.rejection_reason}>
+                                  <span
+                                    className="text-[10px] text-red-500 max-w-[150px] truncate block"
+                                    title={p.rejection_reason}
+                                  >
                                     Reason: {p.rejection_reason}
                                   </span>
                                 )}
@@ -1058,6 +1086,15 @@ function AdminPage() {
                 </table>
               </div>
             </div>
+
+            {/* ── Monetization Controls ─────────────────────────────── */}
+            <MonetizationPanel
+              mutateVisibility={mutateVisibility}
+              mutateBoost={mutateBoost}
+              mutateSlotLimit={mutateSlotLimit}
+              fetchListings={fetchMonetizationListings}
+              fetchSlotLimits={fetchSlotLimits}
+            />
           </div>
         )}
 

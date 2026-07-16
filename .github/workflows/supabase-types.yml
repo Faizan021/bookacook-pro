@@ -1,0 +1,29 @@
+name: Check Supabase Types
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  check-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      
+      - name: Verify generated types match committed types
+        run: |
+          supabase start
+          # Generate types from local DB
+          supabase gen types typescript --local > src/integrations/supabase/types.ts
+          
+          # Check for uncommitted changes
+          if ! git diff --exit-code; then
+            echo "Error: Generated types differ from committed types in src/integrations/supabase/types.ts"
+            echo "Please run 'supabase gen types typescript --local > src/integrations/supabase/types.ts' locally and commit the changes."
+            exit 1
+          fi

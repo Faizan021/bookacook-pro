@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Plus, Loader2, Tag, Ticket } from "lucide-react";
 import {
   createFileRoute,
@@ -63,6 +64,11 @@ import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard/planner")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>): { tab?: string } => {
+    return {
+      tab: search.tab as string | undefined,
+    };
+  },
   beforeLoad: async () => {
     try {
       const profile = await getUserProfile();
@@ -444,7 +450,9 @@ function BusinessProfileSection() {
   const [bannerPreview, setBannerPreview] = useState(planner?.banner_image_url || null);
   const [logoPath, setLogoPath] = useState(planner?.logo_url || null);
   const [bannerPath, setBannerPath] = useState(planner?.banner_image_url || null);
-  const [useGeneratedBranding, setUseGeneratedBranding] = useState(planner?.use_generated_branding || false);
+  const [useGeneratedBranding, setUseGeneratedBranding] = useState(
+    planner?.use_generated_branding || false,
+  );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [serviceAreas, setServiceAreas] = useState((planner as any).service_areas || "");
@@ -567,7 +575,8 @@ function BusinessProfileSection() {
             <div>
               <h4 className="text-sm font-bold text-foreground">Speisely Branding Assistant</h4>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Choose between your manually uploaded images or a clean Speisely-generated logo and banner.
+                Choose between your manually uploaded images or a clean Speisely-generated logo and
+                banner.
               </p>
             </div>
 
@@ -588,9 +597,12 @@ function BusinessProfileSection() {
                     className="mt-0.5 accent-primary"
                   />
                   <div>
-                    <span className="text-xs font-bold block text-foreground">My Uploaded Branding</span>
+                    <span className="text-xs font-bold block text-foreground">
+                      My Uploaded Branding
+                    </span>
                     <span className="text-[10px] text-muted-foreground block mt-0.5">
-                      Uses uploaded files. Automatically falls back to Speisely default design if files are missing.
+                      Uses uploaded files. Automatically falls back to Speisely default design if
+                      files are missing.
                     </span>
                   </div>
                 </div>
@@ -612,9 +624,12 @@ function BusinessProfileSection() {
                     className="mt-0.5 accent-primary"
                   />
                   <div>
-                    <span className="text-xs font-bold block text-foreground">Speisely-Generated Branding</span>
+                    <span className="text-xs font-bold block text-foreground">
+                      Speisely-Generated Branding
+                    </span>
                     <span className="text-[10px] text-muted-foreground block mt-0.5">
-                      Automatically generates a clean logo monogram and geometric banner background using your name.
+                      Automatically generates a clean logo monogram and geometric banner background
+                      using your name.
                     </span>
                   </div>
                 </div>
@@ -1177,7 +1192,9 @@ function LogisticsSection() {
   const [deliveryFee, setDeliveryFee] = useState(((planner as any)?.delivery_fee_cents || 0) / 100);
   const [minDelivery, setMinDelivery] = useState(((planner as any)?.min_delivery_cents || 0) / 100);
   const [maxDistance, setMaxDistance] = useState((planner as any)?.max_delivery_distance_km || 0);
-  const [availableForBookings, setAvailableForBookings] = useState((planner as any)?.available_for_bookings ?? true);
+  const [availableForBookings, setAvailableForBookings] = useState(
+    (planner as any)?.available_for_bookings ?? true,
+  );
   const [saving, setSaving] = useState(false);
 
   if (!planner) return null;
@@ -1737,13 +1754,13 @@ function PlannerDashboard() {
 
   useSpeiselyPing(q.data?.planner?.id, ["catering_briefs", "brief_messages", "planner_requests"]);
 
-  const { hash } = useLocation();
-  const activeTab = (hash || "#overview").replace("#", "");
+  const search = Route.useSearch();
+  const activeTab = search.tab || "overview";
   const qc = useQueryClient();
 
   if (!q.data?.planner) {
     return (
-      <VendorLayout vertical="planner" title="Planner Dashboard">
+      <VendorLayout vertical="planner" title="Planner Dashboard" activeTab={activeTab}>
         <EmptyCard
           title="Create your planner storefront"
           description="Set up your brand to start showcasing event service packages on Speisely."
@@ -1759,6 +1776,7 @@ function PlannerDashboard() {
       vertical="planner"
       title={`${q.data.planner.name} Dashboard`}
       storefrontSlug={q.data.planner.slug}
+      activeTab={activeTab}
     >
       <React.Suspense
         fallback={
@@ -1783,8 +1801,7 @@ function PlannerDashboard() {
           <MarketingSEOSection
             entity={q.data.planner}
             onSave={async (slug, domain, seoTitle, seoDescription) => {
-              const { updateMyPlannerSettings } =
-                await import("@/lib/planner/mutations.functions");
+              const { updateMyPlannerSettings } = await import("@/lib/planner/mutations.functions");
               await updateMyPlannerSettings({
                 data: {
                   name: q.data.planner.name,

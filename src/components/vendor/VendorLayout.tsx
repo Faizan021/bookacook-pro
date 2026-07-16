@@ -25,12 +25,18 @@ interface VendorLayoutProps {
   vertical: "restaurant" | "caterer" | "planner";
   title: string;
   storefrontSlug?: string;
+  activeTab?: string;
 }
 
-export function VendorLayout({ children, vertical, title, storefrontSlug }: VendorLayoutProps) {
+export function VendorLayout({
+  children,
+  vertical,
+  title,
+  storefrontSlug,
+  activeTab,
+}: VendorLayoutProps) {
   const router = useRouter();
   const location = useLocation();
-  const search = useSearch({ strict: false });
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -112,17 +118,8 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
 
           <nav className="space-y-1">
             {navItems.map((item) => {
-              // We'll use hash routing for tabs since the existing components use Radix Tabs
-              // which read the value. Wait, Radix Tabs don't automatically sync with the URL hash unless coded to.
-              // For a SaaS feel, we should update the URL hash or use search params.
-              // For now, we'll just emit an event or rely on the parent component mapping the active tab.
-              // Actually, since we are wrapping the existing Tabs, we can just render the Sidebar buttons
-              // and let the parent control the active tab via state or hash.
-
-              // We'll pass the `id` to the URL search param or hash so the parent can read it.
-              const tab = typeof search.tab === "string" ? search.tab : undefined;
-              const cleanTab = tab || (location.hash || "").replace("#", "");
-              let isActive = cleanTab === item.id || (!cleanTab && item.id === "overview");
+              const cleanTab = activeTab || "overview";
+              let isActive = cleanTab === item.id;
               if (
                 item.id === "settings-general" &&
                 cleanTab.startsWith("settings-") &&

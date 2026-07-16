@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
@@ -350,4 +351,130 @@ export const getSeoDrafts = createServerFn({ method: "GET" })
 
     if (error) throw new Error("Failed to fetch SEO drafts: " + error.message);
     return data;
+  });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Monetization Queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+type ListingRole = "restaurant" | "caterer" | "planner";
+
+const MONETIZATION_TABLES: Record<ListingRole, string> = {
+  restaurant: "restaurants",
+  caterer: "caterers",
+  planner: "planners",
+};
+
+/**
+ * Returns featured slot status for a given role + city using three-tier precedence:
+ * 1. Exact event-type row
+ * 2. City-wide '__city__' row
+ * 3. Default max = 3
+ */
+export const getFeaturedSlotStatus = createServerFn({ method: "GET" })
+  .validator((d: { role: ListingRole; city_slug: string; event_type?: string }) => d)
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context, data }) => {
+    const { userId } = context;
+    const { role, city_slug, event_type } = data;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const table = MONETIZATION_TABLES[role];
+
+    // Resolve max slots
+    let maxSlots = 3;
+    if (event_type) {
+      const { data: exact } = await (supabaseAdmin as any)
+        .from("featured_slot_limits")
+        .select("max_slots")
+        .eq("role", role)
+        .eq("city_slug", city_slug)
+        .eq("event_type", event_type)
+        .maybeSingle();
+      if (exact) {
+        maxSlots = exact.max_slots;
+      } else {
+        const { data: cityWide } = await (supabaseAdmin as any)
+          .from("featured_slot_limits")
+          .select("max_slots")
+          .eq("role", role)
+          .eq("city_slug", city_slug)
+          .eq("event_type", "__city__")
+          .maybeSingle();
+        if (cityWide) maxSlots = cityWide.max_slots;
+      }
+    } else {
+      const { data: cityWide } = await (supabaseAdmin as any)
+        .from("featured_slot_limits")
+        .select("max_slots")
+        .eq("role", role)
+        .eq("city_slug", city_slug)
+        .eq("event_type", "__city__")
+        .maybeSingle();
+      if (cityWide) maxSlots = cityWide.max_slots;
+    }
+
+    // Count current featured listings for this role + city
+    const { count } = await (supabaseAdmin as any)
+      .from(table)
+      .select("id", { count: "exact", head: true })
+      .eq("is_featured", true)
+      .ilike("city", city_slug.replace(/-/g, " "));
+
+    const used = count ?? 0;
+    return { used, max: maxSlots, available: Math.max(0, maxSlots - used) };
+  });
+
+/**
+ * Fetch all listings for a given role with their monetization fields.
+ * Effective sponsorship: is_sponsored=true only if campaign_window_end is null or in the future.
+ */
+export const getMonetizationListings = createServerFn({ method: "GET" })
+  .validator((d: { role: ListingRole }) => d)
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context, data }) => {
+    const { userId } = context;
+    const { role } = data;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const table = MONETIZATION_TABLES[role];
+
+    const { data: listings, error } = await (supabaseAdmin as any)
+      .from(table)
+      .select(
+        "id, name, city, is_published, is_featured, is_sponsored, indexability_override, ranking_boost, campaign_window_start, campaign_window_end, seasonal_boost_tags",
+      )
+      .order("name");
+
+    if (error) throw new Error(`Failed to fetch ${role} listings: ${error.message}`);
+
+    // Apply lazy sponsorship expiration for UI display
+    const now = new Date().toISOString();
+    return (listings ?? []).map((l: any) => ({
+      ...l,
+      effective_sponsored:
+        l.is_sponsored && (l.campaign_window_end == null || l.campaign_window_end >= now),
+      sponsored_expired:
+        l.is_sponsored && l.campaign_window_end != null && l.campaign_window_end < now,
+    }));
+  });
+
+/** Fetch all featured slot limit rows for Admin Panel B. */
+export const getFeaturedSlotLimits = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await verifyAdmin(supabaseAdmin, userId);
+    const { data, error } = await (supabaseAdmin as any)
+      .from("featured_slot_limits")
+      .select("*")
+      .order("role")
+      .order("city_slug");
+    if (error) throw new Error("Failed to fetch featured slot limits: " + error.message);
+    return data ?? [];
   });

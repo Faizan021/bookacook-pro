@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Plus, Loader2, Tag, Ticket } from "lucide-react";
 import {
   createFileRoute,
@@ -685,7 +686,12 @@ function ProductsSection() {
               price_cents: cents,
               image_url: imagePath,
               category: category || undefined,
-              dietary_tags: dietaryTags ? dietaryTags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+              dietary_tags: dietaryTags
+                ? dietaryTags
+                    .split(",")
+                    .map((t) => t.trim())
+                    .filter(Boolean)
+                : [],
             });
           }}
         >
@@ -723,16 +729,24 @@ function ProductsSection() {
             <Label htmlFor="pcategory">{tt("Kategorie", "Category")}</Label>
             <Input
               id="pcategory"
-              placeholder={tt("z.B. Pizza, Nudeln, Vorspeisen, Desserts", "e.g. Pizza, Pasta, Starters, Desserts")}
+              placeholder={tt(
+                "z.B. Pizza, Nudeln, Vorspeisen, Desserts",
+                "e.g. Pizza, Pasta, Starters, Desserts",
+              )}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="pdietary">{tt("Eigenschaften (Kommagetrennt)", "Dietary & Labels (Comma-separated)")}</Label>
+            <Label htmlFor="pdietary">
+              {tt("Eigenschaften (Kommagetrennt)", "Dietary & Labels (Comma-separated)")}
+            </Label>
             <Input
               id="pdietary"
-              placeholder={tt("z.B. Halal, Vegan, Vegetarisch, Rind, Huhn, Fisch", "e.g. Halal, Vegan, Vegetarian, Beef, Chicken, Fish")}
+              placeholder={tt(
+                "z.B. Halal, Vegan, Vegetarisch, Rind, Huhn, Fisch",
+                "e.g. Halal, Vegan, Vegetarian, Beef, Chicken, Fish",
+              )}
               value={dietaryTags}
               onChange={(e) => setDietaryTags(e.target.value)}
             />
@@ -976,6 +990,7 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
 }
 
 function OverviewSection() {
+  const navigate = useNavigate({ from: Route.fullPath });
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchKPIs = useServerFn(getRestaurantKPIs);
@@ -1010,7 +1025,6 @@ function OverviewSection() {
       </div>
     );
 
-  const navigate = useNavigate({ from: Route.fullPath });
   const navigateTo = (tab: string) => {
     let targetTab = tab;
     if (targetTab === "profile") {
@@ -1201,15 +1215,36 @@ function OverviewSection() {
               data={q.data.referralData.slice().reverse()}
               margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
             >
-              <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#4a5568' }} tickLine={false} axisLine={false} />
-              <YAxis tick={{ fontSize: 12, fill: '#4a5568' }} tickLine={false} axisLine={false} />
-              <Tooltip 
-                cursor={{ fill: '#f8faf9' }}
-                contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8e4', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+              <XAxis
+                dataKey="month"
+                tick={{ fontSize: 12, fill: "#4a5568" }}
+                tickLine={false}
+                axisLine={false}
               />
-              <Legend wrapperStyle={{ paddingTop: '20px' }} />
-              <Bar dataKey="direct" name={tt("Eigener Storefront", "Direct Storefront")} stackId="a" fill="#22c55e" radius={[0, 0, 4, 4]} />
-              <Bar dataKey="marketplace" name={tt("Speisely Marketplace", "Speisely Marketplace")} stackId="a" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+              <YAxis tick={{ fontSize: 12, fill: "#4a5568" }} tickLine={false} axisLine={false} />
+              <Tooltip
+                cursor={{ fill: "#f8faf9" }}
+                contentStyle={{
+                  borderRadius: "12px",
+                  border: "1px solid #e2e8e4",
+                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                }}
+              />
+              <Legend wrapperStyle={{ paddingTop: "20px" }} />
+              <Bar
+                dataKey="direct"
+                name={tt("Eigener Storefront", "Direct Storefront")}
+                stackId="a"
+                fill="#22c55e"
+                radius={[0, 0, 4, 4]}
+              />
+              <Bar
+                dataKey="marketplace"
+                name={tt("Speisely Marketplace", "Speisely Marketplace")}
+                stackId="a"
+                fill="#f59e0b"
+                radius={[4, 4, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -1311,7 +1346,9 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
   const [logoPath, setLogoPath] = useState(restaurant.logo_url || null);
   const [bannerPath, setBannerPath] = useState(restaurant.banner_image_url || null);
   const [certifications, setCertifications] = useState((restaurant as any).certifications || "");
-  const [useGeneratedBranding, setUseGeneratedBranding] = useState(restaurant.use_generated_branding || false);
+  const [useGeneratedBranding, setUseGeneratedBranding] = useState(
+    restaurant.use_generated_branding || false,
+  );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -1484,7 +1521,9 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     onChange={(e) => e.target.files?.[0] && handleImage(e.target.files[0], "logo")}
                   />
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-1">Recommended size: 512x512 px (Square)</p>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Recommended size: 512x512 px (Square)
+                </p>
               </div>
 
               <div className="space-y-2 md:col-span-2">
@@ -1522,7 +1561,9 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     }
                   />
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-1">Recommended size: 1200x400 px (3:1 Aspect Ratio)</p>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Recommended size: 1200x400 px (3:1 Aspect Ratio)
+                </p>
               </div>
             </div>
 
@@ -1605,16 +1646,25 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                 {useGeneratedBranding && (
                   <div className="p-3 bg-white border border-stone-200 rounded-lg space-y-3">
                     <div className="text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                      {tt("Live-Vorschau des generierten Brandings", "Live Preview of Generated Branding")}
+                      {tt(
+                        "Live-Vorschau des generierten Brandings",
+                        "Live Preview of Generated Branding",
+                      )}
                     </div>
                     <div className="flex flex-col sm:flex-row gap-4 items-center">
                       <img
-                        src={generateSvgLogo(name || "Restaurant", restaurant.cuisine_type || "Cuisine")}
+                        src={generateSvgLogo(
+                          name || "Restaurant",
+                          restaurant.cuisine_type || "Cuisine",
+                        )}
                         className="w-16 h-16 rounded-full border border-stone-200 shadow-sm"
                         alt="Generated Logo Preview"
                       />
                       <img
-                        src={generateSvgBanner(name || "Restaurant", restaurant.cuisine_type || "Cuisine")}
+                        src={generateSvgBanner(
+                          name || "Restaurant",
+                          restaurant.cuisine_type || "Cuisine",
+                        )}
                         className="w-full sm:w-64 h-16 rounded-lg object-cover border border-stone-200 shadow-sm"
                         alt="Generated Banner Preview"
                       />
@@ -1661,8 +1711,12 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
   const [deliveryFee, setDeliveryFee] = useState(restaurant.delivery_fee?.toString() || "2.5");
   const [serviceAreas, setServiceAreas] = useState(restaurant.service_areas || "");
   const [isPublished, setIsPublished] = useState(restaurant.is_published ?? false);
-  const [showInMarketplace, setShowInMarketplace] = useState(restaurant.show_in_marketplace ?? false);
-  const [marketplaceDiscovery, setMarketplaceDiscovery] = useState(restaurant.marketplace_discovery ?? false);
+  const [showInMarketplace, setShowInMarketplace] = useState(
+    restaurant.show_in_marketplace ?? false,
+  );
+  const [marketplaceDiscovery, setMarketplaceDiscovery] = useState(
+    restaurant.marketplace_discovery ?? false,
+  );
   const [saving, setSaving] = useState(false);
 
   // Check if payments are configured
@@ -1744,7 +1798,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
             </div>
             {!hasPaymentMethod && (
               <p className="text-[10px] text-rose-600 bg-rose-500/5 border border-rose-500/10 p-2.5 rounded-lg leading-relaxed">
-                ⚠️ {" "}
+                ⚠️{" "}
                 {tt(
                   "Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie veröffentlichen.",
                   "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.",
@@ -2081,10 +2135,7 @@ function SettingsOperationsSection({ restaurant }: { restaurant: any }) {
       {/* Kitchen Printer Settings — Restaurant scope only.
            Reads/writes restaurant_printers and restaurant_print_jobs via supabase client.
            No catering or planner tables are referenced. */}
-      <KitchenPrinterSettings
-        restaurantId={restaurant.id}
-        lang={lang}
-      />
+      <KitchenPrinterSettings restaurantId={restaurant.id} lang={lang} />
     </div>
   );
 }
@@ -3174,6 +3225,12 @@ function ReservationsSection() {
 
 function BillingSection() {
   const fetchProducts = useServerFn(getRestaurantProducts);
+  const startSubscription = useServerFn(startStarterSubscription);
+  const getPortalUrl = useServerFn(openBillingPortal);
+
+  const [loading, setLoading] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+
   const q = useSuspenseQuery({
     queryKey: ["restaurant", "products"],
     queryFn: () => fetchProducts(),
@@ -3191,13 +3248,6 @@ function BillingSection() {
   const billingCycleStart = restaurant.billing_cycle_start
     ? new Date(restaurant.billing_cycle_start)
     : new Date();
-
-  // Mutations
-  const startSubscription = useServerFn(startStarterSubscription);
-  const getPortalUrl = useServerFn(openBillingPortal);
-
-  const [loading, setLoading] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
 
   const handleStartSubscription = async () => {
     setShowTerms(false);
@@ -3459,12 +3509,12 @@ function RestaurantDashboardInner() {
     retry: false,
   });
 
-  const { 
-    tab, 
-    connect_success: connectSuccess, 
-    connect_error: connectError, 
-    billing_success: billingSuccess, 
-    billing_cancel: billingCancel 
+  const {
+    tab,
+    connect_success: connectSuccess,
+    connect_error: connectError,
+    billing_success: billingSuccess,
+    billing_cancel: billingCancel,
   } = Route.useSearch();
   const rawTab = tab || (location.hash || "#overview").replace("#", "");
 
@@ -3576,7 +3626,7 @@ function RestaurantDashboardInner() {
 
   if (!q.data?.restaurant) {
     return (
-      <VendorLayout vertical="restaurant" title="Restaurant Dashboard">
+      <VendorLayout vertical="restaurant" title="Restaurant Dashboard" activeTab={tab}>
         <EmptyCard
           title="No storefront yet"
           description="Create your restaurant storefront to start receiving orders."
@@ -3591,6 +3641,7 @@ function RestaurantDashboardInner() {
       vertical="restaurant"
       title={`${q.data.restaurant.name} Dashboard`}
       storefrontSlug={q.data.restaurant.slug}
+      activeTab={tab}
     >
       <React.Suspense
         fallback={
@@ -3614,7 +3665,13 @@ function RestaurantDashboardInner() {
             entity={q.data.restaurant}
             onSave={async (slug, domain, seoTitle, seoDescription) => {
               await updateMyRestaurantSettings({
-                data: { name: q.data.restaurant.name, slug, custom_domain: domain, seo_title: seoTitle, seo_description: seoDescription }
+                data: {
+                  name: q.data.restaurant.name,
+                  slug,
+                  custom_domain: domain,
+                  seo_title: seoTitle,
+                  seo_description: seoDescription,
+                },
               });
             }}
             vertical="restaurant"

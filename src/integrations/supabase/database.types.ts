@@ -3,19 +3,29 @@ import { Database as GeneratedDatabase } from "./types";
 /**
  * OVERRIDE GOVERNANCE RULE:
  * This is a typed compatibility wrapper to bridge the gap between our active schema
- * and the last `supabase gen types` execution. 
+ * and the last `supabase gen types` execution.
  * Every override here MUST map to a real Supabase migration. Do not invent "fantasy types".
  */
 export type Database = Omit<GeneratedDatabase, "public"> & {
   public: {
     Tables: Omit<GeneratedDatabase["public"]["Tables"], "restaurants" | "planners" | "caterers"> & {
-      restaurants: Omit<GeneratedDatabase["public"]["Tables"]["restaurants"], "Row" | "Insert" | "Update"> & {
+      restaurants: Omit<
+        GeneratedDatabase["public"]["Tables"]["restaurants"],
+        "Row" | "Insert" | "Update"
+      > & {
         Row: GeneratedDatabase["public"]["Tables"]["restaurants"]["Row"] & {
           seo_dietary_options: string[] | null;
           seo_local_intro: string | null;
           seo_nearby_landmarks: string[] | null;
           show_in_marketplace: boolean | null;
           marketplace_discovery: boolean | null;
+          is_featured: boolean;
+          is_sponsored: boolean;
+          indexability_override: "index" | "noindex" | "default";
+          ranking_boost: number;
+          campaign_window_start: string | null;
+          campaign_window_end: string | null;
+          seasonal_boost_tags: string[] | null;
         };
         Insert: GeneratedDatabase["public"]["Tables"]["restaurants"]["Insert"] & {
           seo_dietary_options?: string[] | null;
@@ -23,6 +33,13 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
           seo_nearby_landmarks?: string[] | null;
           show_in_marketplace?: boolean | null;
           marketplace_discovery?: boolean | null;
+          is_featured?: boolean;
+          is_sponsored?: boolean;
+          indexability_override?: "index" | "noindex" | "default";
+          ranking_boost?: number;
+          campaign_window_start?: string | null;
+          campaign_window_end?: string | null;
+          seasonal_boost_tags?: string[] | null;
         };
         Update: GeneratedDatabase["public"]["Tables"]["restaurants"]["Update"] & {
           seo_dietary_options?: string[] | null;
@@ -30,41 +47,162 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
           seo_nearby_landmarks?: string[] | null;
           show_in_marketplace?: boolean | null;
           marketplace_discovery?: boolean | null;
+          is_featured?: boolean;
+          is_sponsored?: boolean;
+          indexability_override?: "index" | "noindex" | "default";
+          ranking_boost?: number;
+          campaign_window_start?: string | null;
+          campaign_window_end?: string | null;
+          seasonal_boost_tags?: string[] | null;
         };
       };
-      caterers: Omit<GeneratedDatabase["public"]["Tables"]["caterers"], "Row" | "Insert" | "Update"> & {
+      caterers: Omit<
+        GeneratedDatabase["public"]["Tables"]["caterers"],
+        "Row" | "Insert" | "Update"
+      > & {
         Row: GeneratedDatabase["public"]["Tables"]["caterers"]["Row"] & {
           seo_dietary_options: string[] | null;
           seo_local_intro: string | null;
           seo_nearby_landmarks: string[] | null;
+          is_featured: boolean;
+          is_sponsored: boolean;
+          indexability_override: "index" | "noindex" | "default";
+          ranking_boost: number;
+          campaign_window_start: string | null;
+          campaign_window_end: string | null;
+          seasonal_boost_tags: string[] | null;
         };
         Insert: GeneratedDatabase["public"]["Tables"]["caterers"]["Insert"] & {
           seo_dietary_options?: string[] | null;
           seo_local_intro?: string | null;
           seo_nearby_landmarks?: string[] | null;
+          is_featured?: boolean;
+          is_sponsored?: boolean;
+          indexability_override?: "index" | "noindex" | "default";
+          ranking_boost?: number;
+          campaign_window_start?: string | null;
+          campaign_window_end?: string | null;
+          seasonal_boost_tags?: string[] | null;
         };
         Update: GeneratedDatabase["public"]["Tables"]["caterers"]["Update"] & {
           seo_dietary_options?: string[] | null;
           seo_local_intro?: string | null;
           seo_nearby_landmarks?: string[] | null;
+          is_featured?: boolean;
+          is_sponsored?: boolean;
+          indexability_override?: "index" | "noindex" | "default";
+          ranking_boost?: number;
+          campaign_window_start?: string | null;
+          campaign_window_end?: string | null;
+          seasonal_boost_tags?: string[] | null;
         };
       };
-      planners: Omit<GeneratedDatabase["public"]["Tables"]["planners"], "Row" | "Insert" | "Update"> & {
+      planners: Omit<
+        GeneratedDatabase["public"]["Tables"]["planners"],
+        "Row" | "Insert" | "Update"
+      > & {
         Row: GeneratedDatabase["public"]["Tables"]["planners"]["Row"] & {
           seo_dietary_options: string[] | null;
           seo_local_intro: string | null;
           seo_nearby_landmarks: string[] | null;
+          is_featured: boolean;
+          is_sponsored: boolean;
+          indexability_override: "index" | "noindex" | "default";
+          ranking_boost: number;
+          campaign_window_start: string | null;
+          campaign_window_end: string | null;
+          seasonal_boost_tags: string[] | null;
         };
         Insert: GeneratedDatabase["public"]["Tables"]["planners"]["Insert"] & {
           seo_dietary_options?: string[] | null;
           seo_local_intro?: string | null;
           seo_nearby_landmarks?: string[] | null;
+          is_featured?: boolean;
+          is_sponsored?: boolean;
+          indexability_override?: "index" | "noindex" | "default";
+          ranking_boost?: number;
+          campaign_window_start?: string | null;
+          campaign_window_end?: string | null;
+          seasonal_boost_tags?: string[] | null;
         };
         Update: GeneratedDatabase["public"]["Tables"]["planners"]["Update"] & {
           seo_dietary_options?: string[] | null;
           seo_local_intro?: string | null;
           seo_nearby_landmarks?: string[] | null;
+          is_featured?: boolean;
+          is_sponsored?: boolean;
+          indexability_override?: "index" | "noindex" | "default";
+          ranking_boost?: number;
+          campaign_window_start?: string | null;
+          campaign_window_end?: string | null;
+          seasonal_boost_tags?: string[] | null;
         };
+      };
+      featured_slot_limits: {
+        Row: {
+          id: string;
+          role: "restaurant" | "caterer" | "planner";
+          city_slug: string;
+          event_type: string;
+          max_slots: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          role: "restaurant" | "caterer" | "planner";
+          city_slug: string;
+          event_type?: string;
+          max_slots?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          role?: "restaurant" | "caterer" | "planner";
+          city_slug?: string;
+          event_type?: string;
+          max_slots?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      admin_audit_log: {
+        Row: {
+          id: string;
+          actor_id: string;
+          role: "restaurant" | "caterer" | "planner";
+          listing_id: string;
+          field: string;
+          old_value: string | null;
+          new_value: string | null;
+          reason: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          actor_id: string;
+          role: "restaurant" | "caterer" | "planner";
+          listing_id: string;
+          field: string;
+          old_value?: string | null;
+          new_value?: string | null;
+          reason?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          actor_id?: string;
+          role?: "restaurant" | "caterer" | "planner";
+          listing_id?: string;
+          field?: string;
+          old_value?: string | null;
+          new_value?: string | null;
+          reason?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       discovery_pages: {
         Row: {
@@ -152,7 +290,7 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
             isOneToOne: false;
             referencedRelation: "restaurants";
             referencedColumns: ["id"];
-          }
+          },
         ];
       };
       restaurant_print_jobs: {
@@ -203,7 +341,7 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
             isOneToOne: false;
             referencedRelation: "restaurants";
             referencedColumns: ["id"];
-          }
+          },
         ];
       };
       service_leads: {
@@ -277,7 +415,7 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
             isOneToOne: false;
             referencedRelation: "restaurants";
             referencedColumns: ["id"];
-          }
+          },
         ];
       };
     };
@@ -288,5 +426,6 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
   };
 };
 
-export type Tables<T extends keyof Database["public"]["Tables"]> = Database["public"]["Tables"][T]["Row"];
+export type Tables<T extends keyof Database["public"]["Tables"]> =
+  Database["public"]["Tables"][T]["Row"];
 export type Enums<T extends keyof Database["public"]["Enums"]> = Database["public"]["Enums"][T];
