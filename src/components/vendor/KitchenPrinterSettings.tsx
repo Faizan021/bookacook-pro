@@ -111,12 +111,7 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
   const [macError, setMacError] = useState<string | null>(null);
   const [paperWidthInput, setPaperWidthInput] = useState<"58" | "80">("80");
 
-  React.useEffect(() => {
-    if (printer) {
-      setMacInput(printer.mac_address);
-      setPaperWidthInput(printer.paper_width === 58 ? "58" : "80");
-    }
-  }, [printer]);
+
 
   // -------------------------------------------------------------------------
   // Load existing printer for this restaurant
@@ -125,7 +120,7 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
     queryKey: ["restaurant-printer", restaurantId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("restaurant_printers" as any)
+        .from("restaurant_printers")
         .select("*")
         .eq("restaurant_id", restaurantId)
         .maybeSingle();
@@ -174,7 +169,7 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
 
       // Fetch the most recent confirmed order to use as the test subject
       const { data: latestOrder, error: orderErr } = await supabase
-        .from("restaurant_orders" as any)
+        .from("restaurant_orders")
         .select("id")
         .eq("restaurant_id", restaurantId)
         .eq("status", "confirmed")
@@ -194,7 +189,7 @@ export function KitchenPrinterSettings({ restaurantId, lang }: KitchenPrinterSet
 
       // Insert a print job — the printer will pick it up on its next poll
       const { error: insertErr } = await supabase
-        .from("restaurant_print_jobs" as any)
+        .from("restaurant_print_jobs")
         .insert({
           order_id: latestOrder.id,
           restaurant_id: restaurantId,

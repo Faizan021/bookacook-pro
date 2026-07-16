@@ -22,11 +22,14 @@ const loadPlannerGeoData = createServerFn({ method: "GET" })
 
 export const Route = createFileRoute("/planner/$city-$eventType")({
   loader: async ({ params }) => {
-    const res = await loadPlannerGeoData({ data: { citySlug: params.city, eventType: params.eventType } });
+    const slug = params["city-$eventType"];
+    const city = slug.split("-")[0];
+    const eventType = slug.split("-").slice(1).join("-");
+    const res = await loadPlannerGeoData({ data: { citySlug: city, eventType: eventType } });
     if (res.status === "404" || !res.content) {
       throw notFound();
     }
-    return { content: res.content, city: params.city, eventType: params.eventType };
+    return { content: res.content, city, eventType };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };

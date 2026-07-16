@@ -313,7 +313,7 @@ export const Route = createFileRoute("/api/print/star")({
         );
 
         // Return ESC/POS binary — idempotent, status remains unchanged until DELETE confirms
-        return new Response(escPosData, {
+        return new Response(new Uint8Array(escPosData), {
           status: 200,
           headers: {
             "Content-Type": "application/vnd.star.starprnt",

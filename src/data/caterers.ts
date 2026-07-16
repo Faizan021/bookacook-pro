@@ -15,6 +15,7 @@ export type Caterer = {
   tags: string[];
   img: string;
   logo?: string;
+  slug?: string;
   use_generated_branding?: boolean;
   status: "available" | "busy";
   area: string;

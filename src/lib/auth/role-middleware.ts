@@ -2,7 +2,7 @@
 import { createMiddleware } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
+import type { Database } from "@/integrations/supabase/database.types";
 import { SESSION_CONFIG } from "./session.config";
 import type { UserRole } from "./get-user-profile.functions";
 

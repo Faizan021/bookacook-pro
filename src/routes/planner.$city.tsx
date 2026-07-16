@@ -68,7 +68,7 @@ function PlannerCityHubPage() {
                 className="h-auto py-6 border-forest/20 hover:border-forest hover:bg-forest/5 text-forest flex flex-col gap-2" 
                 asChild
               >
-                <Link to="/planner/$city-$eventType" params={{ city, eventType }}>
+                <Link to="/planner/$city-$eventType" params={{ "city-$eventType": `${city}-${eventType}` }}>
                   <span className="capitalize text-lg font-serif">{eventType}</span>
                   <span className="text-sm text-muted-foreground font-sans">Planer anzeigen <ArrowRight className="inline h-3 w-3 ml-1" /></span>
                 </Link>

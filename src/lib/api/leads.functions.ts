@@ -50,7 +50,7 @@ export const submitLeadCapture = createServerFn({ method: "POST" })
     const supabase = supabaseAdmin;
     
     const { data: leadData, error } = await supabase
-      .from("service_leads" as any)
+      .from("service_leads")
       .insert({
         name: data.name,
         email: data.email,

@@ -3435,7 +3435,7 @@ function RestaurantDashboardInner() {
   });
 
   const location = useLocation();
-  const searchParams = React.useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const searchParams = React.useMemo(() => new URLSearchParams(location.search as any), [location.search]);
   const rawTab = searchParams.get("tab") || (location.hash || "#overview").replace("#", "");
 
   React.useEffect(() => {
@@ -3586,7 +3586,11 @@ function RestaurantDashboardInner() {
         {currentTab === "marketing-seo" && (
           <MarketingSEOSection
             entity={q.data.restaurant}
-            upsertFn={updateMyRestaurantSettings}
+            onSave={async (slug, domain, seoTitle, seoDescription) => {
+              await updateMyRestaurantSettings({
+                data: { name: q.data.restaurant.name, slug, custom_domain: domain, seo_title: seoTitle, seo_description: seoDescription }
+              });
+            }}
             vertical="restaurant"
           />
         )}

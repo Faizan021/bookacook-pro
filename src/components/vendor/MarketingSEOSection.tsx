@@ -10,6 +10,7 @@ export function MarketingSEOSection({
 }: {
   entity: any;
   onSave: (slug: string, domain: string | null, seoTitle: string | null, seoDescription: string | null) => Promise<void>;
+  vertical?: string;
 }) {
   const [slug, setSlug] = useState(entity.slug || "");
   const [domain, setDomain] = useState(entity.custom_domain || "");

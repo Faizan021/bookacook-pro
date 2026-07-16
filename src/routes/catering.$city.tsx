@@ -153,11 +153,8 @@ function CateringCityPage() {
         <div className="md:col-span-4">
           <div className="sticky top-24" id="quote">
             <LeadCaptureForm 
-              title="Unverbindliches Angebot"
-              subtitle={`Erhalten Sie passgenaue Catering-Angebote für Ihr Event in ${content.areaServed}.`}
-              buttonText="Jetzt anfragen"
-              city={content.areaServed}
-              origin="Catering City Geo Page"
+              defaultCity={content.areaServed}
+              sourceRoute="Catering City Geo Page"
             />
           </div>
         </div>

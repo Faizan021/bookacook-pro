@@ -30,6 +30,7 @@ export type Planner = {
     | "trade-show";
   img: string | null;
   logo?: string;
+  slug?: string;
   use_generated_branding?: boolean;
   gallery: string[];
   area: string | null;

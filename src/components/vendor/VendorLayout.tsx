@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useRouter, useLocation } from "@tanstack/react-router";
+import { Link, useRouter, useLocation, useSearch } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/LanguageToggle";
@@ -30,6 +30,7 @@ interface VendorLayoutProps {
 export function VendorLayout({ children, vertical, title, storefrontSlug }: VendorLayoutProps) {
   const router = useRouter();
   const location = useLocation();
+  const search = useSearch({ strict: false });
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -119,8 +120,8 @@ export function VendorLayout({ children, vertical, title, storefrontSlug }: Vend
               // and let the parent control the active tab via state or hash.
 
               // We'll pass the `id` to the URL search param or hash so the parent can read it.
-              const searchParams = new URLSearchParams(location.search);
-              const cleanTab = searchParams.get("tab") || (location.hash || "").replace("#", "");
+              const tab = typeof search.tab === "string" ? search.tab : undefined;
+              const cleanTab = tab || (location.hash || "").replace("#", "");
               let isActive = cleanTab === item.id || (!cleanTab && item.id === "overview");
               if (
                 item.id === "settings-general" &&
