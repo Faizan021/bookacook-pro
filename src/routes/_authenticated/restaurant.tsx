@@ -1662,6 +1662,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
   const [serviceAreas, setServiceAreas] = useState(restaurant.service_areas || "");
   const [isPublished, setIsPublished] = useState(restaurant.is_published ?? false);
   const [showInMarketplace, setShowInMarketplace] = useState(restaurant.show_in_marketplace ?? false);
+  const [marketplaceDiscovery, setMarketplaceDiscovery] = useState(restaurant.marketplace_discovery ?? false);
   const [saving, setSaving] = useState(false);
 
   // Check if payments are configured
@@ -1685,6 +1686,7 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
           service_areas: serviceAreas,
           is_published: isPublished,
           show_in_marketplace: showInMarketplace,
+          marketplace_discovery: marketplaceDiscovery,
         },
       });
       toast.success(
@@ -1700,6 +1702,98 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
 
   return (
     <div className="space-y-6">
+      {/* Visibility & Discovery Section */}
+      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+        <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
+          <h3 className="font-display text-xl text-forest">
+            {tt("Sichtbarkeit & Entdeckung", "Visibility & Discovery")}
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            {tt(
+              "Verwalten Sie Ihre Storefront-Präsenz und Marktplatz-Sichtbarkeit.",
+              "Manage your storefront presence and marketplace discoverability.",
+            )}
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-1">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+              <div>
+                <Label htmlFor="is-published" className="font-semibold text-forest">
+                  {tt("Storefront veröffentlichen", "Publish Storefront")}
+                </Label>
+                <p className="text-[10px] text-muted-foreground mt-0.5">
+                  {tt(
+                    "Halten Sie Ihre direkte öffentliche Seite live.",
+                    "Keep your direct public page live at your Speisely storefront URL.",
+                  )}
+                </p>
+              </div>
+              <Switch
+                id="is-published"
+                checked={isPublished}
+                disabled={!hasPaymentMethod}
+                onCheckedChange={(val) => {
+                  setIsPublished(val);
+                  if (val) {
+                    trackEvent("storefront_publish_attempted");
+                  }
+                }}
+              />
+            </div>
+            {!hasPaymentMethod && (
+              <p className="text-[10px] text-rose-600 bg-rose-500/5 border border-rose-500/10 p-2.5 rounded-lg leading-relaxed">
+                ⚠️ {" "}
+                {tt(
+                  "Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie veröffentlichen.",
+                  "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.",
+                )}
+              </p>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+            <div>
+              <Label htmlFor="show-in-marketplace" className="font-semibold text-forest">
+                {tt("Auf dem Marktplatz anzeigen", "Show in Marketplace")}
+              </Label>
+              <p className="text-[10px] text-muted-foreground mt-0.5 max-w-[280px]">
+                {tt(
+                  "Schließt dieses Restaurant in die Marktplatz-Suche und -Einträge auf Speisely ein.",
+                  "Include this restaurant in marketplace search and listings on Speisely.",
+                )}
+              </p>
+            </div>
+            <Switch
+              id="show-in-marketplace"
+              checked={showInMarketplace}
+              onCheckedChange={setShowInMarketplace}
+            />
+          </div>
+
+          <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+            <div>
+              <Label htmlFor="marketplace-discovery" className="font-semibold text-forest">
+                {tt("Marktplatz-Entdeckung", "Marketplace Discovery")}
+              </Label>
+              <p className="text-[10px] text-muted-foreground mt-0.5 max-w-[280px]">
+                {tt(
+                  "Nehmen Sie am Entdeckungsprogramm von Speisely teil, um neue Kunden zu erreichen. Es können Marktplatzgebühren anfallen.",
+                  "Join Speisely’s discovery program to reach new customers through marketplace promotion and discovery surfaces. Marketplace fees may apply.",
+                )}
+              </p>
+            </div>
+            <Switch
+              id="marketplace-discovery"
+              checked={marketplaceDiscovery}
+              onCheckedChange={setMarketplaceDiscovery}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Storefront & Delivery Settings Section */}
       <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
         <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
           <h3 className="font-display text-xl text-forest">
@@ -1707,8 +1801,8 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
           </h3>
           <p className="text-xs text-muted-foreground">
             {tt(
-              "Verwalten Sie Ihre Bestellkanäle, Liefergebühren und die Storefront-Veröffentlichung.",
-              "Manage your order channels, delivery fees, and storefront live status.",
+              "Verwalten Sie Ihre Bestellkanäle und Liefergebühren.",
+              "Manage your order channels and delivery fees.",
             )}
           </p>
         </div>
@@ -1731,28 +1825,6 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
                 id="accepts-orders"
                 checked={acceptsOrders}
                 onCheckedChange={setAcceptsOrders}
-              />
-            </div>
-
-            <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
-              <div>
-                <Label htmlFor="show-in-marketplace" className="font-semibold text-forest flex items-center gap-2">
-                  {tt("Auf dem Marktplatz anzeigen", "Show in Marketplace")}
-                  <span className="bg-forest/10 text-forest px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider">
-                    {tt("Sichtbarkeit", "Visibility")}
-                  </span>
-                </Label>
-                <p className="text-[10px] text-muted-foreground mt-0.5 max-w-[280px]">
-                  {tt(
-                    "Schließt dieses Restaurant in die Marktplatz-Suche und -Einträge ein.",
-                    "Include this restaurant in marketplace search and listings.",
-                  )}
-                </p>
-              </div>
-              <Switch
-                id="show-in-marketplace"
-                checked={showInMarketplace}
-                onCheckedChange={setShowInMarketplace}
               />
             </div>
 
@@ -1853,75 +1925,6 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
                 className="resize-none"
               />
             </div>
-
-            {/* Publishing Section */}
-            <div className="flex flex-col gap-3 p-4 border border-[#e2e8e4] rounded-2xl bg-white shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="is-published" className="font-semibold text-forest">
-                    {tt("Storefront veröffentlichen", "Publish Storefront")}
-                  </Label>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">
-                    {tt(
-                      "Halten Sie Ihre direkte öffentliche Seite live unter /restaurant/",
-                      "Keep your direct public page live at /restaurant/",
-                    )}
-                    {restaurant.slug}
-                  </p>
-                </div>
-                <Switch
-                  id="is-published"
-                  checked={isPublished}
-                  disabled={!hasPaymentMethod}
-                  onCheckedChange={(val) => {
-                    setIsPublished(val);
-                    if (val) {
-                      trackEvent("storefront_publish_attempted");
-                    }
-                  }}
-                />
-              </div>
-              {!hasPaymentMethod && (
-                <p className="text-[10px] text-rose-600 bg-rose-500/5 border border-rose-500/10 p-2.5 rounded-lg leading-relaxed">
-                  ⚠️{" "}
-                  {tt(
-                    "Aktivieren Sie zuerst mindestens eine Zahlungsmethode (Bargeld, PayPal oder Stripe) im Zahlungs-Tab, bevor Sie veröffentlichen.",
-                    "Please enable at least one payment method (Cash, PayPal, or Stripe Connect) under the Payments tab before publishing.",
-                  )}
-                </p>
-              )}
-            </div>
-
-            {/* Marketplace Discovery Section */}
-            <div className="flex flex-col gap-3 p-4 border border-[#e2e8e4] rounded-2xl bg-[#fdfaf5] shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label htmlFor="show-in-marketplace" className="font-semibold text-forest flex items-center gap-1.5">
-                    <Tag className="h-4 w-4" />
-                    {tt("Marketplace Discovery", "Marketplace Discovery")}
-                  </Label>
-                  <p className="text-[10px] text-muted-foreground mt-0.5 max-w-[250px]">
-                    {tt(
-                      "Werden Sie im Speisely Food-Marketplace gelistet und erhalten Sie neue Kunden. (Erhöhte Servicegebühr bei Marketplace-Bestellungen).",
-                      "Get listed on the Speisely food marketplace and acquire new customers. (Increased service fee on marketplace orders).",
-                    )}
-                  </p>
-                </div>
-                <Switch
-                  id="show-in-marketplace"
-                  checked={showInMarketplace}
-                  onCheckedChange={(val) => {
-                    setShowInMarketplace(val);
-                    if (val) {
-                      trackEvent("marketplace_optin_enabled");
-                    } else {
-                      trackEvent("marketplace_optin_disabled");
-                    }
-                  }}
-                />
-              </div>
-            </div>
-
           </div>
         </div>
 

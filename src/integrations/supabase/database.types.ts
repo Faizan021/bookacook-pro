@@ -15,18 +15,21 @@ export type Database = Omit<GeneratedDatabase, "public"> & {
           seo_local_intro: string | null;
           seo_nearby_landmarks: string[] | null;
           show_in_marketplace: boolean | null;
+          marketplace_discovery: boolean | null;
         };
         Insert: GeneratedDatabase["public"]["Tables"]["restaurants"]["Insert"] & {
           seo_dietary_options?: string[] | null;
           seo_local_intro?: string | null;
           seo_nearby_landmarks?: string[] | null;
           show_in_marketplace?: boolean | null;
+          marketplace_discovery?: boolean | null;
         };
         Update: GeneratedDatabase["public"]["Tables"]["restaurants"]["Update"] & {
           seo_dietary_options?: string[] | null;
           seo_local_intro?: string | null;
           seo_nearby_landmarks?: string[] | null;
           show_in_marketplace?: boolean | null;
+          marketplace_discovery?: boolean | null;
         };
       };
       caterers: Omit<GeneratedDatabase["public"]["Tables"]["caterers"], "Row" | "Insert" | "Update"> & {

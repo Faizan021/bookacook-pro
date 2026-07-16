@@ -130,6 +130,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       accepts_orders?: boolean;
       use_generated_branding?: boolean;
       show_in_marketplace?: boolean;
+      marketplace_discovery?: boolean;
       seo_title?: string | null;
       seo_description?: string | null;
       seo_primary_keyword?: string | null;
@@ -174,6 +175,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           accepts_orders: z.boolean().optional(),
           use_generated_branding: z.boolean().optional(),
           show_in_marketplace: z.boolean().optional(),
+          marketplace_discovery: z.boolean().optional(),
           seo_title: z.string().max(60).optional().nullable(),
           seo_description: z.string().max(160).optional().nullable(),
           seo_primary_keyword: z.string().max(200).optional().nullable(),
