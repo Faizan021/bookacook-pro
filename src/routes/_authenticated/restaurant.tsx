@@ -1744,8 +1744,8 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
                 </Label>
                 <p className="text-[10px] text-muted-foreground mt-0.5 max-w-[280px]">
                   {tt(
-                    "Macht dein Profil auf dem Speisely-Marktplatz auffindbar, damit neue Kunden dich entdecken können.",
-                    "Makes your profile discoverable on the Speisely Marketplace so new customers can find you.",
+                    "Schließt dieses Restaurant in die Marktplatz-Suche und -Einträge ein.",
+                    "Include this restaurant in marketplace search and listings.",
                   )}
                 </p>
               </div>
@@ -1863,8 +1863,8 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
                   </Label>
                   <p className="text-[10px] text-muted-foreground mt-0.5">
                     {tt(
-                      "Schalten Sie Ihr Storefront öffentlich live unter /restaurant/",
-                      "Make your storefront live at /restaurant/",
+                      "Halten Sie Ihre direkte öffentliche Seite live unter /restaurant/",
+                      "Keep your direct public page live at /restaurant/",
                     )}
                     {restaurant.slug}
                   </p>
