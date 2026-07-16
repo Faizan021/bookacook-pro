@@ -1736,6 +1736,28 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
 
             <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
               <div>
+                <Label htmlFor="show-in-marketplace" className="font-semibold text-forest flex items-center gap-2">
+                  {tt("Auf dem Marktplatz anzeigen", "Show in Marketplace")}
+                  <span className="bg-forest/10 text-forest px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider">
+                    {tt("Sichtbarkeit", "Visibility")}
+                  </span>
+                </Label>
+                <p className="text-[10px] text-muted-foreground mt-0.5 max-w-[280px]">
+                  {tt(
+                    "Macht dein Profil auf dem Speisely-Marktplatz auffindbar, damit neue Kunden dich entdecken können.",
+                    "Makes your profile discoverable on the Speisely Marketplace so new customers can find you.",
+                  )}
+                </p>
+              </div>
+              <Switch
+                id="show-in-marketplace"
+                checked={showInMarketplace}
+                onCheckedChange={setShowInMarketplace}
+              />
+            </div>
+
+            <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+              <div>
                 <Label htmlFor="accepts-pickup" className="font-semibold text-forest">
                   {tt("Abholung erlauben", "Allow Pickup")}
                 </Label>
@@ -3434,15 +3456,16 @@ function RestaurantDashboardInner() {
     retry: false,
   });
 
-  const location = useLocation();
-  const searchParams = React.useMemo(() => new URLSearchParams(location.search as any), [location.search]);
-  const rawTab = searchParams.get("tab") || (location.hash || "#overview").replace("#", "");
+  const { 
+    tab, 
+    connect_success: connectSuccess, 
+    connect_error: connectError, 
+    billing_success: billingSuccess, 
+    billing_cancel: billingCancel 
+  } = Route.useSearch();
+  const rawTab = tab || (location.hash || "#overview").replace("#", "");
 
   React.useEffect(() => {
-    const connectSuccess = searchParams.get("connect_success");
-    const connectError = searchParams.get("connect_error");
-    const billingSuccess = searchParams.get("billing_success");
-    const billingCancel = searchParams.get("billing_cancel");
     const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
     if (connectSuccess) {
@@ -3485,7 +3508,7 @@ function RestaurantDashboardInner() {
         window.location.pathname + (rawTab ? `?tab=${rawTab}` : ""),
       );
     }
-  }, [searchParams, lang, rawTab]);
+  }, [connectSuccess, connectError, billingSuccess, billingCancel, lang, rawTab]);
 
   React.useEffect(() => {
     trackEvent("restaurant_onboarding_started");
