@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { z } from "zod";
 import { useMemo, useState, useEffect } from "react";
@@ -77,11 +78,11 @@ export const Route = createFileRoute("/restaurant/$slug")({
     if (!fullRestaurant) {
       throw notFound();
     }
-    
+
     // Redirect to custom domain if it exists to prevent duplicate indexing
     if (dbRestaurant?.custom_domain) {
       // We only redirect if we are not already on the custom domain.
-      // Wait, in a typical TanStack Start app, the loader runs on both server and client. 
+      // Wait, in a typical TanStack Start app, the loader runs on both server and client.
       // But we can check `window.location.hostname`? No, loader is server-first.
       // If we redirect to https://customdomain, and they are already on it, we might loop.
       // Actually, if they are already on the custom domain, the request hostname matches.
@@ -98,10 +99,10 @@ export const Route = createFileRoute("/restaurant/$slug")({
   head: ({ loaderData, params }) => {
     const r = loaderData?.fullRestaurant;
     const dbR = loaderData?.dbRestaurant as any;
-    
+
     const cuisineType = r?.tags?.join(", ") ?? "";
     const city = dbR?.city ?? r?.area ?? "Deutschland";
-    
+
     // Default values
     const rawDesc = r
       ? `Bestelle direkt bei ${r.name} in ${city} – ohne Provision, ohne Umwege. ${cuisineType} Küche auf Speisely.`
@@ -110,13 +111,13 @@ export const Route = createFileRoute("/restaurant/$slug")({
     const defaultTitle = r
       ? `${r.name} – Online Bestellen in ${city} | Speisely`
       : "Restaurant – Online Bestellen | Speisely";
-      
+
     // Apply DB overrides if present
     const title = dbR?.seo_title || defaultTitle;
     const description = dbR?.seo_description || defaultDescription;
-    
+
     const ogImage = r?.img ?? "https://speisely.de/og-default.jpg";
-    const canonicalUrl = dbR?.custom_domain 
+    const canonicalUrl = dbR?.custom_domain
       ? `https://${dbR.custom_domain}`
       : `https://speisely.de/restaurant/${params.slug}`;
 
@@ -146,7 +147,18 @@ export const Route = createFileRoute("/restaurant/$slug")({
           },
           servesCuisine: dbR?.seo_cuisine_target || r.tags?.[0] || "",
           hasMenu: `${canonicalUrl}#menu`,
-          ...(dbR?.seo_signature_dishes?.length ? { hasOfferCatalog: { "@type": "OfferCatalog", name: "Signature Dishes", itemListElement: dbR.seo_signature_dishes.map((dish: string) => ({ "@type": "Offer", itemOffered: { "@type": "Product", name: dish } })) } } : {}),
+          ...(dbR?.seo_signature_dishes?.length
+            ? {
+                hasOfferCatalog: {
+                  "@type": "OfferCatalog",
+                  name: "Signature Dishes",
+                  itemListElement: dbR.seo_signature_dishes.map((dish: string) => ({
+                    "@type": "Offer",
+                    itemOffered: { "@type": "Product", name: dish },
+                  })),
+                },
+              }
+            : {}),
           potentialAction: {
             "@type": "OrderAction",
             target: {
@@ -155,12 +167,10 @@ export const Route = createFileRoute("/restaurant/$slug")({
               inLanguage: "de-DE",
               actionPlatform: [
                 "http://schema.org/DesktopWebPlatform",
-                "http://schema.org/MobileWebPlatform"
-              ]
+                "http://schema.org/MobileWebPlatform",
+              ],
             },
-            deliveryMethod: [
-              "http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"
-            ]
+            deliveryMethod: ["http://purl.org/goodrelations/v1#DeliveryModeOwnFleet"],
           },
           ...(loaderData?.reviewsData?.aggregates?.count &&
           loaderData.reviewsData.aggregates.count > 0
@@ -181,7 +191,7 @@ export const Route = createFileRoute("/restaurant/$slug")({
         { src: `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`, async: true },
         {
           children: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${googleAnalyticsId}');`,
-        }
+        },
       );
     }
 
@@ -223,7 +233,16 @@ export const Route = createFileRoute("/restaurant/$slug")({
 
 function RestaurantPage() {
   const { slug } = Route.useParams();
-  const { order_success, claimable, email, name: customerName, payment_method, paypal_url, amount, ref } = Route.useSearch();
+  const {
+    order_success,
+    claimable,
+    email,
+    name: customerName,
+    payment_method,
+    paypal_url,
+    amount,
+    ref,
+  } = Route.useSearch();
   const { lang } = useI18n();
   const loaderData = Route.useLoaderData() as any;
   const { dbRestaurant: dbROrig, fullRestaurant: fullROrig, reviewsData } = loaderData;
@@ -251,7 +270,7 @@ function RestaurantPage() {
 
   const [cart, setCart] = useState<Record<string, number>>({});
   const [filter, setFilter] = useState<string>("all");
-  
+
   const availableTags = useMemo(() => {
     const tagsSet = new Set<string>();
     restaurant?.menu?.forEach((item: any) => {
@@ -278,6 +297,55 @@ function RestaurantPage() {
   const validatePromoFn = useServerFn(validatePromoCode);
   const [selectedPayment, setSelectedPayment] = useState<"cash" | "paypal" | "stripe" | null>(null);
 
+  const categories = useMemo(() => {
+    if (!restaurant?.menu) return [];
+    const seen = new Set<string>();
+    const cats: string[] = [];
+    restaurant.menu.forEach((m: any) => {
+      const c = m.category || "Menu";
+      if (!seen.has(c)) {
+        seen.add(c);
+        cats.push(c);
+      }
+    });
+    return cats;
+  }, [restaurant]);
+
+  const [activeCategory, setActiveCategory] = useState<string>("");
+
+  useEffect(() => {
+    if (!categories || categories.length === 0) return;
+    const observerOptions = {
+      root: null,
+      rootMargin: "-120px 0px -50% 0px",
+      threshold: 0,
+    };
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const catName = id.replace("category-", "");
+          setActiveCategory(catName);
+        }
+      });
+    };
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    categories.forEach((cat) => {
+      const el = document.getElementById(`category-${cat}`);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [categories]);
+
+  const certBadges = useMemo(() => {
+    if (!restaurant?.certifications) return [];
+    return String(restaurant.certifications)
+      .split(",")
+      .map((tag: string) => tag.trim())
+      .filter((tag: string) => tag.length > 0)
+      .filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
+  }, [restaurant?.certifications]);
+
   const [claimPassword, setClaimPassword] = useState("");
   const [claimLoading, setClaimLoading] = useState(false);
   const [claimSuccess, setClaimSuccess] = useState(false);
@@ -293,13 +361,15 @@ function RestaurantPage() {
         options: {
           data: {
             full_name: customerName || "Customer",
-          }
-        }
+          },
+        },
       });
       if (error) throw error;
       setClaimSuccess(true);
     } catch (err: any) {
-      alert(t("Fehler bei der Registrierung: ", "Failed to claim account: ") + (err.message || err));
+      alert(
+        t("Fehler bei der Registrierung: ", "Failed to claim account: ") + (err.message || err),
+      );
     } finally {
       setClaimLoading(false);
     }
@@ -333,7 +403,9 @@ function RestaurantPage() {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session?.user) {
         setCurrentUser(session.user);
         const { data } = await supabase
@@ -349,7 +421,9 @@ function RestaurantPage() {
     };
     getSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setCurrentUser(session.user);
         supabase
@@ -414,6 +488,7 @@ function RestaurantPage() {
   const [resLoading, setResLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(false);
   const [resError, setResError] = useState("");
+  const [mobileCartOpen, setMobileCartOpen] = useState(false);
 
   const t = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -549,7 +624,6 @@ function RestaurantPage() {
     }
   };
 
-  const [mobileCartOpen, setMobileCartOpen] = useState(false);
   const reviews = reviewsData?.reviews || [];
   const aggregates = reviewsData?.aggregates;
   if (!restaurant) return null;
@@ -557,28 +631,6 @@ function RestaurantPage() {
   const scrollToMenu = () => {
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
   };
-
-  const categories = useMemo(() => {
-    const seen = new Set<string>();
-    const cats: string[] = [];
-    restaurant.menu.forEach((m: any) => {
-      const c = m.category || "Menu";
-      if (!seen.has(c)) {
-        seen.add(c);
-        cats.push(c);
-      }
-    });
-    return cats;
-  }, [restaurant]);
-
-  const certBadges = useMemo(() => {
-    if (!restaurant?.certifications) return [];
-    return String(restaurant.certifications)
-      .split(",")
-      .map((tag: string) => tag.trim())
-      .filter((tag: string) => tag.length > 0)
-      .filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
-  }, [restaurant?.certifications]);
 
   const maxBadges = 5;
   const visibleBadges = certBadges.slice(0, maxBadges);
@@ -695,13 +747,22 @@ function RestaurantPage() {
             </span>
             <div className="flex gap-1.5 items-center">
               {paymentMethods.cash && (
-                <span title={t("Barzahlung", "Cash")} className="text-sm">💶</span>
+                <span title={t("Barzahlung", "Cash")} className="text-sm">
+                  💶
+                </span>
               )}
               {paymentMethods.paypal && (
-                <span title="PayPal" className="text-[8px] font-black text-[#003087] bg-blue-50 px-1 py-0.5 rounded border border-blue-200 leading-none">PayPal</span>
+                <span
+                  title="PayPal"
+                  className="text-[8px] font-black text-[#003087] bg-blue-50 px-1 py-0.5 rounded border border-blue-200 leading-none"
+                >
+                  PayPal
+                </span>
               )}
               {paymentMethods.stripe && (
-                <span title={t("Kreditkarte", "Credit Card")} className="text-sm">💳</span>
+                <span title={t("Kreditkarte", "Credit Card")} className="text-sm">
+                  💳
+                </span>
               )}
             </div>
           </div>
@@ -890,14 +951,14 @@ function RestaurantPage() {
                 className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
               />
             )}
-             <input
+            <input
               type="text"
               placeholder={t("Notizen (optional)", "Notes (optional)")}
               value={checkoutNotes}
               onChange={(e) => setCheckoutNotes(e.target.value)}
               className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
             />
-            
+
             {/* Consent & Opt-ins Checkboxes */}
             <div className="space-y-2 mt-3 pt-2 border-t border-[oklch(0.85_0.05_152)]/30 text-left">
               <label className="flex items-start gap-2 cursor-pointer">
@@ -910,7 +971,7 @@ function RestaurantPage() {
                 <span className="text-[11px] text-forest/75 leading-snug">
                   {t(
                     "Ich stimme zu, dass meine Daten zur Bearbeitung der Bestellung verarbeitet werden (Double Opt-In). *",
-                    "I consent to having my data processed to handle my order (Double Opt-in). *"
+                    "I consent to having my data processed to handle my order (Double Opt-in). *",
                   )}
                 </span>
               </label>
@@ -925,7 +986,7 @@ function RestaurantPage() {
                 <span className="text-[11px] text-forest/75 leading-snug">
                   {t(
                     "Ich möchte E-Mails über Angebote und Rabatte erhalten (Optional).",
-                    "I would like to receive emails about offers and discounts (Optional)."
+                    "I would like to receive emails about offers and discounts (Optional).",
                   )}
                 </span>
               </label>
@@ -940,7 +1001,7 @@ function RestaurantPage() {
                 <span className="text-[11px] text-forest/75 leading-snug">
                   {t(
                     "Ich bestätige, dass alle von mir gemachten Angaben korrekt sind. *",
-                    "I confirm that all information provided is correct. *"
+                    "I confirm that all information provided is correct. *",
                   )}
                 </span>
               </label>
@@ -1008,7 +1069,7 @@ function RestaurantPage() {
           <button
             onClick={async () => {
               if (isGated || checkoutLoading) return;
-              
+
               if (currentUser && userRole !== "customer") {
                 setAuthPopupOpen(true);
                 return;
@@ -1027,8 +1088,8 @@ function RestaurantPage() {
                 alert(
                   t(
                     "Bitte füllen Sie Ihre E-Mail-Adresse aus.",
-                    "Please fill out your email address."
-                  )
+                    "Please fill out your email address.",
+                  ),
                 );
                 return;
               }
@@ -1042,8 +1103,8 @@ function RestaurantPage() {
                 alert(
                   t(
                     "Bitte akzeptieren Sie die Datenverarbeitung (Double Opt-In).",
-                    "Please accept the data processing consent (Double Opt-in)."
-                  )
+                    "Please accept the data processing consent (Double Opt-in).",
+                  ),
                 );
                 return;
               }
@@ -1051,8 +1112,8 @@ function RestaurantPage() {
                 alert(
                   t(
                     "Bitte bestätigen Sie, dass alle Ihre Angaben korrekt sind.",
-                    "Please confirm that all your details are correct."
-                  )
+                    "Please confirm that all your details are correct.",
+                  ),
                 );
                 return;
               }
@@ -1075,8 +1136,8 @@ function RestaurantPage() {
                     source: "storefront_checkout",
                     source_detail: slug,
                     user_id: currentUser?.id,
-                  }
-                }).catch(e => console.error("Error saving consent", e));
+                  },
+                }).catch((e) => console.error("Error saving consent", e));
 
                 const itemsPayload = cartItems.map((i) => ({ productId: i.id, quantity: i.qty }));
                 const res = await checkoutFn({
@@ -1103,7 +1164,7 @@ function RestaurantPage() {
                 if (selectedPayment === "paypal" && res?.url) {
                   successQuery += `&payment_method=paypal&paypal_url=${encodeURIComponent(res.url)}&amount=${encodeURIComponent(finalTotal.toFixed(2))}`;
                 }
-                
+
                 setCart({});
                 if (isMobile) setMobileCartOpen(false);
 
@@ -1119,10 +1180,12 @@ function RestaurantPage() {
                     );
                   }
                 } else if (selectedPayment === "paypal") {
-                  window.location.href = window.location.origin + window.location.pathname + successQuery;
+                  window.location.href =
+                    window.location.origin + window.location.pathname + successQuery;
                 } else {
                   // Cash
-                  window.location.href = window.location.origin + window.location.pathname + successQuery;
+                  window.location.href =
+                    window.location.origin + window.location.pathname + successQuery;
                 }
               } catch (err: any) {
                 alert(t("Fehler: ", "Error: ") + (err.message || err));
@@ -1159,7 +1222,7 @@ function RestaurantPage() {
               <p className="text-sm text-forest/70 max-w-md mx-auto">
                 {t(
                   `Vielen Dank für Ihre Bestellung bei ${restaurant?.name || "uns"}! Die Küche bereitet Ihre Speisen frisch zu.`,
-                  `Thank you for your order at ${restaurant?.name || "us"}! The kitchen is preparing your fresh dishes.`
+                  `Thank you for your order at ${restaurant?.name || "us"}! The kitchen is preparing your fresh dishes.`,
                 )}
               </p>
             </div>
@@ -1176,7 +1239,7 @@ function RestaurantPage() {
                     <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
                       {t(
                         `Bitte klicken Sie auf den untenstehenden Button, um Ihre Zahlung von €${amount || ""} abzuschließen.`,
-                        `Please click the button below to complete your payment of €${amount || ""}.`
+                        `Please click the button below to complete your payment of €${amount || ""}.`,
                       )}
                     </p>
                   </div>
@@ -1205,7 +1268,7 @@ function RestaurantPage() {
                     <p className="text-xs text-muted-foreground">
                       {t(
                         "Sie sind nun registriert. Sie können sich ab sofort mit Ihrem Passwort anmelden, um Bestellungen zu verfolgen.",
-                        "You are now registered. You can log in using your password to track future orders."
+                        "You are now registered. You can log in using your password to track future orders.",
                       )}
                     </p>
                   </div>
@@ -1218,7 +1281,7 @@ function RestaurantPage() {
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {t(
                           `Für Ihre E-Mail (${email}) wurde ein CRM-Profil angelegt. Setzen Sie jetzt ein Passwort, um Ihr Konto zu aktivieren und Ihre Bestellungen zu speichern!`,
-                          `A CRM profile has been created for your email (${email}). Set a password below to claim your account and save your order history!`
+                          `A CRM profile has been created for your email (${email}). Set a password below to claim your account and save your order history!`,
                         )}
                       </p>
                     </div>
@@ -1488,15 +1551,19 @@ function RestaurantPage() {
                   {dbRestaurant.seo_cuisine_target}
                 </p>
               )}
-              {dbRestaurant?.seo_signature_dishes && dbRestaurant.seo_signature_dishes.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {dbRestaurant.seo_signature_dishes.map((dish: string, i: number) => (
-                    <span key={i} className="text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white">
-                      {dish}
-                    </span>
-                  ))}
-                </div>
-              )}
+              {dbRestaurant?.seo_signature_dishes &&
+                dbRestaurant.seo_signature_dishes.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {dbRestaurant.seo_signature_dishes.map((dish: string, i: number) => (
+                      <span
+                        key={i}
+                        className="text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white"
+                      >
+                        {dish}
+                      </span>
+                    ))}
+                  </div>
+                )}
               {restaurant.id && (
                 <a
                   href={storefrontUrl}
@@ -1528,13 +1595,22 @@ function RestaurantPage() {
               </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-2 m-0 mt-0.5">
                 {paymentMethods.cash && (
-                  <span title={t("Barzahlung", "Cash")} className="cursor-help text-base">💶</span>
+                  <span title={t("Barzahlung", "Cash")} className="cursor-help text-base">
+                    💶
+                  </span>
                 )}
                 {paymentMethods.paypal && (
-                  <span title="PayPal" className="cursor-help text-xs font-black text-[#003087] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200">PayPal</span>
+                  <span
+                    title="PayPal"
+                    className="cursor-help text-xs font-black text-[#003087] bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200"
+                  >
+                    PayPal
+                  </span>
                 )}
                 {paymentMethods.stripe && (
-                  <span title={t("Kreditkarte", "Credit Card")} className="cursor-help text-base">💳</span>
+                  <span title={t("Kreditkarte", "Credit Card")} className="cursor-help text-base">
+                    💳
+                  </span>
                 )}
               </dd>
             </div>
@@ -1599,9 +1675,14 @@ function RestaurantPage() {
             </p>
             {dbRestaurant?.seo_nearby_landmarks && dbRestaurant.seo_nearby_landmarks.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="text-sm font-semibold text-forest/70">{t("In der Nähe:", "Nearby:")}</span>
+                <span className="text-sm font-semibold text-forest/70">
+                  {t("In der Nähe:", "Nearby:")}
+                </span>
                 {dbRestaurant.seo_nearby_landmarks.map((lm: string, i: number) => (
-                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1"><MapPin className="h-3 w-3" />{lm}</span>
+                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {lm}
+                  </span>
                 ))}
               </div>
             )}
@@ -1653,6 +1734,7 @@ function RestaurantPage() {
 
           <CategoryNav
             categories={categories}
+            activeCategory={activeCategory}
             onSelect={(cat) => {
               document
                 .getElementById(`category-${cat}`)
@@ -1665,7 +1747,10 @@ function RestaurantPage() {
               const items = restaurant.menu.filter(
                 (m: any) =>
                   (m.category || "Menu") === cat &&
-                  (filter === "all" || (m.dietary ?? []).some((tag: string) => tag.toLowerCase() === filter.toLowerCase())),
+                  (filter === "all" ||
+                    (m.dietary ?? []).some(
+                      (tag: string) => tag.toLowerCase() === filter.toLowerCase(),
+                    )),
               );
               if (items.length === 0) return null;
               return (
@@ -1677,16 +1762,16 @@ function RestaurantPage() {
                       return (
                         <div
                           key={m.name}
-                          className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group"
+                          className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-2xl shadow-sm hover:shadow-md hover:border-forest/40 hover:-translate-y-0.5 transition-all duration-300 group"
                         >
                           <div className="min-w-0 flex flex-col md:flex-row gap-4">
                             {m.img && (
-                              <div className="shrink-0">
+                              <div className="shrink-0 overflow-hidden rounded-xl border border-[#eadfce]/50 h-24 w-24 md:h-32 md:w-32">
                                 <img
                                   src={m.img}
                                   alt={m.name}
                                   loading="lazy"
-                                  className="h-24 w-24 md:h-32 md:w-32 rounded-lg object-cover border border-[#eadfce]/50"
+                                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
                               </div>
                             )}
@@ -1695,17 +1780,36 @@ function RestaurantPage() {
                                 <h4 className="font-display text-lg font-bold text-forest">
                                   {m.name}
                                 </h4>
-                                {(m.dietary ?? []).map((d: any) => (
-                                  <span
-                                    key={d}
-                                    className="inline-flex items-center rounded-full bg-[#fdfaf5] text-[#16372f] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide border border-[#eadfce]/60"
-                                    title={d}
-                                  >
-                                    {d === "vegan" ? "🌱 Vegan" : d === "vegetarian" ? "V" : "GF"}
-                                  </span>
-                                ))}
+                                {(m.dietary ?? []).map((d: any) => {
+                                  const tag = d.toLowerCase();
+                                  let bgClass = "bg-gray-50 text-gray-700 border-gray-200";
+                                  let label = d;
+                                  if (tag === "vegan") {
+                                    bgClass = "bg-emerald-50 text-emerald-700 border-emerald-100";
+                                    label = "🌱 " + t("Vegan", "Vegan");
+                                  } else if (
+                                    tag === "vegetarian" ||
+                                    tag === "vegetarisch" ||
+                                    tag === "veggie"
+                                  ) {
+                                    bgClass = "bg-amber-50 text-amber-700 border-amber-100";
+                                    label = "🥦 " + t("Veggie", "Veggie");
+                                  } else if (tag === "gluten-free" || tag === "glutenfrei") {
+                                    bgClass = "bg-sky-50 text-sky-700 border-sky-100";
+                                    label = "🌾 " + t("Glutenfrei", "Gluten-free");
+                                  }
+                                  return (
+                                    <span
+                                      key={d}
+                                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${bgClass}`}
+                                      title={d}
+                                    >
+                                      {label}
+                                    </span>
+                                  );
+                                })}
                               </div>
-                              <p className="text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">
+                              <p className="text-sm text-forest/70 mt-1.5 leading-relaxed max-w-xl">
                                 {m.desc[lang]}
                               </p>
                               <p className="mt-3 text-lg font-bold text-forest">
@@ -1717,13 +1821,13 @@ function RestaurantPage() {
                             {qty === 0 ? (
                               <button
                                 onClick={() => add(m.name)}
-                                className="h-10 w-10 grid place-items-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90 pulse-btn shadow-md"
+                                className="h-10 w-10 grid place-items-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 pulse-btn shadow-md"
                                 aria-label={t("Hinzufügen", "Add")}
                               >
                                 <Plus className="h-5 w-5" />
                               </button>
                             ) : (
-                              <div className="inline-flex items-center gap-3 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10 shadow-md">
+                              <div className="inline-flex items-center gap-3 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10 shadow-md hover:scale-[1.02] active:scale-100 transition-all duration-200">
                                 <button
                                   onClick={() => remove(m.name)}
                                   className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10"
@@ -1952,7 +2056,7 @@ function RestaurantPage() {
           <p className="text-sm text-forest/80 leading-relaxed mt-4">
             {t(
               "Bitte melden Sie sich als Kunde an, um eine Bestellung aufzugeben. Partner-Konten können keine Bestellungen aufgeben.",
-              "Please sign in as a customer to place an order. Partner accounts cannot place orders."
+              "Please sign in as a customer to place an order. Partner accounts cannot place orders.",
             )}
           </p>
           <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
@@ -1964,7 +2068,9 @@ function RestaurantPage() {
             </button>
             <Link
               to="/auth"
-              search={{ redirect: typeof window !== "undefined" ? window.location.href : undefined }}
+              search={{
+                redirect: typeof window !== "undefined" ? window.location.href : undefined,
+              }}
               className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-forest text-white font-bold text-sm hover:opacity-90 transition cursor-pointer"
             >
               {t("Jetzt anmelden", "Sign In Now")}
