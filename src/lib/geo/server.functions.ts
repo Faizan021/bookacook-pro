@@ -154,11 +154,13 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   // 1. Fetch published pages
-  const { data: seoPages } = await supabaseAdmin
+  // Cast to any[] to access intro_md which is not yet in the generated Supabase types
+  // (mirrors the (seoData as any)?.intro_md pattern used in the city route loader)
+  const { data: seoPages } = (await supabaseAdmin
     .from("seo_content_pages")
     .select("slug, content, meta_title, target_keyword")
     .eq("status", "published")
-    .like("slug", "%/ort/%");
+    .like("slug", "%/ort/%")) as { data: any[] | null };
 
   if (!seoPages || seoPages.length === 0) return [];
 
@@ -213,7 +215,17 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
     const minVendors = role === "restaurants" ? 3 : 1;
     const hasEnoughVendors = vendorCount >= minVendors;
 
-    if (hasEnoughVendors || hasUniqueText) {
+    // Restaurants city pages require strict AND gating: enough vendors AND enough intro text.
+    // This prevents sitemap.xml from listing pages that would render as noindex, follow.
+    // Other roles use the looser threshold (hasEnoughVendors is sufficient).
+    // We use page.content as the rich intro proxy (intro_md isn't in the select query).
+    const introCopy: string = page.content || "";
+    const hasRichIntro = introCopy.length >= 150;
+
+    const isIndexable =
+      role === "restaurants" ? hasEnoughVendors && hasRichIntro : hasEnoughVendors || hasUniqueText;
+
+    if (isIndexable) {
       let finalSlug = page.slug;
       if (finalSlug && finalSlug.startsWith("restaurants/ort/")) {
         finalSlug = finalSlug.replace("restaurants/ort/", "restaurant/ort/");
