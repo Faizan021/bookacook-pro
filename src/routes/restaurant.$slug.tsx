@@ -337,6 +337,51 @@ function RestaurantPage() {
     return () => observer.disconnect();
   }, [categories]);
 
+  // Curated font mapping configuration for dynamic imports
+  const fontMap: Record<string, { family: string; importName: string }> = useMemo(
+    () => ({
+      playfair: {
+        family: "Playfair Display",
+        importName: "Playfair+Display:ital,wght@0,400..900;1,400..900",
+      },
+      cormorant: {
+        family: "Cormorant Garamond",
+        importName: "Cormorant+Garamond:ital,wght@0,300..700;1,300..700",
+      },
+      outfit: { family: "Outfit", importName: "Outfit:wght@100..900" },
+      montserrat: {
+        family: "Montserrat",
+        importName: "Montserrat:ital,wght@0,100..900;1,100..900",
+      },
+      inter: {
+        family: "Inter",
+        importName: "Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900",
+      },
+    }),
+    [],
+  );
+
+  const fontToken = dbRestaurant?.theme_header_font || "fraunces";
+  const accentColor = dbRestaurant?.theme_accent_color;
+
+  const fontConfig = fontMap[fontToken];
+  const fontLink = fontConfig
+    ? `https://fonts.googleapis.com/css2?family=${fontConfig.importName}&display=swap`
+    : null;
+
+  const fontFamily = fontConfig ? fontConfig.family : fontToken === "fraunces" ? "Fraunces" : null;
+
+  // YIQ luminance checker to compute contrast-safe colors
+  const contrastColor = useMemo(() => {
+    if (!accentColor || !/^#[0-9A-Fa-f]{6}$/.test(accentColor)) return "#ffffff";
+    const color = accentColor.startsWith("#") ? accentColor.slice(1) : accentColor;
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 128 ? "#16372f" : "#ffffff";
+  }, [accentColor]);
+
   const certBadges = useMemo(() => {
     if (!restaurant?.certifications) return [];
     return String(restaurant.certifications)
@@ -1322,6 +1367,43 @@ function RestaurantPage() {
 
   return (
     <SiteShell>
+      {fontLink && <link rel="stylesheet" href={fontLink} />}
+      {accentColor && (
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+          :root {
+            --forest: ${accentColor} !important;
+            ${fontFamily ? `--font-display: "${fontFamily}", var(--font-sans), serif !important;` : ""}
+          }
+          .bg-forest {
+            background-color: ${accentColor} !important;
+          }
+          .bg-forest.text-white,
+          .bg-forest.text-\\[oklch\\(0\\.97_0\\.02_92\\)\\] {
+            color: ${contrastColor} !important;
+          }
+          .text-forest {
+            color: ${accentColor} !important;
+          }
+          .border-forest {
+            border-color: ${accentColor} !important;
+          }
+        `,
+          }}
+        />
+      )}
+      {!accentColor && fontFamily && (
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+          :root {
+            --font-display: "${fontFamily}", var(--font-sans), serif !important;
+          }
+        `,
+          }}
+        />
+      )}
       <AnnouncementBanner
         isActive={restaurant.announcement_active ?? false}
         text={restaurant.announcement_text ?? null}

@@ -1717,6 +1717,12 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
   const [marketplaceDiscovery, setMarketplaceDiscovery] = useState(
     restaurant.marketplace_discovery ?? false,
   );
+  const [themeAccentColor, setThemeAccentColor] = useState(
+    restaurant.theme_accent_color || "#16372f",
+  );
+  const [themeHeaderFont, setThemeHeaderFont] = useState(
+    restaurant.theme_header_font || "fraunces",
+  );
   const [saving, setSaving] = useState(false);
 
   // Check if payments are configured
@@ -1741,6 +1747,8 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
           is_published: isPublished,
           show_in_marketplace: showInMarketplace,
           marketplace_discovery: marketplaceDiscovery,
+          theme_accent_color: themeAccentColor,
+          theme_header_font: themeHeaderFont,
         },
       });
       toast.success(
@@ -1981,12 +1989,150 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Design & Branding Settings Section */}
+      <div className="bg-white border border-[#e2e8e4] p-8 rounded-3xl shadow-sm space-y-6">
+        <div className="flex flex-col gap-1.5 border-b border-[#e2e8e4] pb-4">
+          <h3 className="font-display text-xl text-forest">
+            {tt("Design & Branding", "Design & Branding")}
+          </h3>
+          <p className="text-xs text-muted-foreground">
+            {tt(
+              "Personalisieren Sie das visuelle Erscheinungsbild Ihres Storefronts mit unseren kuratierten Design-Optionen.",
+              "Personalize the visual appearance of your storefront with our curated design options.",
+            )}
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Accent Color Section */}
+          <div className="space-y-4">
+            <div>
+              <Label className="font-semibold text-forest">
+                {tt("Farbe (Akzent)", "Accent Color")}
+              </Label>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                {tt(
+                  "Wählen Sie eine Akzentfarbe für Buttons, Abzeichen und Navigationselemente.",
+                  "Select an accent color for buttons, badges, and navigation elements.",
+                )}
+              </p>
+            </div>
+
+            {/* Presets Grid */}
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { name: tt("Waldgrün", "Forest Green"), value: "#16372f" },
+                { name: tt("Gold", "Gold"), value: "#c5a880" },
+                { name: tt("Koralle", "Warm Coral"), value: "#f08a5d" },
+                { name: tt("Pflaume", "Deep Plum"), value: "#6a1b29" },
+                { name: tt("Mitternachtsblau", "Midnight Blue"), value: "#1b2a4a" },
+                { name: tt("Tiefes Türkis", "Deep Teal"), value: "#0f4c5c" },
+              ].map((c) => (
+                <button
+                  key={c.value}
+                  type="button"
+                  onClick={() => setThemeAccentColor(c.value)}
+                  className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border text-center transition cursor-pointer ${
+                    themeAccentColor === c.value
+                      ? "border-forest bg-[#f8faf9] font-bold"
+                      : "border-border/60 bg-white hover:border-forest/30"
+                  }`}
+                >
+                  <span
+                    className="h-5 w-5 rounded-full border border-black/10 shrink-0"
+                    style={{ backgroundColor: c.value }}
+                  />
+                  <span className="text-[9px] uppercase tracking-wider text-forest/70 truncate w-full">
+                    {c.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Custom hex input */}
+            <div className="flex items-center gap-3 pt-2">
+              <div className="space-y-1.5 flex-grow">
+                <Label htmlFor="custom-hex" className="text-xs">
+                  {tt("Eigene Hex-Farbe", "Custom Hex Color")}
+                </Label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    id="custom-hex"
+                    type="text"
+                    placeholder="#16372f"
+                    value={themeAccentColor}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setThemeAccentColor(val);
+                    }}
+                    className="text-xs uppercase"
+                  />
+                  <div
+                    className="h-9 w-9 rounded-md border border-border shrink-0"
+                    style={{
+                      backgroundColor: /^#[0-9A-Fa-f]{6}$/.test(themeAccentColor)
+                        ? themeAccentColor
+                        : "#16372f",
+                    }}
+                  />
+                </div>
+                {!/^#[0-9A-Fa-f]{6}$/.test(themeAccentColor) && (
+                  <p className="text-[9px] text-rose-600">
+                    {tt(
+                      "Muss ein gültiger Hex-Code sein (z.B. #16372F)",
+                      "Must be a valid hex code (e.g., #16372F)",
+                    )}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Header Font Section */}
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="header-font" className="font-semibold text-forest">
+                {tt("Schriftart (Überschriften)", "Header Font")}
+              </Label>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                {tt(
+                  "Wählen Sie einen kuratierten Schriftstil für Ihre Storefront-Überschriften.",
+                  "Choose a curated typographic style for your storefront headings.",
+                )}
+              </p>
+            </div>
+
+            <div className="space-y-1.5">
+              <select
+                id="header-font"
+                value={themeHeaderFont}
+                onChange={(e) => setThemeHeaderFont(e.target.value)}
+                className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm text-forest focus:outline-none focus:border-forest"
+              >
+                <option value="fraunces">Fraunces (Elegant Serif - Default)</option>
+                <option value="playfair">Playfair Display (Classic Serif)</option>
+                <option value="cormorant">Cormorant Garamond (Graceful Serif)</option>
+                <option value="outfit">Outfit (Modern Geometric Sans)</option>
+                <option value="montserrat">Montserrat (Clean Editorial Sans)</option>
+                <option value="inter">Inter (Minimal Neutral Sans)</option>
+              </select>
+              <p className="text-[10px] text-muted-foreground mt-1">
+                {tt(
+                  "Hinweis: Branded Fonts werden auf der Kunden-Storefront automatisch geladen.",
+                  "Note: Curated fonts are loaded dynamically on the customer storefront.",
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
 
         <div className="pt-4 border-t border-[#e2e8e4] flex justify-end">
           <Button
             onClick={handleSave}
-            disabled={saving}
-            className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer"
+            disabled={saving || !/^#[0-9A-Fa-f]{6}$/.test(themeAccentColor)}
+            className="bg-forest hover:bg-forest/90 text-white rounded-full px-6 py-2 shadow-sm font-semibold transition cursor-pointer disabled:opacity-50"
           >
             {saving
               ? tt("Wird gespeichert...", "Saving...")

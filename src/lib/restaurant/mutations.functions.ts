@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth/role-middleware";
@@ -139,6 +140,8 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       seo_signature_dishes?: string[] | null;
       seo_local_intro?: string | null;
       seo_nearby_landmarks?: string[] | null;
+      theme_accent_color?: string | null;
+      theme_header_font?: string | null;
     }) =>
       z
         .object({
@@ -184,6 +187,15 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
           seo_signature_dishes: z.array(z.string().max(100)).optional().nullable(),
           seo_local_intro: z.string().max(2000).optional().nullable(),
           seo_nearby_landmarks: z.array(z.string().max(100)).optional().nullable(),
+          theme_accent_color: z
+            .string()
+            .regex(/^#[0-9A-Fa-f]{6}$/, "Must be a valid hex color starting with #")
+            .nullable()
+            .optional(),
+          theme_header_font: z
+            .enum(["fraunces", "playfair", "outfit", "montserrat", "cormorant", "inter"])
+            .nullable()
+            .optional(),
         })
         .parse(input),
   )
@@ -225,7 +237,9 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
     if (restStatus?.approval_status === "rejected") {
       updatePayload.approval_status = "pending";
       updatePayload.rejection_reason = null;
-      console.log(`[Review Queue] Resetting rejected restaurant status back to pending due to profile update for owner=${userId}`);
+      console.log(
+        `[Review Queue] Resetting rejected restaurant status back to pending due to profile update for owner=${userId}`,
+      );
     }
 
     const { error } = await supabase

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
@@ -65,7 +66,7 @@ export const createTableReservation = createServerFn({ method: "POST" })
       throw new Error(
         data.locale === "de"
           ? "Dieses Restaurant akzeptiert derzeit keine Reservierungen."
-          : "This restaurant is currently not accepting reservations."
+          : "This restaurant is currently not accepting reservations.",
       );
     }
 
@@ -121,17 +122,18 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.slug);
+
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      data.slug,
+    );
     const query = supabaseAdmin
       .from("restaurants")
       .select(
-        "id, owner_id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications, accepts_cash, accepts_paypal, paypal_email",
+        "id, owner_id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications, accepts_cash, accepts_paypal, paypal_email, theme_accent_color, theme_header_font",
       );
 
-    const { data: rest, error } = await (isUuid
-      ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`)
-      : query.eq("slug", data.slug)
+    const { data: rest, error } = await (
+      isUuid ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`) : query.eq("slug", data.slug)
     ).maybeSingle();
 
     if (error) throw new Error(error.message);
@@ -154,26 +156,27 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
     return { restaurant: rest, promoCodes };
   });
 
-export const getMarketplaceRestaurants = createServerFn({ method: "GET" })
-  .handler(async () => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handler(async () => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Fetch restaurants that are published and opted into the marketplace
-    // Selecting fields needed for the directory cards.
-    const { data: restaurants, error } = await supabaseAdmin
-      .from("restaurants")
-      // @ts-ignore - show_in_marketplace is added via recent migration, might not be in types.ts
-      .select("id, name, slug, custom_domain, is_published, show_in_marketplace, logo_url, banner_image_url, city, cuisine_type")
-      .eq("is_published", true)
-      .eq("show_in_marketplace", true);
+  // Fetch restaurants that are published and opted into the marketplace
+  // Selecting fields needed for the directory cards.
+  const { data: restaurants, error } = await supabaseAdmin
+    .from("restaurants")
+    // @ts-ignore - show_in_marketplace is added via recent migration, might not be in types.ts
+    .select(
+      "id, name, slug, custom_domain, is_published, show_in_marketplace, logo_url, banner_image_url, city, cuisine_type",
+    )
+    .eq("is_published", true)
+    .eq("show_in_marketplace", true);
 
-    if (error) {
-      console.error("[getMarketplaceRestaurants] Error fetching marketplace restaurants:", error);
-      throw new Error(error.message);
-    }
+  if (error) {
+    console.error("[getMarketplaceRestaurants] Error fetching marketplace restaurants:", error);
+    throw new Error(error.message);
+  }
 
-    return { restaurants: restaurants || [] };
-  });
+  return { restaurants: restaurants || [] };
+});
 
 async function calculatePromoDiscount(
   supabaseAdmin: any,
@@ -435,9 +438,7 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
       // Check if an auth user already exists for this email address
       try {
         const { data: usersData } = await supabaseAdmin.auth.admin.listUsers();
-        const matched = usersData?.users?.find(
-          (u) => u.email?.toLowerCase().trim() === cleanEmail,
-        );
+        const matched = usersData?.users?.find((u) => u.email?.toLowerCase().trim() === cleanEmail);
         if (matched) {
           authUserId = matched.id;
         }
@@ -464,15 +465,16 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
 
     // GDPR Marketing Consent
     if (data.marketingConsent !== undefined) {
-      await supabaseAdmin
-        .from("user_consents")
-        .upsert({
+      await supabaseAdmin.from("user_consents").upsert(
+        {
           email: cleanEmail,
           user_id: authUserId || null,
           audience_type: "customer",
           marketing_opt_in: data.marketingConsent,
           source_detail: "storefront_checkout",
-        }, { onConflict: "email" });
+        },
+        { onConflict: "email" },
+      );
     }
 
     // 5. Create Order in DB
@@ -534,11 +536,11 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         order.id,
       );
 
-      return { 
-        orderId: order.id, 
-        url: session.url, 
-        customerProfileId, 
-        accountClaimable: !authUserId 
+      return {
+        orderId: order.id,
+        url: session.url,
+        customerProfileId,
+        accountClaimable: !authUserId,
       };
     } else {
       // Cash / PayPal
@@ -600,13 +602,18 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
               status: "pending",
             })
             .throwOnError();
-          console.log(`[Print Queue] Enqueued print job for order ${order.id} (${data.paymentMethod})`);
+          console.log(
+            `[Print Queue] Enqueued print job for order ${order.id} (${data.paymentMethod})`,
+          );
         }
       } catch (printErr: any) {
         // A duplicate insert (order_id unique conflict) or any DB error must NOT
         // fail the checkout response. The manual print fallback remains available.
         if (printErr?.code !== "23505") {
-          console.error(`[Print Queue] Failed to enqueue print job for order ${order.id}:`, printErr?.message);
+          console.error(
+            `[Print Queue] Failed to enqueue print job for order ${order.id}:`,
+            printErr?.message,
+          );
         }
       }
 
@@ -630,11 +637,11 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         });
       }
 
-      return { 
-        orderId: order.id, 
-        url: redirectUrl, 
-        customerProfileId, 
-        accountClaimable: !authUserId 
+      return {
+        orderId: order.id,
+        url: redirectUrl,
+        customerProfileId,
+        accountClaimable: !authUserId,
       };
     }
   });
