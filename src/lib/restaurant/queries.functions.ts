@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireRole, requireSupabaseAuth } from "@/lib/auth/role-middleware";
@@ -30,7 +31,7 @@ export const getRestaurantOrders = createServerFn({ method: "GET" })
     if (!restaurant) return { restaurant: null, orders: [] as any[] };
     const { data, error } = await supabase
       .from("restaurant_orders")
-      .select("id, customer_name, items, total_cents, status, notes, created_at")
+      .select("id, customer_name, items, total_cents, status, notes, created_at, referral_source")
       .eq("restaurant_id", restaurant.id)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -50,7 +51,9 @@ export const getRestaurantProducts = createServerFn({ method: "GET" })
 
     const { data, error } = await supabase
       .from("restaurant_products")
-      .select("id, name, description, price_cents, image_url, is_available, created_at, category, dietary_tags")
+      .select(
+        "id, name, description, price_cents, image_url, is_available, created_at, category, dietary_tags",
+      )
       .eq("restaurant_id", restaurant.id)
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -152,15 +155,37 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
       return { month: monthStr, direct: 0, marketplace: 0 };
     });
 
+    const campaignBreakdown: Record<string, { count: number; totalCents: number }> = {};
+
     (orders || []).forEach((o: any) => {
       const d = new Date(o.created_at);
       const mStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
       const rItem = referralData.find((x) => x.month === mStr);
       if (rItem) {
-        if (o.referral_source === "marketplace") rItem.marketplace += 1;
-        else rItem.direct += 1;
+        if (o.referral_source === "marketplace" || o.referral_source === "speisely_marketplace") {
+          rItem.marketplace += 1;
+        } else {
+          rItem.direct += 1;
+        }
+      }
+
+      const source = o.referral_source || "direct";
+      if (!campaignBreakdown[source]) {
+        campaignBreakdown[source] = { count: 0, totalCents: 0 };
+      }
+      campaignBreakdown[source].count += 1;
+      if (o.status === "completed" || o.status === "delivered" || o.status === "picked_up") {
+        campaignBreakdown[source].totalCents += o.total_cents || 0;
       }
     });
+
+    const campaignsList = Object.entries(campaignBreakdown)
+      .map(([name, stats]) => ({
+        name,
+        count: stats.count,
+        revenueCents: stats.totalCents,
+      }))
+      .sort((a, b) => b.count - a.count);
 
     return {
       isActive: restaurant.is_active,
@@ -179,6 +204,7 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
       acceptsCash: (restaurant as any).accepts_cash,
       acceptsPaypal: (restaurant as any).accepts_paypal,
       referralData,
+      campaignsList,
     };
   });
 

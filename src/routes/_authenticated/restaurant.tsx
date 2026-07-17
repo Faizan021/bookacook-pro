@@ -465,9 +465,19 @@ function OrdersSection() {
                       🖨️ {t("Print", "Drucken")}
                     </Button>
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    #{o.id.slice(0, 8)} Â· {new Date(o.created_at).toLocaleString()}
-                  </p>
+                  <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-muted-foreground">
+                    <span>
+                      #{o.id.slice(0, 8)} · {new Date(o.created_at).toLocaleString()}
+                    </span>
+                    {o.referral_source && o.referral_source !== "direct" && (
+                      <span className="inline-flex items-center gap-1 rounded bg-[#eadfce]/45 text-forest px-2 py-0.5 font-bold text-[9px] uppercase tracking-wider">
+                        📢{" "}
+                        {o.referral_source === "speisely_marketplace"
+                          ? "Marketplace"
+                          : o.referral_source}
+                      </span>
+                    )}
+                  </div>
                   {items.length > 0 && (
                     <ul className="mt-3 text-sm text-foreground/80 space-y-0.5">
                       {items.map((it: any, i: number) => (
@@ -1205,48 +1215,93 @@ function OverviewSection() {
       </div>
 
       {/* SECTION 2.5: REFERRAL BREAKDOWN */}
-      <div className="space-y-4">
-        <h2 className="font-display text-xl text-forest">
-          {tt("Bestellherkunft (letzte 6 Monate)", "Order Source (last 6 months)")}
-        </h2>
-        <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={q.data.referralData.slice().reverse()}
-              margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-            >
-              <XAxis
-                dataKey="month"
-                tick={{ fontSize: 12, fill: "#4a5568" }}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis tick={{ fontSize: 12, fill: "#4a5568" }} tickLine={false} axisLine={false} />
-              <Tooltip
-                cursor={{ fill: "#f8faf9" }}
-                contentStyle={{
-                  borderRadius: "12px",
-                  border: "1px solid #e2e8e4",
-                  boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                }}
-              />
-              <Legend wrapperStyle={{ paddingTop: "20px" }} />
-              <Bar
-                dataKey="direct"
-                name={tt("Eigener Storefront", "Direct Storefront")}
-                stackId="a"
-                fill="#22c55e"
-                radius={[0, 0, 4, 4]}
-              />
-              <Bar
-                dataKey="marketplace"
-                name={tt("Speisely Marketplace", "Speisely Marketplace")}
-                stackId="a"
-                fill="#f59e0b"
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-4">
+          <h2 className="font-display text-xl text-forest">
+            {tt("Bestellherkunft (letzte 6 Monate)", "Order Source (last 6 months)")}
+          </h2>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={q.data.referralData.slice().reverse()}
+                margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+              >
+                <XAxis
+                  dataKey="month"
+                  tick={{ fontSize: 12, fill: "#4a5568" }}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis tick={{ fontSize: 12, fill: "#4a5568" }} tickLine={false} axisLine={false} />
+                <Tooltip
+                  cursor={{ fill: "#f8faf9" }}
+                  contentStyle={{
+                    borderRadius: "12px",
+                    border: "1px solid #e2e8e4",
+                    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+                <Legend wrapperStyle={{ paddingTop: "20px" }} />
+                <Bar
+                  dataKey="direct"
+                  name={tt("Eigener Storefront", "Direct Storefront")}
+                  stackId="a"
+                  fill="#22c55e"
+                  radius={[0, 0, 4, 4]}
+                />
+                <Bar
+                  dataKey="marketplace"
+                  name={tt("Speisely Marketplace", "Speisely Marketplace")}
+                  stackId="a"
+                  fill="#f59e0b"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="font-display text-xl text-forest">
+            {tt("Marketing-Kampagnen", "Marketing Campaigns")}
+          </h2>
+          <div className="bg-white border border-[#e2e8e4] p-6 rounded-2xl shadow-md h-[300px] overflow-y-auto">
+            {!q.data.campaignsList || q.data.campaignsList.length === 0 ? (
+              <div className="flex flex-col items-center justify-center text-center h-full py-6">
+                <span className="text-2xl mb-2">📢</span>
+                <p className="text-xs text-muted-foreground">
+                  {tt("Noch keine Kampagnendaten erfasst.", "No campaign data tracked yet.")}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-[#e2e8e4] pb-2 text-muted-foreground font-semibold">
+                      <th className="pb-2">{tt("Kanal", "Channel")}</th>
+                      <th className="pb-2 text-center">{tt("Bestellungen", "Orders")}</th>
+                      <th className="pb-2 text-right">{tt("Umsatz", "Revenue")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {q.data.campaignsList.map((c: any, index: number) => (
+                      <tr key={index} className="border-b border-[#f1f5f9] last:border-0">
+                        <td className="py-2 font-medium text-forest truncate max-w-[100px]">
+                          {c.name === "speisely_marketplace"
+                            ? tt("Marktplatz", "Marketplace")
+                            : c.name}
+                        </td>
+                        <td className="py-2 text-center text-gray-600">{c.count}</td>
+                        <td className="py-2 text-right font-semibold text-forest">
+                          {formatPrice(c.revenueCents)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

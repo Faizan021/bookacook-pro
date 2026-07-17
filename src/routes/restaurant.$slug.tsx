@@ -836,6 +836,15 @@ function RestaurantPage() {
       }).catch((e) => console.error("Error saving consent", e));
 
       const itemsPayload = cartItems.map((i) => ({ productId: i.id, quantity: i.qty }));
+      let cleanRef = "direct";
+      if (ref) {
+        const raw = ref.trim().toLowerCase();
+        const sanitized = raw.replace(/[^a-z0-9\-_]/g, "").slice(0, 50);
+        if (sanitized) {
+          cleanRef = sanitized === "marketplace" ? "speisely_marketplace" : sanitized;
+        }
+      }
+
       const res = await checkoutFn({
         data: {
           restaurantId: dbRestaurant?.id ?? "",
@@ -851,7 +860,7 @@ function RestaurantPage() {
           deliveryAddress: orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
           notes: checkoutNotes || undefined,
           marketingConsent: marketingAccepted,
-          referralSource: ref || "direct",
+          referralSource: cleanRef,
         },
       });
 

@@ -338,6 +338,19 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    // Normalization of referral source parameter
+    let normalizedRef = "direct";
+    if (data.referralSource) {
+      const rawRef = data.referralSource.trim().toLowerCase();
+      const sanitized = rawRef.replace(/[^a-z0-9\-_]/g, "").slice(0, 50);
+      if (sanitized) {
+        normalizedRef = sanitized;
+        if (normalizedRef === "marketplace") {
+          normalizedRef = "speisely_marketplace";
+        }
+      }
+    }
+
     // 1. Fetch restaurant
     const { data: rest, error: restErr } = await supabaseAdmin
       .from("restaurants")
@@ -496,7 +509,7 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         status: "pending",
         total_cents: finalTotalCents,
         applied_promo_code: data.promoCode ? data.promoCode.toUpperCase() : null,
-        referral_source: data.referralSource || "direct",
+        referral_source: normalizedRef,
       } as any)
       .select("id")
       .single();

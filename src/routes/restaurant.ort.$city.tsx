@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-router";
 import { getGeoPageData } from "@/lib/geo/server.functions";
 import { SiteShell } from "@/components/SiteShell";
@@ -23,10 +24,16 @@ export const Route = createFileRoute("/restaurant/ort/$city")({
     const { seoData, indexStatus, location, searchParams } = loaderData;
 
     const isFiltered = Object.keys(searchParams).length > 0;
-    const meetsThreshold = (loaderData?.vendors?.length ?? 0) >= 3 && ((seoData as any)?.intro_md?.length ?? 0) >= 150;
-    const finalIndexStatus = isFiltered || !meetsThreshold || indexStatus !== "index"
-      ? "noindex, follow"
-      : "index, follow";
+    const meetsThreshold =
+      (loaderData?.vendors?.length ?? 0) >= 3 && ((seoData as any)?.intro_md?.length ?? 0) >= 150;
+    const finalIndexStatus =
+      isFiltered || !meetsThreshold || indexStatus !== "index"
+        ? "noindex, follow"
+        : "index, follow";
+
+    console.log(
+      `[SEO Index Gating] City: ${location.name} | Vendors count: ${loaderData?.vendors?.length ?? 0} (min 3) | Intro length: ${(seoData as any)?.intro_md?.length ?? 0} (min 150) | Status: ${finalIndexStatus}`,
+    );
 
     const canonicalUrl = `/restaurant/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
 
@@ -118,6 +125,31 @@ function GeoRestaurantsPage() {
     };
   }
 
+  const jsonLdBreadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://speisely.de",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Restaurants",
+        item: "https://speisely.de/restaurants",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: location.name,
+        item: `https://speisely.de/restaurant/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`,
+      },
+    ],
+  };
+
   const filters = [
     { id: "all", label: "Alle" },
     { id: "vegan", label: "Vegan" },
@@ -131,6 +163,10 @@ function GeoRestaurantsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
       />
 
       {/* Hero Section */}
@@ -150,13 +186,20 @@ function GeoRestaurantsPage() {
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-          <div className="flex items-center gap-2 text-sm text-[oklch(0.97_0.02_92)]/80 mb-6">
-            <Link to="/instant-order" className="hover:text-white transition">
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 text-xs text-[oklch(0.97_0.02_92)]/80 mb-6"
+          >
+            <Link to="/" className="hover:text-white transition">
+              Home
+            </Link>
+            <ChevronRight className="h-3 w-3 opacity-60" />
+            <Link to="/restaurants" className="hover:text-white transition">
               Restaurants
             </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-white font-medium">{location.name}</span>
-          </div>
+            <ChevronRight className="h-3 w-3 opacity-60" />
+            <span className="text-white font-semibold">{location.name}</span>
+          </nav>
 
           <div className="max-w-2xl text-[oklch(0.97_0.02_92)]">
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl mb-6">
@@ -175,7 +218,8 @@ function GeoRestaurantsPage() {
               </div>
             )}
             <p className="text-lg opacity-90 max-w-xl whitespace-pre-wrap">
-              {seoData?.hero_copy || seoData?.meta_description ||
+              {seoData?.hero_copy ||
+                seoData?.meta_description ||
                 `Entdecke die besten Restaurants und Menüs in ${location.name}.`}
             </p>
           </div>
