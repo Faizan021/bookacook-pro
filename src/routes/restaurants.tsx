@@ -108,23 +108,30 @@ function RestaurantsDirectory() {
     <SiteShell>
       <div className="min-h-screen flex flex-col bg-[#fcfdfc]">
         <main className="flex-grow">
-          {/* Hero Section */}
-          <div className="bg-forest pt-32 pb-24 px-6 text-center text-white relative overflow-hidden">
-            <div
-              className="absolute inset-0 opacity-10"
-              style={{
-                backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-                backgroundSize: "24px 24px",
-              }}
-            ></div>
+          {/* Hero Section — matches Catering & Planner cinematic style */}
+          <div className="relative min-h-[420px] md:min-h-[500px] flex items-center overflow-hidden">
+            {/* Cinematic background image */}
+            <img
+              src="/hero-cinematic.png"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            {/* Forest gradient overlay — identical to catering.index.tsx */}
+            <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" />
+            <div className="absolute inset-0 bg-black/20" />
 
-            <div className="relative z-10 max-w-3xl mx-auto">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 tracking-tight">
-                Speisely Marketplace
+            <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 w-full">
+              {/* Gold pill badge */}
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm mb-6">
+                🍽 Speisely Marketplace
+              </span>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 tracking-tight max-w-2xl leading-tight">
+                Order local food. <span className="text-[#f2d896]">Direct & Fair.</span>
               </h1>
-              <p className="text-lg md:text-xl max-w-2xl mx-auto text-white/90">
-                Discover independent local restaurants and order directly. Fair for them, better for
-                you.
+              <p className="text-lg md:text-xl text-white/80 max-w-xl mb-8">
+                Discover independent restaurants in your city and order directly — no middlemen,
+                better prices, fairer for everyone.
               </p>
             </div>
           </div>
