@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
 import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
@@ -37,6 +38,7 @@ export type Restaurant = {
   announcement_bg_color?: string;
   announcement_text?: string;
   isShowcase?: boolean;
+  serviceAreas?: string;
 };
 
 export const fallbackRestaurants: Restaurant[] = [
@@ -237,17 +239,26 @@ function mapRestaurant(r: any): Restaurant {
   const isBannerMissing = !r.banner_image_url;
   const isLogoMissing = !r.logo_url;
 
-  const resolvedBanner = (isGenerated || isBannerMissing)
-    ? generateSvgBanner(r.name || r.business_name || "Restaurant", r.cuisine_type || "Speisely Partner")
-    : (r.banner_image_url.startsWith("http")
+  const resolvedBanner =
+    isGenerated || isBannerMissing
+      ? generateSvgBanner(
+          r.name || r.business_name || "Restaurant",
+          r.cuisine_type || "Speisely Partner",
+        )
+      : r.banner_image_url.startsWith("http")
         ? r.banner_image_url
-        : supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url).data.publicUrl);
+        : supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url).data
+            .publicUrl;
 
-  const resolvedLogo = (isGenerated || isLogoMissing)
-    ? generateSvgLogo(r.name || r.business_name || "Restaurant", r.cuisine_type || "Speisely Partner")
-    : (r.logo_url.startsWith("http")
+  const resolvedLogo =
+    isGenerated || isLogoMissing
+      ? generateSvgLogo(
+          r.name || r.business_name || "Restaurant",
+          r.cuisine_type || "Speisely Partner",
+        )
+      : r.logo_url.startsWith("http")
         ? r.logo_url
-        : supabase.storage.from("storefront-assets").getPublicUrl(r.logo_url).data.publicUrl);
+        : supabase.storage.from("storefront-assets").getPublicUrl(r.logo_url).data.publicUrl;
 
   return {
     id: r.id,
@@ -267,6 +278,7 @@ function mapRestaurant(r: any): Restaurant {
     address: r.business_address || "",
     phone: r.phone || "",
     about: { de: r.description || "", en: r.description || "" },
+    serviceAreas: r.service_areas || "",
     menu: (r.restaurant_products || []).map((p: any) => ({
       id: p.id,
       name: p.name,
@@ -296,6 +308,8 @@ export async function getRestaurants(): Promise<Restaurant[]> {
     )
     .eq("is_active", true)
     .eq("approval_status", "approved")
+    .eq("is_published", true)
+    .eq("show_in_marketplace", true)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -331,9 +345,8 @@ export async function getRestaurant(slugOrId: string): Promise<Restaurant | unde
       "id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*), approval_status, owner_id, business_address, use_generated_branding",
     );
 
-  const { data, error } = await (isUuid
-    ? query.or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
-    : query.eq("slug", slugOrId)
+  const { data, error } = await (
+    isUuid ? query.or(`slug.eq.${slugOrId},id.eq.${slugOrId}`) : query.eq("slug", slugOrId)
   ).maybeSingle();
 
   if (!error && data) {
@@ -341,7 +354,9 @@ export async function getRestaurant(slugOrId: string): Promise<Restaurant | unde
       return undefined;
     }
     if (data.approval_status !== "approved") {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user?.id !== data.owner_id) {
         return undefined;
       }

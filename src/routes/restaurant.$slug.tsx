@@ -337,6 +337,26 @@ function RestaurantPage() {
     return () => observer.disconnect();
   }, [categories]);
 
+  // Canonical Redirection to mapped Custom Domains
+  useEffect(() => {
+    if (typeof window !== "undefined" && dbRestaurant?.custom_domain) {
+      const currentHost = window.location.hostname;
+      const targetDomain = dbRestaurant.custom_domain.trim().toLowerCase();
+
+      if (
+        currentHost !== "localhost" &&
+        currentHost !== "127.0.0.1" &&
+        currentHost !== targetDomain
+      ) {
+        const redirectUrl = new URL(window.location.href);
+        redirectUrl.hostname = targetDomain;
+        redirectUrl.pathname = "/";
+
+        window.location.replace(redirectUrl.toString());
+      }
+    }
+  }, [dbRestaurant]);
+
   // Curated font mapping configuration for dynamic imports
   const fontMap: Record<string, { family: string; importName: string }> = useMemo(
     () => ({
@@ -831,7 +851,7 @@ function RestaurantPage() {
           deliveryAddress: orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
           notes: checkoutNotes || undefined,
           marketingConsent: marketingAccepted,
-          referralSource: ref === "speisely_marketplace" ? "marketplace" : "direct",
+          referralSource: ref || "direct",
         },
       });
 

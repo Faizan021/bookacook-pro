@@ -1667,6 +1667,7 @@ export type Database = {
           status: Database["public"]["Enums"]["order_status"];
           total_cents: number;
           updated_at: string;
+          referral_source: string | null;
         };
         Insert: {
           applied_promo_code?: string | null;
@@ -1685,6 +1686,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["order_status"];
           total_cents?: number;
           updated_at?: string;
+          referral_source?: string | null;
         };
         Update: {
           applied_promo_code?: string | null;
@@ -1703,6 +1705,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["order_status"];
           total_cents?: number;
           updated_at?: string;
+          referral_source?: string | null;
         };
         Relationships: [
           {

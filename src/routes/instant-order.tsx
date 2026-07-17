@@ -103,6 +103,21 @@ function InstantOrder() {
     let list = restaurants.filter((r) => {
       if (lowerQ && !`${r.name} ${r.tags.join(" ")} ${r.area}`.toLowerCase().includes(lowerQ))
         return false;
+
+      if (location && location !== tt("Aktueller Standort", "Current location")) {
+        const normLoc = location.trim().toLowerCase();
+        const areaMatch = r.area.toLowerCase().includes(normLoc);
+        const addressMatch = r.address.toLowerCase().includes(normLoc);
+        const hasServiceAreas = r.serviceAreas
+          ? r.serviceAreas.split(",").map((x) => x.trim().toLowerCase())
+          : [];
+        const serviceAreaMatch = hasServiceAreas.some(
+          (area) => normLoc.includes(area) || area.includes(normLoc),
+        );
+
+        if (!areaMatch && !addressMatch && !serviceAreaMatch) return false;
+      }
+
       const tagSet = r.tags.map((x) => x.toLowerCase());
       switch (activeFilter) {
         case "all":
@@ -132,7 +147,7 @@ function InstantOrder() {
       return parseFee(a.fee) - parseFee(b.fee);
     });
     return list;
-  }, [activeFilter, sort, query]);
+  }, [activeFilter, sort, query, location]);
 
   const resetFilters = () => {
     setActiveFilter(DEFAULT_FILTER);
