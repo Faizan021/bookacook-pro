@@ -1,14 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { getMarketplaceRestaurants } from "@/lib/restaurant/public.functions";
-import { Store, ArrowRight, MapPin, Utensils, Search, CheckCircle2 } from "lucide-react";
+import { getValidGeoLocations } from "@/lib/geo/server.functions";
+import {
+  Store,
+  ArrowRight,
+  MapPin,
+  Utensils,
+  Search,
+  CheckCircle2,
+  ChevronRight,
+} from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/restaurants")({
   component: RestaurantsDirectory,
   loader: async () => {
-    return await getMarketplaceRestaurants();
+    const [marketplaceData, validGeoLocations] = await Promise.all([
+      getMarketplaceRestaurants(),
+      getValidGeoLocations(),
+    ]);
+    return { ...marketplaceData, validGeoLocations };
   },
   head: () => ({
     meta: [
@@ -32,10 +45,27 @@ export const Route = createFileRoute("/restaurants")({
   }),
 });
 
+/** Convert a URL slug like "frankfurt-am-main" to "Frankfurt Am Main" */
+function slugToTitle(slug: string): string {
+  return slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 function RestaurantsDirectory() {
-  const { restaurants } = Route.useLoaderData();
+  const { restaurants, validGeoLocations } = Route.useLoaderData() as any;
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
+
+  // Extract and sort city entries from valid geo paths (format: /restaurant/ort/$slug)
+  const cityLinks = useMemo(() => {
+    if (!validGeoLocations) return [];
+    return (validGeoLocations as string[])
+      .filter((p) => p.startsWith("/restaurant/ort/"))
+      .map((p) => {
+        const slug = p.replace("/restaurant/ort/", "");
+        return { slug, label: slugToTitle(slug), path: p };
+      })
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [validGeoLocations]);
 
   const getRestaurantUrl = (rest: any) => {
     return `/restaurant/${rest.slug}?ref=speisely_marketplace`;
@@ -98,6 +128,30 @@ function RestaurantsDirectory() {
               </p>
             </div>
           </div>
+
+          {/* Browse by City Hub Section */}
+          {cityLinks.length > 0 && (
+            <section className="mx-auto max-w-7xl px-6 mt-12">
+              <div className="flex items-baseline justify-between mb-4">
+                <h2 className="font-display text-2xl text-forest">Browse Restaurants by City</h2>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {cityLinks.map(({ slug, label, path }) => (
+                  <Link
+                    key={slug}
+                    to="/restaurant/ort/$city"
+                    params={{ city: slug }}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#e2e8e4] bg-white px-4 py-2 text-sm font-medium text-forest shadow-sm hover:border-forest/30 hover:bg-cream/40 transition duration-200"
+                    aria-label={`Restaurants in ${label}`}
+                  >
+                    <MapPin className="h-3.5 w-3.5 text-leaf shrink-0" />
+                    {label}
+                    <ChevronRight className="h-3 w-3 opacity-40" />
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Discovery Filter Controls */}
           <section className="mx-auto max-w-7xl px-6 -mt-8 relative z-20">
