@@ -4,7 +4,7 @@ import { getGeoPageData } from "@/lib/geo/server.functions";
 import { SiteShell } from "@/components/SiteShell";
 import { MapPin, Star, ChevronRight, Search, UtensilsCrossed, X } from "lucide-react";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export const Route = createFileRoute("/restaurant/ort/$city")({
   validateSearch: z.object({
@@ -68,7 +68,7 @@ export const Route = createFileRoute("/restaurant/ort/$city")({
 });
 
 function GeoRestaurantsPage() {
-  const { location, seoData, vendors, aggregateRating, searchParams } =
+  const { location, seoData, vendors, aggregateRating, searchParams, stats } =
     Route.useLoaderData() as any;
   const router = useRouter();
 
@@ -150,13 +150,37 @@ function GeoRestaurantsPage() {
     ],
   };
 
-  const filters = [
-    { id: "all", label: "Alle" },
-    { id: "vegan", label: "Vegan" },
-    { id: "vegetarian", label: "Vegetarisch" },
-    { id: "asian", label: "Asiatisch" },
-    { id: "italian", label: "Italienisch" },
-  ];
+  const cuisinesFilter = useMemo(() => {
+    const list = [{ id: "all", label: "Alle" }];
+    if (stats?.popularCuisines) {
+      stats.popularCuisines.slice(0, 5).forEach((c: string) => {
+        list.push({ id: c, label: c.charAt(0).toUpperCase() + c.slice(1) });
+      });
+    } else {
+      list.push(
+        { id: "vegan", label: "Vegan" },
+        { id: "vegetarian", label: "Vegetarisch" },
+        { id: "asian", label: "Asiatisch" },
+        { id: "italian", label: "Italienisch" },
+      );
+    }
+    return list;
+  }, [stats]);
+
+  const deliveryAreasList = useMemo(() => {
+    const areas = new Set<string>();
+    vendors.forEach((v: any) => {
+      if (v.service_areas) {
+        v.service_areas.split(",").forEach((a: string) => {
+          const cleaned = a.trim();
+          if (cleaned.length > 0 && cleaned.length < 10) {
+            areas.add(cleaned);
+          }
+        });
+      }
+    });
+    return Array.from(areas).sort();
+  }, [vendors]);
 
   return (
     <SiteShell>
@@ -226,8 +250,45 @@ function GeoRestaurantsPage() {
         </div>
       </section>
 
+      {/* City Statistics Cards */}
+      {stats && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-20">
+          <div className="bg-white border border-[#e2e8e4] p-4 rounded-2xl shadow-sm flex items-center gap-4 hover:border-forest/20 transition duration-300">
+            <span className="text-xl">🍽️</span>
+            <div>
+              <p className="text-[9px] uppercase font-bold tracking-wider text-muted-foreground">
+                Active Restaurants
+              </p>
+              <p className="text-base font-bold text-forest">{vendors.length}</p>
+            </div>
+          </div>
+
+          <div className="bg-white border border-[#e2e8e4] p-4 rounded-2xl shadow-sm flex items-center gap-4 hover:border-forest/20 transition duration-300">
+            <span className="text-xl">💰</span>
+            <div>
+              <p className="text-[9px] uppercase font-bold tracking-wider text-muted-foreground">
+                Average Min. Order
+              </p>
+              <p className="text-base font-bold text-forest">ab {stats.minOrderAverage}€</p>
+            </div>
+          </div>
+
+          <div className="bg-white border border-[#e2e8e4] p-4 rounded-2xl shadow-sm flex items-center gap-4 hover:border-forest/20 transition duration-300">
+            <span className="text-xl">🔥</span>
+            <div>
+              <p className="text-[9px] uppercase font-bold tracking-wider text-muted-foreground">
+                Top Cuisine
+              </p>
+              <p className="text-base font-bold text-forest capitalize font-display">
+                {stats.popularCuisines[0] || "Diverse"}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Discovery & Filters */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 -mt-8 relative z-20">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-8 relative z-20">
         <div className="surface-card flex items-center gap-3 px-5 py-4 w-full md:w-96 shadow-lg rounded-2xl">
           <Search className="h-5 w-5 text-forest/60 shrink-0" />
           <input
@@ -239,7 +300,7 @@ function GeoRestaurantsPage() {
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-2">
-          {filters.map((f) => (
+          {cuisinesFilter.map((f: any) => (
             <button
               key={f.id}
               onClick={() => setDietFilter(f.id)}
@@ -283,6 +344,7 @@ function GeoRestaurantsPage() {
                 key={v.id}
                 to="/restaurant/$slug"
                 params={{ slug: v.slug || v.id }}
+                search={{ ref: "speisely_marketplace" } as any}
                 className="group flex flex-col surface-card p-3 transition hover:shadow-md hover:ring-[#b28a3c]/30 rounded-2xl"
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-forest/5 rounded-xl">
@@ -346,6 +408,23 @@ function GeoRestaurantsPage() {
             className="prose prose-forest max-w-none whitespace-pre-wrap"
             dangerouslySetInnerHTML={{ __html: seoData.faq_md }}
           />
+        </section>
+      )}
+
+      {/* Available Delivery Areas Section */}
+      {deliveryAreasList.length > 0 && (
+        <section className="mx-auto max-w-4xl px-4 sm:px-6 py-12 border-t border-forest/10">
+          <h2 className="font-display text-2xl text-forest mb-4">Available Delivery Areas</h2>
+          <div className="flex flex-wrap gap-2">
+            {deliveryAreasList.map((area: string, idx: number) => (
+              <span
+                key={idx}
+                className="bg-cream/45 border border-[#eadfce]/30 rounded-lg px-3 py-1.5 text-xs text-forest font-medium"
+              >
+                📍 {area}
+              </span>
+            ))}
+          </div>
         </section>
       )}
     </SiteShell>

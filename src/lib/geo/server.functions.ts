@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
@@ -44,7 +45,7 @@ export const getGeoPageData = createServerFn({ method: "GET" })
       const { data: res } = await supabaseAdmin
         .from("restaurants")
         .select(
-          "id, name, slug, logo_url, banner_image_url, cuisine_type, min_order_amount, delivery_fee, accepts_pickup, accepts_delivery, city, description",
+          "id, name, slug, logo_url, banner_image_url, cuisine_type, min_order_amount, delivery_fee, accepts_pickup, accepts_delivery, city, description, service_areas",
         )
         .eq("is_published", true)
         .ilike("city", location.name);
@@ -111,12 +112,41 @@ export const getGeoPageData = createServerFn({ method: "GET" })
       }
     }
 
+    let stats = null;
+    if (data.role === "restaurants" && vendors.length > 0) {
+      const minOrders = vendors
+        .map((v) => Number(v.min_order_amount ?? 10))
+        .filter((n) => !isNaN(n));
+      const minOrderAvg =
+        minOrders.length > 0
+          ? Math.round(minOrders.reduce((a, b) => a + b, 0) / minOrders.length)
+          : 10;
+
+      const cuisinesMap: Record<string, number> = {};
+      vendors.forEach((v) => {
+        if (v.cuisine_type) {
+          const type = v.cuisine_type.trim().toLowerCase();
+          cuisinesMap[type] = (cuisinesMap[type] || 0) + 1;
+        }
+      });
+
+      const popularCuisines = Object.entries(cuisinesMap)
+        .sort((a, b) => b[1] - a[1])
+        .map(([name]) => name);
+
+      stats = {
+        minOrderAverage: minOrderAvg,
+        popularCuisines,
+      };
+    }
+
     return {
       indexStatus,
       location,
       seoData,
       vendors,
       aggregateRating,
+      stats,
     };
   });
 
