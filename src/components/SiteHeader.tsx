@@ -56,7 +56,7 @@ export function SiteHeader() {
   }, []);
 
   const navItems = [
-    { to: "/instant-order", label: t("nav.instant") },
+    { to: "/restaurants", label: t("nav.restaurants") },
     { to: "/catering", label: t("nav.catering") },
     { to: "/planner", label: "Event Planner" },
     { to: "/partners", label: t("nav.partners") },

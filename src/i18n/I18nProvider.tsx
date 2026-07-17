@@ -6,6 +6,7 @@ type Dict = Record<string, { de: string; en: string }>;
 
 const dict: Dict = {
   "nav.instant": { de: "Essen sofort bestellen", en: "Instant Food Order" },
+  "nav.restaurants": { de: "Restaurants", en: "Restaurants" },
   "nav.catering": { de: "Catering", en: "Catering" },
   "nav.partners": { de: "Für Partner", en: "For partners" },
   "nav.about": { de: "Über uns", en: "About Us" },
@@ -216,7 +217,7 @@ const dict: Dict = {
 const Ctx = createContext<{
   lang: Lang;
   setLang: (l: Lang) => void;
-  t: (k: any, fallback?: any) => string;
+  t: (k: string, fallback?: string) => string;
 }>({
   lang: "de",
   setLang: () => {},
