@@ -707,6 +707,118 @@ function RestaurantPage() {
 
   const finalTotal = subtotal - discountAmount + deliveryFee;
 
+  const handleCheckout = async () => {
+    if (isGated || checkoutLoading) return;
+
+    if (currentUser && userRole !== "customer") {
+      setAuthPopupOpen(true);
+      return;
+    }
+
+    if (!checkoutIdentity.name || !checkoutIdentity.phone) {
+      alert(
+        t(
+          "Bitte füllen Sie Name und Telefonnummer aus.",
+          "Please fill out your name and phone number.",
+        ),
+      );
+      return;
+    }
+    if (!checkoutIdentity.email) {
+      alert(t("Bitte füllen Sie Ihre E-Mail-Adresse aus.", "Please fill out your email address."));
+      return;
+    }
+    if (orderType === "delivery" && !checkoutIdentity.deliveryAddress) {
+      alert(t("Bitte geben Sie eine Lieferadresse ein.", "Please enter a delivery address."));
+      return;
+    }
+    if (!termsAccepted) {
+      alert(
+        t(
+          "Bitte akzeptieren Sie die Datenverarbeitung (Double Opt-In).",
+          "Please accept the data processing consent (Double Opt-in).",
+        ),
+      );
+      return;
+    }
+    if (!infoCorrect) {
+      alert(
+        t(
+          "Bitte bestätigen Sie, dass alle Ihre Angaben korrekt sind.",
+          "Please confirm that all your details are correct.",
+        ),
+      );
+      return;
+    }
+    if (!selectedPayment) {
+      alert(t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."));
+      return;
+    }
+
+    setCheckoutLoading(true);
+    try {
+      // Upsert customer consent in parallel/background
+      await upsertConsentFn({
+        data: {
+          email: checkoutIdentity.email || currentUser?.email || "",
+          audience_type: "customer",
+          marketing_opt_in: marketingAccepted,
+          terms_acknowledged: termsAccepted,
+          source: "storefront_checkout",
+          source_detail: slug,
+          user_id: currentUser?.id,
+        },
+      }).catch((e) => console.error("Error saving consent", e));
+
+      const itemsPayload = cartItems.map((i) => ({ productId: i.id, quantity: i.qty }));
+      const res = await checkoutFn({
+        data: {
+          restaurantId: dbRestaurant?.id ?? "",
+          slug: slug,
+          origin: window.location.origin,
+          paymentMethod: selectedPayment,
+          orderType: orderType,
+          items: itemsPayload,
+          promoCode: appliedPromo?.code,
+          customerName: checkoutIdentity.name,
+          customerPhone: checkoutIdentity.phone,
+          customerEmail: checkoutIdentity.email,
+          deliveryAddress: orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
+          notes: checkoutNotes || undefined,
+          marketingConsent: marketingAccepted,
+          referralSource: ref === "speisely_marketplace" ? "marketplace" : "direct",
+        },
+      });
+
+      let successQuery = `?order_success=true&claimable=${res?.accountClaimable ? "true" : "false"}&email=${encodeURIComponent(checkoutIdentity.email)}&name=${encodeURIComponent(checkoutIdentity.name)}`;
+      if (selectedPayment === "paypal" && res?.url) {
+        successQuery += `&payment_method=paypal&paypal_url=${encodeURIComponent(res.url)}&amount=${encodeURIComponent(finalTotal.toFixed(2))}`;
+      }
+
+      setCart({});
+      if (mobileCartOpen) setMobileCartOpen(false);
+
+      if (selectedPayment === "stripe") {
+        if (res?.url) {
+          window.location.href = res.url;
+        } else {
+          alert(
+            t("Fehler beim Erstellen der Zahlungssitzung.", "Failed to create checkout session."),
+          );
+        }
+      } else if (selectedPayment === "paypal") {
+        window.location.href = window.location.origin + window.location.pathname + successQuery;
+      } else {
+        // Cash
+        window.location.href = window.location.origin + window.location.pathname + successQuery;
+      }
+    } catch (err: any) {
+      alert(t("Fehler: ", "Error: ") + (err.message || err));
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
   const renderSidebar = (isMobile = false) => (
     <>
       {!isMobile && (
@@ -1011,52 +1123,59 @@ function RestaurantPage() {
           {/* ─── PAYMENT METHODS ─── */}
           {!isGated && (
             <div className="mt-4 pt-4 border-t border-[oklch(0.85_0.05_152)] space-y-2">
-              <p className="text-xs font-semibold text-forest/60 uppercase tracking-wide">
+              <p className="text-xs font-bold text-forest/70 uppercase tracking-wider">
                 {t("Bezahlen mit:", "Pay with:")}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {paymentMethods.cash && (
                   <button
                     type="button"
                     onClick={() => setSelectedPayment("cash")}
-                    className={`flex items-center gap-1.5 rounded border px-3 py-2 text-xs font-bold transition-all ${
+                    className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all duration-200 cursor-pointer ${
                       selectedPayment === "cash"
-                        ? "border-forest bg-forest text-white shadow"
-                        : "border-[#aac4aa] bg-white text-forest hover:border-forest"
+                        ? "border-emerald-500 bg-emerald-50/40 text-emerald-700 font-bold shadow-sm"
+                        : "border-border/60 bg-white text-forest/70 hover:border-forest/30"
                     }`}
                   >
-                    <span>💶</span> {t("BAR", "CASH")}
+                    <span className="text-xl mb-1">💶</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider">
+                      {t("Bar", "Cash")}
+                    </span>
                   </button>
                 )}
                 {paymentMethods.paypal && (
                   <button
                     type="button"
                     onClick={() => setSelectedPayment("paypal")}
-                    className={`flex items-center gap-1.5 rounded border px-3 py-2 text-xs font-bold transition-all ${
+                    className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all duration-200 cursor-pointer ${
                       selectedPayment === "paypal"
-                        ? "border-[#003087] bg-[#003087] text-white shadow"
-                        : "border-[#009cde] bg-white text-[#003087] hover:border-[#003087]"
+                        ? "border-[#003087] bg-blue-50/40 text-[#003087] font-bold shadow-sm"
+                        : "border-border/60 bg-white text-forest/70 hover:border-forest/30"
                     }`}
                   >
-                    <span className="font-black text-sm">P</span> PAYPAL
+                    <span className="text-xl mb-1 font-black">P</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider">PayPal</span>
                   </button>
                 )}
                 {paymentMethods.stripe && (
                   <button
                     type="button"
                     onClick={() => setSelectedPayment("stripe")}
-                    className={`flex items-center gap-1.5 rounded border px-3 py-2 text-xs font-bold transition-all ${
+                    className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all duration-200 cursor-pointer ${
                       selectedPayment === "stripe"
-                        ? "border-[#6772e5] bg-[#6772e5] text-white shadow"
-                        : "border-[#aab7c4] bg-white text-[#6772e5] hover:border-[#6772e5]"
+                        ? "border-[#6772e5] bg-indigo-50/40 text-[#6772e5] font-bold shadow-sm"
+                        : "border-border/60 bg-white text-forest/70 hover:border-forest/30"
                     }`}
                   >
-                    <span>💳</span> {t("KREDITKARTE", "CREDIT CARD")}
+                    <span className="text-xl mb-1">💳</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider">
+                      {t("Karte", "Card")}
+                    </span>
                   </button>
                 )}
               </div>
               {selectedPayment === "paypal" && (
-                <p className="text-[10px] text-muted-foreground">
+                <p className="text-[10px] text-muted-foreground mt-1">
                   {t(
                     "Nach der Bestellung werden Sie zu PayPal weitergeleitet.",
                     "After placing your order you'll be redirected to PayPal.",
@@ -1066,144 +1185,21 @@ function RestaurantPage() {
             </div>
           )}
 
-          <button
-            onClick={async () => {
-              if (isGated || checkoutLoading) return;
-
-              if (currentUser && userRole !== "customer") {
-                setAuthPopupOpen(true);
-                return;
-              }
-
-              if (!checkoutIdentity.name || !checkoutIdentity.phone) {
-                alert(
-                  t(
-                    "Bitte füllen Sie Name und Telefonnummer aus.",
-                    "Please fill out your name and phone number.",
-                  ),
-                );
-                return;
-              }
-              if (!checkoutIdentity.email) {
-                alert(
-                  t(
-                    "Bitte füllen Sie Ihre E-Mail-Adresse aus.",
-                    "Please fill out your email address.",
-                  ),
-                );
-                return;
-              }
-              if (orderType === "delivery" && !checkoutIdentity.deliveryAddress) {
-                alert(
-                  t("Bitte geben Sie eine Lieferadresse ein.", "Please enter a delivery address."),
-                );
-                return;
-              }
-              if (!termsAccepted) {
-                alert(
-                  t(
-                    "Bitte akzeptieren Sie die Datenverarbeitung (Double Opt-In).",
-                    "Please accept the data processing consent (Double Opt-in).",
-                  ),
-                );
-                return;
-              }
-              if (!infoCorrect) {
-                alert(
-                  t(
-                    "Bitte bestätigen Sie, dass alle Ihre Angaben korrekt sind.",
-                    "Please confirm that all your details are correct.",
-                  ),
-                );
-                return;
-              }
-              if (!selectedPayment) {
-                alert(
-                  t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."),
-                );
-                return;
-              }
-
-              setCheckoutLoading(true);
-              try {
-                // Upsert customer consent in parallel/background
-                await upsertConsentFn({
-                  data: {
-                    email: checkoutIdentity.email || currentUser?.email || "",
-                    audience_type: "customer",
-                    marketing_opt_in: marketingAccepted,
-                    terms_acknowledged: termsAccepted,
-                    source: "storefront_checkout",
-                    source_detail: slug,
-                    user_id: currentUser?.id,
-                  },
-                }).catch((e) => console.error("Error saving consent", e));
-
-                const itemsPayload = cartItems.map((i) => ({ productId: i.id, quantity: i.qty }));
-                const res = await checkoutFn({
-                  data: {
-                    restaurantId: dbRestaurant?.id ?? "",
-                    slug: slug,
-                    origin: window.location.origin,
-                    paymentMethod: selectedPayment,
-                    orderType: orderType,
-                    items: itemsPayload,
-                    promoCode: appliedPromo?.code,
-                    customerName: checkoutIdentity.name,
-                    customerPhone: checkoutIdentity.phone,
-                    customerEmail: checkoutIdentity.email,
-                    deliveryAddress:
-                      orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
-                    notes: checkoutNotes || undefined,
-                    marketingConsent: marketingAccepted,
-                    referralSource: ref === "speisely_marketplace" ? "marketplace" : "direct",
-                  },
-                });
-
-                let successQuery = `?order_success=true&claimable=${res?.accountClaimable ? "true" : "false"}&email=${encodeURIComponent(checkoutIdentity.email)}&name=${encodeURIComponent(checkoutIdentity.name)}`;
-                if (selectedPayment === "paypal" && res?.url) {
-                  successQuery += `&payment_method=paypal&paypal_url=${encodeURIComponent(res.url)}&amount=${encodeURIComponent(finalTotal.toFixed(2))}`;
-                }
-
-                setCart({});
-                if (isMobile) setMobileCartOpen(false);
-
-                if (selectedPayment === "stripe") {
-                  if (res?.url) {
-                    window.location.href = res.url;
-                  } else {
-                    alert(
-                      t(
-                        "Fehler beim Erstellen der Zahlungssitzung.",
-                        "Failed to create checkout session.",
-                      ),
-                    );
-                  }
-                } else if (selectedPayment === "paypal") {
-                  window.location.href =
-                    window.location.origin + window.location.pathname + successQuery;
-                } else {
-                  // Cash
-                  window.location.href =
-                    window.location.origin + window.location.pathname + successQuery;
-                }
-              } catch (err: any) {
-                alert(t("Fehler: ", "Error: ") + (err.message || err));
-              } finally {
-                setCheckoutLoading(false);
-              }
-            }}
-            disabled={isGated || checkoutLoading}
-            className={`mt-5 w-full rounded-full py-3 font-semibold shadow-md transition ${
-              isGated || checkoutLoading
-                ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
-                : "bg-[#22C55E] hover:bg-[#22C55E]/90 text-white cursor-pointer"
-            }`}
-          >
-            {checkoutLoading
-              ? t("Wird geladen...", "Loading...")
-              : `${t("Zur Kasse", "Go to checkout")} • €${finalTotal.toFixed(2)}`}
-          </button>
+          {!isMobile && (
+            <button
+              onClick={handleCheckout}
+              disabled={isGated || checkoutLoading}
+              className={`mt-5 w-full rounded-full py-3 font-semibold shadow-md transition ${
+                isGated || checkoutLoading
+                  ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
+                  : "bg-forest hover:bg-forest/90 text-white cursor-pointer"
+              }`}
+            >
+              {checkoutLoading
+                ? t("Wird geladen...", "Loading...")
+                : `${t("Zur Kasse", "Go to checkout")} • €${finalTotal.toFixed(2)}`}
+            </button>
+          )}
         </>
       )}
     </>
@@ -1920,8 +1916,8 @@ function RestaurantPage() {
 
       {/* Mobile Sticky Bottom Cart Bar */}
       {totalCount > 0 && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#eadfce] p-4 z-40 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] flex items-center justify-between pb-safe">
-          <div className="text-forest">
+        <div className="lg:hidden fixed bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-[#eadfce]/70 p-4 z-40 shadow-[0_12px_30px_rgba(22,55,47,0.15)] rounded-2xl flex items-center justify-between pb-safe transition-all duration-300 animate-in slide-in-from-bottom-5 duration-300">
+          <div key={totalCount} className="animate-cart-bounce text-forest">
             <div className="font-semibold text-sm">
               {totalCount} {totalCount === 1 ? t("Artikel", "Item") : t("Artikel", "Items")}
             </div>
@@ -1931,13 +1927,13 @@ function RestaurantPage() {
           </div>
           <Sheet open={mobileCartOpen} onOpenChange={setMobileCartOpen}>
             <SheetTrigger asChild>
-              <button className="rounded-full bg-[#22C55E] text-white px-5 py-2.5 text-sm font-bold shadow-md hover:bg-[#22C55E]/90 transition cursor-pointer">
+              <button className="rounded-xl bg-forest text-white px-5 py-2.5 text-sm font-bold shadow-md hover:bg-forest/90 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 cursor-pointer">
                 {t("Bestellung anzeigen", "View order")}
               </button>
             </SheetTrigger>
             <SheetContent
               side="bottom"
-              className="h-[85vh] bg-[#fdfaf5] text-forest border-t border-[#eadfce] rounded-t-2xl px-4 py-6 overflow-y-auto"
+              className="h-[85vh] bg-[#fdfaf5] text-forest border-t border-[#eadfce] rounded-t-2xl px-4 py-6 overflow-hidden flex flex-col"
             >
               <SheetHeader className="text-left mb-4">
                 <SheetTitle className="flex items-center gap-2 font-display text-xl text-forest">
@@ -1945,7 +1941,24 @@ function RestaurantPage() {
                   {t("Deine Bestellung", "Your order")}
                 </SheetTitle>
               </SheetHeader>
-              <div className="py-2 pb-10">{renderSidebar(true)}</div>
+              <div className="flex-grow overflow-y-auto px-1 pb-24 custom-scrollbar">
+                {renderSidebar(true)}
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#eadfce] p-4 flex flex-col gap-2 pb-safe z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+                <button
+                  onClick={handleCheckout}
+                  disabled={isGated || checkoutLoading}
+                  className={`w-full rounded-xl py-3.5 font-bold shadow-md transition-all duration-200 ${
+                    isGated || checkoutLoading
+                      ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
+                      : "bg-forest hover:bg-forest/90 text-white hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+                  }`}
+                >
+                  {checkoutLoading
+                    ? t("Wird geladen...", "Loading...")
+                    : `${t("Bestellung abschicken", "Submit Order")} • €${finalTotal.toFixed(2)}`}
+                </button>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
