@@ -165,17 +165,30 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
     .from("restaurants")
     // @ts-ignore - show_in_marketplace is added via recent migration, might not be in types.ts
     .select(
-      "id, name, slug, custom_domain, is_published, show_in_marketplace, logo_url, banner_image_url, city, cuisine_type",
+      "id, name, slug, custom_domain, is_published, show_in_marketplace, logo_url, banner_image_url, city, cuisine_type, delivery_fee, min_order_amount, use_generated_branding, approval_status",
     )
     .eq("is_published", true)
     .eq("show_in_marketplace", true);
 
-  if (error) {
-    console.error("[getMarketplaceRestaurants] Error fetching marketplace restaurants:", error);
-    throw new Error(error.message);
-  }
+  const mappedRestaurants = (restaurants || []).map((r: any) => {
+    let logoUrl = r.logo_url;
+    if (logoUrl && !logoUrl.startsWith("http")) {
+      logoUrl = supabaseAdmin.storage.from("storefront-assets").getPublicUrl(logoUrl)
+        .data.publicUrl;
+    }
+    let bannerUrl = r.banner_image_url;
+    if (bannerUrl && !bannerUrl.startsWith("http")) {
+      bannerUrl = supabaseAdmin.storage.from("storefront-assets").getPublicUrl(bannerUrl)
+        .data.publicUrl;
+    }
+    return {
+      ...r,
+      logo_url: logoUrl,
+      banner_image_url: bannerUrl,
+    };
+  });
 
-  return { restaurants: restaurants || [] };
+  return { restaurants: mappedRestaurants };
 });
 
 async function calculatePromoDiscount(

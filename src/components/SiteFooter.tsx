@@ -7,10 +7,10 @@ import { useServerFn } from "@tanstack/react-start";
 import { getValidGeoLocations } from "@/lib/geo/server.functions";
 
 export function SiteFooter() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [email, setEmail] = useState("");
   const getLocs = useServerFn(getValidGeoLocations);
-  const [validLocs, setValidLocs] = useState<string[]>([]);
+  const [validLocs, setValidLocs] = useState<{ path: string; label: string }[]>([]);
 
   useEffect(() => {
     getLocs().then(setValidLocs);
@@ -25,7 +25,7 @@ export function SiteFooter() {
   ];
 
   const cityLinks = topCities
-    .filter((city) => validLocs.includes(`/restaurant/ort/${city.slug}`))
+    .filter((city) => validLocs.some((loc) => loc.path === `/restaurant/ort/${city.slug}`))
     .map((city) => ({ label: `Restaurants in ${city.name}`, to: `/restaurant/ort/${city.slug}` }));
 
   return (
@@ -43,7 +43,10 @@ export function SiteFooter() {
         <FooterCol
           title={t("footer.discover")}
           items={[
-            { label: "Lokale Restaurants", to: "/restaurants" },
+            {
+              label: lang === "de" ? "Lokale Restaurants" : "Local Restaurants",
+              to: "/restaurants",
+            },
             { label: t("nav.instant"), to: "/instant-order" },
             { label: t("nav.catering"), to: "/catering" },
             { label: t("Event-Planer", "Event Planner"), to: "/planner" },

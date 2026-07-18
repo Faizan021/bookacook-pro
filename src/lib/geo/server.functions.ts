@@ -164,7 +164,7 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
 
   if (!seoPages || seoPages.length === 0) return [];
 
-  const validPaths: string[] = [];
+  const validEntries: { path: string; label: string }[] = [];
 
   // 2. Evaluate each page
   for (const page of seoPages) {
@@ -180,7 +180,7 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
 
     if (!hasSeo) continue;
 
-    // Location match
+    // Location match — also gives us the properly capitalised German city name
     const { data: location } = await supabaseAdmin
       .from("german_locations")
       .select("name")
@@ -230,9 +230,9 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
       if (finalSlug && finalSlug.startsWith("restaurants/ort/")) {
         finalSlug = finalSlug.replace("restaurants/ort/", "restaurant/ort/");
       }
-      validPaths.push(`/${finalSlug}`);
+      validEntries.push({ path: `/${finalSlug}`, label: location.name });
     }
   }
 
-  return validPaths;
+  return validEntries;
 });

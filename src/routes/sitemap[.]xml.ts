@@ -62,7 +62,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.7",
           })),
-          ...validGeoLocations.map((path) => ({
+          ...validGeoLocations.map(({ path }: { path: string }) => ({
             path,
             lastmod: today,
             changefreq: "weekly" as const,
