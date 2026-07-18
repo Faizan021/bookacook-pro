@@ -372,8 +372,8 @@ function RestaurantsDirectory() {
                       tt("Standort wird ermittelt...", "Determining your location...")}
                     {geoStatus === "denied" &&
                       tt(
-                        "Standort-Freigabe wurde blockiert. Bitte gib die Erlaubnis in den Browsereinstellungen frei oder nutze die manuelle Suche.",
-                        "Location permission denied. Please enable location access in browser settings or search manually.",
+                        "Standort-Freigabe wurde blockiert. Klicke links neben der URL auf das Schloss-Symbol (🔒) oder das Regler-Symbol und stelle 'Standort' auf 'Zulassen', um die Ortung zu aktivieren.",
+                        "Location access blocked. Click the lock/settings icon (🔒) next to the URL address bar and set 'Location' to 'Allow' to enable proximity search.",
                       )}
                     {geoStatus === "timeout" &&
                       tt(
