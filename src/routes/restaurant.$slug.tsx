@@ -27,6 +27,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { getRestaurant } from "@/data/restaurants";
 import { supabase } from "@/integrations/supabase/client";
 import { upsertConsentRecord } from "@/lib/consent.functions";
+import { toast } from "sonner";
 
 import {
   Dialog,
@@ -248,14 +249,6 @@ function RestaurantPage() {
   const { dbRestaurant: dbROrig, fullRestaurant: fullROrig, reviewsData } = loaderData;
   const dbRestaurant = dbROrig as any;
   const fullRestaurant = fullROrig as any;
-  const isGated = useMemo(() => {
-    if (!dbRestaurant) return false;
-    // Only gate ordering if NO payment method is available at all
-    const hasStripe = dbRestaurant.stripe_connect_status === "connected";
-    const acceptsCash = dbRestaurant.accepts_cash === true;
-    const acceptsPaypal = dbRestaurant.accepts_paypal === true && !!dbRestaurant.paypal_email;
-    return !(hasStripe || acceptsCash || acceptsPaypal);
-  }, [dbRestaurant]);
   const restaurant = useMemo(() => {
     if (!fullRestaurant) return null;
     return {
@@ -263,6 +256,21 @@ function RestaurantPage() {
       certifications: dbRestaurant?.certifications || (fullRestaurant as any).certifications || "",
     };
   }, [fullRestaurant, dbRestaurant]);
+
+  const isGated = useMemo(() => {
+    // Only gate ordering if NO payment method is available at all
+    const hasStripe =
+      (dbRestaurant?.stripe_connect_status ?? restaurant?.stripeConnectStatus) === "connected";
+    const acceptsCash = (dbRestaurant?.accepts_cash ?? restaurant?.acceptsCash) === true;
+    const acceptsPaypal =
+      (dbRestaurant?.accepts_paypal ?? restaurant?.acceptsPaypal) === true &&
+      !!(dbRestaurant?.paypal_email ?? restaurant?.paypalEmail);
+    return !(hasStripe || acceptsCash || acceptsPaypal);
+  }, [dbRestaurant, restaurant]);
+
+  const isGeneratedBranding = !!(
+    dbRestaurant?.use_generated_branding || restaurant?.use_generated_branding
+  );
 
   const storefrontUrl = dbRestaurant?.custom_domain
     ? `https://${dbRestaurant.custom_domain}`
@@ -443,11 +451,12 @@ function RestaurantPage() {
   // Derive which payment methods this restaurant supports
   const paymentMethods = useMemo(
     () => ({
-      cash: (dbRestaurant as any)?.accepts_cash === true,
-      paypal: (dbRestaurant as any)?.accepts_paypal === true,
-      stripe: dbRestaurant?.stripe_connect_status === "connected",
+      cash: (dbRestaurant?.accepts_cash ?? restaurant?.acceptsCash) === true,
+      paypal: (dbRestaurant?.accepts_paypal ?? restaurant?.acceptsPaypal) === true,
+      stripe:
+        (dbRestaurant?.stripe_connect_status ?? restaurant?.stripeConnectStatus) === "connected",
     }),
-    [dbRestaurant],
+    [dbRestaurant, restaurant],
   );
 
   const [scheduleMode, setScheduleMode] = useState<"now" | "later">("now");
@@ -547,9 +556,11 @@ function RestaurantPage() {
     email: "",
     phone: "",
     deliveryAddress: "",
+    postalCode: "",
   });
   const [orderType, setOrderType] = useState<"pickup" | "delivery">("pickup");
   const [checkoutNotes, setCheckoutNotes] = useState("");
+  const [checkoutError, setCheckoutError] = useState("");
   const [resLoading, setResLoading] = useState(false);
   const [resSuccess, setResSuccess] = useState(false);
   const [resError, setResError] = useState("");
@@ -738,7 +749,7 @@ function RestaurantPage() {
 
       const res = await validatePromoFn({
         data: {
-          restaurantId: dbRestaurant.id,
+          restaurantId: dbRestaurant?.id ?? restaurant?.id ?? "",
           promoCode: promoCodeInput.trim(),
           items: itemsPayload,
         },
@@ -774,6 +785,7 @@ function RestaurantPage() {
 
   const handleCheckout = async () => {
     if (isGated || checkoutLoading) return;
+    setCheckoutError("");
 
     if (currentUser && userRole !== "customer") {
       setAuthPopupOpen(true);
@@ -781,42 +793,78 @@ function RestaurantPage() {
     }
 
     if (!checkoutIdentity.name || !checkoutIdentity.phone) {
-      alert(
-        t(
-          "Bitte füllen Sie Name und Telefonnummer aus.",
-          "Please fill out your name and phone number.",
-        ),
+      const msg = t(
+        "Bitte füllen Sie Name und Telefonnummer aus.",
+        "Please fill out your name and phone number.",
       );
+      setCheckoutError(msg);
+      toast.error(msg);
       return;
     }
     if (!checkoutIdentity.email) {
-      alert(t("Bitte füllen Sie Ihre E-Mail-Adresse aus.", "Please fill out your email address."));
+      const msg = t(
+        "Bitte füllen Sie Ihre E-Mail-Adresse aus.",
+        "Please fill out your email address.",
+      );
+      setCheckoutError(msg);
+      toast.error(msg);
       return;
     }
-    if (orderType === "delivery" && !checkoutIdentity.deliveryAddress) {
-      alert(t("Bitte geben Sie eine Lieferadresse ein.", "Please enter a delivery address."));
-      return;
+    if (orderType === "delivery") {
+      if (!checkoutIdentity.postalCode || checkoutIdentity.postalCode.length !== 5) {
+        const msg = t(
+          "Bitte geben Sie eine gültige 5-stellige Postleitzahl ein.",
+          "Please enter a valid 5-digit ZIP code.",
+        );
+        setCheckoutError(msg);
+        toast.error(msg);
+        return;
+      }
+      if (!checkoutIdentity.deliveryAddress) {
+        const msg = t(
+          "Bitte geben Sie eine Lieferadresse ein.",
+          "Please enter a delivery address.",
+        );
+        setCheckoutError(msg);
+        toast.error(msg);
+        return;
+      }
+      if (restaurant?.serviceAreas && restaurant.serviceAreas.trim()) {
+        const enteredPostcode = checkoutIdentity.postalCode.trim();
+        const allowedPostcodes = restaurant.serviceAreas.split(",").map((p: string) => p.trim());
+        if (!allowedPostcodes.includes(enteredPostcode)) {
+          const msg = t(
+            `Wir liefern leider nicht an diese Postleitzahl. Dieses Restaurant liefert nur an folgende Postleitzahlen: ${restaurant.serviceAreas}`,
+            `We do not deliver to this postal code. This restaurant only delivers to the following postal codes: ${restaurant.serviceAreas}`,
+          );
+          setCheckoutError(msg);
+          toast.error(msg);
+          return;
+        }
+      }
     }
     if (!termsAccepted) {
-      alert(
-        t(
-          "Bitte akzeptieren Sie die Datenverarbeitung (Double Opt-In).",
-          "Please accept the data processing consent (Double Opt-in).",
-        ),
+      const msg = t(
+        "Bitte akzeptieren Sie die Datenverarbeitung (Double Opt-In).",
+        "Please accept the data processing consent (Double Opt-in).",
       );
+      setCheckoutError(msg);
+      toast.error(msg);
       return;
     }
     if (!infoCorrect) {
-      alert(
-        t(
-          "Bitte bestätigen Sie, dass alle Ihre Angaben korrekt sind.",
-          "Please confirm that all your details are correct.",
-        ),
+      const msg = t(
+        "Bitte bestätigen Sie, dass alle Ihre Angaben korrekt sind. *",
+        "Please confirm that all information provided is correct. *",
       );
+      setCheckoutError(msg);
+      toast.error(msg);
       return;
     }
     if (!selectedPayment) {
-      alert(t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method."));
+      const msg = t("Bitte wählen Sie eine Zahlungsmethode.", "Please select a payment method.");
+      setCheckoutError(msg);
+      toast.error(msg);
       return;
     }
 
@@ -847,7 +895,7 @@ function RestaurantPage() {
 
       const res = await checkoutFn({
         data: {
-          restaurantId: dbRestaurant?.id ?? "",
+          restaurantId: dbRestaurant?.id ?? restaurant?.id ?? "",
           slug: slug,
           origin: window.location.origin,
           paymentMethod: selectedPayment,
@@ -857,7 +905,10 @@ function RestaurantPage() {
           customerName: checkoutIdentity.name,
           customerPhone: checkoutIdentity.phone,
           customerEmail: checkoutIdentity.email,
-          deliveryAddress: orderType === "delivery" ? checkoutIdentity.deliveryAddress : undefined,
+          deliveryAddress:
+            orderType === "delivery"
+              ? `${checkoutIdentity.postalCode} ${checkoutIdentity.deliveryAddress}`
+              : undefined,
           notes: checkoutNotes || undefined,
           marketingConsent: marketingAccepted,
           referralSource: cleanRef,
@@ -1126,16 +1177,33 @@ function RestaurantPage() {
               className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
             />
             {orderType === "delivery" && (
-              <input
-                type="text"
-                required
-                placeholder={t("Lieferadresse *", "Delivery Address *")}
-                value={checkoutIdentity.deliveryAddress}
-                onChange={(e) =>
-                  setCheckoutIdentity({ ...checkoutIdentity, deliveryAddress: e.target.value })
-                }
-                className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
-              />
+              <div className="flex gap-2 w-full">
+                <input
+                  type="text"
+                  required
+                  pattern="\d{5}"
+                  maxLength={5}
+                  placeholder={t("PLZ *", "ZIP *")}
+                  value={checkoutIdentity.postalCode}
+                  onChange={(e) =>
+                    setCheckoutIdentity({
+                      ...checkoutIdentity,
+                      postalCode: e.target.value.replace(/\D/g, ""),
+                    })
+                  }
+                  className="w-20 rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
+                />
+                <input
+                  type="text"
+                  required
+                  placeholder={t("Straße, Hausnr. *", "Street, House No. *")}
+                  value={checkoutIdentity.deliveryAddress}
+                  onChange={(e) =>
+                    setCheckoutIdentity({ ...checkoutIdentity, deliveryAddress: e.target.value })
+                  }
+                  className="flex-grow rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-2 text-sm focus:border-forest focus:outline-none"
+                />
+              </div>
             )}
             <input
               type="text"
@@ -1256,6 +1324,13 @@ function RestaurantPage() {
                   )}
                 </p>
               )}
+            </div>
+          )}
+
+          {checkoutError && (
+            <div className="mt-4 p-3 bg-rose-50 border border-rose-100 text-rose-700 text-xs font-semibold rounded-xl text-left flex items-start gap-2 shadow-sm animate-shake">
+              <span className="shrink-0 mt-0.5">⚠️</span>
+              <span>{checkoutError}</span>
             </div>
           )}
 
@@ -1434,9 +1509,9 @@ function RestaurantPage() {
         />
       )}
       <AnnouncementBanner
-        isActive={restaurant.announcement_active ?? false}
-        text={restaurant.announcement_text ?? null}
-        bgColor={restaurant.announcement_bg_color ?? null}
+        isActive={restaurant?.announcement_active ?? dbRestaurant?.announcement_active ?? false}
+        text={restaurant?.announcement_text ?? dbRestaurant?.announcement_text ?? null}
+        bgColor={restaurant?.announcement_bg_color ?? dbRestaurant?.announcement_bg_color ?? null}
       />
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-8">
         {dbRestaurant?.city ? (
@@ -1468,14 +1543,16 @@ function RestaurantPage() {
             width={1200}
             height={420}
           />
-          {/* Dark gradient overlay */}
-          <div
-            className="absolute inset-0 z-10"
-            style={{
-              backgroundImage:
-                "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%)",
-            }}
-          />
+          {/* Dark gradient overlay — only for real photos */}
+          {!isGeneratedBranding && (
+            <div
+              className="absolute inset-0 z-10"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%)",
+              }}
+            />
+          )}
 
           {/* Top Right Actions */}
           <div className="absolute top-4 right-4 md:top-6 md:right-6 z-30 flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 sm:gap-3">

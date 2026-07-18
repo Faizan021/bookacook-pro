@@ -39,6 +39,10 @@ export type Restaurant = {
   announcement_text?: string;
   isShowcase?: boolean;
   serviceAreas?: string;
+  acceptsCash?: boolean;
+  acceptsPaypal?: boolean;
+  paypalEmail?: string;
+  stripeConnectStatus?: string;
 };
 
 export const fallbackRestaurants: Restaurant[] = [
@@ -279,6 +283,13 @@ function mapRestaurant(r: any): Restaurant {
     phone: r.phone || "",
     about: { de: r.description || "", en: r.description || "" },
     serviceAreas: r.service_areas || "",
+    acceptsCash: r.accepts_cash || false,
+    acceptsPaypal: r.accepts_paypal || false,
+    paypalEmail: r.paypal_email || "",
+    stripeConnectStatus: r.stripe_connect_status || "not_connected",
+    announcement_active: r.announcement_active || false,
+    announcement_text: r.announcement_text || "",
+    announcement_bg_color: r.announcement_bg_color || "default",
     menu: (r.restaurant_products || []).map((p: any) => ({
       id: p.id,
       name: p.name,
