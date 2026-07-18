@@ -10,6 +10,7 @@ import {
   Search,
   CheckCircle2,
   ChevronDown,
+  Navigation,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useMemo, useState } from "react";
@@ -46,6 +47,21 @@ export const Route = createFileRoute("/restaurants")({
   }),
 });
 
+/** Haversine formula to compute distance in kilometers */
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Earth radius in km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 function RestaurantsDirectory() {
   const { restaurants, validGeoLocations } = Route.useLoaderData() as any;
   const [query, setQuery] = useState("");
@@ -53,6 +69,12 @@ function RestaurantsDirectory() {
   const [cityOpen, setCityOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
   const { lang } = useI18n();
+
+  // Browser Geolocation state
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [geoStatus, setGeoStatus] = useState<
+    "idle" | "loading" | "active" | "denied" | "unavailable" | "timeout"
+  >("idle");
 
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -71,11 +93,46 @@ function RestaurantsDirectory() {
     return cityLinks.filter((c) => c.label.toLowerCase().includes(q));
   }, [cityLinks, citySearch]);
 
-  const filtered = useMemo(() => {
+  const handleNearMeClick = () => {
+    if (!navigator.geolocation) {
+      setGeoStatus("unavailable");
+      return;
+    }
+    setGeoStatus("loading");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserCoords({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+        setGeoStatus("active");
+        setLocation(""); // Clear manual city filter when active
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        if (error.code === error.PERMISSION_DENIED) {
+          setGeoStatus("denied");
+        } else if (error.code === error.TIMEOUT) {
+          setGeoStatus("timeout");
+        } else {
+          setGeoStatus("unavailable");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 8000 },
+    );
+  };
+
+  const handleResetLocation = () => {
+    setUserCoords(null);
+    setGeoStatus("idle");
+  };
+
+  const filteredAndSorted = useMemo(() => {
     const q = query.trim().toLowerCase();
     const l = location.trim().toLowerCase();
 
-    return restaurants.filter((rest: any) => {
+    // 1. Filter
+    const filteredList = restaurants.filter((rest: any) => {
       if (
         q &&
         !`${rest.name} ${rest.cuisine_type || ""} ${rest.city || ""} ${rest.description || ""}`
@@ -102,7 +159,35 @@ function RestaurantsDirectory() {
 
       return true;
     });
-  }, [restaurants, query, location]);
+
+    // 2. Map distances and Sort if geolocation is active
+    if (geoStatus === "active" && userCoords) {
+      const listWithDistance = filteredList.map((rest: any) => {
+        let distance: number | null = null;
+        if (rest.lat != null && rest.lng != null) {
+          distance = calculateDistance(userCoords.lat, userCoords.lng, rest.lat, rest.lng);
+        }
+        return { ...rest, distance };
+      });
+
+      // Sort by distance (restaurants with distance first, then null distances at the end)
+      return listWithDistance.sort((a: any, b: any) => {
+        if (a.distance === null && b.distance === null) return 0;
+        if (a.distance === null) return 1;
+        if (b.distance === null) return -1;
+        return a.distance - b.distance;
+      });
+    }
+
+    return filteredList;
+  }, [restaurants, query, location, geoStatus, userCoords]);
+
+  const formatDistance = (dist: number) => {
+    if (dist < 1) {
+      return `${Math.round(dist * 1000)} m`;
+    }
+    return `${dist.toFixed(1)} km`;
+  };
 
   return (
     <SiteShell>
@@ -215,21 +300,43 @@ function RestaurantsDirectory() {
                 />
               </div>
 
-              <div className="flex items-center gap-3 px-4 py-3 bg-cream/30 rounded-2xl w-full md:w-80 border border-[#eadfce]/20">
+              <div className="flex items-center gap-3 px-4 py-3 bg-cream/30 rounded-2xl w-full md:w-80 border border-[#eadfce]/20 relative">
                 <MapPin className="h-5 w-5 text-forest/60 shrink-0" />
                 <input
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  placeholder={tt("Stadt oder PLZ eingeben...", "Enter city or ZIP code...")}
-                  className="w-full bg-transparent outline-none text-forest placeholder:text-forest/40 text-sm"
+                  placeholder={
+                    geoStatus === "active"
+                      ? tt("Mein Standort (Aktiv)", "My Location (Active)")
+                      : tt("Stadt oder PLZ eingeben...", "Enter city or ZIP code...")
+                  }
+                  className="w-full bg-transparent outline-none text-forest placeholder:text-forest/40 text-sm pr-8"
+                  disabled={geoStatus === "active"}
                 />
+
+                {/* Geolocation Locator Button */}
+                <button
+                  type="button"
+                  onClick={geoStatus === "active" ? handleResetLocation : handleNearMeClick}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-lg transition-colors cursor-pointer hover:bg-cream/80 ${
+                    geoStatus === "active"
+                      ? "text-leaf"
+                      : geoStatus === "loading"
+                        ? "text-leaf animate-pulse"
+                        : "text-forest/40 hover:text-forest"
+                  }`}
+                  title={tt("Meinen Standort verwenden", "Use my current location")}
+                >
+                  <Navigation className="h-4 w-4" />
+                </button>
               </div>
 
-              {(query || location) && (
+              {(query || location || geoStatus === "active") && (
                 <button
                   onClick={() => {
                     setQuery("");
                     setLocation("");
+                    handleResetLocation();
                   }}
                   className="text-xs text-forest/60 hover:text-forest underline font-medium shrink-0 cursor-pointer"
                 >
@@ -239,9 +346,64 @@ function RestaurantsDirectory() {
             </div>
           </section>
 
+          {/* Geolocation status messages */}
+          {geoStatus !== "idle" && (
+            <section className="mx-auto max-w-7xl px-6 mt-4">
+              <div
+                className={`p-3 rounded-2xl border text-xs md:text-sm font-medium flex items-center justify-between transition-all ${
+                  geoStatus === "active"
+                    ? "bg-leaf/5 border-leaf/20 text-forest"
+                    : geoStatus === "loading"
+                      ? "bg-cream/40 border-[#e2e8e4] text-forest/70 animate-pulse"
+                      : "bg-red-50 border-red-100 text-red-700"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full bg-current ${geoStatus === "loading" ? "animate-ping" : ""}`}
+                  />
+                  <span>
+                    {geoStatus === "active" &&
+                      tt(
+                        "Standort aktiv — Restaurants nach Nähe zum Stadtzentrum sortiert.",
+                        "Location active — restaurants sorted by proximity to city center.",
+                      )}
+                    {geoStatus === "loading" &&
+                      tt("Standort wird ermittelt...", "Determining your location...")}
+                    {geoStatus === "denied" &&
+                      tt(
+                        "Standort-Freigabe wurde blockiert. Bitte gib die Erlaubnis in den Browsereinstellungen frei oder nutze die manuelle Suche.",
+                        "Location permission denied. Please enable location access in browser settings or search manually.",
+                      )}
+                    {geoStatus === "timeout" &&
+                      tt(
+                        "Zeitüberschreitung bei Standortsuche. Bitte versuche es erneut oder suche manuell.",
+                        "Location request timed out. Please try again or search manually.",
+                      )}
+                    {geoStatus === "unavailable" &&
+                      tt(
+                        "Standortbestimmung ist in diesem Browser nicht verfügbar.",
+                        "Location discovery is not supported in this browser.",
+                      )}
+                  </span>
+                </div>
+                {geoStatus !== "loading" && (
+                  <button
+                    onClick={handleResetLocation}
+                    className="text-xs underline font-semibold cursor-pointer hover:opacity-80"
+                  >
+                    {geoStatus === "active"
+                      ? tt("Deaktivieren", "Disable")
+                      : tt("Schließen", "Dismiss")}
+                  </button>
+                )}
+              </div>
+            </section>
+          )}
+
           {/* Directory Grid */}
           <div className="max-w-7xl mx-auto px-6 py-16 w-full">
-            {filtered.length === 0 ? (
+            {filteredAndSorted.length === 0 ? (
               <div className="text-center py-24 bg-white rounded-3xl shadow-sm border border-[#e2e8e4]">
                 <Store className="w-16 h-16 mx-auto text-[#cbd5e1] mb-6" />
                 <h3 className="text-2xl font-display text-forest mb-2">
@@ -256,7 +418,7 @@ function RestaurantsDirectory() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {filtered.map((rest: any) => (
+                {filteredAndSorted.map((rest: any) => (
                   <Link
                     key={rest.id}
                     to="/restaurant/$slug"
@@ -273,7 +435,6 @@ function RestaurantsDirectory() {
                         .join("")
                         .toUpperCase();
                       const hasRealBanner = rest.banner_image_url && !rest.use_generated_branding;
-                      const hasRealLogo = rest.logo_url && !rest.use_generated_branding;
                       return (
                         <div className="relative aspect-[16/10] w-full overflow-hidden bg-forest/5 rounded-xl">
                           {hasRealBanner ? (
@@ -316,11 +477,21 @@ function RestaurantsDirectory() {
                             </div>
                           )}
 
-                          {/* City Badge */}
-                          {rest.city && (
-                            <div className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-forest shadow-sm backdrop-blur-md">
-                              <MapPin className="h-2.5 w-2.5 text-leaf" /> {rest.city}
+                          {/* Distance or City Badge */}
+                          {rest.distance != null ? (
+                            <div className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-0.5 text-[10px] font-bold text-forest shadow-sm backdrop-blur-md border border-[#e2e8e4]/40">
+                              <Navigation className="h-2.5 w-2.5 text-leaf rotate-45 shrink-0" />
+                              <span>
+                                ~{formatDistance(rest.distance)} ({tt("Mitte", "Center")})
+                              </span>
                             </div>
+                          ) : (
+                            rest.city && (
+                              <div className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-forest shadow-sm backdrop-blur-md">
+                                <MapPin className="h-2.5 w-2.5 text-leaf shrink-0" />
+                                <span className="truncate max-w-[100px]">{rest.city}</span>
+                              </div>
+                            )
                           )}
                         </div>
                       );

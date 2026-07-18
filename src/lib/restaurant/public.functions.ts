@@ -170,6 +170,24 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
     .eq("is_published", true)
     .eq("show_in_marketplace", true);
 
+  const cities = Array.from(new Set((restaurants || []).map((r: any) => r.city).filter(Boolean)));
+  const cityCoordsMap: Record<string, { lat: number; lng: number }> = {};
+
+  if (cities.length > 0) {
+    const { data: locs, error: locErr } = await supabaseAdmin
+      .from("german_locations")
+      .select("name, lat, lng")
+      .in("name", cities);
+
+    if (!locErr && locs) {
+      locs.forEach((l: any) => {
+        if (l.name && l.lat != null && l.lng != null) {
+          cityCoordsMap[l.name.toLowerCase()] = { lat: Number(l.lat), lng: Number(l.lng) };
+        }
+      });
+    }
+  }
+
   const mappedRestaurants = (restaurants || []).map((r: any) => {
     let logoUrl = r.logo_url;
     if (logoUrl && !logoUrl.startsWith("http")) {
@@ -181,10 +199,15 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
       bannerUrl = supabaseAdmin.storage.from("storefront-assets").getPublicUrl(bannerUrl)
         .data.publicUrl;
     }
+    const cityKey = r.city ? r.city.toLowerCase() : "";
+    const coords = cityCoordsMap[cityKey] || { lat: null, lng: null };
+
     return {
       ...r,
       logo_url: logoUrl,
       banner_image_url: bannerUrl,
+      lat: coords.lat,
+      lng: coords.lng,
     };
   });
 
