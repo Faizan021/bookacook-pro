@@ -75,6 +75,7 @@ function RestaurantsDirectory() {
   const [geoStatus, setGeoStatus] = useState<
     "idle" | "loading" | "active" | "denied" | "unavailable" | "timeout"
   >("idle");
+  const [geoErrorMsg, setGeoErrorMsg] = useState("");
 
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
 
@@ -106,10 +107,12 @@ function RestaurantsDirectory() {
           lng: position.coords.longitude,
         });
         setGeoStatus("active");
+        setGeoErrorMsg("");
         setLocation(""); // Clear manual city filter when active
       },
       (error) => {
         console.error("Geolocation error:", error);
+        setGeoErrorMsg(`${error.message} (Code: ${error.code})`);
         if (error.code === error.PERMISSION_DENIED) {
           setGeoStatus("denied");
         } else if (error.code === error.TIMEOUT) {
@@ -372,8 +375,8 @@ function RestaurantsDirectory() {
                       tt("Standort wird ermittelt...", "Determining your location...")}
                     {geoStatus === "denied" &&
                       tt(
-                        "Standort-Freigabe wurde blockiert. Klicke links neben der URL auf das Schloss-Symbol (🔒) oder das Regler-Symbol und stelle 'Standort' auf 'Zulassen', um die Ortung zu aktivieren.",
-                        "Location access blocked. Click the lock/settings icon (🔒) next to the URL address bar and set 'Location' to 'Allow' to enable proximity search.",
+                        `Standort-Freigabe wurde blockiert. Klicke links neben der URL auf das Schloss-Symbol (🔒) oder das Regler-Symbol und stelle 'Standort' auf 'Zulassen', um die Ortung zu aktivieren. (Fehler: ${geoErrorMsg})`,
+                        `Location access blocked. Click the lock/settings icon (🔒) next to the URL address bar and set 'Location' to 'Allow' to enable proximity search. (Error: ${geoErrorMsg})`,
                       )}
                     {geoStatus === "timeout" &&
                       tt(
