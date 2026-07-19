@@ -45,6 +45,15 @@ DECLARE
     v_offer_id UUID;
     v_initial_status surplus_offer_status;
 BEGIN
+    -- Verify the caller owns the restaurant profile
+    IF NOT EXISTS (
+        SELECT 1 FROM restaurants
+        WHERE id = p_restaurant_id
+          AND owner_id = auth.uid()
+    ) THEN
+        RAISE EXCEPTION 'Unauthorized';
+    END IF;
+
     -- Generate a unique 64-bit integer hash from restaurant_id and start_time date to lock on
     v_lock_id := ('x' || substr(md5(p_restaurant_id::text || date(p_start_time)::text), 1, 16))::bit(64)::bigint;
     
@@ -83,7 +92,7 @@ BEGIN
     
     RETURN v_offer_id;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- 2. Concurrency-Safe Stock Decrement: Atomic quantity deduction at purchase time
 CREATE OR REPLACE FUNCTION decrement_surplus_stock(
@@ -106,4 +115,44 @@ BEGIN
     
     RETURN v_updated > 0;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 3. Enable RLS and define policies on surplus_offers table
+ALTER TABLE surplus_offers ENABLE ROW LEVEL SECURITY;
+
+-- Allow SELECT for active offers to anyone (storefront), and all offers to restaurant owners
+CREATE POLICY select_surplus_offers ON surplus_offers
+FOR SELECT USING (
+    status = 'active'
+    OR EXISTS (
+        SELECT 1 FROM restaurants r
+        WHERE r.id = surplus_offers.restaurant_id
+          AND r.owner_id = auth.uid()
+    )
+);
+
+-- Allow INSERT for restaurant owners
+CREATE POLICY insert_surplus_offers ON surplus_offers
+FOR INSERT WITH CHECK (
+    EXISTS (
+        SELECT 1 FROM restaurants r
+        WHERE r.id = surplus_offers.restaurant_id
+          AND r.owner_id = auth.uid()
+    )
+);
+
+-- Allow UPDATE for restaurant owners
+CREATE POLICY update_surplus_offers ON surplus_offers
+FOR UPDATE USING (
+    EXISTS (
+        SELECT 1 FROM restaurants r
+        WHERE r.id = surplus_offers.restaurant_id
+          AND r.owner_id = auth.uid()
+    )
+) WITH CHECK (
+    EXISTS (
+        SELECT 1 FROM restaurants r
+        WHERE r.id = surplus_offers.restaurant_id
+          AND r.owner_id = auth.uid()
+    )
+);
