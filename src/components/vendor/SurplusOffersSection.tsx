@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, startTransition } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -293,8 +293,10 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
                 <button
                   type="button"
                   onClick={() => {
-                    setOfferType("single");
-                    setSurplusPriceCents(0);
+                    startTransition(() => {
+                      setOfferType("single");
+                      setSurplusPriceCents(0);
+                    });
                   }}
                   className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
                     offerType === "single"
@@ -307,8 +309,10 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
                 <button
                   type="button"
                   onClick={() => {
-                    setOfferType("magic_bag");
-                    setSurplusPriceCents(Math.floor(magicBagValueCents * 0.5));
+                    startTransition(() => {
+                      setOfferType("magic_bag");
+                      setSurplusPriceCents(Math.floor(magicBagValueCents * 0.5));
+                    });
                   }}
                   className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
                     offerType === "magic_bag"
@@ -327,12 +331,14 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
                 <Select
                   value={selectedProductId}
                   onValueChange={(val) => {
-                    setSelectedProductId(val);
-                    const p = products.find((prod: any) => prod.id === val);
-                    if (p) {
-                      // Pre-fill with a default 50% discount suggestion
-                      setSurplusPriceCents(Math.floor(p.price_cents * 0.5));
-                    }
+                    startTransition(() => {
+                      setSelectedProductId(val);
+                      const p = products.find((prod: any) => prod.id === val);
+                      if (p) {
+                        // Pre-fill with a default 50% discount suggestion
+                        setSurplusPriceCents(Math.floor(p.price_cents * 0.5));
+                      }
+                    });
                   }}
                 >
                   <SelectTrigger className="w-full bg-cream/10 border-[#e2e8e4]">
