@@ -3986,10 +3986,14 @@ function RestaurantDashboardInner() {
         {currentTab === "promotions" && (
           <PromotionsSection
             vertical="restaurants"
-            availableItems={(q.data.restaurant?.restaurant_products || []).map((p: any) => p.name)}
+            availableItems={(q.data.products || []).map((p: any) => p.name)}
           />
         )}
-        {currentTab === "surplus-offers" && <SurplusOffersSection restaurant={q.data.restaurant} />}
+        {currentTab === "surplus-offers" && (
+          <SurplusOffersSection
+            restaurant={{ ...q.data.restaurant, restaurant_products: q.data.products }}
+          />
+        )}
         {currentTab === "marketing-seo" && (
           <MarketingSEOSection
             entity={q.data.restaurant}
