@@ -32,7 +32,9 @@ function assertRestaurantOwnerPrimary(context: any, action: string): void {
 export const createSurplusOffer = createServerFn({ method: "POST" })
   .validator(
     z.object({
-      menuItemId: z.string().uuid(),
+      menuItemId: z.string().uuid().optional(),
+      isMagicBag: z.boolean().optional(),
+      magicBagOriginalPriceCents: z.number().int().positive().optional(),
       surplusPriceCents: z.number().int().positive(),
       initialQuantity: z.number().int().positive(),
       startTime: z.string().datetime(),
@@ -61,16 +63,69 @@ export const createSurplusOffer = createServerFn({ method: "POST" })
       throw new Error("No restaurant profile associated with this account.");
     }
 
-    // 2. Fetch and validate the menu item
-    const { data: menuItem, error: itemErr } = await supabase
-      .from("restaurant_products")
-      .select("id, name, price_cents")
-      .eq("id", input.menuItemId)
-      .eq("restaurant_id", restaurant.id)
-      .maybeSingle();
+    // 2. Fetch and validate the menu item (either standard or dynamically created Magic Bag)
+    let menuItem: { id: string; name: string; price_cents: number } | null = null;
 
-    if (itemErr || !menuItem) {
-      throw new Error("Menu item not found or does not belong to your restaurant.");
+    if (input.isMagicBag) {
+      if (!input.magicBagOriginalPriceCents) {
+        throw new Error("Estimated original value is required for Magic Bag.");
+      }
+
+      // Check if Surprise Bag item already exists
+      const { data: existingBag, error: bagQueryErr } = await supabase
+        .from("restaurant_products")
+        .select("id, name, price_cents")
+        .eq("restaurant_id", restaurant.id)
+        .eq("name", "Überraschungstüte (Chef's Surprise Bag)")
+        .maybeSingle();
+
+      if (bagQueryErr) throw new Error(bagQueryErr.message);
+
+      if (existingBag) {
+        // Update its nominal original price to the newly specified value
+        const { data: updatedBag, error: bagUpdateErr } = await supabase
+          .from("restaurant_products")
+          .update({ price_cents: input.magicBagOriginalPriceCents })
+          .eq("id", existingBag.id)
+          .select("id, name, price_cents")
+          .single();
+
+        if (bagUpdateErr) throw new Error(bagUpdateErr.message);
+        menuItem = updatedBag;
+      } else {
+        // Insert a new Surprise Bag product
+        const { data: newBag, error: bagInsertErr } = await supabase
+          .from("restaurant_products")
+          .insert({
+            restaurant_id: restaurant.id,
+            name: "Überraschungstüte (Chef's Surprise Bag)",
+            description: "Eine bunte Überraschungstüte mit leckeren Speisen des Tages zum Vorteilspreis.",
+            price_cents: input.magicBagOriginalPriceCents,
+            is_available: true,
+            category: "Überraschungen",
+          })
+          .select("id, name, price_cents")
+          .single();
+
+        if (bagInsertErr) throw new Error(bagInsertErr.message);
+        menuItem = newBag;
+      }
+    } else {
+      if (!input.menuItemId) {
+        throw new Error("Menu item must be specified.");
+      }
+
+      const { data: fetchedItem, error: itemErr } = await supabase
+        .from("restaurant_products")
+        .select("id, name, price_cents")
+        .eq("id", input.menuItemId)
+        .eq("restaurant_id", restaurant.id)
+        .maybeSingle();
+
+      if (itemErr || !fetchedItem) {
+        throw new Error("Menu item not found or does not belong to your restaurant.");
+      }
+      menuItem = fetchedItem;
     }
 
     const originalPriceCents = menuItem.price_cents;

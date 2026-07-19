@@ -55,7 +55,9 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
   });
 
   // State
+  const [offerType, setOfferType] = useState<"single" | "magic_bag">("single");
   const [selectedProductId, setSelectedProductId] = useState<string>("");
+  const [magicBagValueCents, setMagicBagValueCents] = useState<number>(1500); // Default €15.00 original value
   const [surplusPriceCents, setSurplusPriceCents] = useState<number>(0);
   const [initialQuantity, setInitialQuantity] = useState<number>(5);
 
@@ -87,6 +89,7 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
       setSelectedProductId("");
       setSurplusPriceCents(0);
       setInitialQuantity(5);
+      setMagicBagValueCents(1500);
     },
     onError: (err: any) => {
       toast.error(err.message || tt("Fehler beim Erstellen des Angebots", "Error creating offer"));
@@ -141,12 +144,26 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedProductId) {
+    if (offerType === "single" && !selectedProductId) {
       toast.error(tt("Bitte wählen Sie ein Produkt aus.", "Please select a product."));
+      return;
+    }
+    if (offerType === "magic_bag" && magicBagValueCents <= 0) {
+      toast.error(tt("Bitte geben Sie einen gültigen geschätzten Originalwert ein.", "Please enter a valid estimated original value."));
       return;
     }
     if (surplusPriceCents <= 0) {
       toast.error(tt("Bitte geben Sie einen gültigen Preis ein.", "Please enter a valid price."));
+      return;
+    }
+
+    const originalPriceCents = offerType === "single"
+      ? (selectedProduct?.price_cents || 0)
+      : magicBagValueCents;
+
+    const maxSurplusPriceCents = Math.floor(originalPriceCents * 0.5);
+    if (surplusPriceCents > maxSurplusPriceCents) {
+      toast.error(tt("Der Angebotspreis darf maximal 50% des Originalpreises betragen.", "The surplus price must be at least a 50% discount from the original price."));
       return;
     }
 
@@ -155,7 +172,9 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
     const utcEnd = new Date(endTime).toISOString();
 
     createMutation.mutate({
-      menuItemId: selectedProductId,
+      menuItemId: offerType === "single" ? selectedProductId : undefined,
+      isMagicBag: offerType === "magic_bag",
+      magicBagOriginalPriceCents: offerType === "magic_bag" ? magicBagValueCents : undefined,
       surplusPriceCents,
       initialQuantity,
       startTime: utcStart,
@@ -267,51 +286,150 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Offer Type selector */}
             <div className="space-y-1.5">
-              <Label>{tt("Menü-Artikel", "Menu Item")}</Label>
-              <Select
-                value={selectedProductId}
-                onValueChange={(val) => {
-                  setSelectedProductId(val);
-                  const p = products.find((prod: any) => prod.id === val);
-                  if (p) {
-                    // Pre-fill with a default 30% discount suggestion
-                    setSurplusPriceCents(Math.floor(p.price_cents * 0.7));
-                  }
-                }}
-              >
-                <SelectTrigger className="w-full bg-cream/10 border-[#e2e8e4]">
-                  <SelectValue placeholder={tt("Artikel auswählen...", "Select item...")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {products.map((p: any) => (
-                    <SelectItem key={p.id} value={p.id}>
-                      {p.name} (€{(p.price_cents / 100).toFixed(2)})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label>{tt("Angebots-Typ", "Offer Type")}</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOfferType("single");
+                    setSurplusPriceCents(0);
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                    offerType === "single"
+                      ? "bg-forest text-cream border-forest"
+                      : "bg-cream/10 text-forest border-[#e2e8e4] hover:bg-cream/30"
+                  }`}
+                >
+                  {tt("Einzelnes Produkt", "Menu Item")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOfferType("magic_bag");
+                    setSurplusPriceCents(Math.floor(magicBagValueCents * 0.5));
+                  }}
+                  className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                    offerType === "magic_bag"
+                      ? "bg-forest text-cream border-forest"
+                      : "bg-cream/10 text-forest border-[#e2e8e4] hover:bg-cream/30"
+                  }`}
+                >
+                  {tt("Überraschungstüte", "Magic Bag")}
+                </button>
+              </div>
             </div>
 
-            {selectedProduct && (
-              <div className="p-3.5 bg-cream/30 rounded-xl border border-[#e2e8e4] text-xs space-y-1">
-                <div className="flex justify-between text-forest/70">
-                  <span>{tt("Originalpreis", "Original Price")}:</span>
-                  <span className="font-semibold">
-                    €{(selectedProduct.price_cents / 100).toFixed(2)}
-                  </span>
+            {offerType === "single" ? (
+              <div className="space-y-1.5">
+                <Label>{tt("Menü-Artikel", "Menu Item")}</Label>
+                <Select
+                  value={selectedProductId}
+                  onValueChange={(val) => {
+                    setSelectedProductId(val);
+                    const p = products.find((prod: any) => prod.id === val);
+                    if (p) {
+                      // Pre-fill with a default 50% discount suggestion
+                      setSurplusPriceCents(Math.floor(p.price_cents * 0.5));
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-full bg-cream/10 border-[#e2e8e4]">
+                    <SelectValue placeholder={tt("Artikel auswählen...", "Select item...")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {products.map((p: any) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {p.name} (€{(p.price_cents / 100).toFixed(2)})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {selectedProduct && (
+                  <div className="p-3.5 bg-cream/30 rounded-xl border border-[#e2e8e4] text-xs space-y-1.5 mt-2">
+                    <div className="flex justify-between text-forest/70">
+                      <span>{tt("Originalpreis", "Original Price")}:</span>
+                      <span className="font-semibold">
+                        €{(selectedProduct.price_cents / 100).toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-forest/70">
+                      <span>
+                        {tt("Max. erlaubter Angebotspreis (50% Rabatt)", "Max offer price (50% off)")}:
+                      </span>
+                      <span className="font-semibold text-rose-600">
+                        €{(selectedProduct.price_cents / 200).toFixed(2)}
+                      </span>
+                    </div>
+                    {/* Quick discount buttons */}
+                    <div className="flex gap-2 pt-2 border-t border-[#e2e8e4]/50">
+                      {[50, 60, 70].map((pct) => (
+                        <button
+                          key={pct}
+                          type="button"
+                          onClick={() => {
+                            const price = Math.floor(selectedProduct.price_cents * (1 - pct / 100));
+                            setSurplusPriceCents(price);
+                          }}
+                          className="px-2 py-1 bg-forest/10 hover:bg-forest/20 text-forest rounded-lg text-xs font-semibold transition-colors"
+                        >
+                          -{pct}% Off
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="space-y-1.5">
+                  <Label>{tt("Schätzwert Originalpreis (€)", "Est. Original Value (€)")}</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    placeholder="15.00"
+                    value={magicBagValueCents ? (magicBagValueCents / 100).toFixed(2) : ""}
+                    onChange={(e) => {
+                      const val = Math.round(parseFloat(e.target.value) * 100) || 0;
+                      setMagicBagValueCents(val);
+                      // Auto-update price if custom value was set
+                      setSurplusPriceCents(Math.floor(val * 0.5));
+                    }}
+                    className="bg-cream/10 border-[#e2e8e4]"
+                  />
                 </div>
-                <div className="flex justify-between text-forest/70">
-                  <span>
-                    {tt("Max. erlaubter Angebotspreis (50% Rabatt)", "Max offer price (50% off)")}:
-                  </span>
-                  <span className="font-semibold text-rose-600">
-                    €{(selectedProduct.price_cents / 200).toFixed(2)}
-                  </span>
+
+                <div className="p-3.5 bg-cream/30 rounded-xl border border-[#e2e8e4] text-xs space-y-1.5">
+                  <div className="flex justify-between text-forest/70">
+                    <span>{tt("Max. erlaubter Angebotspreis (50% Rabatt)", "Max offer price (50% off)")}:</span>
+                    <span className="font-semibold text-rose-600">
+                      €{(magicBagValueCents / 200).toFixed(2)}
+                    </span>
+                  </div>
+                  {/* Quick discount buttons */}
+                  <div className="flex gap-2 pt-2 border-t border-[#e2e8e4]/50">
+                    {[50, 60, 70].map((pct) => (
+                      <button
+                        key={pct}
+                        type="button"
+                        onClick={() => {
+                          const price = Math.floor(magicBagValueCents * (1 - pct / 100));
+                          setSurplusPriceCents(price);
+                        }}
+                        className="px-2 py-1 bg-forest/10 hover:bg-forest/20 text-forest rounded-lg text-xs font-semibold transition-colors"
+                      >
+                        -{pct}% Off
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
 
+            {/* Price input field with validation feedback */}
             <div className="space-y-1.5">
               <Label>{tt("Angebotspreis (€)", "Surplus Price (€)")}</Label>
               <Input
@@ -326,6 +444,26 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
                 }}
                 className="bg-cream/10 border-[#e2e8e4]"
               />
+              {(() => {
+                const originalPriceCents = offerType === "single"
+                  ? (selectedProduct?.price_cents || 0)
+                  : magicBagValueCents;
+                const maxSurplusPriceCents = Math.floor(originalPriceCents * 0.5);
+                const isPriceInvalid = surplusPriceCents > maxSurplusPriceCents && originalPriceCents > 0;
+
+                if (isPriceInvalid) {
+                  return (
+                    <p className="text-xs text-rose-600 font-semibold mt-1 flex items-center gap-1">
+                      <span>⚠️</span>
+                      {tt(
+                        `Der Rabatt muss mindestens 50% betragen (Maximalpreis: €${(maxSurplusPriceCents / 100).toFixed(2)})`,
+                        `Discount must be at least 50% (Max price: €${(maxSurplusPriceCents / 100).toFixed(2)})`
+                      )}
+                    </p>
+                  );
+                }
+                return null;
+              })()}
             </div>
 
             <div className="space-y-1.5">
@@ -375,15 +513,26 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
               </Select>
             </div>
 
-            <Button
-              type="submit"
-              disabled={createMutation.isPending}
-              className="w-full mt-4 bg-forest hover:bg-forest/90 text-cream font-medium"
-            >
-              {createMutation.isPending
-                ? tt("Wird erstellt...", "Creating...")
-                : tt("Angebot aktivieren", "Activate Offer")}
-            </Button>
+            {(() => {
+              const originalPriceCents = offerType === "single"
+                ? (selectedProduct?.price_cents || 0)
+                : magicBagValueCents;
+              const maxSurplusPriceCents = Math.floor(originalPriceCents * 0.5);
+              const isPriceInvalid = surplusPriceCents > maxSurplusPriceCents && originalPriceCents > 0;
+              const isDisabled = createMutation.isPending || isPriceInvalid || surplusPriceCents <= 0 || (offerType === "single" && !selectedProductId);
+
+              return (
+                <Button
+                  type="submit"
+                  disabled={isDisabled}
+                  className="w-full mt-4 bg-forest hover:bg-forest/90 text-cream font-medium"
+                >
+                  {createMutation.isPending
+                    ? tt("Wird erstellt...", "Creating...")
+                    : tt("Angebot aktivieren", "Activate Offer")}
+                </Button>
+              );
+            })()}
           </form>
         </div>
 
