@@ -69,7 +69,7 @@ export function VendorLayout({
       { id: "reservations", label: tt("Reservierungen", "Reservations"), icon: CalendarDays },
       { id: "menu", label: tt("Speisekarte", "Menu"), icon: UtensilsCrossed },
       { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },
-      { id: "surplus-offers", label: tt("AI-Angebote", "AI Offers"), icon: Sparkles },
+      { id: "surplus-offers", label: tt("Chef-Angebote", "Chef's Specials"), icon: Sparkles },
       { id: "marketing-seo", label: tt("Marketing & SEO", "Marketing & SEO"), icon: Globe },
       { id: "settings-billing", label: tt("Abonnement", "Subscription"), icon: CreditCard },
       { id: "settings-general", label: tt("Einstellungen", "Settings"), icon: Settings },

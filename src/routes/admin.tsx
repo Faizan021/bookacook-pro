@@ -1266,7 +1266,7 @@ function AdminPage() {
             <div className="flex items-center gap-2.5 border-b border-gray-200 pb-4">
               <Sparkles className="h-6 w-6 text-emerald-600 animate-pulse" />
               <h2 className="text-xl font-bold text-gray-900 font-display">
-                Time-Limited Surplus Policies (AI Offers)
+                Time-Limited Surplus Policies (Chef's Specials)
               </h2>
             </div>
 

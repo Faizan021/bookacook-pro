@@ -196,6 +196,19 @@ export function SurplusOffersSection({ restaurant }: SurplusOffersSectionProps) 
 
   return (
     <div className="space-y-8 p-1">
+      {/* Naming explanation header */}
+      <div className="rounded-2xl border border-emerald-100 bg-emerald-50/30 p-5 space-y-2">
+        <h2 className="font-display text-lg font-bold text-forest">
+          {tt("Chef-Angebote (Überschuss-Rettung)", "Chef's Specials (Surplus Recovery)")}
+        </h2>
+        <p className="text-sm text-forest/80 leading-relaxed">
+          {tt(
+            "Verkaufen Sie überschüssige, frisch zubereitete Speisen am Ende des Tages als zeitlich begrenzte Sonderangebote direkt auf Ihrer Storefront. Retten Sie Lebensmittel vor der Verschwendung, gewinnen Sie neue Kunden und decken Sie Ihre Zutatenkosten.",
+            "Sell surplus, freshly prepared meals at the end of the day as time-limited special offers directly on your storefront. Save food from going to waste, attract new customers, and recover your ingredient costs."
+          )}
+        </p>
+      </div>
+
       {/* Overview Metrics Cards */}
       <div className="grid gap-6 md:grid-cols-3">
         <div className="relative overflow-hidden rounded-2xl border border-[#e2e8e4] bg-white p-6 shadow-sm">
