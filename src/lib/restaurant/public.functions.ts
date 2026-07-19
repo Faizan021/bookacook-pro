@@ -132,11 +132,42 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
         "id, owner_id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications, accepts_cash, accepts_paypal, paypal_email, theme_accent_color, theme_header_font",
       );
 
-    const { data: rest, error } = await (
+    // eslint-disable-next-line prefer-const
+    let { data: rest, error } = await (
       isUuid ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`) : query.eq("slug", data.slug)
     ).maybeSingle();
 
-    if (error) throw new Error(error.message);
+    if (error) {
+      // If the query failed because theme columns don't exist on the database yet, retry without them
+      if (
+        error.message.includes("theme_accent_color") ||
+        error.message.includes("theme_header_font") ||
+        error.message.includes("does not exist") ||
+        error.code === "PGRST204" ||
+        error.code === "42703"
+      ) {
+        const fallbackQuery = supabaseAdmin
+          .from("restaurants")
+          .select(
+            "id, owner_id, name, slug, custom_domain, stripe_connect_status, subscription_status, is_published, certifications, accepts_cash, accepts_paypal, paypal_email",
+          );
+        const { data: retryData, error: retryError } = await (
+          isUuid
+            ? fallbackQuery.or(`slug.eq.${data.slug},id.eq.${data.slug}`)
+            : fallbackQuery.eq("slug", data.slug)
+        ).maybeSingle();
+        if (retryError) throw new Error(retryError.message);
+        rest = retryData
+          ? {
+              ...retryData,
+              theme_accent_color: null,
+              theme_header_font: null,
+            }
+          : null;
+      } else {
+        throw new Error(error.message);
+      }
+    }
 
     let promoCodes: any[] = [];
     if (rest) {
@@ -336,7 +367,12 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
       origin: string;
       paymentMethod: "stripe" | "cash" | "paypal";
       orderType: "pickup" | "delivery" | "dine_in";
-      items: Array<{ productId: string; quantity: number }>;
+      items: Array<{
+        productId: string;
+        quantity: number;
+        isSurplusOffer?: boolean;
+        surplusOfferId?: string;
+      }>;
       promoCode?: string;
       customerName: string;
       customerPhone: string;
@@ -354,7 +390,14 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
           paymentMethod: z.enum(["stripe", "cash", "paypal"]),
           orderType: z.enum(["pickup", "delivery", "dine_in"]),
           items: z
-            .array(z.object({ productId: z.string().uuid(), quantity: z.number().int().min(1) }))
+            .array(
+              z.object({
+                productId: z.string().uuid(),
+                quantity: z.number().int().min(1),
+                isSurplusOffer: z.boolean().optional(),
+                surplusOfferId: z.string().uuid().optional(),
+              }),
+            )
             .min(1),
           promoCode: z.string().optional(),
           customerName: z.string().min(1),
@@ -414,18 +457,59 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
     if (prodErr || !products || products.length === 0)
       throw new Error("Products not found or invalid");
 
+    // Fetch surplus offers if any items are surplus
+    const surplusOfferIds = data.items
+      .filter((i) => i.isSurplusOffer && i.surplusOfferId)
+      .map((i) => i.surplusOfferId as string);
+
+    let surplusOffers: any[] = [];
+    if (surplusOfferIds.length > 0) {
+      const { data: sOffers, error: sErr } = await supabaseAdmin
+        .from("surplus_offers")
+        .select("*")
+        .in("id", surplusOfferIds)
+        .eq("status", "active")
+        .eq("restaurant_id", data.restaurantId);
+      if (sErr) throw new Error("Failed to validate surplus offers: " + sErr.message);
+      surplusOffers = sOffers || [];
+    }
+
     let subtotalCents = 0;
     const validatedItems = data.items.map((item) => {
       const product = products.find((p) => p.id === item.productId);
       if (!product) throw new Error(`Invalid product ID: ${item.productId}`);
-      const lineTotal = product.price_cents * item.quantity;
+
+      let priceCents = product.price_cents;
+      let surplusOfferId = null;
+
+      if (item.isSurplusOffer && item.surplusOfferId) {
+        const surplusOffer = surplusOffers.find((o) => o.id === item.surplusOfferId);
+        if (!surplusOffer) {
+          throw new Error("The surplus offer has expired or is no longer available.");
+        }
+        if (surplusOffer.menu_item_id !== product.id) {
+          throw new Error("Surplus offer product mismatch.");
+        }
+        if (new Date(surplusOffer.end_time).getTime() <= Date.now()) {
+          throw new Error("The surplus offer has expired.");
+        }
+        if (surplusOffer.current_quantity < item.quantity) {
+          throw new Error("Not enough portions left for this surplus offer.");
+        }
+        priceCents = surplusOffer.surplus_price_cents;
+        surplusOfferId = surplusOffer.id;
+      }
+
+      const lineTotal = priceCents * item.quantity;
       subtotalCents += lineTotal;
       return {
         product_id: product.id,
-        name: product.name,
-        price_cents: product.price_cents,
+        name: product.name + (item.isSurplusOffer ? " (Chef's Special)" : ""),
+        price_cents: priceCents,
         quantity: item.quantity,
         line_total_cents: lineTotal,
+        is_surplus_offer: item.isSurplusOffer || false,
+        surplus_offer_id: surplusOfferId,
       };
     }); // 3. Apply promo code if present
     const promoResult = await calculatePromoDiscount(
@@ -524,6 +608,27 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         },
         { onConflict: "email" },
       );
+    }
+
+    // 4.8 Decrement surplus stocks atomic check
+    for (const item of validatedItems) {
+      if (item.is_surplus_offer && item.surplus_offer_id) {
+        const { data: decremented, error: decErr } = await (supabaseAdmin as any).rpc(
+          "decrement_surplus_stock",
+          {
+            p_offer_id: item.surplus_offer_id,
+            p_quantity_to_buy: item.quantity,
+          },
+        );
+        if (decErr || !decremented) {
+          console.warn(
+            `[SurplusOffers] CHECKOUT_STOCK_FAILED offerId=${item.surplus_offer_id} qty=${item.quantity} restaurantId=${data.restaurantId} decErr=${decErr?.message ?? "sold_out_or_expired"}`,
+          );
+          throw new Error(
+            "This surplus offer is no longer available or has sold out. Please refresh and adjust your cart.",
+          );
+        }
+      }
     }
 
     // 5. Create Order in DB

@@ -52,6 +52,7 @@ import {
   LogOut,
   Globe,
   MousePointerClick,
+  Sparkles,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -72,9 +73,8 @@ function AdminPage() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  // Active Tab
   const [activeTab, setActiveTab] = useState<
-    "overview" | "analytics" | "users" | "listings" | "orders" | "ai-tools"
+    "overview" | "analytics" | "users" | "listings" | "orders" | "ai-tools" | "surplus-policies"
   >("overview");
   const [aiSubTab, setAiSubTab] = useState<"drafts" | "sitemap" | "competitor" | "geo">("drafts");
   const [searchTerm, setSearchTerm] = useState("");
@@ -462,6 +462,20 @@ function AdminPage() {
           >
             <Globe className="w-4 h-4" />
             <span>AI Visibility & Tools</span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("surplus-policies");
+              setSearchTerm("");
+            }}
+            className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "surplus-policies"
+                ? "border-forest text-forest"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-emerald-600" />
+            <span>Surplus Policies</span>
           </button>
         </div>
 
@@ -1242,6 +1256,106 @@ function AdminPage() {
                   <GeoTargetingEngine />
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Tab 6: Surplus Policies */}
+        {activeTab === "surplus-policies" && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 space-y-6">
+            <div className="flex items-center gap-2.5 border-b border-gray-200 pb-4">
+              <Sparkles className="h-6 w-6 text-emerald-600 animate-pulse" />
+              <h2 className="text-xl font-bold text-gray-900 font-display">
+                Time-Limited Surplus Policies (AI Offers)
+              </h2>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="space-y-4 border border-gray-150 rounded-xl p-5 bg-gray-50/50">
+                <h3 className="font-semibold text-gray-900 font-display">Governance Controls</h3>
+
+                <div className="flex items-center justify-between py-2 border-b border-gray-200/50">
+                  <div>
+                    <Label className="font-bold text-gray-800">
+                      Smart Surplus Recovery (Global)
+                    </Label>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      Allow restaurants to create and list time-bound deals.
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={true}
+                    disabled
+                    className="h-4 w-4 text-forest border-gray-300 rounded focus:ring-forest cursor-not-allowed"
+                  />
+                </div>
+
+                <div className="space-y-2 border-b border-gray-200/50 pb-4">
+                  <Label className="font-semibold text-gray-700">Max Allowed Discount (Cap)</Label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="10"
+                      max="90"
+                      value="50"
+                      disabled
+                      className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-not-allowed accent-forest"
+                    />
+                    <span className="text-sm font-bold bg-white border px-2.5 py-1 rounded">
+                      50%
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Maximum price discount a restaurant can set relative to retail price.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="font-semibold text-gray-700">Max Offers Per Day</Label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="number"
+                      value="1"
+                      disabled
+                      className="w-20 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:outline-none cursor-not-allowed"
+                    />
+                    <span className="text-xs text-gray-500">
+                      Default frequency cap for standard restaurants.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4 border border-gray-150 rounded-xl p-5 bg-gray-50/50">
+                <h3 className="font-semibold text-gray-900 font-display">
+                  Fulfillment & Expiry Safeguards
+                </h3>
+
+                <div className="space-y-3.5 text-sm text-gray-600">
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                    <p className="leading-tight">
+                      <strong>Auto-eviction:</strong> Cart items are automatically evicted
+                      immediately on timestamp expiry.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                    <p className="leading-tight">
+                      <strong>Closing buffer:</strong> Deals must end at least 30 minutes before
+                      restaurant closing time.
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-emerald-600 font-bold shrink-0">✓</span>
+                    <p className="leading-tight">
+                      <strong>Predictability guard:</strong> Designed to avoid training customers
+                      into expecting fixed daily discounts.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

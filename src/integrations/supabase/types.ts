@@ -33,6 +33,94 @@ export type Database = {
   };
   public: {
     Tables: {
+      surplus_offers: {
+        Row: {
+          id: string;
+          restaurant_id: string;
+          menu_item_id: string;
+          item_name: string;
+          original_price_cents: number;
+          surplus_price_cents: number;
+          initial_quantity: number;
+          current_quantity: number;
+          start_time: string;
+          end_time: string;
+          status:
+            | "draft"
+            | "scheduled"
+            | "active"
+            | "paused"
+            | "sold_out"
+            | "expired"
+            | "cancelled";
+          fulfillment_mode: string;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          restaurant_id: string;
+          menu_item_id: string;
+          item_name: string;
+          original_price_cents: number;
+          surplus_price_cents: number;
+          initial_quantity: number;
+          current_quantity?: number;
+          start_time: string;
+          end_time: string;
+          status?:
+            | "draft"
+            | "scheduled"
+            | "active"
+            | "paused"
+            | "sold_out"
+            | "expired"
+            | "cancelled";
+          fulfillment_mode?: string;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          restaurant_id?: string;
+          menu_item_id?: string;
+          item_name?: string;
+          original_price_cents?: number;
+          surplus_price_cents?: number;
+          initial_quantity?: number;
+          current_quantity?: number;
+          start_time?: string;
+          end_time?: string;
+          status?:
+            | "draft"
+            | "scheduled"
+            | "active"
+            | "paused"
+            | "sold_out"
+            | "expired"
+            | "cancelled";
+          fulfillment_mode?: string;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "surplus_offers_restaurant_id_fkey";
+            columns: ["restaurant_id"];
+            isOneToOne: false;
+            referencedRelation: "restaurants";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "surplus_offers_menu_item_id_fkey";
+            columns: ["menu_item_id"];
+            isOneToOne: false;
+            referencedRelation: "restaurant_products";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+
       _archive_availability: {
         Row: {
           _archived_at: string | null;

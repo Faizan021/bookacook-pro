@@ -133,7 +133,10 @@ export const requireRole = (role: UserRole) =>
   createMiddleware({ type: "function" })
     .middleware([requireSupabaseAuth()])
     .server(async ({ next, context }) => {
-      const { supabase: supabaseCtx, userId } = context as any;
+      const { supabase: supabaseCtx, userId } = context as {
+        supabase: typeof supabase;
+        userId: string;
+      };
 
       // Fallback if supabase context is missing
       const dbClient = supabaseCtx || supabase;
@@ -153,14 +156,16 @@ export const requireRole = (role: UserRole) =>
         }
       }
 
-      let roleList = (roles ?? []).map((r: any) => r.role as UserRole);
+      let roleList = (roles ?? []).map((r) => r.role as unknown as UserRole);
 
       if (roleList.length === 0 && authData?.user?.user_metadata?.role) {
         const metaRole = authData.user.user_metadata.role as string;
 
         if (SELF_HEALABLE_ROLES.includes(metaRole as UserRole)) {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          await supabaseAdmin.from("user_roles").insert({ user_id: userId, role: metaRole as any });
+          await supabaseAdmin
+            .from("user_roles")
+            .insert({ user_id: userId, role: metaRole as unknown as Database["public"]["Enums"]["app_role"] });
           roleList = [metaRole as UserRole];
 
           console.log(
@@ -185,7 +190,19 @@ export const requireRole = (role: UserRole) =>
         roleList.push("partner");
       }
 
-      // Map unified partner role to legacy roles to satisfy existing server functions
+      // ⚠️ ARCHITECTURE REVIEW REQUIRED (follow-up ticket: ARCH-001)
+      // This block expands the unified `partner` role into all three vertical roles
+      // (restaurant_owner, caterer, planner) for backward compatibility with server
+      // functions that check for a specific vertical role.
+      //
+      // RISK: Any feature that uses requireRole("restaurant_owner") is silently
+      // accessible to Caterers and Planners unless a vertical-specific guard is also
+      // applied at the handler level (see assertRestaurantOwnerPrimary() in
+      // surplus.functions.ts as the current compensating control pattern).
+      //
+      // RECOMMENDED FIX: Replace this blanket expansion with a per-feature permission
+      // map keyed by user_roles.role. Each vertical should only expand to the roles
+      // it genuinely needs. Review scheduled in auth-model refactor sprint.
       if (roleList.includes("partner")) {
         if (!roleList.includes("restaurant_owner")) roleList.push("restaurant_owner" as UserRole);
         if (!roleList.includes("caterer")) roleList.push("caterer" as UserRole);

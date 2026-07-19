@@ -3,6 +3,7 @@ import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-route
 import { z } from "zod";
 import { useMemo, useState, useEffect } from "react";
 import { trackEvent } from "@/utils/posthog";
+import { UPSELL_RECOMMENDATIONS_ENABLED } from "@/utils/featureFlags";
 import {
   MapPin,
   Star,
@@ -18,6 +19,7 @@ import {
   ShieldCheck,
   CheckCircle2,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
@@ -48,6 +50,8 @@ import { UnifiedCustomerFields } from "@/components/UnifiedCustomerFields";
 import { recordPageView } from "@/lib/vendor/analytics.functions";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { getPublicRestaurantReviews } from "@/lib/reviews/public.functions";
+import { useQuery } from "@tanstack/react-query";
+import { getActiveSurplusOffer } from "@/lib/restaurant/surplus.functions";
 
 const searchSchema = z.object({
   order_success: z.union([z.string(), z.boolean()]).optional(),
@@ -279,6 +283,62 @@ function RestaurantPage() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [filter, setFilter] = useState<string>("all");
 
+  const getActiveOfferFn = useServerFn(getActiveSurplusOffer);
+  const { data: activeSurplusOffer } = useQuery({
+    queryKey: ["restaurant", restaurant?.id, "active-surplus-offer"],
+    queryFn: () => getActiveOfferFn({ data: { restaurantId: restaurant?.id || "" } }),
+    enabled: !!restaurant?.id,
+  });
+
+  const [surplusEvictedMessage, setSurplusEvictedMessage] = useState<string | null>(null);
+  const [timeLeftStr, setTimeLeftStr] = useState<string>("");
+
+  useEffect(() => {
+    if (!activeSurplusOffer) return;
+    const updateTime = () => {
+      const diff = new Date(activeSurplusOffer.end_time).getTime() - Date.now();
+      if (diff <= 0) {
+        setTimeLeftStr(lang === "de" ? "Abgelaufen" : "Expired");
+      } else {
+        const hours = Math.floor(diff / 3600000);
+        const mins = Math.floor((diff % 3600000) / 60000);
+        const secs = Math.floor((diff % 60000) / 1000);
+        setTimeLeftStr(`${hours > 0 ? `${hours}h ` : ""}${mins}m ${secs}s`);
+      }
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, [activeSurplusOffer, lang]);
+
+  useEffect(() => {
+    const surplusKey = Object.keys(cart).find((k) => k.endsWith(" (Chef's Special)"));
+    if (!surplusKey) return;
+
+    const baseName = surplusKey.replace(" (Chef's Special)", "");
+    const now = Date.now();
+
+    const shouldEvict =
+      !activeSurplusOffer ||
+      activeSurplusOffer.item_name !== baseName ||
+      new Date(activeSurplusOffer.end_time).getTime() <= now ||
+      activeSurplusOffer.current_quantity <= 0 ||
+      activeSurplusOffer.status !== "active";
+
+    if (shouldEvict) {
+      setCart((prev) => {
+        const next = { ...prev };
+        delete next[surplusKey];
+        return next;
+      });
+      setSurplusEvictedMessage(
+        lang === "de"
+          ? `Das Chef's Special Angebot für "${baseName}" ist abgelaufen oder ausverkauft und wurde aus Ihrem Warenkorb entfernt.`
+          : `The Chef's Special offer for "${baseName}" has expired or sold out and was removed from your cart.`,
+      );
+    }
+  }, [cart, activeSurplusOffer, lang]);
+
   const availableTags = useMemo(() => {
     const tagsSet = new Set<string>();
     restaurant?.menu?.forEach((item: any) => {
@@ -292,6 +352,288 @@ function RestaurantPage() {
     });
     return Array.from(tagsSet);
   }, [restaurant]);
+
+  // Pre-normalize category roles once per menu item (not inline repeatedly during render)
+  const normalizedMenu = useMemo(() => {
+    if (!restaurant?.menu) return [];
+
+    const DRINK_CATEGORIES = [
+      "drinks",
+      "beverages",
+      "soft drinks",
+      "getränke",
+      "alkoholfrei",
+      "bier",
+      "wein",
+      "juice",
+      "säfte",
+    ];
+    const DESSERT_CATEGORIES = ["desserts", "dessert", "nachspeisen", "süßspeisen", "eis", "sweet"];
+    const SIDE_CATEGORIES = [
+      "sides",
+      "salads",
+      "salad",
+      "beilagen",
+      "snacks",
+      "vorspeisen",
+      "soup",
+      "suppen",
+    ];
+
+    return restaurant.menu.map((item: any, index: number) => {
+      const cat = (item.category || "").trim().toLowerCase();
+      let role: "drink" | "dessert" | "side" | "main" = "main";
+      if (DRINK_CATEGORIES.some((c) => cat.includes(c))) {
+        role = "drink";
+      } else if (DESSERT_CATEGORIES.some((c) => cat.includes(c))) {
+        role = "dessert";
+      } else if (SIDE_CATEGORIES.some((c) => cat.includes(c))) {
+        role = "side";
+      }
+
+      // Fallback name-based heuristics if category classification defaulted to main
+      if (role === "main") {
+        const itemName = (item.name || "").trim().toLowerCase();
+        const words = itemName.split(/[\s,.(\-/)(]+/);
+
+        const drinkWords = [
+          "cola",
+          "fanta",
+          "sprite",
+          "wasser",
+          "water",
+          "bier",
+          "beer",
+          "wein",
+          "wine",
+          "saft",
+          "juice",
+          "getränk",
+          "getränke",
+          "drink",
+          "drinks",
+          "pepsi",
+          "mezzo",
+          "spezi",
+          "eistee",
+          "pils",
+          "radler",
+          "selters",
+          "schorle",
+          "fizz",
+          "apfelschorle",
+          "limonade",
+          "softdrink",
+          "ayran",
+          "uludag",
+          "bionade",
+          "club-mate",
+        ];
+        const dessertWords = [
+          "cake",
+          "kuchen",
+          "dessert",
+          "desserts",
+          "nachspeise",
+          "nachspeisen",
+          "sweet",
+          "muffin",
+          "muffins",
+          "waffel",
+          "waffeln",
+          "brownie",
+          "brownies",
+          "tiramisu",
+          "pfannkuchen",
+          "pudding",
+          "sorbet",
+          "crepe",
+          "crêpe",
+        ];
+        const sideWords = [
+          "pommes",
+          "krokette",
+          "kroketten",
+          "beilage",
+          "beilagen",
+          "salat",
+          "salate",
+          "salad",
+          "salads",
+          "ketchup",
+          "mayo",
+          "sauce",
+          "saucen",
+          "soße",
+          "soßen",
+          "dipp",
+          "dip",
+          "dips",
+          "brot",
+          "brötchen",
+          "bread",
+          "nuggets",
+          "onionrings",
+          "rice",
+          "reis",
+          "fritten",
+          "coleslaw",
+          "tzatziki",
+          "aioli",
+          "edamame",
+        ];
+
+        if (
+          drinkWords.some((w) => words.includes(w)) ||
+          itemName.includes("coca-cola") ||
+          itemName.includes("red bull") ||
+          itemName.includes("redbull")
+        ) {
+          role = "drink";
+        } else if (
+          dessertWords.some((w) => words.includes(w)) ||
+          itemName.includes("eis") ||
+          itemName.includes("süß")
+        ) {
+          role = "dessert";
+        } else if (
+          sideWords.some((w) => words.includes(w)) ||
+          itemName.includes("onion rings") ||
+          itemName.includes("sauce") ||
+          itemName.includes("soße") ||
+          itemName.includes("kartoffel")
+        ) {
+          role = "side";
+        }
+      }
+
+      return {
+        ...item,
+        normalizedRole: role,
+        originalIndex: index,
+      };
+    });
+  }, [restaurant]);
+
+  // Safely compute cartItems, total, totalCount at the top of the component (before early returns)
+  const cartItems = useMemo(() => {
+    if (!restaurant?.menu) return [];
+    return Object.entries(cart)
+      .map(([cartKey, qty]) => {
+        const isSurplus = cartKey.endsWith(" (Chef's Special)");
+        const baseName = isSurplus ? cartKey.replace(" (Chef's Special)", "") : cartKey;
+        const item = restaurant.menu.find((m: any) => m.name === baseName);
+        if (!item) return null;
+
+        const price =
+          isSurplus && activeSurplusOffer
+            ? activeSurplusOffer.surplus_price_cents / 100
+            : item.price;
+
+        return {
+          ...item,
+          name: cartKey,
+          baseName,
+          price,
+          isSurplus,
+          qty,
+        };
+      })
+      .filter(Boolean) as any[];
+  }, [cart, restaurant, activeSurplusOffer]);
+
+  const total = useMemo(() => cartItems.reduce((sum, i) => sum + i.price * i.qty, 0), [cartItems]);
+  const totalCount = useMemo(() => cartItems.reduce((sum, i) => sum + i.qty, 0), [cartItems]);
+
+  // 1. Check if the cart has at least 1 food item (non-drink and non-dessert)
+  const hasFoodItem = useMemo(() => {
+    return cartItems.some((item) => {
+      const matchName = item.baseName || item.name;
+      const norm = normalizedMenu.find((m: any) => m.name === matchName);
+      return norm && (norm.normalizedRole === "main" || norm.normalizedRole === "side");
+    });
+  }, [cartItems, normalizedMenu]);
+
+  // 2. Check if the cart already has at least 1 drink
+  const hasDrinkInCart = useMemo(() => {
+    return cartItems.some((item) => {
+      const matchName = item.baseName || item.name;
+      const norm = normalizedMenu.find((m: any) => m.name === matchName);
+      return norm && norm.normalizedRole === "drink";
+    });
+  }, [cartItems, normalizedMenu]);
+
+  // 3. Compute recommendations
+  const upsellRecommendations = useMemo(() => {
+    if (!UPSELL_RECOMMENDATIONS_ENABLED) return [];
+    if (!hasFoodItem) return [];
+
+    const cartItemNames = new Set(cartItems.map((i: any) => i.name));
+    const targetRoles: ("drink" | "dessert" | "side")[] = !hasDrinkInCart
+      ? ["drink"]
+      : ["dessert", "side"];
+
+    const candidates = normalizedMenu.filter((item: any) => {
+      if (cartItemNames.has(item.name)) return false;
+      if (item.is_available === false) return false;
+      if (!item.price || item.price <= 0) return false;
+      if (!item.category || !item.category.trim()) return false;
+      return targetRoles.includes(item.normalizedRole);
+    });
+
+    // Stable sort by price ascending, tie-breaker: item name ascending
+    candidates.sort((a: any, b: any) => {
+      if (a.price !== b.price) {
+        return a.price - b.price;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
+    return candidates.slice(0, 2);
+  }, [hasFoodItem, hasDrinkInCart, normalizedMenu, cartItems]);
+
+  const [loggedImpressionSetKey, setLoggedImpressionSetKey] = useState<string>("");
+
+  useEffect(() => {
+    if (upsellRecommendations.length === 0) return;
+
+    const setKey = upsellRecommendations
+      .map((i: any) => i.id || i.name)
+      .sort()
+      .join("-");
+
+    if (setKey && setKey !== loggedImpressionSetKey) {
+      trackEvent("upsell_impression", {
+        recommendation_set_key: setKey,
+        visible_item_ids: upsellRecommendations.map((i: any) => i.id || i.name),
+        cart_value_cents: Math.round(total * 100),
+      });
+      setLoggedImpressionSetKey(setKey);
+    }
+  }, [upsellRecommendations, loggedImpressionSetKey, total]);
+
+  function handleAddUpsellItem(item: any) {
+    setCart((prev) => ({
+      ...prev,
+      [item.name]: (prev[item.name] || 0) + 1,
+    }));
+    const setKey = upsellRecommendations
+      .map((i: any) => i.id || i.name)
+      .sort()
+      .join("-");
+    trackEvent("upsell_clicked", {
+      clicked_item_id: item.id || item.name,
+      recommendation_set_key: setKey,
+      cart_value_cents: Math.round((total + item.price) * 100),
+    });
+    toast.success(
+      t(
+        `"${item.name}" wurde zum Warenkorb hinzugefügt!`,
+        `"${item.name}" has been added to your cart!`,
+      ),
+    );
+  }
+
   const [promoCodeInput, setPromoCodeInput] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<{
     code: string;
@@ -523,7 +865,7 @@ function RestaurantPage() {
         data: { vendorId: restaurant.id, vendorType: "restaurant", url: window.location.pathname },
       }).catch((e) => console.error("Tracking error", e));
     }
-  }, [restaurant?.id]);
+  }, [restaurant?.id, recordView]);
 
   useEffect(() => {
     const isOwner = dbRestaurant && currentUser && currentUser.id === dbRestaurant.owner_id;
@@ -722,25 +1064,16 @@ function RestaurantPage() {
       return next;
     });
 
-  const cartItems = Object.entries(cart).map(([name, qty]) => {
-    const item = restaurant.menu.find((m: any) => m.name === name)!;
-    return { ...item, qty };
-  });
-  const total = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0);
-  const totalCount = cartItems.reduce((sum, i) => sum + i.qty, 0);
-
   const handleApplyPromo = async () => {
     setPromoError("");
     if (!promoCodeInput.trim()) return;
     setPromoLoading(true);
 
     try {
-      const itemsPayload = Object.entries(cart)
-        .map(([name, quantity]) => {
-          const item = restaurant.menu.find((m: any) => m.name === name);
-          return item?.id ? { productId: item.id, quantity } : null;
-        })
-        .filter(Boolean) as { productId: string; quantity: number }[];
+      const itemsPayload = cartItems.map((i) => ({
+        productId: i.id,
+        quantity: i.qty,
+      }));
       if (itemsPayload.length === 0) {
         setPromoError(t("Dein Warenkorb ist leer", "Your cart is empty"));
         setPromoLoading(false);
@@ -883,7 +1216,12 @@ function RestaurantPage() {
         },
       }).catch((e) => console.error("Error saving consent", e));
 
-      const itemsPayload = cartItems.map((i) => ({ productId: i.id, quantity: i.qty }));
+      const itemsPayload = cartItems.map((i) => ({
+        productId: i.id,
+        quantity: i.qty,
+        isSurplusOffer: i.isSurplus,
+        surplusOfferId: i.isSurplus && activeSurplusOffer ? activeSurplusOffer.id : undefined,
+      }));
       let cleanRef = "direct";
       if (ref) {
         const raw = ref.trim().toLowerCase();
@@ -950,6 +1288,18 @@ function RestaurantPage() {
         <div className="flex items-center gap-2 text-forest">
           <ShoppingBag className="h-5 w-5" />
           <h3 className="font-display text-xl">{t("Deine Bestellung", "Your order")}</h3>
+        </div>
+      )}
+      {surplusEvictedMessage && (
+        <div className="mt-3 p-3 rounded-xl bg-amber-50 text-amber-800 text-xs border border-amber-200 text-left font-medium relative pr-8">
+          <p>{surplusEvictedMessage}</p>
+          <button
+            type="button"
+            onClick={() => setSurplusEvictedMessage(null)}
+            className="absolute top-2 right-2 text-amber-500 hover:text-amber-700 text-xs font-semibold px-1"
+          >
+            ✕
+          </button>
         </div>
       )}
       {isGated && (
@@ -1053,13 +1403,67 @@ function RestaurantPage() {
                 <span className="h-6 min-w-6 px-2 grid place-items-center rounded-full bg-[oklch(0.88_0.06_152)] text-forest text-xs font-semibold">
                   {i.qty}
                 </span>
-                <span className="text-sm text-forest truncate">{i.name}</span>
+                <span className="text-sm text-forest truncate flex items-center gap-1.5">
+                  {i.isSurplus ? i.baseName : i.name}
+                  {i.isSurplus && (
+                    <span className="inline-flex items-center rounded-md bg-emerald-100 text-emerald-800 text-[9px] font-bold px-1.5 py-0.5 border border-emerald-200">
+                      {t("AI-Deal", "AI Deal")}
+                    </span>
+                  )}
+                </span>
                 <span className="text-sm font-medium text-forest">
                   €{(i.price * i.qty).toFixed(2)}
                 </span>
               </div>
             ))}
           </div>
+
+          {/* Upsell Recommendations (Frequently Ordered Together) */}
+          {UPSELL_RECOMMENDATIONS_ENABLED && upsellRecommendations.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-[oklch(0.85_0.05_152)]">
+              <h4 className="text-[11px] font-bold text-forest/75 mb-2 flex items-center gap-1.5 uppercase tracking-wider">
+                <Sparkles className="h-3.5 w-3.5 text-[#b28a3c] animate-pulse" />
+                {t("Dazu bestellen?", "Frequently ordered together")}
+              </h4>
+              <div className="space-y-2">
+                {upsellRecommendations.map((item: any) => (
+                  <div
+                    key={item.name}
+                    className="flex items-center justify-between p-2 rounded-lg bg-[oklch(0.97_0.01_152)] border border-[oklch(0.92_0.02_152)] hover:border-forest/20 transition-all"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      {item.img ? (
+                        <img
+                          src={item.img}
+                          alt={item.name}
+                          className="h-10 w-10 rounded object-cover shadow-sm shrink-0"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded bg-forest/5 flex items-center justify-center text-base shadow-sm shrink-0">
+                          {item.normalizedRole === "drink" ? "🥤" : "🍰"}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-forest truncate">{item.name}</p>
+                        <p className="text-[10px] font-medium text-forest/65">
+                          €{item.price.toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleAddUpsellItem(item)}
+                      className="text-[10px] font-extrabold text-forest bg-white hover:bg-forest hover:text-white border border-forest/25 px-2.5 py-1 rounded-md transition-all flex items-center gap-0.5 shadow-sm cursor-pointer"
+                    >
+                      <Plus className="h-3 w-3" />
+                      {t("Hinzufügen", "Add")}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="mt-4 flex items-center justify-between text-sm text-forest/70">
             <span>{t("Zwischensumme", "Subtotal")}</span>
             <span>€{subtotal.toFixed(2)}</span>
@@ -1913,6 +2317,99 @@ function RestaurantPage() {
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {activeSurplusOffer && (
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-500/25 bg-emerald-950/5 text-emerald-950 p-6 md:p-8 shadow-lg backdrop-blur-md mb-8 flex flex-col md:flex-row gap-6 items-center justify-between group transition-all duration-300 hover:shadow-xl hover:border-emerald-500/40">
+              {/* Background gradient glow */}
+              <div className="absolute -right-20 -top-20 w-48 h-48 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none group-hover:bg-emerald-500/20 transition-all duration-500" />
+
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-6 w-full">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-600/10 text-emerald-700 border border-emerald-500/20 shrink-0">
+                  <Sparkles className="h-8 w-8 animate-pulse text-emerald-600" />
+                </div>
+
+                <div className="space-y-2 text-center md:text-left flex-1 min-w-0">
+                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-2.5">
+                    <span className="inline-flex items-center rounded-full bg-emerald-600 text-cream text-[10px] font-black px-3 py-1 uppercase tracking-wider shadow-sm">
+                      🌱 {t("Chef's Special", "Chef's Special")}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 text-amber-700 border border-amber-500/20 text-[10px] font-bold px-3 py-1 uppercase tracking-wider">
+                      {t("Lebensmittel retten", "Save Food")}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-2xl font-black text-forest tracking-tight">
+                    {activeSurplusOffer.item_name}
+                  </h3>
+
+                  <p className="text-sm text-forest/75 font-medium max-w-lg leading-relaxed">
+                    {t(
+                      "Genießen Sie unsere frische Zubereitung zu einem exklusiven, reduzierten Preis. Nur für begrenzte Zeit verfügbar!",
+                      "Enjoy our freshly prepared meal at an exclusive, discounted rate. Only available for a limited time!",
+                    )}
+                  </p>
+
+                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mt-4 pt-1">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-100/70 border border-emerald-200/50 px-3 py-1 rounded-lg">
+                      📦 {t("Nur noch:", "Only")}{" "}
+                      <span className="text-sm font-black">
+                        {activeSurplusOffer.current_quantity}
+                      </span>{" "}
+                      {t("Portionen übrig", "left")}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-100/70 border border-emerald-200/50 px-3 py-1 rounded-lg">
+                      ⏱️ {t("Verbleibende Zeit:", "Time left:")}{" "}
+                      <span className="font-mono text-sm font-black text-emerald-950">
+                        {timeLeftStr}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center md:items-end gap-3 shrink-0 w-full md:w-auto border-t md:border-t-0 border-[#eadfce] pt-4 md:pt-0">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-black text-emerald-600 tracking-tight">
+                    €{(activeSurplusOffer.surplus_price_cents / 100).toFixed(2)}
+                  </span>
+                  <span className="text-base text-forest/45 line-through font-semibold">
+                    €{(activeSurplusOffer.original_price_cents / 100).toFixed(2)}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const surplusKey = activeSurplusOffer.item_name + " (Chef's Special)";
+                    setCart((prev) => {
+                      const currentQty = prev[surplusKey] || 0;
+                      if (currentQty >= activeSurplusOffer.current_quantity) {
+                        toast.error(
+                          lang === "de"
+                            ? `Sie können nicht mehr als ${activeSurplusOffer.current_quantity} Portionen hinzufügen.`
+                            : `You cannot add more than ${activeSurplusOffer.current_quantity} portions.`,
+                        );
+                        return prev;
+                      }
+                      return {
+                        ...prev,
+                        [surplusKey]: currentQty + 1,
+                      };
+                    });
+                    toast.success(
+                      lang === "de"
+                        ? `"${activeSurplusOffer.item_name}" zum Warenkorb hinzugefügt!`
+                        : `"${activeSurplusOffer.item_name}" added to cart!`,
+                    );
+                  }}
+                  className="w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-cream font-bold px-8 py-3 rounded-2xl shadow-md border border-emerald-500 hover:shadow-lg transition-all duration-300 flex items-center justify-center cursor-pointer"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  {t("In den Warenkorb", "Add to order")}
+                </button>
+              </div>
             </div>
           )}
 

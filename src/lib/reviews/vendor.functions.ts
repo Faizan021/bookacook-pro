@@ -201,7 +201,8 @@ export const getVendorPlannerReviews = createServerFn({ method: "GET" })
     const vendor = await resolveOwnedPlanner(supabase, userId);
     if (!vendor) throw new Error("Not authorized");
 
-    const { data, error } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data, error } = await (supabase as any)
       .from("event_manager_reviews")
       .select(
         `
@@ -233,7 +234,8 @@ export const submitPlannerVendorReply = createServerFn({ method: "POST" })
     const vendor = await resolveOwnedPlanner(supabase, userId);
     if (!vendor) throw new Error("Not authorized");
 
-    const { data: existing, error: checkErr } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: existing, error: checkErr } = await (supabase as any)
       .from("event_manager_reviews")
       .select("id, vendor_reply")
       .eq("id", data.reviewId)
@@ -244,7 +246,8 @@ export const submitPlannerVendorReply = createServerFn({ method: "POST" })
     if (existing.vendor_reply)
       throw new Error("Review already has a vendor reply. Single reply enforced.");
 
-    const { error: updateErr } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: updateErr } = await (supabase as any)
       .from("event_manager_reviews")
       .update({ vendor_reply: data.reply })
       .eq("id", data.reviewId)
@@ -264,7 +267,8 @@ export const flagPlannerReview = createServerFn({ method: "POST" })
     const vendor = await resolveOwnedPlanner(supabase, userId);
     if (!vendor) throw new Error("Not authorized");
 
-    const { error: updateErr } = await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: updateErr } = await (supabase as any)
       .from("event_manager_reviews")
       .update({ status: "flagged" })
       .eq("id", data.reviewId)

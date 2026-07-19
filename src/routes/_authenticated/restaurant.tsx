@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Plus, Loader2, Tag, Ticket } from "lucide-react";
+import { Plus, Loader2, Tag, Ticket, Sparkles } from "lucide-react";
+import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import {
   createFileRoute,
   Link,
@@ -66,6 +67,7 @@ import { SubscriptionTermsModal } from "@/components/vendor/SubscriptionTermsMod
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 import { KitchenPrinterSettings } from "@/components/vendor/KitchenPrinterSettings";
+import { SurplusOffersSection } from "@/components/vendor/SurplusOffersSection";
 
 export const Route = createFileRoute("/_authenticated/restaurant")({
   ssr: false,
@@ -545,6 +547,41 @@ function ProductsSection() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const fileRef = React.useRef<HTMLInputElement>(null);
 
+  const generateAiCopy = useServerFn(generateGastronomyCopy);
+  const [generatingDescription, setGeneratingDescription] = useState(false);
+
+  async function handleGenerateDescription() {
+    if (!name.trim()) {
+      toast.error(
+        tt("Bitte geben Sie zuerst einen Artikelnamen ein.", "Please enter an item name first."),
+      );
+      return;
+    }
+    setGeneratingDescription(true);
+    try {
+      const res = await generateAiCopy({
+        data: {
+          type: "menu_item",
+          name: name.trim(),
+          category: category.trim() || null,
+          additionalContext: dietaryTags.trim() || null,
+        },
+      });
+
+      const generatedDesc = lang === "de" ? res.desc_de : res.desc_en;
+      if (generatedDesc) {
+        setDescription(generatedDesc.slice(0, 80));
+      }
+      toast.success(
+        tt("Beschreibung erfolgreich generiert!", "Description generated successfully!"),
+      );
+    } catch (e: any) {
+      toast.error(e.message || tt("Fehler beim Generieren", "Generation failed"));
+    } finally {
+      setGeneratingDescription(false);
+    }
+  }
+
   const mut = useMutation({
     mutationFn: (vars: {
       id?: string;
@@ -715,7 +752,20 @@ function ProductsSection() {
             <Input id="pname" value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="pdesc">{tt("Beschreibung", "Description")}</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="pdesc">{tt("Beschreibung", "Description")}</Label>
+              <button
+                type="button"
+                onClick={handleGenerateDescription}
+                disabled={generatingDescription}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-forest hover:opacity-85 disabled:opacity-50"
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                {generatingDescription
+                  ? tt("Schreibe...", "Writing...")
+                  : tt("Mit KI schreiben", "Write with AI")}
+              </button>
+            </div>
             <Textarea
               id="pdesc"
               rows={2}
@@ -1787,6 +1837,71 @@ function SettingsStorefrontSection({ restaurant }: { restaurant: any }) {
     restaurant.accepts_paypal;
 
   async function handleSave() {
+    if (acceptsDelivery) {
+      const radius = parseFloat(deliveryRadius);
+      if (isNaN(radius) || radius <= 0) {
+        toast.error(
+          tt(
+            "Bitte geben Sie einen gültigen Lieferradius größer als 0 km ein.",
+            "Please enter a valid delivery radius greater than 0 km.",
+          ),
+        );
+        return;
+      }
+    }
+
+    const minOrderVal = parseFloat(minOrder);
+    if (isNaN(minOrderVal) || minOrderVal < 0) {
+      toast.error(
+        tt(
+          "Bitte geben Sie einen gültigen Mindestbestellwert ein (muss mindestens 0 sein).",
+          "Please enter a valid minimum order value (must be at least 0).",
+        ),
+      );
+      return;
+    }
+
+    if (acceptsDelivery) {
+      const fee = parseFloat(deliveryFee);
+      if (isNaN(fee) || fee < 0) {
+        toast.error(
+          tt(
+            "Bitte geben Sie eine gültige Liefergebühr ein (muss mindestens 0 sein).",
+            "Please enter a valid delivery fee (must be at least 0).",
+          ),
+        );
+        return;
+      }
+
+      const cleanAreas = serviceAreas
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+
+      if (cleanAreas.length === 0) {
+        toast.error(
+          tt(
+            "Bitte geben Sie mindestens eine Postleitzahl als Liefergebiet ein.",
+            "Please enter at least one postcode for delivery areas.",
+          ),
+        );
+        return;
+      }
+
+      const postcodeRegex = /^\d{5}$/;
+      for (const area of cleanAreas) {
+        if (!postcodeRegex.test(area)) {
+          toast.error(
+            tt(
+              `Ungültige Postleitzahl: "${area}". Postleitzahlen müssen genau 5 Ziffern haben (z.B. 41238).`,
+              `Invalid postcode: "${area}". Postcodes must be exactly 5 digits (e.g. 41238).`,
+            ),
+          );
+          return;
+        }
+      }
+    }
+
     setSaving(true);
     try {
       await upsert({
@@ -2403,14 +2518,27 @@ function SettingsPaymentsSection({
   }
 
   async function handleSave() {
-    if (acceptsPaypal && !paypalEmail.trim()) {
-      toast.error(
-        tt(
-          "Bitte geben Sie einen PayPal.Me Link oder Ihre PayPal-E-Mail-Adresse ein.",
-          "Please enter a PayPal.Me link or your PayPal email address.",
-        ),
-      );
-      return;
+    if (acceptsPaypal) {
+      const email = paypalEmail.trim();
+      if (!email) {
+        toast.error(
+          tt(
+            "Bitte geben Sie Ihre PayPal-E-Mail-Adresse ein.",
+            "Please enter your PayPal email address.",
+          ),
+        );
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error(
+          tt(
+            "Bitte geben Sie eine gültige E-Mail-Adresse für PayPal ein.",
+            "Please enter a valid email address for PayPal.",
+          ),
+        );
+        return;
+      }
     }
     setSaving(true);
     try {
@@ -3861,6 +3989,7 @@ function RestaurantDashboardInner() {
             availableItems={(q.data.restaurant?.restaurant_products || []).map((p: any) => p.name)}
           />
         )}
+        {currentTab === "surplus-offers" && <SurplusOffersSection restaurant={q.data.restaurant} />}
         {currentTab === "marketing-seo" && (
           <MarketingSEOSection
             entity={q.data.restaurant}

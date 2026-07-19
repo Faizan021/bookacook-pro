@@ -202,6 +202,67 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
+    // Fetch current settings to merge and validate
+    const { data: currentRest, error: fetchErr } = await supabase
+      .from("restaurants")
+      .select("accepts_delivery, accepts_paypal, paypal_email, service_areas, delivery_radius_km, delivery_fee, min_order_amount")
+      .eq("owner_id", userId)
+      .maybeSingle();
+
+    if (fetchErr) throw new Error(fetchErr.message);
+
+    const merged = {
+      accepts_delivery: data.accepts_delivery ?? currentRest?.accepts_delivery ?? false,
+      accepts_paypal: data.accepts_paypal ?? currentRest?.accepts_paypal ?? false,
+      paypal_email: data.paypal_email !== undefined ? data.paypal_email : (currentRest?.paypal_email ?? null),
+      service_areas: data.service_areas !== undefined ? data.service_areas : (currentRest?.service_areas ?? ""),
+      delivery_radius_km: data.delivery_radius_km !== undefined ? data.delivery_radius_km : (currentRest?.delivery_radius_km ?? 0),
+      delivery_fee: data.delivery_fee !== undefined ? data.delivery_fee : (currentRest?.delivery_fee ?? 0),
+      min_order_amount: data.min_order_amount !== undefined ? data.min_order_amount : (currentRest?.min_order_amount ?? 0),
+    };
+
+    // Validate delivery settings
+    if (merged.accepts_delivery) {
+      if (merged.delivery_radius_km! <= 0) {
+        throw new Error("Der Lieferradius muss größer als 0 km sein.");
+      }
+      if (merged.delivery_fee! < 0) {
+        throw new Error("Die Liefergebühr darf nicht negativ sein.");
+      }
+      
+      const cleanAreas = (merged.service_areas || "")
+        .split(",")
+        .map((s: string) => s.trim())
+        .filter(Boolean);
+
+      if (cleanAreas.length === 0) {
+        throw new Error("Bitte geben Sie mindestens eine Postleitzahl als Liefergebiet ein.");
+      }
+
+      const postcodeRegex = /^\d{5}$/;
+      for (const area of cleanAreas) {
+        if (!postcodeRegex.test(area)) {
+          throw new Error(`Ungültige Postleitzahl: "${area}". Postleitzahlen müssen genau 5 Ziffern haben (z.B. 41238).`);
+        }
+      }
+    }
+
+    if (merged.min_order_amount! < 0) {
+      throw new Error("Der Mindestbestellwert darf nicht negativ sein.");
+    }
+
+    // Validate PayPal settings
+    if (merged.accepts_paypal) {
+      const email = (merged.paypal_email || "").trim();
+      if (!email) {
+        throw new Error("Bitte geben Sie Ihre PayPal-E-Mail-Adresse ein.");
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        throw new Error("Bitte geben Sie eine gültige E-Mail-Adresse für PayPal ein.");
+      }
+    }
+
     // Gate publishing: restaurant must have Stripe connected OR at least one
     // alternative payment method (cash or PayPal) so customers can always pay.
     if (data.is_published === true) {

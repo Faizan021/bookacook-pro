@@ -319,7 +319,7 @@ export const updatePlannerRequestStatus = createServerFn({ method: "POST" })
 
     const { error } = await supabase
       .from("catering_briefs")
-      .update({ status: data.status })
+      .update({ status: data.status as "accepted" | "declined" | "draft" | "cancelled" | "needs_more_info" | "ready_for_matching" | "matched" | "quote_requested" | "booked" | "submitted" | "reviewing" | "quoted" })
       .eq("id", data.requestId)
       .eq("preferred_planner_id", planner.id);
     if (error) throw new Error(error.message);
