@@ -29,7 +29,10 @@ export function UnifiedCustomerFields({
     <div className="space-y-4">
       {/* Name Input */}
       <div className="space-y-1.5">
-        <Label htmlFor="customer-name">{t("Vollständiger Name", "Full Name")}</Label>
+        <Label htmlFor="customer-name">
+          {t("Vollständiger Name", "Full Name")}
+          <span className="text-red-500 ml-1">*</span>
+        </Label>
         <Input
           id="customer-name"
           required
@@ -43,7 +46,10 @@ export function UnifiedCustomerFields({
       {/* Email & Phone Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <Label htmlFor="customer-email">{t("E-Mail Adresse", "Email Address")}</Label>
+          <Label htmlFor="customer-email">
+            {t("E-Mail Adresse", "Email Address")}
+            <span className="text-red-500 ml-1">*</span>
+          </Label>
           <Input
             id="customer-email"
             type="email"
@@ -56,7 +62,10 @@ export function UnifiedCustomerFields({
         </div>
         {!hidePhone && (
           <div className="space-y-1.5">
-            <Label htmlFor="customer-phone">{t("Telefonnummer", "Phone Number")}</Label>
+            <Label htmlFor="customer-phone">
+              {t("Telefonnummer", "Phone Number")}
+              <span className="text-red-500 ml-1">*</span>
+            </Label>
             <Input
               id="customer-phone"
               type="tel"
