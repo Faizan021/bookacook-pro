@@ -63,6 +63,7 @@ const searchSchema = z.object({
   paypal_url: z.string().optional(),
   amount: z.union([z.string(), z.number()]).optional(),
   ref: z.string().optional(),
+  action: z.string().optional(),
 });
 
 export const Route = createFileRoute("/restaurant/$slug")({
@@ -247,6 +248,7 @@ function RestaurantPage() {
     paypal_url,
     amount,
     ref,
+    action,
   } = Route.useSearch();
   const { lang } = useI18n();
   const loaderData = Route.useLoaderData() as any;
@@ -879,6 +881,15 @@ function RestaurantPage() {
     }
   }, [currentUser, userRole, dbRestaurant]);
 
+  useEffect(() => {
+    if (action === "reserve") {
+      const timer = setTimeout(() => {
+        document.getElementById("reservations-section")?.scrollIntoView({ behavior: "smooth" });
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [action]);
+
   const [resModalOpen, setResModalOpen] = useState(false);
   const [identity, setIdentity] = useState({
     name: "",
@@ -935,6 +946,7 @@ function RestaurantPage() {
         reservationDate: todayStr,
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
