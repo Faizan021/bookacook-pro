@@ -90,6 +90,8 @@ export default {
 
           let targetPath = null;
 
+          const subPath = url.pathname === "/" ? "" : url.pathname;
+
           // Check restaurants
           let res = await fetch(
             `${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`,
@@ -99,7 +101,7 @@ export default {
           );
           let data = await res.json();
           if (data && data.length > 0) {
-            targetPath = `/restaurant/${data[0].slug}`;
+            targetPath = `/restaurant/${data[0].slug}${subPath}`;
           }
 
           // Check caterers
@@ -112,7 +114,7 @@ export default {
             );
             data = await res.json();
             if (data && data.length > 0) {
-              targetPath = `/catering/${data[0].slug}`;
+              targetPath = `/catering/${data[0].slug}${subPath}`;
             }
           }
 
@@ -126,7 +128,7 @@ export default {
             );
             data = await res.json();
             if (data && data.length > 0) {
-              targetPath = `/planner/${data[0].slug}`;
+              targetPath = `/planner/${data[0].slug}${subPath}`;
             }
           }
 
@@ -142,6 +144,8 @@ export default {
         // Static Fallback
         if (isSpeiselySubdomain && currentRequest === request) {
           let staticPath = null;
+          const subPath = url.pathname === "/" ? "" : url.pathname;
+
           // Dynamically import data fetchers
           const { getRestaurants } = await import("./data/restaurants");
           const { getCaterers } = await import("./data/caterers");
@@ -152,10 +156,11 @@ export default {
           const planners = await getPlanners();
 
           if (restaurants.find((r) => r.id === targetSlug))
-            staticPath = `/restaurant/${targetSlug}`;
+            staticPath = `/restaurant/${targetSlug}${subPath}`;
           else if (caterers.find((r) => r.id === targetSlug))
-            staticPath = `/catering/${targetSlug}`;
-          else if (planners.find((r) => r.id === targetSlug)) staticPath = `/planner/${targetSlug}`;
+            staticPath = `/catering/${targetSlug}${subPath}`;
+          else if (planners.find((r) => r.id === targetSlug))
+            staticPath = `/planner/${targetSlug}${subPath}`;
 
           if (staticPath) {
             const newUrl = new URL(staticPath, request.url);
