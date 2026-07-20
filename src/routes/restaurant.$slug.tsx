@@ -893,6 +893,109 @@ function RestaurantPage() {
     reservationTime: "19:00",
     notes: "",
   });
+
+  const TIME_SLOTS = [
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "17:00",
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
+    "19:30",
+    "20:00",
+    "20:30",
+    "21:00",
+    "21:30",
+  ];
+
+  const [existingBookings, setExistingBookings] = useState<any[]>([]);
+
+  const getRestaurantLocalNow = () => {
+    const now = new Date();
+    const berlinString = now.toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+    return new Date(berlinString);
+  };
+
+  useEffect(() => {
+    if (!resForm.reservationDate) {
+      const localNow = getRestaurantLocalNow();
+      const todayStr =
+        localNow.getFullYear() +
+        "-" +
+        String(localNow.getMonth() + 1).padStart(2, "0") +
+        "-" +
+        String(localNow.getDate()).padStart(2, "0");
+      setResForm((prev) => ({
+        ...prev,
+        reservationDate: todayStr,
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!resForm.reservationDate || !restaurant?.id) return;
+
+    const fetchBookings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("table_reservations")
+          .select("reservation_time, guest_count")
+          .eq("restaurant_id", restaurant.id)
+          .eq("reservation_date", resForm.reservationDate)
+          .in("status", ["confirmed", "approved"]);
+
+        if (error) {
+          console.error("Error fetching bookings:", error);
+          return;
+        }
+
+        setExistingBookings(data || []);
+      } catch (e) {
+        console.error("Exception fetching bookings:", e);
+      }
+    };
+
+    fetchBookings();
+  }, [resForm.reservationDate, restaurant?.id]);
+
+  const isSlotInPast = (slotTime: string) => {
+    if (!resForm.reservationDate) return false;
+
+    const localNow = getRestaurantLocalNow();
+    const todayStr =
+      localNow.getFullYear() +
+      "-" +
+      String(localNow.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(localNow.getDate()).padStart(2, "0");
+
+    if (resForm.reservationDate === todayStr) {
+      const [slotHours, slotMinutes] = slotTime.split(":").map(Number);
+      const slotTimeToday = new Date(localNow);
+      slotTimeToday.setHours(slotHours, slotMinutes, 0, 0);
+      return slotTimeToday <= localNow;
+    }
+    return false;
+  };
+
+  const getSlotCapacityDetails = (slotTime: string) => {
+    const seatCapacity = dbRestaurant?.seat_capacity ?? 30;
+    const normalizedSlotTime = slotTime.length === 5 ? `${slotTime}:00` : slotTime;
+
+    const slotGuests = existingBookings
+      .filter((b) => b.reservation_time === normalizedSlotTime)
+      .reduce((sum, b) => sum + b.guest_count, 0);
+
+    const availableSeats = Math.max(0, seatCapacity - slotGuests);
+    const isFull = slotGuests + resForm.guestCount > seatCapacity;
+
+    return { slotGuests, availableSeats, isFull };
+  };
   const [checkoutIdentity, setCheckoutIdentity] = useState({
     name: "",
     email: "",
@@ -1036,7 +1139,27 @@ function RestaurantPage() {
       setResSuccess(true);
       // Wait a moment then show the ICS download automatically or provide a button
     } catch (err: any) {
-      setResError(err.message);
+      const errMsg = err.message || "";
+      if (
+        errMsg.includes("not enough seats") ||
+        errMsg.includes("nicht genügend Plätze") ||
+        errMsg.includes("capacity")
+      ) {
+        setResError(
+          t(
+            "Dieser Zeitraum ist leider gerade ausgebucht oder hat nicht mehr genügend freie Plätze. Bitte wählen Sie eine andere Uhrzeit.",
+            "This slot just became unavailable or does not have enough remaining capacity. Please select another time slot.",
+          ),
+        );
+      } else {
+        setResError(
+          errMsg ||
+            t(
+              "Es gab einen Fehler. Bitte versuchen Sie es erneut.",
+              "An error occurred. Please try again.",
+            ),
+        );
+      }
     } finally {
       setResLoading(false);
     }
@@ -1325,6 +1448,30 @@ function RestaurantPage() {
           >
             {t("Zur Kasse", "Go to checkout")}
           </button>
+
+          <div className="mt-6 p-4 rounded-xl border border-dashed border-[#eadfce] bg-[#fdfaf5]/70 text-left flex flex-col gap-2.5">
+            <div className="flex items-center gap-2 text-forest font-semibold text-sm">
+              <Calendar className="h-4 w-4 text-forest" />
+              <span>{t("Lieber vor Ort essen?", "Prefer to dine in?")}</span>
+            </div>
+            <p className="text-xs text-forest/60 leading-relaxed">
+              {t(
+                "Reserviere jetzt deinen Tisch und genieße erstklassigen Service vor Ort.",
+                "Reserve your table now and enjoy premium service on-site.",
+              )}
+            </p>
+            <button
+              onClick={() => {
+                document
+                  .getElementById("reservations-section")
+                  ?.scrollIntoView({ behavior: "smooth" });
+                trackEvent("reservation_form_started", { restaurantId: restaurant!.id });
+              }}
+              className="mt-1 w-full py-2 px-4 rounded-full bg-forest hover:bg-forest/90 text-white text-xs font-bold transition cursor-pointer text-center"
+            >
+              {t("Tisch reservieren", "Book a Table")}
+            </button>
+          </div>
         </>
       ) : (
         <>
@@ -1973,152 +2120,18 @@ function RestaurantPage() {
                 : t("Vorbestellen", "Pre-order")}
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
-            <Dialog
-              open={resModalOpen}
-              onOpenChange={(open) => {
-                setResModalOpen(open);
-                if (open) {
-                  trackEvent("reservation_form_started", { restaurantId: restaurant!.id });
-                } else {
-                  setResSuccess(false);
-                  setResForm({
-                    guestCount: 2,
-                    reservationDate: "",
-                    reservationTime: "19:00",
-                    notes: "",
-                  });
-                }
+            <button
+              onClick={() => {
+                document
+                  .getElementById("reservations-section")
+                  ?.scrollIntoView({ behavior: "smooth" });
+                trackEvent("reservation_form_started", { restaurantId: restaurant!.id });
               }}
+              className="group flex items-center gap-1.5 rounded-full border border-white bg-white/20 hover:bg-white/30 backdrop-blur-md px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
             >
-              <DialogTrigger asChild>
-                <button className="group flex items-center gap-1.5 rounded-full border border-white bg-white/20 hover:bg-white/30 backdrop-blur-md px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer">
-                  {t("Tisch Reservieren", "Book a Table")}
-                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md bg-[#fdfaf5] text-forest border-[#eadfce]">
-                <DialogHeader>
-                  <DialogTitle>
-                    {t("Tisch reservieren bei ", "Book a table at ")}
-                    {restaurant.name}
-                  </DialogTitle>
-                </DialogHeader>
-
-                {resSuccess ? (
-                  <div className="py-8 text-center text-forest flex flex-col items-center">
-                    <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-[#22C55E]/10 text-[#22C55E] grid place-items-center">
-                      <Check className="h-8 w-8" />
-                    </div>
-                    <h3 className="text-xl font-bold font-display text-forest">
-                      {t("Reservierung bestätigt!", "Reservation Confirmed!")}
-                    </h3>
-                    <p className="mt-2 text-sm text-forest/70 max-w-sm px-4">
-                      {t(
-                        "Ihre Reservierung wurde erfolgreich bestätigt. Wir freuen uns auf Ihren Besuch!",
-                        "Your reservation has been successfully confirmed. We look forward to your visit!",
-                      )}
-                    </p>
-
-                    <div className="mt-6 flex flex-col gap-2 w-full max-w-xs">
-                      <button
-                        type="button"
-                        onClick={downloadIcsFile}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-forest text-white py-2.5 px-4 font-bold text-sm hover:opacity-90 transition cursor-pointer"
-                      >
-                        <Calendar className="h-4 w-4" />
-                        {t("In den Kalender eintragen", "Add to Calendar")}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setResModalOpen(false);
-                          setResSuccess(false);
-                          setResForm({
-                            guestCount: 2,
-                            reservationDate: "",
-                            reservationTime: "19:00",
-                            notes: "",
-                          });
-                        }}
-                        className="rounded-full border border-forest bg-transparent hover:bg-forest/5 py-2.5 px-4 font-bold text-sm text-forest transition cursor-pointer"
-                      >
-                        {t("Schließen", "Close")}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <form onSubmit={handleReservationSubmit} className="grid gap-4 mt-4">
-                    {resError && <p className="text-sm text-red-600">{resError}</p>}
-
-                    <UnifiedCustomerFields
-                      value={identity}
-                      onChange={(fields) => setIdentity({ ...identity, ...fields })}
-                    />
-
-                    <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[oklch(0.85_0.05_152)]">
-                      <div className="space-y-1">
-                        <label className="text-sm font-medium">{t("Personen", "Guests")} *</label>
-                        <input
-                          required
-                          type="number"
-                          min="1"
-                          max="20"
-                          className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm"
-                          value={resForm.guestCount}
-                          onChange={(e) =>
-                            setResForm({ ...resForm, guestCount: parseInt(e.target.value) })
-                          }
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-sm font-medium">{t("Datum", "Date")} *</label>
-                        <input
-                          required
-                          type="date"
-                          min={new Date().toISOString().split("T")[0]}
-                          className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm"
-                          value={resForm.reservationDate}
-                          onChange={(e) =>
-                            setResForm({ ...resForm, reservationDate: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-sm font-medium">{t("Uhrzeit", "Time")} *</label>
-                        <input
-                          required
-                          type="time"
-                          className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm"
-                          value={resForm.reservationTime}
-                          onChange={(e) =>
-                            setResForm({ ...resForm, reservationTime: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium">
-                        {t("Besondere Wünsche (Optional)", "Notes (Optional)")}
-                      </label>
-                      <textarea
-                        className="w-full rounded-md border border-[#eadfce] bg-white px-3 py-2 text-sm min-h-[60px]"
-                        value={resForm.notes}
-                        onChange={(e) => setResForm({ ...resForm, notes: e.target.value })}
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={resLoading}
-                      className="mt-2 w-full rounded-full bg-forest py-2.5 text-sm font-bold text-white hover:opacity-90 disabled:opacity-50"
-                    >
-                      {resLoading ? "..." : t("Reservierung anfragen", "Request Reservation")}
-                    </button>
-                  </form>
-                )}
-              </DialogContent>
-            </Dialog>
+              {t("Tisch Reservieren", "Book a Table")}
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </button>
           </div>
 
           {/* Bottom Info Overlay */}
@@ -2552,6 +2565,234 @@ function RestaurantPage() {
             </div>
           </div>
         </aside>
+      </section>
+
+      {/* Table Reservations Section */}
+      <section
+        id="reservations-section"
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mb-16 scroll-mt-24"
+      >
+        <div className="bg-white border border-[#eadfce] rounded-3xl p-6 md:p-8 shadow-xl shadow-forest/5 relative overflow-hidden">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-5 border-b border-[#eadfce]/50">
+            <div>
+              <div className="flex items-center gap-2 text-forest font-semibold text-xs tracking-wider uppercase mb-1.5">
+                <Calendar className="h-4 w-4 text-forest" />
+                <span>{t("Reservierung", "Booking")}</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-display font-bold text-forest">
+                {t("Tisch reservieren bei ", "Book a table at ")}
+                {restaurant.name}
+              </h2>
+            </div>
+            <div className="flex items-center gap-2 text-xs md:text-sm text-forest/70 font-medium bg-[#fdfaf5] px-3.5 py-1.5 rounded-full border border-[#eadfce]/45">
+              <span>{t("Kapazität:", "Capacity:")}</span>
+              <span className="font-bold text-forest">
+                {dbRestaurant?.seat_capacity ?? 30} {t("Plätze", "Seats")}
+              </span>
+            </div>
+          </div>
+
+          {resSuccess ? (
+            <div className="py-12 text-center text-forest flex flex-col items-center max-w-lg mx-auto animate-in fade-in zoom-in-95 duration-200">
+              <div className="mb-5 h-20 w-20 rounded-full bg-[#22C55E]/10 text-[#22C55E] grid place-items-center">
+                <Check className="h-10 w-10 animate-in zoom-in duration-300 delay-100" />
+              </div>
+              <h3 className="text-2xl font-bold font-display text-forest">
+                {t("Reservierung angefragt!", "Reservation Requested!")}
+              </h3>
+              <p className="mt-3 text-sm text-forest/70 leading-relaxed px-4">
+                {t(
+                  "Ihre Reservierung wurde erfolgreich angefragt. Wir haben Ihnen eine Bestätigungs-E-Mail gesendet und freuen uns auf Ihren Besuch!",
+                  "Your reservation has been successfully requested. We have sent you a confirmation email and look forward to your visit!",
+                )}
+              </p>
+
+              <div className="mt-8 flex flex-col sm:flex-row gap-3 w-full justify-center">
+                <button
+                  type="button"
+                  onClick={downloadIcsFile}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-forest hover:bg-forest/90 text-white py-3 px-6 font-bold text-sm shadow-md transition-all active:scale-[0.98] cursor-pointer"
+                >
+                  <Calendar className="h-4 w-4" />
+                  {t("In den Kalender eintragen", "Add to Calendar")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setResSuccess(false);
+                    setResForm((prev) => ({
+                      ...prev,
+                      notes: "",
+                    }));
+                  }}
+                  className="rounded-full border border-forest bg-transparent hover:bg-forest/5 py-3 px-6 font-bold text-sm text-forest transition cursor-pointer"
+                >
+                  {t("Neue Reservierung", "New Reservation")}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleReservationSubmit}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10"
+            >
+              {/* Left Column: Booking Selector */}
+              <div className="space-y-6">
+                {/* 1. Guest Selector */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-forest flex items-center gap-2">
+                    <span>👥 {t("Anzahl der Personen", "Number of Guests")} *</span>
+                  </label>
+                  <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((count) => {
+                      const isSelected = resForm.guestCount === count;
+                      return (
+                        <button
+                          key={count}
+                          type="button"
+                          onClick={() => setResForm({ ...resForm, guestCount: count })}
+                          className={`py-2.5 rounded-xl text-sm font-bold border transition-all duration-150 cursor-pointer ${
+                            isSelected
+                              ? "bg-forest border-forest text-white shadow-md shadow-forest/10"
+                              : "bg-[#fdfaf5] border-[#eadfce] text-forest hover:bg-[#eadfce]/20"
+                          }`}
+                        >
+                          {count === 8 ? "8+" : count}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. Date Picker */}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-forest flex items-center gap-2">
+                    <span>📅 {t("Reservierungsdatum", "Reservation Date")} *</span>
+                  </label>
+                  <input
+                    required
+                    type="date"
+                    min={new Date().toISOString().split("T")[0]}
+                    className="w-full rounded-xl border border-[#eadfce] bg-[#fdfaf5]/30 px-4 py-3 text-sm text-forest outline-none focus:border-forest/60 focus:bg-white transition-all"
+                    value={resForm.reservationDate}
+                    onChange={(e) => setResForm({ ...resForm, reservationDate: e.target.value })}
+                  />
+                </div>
+
+                {/* 3. Time Picker (Dynamic slots) */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-forest flex items-center gap-2">
+                    <span>🕒 {t("Uhrzeit auswählen", "Select Time Slot")} *</span>
+                  </label>
+                  <div className="grid grid-cols-4 gap-2.5">
+                    {TIME_SLOTS.map((slot) => {
+                      const isPast = isSlotInPast(slot);
+                      const { isFull, availableSeats } = getSlotCapacityDetails(slot);
+                      const isDisabled = isPast || isFull;
+                      const isSelected = resForm.reservationTime === slot;
+
+                      return (
+                        <button
+                          key={slot}
+                          disabled={isDisabled}
+                          type="button"
+                          onClick={() => setResForm({ ...resForm, reservationTime: slot })}
+                          className={`py-2 rounded-xl text-xs font-bold border flex flex-col items-center justify-center transition-all duration-150 relative ${
+                            isSelected
+                              ? "bg-forest border-forest text-white shadow-md shadow-forest/10"
+                              : isDisabled
+                                ? "bg-zinc-100 border-zinc-200 text-zinc-400 line-through cursor-not-allowed"
+                                : "bg-[#fdfaf5] border-[#eadfce] text-forest hover:bg-[#eadfce]/20 cursor-pointer"
+                          }`}
+                          title={
+                            isPast
+                              ? t("In der Vergangenheit", "Past slot")
+                              : isFull
+                                ? t("Ausgebucht", "Fully Booked")
+                                : `${availableSeats} ${t("Plätze frei", "seats left")}`
+                          }
+                        >
+                          <span className="text-sm">{slot}</span>
+                          {!isDisabled && (
+                            <span
+                              className={`text-[9px] font-medium mt-0.5 ${isSelected ? "text-white/80" : "text-forest/60"}`}
+                            >
+                              {availableSeats}
+                            </span>
+                          )}
+                          {isFull && !isPast && (
+                            <span className="text-[8px] uppercase tracking-wider text-red-500 font-extrabold mt-0.5">
+                              {t("Voll", "Full")}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-2.5 text-[11px] text-forest/50">
+                    <span>🌐</span>
+                    <span>
+                      {t(
+                        "Alle Zeiten sind in der lokalen Zeitzone des Restaurants angegeben (Europe/Berlin).",
+                        "All times are shown in the restaurant's local timezone (Europe/Berlin).",
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Guest Details Form */}
+              <div className="space-y-5 flex flex-col justify-between">
+                <div className="space-y-4">
+                  {resError && (
+                    <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs font-semibold rounded-xl flex items-center gap-2">
+                      ⚠️ <span>{resError}</span>
+                    </div>
+                  )}
+
+                  <UnifiedCustomerFields
+                    value={identity}
+                    onChange={(fields) => setIdentity({ ...identity, ...fields })}
+                  />
+
+                  <div className="space-y-1">
+                    <label className="text-sm font-semibold text-forest">
+                      {t("Besondere Wünsche (Optional)", "Special Requests (Optional)")}
+                    </label>
+                    <textarea
+                      placeholder={t(
+                        "z.B. Allergien, Geburtstag, Tisch am Fenster...",
+                        "e.g. allergies, birthday, window table...",
+                      )}
+                      className="w-full rounded-xl border border-[#eadfce] bg-[#fdfaf5]/30 px-4 py-3 text-sm text-forest min-h-[90px] outline-none focus:border-forest/60 focus:bg-white transition-all"
+                      value={resForm.notes}
+                      onChange={(e) => setResForm({ ...resForm, notes: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    disabled={resLoading}
+                    className="w-full rounded-full bg-forest hover:bg-forest/90 text-white py-3.5 font-bold shadow-lg shadow-forest/10 hover:shadow-xl active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer text-center text-sm"
+                  >
+                    {resLoading
+                      ? t("Wird geladen...", "Loading...")
+                      : t("Tisch reservieren", "Confirm Table Reservation")}
+                  </button>
+                  <p className="text-[11px] text-forest/50 text-center mt-3 leading-relaxed">
+                    *{" "}
+                    {t(
+                      "Die Reservierung ist direkt verbindlich. Sie erhalten eine E-Mail mit den Details.",
+                      "Reservations are binding. You will receive an email confirmation with all details.",
+                    )}
+                  </p>
+                </div>
+              </div>
+            </form>
+          )}
+        </div>
       </section>
 
       {/* Process Section */}
