@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/ban-ts-comment */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
+import { optionalSupabaseAuth } from "@/lib/auth/role-middleware";
 import { sendPartnerNotificationEmail } from "@/lib/email.functions";
 export const createTableReservation = createServerFn({ method: "POST" })
   .validator(
@@ -40,7 +40,7 @@ export const createTableReservation = createServerFn({ method: "POST" })
         })
         .parse(input),
   )
-  .middleware([requireSupabaseAuth()])
+  .middleware([optionalSupabaseAuth()])
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { userId } = context;
@@ -102,7 +102,7 @@ export const createTableReservation = createServerFn({ method: "POST" })
     // 4. Auto-accept by inserting directly as "confirmed"
     const { error } = await supabaseAdmin.from("table_reservations").insert({
       restaurant_id: data.restaurantId,
-      customer_id: userId,
+      customer_id: userId || null,
       first_name: data.firstName,
       last_name: data.lastName,
       phone: data.phone,
