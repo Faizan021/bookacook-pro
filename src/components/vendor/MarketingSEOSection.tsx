@@ -107,10 +107,12 @@ export function MarketingSEOSection({
   return (
     <section className="space-y-6 max-w-4xl">
       <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl">Marketing & SEO</h2>
+        <h2 className="font-display text-2xl">{tt("Online-Präsenz", "Online Presence")}</h2>
         <p className="text-sm text-muted-foreground">
-          Manage your default Speisely subdomain, custom domains, and search engine optimization
-          (SEO) fields.
+          {tt(
+            "Steigern Sie Ihre Sichtbarkeit bei Google und wandeln Sie Follower auf Instagram & TikTok in direkte Online-Bestellungen um.",
+            "Boost your Google search ranking and turn social media followers on Instagram & TikTok into commission-free direct orders.",
+          )}
         </p>
       </div>
 

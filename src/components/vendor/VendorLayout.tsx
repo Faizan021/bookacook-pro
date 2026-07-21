@@ -67,17 +67,20 @@ export function VendorLayout({
       category: tt("Direkter Betrieb", "Direct Operations"),
       items: [
         { id: "overview", label: tt("Übersicht", "Overview"), icon: LayoutDashboard },
-        { id: "orders", label: tt("Bestellungen", "Orders"), icon: ShoppingBag },
+        {
+          id: "orders",
+          label: tt("Bestellungen & POS-Druck", "Orders & POS Printing"),
+          icon: ShoppingBag,
+        },
         { id: "reservations", label: tt("Reservierungen", "Reservations"), icon: CalendarDays },
-        { id: "menu", label: tt("Speisekarte", "Menu"), icon: UtensilsCrossed },
+        { id: "menu", label: tt("Speisekarte & Gerichte", "Menu & Dishes"), icon: UtensilsCrossed },
       ],
     },
     {
       category: tt("Wachstum & Marketing", "Growth & Marketing"),
       items: [
-        { id: "promotions", label: tt("Aktionen & Coupons", "Promotions & Coupons"), icon: Tag },
-        { id: "surplus-offers", label: tt("Chef-Angebote", "Chef's Specials"), icon: Sparkles },
-        { id: "marketing-seo", label: tt("Marketing & SEO", "Marketing & SEO"), icon: Globe },
+        { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },
+        { id: "marketing-seo", label: tt("Online-Präsenz", "Online Presence"), icon: Globe },
       ],
     },
     {

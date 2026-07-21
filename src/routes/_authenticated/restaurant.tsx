@@ -385,8 +385,153 @@ function CreateRestaurantForm() {
   );
 }
 
+function fixMojibake(text: string | null | undefined): string {
+  if (!text) return "";
+  return text
+    .replace(/â€”/g, "—")
+    .replace(/Ã—/g, "×")
+    .replace(/Ã¤/g, "ä")
+    .replace(/Ã¶/g, "ö")
+    .replace(/Ã¼/g, "ü")
+    .replace(/Ã„/g, "Ä")
+    .replace(/Ã–/g, "Ö")
+    .replace(/Ãœ/g, "Ü")
+    .replace(/ÃŸ/g, "ß");
+}
+
+function OrderDetailsModal({
+  order,
+  restaurantName,
+  onClose,
+}: {
+  order: any;
+  restaurantName: string;
+  onClose: () => void;
+}) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  if (!order) return null;
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-3xl p-6 lg:p-8 max-w-lg w-full shadow-2xl space-y-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between border-b border-[#e2e8e4] pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span
+                className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${STATUS_STYLES[order.status as OrderStatus] || "bg-stone-100"}`}
+              >
+                {order.status}
+              </span>
+              <span className="text-xs font-mono text-muted-foreground">
+                #{order.id.slice(0, 8)}
+              </span>
+            </div>
+            <h3 className="font-display text-xl font-bold text-forest mt-1">
+              {fixMojibake(order.customer_name) || tt("Kunde", "Customer")}
+            </h3>
+          </div>
+          <button
+            onClick={onClose}
+            type="button"
+            className="h-8 w-8 rounded-full bg-stone-100 text-stone-500 hover:bg-stone-200 flex items-center justify-center font-bold text-sm cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="space-y-4 text-xs">
+          <div className="grid grid-cols-2 gap-4 bg-[#f8faf9] p-4 rounded-2xl border border-forest/10">
+            <div>
+              <p className="text-muted-foreground font-semibold uppercase text-[10px]">
+                {tt("Bestelldatum", "Order Date")}
+              </p>
+              <p className="font-semibold text-forest mt-0.5">
+                {new Date(order.created_at).toLocaleString()}
+              </p>
+            </div>
+            <div>
+              <p className="text-muted-foreground font-semibold uppercase text-[10px]">
+                {tt("Gesamtsumme", "Total Amount")}
+              </p>
+              <p className="font-bold text-forest text-sm mt-0.5">
+                {formatPrice(order.total_cents)}
+              </p>
+            </div>
+            {order.delivery_fee_cents > 0 && (
+              <div>
+                <p className="text-muted-foreground font-semibold uppercase text-[10px]">
+                  {tt("Liefergebühr", "Delivery Fee")}
+                </p>
+                <p className="font-semibold text-forest mt-0.5">
+                  {formatPrice(order.delivery_fee_cents)}
+                </p>
+              </div>
+            )}
+            {order.referral_source && (
+              <div>
+                <p className="text-muted-foreground font-semibold uppercase text-[10px]">
+                  {tt("Herkunft", "Source")}
+                </p>
+                <p className="font-semibold text-forest capitalize mt-0.5">
+                  {order.referral_source.replace("_", " ")}
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-forest mb-2 uppercase text-[10px] tracking-wider">
+              {tt("Bestellte Artikel", "Ordered Items")}
+            </h4>
+            <div className="divide-y divide-stone-100 bg-white rounded-2xl border border-stone-200 p-3">
+              {items.map((it: any, i: number) => (
+                <div key={i} className="py-2 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-forest">{it.qty ?? 1}×</span>
+                    <span>{fixMojibake(it.name)}</span>
+                  </div>
+                  <span className="font-semibold text-forest">
+                    {formatPrice((it.price_cents || 0) * (it.qty || 1))}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {order.notes && (
+            <div className="bg-amber-50 border border-amber-200 p-3 rounded-2xl">
+              <p className="text-[10px] font-bold uppercase text-amber-800">
+                {tt("Kundenhinweis", "Customer Note")}
+              </p>
+              <p className="text-xs text-amber-900 italic mt-0.5">"{fixMojibake(order.notes)}"</p>
+            </div>
+          )}
+        </div>
+
+        <div className="pt-4 border-t border-[#e2e8e4] flex items-center justify-between gap-3">
+          <Button
+            variant="outline"
+            onClick={() => printReceipt(order, restaurantName)}
+            className="w-full rounded-xl gap-2 border-forest/20 text-forest hover:bg-forest/5 font-semibold text-xs py-2.5"
+          >
+            🖨️ {tt("Beleg erneut drucken", "Reprint Receipt")}
+          </Button>
+          <Button
+            onClick={onClose}
+            className="w-full bg-forest text-cream hover:bg-forest/90 rounded-xl font-semibold text-xs py-2.5"
+          >
+            {tt("Schließen", "Close")}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function OrdersSection() {
-  const { lang, t } = useI18n();
+  const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchOrders = useServerFn(getRestaurantOrders);
   const updateStatus = useServerFn(updateRestaurantOrderStatus);
@@ -400,6 +545,14 @@ function OrdersSection() {
     mutationFn: (vars: { orderId: string; status: any }) => updateStatus({ data: vars }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["restaurant", "orders"] }),
   });
+
+  const [timeFilter, setTimeFilter] = useState<
+    "all" | "today" | "yesterday" | "this_week" | "this_month" | "this_year" | "custom"
+  >("all");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
   const data = ordersQ.data;
   if (!data?.restaurant) {
@@ -415,49 +568,39 @@ function OrdersSection() {
       </EmptyCard>
     );
   }
-  if (data.orders.length === 0) {
-    const triggerTestPrint = () => {
-      const mockOrder = {
-        id: "test-print-12345",
-        created_at: new Date().toISOString(),
-        customer_name: "John Doe (Test)",
-        total_cents: 2450,
-        notes: tt("Bitte extra scharf", "Extra spicy, please"),
-        items: [
-          { qty: 2, name: "Pizza Margherita", price_cents: 850 },
-          { qty: 1, name: "Coca-Cola 0.33l", price_cents: 250 },
-          { qty: 1, name: "Tiramisu", price_cents: 500 },
-        ],
-      };
-      printReceipt(mockOrder, data.restaurant.name);
-    };
 
-    return (
-      <EmptyCard
-        title={tt("Noch keine Bestellungen", "No orders yet")}
-        description={tt(
-          `Sobald Kunden bei ${data.restaurant.name} bestellen, erscheinen die Bestellungen hier in Echtzeit.`,
-          `When customers order from ${data.restaurant.name}, they will appear here in real time.`,
-        )}
-      >
-        <div className="flex flex-col items-center justify-center gap-3">
-          <Button
-            variant="outline"
-            onClick={triggerTestPrint}
-            className="rounded-full gap-2 border-forest/20 text-forest hover:bg-cream"
-          >
-            🖨️ {tt("Test-Beleg drucken", "Print Test Receipt")}
-          </Button>
-          <p className="text-xs text-muted-foreground max-w-sm">
-            {tt(
-              "Nutze dies, um die Ausrichtung und das Layout deines 80mm Thermo-Bondruckers zu testen.",
-              "Use this to test your 80mm thermal receipt printer alignment and layout.",
-            )}
-          </p>
-        </div>
-      </EmptyCard>
-    );
-  }
+  // Filter orders by time window
+  const filteredOrders = (data.orders || []).filter((o: any) => {
+    const orderDate = new Date(o.created_at);
+    const now = new Date();
+
+    if (timeFilter === "today") {
+      return orderDate.toDateString() === now.toDateString();
+    }
+    if (timeFilter === "yesterday") {
+      const yest = new Date(now.getTime() - 86400000);
+      return orderDate.toDateString() === yest.toDateString();
+    }
+    if (timeFilter === "this_week") {
+      const weekAgo = new Date(now.getTime() - 7 * 86400000);
+      return orderDate >= weekAgo;
+    }
+    if (timeFilter === "this_month") {
+      return (
+        orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear()
+      );
+    }
+    if (timeFilter === "this_year") {
+      return orderDate.getFullYear() === now.getFullYear();
+    }
+    if (timeFilter === "custom") {
+      if (fromDate && new Date(o.created_at) < new Date(fromDate)) return false;
+      if (toDate && new Date(o.created_at) > new Date(toDate + "T23:59:59")) return false;
+      return true;
+    }
+    return true;
+  });
+
   return (
     <section className="space-y-6">
       <TabHeroHeader
@@ -467,7 +610,7 @@ function OrdersSection() {
           "Echtzeit-Bestellverwaltung, Küchen-Drucker (POS) und Lieferstatus im Überblick.",
           "Real-time order management, kitchen receipt printing (POS), and delivery status.",
         )}
-        badgeText={`${data.orders.length} ${tt("Bestellungen", "Orders")}`}
+        badgeText={`${filteredOrders.length} ${tt("Bestellungen", "Orders")}`}
         actionButton={
           <Button
             variant="outline"
@@ -494,84 +637,202 @@ function OrdersSection() {
         }
       />
       <PrintOnboardingBanner type="thermal" brandName={data.restaurant.name} />
+
+      {/* Time Filter Controls */}
+      <div className="bg-white border border-[#e2e8e4] p-4 rounded-2xl shadow-sm space-y-3">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-forest/70">
+            {tt("Zeitraum-Filter", "Time Window Filter")}
+          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {[
+              { id: "all", label: tt("Alle", "All") },
+              { id: "today", label: tt("Heute", "Today") },
+              { id: "yesterday", label: tt("Gestern", "Yesterday") },
+              { id: "this_week", label: tt("Diese Woche", "This Week") },
+              { id: "this_month", label: tt("Diesen Monat", "This Month") },
+              { id: "this_year", label: tt("Dieses Jahr", "This Year") },
+              { id: "custom", label: tt("Benutzerdefiniert", "Custom Range") },
+            ].map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setTimeFilter(f.id as any)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  timeFilter === f.id
+                    ? "bg-forest text-cream shadow-sm"
+                    : "bg-stone-100 text-forest/70 hover:bg-stone-200"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {timeFilter === "custom" && (
+          <div className="flex items-center gap-3 pt-2 border-t border-stone-100 flex-wrap text-xs">
+            <div className="flex items-center gap-2">
+              <Label className="text-xs text-forest/70">{tt("Von:", "From:")}</Label>
+              <Input
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                className="h-8 text-xs bg-stone-50"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <Label className="text-xs text-forest/70">{tt("Bis:", "To:")}</Label>
+              <Input
+                type="date"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+                className="h-8 text-xs bg-stone-50"
+              />
+            </div>
+            {(fromDate || toDate) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setFromDate("");
+                  setToDate("");
+                }}
+                className="text-xs text-rose-600 underline font-semibold cursor-pointer"
+              >
+                {tt("Zurücksetzen", "Reset")}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Orders List */}
       <div className="grid gap-4">
-        {data.orders.map((o: any) => {
-          const items = Array.isArray(o.items) ? o.items : [];
-          return (
-            <article key={o.id} className="surface-card p-5">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${STATUS_STYLES[o.status as OrderStatus]}`}
-                    >
-                      {o.status}
-                    </span>
-                    <h3 className="font-display text-lg">
-                      {o.customer_name ?? "Customer"} â€” {formatPrice(o.total_cents)}
-                    </h3>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => printReceipt(o, data.restaurant.name)}
-                      className="h-7 rounded-full text-xs gap-1 border-forest/20 text-forest hover:bg-cream shrink-0"
-                    >
-                      🖨️ {t("Print", "Drucken")}
-                    </Button>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-muted-foreground">
-                    <span>
-                      #{o.id.slice(0, 8)} · {new Date(o.created_at).toLocaleString()}
-                    </span>
-                    {o.referral_source && o.referral_source !== "direct" && (
-                      <span className="inline-flex items-center gap-1 rounded bg-[#eadfce]/45 text-forest px-2 py-0.5 font-bold text-[9px] uppercase tracking-wider">
-                        📢{" "}
-                        {o.referral_source === "speisely_marketplace"
-                          ? "Marketplace"
-                          : o.referral_source}
+        {filteredOrders.length === 0 ? (
+          <div className="bg-white border border-[#e2e8e4] p-12 rounded-2xl text-center space-y-2">
+            <span className="text-3xl block">📦</span>
+            <p className="font-semibold text-forest">
+              {tt(
+                "Keine Bestellungen im gewählten Zeitraum",
+                "No orders found in selected time range",
+              )}
+            </p>
+            <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+              {tt(
+                "Passen Sie den Zeitraum-Filter oben an, um vergangene Bestellungen anzuzeigen.",
+                "Adjust the time filter above to search for historical orders.",
+              )}
+            </p>
+          </div>
+        ) : (
+          filteredOrders.map((o: any) => {
+            const items = Array.isArray(o.items) ? o.items : [];
+            const customerName = fixMojibake(o.customer_name) || tt("Kunde", "Customer");
+            return (
+              <article
+                key={o.id}
+                onClick={() => setSelectedOrder(o)}
+                className="bg-white border border-[#e2e8e4] hover:border-forest/30 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span
+                        className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${STATUS_STYLES[o.status as OrderStatus] || "bg-stone-100"}`}
+                      >
+                        {o.status}
                       </span>
+                      <h3 className="font-display text-lg font-bold text-forest group-hover:text-forest/80 transition">
+                        {customerName} — {formatPrice(o.total_cents)}
+                      </h3>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          printReceipt(o, data.restaurant.name);
+                        }}
+                        className="h-7 rounded-xl text-xs gap-1 border-forest/20 text-forest hover:bg-forest/5 shrink-0"
+                      >
+                        🖨️ {tt("Drucken", "Print")}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOrder(o);
+                        }}
+                        className="h-7 text-xs text-forest/70 hover:text-forest font-semibold"
+                      >
+                        🔍 {tt("Details", "Inspect")}
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs text-muted-foreground">
+                      <span className="font-mono">
+                        #{o.id.slice(0, 8)} · {new Date(o.created_at).toLocaleString()}
+                      </span>
+                      {o.referral_source && o.referral_source !== "direct" && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 text-amber-800 border border-amber-500/20 px-2 py-0.5 font-bold text-[9px] uppercase tracking-wider">
+                          📢{" "}
+                          {o.referral_source === "speisely_marketplace"
+                            ? "Marketplace"
+                            : o.referral_source}
+                        </span>
+                      )}
+                    </div>
+                    {items.length > 0 && (
+                      <ul className="mt-3 text-xs text-forest/80 space-y-1 bg-[#f8faf9] p-3 rounded-xl border border-forest/5">
+                        {items.map((it: any, i: number) => (
+                          <li key={i} className="flex items-center gap-2">
+                            <span className="font-bold text-forest">{it.qty ?? 1}×</span>
+                            <span>{fixMojibake(it.name)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {o.notes && (
+                      <p className="mt-2 text-xs italic text-muted-foreground bg-amber-50/50 p-2 rounded-lg border border-amber-200/50">
+                        "{fixMojibake(o.notes)}"
+                      </p>
                     )}
                   </div>
-                  {items.length > 0 && (
-                    <ul className="mt-3 text-sm text-foreground/80 space-y-0.5">
-                      {items.map((it: any, i: number) => (
-                        <li key={i}>
-                          {it.qty ?? 1}Ã— {it.name}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {o.notes && (
-                    <p className="mt-2 text-sm italic text-muted-foreground">"{o.notes}"</p>
-                  )}
+                  <div className="w-48 shrink-0" onClick={(e) => e.stopPropagation()}>
+                    <Label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      {tt("Status ändern", "Update Status")}
+                    </Label>
+                    <Select
+                      value={o.status}
+                      onValueChange={(v) =>
+                        statusMut.mutate({ orderId: o.id, status: v as OrderStatus })
+                      }
+                    >
+                      <SelectTrigger className="mt-1 h-9 rounded-xl text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STATUSES.map((s) => (
+                          <SelectItem key={s} value={s} className="text-xs">
+                            {s}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div className="w-48">
-                  <Label className="text-xs uppercase tracking-wider text-muted-foreground">
-                    Update status
-                  </Label>
-                  <Select
-                    value={o.status}
-                    onValueChange={(v) =>
-                      statusMut.mutate({ orderId: o.id, status: v as OrderStatus })
-                    }
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {STATUSES.map((s) => (
-                        <SelectItem key={s} value={s}>
-                          {s}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </article>
-          );
-        })}
+              </article>
+            );
+          })
+        )}
       </div>
+
+      {selectedOrder && (
+        <OrderDetailsModal
+          order={selectedOrder}
+          restaurantName={data.restaurant.name}
+          onClose={() => setSelectedOrder(null)}
+        />
+      )}
     </section>
   );
 }
@@ -846,36 +1107,75 @@ function ProductsSection() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="pcategory">{tt("Kategorie", "Category")}</Label>
-            <Input
-              id="pcategory"
-              placeholder={tt(
-                "z.B. Pizza, Nudeln, Vorspeisen, Desserts",
-                "e.g. Pizza, Pasta, Starters, Desserts",
-              )}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="pdietary">
-              {tt("Eigenschaften (Kommagetrennt)", "Dietary & Labels (Comma-separated)")}
+            <Label htmlFor="pcategory" className="font-semibold text-xs text-forest">
+              {tt("Gang / Kategorie (Pflicht)", "Course / Category (Required)")}
             </Label>
-            <Input
-              id="pdietary"
-              placeholder={tt(
-                "z.B. Halal, Vegan, Vegetarisch, Rind, Huhn, Fisch",
-                "e.g. Halal, Vegan, Vegetarian, Beef, Chicken, Fish",
-              )}
-              value={dietaryTags}
-              onChange={(e) => setDietaryTags(e.target.value)}
-            />
-            <p className="text-[10px] text-muted-foreground leading-tight">
-              {tt(
-                "Wird als Filter auf Ihrem Storefront angezeigt.",
-                "Will be shown as filters on your storefront.",
-              )}
-            </p>
+            <Select value={category} onValueChange={(v) => setCategory(v)}>
+              <SelectTrigger id="pcategory" className="h-9 text-xs bg-white rounded-xl">
+                <SelectValue placeholder={tt("Wähle einen Gang...", "Select course...")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Starter">
+                  {tt("🥗 Vorspeise (Starter)", "🥗 Starter")}
+                </SelectItem>
+                <SelectItem value="Main Dish">
+                  {tt("🍲 Hauptgericht (Main Dish)", "🍲 Main Dish")}
+                </SelectItem>
+                <SelectItem value="Side">{tt("🍟 Beilage (Side)", "🍟 Side")}</SelectItem>
+                <SelectItem value="Dessert">
+                  {tt("🍰 Nachtisch (Dessert)", "🍰 Dessert")}
+                </SelectItem>
+                <SelectItem value="Drink">{tt("🥤 Getränk (Drink)", "🥤 Drink")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2 pt-1">
+            <Label className="font-semibold text-xs text-forest">
+              {tt("Ernährungsmerkmale (Artikel-Attribute)", "Dietary Tags (Item Attributes)")}
+            </Label>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              {[
+                { id: "Vegetarian", label: tt("🥬 Vegetarisch", "🥬 Vegetarian") },
+                { id: "Vegan", label: tt("🌱 Vegan", "🌱 Vegan") },
+                { id: "Meat", label: tt("🥩 Fleisch", "🥩 Meat") },
+                { id: "Gluten-Free", label: tt("🌾 Glutenfrei", "🌾 Gluten-Free") },
+              ].map((dt) => {
+                const isChecked = (dietaryTags || "").includes(dt.id);
+                return (
+                  <label
+                    key={dt.id}
+                    className={`flex items-center gap-2 p-2 rounded-xl border transition cursor-pointer text-xs font-medium ${
+                      isChecked
+                        ? "bg-forest/10 border-forest text-forest font-bold"
+                        : "bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={(e) => {
+                        const currentTags = dietaryTags
+                          ? dietaryTags
+                              .split(",")
+                              .map((s) => s.trim())
+                              .filter(Boolean)
+                          : [];
+                        let nextTags: string[];
+                        if (e.target.checked) {
+                          nextTags = Array.from(new Set([...currentTags, dt.id]));
+                        } else {
+                          nextTags = currentTags.filter((t) => t !== dt.id);
+                        }
+                        setDietaryTags(nextTags.join(", "));
+                      }}
+                      className="rounded text-forest focus:ring-forest h-3.5 w-3.5"
+                    />
+                    <span>{dt.label}</span>
+                  </label>
+                );
+              })}
+            </div>
           </div>
           <div className="space-y-1.5">
             <Label>{tt("Bild (Optional)", "Image (Optional)")}</Label>
@@ -3109,9 +3409,15 @@ function SettingsShell({
 function PromotionsSection({
   vertical,
   availableItems = [],
+  restaurant,
+  products,
 }: {
   vertical: "restaurants" | "caterers" | "planners";
   availableItems?: string[];
+
+  restaurant?: any;
+
+  products?: any[];
 }) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
@@ -3179,10 +3485,10 @@ function PromotionsSection({
       setAppliesTo("all");
       setMinOrder("");
       setFreeItemName("");
-      setRequiredQty("");
+      setRequiredQty("2");
       setStartsAt("");
       setEndsAt("");
-      toast.success(tt("Promo-Code erstellt", "Promo code created"));
+      toast.success(tt("Aktion erfolgreich erstellt!", "Promotion created successfully!"));
     } catch (e: any) {
       setErr(e.message);
     } finally {
@@ -3238,275 +3544,316 @@ function PromotionsSection({
     return text;
   };
 
+  const [subTab, setSubTab] = useState<"coupons" | "surplus">("coupons");
+
   return (
     <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <TabHeroHeader
         icon={Tag}
-        title={tt("Aktionen & Rabatt-Codes", "Promotions & Promo Codes")}
+        title={tt("Aktionen & Angebote", "Promotions & Offers")}
         subtitle={tt(
-          "Rabatt-Codes und Gutscheine für Stammkunden und Marketing-Aktionen erstellen.",
-          "Create discount codes and promotional vouchers for loyal customers.",
+          "Verwalten Sie Gutscheine, Rabatt-Codes und Retter-Tüten (Surplus Food Sales) an einem Ort.",
+          "Manage coupons, discount codes, and surplus food sales in one unified center.",
         )}
-        badgeText={`${q.data?.length || 0} ${tt("Codes", "Codes")}`}
+        badgeText={`${q.data?.length || 0} ${tt("Aktionen", "Promotions")}`}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 border border-gray-100 bg-white shadow-sm rounded-2xl p-6 h-fit">
-          <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
-            <Plus className="w-4 h-4 text-forest" />
-            {tt("Neuen Code erstellen", "Create New Code")}
-          </h3>
-          <form onSubmit={handleCreate} className="space-y-4">
-            {err && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">{err}</div>}
+      {/* Sub-Tab Navigation Bar */}
+      <div className="flex items-center gap-2 bg-stone-100 p-1.5 rounded-2xl w-fit border border-stone-200">
+        <button
+          type="button"
+          onClick={() => setSubTab("coupons")}
+          className={`px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            subTab === "coupons"
+              ? "bg-forest text-cream shadow-sm"
+              : "text-forest/70 hover:bg-stone-200"
+          }`}
+        >
+          🏷️ {tt("Gutscheine & Rabatte", "Coupons & Offers")}
+        </button>
+        <button
+          type="button"
+          onClick={() => setSubTab("surplus")}
+          className={`px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            subTab === "surplus"
+              ? "bg-forest text-cream shadow-sm"
+              : "text-forest/70 hover:bg-stone-200"
+          }`}
+        >
+          🛍️ {tt("Retter-Tüten (Surplus Food)", "Surplus Food Sales")}
+        </button>
+      </div>
 
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">Code</label>
-              <input
-                value={code}
-                onChange={(e) => setCode(e.target.value.toUpperCase())}
-                placeholder="z.B. SOMMER20"
-                className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest uppercase text-sm"
-              />
-            </div>
+      {subTab === "surplus" ? (
+        <SurplusOffersSection
+          restaurant={{
+            ...restaurant,
+            restaurant_products: products || restaurant?.restaurant_products || [],
+          }}
+        />
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1 border border-gray-100 bg-white shadow-sm rounded-2xl p-6 h-fit">
+            <h3 className="font-semibold text-black mb-4 flex items-center gap-2">
+              <Plus className="w-4 h-4 text-forest" />
+              {tt("Neuen Code erstellen", "Create New Code")}
+            </h3>
+            <form onSubmit={handleCreate} className="space-y-4">
+              {err && <div className="p-3 bg-red-50 text-red-600 text-sm rounded-xl">{err}</div>}
 
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">
-                {tt("Rabatt-Typ", "Discount Type")}
-              </label>
-              <select
-                value={type}
-                onChange={(e) => {
-                  setType(e.target.value as any);
-                  setValue("");
-                }}
-                className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
-              >
-                <option value="percentage">{tt("Prozentsatz", "Percentage")}</option>
-                <option value="fixed">{tt("Fester Betrag", "Fixed Amount")}</option>
-                <option value="free_delivery">{tt("Kostenlose Lieferung", "Free Delivery")}</option>
-                <option value="free_item">{tt("Gratis-Artikel", "Free Item")}</option>
-                <option value="bogo">{tt("Kauf X erhalte 1 gratis", "Buy X Get 1 Free")}</option>
-              </select>
-            </div>
-
-            {(type === "percentage" || type === "fixed") && (
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
-                  {tt("Wert", "Value")} {type === "percentage" ? "(%)" : "(€)"}
-                </label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Code</label>
                 <input
-                  type="number"
-                  step="any"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  placeholder="z.B. 10"
-                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.toUpperCase())}
+                  placeholder="z.B. SOMMER20"
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest uppercase text-sm"
                 />
               </div>
-            )}
 
-            {type === "bogo" && (
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">
-                  {tt("Benötigte Menge (X)", "Required Quantity (X)")}
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  value={requiredQty}
-                  onChange={(e) => setRequiredQty(e.target.value)}
-                  placeholder="z.B. 2"
-                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
-                />
-              </div>
-            )}
-
-            {type === "free_item" && (
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
-                  {tt("Gratis-Artikel", "Free Item")}
+                  {tt("Rabatt-Typ", "Discount Type")}
                 </label>
                 <select
-                  value={freeItemName}
-                  onChange={(e) => setFreeItemName(e.target.value)}
+                  value={type}
+                  onChange={(e) => {
+                    setType(e.target.value as any);
+                    setValue("");
+                  }}
                   className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
                 >
-                  <option value="">{tt("Auswählen...", "Select...")}</option>
-                  {availableItems.map((i) => (
-                    <option key={i} value={i}>
-                      {i}
-                    </option>
-                  ))}
+                  <option value="percentage">{tt("Prozentsatz", "Percentage")}</option>
+                  <option value="fixed">{tt("Fester Betrag", "Fixed Amount")}</option>
+                  <option value="free_delivery">
+                    {tt("Kostenlose Lieferung", "Free Delivery")}
+                  </option>
+                  <option value="free_item">{tt("Gratis-Artikel", "Free Item")}</option>
+                  <option value="bogo">{tt("Kauf X erhalte 1 gratis", "Buy X Get 1 Free")}</option>
                 </select>
               </div>
-            )}
 
-            {type !== "free_delivery" && type !== "free_item" && (
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
-                  {tt("Gilt für", "Applies to")}
-                </label>
-                <select
-                  value={appliesTo}
-                  onChange={(e) => setAppliesTo(e.target.value)}
-                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
-                >
-                  <option value="all">{tt("Gesamte Bestellung", "Entire Order")}</option>
-                  {availableItems.map((i) => (
-                    <option key={i} value={i}>
-                      {i}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-
-            <div>
-              <label className="block text-xs font-medium text-gray-500 mb-1">
-                {tt("Mindestbestellwert (€) (Optional)", "Min. Order Value (€) (Optional)")}
-              </label>
-              <input
-                type="number"
-                min="0"
-                step="any"
-                value={minOrder}
-                onChange={(e) => setMinOrder(e.target.value)}
-                placeholder="z.B. 50"
-                className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
-                  {tt("Gültig ab (Optional)", "Valid From (Optional)")}
-                </label>
-                <input
-                  type="datetime-local"
-                  min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
-                    .toISOString()
-                    .slice(0, 16)}
-                  value={startsAt}
-                  onChange={(e) => setStartsAt(e.target.value)}
-                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">
-                  {tt("Gültig bis (Optional)", "Valid Until (Optional)")}
-                </label>
-                <input
-                  type="datetime-local"
-                  min={
-                    startsAt ||
-                    new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
-                      .toISOString()
-                      .slice(0, 16)
-                  }
-                  value={endsAt}
-                  onChange={(e) => setEndsAt(e.target.value)}
-                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
-                />
-              </div>
-            </div>
-
-            <label className="flex items-center gap-2 cursor-pointer mt-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
-              <input
-                type="checkbox"
-                checked={promote}
-                onChange={(e) => setPromote(e.target.checked)}
-                className="rounded text-forest focus:ring-forest bg-white"
-              />
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-gray-700">
-                  {tt("Im Shop ankündigen", "Announce on storefront")}
-                </span>
-                <span className="text-[10px] text-gray-500">
-                  {tt("Zeigt ein Banner für alle Besucher", "Shows a banner to all visitors")}
-                </span>
-              </div>
-            </label>
-
-            <button
-              disabled={creating}
-              type="submit"
-              className="w-full bg-forest hover:bg-forest/90 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2"
-            >
-              {creating ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Tag className="w-4 h-4" />
-              )}
-              {tt("Code Speichern", "Save Code")}
-            </button>
-          </form>
-        </div>
-
-        <div className="lg:col-span-2 space-y-4">
-          <h3 className="font-semibold text-black flex items-center gap-2 px-1">
-            <Ticket className="w-4 h-4 text-forest" />
-            {tt("Ihre Codes", "Your Codes")}
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {q.data?.map((p: any) => (
-              <div
-                key={p.id}
-                className={`bg-white border rounded-2xl p-5 transition-all shadow-sm ${p.is_active ? "border-gray-200" : "border-gray-100 opacity-60"}`}
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-lg text-black">{p.code}</span>
-                      {getStatusBadge(p)}
-                    </div>
-                    <span className="text-forest font-semibold text-sm">{getPromoSummary(p)}</span>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={p.is_active}
-                      onChange={async (e) => {
-                        const active = e.target.checked;
-                        await togglePromo({ data: { id: p.id, is_active: active } });
-                        qc.invalidateQueries({ queryKey: ["promotions"] });
-                        if (active) toast.success(tt("Aktiviert", "Activated"));
-                        else toast.success(tt("Deaktiviert", "Deactivated"));
-                      }}
-                    />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-forest"></div>
+              {(type === "percentage" || type === "fixed") && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    {tt("Wert", "Value")} {type === "percentage" ? "(%)" : "(€)"}
                   </label>
+                  <input
+                    type="number"
+                    step="any"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    placeholder="z.B. 10"
+                    className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                  />
                 </div>
-                <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
-                  {p.min_order_value_cents > 0 && (
-                    <p>
-                      • {tt("Mindestbestellwert:", "Min. Spend:")} €
-                      {(p.min_order_value_cents / 100).toFixed(2)}
-                    </p>
-                  )}
-                  {p.starts_at && (
-                    <p>
-                      • {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}
-                    </p>
-                  )}
-                  {p.ends_at && (
-                    <p>
-                      • {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}
-                    </p>
-                  )}
+              )}
+
+              {type === "bogo" && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    {tt("Benötigte Menge (X)", "Required Quantity (X)")}
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={requiredQty}
+                    onChange={(e) => setRequiredQty(e.target.value)}
+                    placeholder="z.B. 2"
+                    className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                  />
+                </div>
+              )}
+
+              {type === "free_item" && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    {tt("Gratis-Artikel", "Free Item")}
+                  </label>
+                  <select
+                    value={freeItemName}
+                    onChange={(e) => setFreeItemName(e.target.value)}
+                    className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                  >
+                    <option value="">{tt("Auswählen...", "Select...")}</option>
+                    {availableItems.map((i) => (
+                      <option key={i} value={i}>
+                        {i}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {type !== "free_delivery" && type !== "free_item" && (
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    {tt("Gilt für", "Applies to")}
+                  </label>
+                  <select
+                    value={appliesTo}
+                    onChange={(e) => setAppliesTo(e.target.value)}
+                    className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                  >
+                    <option value="all">{tt("Gesamte Bestellung", "Entire Order")}</option>
+                    {availableItems.map((i) => (
+                      <option key={i} value={i}>
+                        {i}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  {tt("Mindestbestellwert (€) (Optional)", "Min. Order Value (€) (Optional)")}
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={minOrder}
+                  onChange={(e) => setMinOrder(e.target.value)}
+                  placeholder="z.B. 50"
+                  className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    {tt("Gültig ab (Optional)", "Valid From (Optional)")}
+                  </label>
+                  <input
+                    type="datetime-local"
+                    min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+                      .toISOString()
+                      .slice(0, 16)}
+                    value={startsAt}
+                    onChange={(e) => setStartsAt(e.target.value)}
+                    className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                    {tt("Gültig bis (Optional)", "Valid Until (Optional)")}
+                  </label>
+                  <input
+                    type="datetime-local"
+                    min={
+                      startsAt ||
+                      new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+                        .toISOString()
+                        .slice(0, 16)
+                    }
+                    value={endsAt}
+                    onChange={(e) => setEndsAt(e.target.value)}
+                    className="w-full border-gray-200 rounded-xl focus:border-forest focus:ring-forest text-sm"
+                  />
                 </div>
               </div>
-            ))}
-            {q.data?.length === 0 && (
-              <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed">
-                <Ticket className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-                <p>{tt("Noch keine Codes erstellt", "No codes created yet")}</p>
-              </div>
-            )}
+
+              <label className="flex items-center gap-2 cursor-pointer mt-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <input
+                  type="checkbox"
+                  checked={promote}
+                  onChange={(e) => setPromote(e.target.checked)}
+                  className="rounded text-forest focus:ring-forest bg-white"
+                />
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium text-gray-700">
+                    {tt("Im Shop ankündigen", "Announce on storefront")}
+                  </span>
+                  <span className="text-[10px] text-gray-500">
+                    {tt("Zeigt ein Banner für alle Besucher", "Shows a banner to all visitors")}
+                  </span>
+                </div>
+              </label>
+
+              <button
+                disabled={creating}
+                type="submit"
+                className="w-full bg-forest hover:bg-forest/90 text-white font-medium py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2"
+              >
+                {creating ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Tag className="w-4 h-4" />
+                )}
+                {tt("Code Speichern", "Save Code")}
+              </button>
+            </form>
+          </div>
+
+          <div className="lg:col-span-2 space-y-4">
+            <h3 className="font-semibold text-black flex items-center gap-2 px-1">
+              <Ticket className="w-4 h-4 text-forest" />
+              {tt("Ihre Codes", "Your Codes")}
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {q.data?.map((p: any) => (
+                <div
+                  key={p.id}
+                  className={`bg-white border rounded-2xl p-5 transition-all shadow-sm ${p.is_active ? "border-gray-200" : "border-gray-100 opacity-60"}`}
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-bold text-lg text-black">{p.code}</span>
+                        {getStatusBadge(p)}
+                      </div>
+                      <span className="text-forest font-semibold text-sm">
+                        {getPromoSummary(p)}
+                      </span>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={p.is_active}
+                        onChange={async (e) => {
+                          const active = e.target.checked;
+                          await togglePromo({ data: { id: p.id, is_active: active } });
+                          qc.invalidateQueries({ queryKey: ["promotions"] });
+                          if (active) toast.success(tt("Aktiviert", "Activated"));
+                          else toast.success(tt("Deaktiviert", "Deactivated"));
+                        }}
+                      />
+                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-forest"></div>
+                    </label>
+                  </div>
+                  <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
+                    {p.min_order_value_cents > 0 && (
+                      <p>
+                        • {tt("Mindestbestellwert:", "Min. Spend:")} €
+                        {(p.min_order_value_cents / 100).toFixed(2)}
+                      </p>
+                    )}
+                    {p.starts_at && (
+                      <p>
+                        • {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}
+                      </p>
+                    )}
+                    {p.ends_at && (
+                      <p>
+                        • {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {q.data?.length === 0 && (
+                <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed">
+                  <Ticket className="w-8 h-8 mx-auto mb-3 text-gray-300" />
+                  <p>{tt("Noch keine Codes erstellt", "No codes created yet")}</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -4088,6 +4435,8 @@ function RestaurantDashboardInner() {
           <PromotionsSection
             vertical="restaurants"
             availableItems={(q.data.products || []).map((p: any) => p.name)}
+            restaurant={q.data.restaurant}
+            products={q.data.products}
           />
         )}
         {currentTab === "surplus-offers" && (
