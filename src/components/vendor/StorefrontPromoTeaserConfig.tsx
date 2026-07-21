@@ -34,6 +34,12 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
   const [targetValue, setTargetValue] = useState(
     initialData?.target_value ?? (categories[0] || ""),
   );
+  const isInitialCustom = !!(
+    initialData?.target_type === "category" &&
+    initialData.target_value &&
+    !categories.includes(initialData.target_value)
+  );
+  const [isCustomCategory, setIsCustomCategory] = useState(isInitialCustom);
   const [saving, setSaving] = useState(false);
 
   const saveMutation = useServerFn(updateStorefrontPromoTeaser);
@@ -149,6 +155,7 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
                   );
                   setTargetType("category");
                   setTargetValue(categories[0] || tt("Hauptspeisen", "Mains"));
+                  setIsCustomCategory(false);
                 }}
                 className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
               >
@@ -169,6 +176,7 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
                   );
                   setTargetType("category");
                   setTargetValue(categories[0] || tt("Desserts", "Desserts"));
+                  setIsCustomCategory(false);
                 }}
                 className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
               >
@@ -254,14 +262,35 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
 
             {targetType === "category" && (
               <div>
-                <Label className="text-xs font-semibold text-forest mb-1 block">
-                  {tt("Kategorie wählen", "Select Category")}
-                </Label>
-                {categories.length > 0 ? (
+                <div className="flex justify-between items-center mb-1">
+                  <Label className="text-xs font-semibold text-forest">
+                    {tt("Kategorie wählen", "Select Category")}
+                  </Label>
+                  {categories.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCustomCategory(!isCustomCategory);
+                        // Default value toggling helper
+                        if (isCustomCategory) {
+                          setTargetValue(categories[0] || "");
+                        } else {
+                          setTargetValue("");
+                        }
+                      }}
+                      className="text-[10px] text-amber-700 hover:text-amber-800 font-semibold underline cursor-pointer"
+                    >
+                      {isCustomCategory
+                        ? tt("Aus Liste wählen", "Select from list")
+                        : tt("+ Eigene schreiben", "+ Write custom")}
+                    </button>
+                  )}
+                </div>
+                {categories.length > 0 && !isCustomCategory ? (
                   <select
                     value={targetValue}
                     onChange={(e) => setTargetValue(e.target.value)}
-                    className="w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-forest"
+                    className="w-full h-10 px-3 rounded-lg border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-forest cursor-pointer"
                   >
                     {categories.map((c) => (
                       <option key={c} value={c}>
@@ -273,7 +302,10 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
                   <Input
                     value={targetValue}
                     onChange={(e) => setTargetValue(e.target.value)}
-                    placeholder={tt("Kategoriename", "Category name")}
+                    placeholder={tt(
+                      "Kategoriename eingeben (z.B. Brunch)",
+                      "Enter category name (e.g. Brunch)",
+                    )}
                   />
                 )}
               </div>
