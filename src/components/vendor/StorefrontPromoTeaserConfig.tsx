@@ -49,6 +49,16 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
       return;
     }
 
+    if (enabled && targetType === "category" && !(targetValue || "").trim()) {
+      toast.error(
+        tt(
+          "Bitte wählen oder geben Sie einen Kategorienamen an.",
+          "Please select or enter a category name.",
+        ),
+      );
+      return;
+    }
+
     setSaving(true);
     try {
       await saveMutation({
@@ -138,8 +148,9 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
                     ),
                   );
                   setTargetType("category");
+                  setTargetValue(categories[0] || tt("Hauptspeisen", "Mains"));
                 }}
-                className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px]"
+                className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
               >
                 <strong>{tt("Mittagsangebot", "Lunch Special")}</strong>
                 <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
@@ -157,8 +168,9 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
                     ),
                   );
                   setTargetType("category");
+                  setTargetValue(categories[0] || tt("Desserts", "Desserts"));
                 }}
-                className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px]"
+                className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
               >
                 <strong>{tt("Gratis Beigabe", "Free Gift")}</strong>
                 <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
