@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Megaphone, Save, Eye, Sparkles, X } from "lucide-react";
+import { Megaphone, Save, Eye, Sparkles, X, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -105,9 +105,22 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
             <Megaphone className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="font-display text-lg font-semibold text-forest">
-              {tt("Storefront-Aktionsteaser", "Storefront Promo Teaser")}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="font-display text-lg font-semibold text-forest">
+                {tt("Storefront-Aktionsteaser", "Storefront Promo Teaser")}
+              </h3>
+              {enabled && title.trim() ? (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  {tt("LIVE", "LIVE")}
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-neutral-100 text-neutral-600 border border-neutral-200">
+                  <span className="h-1.5 w-1.5 rounded-full bg-neutral-400" />
+                  {tt("ENTWURF", "DRAFT")}
+                </span>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground">
               {tt(
                 "Heben Sie Angebote oder Events hervor, ohne die Bestellung des Kunden zu stören.",
@@ -128,6 +141,48 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
         </div>
       </div>
 
+      {/* 1, 2, 3 Step Guide Card */}
+      <div className="bg-amber-500/5 border border-amber-500/10 rounded-xl p-4 space-y-2">
+        <h4 className="font-semibold text-xs text-amber-800 dark:text-amber-300 uppercase tracking-wide">
+          🚀 {tt("Schnellanleitung: So wird es live", "Quick Start Guide: How to Go Live")}
+        </h4>
+        <div className="grid sm:grid-cols-3 gap-3 text-xs text-muted-foreground">
+          <div className="flex items-start gap-2 bg-white p-3 rounded-lg border border-amber-500/10">
+            <span className="font-bold text-amber-700 bg-amber-500/10 w-5 h-5 rounded-full flex items-center justify-center shrink-0">
+              1
+            </span>
+            <p className="leading-snug">
+              {tt(
+                "Wählen Sie unten ein Angebot (Frühstück, Mittag, Dinner, etc.) oder tippen Sie ein eigenes ein.",
+                "Choose a template below (Breakfast, Lunch, Dinner, etc.) or write your own custom deal.",
+              )}
+            </p>
+          </div>
+          <div className="flex items-start gap-2 bg-white p-3 rounded-lg border border-amber-500/10">
+            <span className="font-bold text-amber-700 bg-amber-500/10 w-5 h-5 rounded-full flex items-center justify-center shrink-0">
+              2
+            </span>
+            <p className="leading-snug">
+              {tt(
+                'Wählen Sie die Ziel-Aktion aus und klicken Sie unten auf "Aktions-Teaser speichern".',
+                'Choose the target action and click "Save Promo Teaser" at the bottom of the form.',
+              )}
+            </p>
+          </div>
+          <div className="flex items-start gap-2 bg-white p-3 rounded-lg border border-amber-500/10">
+            <span className="font-bold text-amber-700 bg-amber-500/10 w-5 h-5 rounded-full flex items-center justify-center shrink-0">
+              3
+            </span>
+            <p className="leading-snug">
+              {tt(
+                'Schalten Sie den Schalter oben rechts auf "AKTIVIERT" um, damit es auf Ihrer Storefront erscheint.',
+                'Switch the toggle in the top right to "ENABLED" to publish it live for customers.',
+              )}
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="grid md:grid-cols-2 gap-6">
         {/* Form Inputs */}
         <div className="space-y-4">
@@ -138,15 +193,39 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
             </h4>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
               {tt(
-                "Verwenden Sie diese Beispiele, um Ihren Umsatz zu steigern. Klicken Sie auf eine Vorlage, um sie als Entwurf zu übernehmen:",
-                "Use these templates to boost orders. Click any layout to load it as a draft:",
+                "Wählen Sie ein Angebot aus, um es als Entwurf zu laden:",
+                "Select a promotion type to pre-fill your draft configuration:",
               )}
             </p>
-            <div className="grid sm:grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              {/* breakfast */}
               <button
                 type="button"
                 onClick={() => {
-                  setTitle(tt("20% Mittags-Rabatt", "20% Lunch Discount"));
+                  setTitle(tt("Frühstücksangebot", "Breakfast Special"));
+                  setSubtitle(
+                    tt(
+                      "Kostenloser Kaffee zu jedem Frühstücksmenü",
+                      "Free coffee with any breakfast combo",
+                    ),
+                  );
+                  setTargetType("category");
+                  setTargetValue(categories[0] || tt("Frühstück", "Breakfast"));
+                  setIsCustomCategory(false);
+                }}
+                className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
+              >
+                <strong>🍳 {tt("Frühstück", "Breakfast")}</strong>
+                <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
+                  {tt("Gratis Kaffee", "Free morning coffee")}
+                </p>
+              </button>
+
+              {/* lunch */}
+              <button
+                type="button"
+                onClick={() => {
+                  setTitle(tt("15% Mittags-Rabatt", "15% Lunch Discount"));
                   setSubtitle(
                     tt(
                       "Gültig Mo-Fr von 11:30 bis 14:00 Uhr auf alle Hauptspeisen",
@@ -159,31 +238,72 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
                 }}
                 className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
               >
-                <strong>{tt("Mittagsangebot", "Lunch Special")}</strong>
+                <strong>🍔 {tt("Mittagstisch", "Lunch Special")}</strong>
                 <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
-                  {tt("20% Rabatt auf Hauptspeisen", "20% off all main courses")}
+                  {tt("15% Rabatt", "15% off main courses")}
                 </p>
               </button>
+
+              {/* dinner */}
               <button
                 type="button"
                 onClick={() => {
-                  setTitle(tt("Kostenloses Dessert", "Free Dessert"));
+                  setTitle(tt("Gratis Wein zum Dinner", "Free Dinner Wine"));
                   setSubtitle(
                     tt(
-                      "Bestellen Sie ein Hauptgericht und erhalten Sie ein Dessert gratis dazu",
-                      "Order any main course and get a free dessert tonight",
+                      "Ein gratis Glas Wein zu jedem Abendessen-Hauptgericht",
+                      "Get a free glass of wine with any dinner main",
                     ),
                   );
                   setTargetType("category");
-                  setTargetValue(categories[0] || tt("Desserts", "Desserts"));
+                  setTargetValue(categories[0] || tt("Hauptspeisen", "Mains"));
                   setIsCustomCategory(false);
                 }}
                 className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
               >
-                <strong>{tt("Gratis Beigabe", "Free Gift")}</strong>
+                <strong>🍷 {tt("Dinner-Aktion", "Dinner Special")}</strong>
                 <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
-                  {tt("Kostenloses Dessert am Abend", "Free dessert with purchase")}
+                  {tt("Gratis Wein", "Free wine with main")}
                 </p>
+              </button>
+
+              {/* special day */}
+              <button
+                type="button"
+                onClick={() => {
+                  setTitle(tt("Sonntags-Familien-Feast", "Sunday Family Feast"));
+                  setSubtitle(
+                    tt(
+                      "Sonntags essen Kinder gratis in Begleitung eines Erwachsenen",
+                      "Kids eat free every Sunday with an adult main course",
+                    ),
+                  );
+                  setTargetType("category");
+                  setTargetValue(categories[0] || tt("Hauptspeisen", "Mains"));
+                  setIsCustomCategory(false);
+                }}
+                className="p-2.5 bg-white border border-forest/10 rounded-lg text-left hover:border-forest hover:bg-forest/5 transition-all text-[11px] cursor-pointer"
+              >
+                <strong>🎉 {tt("Spezialtag-Deal", "Special Day Deal")}</strong>
+                <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
+                  {tt("Kinder essen gratis", "Kids eat free on Sunday")}
+                </p>
+              </button>
+
+              {/* custom */}
+              <button
+                type="button"
+                onClick={() => {
+                  setTitle("");
+                  setSubtitle("");
+                  setImageUrl("");
+                  setTargetType("category");
+                  setTargetValue("");
+                  setIsCustomCategory(true);
+                }}
+                className="col-span-2 p-2 bg-amber-500/5 border border-amber-500/20 rounded-lg text-center hover:border-amber-500 hover:bg-amber-500/10 transition-all text-[11px] cursor-pointer font-semibold text-amber-900"
+              >
+                ✍️ {tt("Eigenes Angebot erstellen", "Make Your Own Deal")}
               </button>
             </div>
           </div>
@@ -356,7 +476,7 @@ export function StorefrontPromoTeaserConfig({ initialData, categories = [], onSa
                 />
               ) : (
                 <div className="w-12 h-12 rounded-lg bg-amber-500/10 text-amber-700 grid place-items-center shrink-0">
-                  <Sparkles className="h-5 w-5" />
+                  <Megaphone className="h-5 w-5" />
                 </div>
               )}
               <div className="flex-1 min-w-0 pr-4">
