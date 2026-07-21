@@ -179,12 +179,14 @@ export default {
       if (currentRequest !== request) {
         const contentType = finalResponse.headers.get("content-type") || "";
         if (contentType.includes("text/html")) {
-          const rewrittenPath = new URL(currentRequest.url).pathname;
+          const fullRewrittenPath = new URL(currentRequest.url).pathname;
+          const parts = fullRewrittenPath.split("/");
+          const tenantBasePath = parts.length >= 3 ? `/${parts[1]}/${parts[2]}` : fullRewrittenPath;
           const html = await finalResponse.text();
           const baseUrl = process.env.VITE_APP_URL || "https://www.speisely.de";
           const injected = html.replace(
             "<script",
-            `<script>window.__TENANT_PATH__=${JSON.stringify(rewrittenPath)}; window.__TSS_SERVER_BASE_URL__=${JSON.stringify(baseUrl)};</script>\n<script`,
+            `<script>window.__TENANT_PATH__=${JSON.stringify(tenantBasePath)}; window.__TSS_SERVER_BASE_URL__=${JSON.stringify(baseUrl)};</script>\n<script`,
           );
           const newHeaders = new Headers(finalResponse.headers);
           newHeaders.delete("content-length");
