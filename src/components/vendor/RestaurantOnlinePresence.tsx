@@ -109,10 +109,10 @@ export function RestaurantOnlinePresence({
 
   const handleSubTabChange = (newSubTab: "social" | "visibility" | "promo") => {
     navigate({
-      search: (prev: any) => ({
-        ...prev,
+      search: {
+        ...searchParams,
         section: newSubTab,
-      }),
+      },
     });
   };
 
@@ -243,8 +243,8 @@ export function RestaurantOnlinePresence({
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   {tt(
-                    "Kopieren Sie diesen Link und setzen Sie ihn als Website-/Bio-Link in Ihrem Instagram-Profil ein. Da die Seite Google-konforme Metadaten enthält, erhöht sie die Sichtbarkeit in den Suchergebnissen.",
-                    "Copy this link and set it as your website/bio link on your Instagram profile and local directory listings. Because the page contains Google-compliant ReserveAction and OrderAction schema metadata, it increases search discoverability.",
+                    "Fügen Sie diesen Link als Hauptlink auf Instagram, TikTok oder in Ihrem Google Maps Profil ein. Dadurch können Kunden Tische reservieren oder Essen bestellen, ohne Speisely verlassen zu müssen – das erhöht Ihre Conversion-Rate, spart Provisionen und bringt Ihnen mehr direkte Kunden über Google.",
+                    "Add this link as your main website link on Instagram, TikTok, or Google Maps. It lets local searchers book a table or order delivery in just a few clicks. This drives higher conversion rates, eliminates commission fees, and brings more direct organic customers through Google.",
                   )}
                 </p>
               </div>
