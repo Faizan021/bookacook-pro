@@ -99,7 +99,8 @@ export const createSurplusOffer = createServerFn({ method: "POST" })
           .insert({
             restaurant_id: restaurant.id,
             name: "Überraschungstüte (Chef's Surprise Bag)",
-            description: "Eine bunte Überraschungstüte mit leckeren Speisen des Tages zum Vorteilspreis.",
+            description:
+              "Eine bunte Überraschungstüte mit leckeren Speisen des Tages zum Vorteilspreis.",
             price_cents: input.magicBagOriginalPriceCents,
             is_available: true,
             category: "Überraschungen",
@@ -333,6 +334,14 @@ export const cancelSurplusOffer = createServerFn({ method: "POST" })
       .in("status", ["draft", "scheduled", "active", "paused"]);
 
     if (error) throw new Error(error.message);
+
+    // Deactivate static surprise bag products for this restaurant
+    await supabase
+      .from("restaurant_products")
+      .update({ is_available: false })
+      .eq("restaurant_id", restaurant.id)
+      .eq("category", "Überraschungen");
+
     console.log(
       `[SurplusOffers] CANCELLED offerId=${input.offerId} restaurantId=${restaurant.id} userId=${userId}`,
     );

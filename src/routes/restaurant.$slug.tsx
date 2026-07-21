@@ -649,11 +649,24 @@ function RestaurantPage() {
   const validatePromoFn = useServerFn(validatePromoCode);
   const [selectedPayment, setSelectedPayment] = useState<"cash" | "paypal" | "stripe" | null>(null);
 
-  const categories = useMemo(() => {
+  const visibleMenu = useMemo(() => {
     if (!restaurant?.menu) return [];
+    return restaurant.menu.filter((m: any) => {
+      if (m.is_available === false) return false;
+      const cat = (m.category || "").trim();
+      const isSurpriseBag = cat === "Überraschungen" || m.name?.includes("Überraschungstüte");
+      if (isSurpriseBag && !activeSurplusOffer) {
+        return false;
+      }
+      return true;
+    });
+  }, [restaurant?.menu, activeSurplusOffer]);
+
+  const categories = useMemo(() => {
+    if (!visibleMenu) return [];
     const seen = new Set<string>();
     const cats: string[] = [];
-    restaurant.menu.forEach((m: any) => {
+    visibleMenu.forEach((m: any) => {
       const c = m.category || "Menu";
       if (!seen.has(c)) {
         seen.add(c);
@@ -661,7 +674,7 @@ function RestaurantPage() {
       }
     });
     return cats;
-  }, [restaurant]);
+  }, [visibleMenu]);
 
   const [activeCategory, setActiveCategory] = useState<string>("");
 
@@ -2450,7 +2463,7 @@ function RestaurantPage() {
 
           <div className="mt-8 space-y-10">
             {categories.map((cat) => {
-              const items = restaurant.menu.filter(
+              const items = visibleMenu.filter(
                 (m: any) =>
                   (m.category || "Menu") === cat &&
                   (filter === "all" ||
