@@ -79,7 +79,7 @@ export function SiteFooter() {
               <Linkedin className="h-4 w-4" />
             </a>
             <a
-              href="https://instagram.com/speisely"
+              href="https://www.instagram.com/speisely/"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"

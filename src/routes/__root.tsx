@@ -139,7 +139,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               contactType: "customer support",
               availableLanguage: ["German", "English"],
             },
-            sameAs: ["https://www.linkedin.com/company/speisely"],
+            sameAs: [
+              "https://www.linkedin.com/company/speisely",
+              "https://www.instagram.com/speisely/",
+            ],
             dateModified: new Date().toISOString().split("T")[0],
           },
           {
