@@ -70,7 +70,7 @@ import { createPromoCode, togglePromoCode } from "@/lib/promotions/mutations.fun
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSpeiselyPing } from "@/lib/vendor/useSpeiselyPing";
-import { MarketingSEOSection } from "@/components/vendor/MarketingSEOSection";
+import { RestaurantOnlinePresence } from "@/components/vendor/RestaurantOnlinePresence";
 import { VendorLayout, DashboardSkeleton } from "@/components/vendor/VendorLayout";
 import { printReceipt } from "@/utils/printReceipt";
 import { toast } from "sonner";
@@ -90,13 +90,21 @@ export const Route = createFileRoute("/_authenticated/restaurant")({
     search: Record<string, unknown>,
   ): {
     tab?: string;
+    section?: "social" | "visibility" | "promo";
     connect_success?: string;
     connect_error?: string;
     billing_success?: string;
     billing_cancel?: string;
   } => {
+    const rawSection = search.section as string | undefined;
+    const validatedSection =
+      rawSection === "social" || rawSection === "visibility" || rawSection === "promo"
+        ? rawSection
+        : undefined;
+
     return {
       tab: search.tab as string | undefined,
+      section: validatedSection,
       connect_success: search.connect_success as string | undefined,
       connect_error: search.connect_error as string | undefined,
       billing_success: search.billing_success as string | undefined,
@@ -1416,6 +1424,7 @@ function OverviewSection() {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const [expandedActivityId, setExpandedActivityId] = useState<string | null>(null);
+  const [isActivityFeedExpanded, setIsActivityFeedExpanded] = useState(true);
   const fetchKPIs = useServerFn(getRestaurantKPIs);
   const q = useSuspenseQuery({
     queryKey: ["restaurant", "kpis"],
@@ -4849,8 +4858,8 @@ function RestaurantDashboardInner() {
           />
         )}
         {currentTab === "marketing-seo" && (
-          <MarketingSEOSection
-            entity={q.data.restaurant}
+          <RestaurantOnlinePresence
+            restaurant={q.data.restaurant}
             onSave={async (slug, domain, seoTitle, seoDescription) => {
               await updateMyRestaurantSettings({
                 data: {
@@ -4862,7 +4871,6 @@ function RestaurantDashboardInner() {
                 },
               });
             }}
-            vertical="restaurant"
           />
         )}
         {currentTab.startsWith("settings-") && (
