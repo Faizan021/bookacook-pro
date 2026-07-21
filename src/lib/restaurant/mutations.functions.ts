@@ -205,7 +205,9 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
     // Fetch current settings to merge and validate
     const { data: currentRest, error: fetchErr } = await supabase
       .from("restaurants")
-      .select("accepts_delivery, accepts_paypal, paypal_email, service_areas, delivery_radius_km, delivery_fee, min_order_amount")
+      .select(
+        "accepts_delivery, accepts_paypal, paypal_email, service_areas, delivery_radius_km, delivery_fee, min_order_amount",
+      )
       .eq("owner_id", userId)
       .maybeSingle();
 
@@ -214,11 +216,20 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
     const merged = {
       accepts_delivery: data.accepts_delivery ?? currentRest?.accepts_delivery ?? false,
       accepts_paypal: data.accepts_paypal ?? currentRest?.accepts_paypal ?? false,
-      paypal_email: data.paypal_email !== undefined ? data.paypal_email : (currentRest?.paypal_email ?? null),
-      service_areas: data.service_areas !== undefined ? data.service_areas : (currentRest?.service_areas ?? ""),
-      delivery_radius_km: data.delivery_radius_km !== undefined ? data.delivery_radius_km : (currentRest?.delivery_radius_km ?? 0),
-      delivery_fee: data.delivery_fee !== undefined ? data.delivery_fee : (currentRest?.delivery_fee ?? 0),
-      min_order_amount: data.min_order_amount !== undefined ? data.min_order_amount : (currentRest?.min_order_amount ?? 0),
+      paypal_email:
+        data.paypal_email !== undefined ? data.paypal_email : (currentRest?.paypal_email ?? null),
+      service_areas:
+        data.service_areas !== undefined ? data.service_areas : (currentRest?.service_areas ?? ""),
+      delivery_radius_km:
+        data.delivery_radius_km !== undefined
+          ? data.delivery_radius_km
+          : (currentRest?.delivery_radius_km ?? 0),
+      delivery_fee:
+        data.delivery_fee !== undefined ? data.delivery_fee : (currentRest?.delivery_fee ?? 0),
+      min_order_amount:
+        data.min_order_amount !== undefined
+          ? data.min_order_amount
+          : (currentRest?.min_order_amount ?? 0),
     };
 
     // Validate delivery settings
@@ -229,7 +240,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       if (merged.delivery_fee! < 0) {
         throw new Error("Die Liefergebühr darf nicht negativ sein.");
       }
-      
+
       const cleanAreas = (merged.service_areas || "")
         .split(",")
         .map((s: string) => s.trim())
@@ -242,7 +253,9 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       const postcodeRegex = /^\d{5}$/;
       for (const area of cleanAreas) {
         if (!postcodeRegex.test(area)) {
-          throw new Error(`Ungültige Postleitzahl: "${area}". Postleitzahlen müssen genau 5 Ziffern haben (z.B. 41238).`);
+          throw new Error(
+            `Ungültige Postleitzahl: "${area}". Postleitzahlen müssen genau 5 Ziffern haben (z.B. 41238).`,
+          );
         }
       }
     }
@@ -418,4 +431,39 @@ export const openBillingPortal = createServerFn({ method: "POST" })
     const session = await createBillingPortalSession(sub.stripe_customer_id, data.origin);
 
     return { url: session.url };
+  });
+
+export const StorefrontPromoTeaserSchema = z.object({
+  enabled: z.boolean(),
+  title: z.string().max(40, "Title must be 40 characters or less"),
+  subtitle: z.string().max(80, "Subtitle must be 80 characters or less"),
+  image_url: z.string().nullable().optional(),
+  target_type: z.enum(["category", "reserve", "catering"]),
+  target_value: z.string().nullable().optional(),
+});
+
+export type StorefrontPromoTeaserInput = z.infer<typeof StorefrontPromoTeaserSchema>;
+
+export const updateStorefrontPromoTeaser = createServerFn({ method: "POST" })
+  .middleware([requireRole("restaurant_owner")])
+  .validator((input: StorefrontPromoTeaserInput) => StorefrontPromoTeaserSchema.parse(input))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+
+    const { data: rest } = await supabase
+      .from("restaurants")
+      .select("id")
+      .eq("owner_id", userId)
+      .maybeSingle();
+
+    if (!rest) throw new Error("No restaurant profile found for current owner");
+
+    const { error } = await supabase
+      .from("restaurants")
+      .update({ announcement_banner: data } as any)
+      .eq("id", rest.id);
+
+    if (error) throw new Error(error.message);
+
+    return { success: true };
   });

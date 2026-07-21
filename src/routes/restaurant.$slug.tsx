@@ -28,6 +28,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { useI18n } from "@/i18n/I18nProvider";
 import { getRestaurant } from "@/data/restaurants";
 import { supabase } from "@/integrations/supabase/client";
+import { StorefrontPromoTeaser } from "@/components/StorefrontPromoTeaser";
 import { upsertConsentRecord } from "@/lib/consent.functions";
 import { toast } from "sonner";
 
@@ -1400,6 +1401,25 @@ function RestaurantPage() {
           referralSource: cleanRef,
         },
       });
+
+      // Track same-session last-click promo teaser conversion if customer clicked promo CTA
+      try {
+        if (typeof window !== "undefined") {
+          const promoClickPayload = window.sessionStorage.getItem("speisely_promo_last_click");
+          if (promoClickPayload) {
+            const parsed = JSON.parse(promoClickPayload);
+            if (parsed && Date.now() - parsed.timestamp < 2 * 60 * 60 * 1000) {
+              trackEvent("promo_teaser_converted", {
+                restaurant_id: parsed.restaurant_id,
+                title: parsed.title,
+                order_value_cents: Math.round(finalTotal * 100),
+              });
+            }
+          }
+        }
+      } catch (e) {
+        // Ignore storage errors
+      }
 
       let successQuery = `?order_success=true&claimable=${res?.accountClaimable ? "true" : "false"}&email=${encodeURIComponent(checkoutIdentity.email)}&name=${encodeURIComponent(checkoutIdentity.name)}`;
       if (selectedPayment === "paypal" && res?.url) {
@@ -3042,6 +3062,12 @@ function RestaurantPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <StorefrontPromoTeaser
+        restaurantId={restaurant.id}
+        data={restaurant.announcement_banner}
+        onSelectCategory={(cat) => setActiveCategory(cat)}
+      />
     </SiteShell>
   );
 }

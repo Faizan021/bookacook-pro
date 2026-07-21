@@ -7,6 +7,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import { Sparkles, Copy, ExternalLink, Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { StorefrontPromoTeaserConfig } from "./StorefrontPromoTeaserConfig";
 
 export function MarketingSEOSection({
   entity,
@@ -306,6 +307,14 @@ export function MarketingSEOSection({
           </Button>
         </div>
       </div>
+
+      {/* Storefront Promo Teaser Section */}
+      <StorefrontPromoTeaserConfig
+        initialData={entity.announcement_banner}
+        categories={(entity.menu || [])
+          .map((m: { category?: string }) => m.category || "")
+          .filter(Boolean)}
+      />
     </section>
   );
 }
