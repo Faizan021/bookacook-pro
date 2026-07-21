@@ -1733,172 +1733,194 @@ function OverviewSection() {
 
       {/* SECTION 3: RECENT ACTIVITY FEED */}
       <div className="space-y-4">
-        <div>
-          <h2 className="font-display text-xl text-forest">
-            {tt("Aktuelle Aktivitäten", "Recent Activity")}
-          </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {tt(
-              "Verfolgen Sie die neuesten Aktivitäten aus Bestellungen, Reservierungen und Änderungen.",
-              "See the latest actions from orders, reservations, and storefront changes.",
+        <button
+          type="button"
+          onClick={() => setIsActivityFeedExpanded(!isActivityFeedExpanded)}
+          className="w-full flex items-center justify-between text-left hover:opacity-85 transition-all cursor-pointer group"
+        >
+          <div>
+            <h2 className="font-display text-xl text-forest flex items-center gap-2">
+              {tt("Aktuelle Aktivitäten", "Recent Activity")}
+            </h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              {tt(
+                "Verfolgen Sie die neuesten Aktivitäten aus Bestellungen, Reservierungen und Änderungen.",
+                "See the latest actions from orders, reservations, and storefront changes.",
+              )}
+            </p>
+          </div>
+          <div className="bg-forest/5 group-hover:bg-forest/10 p-2 rounded-full transition-all shrink-0">
+            {isActivityFeedExpanded ? (
+              <ChevronUp className="h-5 w-5 text-forest" />
+            ) : (
+              <ChevronDown className="h-5 w-5 text-forest" />
             )}
-          </p>
-        </div>
-        <div className="bg-white border border-[#e2e8e4] rounded-2xl shadow-md overflow-hidden">
-          {!aq.data || aq.data.length === 0 ? (
-            <div className="p-12 flex flex-col items-center justify-center text-center">
-              <div className="h-16 w-16 mb-4 rounded-full bg-forest/5 flex items-center justify-center text-forest/20 text-3xl">
-                📭
+          </div>
+        </button>
+        {isActivityFeedExpanded && (
+          <div className="bg-white border border-[#e2e8e4] rounded-2xl shadow-md overflow-hidden">
+            {!aq.data || aq.data.length === 0 ? (
+              <div className="p-12 flex flex-col items-center justify-center text-center">
+                <div className="h-16 w-16 mb-4 rounded-full bg-forest/5 flex items-center justify-center text-forest/20 text-3xl">
+                  📭
+                </div>
+                <p className="text-forest font-semibold">
+                  {tt("Keine aktuellen Aktivitäten.", "No recent activity.")}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                  {tt(
+                    "Neue Bestellungen und Reservierungen erscheinen hier automatisch.",
+                    "New orders and reservations will appear here automatically.",
+                  )}
+                </p>
               </div>
-              <p className="text-forest font-semibold">
-                {tt("Keine aktuellen Aktivitäten.", "No recent activity.")}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1 max-w-xs">
-                {tt(
-                  "Neue Bestellungen und Reservierungen erscheinen hier automatisch.",
-                  "New orders and reservations will appear here automatically.",
-                )}
-              </p>
-            </div>
-          ) : (
-            <div className="divide-y divide-[#e2e8e4]/60">
-              {aq.data.map((event: any) => {
-                const dateObj = new Date(event.time);
-                const isToday = dateObj.toDateString() === new Date().toDateString();
-                const isYesterday =
-                  dateObj.toDateString() === new Date(Date.now() - 86400000).toDateString();
-                let timeStr = "";
+            ) : (
+              <div className="divide-y divide-[#e2e8e4]/60">
+                {aq.data.map((event: any) => {
+                  const dateObj = new Date(event.time);
+                  const isToday = dateObj.toDateString() === new Date().toDateString();
+                  const isYesterday =
+                    dateObj.toDateString() === new Date(Date.now() - 86400000).toDateString();
+                  let timeStr = "";
 
-                if (isToday) {
-                  timeStr = dateObj.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-                } else if (isYesterday) {
-                  timeStr = tt("gestern", "yesterday");
-                } else {
-                  timeStr = dateObj.toLocaleDateString();
-                }
+                  if (isToday) {
+                    timeStr = dateObj.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
+                  } else if (isYesterday) {
+                    timeStr = tt("gestern", "yesterday");
+                  } else {
+                    timeStr = dateObj.toLocaleDateString();
+                  }
 
-                const isExpanded = expandedActivityId === event.id;
+                  const isExpanded = expandedActivityId === event.id;
 
-                return (
-                  <div key={event.id} className="transition-all">
-                    {/* Header Row */}
-                    <button
-                      type="button"
-                      onClick={() => setExpandedActivityId(isExpanded ? null : event.id)}
-                      className="w-full p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-[#f8faf9] text-left transition-all cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex-shrink-0">
-                          {event.type === "order" && (
-                            <span className="text-forest text-lg">🛍️</span>
-                          )}
-                          {event.type === "reservation" && (
-                            <span className="text-sky-500 text-lg">📅</span>
-                          )}
-                          {event.type === "menu" && <span className="text-forest text-lg">🍽️</span>}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-foreground">
-                            {event.description}
-                            {event.status === "pending" && (
-                              <span className="ml-2 inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                                {tt("ausstehend", "pending")}
-                              </span>
-                            )}
-                          </p>
-                          <span className="text-[10px] text-muted-foreground sm:hidden mt-0.5 block">
-                            {timeStr}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 shrink-0">
-                        <span className="text-xs text-muted-foreground hidden sm:inline">
-                          {timeStr}
-                        </span>
-                        {isExpanded ? (
-                          <ChevronUp className="h-4 w-4 text-forest/70" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 text-forest/70" />
-                        )}
-                      </div>
-                    </button>
-
-                    {/* Collapsible Details Area */}
-                    {isExpanded && (
-                      <div className="px-5 pb-5 pt-1 bg-[#f8faf9] border-t border-stone-100 text-xs text-stone-600 animate-in fade-in slide-in-from-top-1 duration-150">
-                        <div className="bg-white p-4 rounded-xl border border-stone-200 mt-2 space-y-2">
-                          <div className="flex justify-between items-center border-b border-stone-100 pb-2">
-                            <span className="font-semibold text-forest uppercase tracking-wider text-[10px]">
-                              {tt("Aktivitäts-Details", "Activity Details")}
-                            </span>
-                            <span className="text-stone-400 text-[10px]">ID: {event.id}</span>
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 text-stone-700">
-                            <div>
-                              <p className="text-stone-400 font-semibold uppercase text-[9px]">
-                                {tt("Ereignis-Typ", "Event Type")}
-                              </p>
-                              <p className="font-medium capitalize">{event.type}</p>
-                            </div>
-                            <div>
-                              <p className="text-stone-400 font-semibold uppercase text-[9px]">
-                                {tt("Zeitstempel", "Timestamp")}
-                              </p>
-                              <p className="font-medium">{new Date(event.time).toLocaleString()}</p>
-                            </div>
-                            {event.status && (
-                              <div>
-                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
-                                  {tt("Status", "Status")}
-                                </p>
-                                <p className="font-semibold capitalize text-forest">
-                                  {event.status}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className="pt-2 border-t border-stone-100 flex gap-2">
+                  return (
+                    <div key={event.id} className="transition-all">
+                      {/* Header Row */}
+                      <button
+                        type="button"
+                        onClick={() => setExpandedActivityId(isExpanded ? null : event.id)}
+                        className="w-full p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-[#f8faf9] text-left transition-all cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex-shrink-0">
                             {event.type === "order" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => navigateTo("orders")}
-                                className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
-                              >
-                                🔍 {tt("Bestellungen verwalten", "Manage Orders")}
-                              </Button>
+                              <span className="text-forest text-lg">🛍️</span>
                             )}
                             {event.type === "reservation" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => navigateTo("reservations")}
-                                className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
-                              >
-                                📅 {tt("Reservierungs-Feed", "Reservations Feed")}
-                              </Button>
+                              <span className="text-sky-500 text-lg">📅</span>
                             )}
                             {event.type === "menu" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => navigateTo("menu")}
-                                className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
-                              >
-                                🍽️ {tt("Speisekarte ansehen", "View Menu")}
-                              </Button>
+                              <span className="text-forest text-lg">🍽️</span>
                             )}
                           </div>
+                          <div>
+                            <p className="text-sm font-medium text-foreground">
+                              {event.description}
+                              {event.status === "pending" && (
+                                <span className="ml-2 inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                                  {tt("ausstehend", "pending")}
+                                </span>
+                              )}
+                            </p>
+                            <span className="text-[10px] text-muted-foreground sm:hidden mt-0.5 block">
+                              {timeStr}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+                        <div className="flex items-center gap-3 shrink-0">
+                          <span className="text-xs text-muted-foreground hidden sm:inline">
+                            {timeStr}
+                          </span>
+                          {isExpanded ? (
+                            <ChevronUp className="h-4 w-4 text-forest/70" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4 text-forest/70" />
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Collapsible Details Area */}
+                      {isExpanded && (
+                        <div className="px-5 pb-5 pt-1 bg-[#f8faf9] border-t border-stone-100 text-xs text-stone-600 animate-in fade-in slide-in-from-top-1 duration-150">
+                          <div className="bg-white p-4 rounded-xl border border-stone-200 mt-2 space-y-2">
+                            <div className="flex justify-between items-center border-b border-stone-100 pb-2">
+                              <span className="font-semibold text-forest uppercase tracking-wider text-[10px]">
+                                {tt("Aktivitäts-Details", "Activity Details")}
+                              </span>
+                              <span className="text-stone-400 text-[10px]">ID: {event.id}</span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 text-stone-700">
+                              <div>
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Ereignis-Typ", "Event Type")}
+                                </p>
+                                <p className="font-medium capitalize">{event.type}</p>
+                              </div>
+                              <div>
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Zeitstempel", "Timestamp")}
+                                </p>
+                                <p className="font-medium">
+                                  {new Date(event.time).toLocaleString()}
+                                </p>
+                              </div>
+                              {event.status && (
+                                <div>
+                                  <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                    {tt("Status", "Status")}
+                                  </p>
+                                  <p className="font-semibold capitalize text-forest">
+                                    {event.status}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="pt-2 border-t border-stone-100 flex gap-2">
+                              {event.type === "order" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => navigateTo("orders")}
+                                  className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
+                                >
+                                  🔍 {tt("Bestellungen verwalten", "Manage Orders")}
+                                </Button>
+                              )}
+                              {event.type === "reservation" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => navigateTo("reservations")}
+                                  className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
+                                >
+                                  📅 {tt("Reservierungs-Feed", "Reservations Feed")}
+                                </Button>
+                              )}
+                              {event.type === "menu" && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => navigateTo("menu")}
+                                  className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
+                                >
+                                  🍽️ {tt("Speisekarte ansehen", "View Menu")}
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
