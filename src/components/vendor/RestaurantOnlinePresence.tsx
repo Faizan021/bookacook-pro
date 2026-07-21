@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { StorefrontPromoTeaserConfig } from "./StorefrontPromoTeaserConfig";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useSearch, useNavigate } from "@tanstack/react-router";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 export function RestaurantOnlinePresence({
   restaurant,
@@ -118,16 +119,24 @@ export function RestaurantOnlinePresence({
 
   return (
     <section className="space-y-6 max-w-4xl">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl text-forest">
-          {tt("Online-Präsenz", "Online Presence")}
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          {tt(
-            "Verwalten Sie die Social-Media-Links, Google-Sichtbarkeit, Website-Einstellungen und Storefront-Promotion-Tools Ihres Restaurants an einem Ort.",
-            "Manage your restaurant’s social links, Google visibility, website settings, and storefront promotion tools in one place.",
-          )}
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <h2 className="font-display text-2xl text-forest">
+            {tt("Online-Präsenz", "Online Presence")}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {tt(
+              "Verwalten Sie die Social-Media-Links, Google-Sichtbarkeit, Website-Einstellungen und Storefront-Promotion-Tools Ihres Restaurants an einem Ort.",
+              "Manage your restaurant’s social links, Google visibility, website settings, and storefront promotion tools in one place.",
+            )}
+          </p>
+        </div>
+        <div className="shrink-0 flex items-center gap-2 bg-cream p-1.5 rounded-full border border-forest/10 self-start sm:self-auto">
+          <span className="text-[10px] text-forest/70 font-semibold px-2 uppercase tracking-wide">
+            {tt("Sprache", "Language")}
+          </span>
+          <LanguageToggle />
+        </div>
       </div>
 
       {/* Internal Sub-navigation Bar */}
