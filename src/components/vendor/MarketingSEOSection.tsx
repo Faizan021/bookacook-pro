@@ -9,6 +9,8 @@ import { Sparkles, Copy, ExternalLink, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { StorefrontPromoTeaserConfig } from "./StorefrontPromoTeaserConfig";
 
+import { useI18n } from "@/i18n/I18nProvider";
+
 export function MarketingSEOSection({
   entity,
   onSave,
@@ -23,6 +25,8 @@ export function MarketingSEOSection({
   ) => Promise<void>;
   vertical?: string;
 }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const [slug, setSlug] = useState(entity.slug || "");
   const [domain, setDomain] = useState(entity.custom_domain || "");
   const [seoTitle, setSeoTitle] = useState(entity.seo_title || "");
@@ -49,10 +53,15 @@ export function MarketingSEOSection({
       if (res.seo_title) setSeoTitle(res.seo_title.slice(0, 60));
       if (res.seo_description) setSeoDescription(res.seo_description.slice(0, 160));
 
-      toast.success("SEO-Metadaten wurden erfolgreich generiert!");
+      toast.success(
+        tt("SEO-Metadaten wurden erfolgreich generiert!", "SEO metadata generated successfully!"),
+      );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
-      toast.error(e.message || "Fehler beim Generieren der KI-Metadaten");
+      toast.error(
+        e.message ||
+          tt("Fehler beim Generieren der KI-Metadaten", "Failed to generate AI metadata"),
+      );
     } finally {
       setGenerating(false);
     }
@@ -60,7 +69,7 @@ export function MarketingSEOSection({
 
   async function handleSave() {
     if (!slug) {
-      setError("Storefront Subdomain is mandatory.");
+      setError(tt("Storefront Subdomain ist erforderlich.", "Storefront Subdomain is mandatory."));
       return;
     }
 
@@ -81,17 +90,22 @@ export function MarketingSEOSection({
       const cleanSeoDescription = seoDescription.trim() || null;
 
       await onSave(cleanSlug, cleanDomain || null, cleanSeoTitle, cleanSeoDescription);
-      toast.success("Marketing & SEO settings updated!");
+      toast.success(
+        tt("Marketing & SEO Einstellungen aktualisiert!", "Marketing & SEO settings updated!"),
+      );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
-      setError(e.message || "Failed to update Marketing & SEO settings");
+      setError(
+        e.message ||
+          tt("Aktualisierung fehlgeschlagen", "Failed to update Marketing & SEO settings"),
+      );
     } finally {
       setSaving(false);
     }
   }
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 max-w-4xl">
       <div className="flex flex-col gap-1">
         <h2 className="font-display text-2xl">Marketing & SEO</h2>
         <p className="text-sm text-muted-foreground">

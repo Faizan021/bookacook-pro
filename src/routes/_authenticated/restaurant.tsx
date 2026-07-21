@@ -1,5 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Plus, Loader2, Tag, Ticket, Sparkles } from "lucide-react";
+import {
+  Plus,
+  Loader2,
+  Tag,
+  Ticket,
+  Sparkles,
+  ShoppingBag,
+  UtensilsCrossed,
+  LayoutDashboard,
+  CreditCard,
+  Settings,
+  CalendarDays,
+  Globe,
+} from "lucide-react";
 import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import {
   createFileRoute,
@@ -215,6 +228,42 @@ class DashboardErrorBoundary extends Component<
   }
 }
 
+function TabHeroHeader({
+  icon: Icon,
+  title,
+  subtitle,
+  badgeText,
+  actionButton,
+}: {
+  icon: React.ElementType;
+  title: string;
+  subtitle: string;
+  badgeText?: string;
+  actionButton?: React.ReactNode;
+}) {
+  return (
+    <div className="mb-6 p-6 bg-white border border-forest/10 rounded-2xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-forest/10 text-forest rounded-2xl shrink-0">
+          <Icon className="h-6 w-6 text-forest" />
+        </div>
+        <div className="space-y-1 min-w-0">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <h2 className="font-display text-xl lg:text-2xl font-bold text-forest">{title}</h2>
+            {badgeText && (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-800 border border-amber-500/20 uppercase tracking-wider">
+                {badgeText}
+              </span>
+            )}
+          </div>
+          <p className="text-xs lg:text-sm text-forest/70 max-w-2xl leading-relaxed">{subtitle}</p>
+        </div>
+      </div>
+      {actionButton && <div className="shrink-0">{actionButton}</div>}
+    </div>
+  );
+}
+
 function EmptyCard({
   title,
   description,
@@ -410,11 +459,16 @@ function OrdersSection() {
     );
   }
   return (
-    <section className="space-y-4">
-      <PrintOnboardingBanner type="thermal" brandName={data.restaurant.name} />
-      <div className="flex items-baseline justify-between">
-        <h2 className="font-display text-2xl">{t("Orders", "Bestellungen")}</h2>
-        <div className="flex items-center gap-3">
+    <section className="space-y-6">
+      <TabHeroHeader
+        icon={ShoppingBag}
+        title={tt("Bestellungen & POS-Druck", "Orders & POS Printing")}
+        subtitle={tt(
+          "Echtzeit-Bestellverwaltung, Küchen-Drucker (POS) und Lieferstatus im Überblick.",
+          "Real-time order management, kitchen receipt printing (POS), and delivery status.",
+        )}
+        badgeText={`${data.orders.length} ${tt("Bestellungen", "Orders")}`}
+        actionButton={
           <Button
             variant="outline"
             size="sm"
@@ -424,7 +478,7 @@ function OrdersSection() {
                 created_at: new Date().toISOString(),
                 customer_name: "John Doe (Test)",
                 total_cents: 2450,
-                notes: t("Extra spicy, please", "Bitte extra scharf"),
+                notes: tt("Bitte extra scharf", "Extra spicy, please"),
                 items: [
                   { qty: 2, name: "Pizza Margherita", price_cents: 850 },
                   { qty: 1, name: "Coca-Cola 0.33l", price_cents: 250 },
@@ -433,15 +487,13 @@ function OrdersSection() {
               };
               printReceipt(mockOrder, data.restaurant.name);
             }}
-            className="h-8 rounded-full text-xs gap-1.5 border-forest/20 text-forest hover:bg-cream"
+            className="h-9 rounded-xl text-xs gap-2 border-forest/20 text-forest hover:bg-forest/5"
           >
-            🖨️ {t("Test Print", "Test-Druck")}
+            🖨️ {tt("Test-Druck", "Test Print")}
           </Button>
-          <span className="text-sm text-muted-foreground">
-            {data.orders.length} {t("total", "gesamt")}
-          </span>
-        </div>
-      </div>
+        }
+      />
+      <PrintOnboardingBanner type="thermal" brandName={data.restaurant.name} />
       <div className="grid gap-4">
         {data.orders.map((o: any) => {
           const items = Array.isArray(o.items) ? o.items : [];
@@ -643,19 +695,27 @@ function ProductsSection() {
           }}
         />
       )}
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <h2 className="font-display text-2xl">{tt("Speisekarte", "Menu")}</h2>
-        <Button
-          id="menu-import-btn"
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => setShowImportWizard(true)}
-          className="gap-1.5 border-forest text-forest hover:bg-forest/10"
-        >
-          ⬆️ {tt("Speisekarte importieren", "Import Menu")}
-        </Button>
-      </div>
+      <TabHeroHeader
+        icon={UtensilsCrossed}
+        title={tt("Speisekarte & Gerichte", "Menu & Dishes")}
+        subtitle={tt(
+          "Speisekarte verwalten, Gerichte hinzufügen, Preise & Verfügbarkeit anpassen.",
+          "Manage menu items, add new dishes, update prices and availability.",
+        )}
+        badgeText={`${q.data.products.length} ${tt("Gerichte", "Dishes")}`}
+        actionButton={
+          <Button
+            id="menu-import-btn"
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setShowImportWizard(true)}
+            className="gap-2 border-forest/20 text-forest hover:bg-forest/5 rounded-xl text-xs font-semibold"
+          >
+            📋 {tt("Speisekarte importieren", "Import Menu")}
+          </Button>
+        }
+      />
       <div className="grid gap-6 md:grid-cols-[1fr_320px]">
         <div className="space-y-3">
           {q.data.products.length === 0 ? (
@@ -1101,6 +1161,19 @@ function OverviewSection() {
 
   return (
     <section className="space-y-8">
+      <TabHeroHeader
+        icon={LayoutDashboard}
+        title={tt("Übersicht & Leistung", "Overview & Performance")}
+        subtitle={tt(
+          "Ihre Zentrale für Tagesumsatz, Bestellverlauf und Schnellaktionen im Überblick.",
+          "Your central hub for daily revenue, order history, and quick restaurant actions.",
+        )}
+        badgeText={
+          q.data.isActive
+            ? tt("🟢 Geöffnet", "🟢 Storefront Open")
+            : tt("🔴 Geschlossen", "🔴 Storefront Closed")
+        }
+      />
       <OnboardingProgressIndicator kpis={q.data} />
       {/* SECTION 1: URGENT ACTIONS */}
       <div className="space-y-4">
@@ -2949,6 +3022,26 @@ function SettingsShell({
 
   return (
     <div className="space-y-6">
+      <TabHeroHeader
+        icon={activeSubtab === "settings-billing" ? CreditCard : Settings}
+        title={
+          activeSubtab === "settings-billing"
+            ? tt("Abonnement & Abrechnung", "Subscription & Billing")
+            : tt("Restaurant Einstellungen", "Restaurant Settings")
+        }
+        subtitle={
+          activeSubtab === "settings-billing"
+            ? tt(
+                "Abonnement-Verwaltung, Stripe Billing Portal und Rechnungen.",
+                "Manage your Speisely subscription, Stripe billing portal, and invoices.",
+              )
+            : tt(
+                "Allgemeine Restaurantdaten, Öffnungszeiten, Zahlungsarten und Einstellungen.",
+                "General restaurant details, business opening hours, payment methods, and settings.",
+              )
+        }
+        badgeText={tt("Konfiguration", "Configuration")}
+      />
       {/* Settings Guide Banner */}
       <div className="bg-cream/40 border border-forest/10 rounded-2xl p-4 flex items-center gap-3">
         <span className="text-xl">⚙️</span>
@@ -3147,17 +3240,15 @@ function PromotionsSection({
 
   return (
     <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div>
-        <h2 className="text-xl font-bold text-black mb-1">
-          {tt("Promotions & Gutscheine", "Promotions & Vouchers")}
-        </h2>
-        <p className="text-gray-500 text-sm">
-          {tt(
-            "Erstellen Sie Rabattcodes für Ihre Kunden.",
-            "Create discount codes for your customers.",
-          )}
-        </p>
-      </div>
+      <TabHeroHeader
+        icon={Tag}
+        title={tt("Aktionen & Rabatt-Codes", "Promotions & Promo Codes")}
+        subtitle={tt(
+          "Rabatt-Codes und Gutscheine für Stammkunden und Marketing-Aktionen erstellen.",
+          "Create discount codes and promotional vouchers for loyal customers.",
+        )}
+        badgeText={`${q.data?.length || 0} ${tt("Codes", "Codes")}`}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 border border-gray-100 bg-white shadow-sm rounded-2xl p-6 h-fit">
@@ -3421,6 +3512,8 @@ function PromotionsSection({
 }
 
 function ReservationsSection() {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const fetchReservations = useServerFn(getRestaurantReservations);
   const updateStatus = useServerFn(updateReservationStatus);
   const qc = useQueryClient();
@@ -3449,8 +3542,11 @@ function ReservationsSection() {
   if (data.reservations.length === 0) {
     return (
       <EmptyCard
-        title="No reservations yet"
-        description="When customers book a table, they will appear here in real time."
+        title={tt("Noch keine Reservierungen", "No reservations yet")}
+        description={tt(
+          "Sobald Kunden einen Tisch buchen, erscheinen die Reservierungen hier in Echtzeit.",
+          "When customers book a table, they will appear here in real time.",
+        )}
       />
     );
   }
@@ -3467,11 +3563,16 @@ function ReservationsSection() {
   };
 
   return (
-    <section className="space-y-4">
-      <div className="flex items-baseline justify-between">
-        <h2 className="font-display text-2xl">Table Reservations</h2>
-        <span className="text-sm text-muted-foreground">{data.reservations.length} total</span>
-      </div>
+    <section className="space-y-6">
+      <TabHeroHeader
+        icon={CalendarDays}
+        title={tt("Tisch-Reservierungen", "Table Reservations")}
+        subtitle={tt(
+          "Tisch-Reservierungen, Gästeanzahl und Bestätigungen verwalten.",
+          "Manage table bookings, guest counts, and customer confirmations.",
+        )}
+        badgeText={`${data.reservations.length} ${tt("Reservierungen", "Reservations")}`}
+      />
       <div className="grid gap-4">
         {data.reservations.map((r: any) => (
           <article key={r.id} className="surface-card p-5">

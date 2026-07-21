@@ -61,19 +61,35 @@ export function VendorLayout({
     });
   }
 
-  // Navigation config based on vertical
-  const navItems = {
-    restaurant: [
-      { id: "overview", label: tt("Übersicht", "Overview"), icon: LayoutDashboard },
-      { id: "orders", label: tt("Bestellungen", "Orders"), icon: ShoppingBag },
-      { id: "reservations", label: tt("Reservierungen", "Reservations"), icon: CalendarDays },
-      { id: "menu", label: tt("Speisekarte", "Menu"), icon: UtensilsCrossed },
-      { id: "promotions", label: tt("Aktionen", "Promotions"), icon: Tag },
-      { id: "surplus-offers", label: tt("Chef-Angebote", "Chef's Specials"), icon: Sparkles },
-      { id: "marketing-seo", label: tt("Marketing & SEO", "Marketing & SEO"), icon: Globe },
-      { id: "settings-billing", label: tt("Abonnement", "Subscription"), icon: CreditCard },
-      { id: "settings-general", label: tt("Einstellungen", "Settings"), icon: Settings },
-    ],
+  // Grouped Navigation config for restaurant vertical
+  const restaurantNavGroups = [
+    {
+      category: tt("Direkter Betrieb", "Direct Operations"),
+      items: [
+        { id: "overview", label: tt("Übersicht", "Overview"), icon: LayoutDashboard },
+        { id: "orders", label: tt("Bestellungen", "Orders"), icon: ShoppingBag },
+        { id: "reservations", label: tt("Reservierungen", "Reservations"), icon: CalendarDays },
+        { id: "menu", label: tt("Speisekarte", "Menu"), icon: UtensilsCrossed },
+      ],
+    },
+    {
+      category: tt("Wachstum & Marketing", "Growth & Marketing"),
+      items: [
+        { id: "promotions", label: tt("Aktionen & Coupons", "Promotions & Coupons"), icon: Tag },
+        { id: "surplus-offers", label: tt("Chef-Angebote", "Chef's Specials"), icon: Sparkles },
+        { id: "marketing-seo", label: tt("Marketing & SEO", "Marketing & SEO"), icon: Globe },
+      ],
+    },
+    {
+      category: tt("Einstellungen", "Settings"),
+      items: [
+        { id: "settings-billing", label: tt("Abonnement", "Subscription"), icon: CreditCard },
+        { id: "settings-general", label: tt("Einstellungen", "Settings"), icon: Settings },
+      ],
+    },
+  ];
+
+  const genericNavItems = {
     caterer: [
       { id: "overview", label: tt("Übersicht", "Overview"), icon: LayoutDashboard },
       { id: "briefs", label: tt("Anfragen & Leads", "Briefs & Leads"), icon: CalendarDays },
@@ -93,78 +109,121 @@ export function VendorLayout({
       { id: "logistics", label: tt("Logistik", "Logistics"), icon: UtensilsCrossed },
       { id: "profile", label: tt("Einstellungen", "Settings"), icon: Settings },
     ],
-  }[vertical];
+  };
 
   return (
     <div className="flex min-h-screen w-full bg-[#f8faf9] text-forest font-sans">
       {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-[#e2e8e4] bg-cream/80 backdrop-blur-md">
+      <aside className="fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-[#e2e8e4] bg-cream/90 backdrop-blur-md">
         <div className="flex h-16 items-center px-6 border-b border-[#e2e8e4]">
           <Link
             to="/"
-            className="flex items-center gap-2 text-forest hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2.5 text-forest hover:opacity-80 transition-opacity"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-forest text-cream font-bold">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-forest text-cream font-bold shadow-sm">
               S
             </div>
-            <span className="font-display text-xl font-bold tracking-tight">Speisely</span>
+            <span className="font-display text-xl font-bold tracking-tight text-forest">
+              Speisely
+            </span>
           </Link>
         </div>
 
-        <div className="flex-1 overflow-y-auto py-6 px-4">
-          <div className="mb-6 px-2">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-forest/50">
+        <div className="flex-1 overflow-y-auto py-5 px-3 space-y-6">
+          <div className="px-2">
+            <h2 className="text-[11px] font-bold uppercase tracking-widest text-forest/50">
               {title}
             </h2>
           </div>
 
-          <nav className="space-y-1">
-            {navItems.map((item) => {
-              const cleanTab = activeTab || "overview";
-              let isActive = cleanTab === item.id;
-              if (
-                item.id === "settings-general" &&
-                cleanTab.startsWith("settings-") &&
-                cleanTab !== "settings-billing"
-              ) {
-                isActive = true;
-              }
+          {vertical === "restaurant" ? (
+            <div className="space-y-6">
+              {restaurantNavGroups.map((group) => (
+                <div key={group.category} className="space-y-1">
+                  <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-forest/40">
+                    {group.category}
+                  </div>
+                  {group.items.map((item) => {
+                    const cleanTab = activeTab || "overview";
+                    let isActive = cleanTab === item.id;
+                    if (
+                      item.id === "settings-general" &&
+                      cleanTab.startsWith("settings-") &&
+                      cleanTab !== "settings-billing"
+                    ) {
+                      isActive = true;
+                    }
 
-              return (
-                <Link
-                  key={item.id}
-                  to={basePath}
-                  search={{ tab: item.id }}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                    isActive
-                      ? "bg-forest text-cream shadow-md"
-                      : "text-forest/70 hover:bg-forest/5 hover:text-forest"
-                  }`}
-                >
-                  <item.icon className={`h-4 w-4 ${isActive ? "text-cream" : "text-forest/50"}`} />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
+                    return (
+                      <Link
+                        key={item.id}
+                        to={basePath}
+                        search={{ tab: item.id }}
+                        className={`flex items-center justify-between rounded-xl px-3 py-2.5 text-xs font-semibold transition-all duration-200 ${
+                          isActive
+                            ? "bg-forest text-cream shadow-md ring-1 ring-forest/20"
+                            : "text-forest/75 hover:bg-forest/5 hover:text-forest"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <item.icon
+                            className={`h-4 w-4 shrink-0 ${isActive ? "text-amber-300" : "text-forest/50"}`}
+                          />
+                          <span className="truncate">{item.label}</span>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <nav className="space-y-1">
+              {(genericNavItems[vertical as keyof typeof genericNavItems] || []).map((item) => {
+                const cleanTab = activeTab || "overview";
+                const isActive = cleanTab === item.id;
+                return (
+                  <Link
+                    key={item.id}
+                    to={basePath}
+                    search={{ tab: item.id }}
+                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all ${
+                      isActive
+                        ? "bg-forest text-cream shadow-md"
+                        : "text-forest/70 hover:bg-forest/5 hover:text-forest"
+                    }`}
+                  >
+                    <item.icon
+                      className={`h-4 w-4 ${isActive ? "text-amber-300" : "text-forest/50"}`}
+                    />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
         </div>
 
         <div className="border-t border-[#e2e8e4] p-4 space-y-2">
           {storefrontSlug && (
-            <Button variant="outline" className="w-full justify-start gap-2 bg-white/50" asChild>
+            <Button
+              variant="outline"
+              className="w-full justify-start gap-2 bg-white/70 border-forest/15 text-forest hover:bg-forest/5"
+              asChild
+            >
               <a
                 href={`${vertical === "caterer" ? "/catering" : vertical === "planner" ? "/planner" : "/restaurant"}/${storefrontSlug}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Store className="h-4 w-4" />
+                <Store className="h-4 w-4 text-forest/60" />
                 {tt("Mein Storefront", "My Storefront")}
               </a>
             </Button>
           )}
           <Button
             variant="ghost"
-            className="w-full justify-start gap-2 text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+            className="w-full justify-start gap-2 text-rose-600 hover:bg-rose-50 hover:text-rose-700 text-xs font-semibold"
             onClick={signOut}
           >
             <LogOut className="h-4 w-4" />
@@ -178,13 +237,13 @@ export function VendorLayout({
         {/* Header */}
         <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-[#e2e8e4] bg-cream/80 px-8 backdrop-blur-md">
           <div className="flex items-center gap-4">
-            <h1 className="font-display text-xl">{title}</h1>
+            <h1 className="font-display text-xl text-forest font-bold">{title}</h1>
             {workspaces && (
               <div className="ml-4 flex items-center gap-2">
                 {workspaces.restaurant && vertical !== "restaurant" && (
                   <Link
                     to="/restaurant"
-                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition"
+                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2.5 py-1 rounded-lg hover:bg-forest/10 transition"
                   >
                     {tt("Restaurant", "Restaurant")}
                   </Link>
@@ -192,7 +251,7 @@ export function VendorLayout({
                 {workspaces.caterer && vertical !== "caterer" && (
                   <Link
                     to="/caterer"
-                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition"
+                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2.5 py-1 rounded-lg hover:bg-forest/10 transition"
                   >
                     {tt("Catering", "Catering")}
                   </Link>
@@ -200,14 +259,14 @@ export function VendorLayout({
                 {workspaces.planner && vertical !== "planner" && (
                   <Link
                     to="/dashboard/planner"
-                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2 py-1 rounded-md hover:bg-forest/10 transition"
+                    className="text-xs font-medium text-forest bg-forest/5 border border-forest/10 px-2.5 py-1 rounded-lg hover:bg-forest/10 transition"
                   >
                     {tt("Event Planner", "Event Planner")}
                   </Link>
                 )}
                 <Link
                   to="/dashboard"
-                  className="text-xs font-medium border border-[#b28a3c] text-[#b28a3c] px-2 py-1 rounded-md hover:bg-[#b28a3c]/10 transition"
+                  className="text-xs font-semibold border border-[#b28a3c] text-[#b28a3c] px-2.5 py-1 rounded-lg hover:bg-[#b28a3c]/10 transition"
                 >
                   {tt("Hub", "Hub")}
                 </Link>
@@ -220,8 +279,8 @@ export function VendorLayout({
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-8">
-          <div className="mx-auto max-w-5xl">{children}</div>
+        <main className="flex-1 p-6 lg:p-10">
+          <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>
     </div>
