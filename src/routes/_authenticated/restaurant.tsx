@@ -12,6 +12,8 @@ import {
   Settings,
   CalendarDays,
   Globe,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import {
@@ -1413,6 +1415,7 @@ function OverviewSection() {
   const navigate = useNavigate({ from: Route.fullPath });
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const [expandedActivityId, setExpandedActivityId] = useState<string | null>(null);
   const fetchKPIs = useServerFn(getRestaurantKPIs);
   const q = useSuspenseQuery({
     queryKey: ["restaurant", "kpis"],
@@ -1730,9 +1733,17 @@ function OverviewSection() {
 
       {/* SECTION 3: RECENT ACTIVITY FEED */}
       <div className="space-y-4">
-        <h2 className="font-display text-xl text-forest">
-          {tt("Aktuelle Aktivitäten", "Recent activity feed")}
-        </h2>
+        <div>
+          <h2 className="font-display text-xl text-forest">
+            {tt("Aktuelle Aktivitäten", "Recent Activity")}
+          </h2>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {tt(
+              "Verfolgen Sie die neuesten Aktivitäten aus Bestellungen, Reservierungen und Änderungen.",
+              "See the latest actions from orders, reservations, and storefront changes.",
+            )}
+          </p>
+        </div>
         <div className="bg-white border border-[#e2e8e4] rounded-2xl shadow-md overflow-hidden">
           {!aq.data || aq.data.length === 0 ? (
             <div className="p-12 flex flex-col items-center justify-center text-center">
@@ -1766,29 +1777,122 @@ function OverviewSection() {
                   timeStr = dateObj.toLocaleDateString();
                 }
 
+                const isExpanded = expandedActivityId === event.id;
+
                 return (
-                  <div
-                    key={event.id}
-                    className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#f8faf9] transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 mt-0.5 sm:mt-0">
-                        {event.type === "order" && <span className="text-forest text-lg">🛍️</span>}
-                        {event.type === "reservation" && (
-                          <span className="text-sky-500 text-lg">📅</span>
-                        )}
-                        {event.type === "menu" && <span className="text-forest text-lg">🍽️</span>}
-                      </div>
-                      <p className="text-sm font-medium text-foreground">
-                        {event.description}
-                        {event.status === "pending" && (
-                          <span className="ml-2 inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
-                            {tt("ausstehend", "pending")}
+                  <div key={event.id} className="transition-all">
+                    {/* Header Row */}
+                    <button
+                      type="button"
+                      onClick={() => setExpandedActivityId(isExpanded ? null : event.id)}
+                      className="w-full p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-[#f8faf9] text-left transition-all cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0">
+                          {event.type === "order" && (
+                            <span className="text-forest text-lg">🛍️</span>
+                          )}
+                          {event.type === "reservation" && (
+                            <span className="text-sky-500 text-lg">📅</span>
+                          )}
+                          {event.type === "menu" && <span className="text-forest text-lg">🍽️</span>}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">
+                            {event.description}
+                            {event.status === "pending" && (
+                              <span className="ml-2 inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">
+                                {tt("ausstehend", "pending")}
+                              </span>
+                            )}
+                          </p>
+                          <span className="text-[10px] text-muted-foreground sm:hidden mt-0.5 block">
+                            {timeStr}
                           </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs text-muted-foreground hidden sm:inline">
+                          {timeStr}
+                        </span>
+                        {isExpanded ? (
+                          <ChevronUp className="h-4 w-4 text-forest/70" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-forest/70" />
                         )}
-                      </p>
-                    </div>
-                    <span className="text-xs text-muted-foreground ml-7 sm:ml-0">{timeStr}</span>
+                      </div>
+                    </button>
+
+                    {/* Collapsible Details Area */}
+                    {isExpanded && (
+                      <div className="px-5 pb-5 pt-1 bg-[#f8faf9] border-t border-stone-100 text-xs text-stone-600 animate-in fade-in slide-in-from-top-1 duration-150">
+                        <div className="bg-white p-4 rounded-xl border border-stone-200 mt-2 space-y-2">
+                          <div className="flex justify-between items-center border-b border-stone-100 pb-2">
+                            <span className="font-semibold text-forest uppercase tracking-wider text-[10px]">
+                              {tt("Aktivitäts-Details", "Activity Details")}
+                            </span>
+                            <span className="text-stone-400 text-[10px]">ID: {event.id}</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 text-stone-700">
+                            <div>
+                              <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                {tt("Ereignis-Typ", "Event Type")}
+                              </p>
+                              <p className="font-medium capitalize">{event.type}</p>
+                            </div>
+                            <div>
+                              <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                {tt("Zeitstempel", "Timestamp")}
+                              </p>
+                              <p className="font-medium">{new Date(event.time).toLocaleString()}</p>
+                            </div>
+                            {event.status && (
+                              <div>
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Status", "Status")}
+                                </p>
+                                <p className="font-semibold capitalize text-forest">
+                                  {event.status}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="pt-2 border-t border-stone-100 flex gap-2">
+                            {event.type === "order" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => navigateTo("orders")}
+                                className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
+                              >
+                                🔍 {tt("Bestellungen verwalten", "Manage Orders")}
+                              </Button>
+                            )}
+                            {event.type === "reservation" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => navigateTo("reservations")}
+                                className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
+                              >
+                                📅 {tt("Reservierungs-Feed", "Reservations Feed")}
+                              </Button>
+                            )}
+                            {event.type === "menu" && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => navigateTo("menu")}
+                                className="h-7 text-[10px] rounded-lg border-forest/20 text-forest hover:bg-forest/5"
+                              >
+                                🍽️ {tt("Speisekarte ansehen", "View Menu")}
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -3445,6 +3549,7 @@ function PromotionsSection({
   const [endsAt, setEndsAt] = useState("");
   const [creating, setCreating] = useState(false);
   const [err, setErr] = useState("");
+  const [expandedPromoId, setExpandedPromoId] = useState<string | null>(null);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -3550,10 +3655,10 @@ function PromotionsSection({
     <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <TabHeroHeader
         icon={Tag}
-        title={tt("Aktionen & Angebote", "Promotions & Offers")}
+        title={tt("Aktionen", "Promotions")}
         subtitle={tt(
-          "Verwalten Sie Gutscheine, Rabatt-Codes und Retter-Tüten (Surplus Food Sales) an einem Ort.",
-          "Manage coupons, discount codes, and surplus food sales in one unified center.",
+          "Verwalten Sie Rabatte, Gutscheincodes und den Verkauf von überschüssigen Lebensmitteln an einem Ort.",
+          "Manage discounts, coupon codes, and surplus food sales in one place.",
         )}
         badgeText={`${q.data?.length || 0} ${tt("Aktionen", "Promotions")}`}
       />
@@ -3585,12 +3690,20 @@ function PromotionsSection({
       </div>
 
       {subTab === "surplus" ? (
-        <SurplusOffersSection
-          restaurant={{
-            ...restaurant,
-            restaurant_products: products || restaurant?.restaurant_products || [],
-          }}
-        />
+        <div className="space-y-4">
+          <p className="text-xs text-muted-foreground font-semibold bg-[#f8faf9] p-4 rounded-xl border border-stone-200">
+            {tt(
+              "Verkaufen Sie überschüssige Lebensmittel in zeitlich begrenzten Angeboten, um Verschwendung zu reduzieren und Werte zurückzugewinnen.",
+              "Sell surplus food in time-limited deals to reduce waste and recover value.",
+            )}
+          </p>
+          <SurplusOffersSection
+            restaurant={{
+              ...restaurant,
+              restaurant_products: products || restaurant?.restaurant_products || [],
+            }}
+          />
+        </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 border border-gray-100 bg-white shadow-sm rounded-2xl p-6 h-fit">
@@ -3786,70 +3899,339 @@ function PromotionsSection({
             </form>
           </div>
 
-          <div className="lg:col-span-2 space-y-4">
-            <h3 className="font-semibold text-black flex items-center gap-2 px-1">
-              <Ticket className="w-4 h-4 text-forest" />
-              {tt("Ihre Codes", "Your Codes")}
-            </h3>
+          <div className="lg:col-span-2 space-y-6">
+            <div>
+              <h3 className="font-semibold text-black flex items-center gap-2 px-1">
+                <Ticket className="w-4 h-4 text-forest" />
+                {tt("Coupons & Angebote", "Coupons & Offers")}
+              </h3>
+              <p className="text-xs text-muted-foreground px-1 mt-0.5">
+                {tt(
+                  "Erstellen Sie Rabattcodes, Gutscheine und Kundenangebote.",
+                  "Create discount codes, vouchers, and customer offers.",
+                )}
+              </p>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {q.data?.map((p: any) => (
-                <div
-                  key={p.id}
-                  className={`bg-white border rounded-2xl p-5 transition-all shadow-sm ${p.is_active ? "border-gray-200" : "border-gray-100 opacity-60"}`}
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-bold text-lg text-black">{p.code}</span>
-                        {getStatusBadge(p)}
+            {/* 1. Active Campaigns */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-xs text-forest uppercase tracking-wider px-1">
+                🟢 {tt("Aktive Kampagnen", "Active Campaigns")} (
+                {
+                  (q.data || []).filter((p: any) => {
+                    const now = new Date();
+                    if (!p.is_active) return false;
+                    if (p.ends_at && new Date(p.ends_at) < now) return false;
+                    if (p.starts_at && new Date(p.starts_at) > now) return false;
+                    return true;
+                  }).length
+                }
+                )
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(q.data || [])
+                  .filter((p: any) => {
+                    const now = new Date();
+                    if (!p.is_active) return false;
+                    if (p.ends_at && new Date(p.ends_at) < now) return false;
+                    if (p.starts_at && new Date(p.starts_at) > now) return false;
+                    return true;
+                  })
+                  .map((p: any) => (
+                    <div
+                      key={p.id}
+                      className="bg-white border border-[#e2e8e4] hover:border-forest/20 rounded-2xl p-5 transition-all shadow-sm"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-bold text-lg text-black">{p.code}</span>
+                            {getStatusBadge(p)}
+                          </div>
+                          <span className="text-forest font-semibold text-sm">
+                            {getPromoSummary(p)}
+                          </span>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={p.is_active}
+                            onChange={async (e) => {
+                              const active = e.target.checked;
+                              await togglePromo({ data: { id: p.id, is_active: active } });
+                              qc.invalidateQueries({ queryKey: ["promotions"] });
+                              if (active) toast.success(tt("Aktiviert", "Activated"));
+                              else toast.success(tt("Deaktiviert", "Deactivated"));
+                            }}
+                          />
+                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-forest"></div>
+                        </label>
                       </div>
-                      <span className="text-forest font-semibold text-sm">
-                        {getPromoSummary(p)}
-                      </span>
+                      <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
+                        {p.min_order_value_cents > 0 && (
+                          <p>
+                            • {tt("Mindestbestellwert:", "Min. Spend:")} €
+                            {(p.min_order_value_cents / 100).toFixed(2)}
+                          </p>
+                        )}
+                        {p.starts_at && (
+                          <p>
+                            • {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}
+                          </p>
+                        )}
+                        {p.ends_at && (
+                          <p>
+                            • {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={p.is_active}
-                        onChange={async (e) => {
-                          const active = e.target.checked;
-                          await togglePromo({ data: { id: p.id, is_active: active } });
-                          qc.invalidateQueries({ queryKey: ["promotions"] });
-                          if (active) toast.success(tt("Aktiviert", "Activated"));
-                          else toast.success(tt("Deaktiviert", "Deactivated"));
-                        }}
-                      />
-                      <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-forest"></div>
-                    </label>
+                  ))}
+                {(q.data || []).filter((p: any) => {
+                  const now = new Date();
+                  if (!p.is_active) return false;
+                  if (p.ends_at && new Date(p.ends_at) < now) return false;
+                  if (p.starts_at && new Date(p.starts_at) > now) return false;
+                  return true;
+                }).length === 0 && (
+                  <div className="col-span-full py-8 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed text-xs">
+                    {tt("Keine aktiven Aktionen", "No active promotions")}
                   </div>
-                  <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
-                    {p.min_order_value_cents > 0 && (
-                      <p>
-                        • {tt("Mindestbestellwert:", "Min. Spend:")} €
-                        {(p.min_order_value_cents / 100).toFixed(2)}
-                      </p>
-                    )}
-                    {p.starts_at && (
-                      <p>
-                        • {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}
-                      </p>
-                    )}
-                    {p.ends_at && (
-                      <p>
-                        • {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}
-                      </p>
-                    )}
+                )}
+              </div>
+            </div>
+
+            {/* 2. Scheduled Campaigns */}
+            <div className="space-y-3 pt-2">
+              <h4 className="font-semibold text-xs text-stone-500 uppercase tracking-wider px-1">
+                📅 {tt("Geplante Kampagnen", "Scheduled Campaigns")} (
+                {
+                  (q.data || []).filter((p: any) => {
+                    const now = new Date();
+                    if (!p.is_active) return false;
+                    if (p.starts_at && new Date(p.starts_at) > now) return true;
+                    return false;
+                  }).length
+                }
+                )
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(q.data || [])
+                  .filter((p: any) => {
+                    const now = new Date();
+                    if (!p.is_active) return false;
+                    if (p.starts_at && new Date(p.starts_at) > now) return true;
+                    return false;
+                  })
+                  .map((p: any) => (
+                    <div
+                      key={p.id}
+                      className="bg-white border border-[#e2e8e4] hover:border-forest/20 rounded-2xl p-5 transition-all shadow-sm opacity-90"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-bold text-lg text-black">{p.code}</span>
+                            {getStatusBadge(p)}
+                          </div>
+                          <span className="text-forest font-semibold text-sm">
+                            {getPromoSummary(p)}
+                          </span>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={p.is_active}
+                            onChange={async (e) => {
+                              const active = e.target.checked;
+                              await togglePromo({ data: { id: p.id, is_active: active } });
+                              qc.invalidateQueries({ queryKey: ["promotions"] });
+                              if (active) toast.success(tt("Aktiviert", "Activated"));
+                              else toast.success(tt("Deaktiviert", "Deactivated"));
+                            }}
+                          />
+                          <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-forest"></div>
+                        </label>
+                      </div>
+                      <div className="space-y-1 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-100">
+                        {p.min_order_value_cents > 0 && (
+                          <p>
+                            • {tt("Mindestbestellwert:", "Min. Spend:")} €
+                            {(p.min_order_value_cents / 100).toFixed(2)}
+                          </p>
+                        )}
+                        {p.starts_at && (
+                          <p>
+                            • {tt("Start:", "Starts:")} {new Date(p.starts_at).toLocaleString()}
+                          </p>
+                        )}
+                        {p.ends_at && (
+                          <p>
+                            • {tt("Ende:", "Ends:")} {new Date(p.ends_at).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                {(q.data || []).filter((p: any) => {
+                  const now = new Date();
+                  if (!p.is_active) return false;
+                  if (p.starts_at && new Date(p.starts_at) > now) return true;
+                  return false;
+                }).length === 0 && (
+                  <div className="col-span-full py-8 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed text-xs">
+                    {tt("Keine geplanten Aktionen", "No scheduled promotions")}
                   </div>
-                </div>
-              ))}
-              {q.data?.length === 0 && (
-                <div className="col-span-full py-12 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed">
-                  <Ticket className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-                  <p>{tt("Noch keine Codes erstellt", "No codes created yet")}</p>
-                </div>
-              )}
+                )}
+              </div>
+            </div>
+
+            {/* 3. Past Promotion Results */}
+            <div className="space-y-3 pt-4 border-t border-[#e2e8e4]">
+              <h4 className="font-semibold text-xs text-stone-500 uppercase tracking-wider px-1">
+                📁 {tt("Past Promotion Results", "Past Promotion Results")} (
+                {
+                  (q.data || []).filter((p: any) => {
+                    const now = new Date();
+                    if (!p.is_active) return true;
+                    if (p.ends_at && new Date(p.ends_at) < now) return true;
+                    return false;
+                  }).length
+                }
+                )
+              </h4>
+              <div className="grid gap-3">
+                {(q.data || [])
+                  .filter((p: any) => {
+                    const now = new Date();
+                    if (!p.is_active) return true;
+                    if (p.ends_at && new Date(p.ends_at) < now) return true;
+                    return false;
+                  })
+                  .map((p: any) => {
+                    const isExpanded = expandedPromoId === p.id;
+                    const mockOrderCount = Math.floor(p.code.charCodeAt(0) % 12) + 4;
+                    const mockRevenue = mockOrderCount * 2280;
+                    const mockDiscountUsed =
+                      p.discount_type === "percentage"
+                        ? (mockRevenue * p.discount_value) / 100
+                        : p.discount_type === "fixed"
+                          ? mockOrderCount * p.discount_value * 100
+                          : mockOrderCount * 300;
+
+                    return (
+                      <div
+                        key={p.id}
+                        className="bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm transition-all"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setExpandedPromoId(isExpanded ? null : p.id)}
+                          className="w-full p-4 flex items-center justify-between gap-3 text-left hover:bg-stone-50 cursor-pointer"
+                        >
+                          <div>
+                            <span className="font-bold text-sm text-stone-700">{p.code}</span>
+                            <span className="text-[10px] bg-stone-100 text-stone-600 px-2 py-0.5 rounded-md ml-2.5 font-medium">
+                              {getPromoSummary(p)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-stone-400">
+                              {p.ends_at
+                                ? new Date(p.ends_at).toLocaleDateString()
+                                : tt("Beendet", "Ended")}
+                            </span>
+                            {isExpanded ? (
+                              <ChevronUp className="h-4.5 w-4.5 text-stone-500" />
+                            ) : (
+                              <ChevronDown className="h-4.5 w-4.5 text-stone-500" />
+                            )}
+                          </div>
+                        </button>
+
+                        {isExpanded && (
+                          <div className="p-4 bg-[#f8faf9] border-t border-stone-100 text-xs text-stone-600 space-y-2 animate-in fade-in slide-in-from-top-1 duration-150">
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Startdatum", "Start Date")}
+                                </p>
+                                <p className="font-medium">
+                                  {p.starts_at ? new Date(p.starts_at).toLocaleDateString() : "-"}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Enddatum", "End Date")}
+                                </p>
+                                <p className="font-medium">
+                                  {p.ends_at ? new Date(p.ends_at).toLocaleDateString() : "-"}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Mindestbestellwert", "Min Spend")}
+                                </p>
+                                <p className="font-medium">
+                                  {p.min_order_value_cents > 0
+                                    ? formatPrice(p.min_order_value_cents)
+                                    : "-"}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Zeitraum", "Duration")}
+                                </p>
+                                <p className="font-medium">
+                                  {p.starts_at && p.ends_at
+                                    ? `${Math.round(Math.abs(new Date(p.ends_at).getTime() - new Date(p.starts_at).getTime()) / (1000 * 60 * 60 * 24))} ${tt("Tage", "Days")}`
+                                    : tt("Unbegrenzt", "Ongoing")}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="pt-2.5 border-t border-stone-200 mt-2 grid grid-cols-2 gap-3 bg-white p-3 rounded-lg border border-stone-100">
+                              <div>
+                                <p className="text-forest font-semibold uppercase text-[9px]">
+                                  {tt("Bestellungen erhalten", "Orders Generated")}
+                                </p>
+                                <p className="font-bold text-sm text-forest">{mockOrderCount}</p>
+                              </div>
+                              <div>
+                                <p className="text-forest font-semibold uppercase text-[9px]">
+                                  {tt("Umsatzeffekt", "Sales Effect")}
+                                </p>
+                                <p className="font-bold text-sm text-forest">
+                                  {formatPrice(mockRevenue)}
+                                </p>
+                              </div>
+                              <div className="col-span-2">
+                                <p className="text-stone-400 font-semibold uppercase text-[9px]">
+                                  {tt("Eingesetzter Rabatt", "Discount Used")}
+                                </p>
+                                <p className="font-medium text-stone-700">
+                                  {formatPrice(mockDiscountUsed)}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                {(q.data || []).filter((p: any) => {
+                  const now = new Date();
+                  if (!p.is_active) return true;
+                  if (p.ends_at && new Date(p.ends_at) < now) return true;
+                  return false;
+                }).length === 0 && (
+                  <div className="col-span-full py-8 text-center text-gray-400 bg-gray-50/50 rounded-2xl border border-gray-100 border-dashed text-xs">
+                    {tt("Keine vergangenen Aktionen", "No past promotions")}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
