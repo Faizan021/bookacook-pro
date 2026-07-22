@@ -1989,6 +1989,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
         setBannerPath(path);
         setBannerPreview(signed?.signedUrl ?? null);
       }
+      setUseGeneratedBranding(false);
     } catch (e: any) {
       toast.error("Upload failed: " + e.message);
     } finally {
@@ -2183,6 +2184,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     onClick={() => {
                       setBannerPath("/images/restaurant_banner_preset.png");
                       setBannerPreview("/images/restaurant_banner_preset.png");
+                      setUseGeneratedBranding(false);
                       toast.success(
                         tt(
                           "Gourmet Food-Banner Vorlage ausgewählt!",
@@ -2199,16 +2201,16 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
             </div>
 
             {BRANDING_ASSISTANT_ENABLED && (
-              <div className="mt-6 p-5 bg-stone-50 border border-stone-200 rounded-xl space-y-4 text-left">
+              <div className="mt-6 p-5 bg-stone-50 border border-stone-200 rounded-2xl space-y-5 text-left">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="text-sm font-bold text-forest">
-                      {tt("Speisely Branding-Assistent", "Speisely Branding Assistant")}
+                      {tt("Speisely Storefront-Design Modus", "Speisely Storefront Branding Mode")}
                     </h4>
                     <p className="text-xs text-forest/70 mt-0.5">
                       {tt(
-                        "Wähle zwischen deinen hochgeladenen Bildern oder einem sauberen, professionell generierten Speisely-Branding.",
-                        "Choose between your uploaded storefront images or a clean, professionally generated Speisely default branding.",
+                        "Wählen Sie, ob auf Ihrer Restaurant-Seite Ihre eigenen Fotos/Gourmet-Banner oder das automatische Speisely-Monogramm angezeigt werden.",
+                        "Choose whether your storefront displays custom photos/gourmet banners or the automated Speisely geometric monogram.",
                       )}
                     </p>
                   </div>
@@ -2217,9 +2219,9 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div
                     onClick={() => setUseGeneratedBranding(false)}
-                    className={`cursor-pointer p-4 rounded-lg border-2 text-left transition-all ${
+                    className={`cursor-pointer p-4 rounded-xl border-2 text-left transition-all ${
                       !useGeneratedBranding
-                        ? "border-forest bg-white shadow-sm"
+                        ? "border-forest bg-white shadow-sm ring-1 ring-forest/10"
                         : "border-stone-200 bg-stone-100/50 hover:bg-stone-100"
                     }`}
                   >
@@ -2228,16 +2230,20 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                         type="radio"
                         checked={!useGeneratedBranding}
                         onChange={() => setUseGeneratedBranding(false)}
-                        className="mt-1 accent-forest"
+                        className="mt-1 accent-forest cursor-pointer"
                       />
                       <div>
                         <span className="text-xs font-bold block text-forest">
-                          {tt("Hochgeladenes Branding", "My Uploaded Branding")}
-                        </span>
-                        <span className="text-[10px] text-forest/70 block mt-1">
+                          📸{" "}
                           {tt(
-                            "Verwendet deine hochgeladenen Bilddateien. Falls keine Bilder vorhanden sind, wird automatisch das Speisely-Branding als Fallback verwendet.",
-                            "Uses your manually uploaded image files. If assets are missing, Speisely fallbacks are used automatically.",
+                            "Eigene Bilder & Gourmet-Vorlagen",
+                            "Custom Images & Gourmet Presets",
+                          )}
+                        </span>
+                        <span className="text-[10px] text-forest/70 block mt-1 leading-relaxed">
+                          {tt(
+                            "Verwendet deine hochgeladenen Logos, Banner-Fotos oder die Gourmet-Food Banner-Vorlage.",
+                            "Uses your uploaded logo, custom banner photos, or your selected Gourmet Food preset banner.",
                           )}
                         </span>
                       </div>
@@ -2246,9 +2252,9 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
 
                   <div
                     onClick={() => setUseGeneratedBranding(true)}
-                    className={`cursor-pointer p-4 rounded-lg border-2 text-left transition-all ${
+                    className={`cursor-pointer p-4 rounded-xl border-2 text-left transition-all ${
                       useGeneratedBranding
-                        ? "border-forest bg-white shadow-sm"
+                        ? "border-forest bg-white shadow-sm ring-1 ring-forest/10"
                         : "border-stone-200 bg-stone-100/50 hover:bg-stone-100"
                     }`}
                   >
@@ -2257,16 +2263,20 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                         type="radio"
                         checked={useGeneratedBranding}
                         onChange={() => setUseGeneratedBranding(true)}
-                        className="mt-1 accent-forest"
+                        className="mt-1 accent-forest cursor-pointer"
                       />
                       <div>
                         <span className="text-xs font-bold block text-forest">
-                          {tt("Generiertes Speisely-Branding", "Speisely-Generated Branding")}
-                        </span>
-                        <span className="text-[10px] text-forest/70 block mt-1">
+                          ✨{" "}
                           {tt(
-                            "Generiert automatisch ein minimalistisches, perfekt passendes Logo und Banner basierend auf deinem Namen.",
-                            "Generates a polished geometric logo monogram and gradient banner matching your name and style.",
+                            "Speisely Monogramm & Farbverlauf",
+                            "Speisely Auto-Generated Monogram",
+                          )}
+                        </span>
+                        <span className="text-[10px] text-forest/70 block mt-1 leading-relaxed">
+                          {tt(
+                            "Generiert automatisch ein geometrisches Monogramm-Logo und Farbverlauf-Banner passend zu deinem Namen.",
+                            "Generates a clean geometric logo monogram & styled gradient banner based on your business name.",
                           )}
                         </span>
                       </div>
@@ -2274,34 +2284,74 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                   </div>
                 </div>
 
-                {useGeneratedBranding && (
-                  <div className="p-3 bg-white border border-stone-200 rounded-lg space-y-3">
-                    <div className="text-[11px] font-bold text-forest/50 uppercase tracking-wider">
+                {/* Unified Live Storefront Header Preview */}
+                <div className="p-4 bg-white border border-stone-200 rounded-xl space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="text-[11px] font-bold text-forest/60 uppercase tracking-wider">
                       {tt(
-                        "Live-Vorschau des generierten Brandings",
-                        "Live Preview of Generated Branding",
+                        "Live-Vorschau Ihres Storefront-Headers",
+                        "Live Preview of Active Storefront Header",
                       )}
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-4 items-center">
-                      <img
-                        src={generateSvgLogo(
-                          name || "Restaurant",
-                          restaurant.cuisine_type || "Cuisine",
-                        )}
-                        className="w-16 h-16 rounded-full border border-stone-200 shadow-sm"
-                        alt="Generated Logo Preview"
-                      />
-                      <img
-                        src={generateSvgBanner(
-                          name || "Restaurant",
-                          restaurant.cuisine_type || "Cuisine",
-                        )}
-                        className="w-full sm:w-64 h-16 rounded-lg object-cover border border-stone-200 shadow-sm"
-                        alt="Generated Banner Preview"
-                      />
-                    </div>
+                    <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                      {!useGeneratedBranding
+                        ? tt("Aktiv: Eigene Bilder", "Active: Custom Media")
+                        : tt("Aktiv: Generiertes Monogramm", "Active: Generated Monogram")}
+                    </span>
                   </div>
-                )}
+
+                  <div className="flex flex-col sm:flex-row gap-4 items-center pt-1">
+                    {!useGeneratedBranding ? (
+                      <>
+                        <div className="w-16 h-16 rounded-full border border-stone-200 shadow-sm overflow-hidden bg-cream flex items-center justify-center shrink-0">
+                          {logoPreview ? (
+                            <img
+                              src={logoPreview}
+                              className="w-full h-full object-cover"
+                              alt="Logo preview"
+                            />
+                          ) : (
+                            <span className="text-xs font-bold text-forest">
+                              {name ? name.slice(0, 2).toUpperCase() : "DS"}
+                            </span>
+                          )}
+                        </div>
+                        <div className="w-full sm:w-80 h-16 rounded-lg overflow-hidden border border-stone-200 shadow-sm bg-stone-100 relative shrink-0">
+                          {bannerPreview ? (
+                            <img
+                              src={bannerPreview}
+                              className="w-full h-full object-cover"
+                              alt="Banner preview"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-forest text-cream text-xs font-bold">
+                              {name || "Storefront Banner"}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src={generateSvgLogo(
+                            name || "Restaurant",
+                            restaurant.cuisine_type || "Cuisine",
+                          )}
+                          className="w-16 h-16 rounded-full border border-stone-200 shadow-sm shrink-0"
+                          alt="Generated Logo Preview"
+                        />
+                        <img
+                          src={generateSvgBanner(
+                            name || "Restaurant",
+                            restaurant.cuisine_type || "Cuisine",
+                          )}
+                          className="w-full sm:w-80 h-16 rounded-lg object-cover border border-stone-200 shadow-sm shrink-0"
+                          alt="Generated Banner Preview"
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>
