@@ -729,13 +729,16 @@ function RestaurantPage() {
   // Canonical Redirection to mapped Custom Domains
   useEffect(() => {
     if (typeof window !== "undefined" && dbRestaurant?.custom_domain) {
-      const currentHost = window.location.hostname;
+      const currentHost = window.location.hostname.toLowerCase();
       const targetDomain = dbRestaurant.custom_domain.trim().toLowerCase();
 
+      // Only redirect for external custom domains (e.g. restaurant-domain.de), NOT speisely.de subdomains
       if (
         currentHost !== "localhost" &&
         currentHost !== "127.0.0.1" &&
-        currentHost !== targetDomain
+        currentHost !== targetDomain &&
+        !targetDomain.endsWith(".speisely.de") &&
+        !targetDomain.endsWith(".vercel.app")
       ) {
         const redirectUrl = new URL(window.location.href);
         redirectUrl.hostname = targetDomain;

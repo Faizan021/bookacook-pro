@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { classifySearchIntent } from "@/lib/search/ai.functions";
 import { trackEvent } from "@/utils/posthog";
 import { useState, useEffect } from "react";
 import {
@@ -10,9 +12,11 @@ import {
   CheckCircle2,
   ChevronRight,
   Star,
+  Loader2,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,6 +67,21 @@ function Home() {
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname.toLowerCase();
+      if (
+        host.endsWith(".speisely.de") &&
+        host !== "speisely.de" &&
+        host !== "www.speisely.de" &&
+        host !== "app.speisely.de" &&
+        host !== "admin.speisely.de"
+      ) {
+        const subdomain = host.replace(".speisely.de", "").trim();
+        if (subdomain) {
+          window.location.replace(`/restaurant/${subdomain}${window.location.search}`);
+        }
+      }
+    }
   }, []);
 
   const verticals = [
@@ -96,6 +115,62 @@ function Home() {
   ];
 
   const current = verticals.find((v) => v.key === activeVertical)!;
+
+  const classify = useServerFn(classifySearchIntent);
+  const [searching, setSearching] = useState(false);
+
+  async function handleAISearch() {
+    if (!searchQuery.trim() || searching) return;
+    setSearching(true);
+    try {
+      const res = await classify({ data: { query: searchQuery.trim() } });
+      
+      let toPath: "/instant-order" | "/catering" | "/planner" = "/instant-order";
+      if (res.vertical === "catering") {
+        toPath = "/catering";
+      } else if (res.vertical === "events") {
+        toPath = "/planner";
+      }
+
+      const searchParams: Record<string, any> = {
+        q: searchQuery.trim(),
+      };
+      if (res.parameters?.location) {
+        searchParams.location = res.parameters.location;
+      }
+      if (res.parameters?.guests) {
+        searchParams.guests = res.parameters.guests;
+      }
+      if (res.parameters?.cuisine) {
+        searchParams.cuisine = res.parameters.cuisine;
+      }
+
+      navigate({
+        to: toPath,
+        search: searchParams as any,
+      });
+
+      if (res.intent === "B2B") {
+        toast.info(
+          tt(
+            `KI hat B2B-Anfrage erkannt (${res.vertical === "catering" ? "Catering" : "Event-Planer"}). Leite weiter...`,
+            `AI detected B2B query (${res.vertical === "catering" ? "Catering" : "Event Planner"}). Routing...`
+          )
+        );
+      } else {
+        toast.info(
+          tt(
+            "Leite weiter zur Restaurantsuche...",
+            "Routing to restaurant search..."
+          )
+        );
+      }
+    } catch (e: any) {
+      navigate({ to: current.to, search: { q: searchQuery } as any });
+    } finally {
+      setSearching(false);
+    }
+  }
 
   const stats = [
     { value: "47+", label: tt("Geprüfte Partner", "Vetted partners") },
@@ -227,42 +302,41 @@ function Home() {
             >
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                  <Sparkles className="h-5 w-5 text-[#b28a3c]" />
+                  {searching ? (
+                    <Loader2 className="h-5 w-5 text-[#b28a3c] animate-spin" />
+                  ) : (
+                    <Sparkles className="h-5 w-5 text-[#b28a3c]" />
+                  )}
                 </div>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && searchQuery.trim()) {
-                      trackEvent("ai_search_clicked", {
-                        query: searchQuery,
-                        vertical: activeVertical,
-                      });
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      navigate({ to: current.to, search: { q: searchQuery } as any });
+                    if (e.key === "Enter") {
+                      handleAISearch();
                     }
                   }}
-                  className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-36 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/50"
+                  disabled={searching}
+                  className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-36 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/50 disabled:opacity-80"
                   placeholder={tt(
                     "Was suchst du? z.B. 'Vegan Catering Berlin'",
                     "What are you looking for? e.g. 'Vegan Catering Berlin'",
                   )}
                 />
                 <button
-                  onClick={() => {
-                    if (searchQuery.trim()) {
-                      trackEvent("ai_search_clicked", {
-                        query: searchQuery,
-                        vertical: activeVertical,
-                      });
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      navigate({ to: current.to, search: { q: searchQuery } as any });
-                    }
-                  }}
-                  className="absolute inset-y-2 right-2 bg-forest text-white rounded-full px-5 sm:px-6 font-bold text-sm sm:text-base shadow-md hover:bg-forest/90 transition-colors flex items-center gap-2 cursor-pointer"
+                  onClick={handleAISearch}
+                  disabled={searching || !searchQuery.trim()}
+                  className="absolute inset-y-2 right-2 bg-forest text-white rounded-full px-5 sm:px-6 font-bold text-sm sm:text-base shadow-md hover:bg-forest/90 transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
-                  {tt("KI Suche", "AI Search")}
+                  {searching ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {tt("Sucht...", "Searching...")}
+                    </>
+                  ) : (
+                    tt("KI Suche", "AI Search")
+                  )}
                 </button>
               </div>
             </div>

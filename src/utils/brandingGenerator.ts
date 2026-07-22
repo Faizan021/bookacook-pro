@@ -10,24 +10,28 @@ const GRADIENTS = [
   { start: "#7d1919", end: "#3d0b0b" }, // Crimson Burgundy
 ];
 
-function getBrandColors(name: string) {
+function getBrandColors(name?: string) {
+  const safeName = name || "Restaurant";
   let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < safeName.length; i++) {
+    hash = safeName.charCodeAt(i) + ((hash << 5) - hash);
   }
   const index = Math.abs(hash) % GRADIENTS.length;
   return GRADIENTS[index];
 }
 
-export function generateSvgLogo(businessName: string, category?: string): string {
-  const initials = businessName
-    .split(/\s+/)
-    .map((word) => word[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase() || "S";
+export function generateSvgLogo(businessName?: string, category?: string): string {
+  const safeName = businessName || "Restaurant";
+  const initials =
+    safeName
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((word) => word[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "S";
 
-  const colors = getBrandColors(businessName);
+  const colors = getBrandColors(safeName);
   const catText = category ? category.toUpperCase() : "SPEISELY PARTNER";
 
   const svg = `
@@ -55,19 +59,20 @@ export function generateSvgLogo(businessName: string, category?: string): string
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg.trim())}`;
 }
 
-export function generateSvgBanner(businessName: string, category?: string): string {
-  const colors = getBrandColors(businessName);
+export function generateSvgBanner(businessName?: string, category?: string): string {
+  const safeName = businessName || "Restaurant";
+  const colors = getBrandColors(safeName);
   const catText = category ? category : "Speisely Marketplace Partner";
 
   // Dynamically calculate font size based on business name length to prevent crop clipping on cards
   let fontSize = 64;
-  if (businessName.length > 25) {
+  if (safeName.length > 25) {
     fontSize = 32;
-  } else if (businessName.length > 20) {
+  } else if (safeName.length > 20) {
     fontSize = 38;
-  } else if (businessName.length > 15) {
+  } else if (safeName.length > 15) {
     fontSize = 44;
-  } else if (businessName.length > 10) {
+  } else if (safeName.length > 10) {
     fontSize = 52;
   }
 
