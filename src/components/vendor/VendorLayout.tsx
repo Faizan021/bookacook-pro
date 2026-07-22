@@ -115,7 +115,7 @@ export function VendorLayout({
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f8faf9] text-forest font-sans">
+    <div className="flex min-h-screen w-full bg-cream text-forest font-sans">
       {/* Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-20 flex w-64 flex-col border-r border-[#e2e8e4] bg-cream/90 backdrop-blur-md">
         <div className="flex h-16 items-center px-6 border-b border-[#e2e8e4]">

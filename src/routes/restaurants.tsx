@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   ChevronDown,
   Navigation,
+  Sparkles,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useMemo, useState } from "react";
@@ -194,10 +195,10 @@ function RestaurantsDirectory() {
 
   return (
     <SiteShell>
-      <div className="min-h-screen flex flex-col bg-[#fcfdfc]">
+      <div className="min-h-screen flex flex-col bg-cream text-forest font-sans">
         <main className="flex-grow">
-          {/* Hero Section — matches Catering & Planner cinematic style */}
-          <div className="relative min-h-[420px] md:min-h-[500px] flex items-center overflow-hidden">
+          {/* Hero Section — matches Catering 2-column showcase style with food photography */}
+          <div className="relative overflow-hidden min-h-[480px] md:min-h-[540px] flex items-center pt-16 pb-20 lg:pt-20 lg:pb-28">
             {/* Cinematic background image */}
             <img
               src="/hero-cinematic.png"
@@ -206,24 +207,82 @@ function RestaurantsDirectory() {
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             {/* Forest gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/45" />
             <div className="absolute inset-0 bg-black/20" />
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 w-full">
-              {/* Gold pill badge */}
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm mb-6">
-                🍽 {tt("Speisely Marktplatz", "Speisely Marketplace")}
-              </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 tracking-tight max-w-2xl leading-tight">
-                {tt("Lokales Essen bestellen. ", "Order local food. ")}
-                <span className="text-[#f2d896]">{tt("Direkt & Fair.", "Direct & Fair.")}</span>
-              </h1>
-              <p className="text-lg md:text-xl text-white/80 max-w-xl mb-8">
-                {tt(
-                  "Entdecke unabhängige Restaurants in deiner Stadt und bestelle direkt — ohne Zwischenhändler, bessere Preise, fairer für alle.",
-                  "Discover independent restaurants in your city and order directly — no middlemen, better prices, fairer for everyone.",
-                )}
-              </p>
+            <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 lg:py-16 w-full grid md:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+              <div className="space-y-6 text-left">
+                {/* Gold pill badge */}
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3.5 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white/90 shadow-sm">
+                  <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" />{" "}
+                  {tt("Speisely Marktplatz", "Speisely Marketplace")}
+                </span>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white tracking-tight leading-[1.08]">
+                  {tt("Lokales Essen bestellen. ", "Order local food. ")}
+                  <br />
+                  <span className="text-[#f2d896]">
+                    {tt("Direkt, Frisch & Fair.", "Direct, Fresh & Fair.")}
+                  </span>
+                </h1>
+                <p className="text-base sm:text-lg md:text-xl text-white/85 max-w-xl leading-relaxed">
+                  {tt(
+                    "Entdecke unabhängige Restaurants in deiner Stadt und bestelle direkt — ohne Zwischenhändler, bessere Preise, fairer für alle.",
+                    "Discover independent restaurants in your city and order directly — no middlemen, better prices, fairer for everyone.",
+                  )}
+                </p>
+
+                <ul className="space-y-2.5 pt-1 text-sm sm:text-base text-white/90 font-medium">
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="h-5 w-5 text-[#f2d896] shrink-0" />
+                    {tt(
+                      "100% Direkte Unterstützung für lokale Gastronomen",
+                      "100% direct support for local restaurants",
+                    )}
+                  </li>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 className="h-5 w-5 text-[#f2d896] shrink-0" />
+                    {tt(
+                      "Lieferung & Abholung ohne versteckte Gebühren",
+                      "Delivery & pickup without hidden platform fees",
+                    )}
+                  </li>
+                </ul>
+              </div>
+
+              {/* Hero Food Showcase Image Card */}
+              <div className="relative group hidden md:block">
+                <div className="absolute -inset-2 bg-gradient-to-tr from-[#f2d896]/20 to-transparent rounded-[2.5rem] blur-2xl -z-10" />
+                <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/20 aspect-[4/3] bg-forest/40">
+                  <img
+                    src="/images/restaurant_hero_food.png"
+                    fetchPriority="high"
+                    alt="Fresh Gourmet Restaurant Dishes"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest/90 via-transparent to-transparent opacity-60" />
+
+                  {/* Floating Quality Badge */}
+                  <div className="absolute bottom-4 left-4 right-4 backdrop-blur-md bg-forest/85 border border-white/20 p-4 rounded-2xl flex items-center justify-between text-white shadow-lg">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-[#f2d896] font-bold text-sm">
+                        <span>★ 4.9/5.0</span>
+                        <span className="text-white/60 font-normal text-xs">
+                          • {tt("Qualitätsgeprüft", "Vetted Quality")}
+                        </span>
+                      </div>
+                      <p className="text-xs text-white/80 mt-0.5 font-medium">
+                        {tt(
+                          "Frisch zubereitet von Top-Restaurants",
+                          "Freshly prepared by top local restaurants",
+                        )}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider bg-[#f2d896] text-forest px-2.5 py-1 rounded-full shrink-0 shadow-sm">
+                      ⚡ {tt("Live", "Live")}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

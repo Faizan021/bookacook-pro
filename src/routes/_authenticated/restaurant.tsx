@@ -2174,9 +2174,27 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     }
                   />
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-1">
-                  Recommended size: 1200x400 px (3:1 Aspect Ratio)
-                </p>
+                <div className="flex flex-wrap items-center justify-between gap-1 mt-1">
+                  <p className="text-[10px] text-muted-foreground">
+                    Recommended size: 1200x400 px (3:1 Aspect Ratio)
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBannerPath("/images/restaurant_banner_preset.png");
+                      setBannerPreview("/images/restaurant_banner_preset.png");
+                      toast.success(
+                        tt(
+                          "Gourmet Food-Banner Vorlage ausgewählt!",
+                          "Gourmet Food banner preset selected!",
+                        ),
+                      );
+                    }}
+                    className="text-[10px] font-semibold text-forest/80 hover:text-forest underline cursor-pointer"
+                  >
+                    ✨ {tt("Gourmet Food-Banner verwenden", "Use Gourmet Food Banner")}
+                  </button>
+                </div>
               </div>
             </div>
 
