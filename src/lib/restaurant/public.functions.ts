@@ -232,12 +232,24 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
 
   const mappedRestaurants = (restaurants || []).map((r: any) => {
     let logoUrl = r.logo_url;
-    if (logoUrl && !logoUrl.startsWith("http")) {
+    if (
+      logoUrl &&
+      !logoUrl.startsWith("http") &&
+      !logoUrl.startsWith("/") &&
+      !logoUrl.startsWith("data:") &&
+      logoUrl !== "GENERATED_MONOGRAM"
+    ) {
       logoUrl = supabaseAdmin.storage.from("storefront-assets").getPublicUrl(logoUrl)
         .data.publicUrl;
     }
     let bannerUrl = r.banner_image_url;
-    if (bannerUrl && !bannerUrl.startsWith("http")) {
+    if (
+      bannerUrl &&
+      !bannerUrl.startsWith("http") &&
+      !bannerUrl.startsWith("/") &&
+      !bannerUrl.startsWith("data:") &&
+      bannerUrl !== "GENERATED_GRADIENT"
+    ) {
       bannerUrl = supabaseAdmin.storage.from("storefront-assets").getPublicUrl(bannerUrl)
         .data.publicUrl;
     }

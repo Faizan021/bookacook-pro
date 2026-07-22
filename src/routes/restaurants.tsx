@@ -496,7 +496,10 @@ function RestaurantsDirectory() {
                         .map((w: string) => w[0])
                         .join("")
                         .toUpperCase();
-                      const hasRealBanner = rest.banner_image_url && !rest.use_generated_branding;
+                      const isGeneratedBanner =
+                        rest.banner_image_url === "GENERATED_GRADIENT" ||
+                        (!rest.banner_image_url && rest.use_generated_branding);
+                      const hasRealBanner = !!rest.banner_image_url && !isGeneratedBanner;
                       return (
                         <div className="relative aspect-[16/10] w-full overflow-hidden bg-forest/5 rounded-xl">
                           {hasRealBanner ? (

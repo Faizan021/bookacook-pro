@@ -239,30 +239,49 @@ export const fallbackRestaurants: Restaurant[] = [
 ];
 
 function mapRestaurant(r: any): Restaurant {
-  const isGenerated = BRANDING_ASSISTANT_ENABLED && r.use_generated_branding;
-  const isBannerMissing = !r.banner_image_url;
-  const isLogoMissing = !r.logo_url;
+  const isGeneratedLogo =
+    r.logo_url === "GENERATED_MONOGRAM" ||
+    (!r.logo_url && (BRANDING_ASSISTANT_ENABLED && r.use_generated_branding));
 
-  const resolvedBanner =
-    isGenerated || isBannerMissing
-      ? generateSvgBanner(
-          r.name || r.business_name || "Restaurant",
-          r.cuisine_type || "Speisely Partner",
-        )
-      : r.banner_image_url.startsWith("http")
-        ? r.banner_image_url
-        : supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url).data
-            .publicUrl;
+  const isGeneratedBanner =
+    r.banner_image_url === "GENERATED_GRADIENT" ||
+    (!r.banner_image_url && (BRANDING_ASSISTANT_ENABLED && r.use_generated_branding));
 
-  const resolvedLogo =
-    isGenerated || isLogoMissing
-      ? generateSvgLogo(
-          r.name || r.business_name || "Restaurant",
-          r.cuisine_type || "Speisely Partner",
-        )
-      : r.logo_url.startsWith("http")
-        ? r.logo_url
-        : supabase.storage.from("storefront-assets").getPublicUrl(r.logo_url).data.publicUrl;
+  let resolvedLogo = generateSvgLogo(
+    r.name || r.business_name || "Restaurant",
+    r.cuisine_type || "Speisely Partner",
+  );
+
+  if (!isGeneratedLogo && r.logo_url) {
+    if (
+      r.logo_url.startsWith("http") ||
+      r.logo_url.startsWith("/") ||
+      r.logo_url.startsWith("data:")
+    ) {
+      resolvedLogo = r.logo_url;
+    } else {
+      resolvedLogo = supabase.storage.from("storefront-assets").getPublicUrl(r.logo_url).data
+        .publicUrl;
+    }
+  }
+
+  let resolvedBanner = generateSvgBanner(
+    r.name || r.business_name || "Restaurant",
+    r.cuisine_type || "Speisely Partner",
+  );
+
+  if (!isGeneratedBanner && r.banner_image_url) {
+    if (
+      r.banner_image_url.startsWith("http") ||
+      r.banner_image_url.startsWith("/") ||
+      r.banner_image_url.startsWith("data:")
+    ) {
+      resolvedBanner = r.banner_image_url;
+    } else {
+      resolvedBanner = supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url)
+        .data.publicUrl;
+    }
+  }
 
   return {
     id: r.id,
