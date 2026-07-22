@@ -27,7 +27,7 @@ import { CategoryNav } from "@/components/ui/CategoryNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getRestaurant } from "@/data/restaurants";
-import { supabase } from "@/integrations/supabase/client";
+import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
 import { StorefrontPromoTeaser } from "@/components/StorefrontPromoTeaser";
 import { upsertConsentRecord } from "@/lib/consent.functions";
 import { toast } from "sonner";
@@ -275,9 +275,32 @@ function RestaurantPage() {
     return !(hasStripe || acceptsCash || acceptsPaypal);
   }, [dbRestaurant, restaurant]);
 
-  const isGeneratedBranding = !!(
-    dbRestaurant?.use_generated_branding || restaurant?.use_generated_branding
-  );
+  const displayLogo = useMemo(() => {
+    const url = dbRestaurant?.logo_url || restaurant?.logo_url;
+    if (url === "GENERATED_MONOGRAM" || (!url && dbRestaurant?.use_generated_branding)) {
+      return generateSvgLogo(
+        restaurant?.name || dbRestaurant?.name || "Restaurant",
+        dbRestaurant?.cuisine_type || "Cuisine",
+      );
+    }
+    return url || restaurant?.logo || generateSvgLogo(restaurant?.name || "Restaurant");
+  }, [dbRestaurant, restaurant]);
+
+  const displayBanner = useMemo(() => {
+    const url = dbRestaurant?.banner_image_url || restaurant?.banner_image_url;
+    if (url === "GENERATED_GRADIENT" || (!url && dbRestaurant?.use_generated_branding)) {
+      return generateSvgBanner(
+        restaurant?.name || dbRestaurant?.name || "Restaurant",
+        dbRestaurant?.cuisine_type || "Cuisine",
+      );
+    }
+    return url || restaurant?.img || "/hero-cinematic.png";
+  }, [dbRestaurant, restaurant]);
+
+  const isGeneratedBanner = useMemo(() => {
+    const url = dbRestaurant?.banner_image_url || restaurant?.banner_image_url;
+    return url === "GENERATED_GRADIENT" || (!url && dbRestaurant?.use_generated_branding);
+  }, [dbRestaurant, restaurant]);
 
   const storefrontUrl = dbRestaurant?.custom_domain
     ? `https://${dbRestaurant.custom_domain}`
@@ -2130,7 +2153,7 @@ function RestaurantPage() {
         {/* Redesigned Full-Width Hero Banner */}
         <div className="relative mt-6 w-full h-[300px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg">
           <img
-            src={restaurant.img}
+            src={displayBanner}
             alt={restaurant.name}
             className="absolute inset-0 h-full w-full object-cover"
             style={{ objectPosition: "center 30%" }}
@@ -2140,7 +2163,7 @@ function RestaurantPage() {
             height={420}
           />
           {/* Dark gradient overlay — only for real photos */}
-          {!isGeneratedBranding && (
+          {!isGeneratedBanner && (
             <div
               className="absolute inset-0 z-10"
               style={{
@@ -2181,9 +2204,9 @@ function RestaurantPage() {
 
           {/* Bottom Info Overlay */}
           <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex items-center gap-4 w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
-            {restaurant.logo && (
+            {displayLogo && (
               <img
-                src={restaurant.logo}
+                src={displayLogo}
                 alt="Logo"
                 className="w-16 h-16 md:w-24 md:h-24 rounded-full border-4 border-white shadow-md bg-white object-cover flex-shrink-0"
               />

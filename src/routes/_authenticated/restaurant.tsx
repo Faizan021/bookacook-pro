@@ -1959,14 +1959,58 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
   const [logoPath, setLogoPath] = useState(restaurant.logo_url || null);
   const [bannerPath, setBannerPath] = useState(restaurant.banner_image_url || null);
   const [certifications, setCertifications] = useState((restaurant as any).certifications || "");
-  const [useGeneratedBranding, setUseGeneratedBranding] = useState(
-    restaurant.use_generated_branding || false,
+  const [logoMode, setLogoMode] = useState<"custom" | "generated">(
+    restaurant.logo_url === "GENERATED_MONOGRAM"
+      ? "generated"
+      : restaurant.use_generated_branding
+        ? "generated"
+        : "custom",
+  );
+  const [bannerMode, setBannerMode] = useState<"custom" | "generated">(
+    restaurant.banner_image_url === "GENERATED_GRADIENT"
+      ? "generated"
+      : restaurant.use_generated_branding
+        ? "generated"
+        : "custom",
   );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const logoRef = React.useRef<HTMLInputElement>(null);
   const bannerRef = React.useRef<HTMLInputElement>(null);
+
+  const GOURMET_BANNER_PRESETS = [
+    {
+      id: "pizza",
+      title: tt("Pizza & Italienisch", "Pizza & Italian"),
+      url: "/images/restaurant_banner_preset.png",
+      tag: "🍕 Italian",
+    },
+    {
+      id: "burger",
+      title: tt("Burger & BBQ Grill", "Burger & BBQ Grill"),
+      url: "/images/banner_burger.png",
+      tag: "🍔 BBQ Grill",
+    },
+    {
+      id: "sushi",
+      title: tt("Sushi & Asiatisch", "Sushi & Asian"),
+      url: "/images/banner_sushi.png",
+      tag: "🍣 Asian Fusion",
+    },
+    {
+      id: "schnitzel",
+      title: tt("Schnitzel & Deutsch", "Schnitzel & German"),
+      url: "/images/banner_schnitzel.png",
+      tag: "🥩 Traditional",
+    },
+    {
+      id: "healthy",
+      title: tt("Salat & Healthy Bowls", "Salad & Bowls"),
+      url: "/images/banner_healthy.png",
+      tag: "🥗 Healthy Bowls",
+    },
+  ];
 
   async function handleImage(file: File, type: "logo" | "banner") {
     setUploading(true);
@@ -1985,11 +2029,12 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
       if (type === "logo") {
         setLogoPath(path);
         setLogoPreview(signed?.signedUrl ?? null);
+        setLogoMode("custom");
       } else {
         setBannerPath(path);
         setBannerPreview(signed?.signedUrl ?? null);
+        setBannerMode("custom");
       }
-      setUseGeneratedBranding(false);
     } catch (e: any) {
       toast.error("Upload failed: " + e.message);
     } finally {
@@ -2000,14 +2045,18 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
   async function handleSave() {
     setSaving(true);
     try {
+      const finalLogoUrl = logoMode === "generated" ? "GENERATED_MONOGRAM" : logoPath;
+      const finalBannerUrl = bannerMode === "generated" ? "GENERATED_GRADIENT" : bannerPath;
+      const useGeneratedBranding = logoMode === "generated" && bannerMode === "generated";
+
       await upsert({
         data: {
           name,
           description: desc,
           phone,
           business_address: address,
-          logo_url: logoPath,
-          banner_image_url: bannerPath,
+          logo_url: finalLogoUrl,
+          banner_image_url: finalBannerUrl,
           certifications,
           use_generated_branding: useGeneratedBranding,
         },
@@ -2032,8 +2081,8 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
           </h3>
           <p className="text-xs text-muted-foreground">
             {tt(
-              "Verwalten Sie Ihre grundlegenden Restaurant-Informationen.",
-              "Manage your basic restaurant details.",
+              "Verwalten Sie Ihre grundlegenden Restaurant-Informationen und das Erscheinungsbild.",
+              "Manage your basic restaurant details and storefront appearance.",
             )}
           </p>
         </div>
@@ -2136,7 +2185,7 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                   />
                 </div>
                 <p className="text-[10px] text-muted-foreground mt-1">
-                  Recommended size: 512x512 px (Square)
+                  Recommended: 512x512 px (Square)
                 </p>
               </div>
 
@@ -2175,180 +2224,256 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
                     }
                   />
                 </div>
-                <div className="flex flex-wrap items-center justify-between gap-1 mt-1">
-                  <p className="text-[10px] text-muted-foreground">
-                    Recommended size: 1200x400 px (3:1 Aspect Ratio)
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setBannerPath("/images/restaurant_banner_preset.png");
-                      setBannerPreview("/images/restaurant_banner_preset.png");
-                      setUseGeneratedBranding(false);
-                      toast.success(
-                        tt(
-                          "Gourmet Food-Banner Vorlage ausgewählt!",
-                          "Gourmet Food banner preset selected!",
-                        ),
-                      );
-                    }}
-                    className="text-[10px] font-semibold text-forest/80 hover:text-forest underline cursor-pointer"
-                  >
-                    ✨ {tt("Gourmet Food-Banner verwenden", "Use Gourmet Food Banner")}
-                  </button>
-                </div>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Recommended size: 1200x400 px (3:1 Aspect Ratio)
+                </p>
+              </div>
+            </div>
+
+            {/* Gourmet Banner Presets Gallery */}
+            <div className="pt-3 space-y-2">
+              <Label className="text-xs font-bold text-forest flex items-center gap-1.5">
+                ✨ {tt("Gourmet Food-Banner Galerie", "Gourmet Food Banner Presets Gallery")}
+              </Label>
+              <p className="text-[11px] text-forest/60">
+                {tt(
+                  "Wählen Sie aus verschiedenen professionellen Speisen-Fotos für Ihre Küchenrichtung:",
+                  "Choose from distinct high-resolution food photography themes matching your cuisine:",
+                )}
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 pt-1">
+                {GOURMET_BANNER_PRESETS.map((preset) => {
+                  const isSelected = bannerPath === preset.url && bannerMode === "custom";
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => {
+                        setBannerPath(preset.url);
+                        setBannerPreview(preset.url);
+                        setBannerMode("custom");
+                        toast.success(
+                          tt(
+                            `Vorlage ausgewählt: ${preset.title}`,
+                            `Preset selected: ${preset.title}`,
+                          ),
+                        );
+                      }}
+                      className={`group relative rounded-xl overflow-hidden border-2 text-left transition-all cursor-pointer aspect-[3/1.8] flex flex-col justify-between p-2 ${
+                        isSelected
+                          ? "border-forest ring-2 ring-forest/20 shadow-md"
+                          : "border-stone-200 hover:border-forest/50 hover:shadow-sm"
+                      }`}
+                    >
+                      <img
+                        src={preset.url}
+                        alt={preset.title}
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-black/45 group-hover:bg-black/35 transition-colors" />
+                      <div className="relative z-10 flex items-center justify-between">
+                        <span className="text-[9px] font-bold text-white bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded">
+                          {preset.tag}
+                        </span>
+                        {isSelected && (
+                          <span className="w-4 h-4 rounded-full bg-forest text-white flex items-center justify-center text-[10px] font-bold">
+                            ✓
+                          </span>
+                        )}
+                      </div>
+                      <span className="relative z-10 text-[10px] font-bold text-white drop-shadow-sm truncate">
+                        {preset.title}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             {BRANDING_ASSISTANT_ENABLED && (
-              <div className="mt-6 p-5 bg-stone-50 border border-stone-200 rounded-2xl space-y-5 text-left">
+              <div className="mt-6 p-5 bg-stone-50 border border-stone-200 rounded-2xl space-y-6 text-left">
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="text-sm font-bold text-forest">
-                      {tt("Speisely Storefront-Design Modus", "Speisely Storefront Branding Mode")}
+                      {tt("Speisely Unabhängige Branding-Auswahl", "Speisely Independent Storefront Branding")}
                     </h4>
                     <p className="text-xs text-forest/70 mt-0.5">
                       {tt(
-                        "Wählen Sie, ob auf Ihrer Restaurant-Seite Ihre eigenen Fotos/Gourmet-Banner oder das automatische Speisely-Monogramm angezeigt werden.",
-                        "Choose whether your storefront displays custom photos/gourmet banners or the automated Speisely geometric monogram.",
+                        "Kombinieren Sie frei zwischen eigenen Bildern/Gourmet-Bannern und dem automatischen Speisely-Monogramm.",
+                        "Mix and match independently between custom images/gourmet food banners and the automated Speisely monogram.",
                       )}
                     </p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div
-                    onClick={() => setUseGeneratedBranding(false)}
-                    className={`cursor-pointer p-4 rounded-xl border-2 text-left transition-all ${
-                      !useGeneratedBranding
-                        ? "border-forest bg-white shadow-sm ring-1 ring-forest/10"
-                        : "border-stone-200 bg-stone-100/50 hover:bg-stone-100"
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <input
-                        type="radio"
-                        checked={!useGeneratedBranding}
-                        onChange={() => setUseGeneratedBranding(false)}
-                        className="mt-1 accent-forest cursor-pointer"
-                      />
-                      <div>
-                        <span className="text-xs font-bold block text-forest">
-                          📸{" "}
-                          {tt(
-                            "Eigene Bilder & Gourmet-Vorlagen",
-                            "Custom Images & Gourmet Presets",
-                          )}
-                        </span>
-                        <span className="text-[10px] text-forest/70 block mt-1 leading-relaxed">
-                          {tt(
-                            "Verwendet deine hochgeladenen Logos, Banner-Fotos oder die Gourmet-Food Banner-Vorlage.",
-                            "Uses your uploaded logo, custom banner photos, or your selected Gourmet Food preset banner.",
-                          )}
-                        </span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Independent Logo Selector */}
+                  <div className="space-y-3 bg-white p-4 rounded-xl border border-stone-200">
+                    <Label className="text-xs font-bold text-forest block">
+                      1. {tt("Logo-Quelle wählen", "Select Logo Source")}
+                    </Label>
+                    <div className="space-y-2">
+                      <div
+                        onClick={() => setLogoMode("custom")}
+                        className={`cursor-pointer p-3 rounded-lg border text-left transition-all ${
+                          logoMode === "custom"
+                            ? "border-forest bg-emerald-50/40 font-semibold text-forest"
+                            : "border-stone-200 bg-stone-50/50 text-forest/70 hover:bg-stone-50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <input
+                            type="radio"
+                            checked={logoMode === "custom"}
+                            onChange={() => setLogoMode("custom")}
+                            className="accent-forest cursor-pointer"
+                          />
+                          <span className="text-xs">
+                            📸 {tt("Eigenes / Hochgeladenes Logo", "Custom Uploaded Logo")}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div
+                        onClick={() => setLogoMode("generated")}
+                        className={`cursor-pointer p-3 rounded-lg border text-left transition-all ${
+                          logoMode === "generated"
+                            ? "border-forest bg-emerald-50/40 font-semibold text-forest"
+                            : "border-stone-200 bg-stone-50/50 text-forest/70 hover:bg-stone-50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <input
+                            type="radio"
+                            checked={logoMode === "generated"}
+                            onChange={() => setLogoMode("generated")}
+                            className="accent-forest cursor-pointer"
+                          />
+                          <span className="text-xs">
+                            ✨ {tt("Speisely Monogramm-Logo", "Speisely Monogram Logo")}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div
-                    onClick={() => setUseGeneratedBranding(true)}
-                    className={`cursor-pointer p-4 rounded-xl border-2 text-left transition-all ${
-                      useGeneratedBranding
-                        ? "border-forest bg-white shadow-sm ring-1 ring-forest/10"
-                        : "border-stone-200 bg-stone-100/50 hover:bg-stone-100"
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <input
-                        type="radio"
-                        checked={useGeneratedBranding}
-                        onChange={() => setUseGeneratedBranding(true)}
-                        className="mt-1 accent-forest cursor-pointer"
-                      />
-                      <div>
-                        <span className="text-xs font-bold block text-forest">
-                          ✨{" "}
-                          {tt(
-                            "Speisely Monogramm & Farbverlauf",
-                            "Speisely Auto-Generated Monogram",
-                          )}
-                        </span>
-                        <span className="text-[10px] text-forest/70 block mt-1 leading-relaxed">
-                          {tt(
-                            "Generiert automatisch ein geometrisches Monogramm-Logo und Farbverlauf-Banner passend zu deinem Namen.",
-                            "Generates a clean geometric logo monogram & styled gradient banner based on your business name.",
-                          )}
-                        </span>
+                  {/* Independent Banner Selector */}
+                  <div className="space-y-3 bg-white p-4 rounded-xl border border-stone-200">
+                    <Label className="text-xs font-bold text-forest block">
+                      2. {tt("Banner-Quelle wählen", "Select Banner Source")}
+                    </Label>
+                    <div className="space-y-2">
+                      <div
+                        onClick={() => setBannerMode("custom")}
+                        className={`cursor-pointer p-3 rounded-lg border text-left transition-all ${
+                          bannerMode === "custom"
+                            ? "border-forest bg-emerald-50/40 font-semibold text-forest"
+                            : "border-stone-200 bg-stone-50/50 text-forest/70 hover:bg-stone-50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <input
+                            type="radio"
+                            checked={bannerMode === "custom"}
+                            onChange={() => setBannerMode("custom")}
+                            className="accent-forest cursor-pointer"
+                          />
+                          <span className="text-xs">
+                            🖼️ {tt("Gourmet-Vorlage / Foto-Banner", "Gourmet Preset / Custom Photo")}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div
+                        onClick={() => setBannerMode("generated")}
+                        className={`cursor-pointer p-3 rounded-lg border text-left transition-all ${
+                          bannerMode === "generated"
+                            ? "border-forest bg-emerald-50/40 font-semibold text-forest"
+                            : "border-stone-200 bg-stone-50/50 text-forest/70 hover:bg-stone-50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <input
+                            type="radio"
+                            checked={bannerMode === "generated"}
+                            onChange={() => setBannerMode("generated")}
+                            className="accent-forest cursor-pointer"
+                          />
+                          <span className="text-xs">
+                            ✨ {tt("Speisely Farbverlauf-Banner", "Speisely Gradient Banner")}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Unified Live Storefront Header Preview */}
-                <div className="p-4 bg-white border border-stone-200 rounded-xl space-y-3">
+                {/* Combined Live Storefront Header Preview */}
+                <div className="p-4 bg-white border border-stone-200 rounded-xl space-y-3 shadow-sm">
                   <div className="flex items-center justify-between">
                     <div className="text-[11px] font-bold text-forest/60 uppercase tracking-wider">
                       {tt(
-                        "Live-Vorschau Ihres Storefront-Headers",
-                        "Live Preview of Active Storefront Header",
+                        "Live-Kombinations-Vorschau Ihres Storefront-Headers",
+                        "Live Combination Preview of Storefront Header",
                       )}
                     </div>
-                    <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                      {!useGeneratedBranding
-                        ? tt("Aktiv: Eigene Bilder", "Active: Custom Media")
-                        : tt("Aktiv: Generiertes Monogramm", "Active: Generated Monogram")}
+                    <span className="text-[10px] font-bold text-forest bg-cream border border-[#eadfce] px-2.5 py-0.5 rounded-full">
+                      Logo: {logoMode === "generated" ? "Monogram" : "Custom"} | Banner:{" "}
+                      {bannerMode === "generated" ? "Gradient" : "Gourmet/Custom Photo"}
                     </span>
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-4 items-center pt-1">
-                    {!useGeneratedBranding ? (
-                      <>
-                        <div className="w-16 h-16 rounded-full border border-stone-200 shadow-sm overflow-hidden bg-cream flex items-center justify-center shrink-0">
-                          {logoPreview ? (
-                            <img
-                              src={logoPreview}
-                              className="w-full h-full object-cover"
-                              alt="Logo preview"
-                            />
-                          ) : (
-                            <span className="text-xs font-bold text-forest">
-                              {name ? name.slice(0, 2).toUpperCase() : "DS"}
-                            </span>
-                          )}
-                        </div>
-                        <div className="w-full sm:w-80 h-16 rounded-lg overflow-hidden border border-stone-200 shadow-sm bg-stone-100 relative shrink-0">
-                          {bannerPreview ? (
-                            <img
-                              src={bannerPreview}
-                              className="w-full h-full object-cover"
-                              alt="Banner preview"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-forest text-cream text-xs font-bold">
-                              {name || "Storefront Banner"}
-                            </div>
-                          )}
-                        </div>
-                      </>
+                    {/* Live Logo Preview */}
+                    {logoMode === "generated" ? (
+                      <img
+                        src={generateSvgLogo(
+                          name || "Restaurant",
+                          restaurant.cuisine_type || "Cuisine",
+                        )}
+                        className="w-16 h-16 rounded-full border border-stone-200 shadow-sm shrink-0"
+                        alt="Generated Monogram Logo"
+                      />
                     ) : (
-                      <>
-                        <img
-                          src={generateSvgLogo(
-                            name || "Restaurant",
-                            restaurant.cuisine_type || "Cuisine",
-                          )}
-                          className="w-16 h-16 rounded-full border border-stone-200 shadow-sm shrink-0"
-                          alt="Generated Logo Preview"
-                        />
-                        <img
-                          src={generateSvgBanner(
-                            name || "Restaurant",
-                            restaurant.cuisine_type || "Cuisine",
-                          )}
-                          className="w-full sm:w-80 h-16 rounded-lg object-cover border border-stone-200 shadow-sm shrink-0"
-                          alt="Generated Banner Preview"
-                        />
-                      </>
+                      <div className="w-16 h-16 rounded-full border border-stone-200 shadow-sm overflow-hidden bg-cream flex items-center justify-center shrink-0">
+                        {logoPreview ? (
+                          <img
+                            src={logoPreview}
+                            className="w-full h-full object-cover"
+                            alt="Logo preview"
+                          />
+                        ) : (
+                          <span className="text-xs font-bold text-forest">
+                            {name ? name.slice(0, 2).toUpperCase() : "DS"}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Live Banner Preview */}
+                    {bannerMode === "generated" ? (
+                      <img
+                        src={generateSvgBanner(
+                          name || "Restaurant",
+                          restaurant.cuisine_type || "Cuisine",
+                        )}
+                        className="w-full sm:w-80 h-16 rounded-lg object-cover border border-stone-200 shadow-sm shrink-0"
+                        alt="Generated Gradient Banner"
+                      />
+                    ) : (
+                      <div className="w-full sm:w-80 h-16 rounded-lg overflow-hidden border border-stone-200 shadow-sm bg-stone-100 relative shrink-0">
+                        {bannerPreview ? (
+                          <img
+                            src={bannerPreview}
+                            className="w-full h-full object-cover"
+                            alt="Banner preview"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-forest text-cream text-xs font-bold">
+                            {name || "Storefront Banner"}
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
