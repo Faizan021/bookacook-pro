@@ -187,7 +187,18 @@ export const getRestaurantBySlug = createServerFn({ method: "GET" })
     return { restaurant: rest, promoCodes };
   });
 
+let marketplaceRestaurantsCache: { data: { restaurants: any[] }; timestamp: number } | null = null;
+const MARKETPLACE_CACHE_TTL_MS = 60 * 1000; // 60 seconds TTL cache
+
 export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handler(async () => {
+  const now = Date.now();
+  if (
+    marketplaceRestaurantsCache &&
+    now - marketplaceRestaurantsCache.timestamp < MARKETPLACE_CACHE_TTL_MS
+  ) {
+    return marketplaceRestaurantsCache.data;
+  }
+
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   // Fetch restaurants that are published and opted into the marketplace
@@ -242,7 +253,9 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
     };
   });
 
-  return { restaurants: mappedRestaurants };
+  const result = { restaurants: mappedRestaurants };
+  marketplaceRestaurantsCache = { data: result, timestamp: now };
+  return result;
 });
 
 async function calculatePromoDiscount(

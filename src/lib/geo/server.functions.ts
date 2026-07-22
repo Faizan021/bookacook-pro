@@ -150,25 +150,80 @@ export const getGeoPageData = createServerFn({ method: "GET" })
     };
   });
 
+let geoLocationsCache: { data: { path: string; label: string }[]; timestamp: number } | null = null;
+const GEO_CACHE_TTL_MS = 3 * 60 * 1000; // 3 minutes TTL cache
+
 export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(async () => {
+  const now = Date.now();
+  if (geoLocationsCache && now - geoLocationsCache.timestamp < GEO_CACHE_TTL_MS) {
+    return geoLocationsCache.data;
+  }
+
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
   // 1. Fetch published pages
-  // Cast to any[] to access intro_md which is not yet in the generated Supabase types
-  // (mirrors the (seoData as any)?.intro_md pattern used in the city route loader)
   const { data: seoPages } = (await supabaseAdmin
     .from("seo_content_pages")
     .select("slug, content, meta_title, target_keyword")
     .eq("status", "published")
     .like("slug", "%/ort/%")) as { data: any[] | null };
 
-  if (!seoPages || seoPages.length === 0) return [];
+  if (!seoPages || seoPages.length === 0) {
+    geoLocationsCache = { data: [], timestamp: now };
+    return [];
+  }
+
+  // 2. Fetch all locations and vendor cities in parallel bulk queries instead of 100+ sequential queries
+  const [locsRes, restRes, catRes, planRes] = await Promise.all([
+    supabaseAdmin.from("german_locations").select("name"),
+    supabaseAdmin.from("restaurants").select("city").eq("is_published", true),
+    supabaseAdmin.from("caterers").select("city"),
+    supabaseAdmin.from("planners").select("city"),
+  ]);
+
+  const locationNameMap = new Map<string, string>();
+  if (locsRes.data) {
+    for (const loc of locsRes.data) {
+      if (loc.name) {
+        locationNameMap.set(loc.name.toLowerCase(), loc.name);
+      }
+    }
+  }
+
+  const restCounts = new Map<string, number>();
+  if (restRes.data) {
+    for (const r of restRes.data) {
+      if (r.city) {
+        const key = r.city.trim().toLowerCase();
+        restCounts.set(key, (restCounts.get(key) || 0) + 1);
+      }
+    }
+  }
+
+  const catCounts = new Map<string, number>();
+  if (catRes.data) {
+    for (const c of catRes.data) {
+      if (c.city) {
+        const key = c.city.trim().toLowerCase();
+        catCounts.set(key, (catCounts.get(key) || 0) + 1);
+      }
+    }
+  }
+
+  const planCounts = new Map<string, number>();
+  if (planRes.data) {
+    for (const p of planRes.data) {
+      if (p.city) {
+        const key = p.city.trim().toLowerCase();
+        planCounts.set(key, (planCounts.get(key) || 0) + 1);
+      }
+    }
+  }
 
   const validEntries: { path: string; label: string }[] = [];
 
-  // 2. Evaluate each page
+  // 3. Evaluate each page in memory
   for (const page of seoPages) {
-    // Slug format: role/ort/city
     const parts = page.slug?.split("/");
     if (!parts || parts.length !== 3) continue;
 
@@ -180,45 +235,24 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
 
     if (!hasSeo) continue;
 
-    // Location match — also gives us the properly capitalised German city name
-    const { data: location } = await supabaseAdmin
-      .from("german_locations")
-      .select("name")
-      .ilike("name", citySlug.replace(/-/g, " "))
-      .limit(1)
-      .maybeSingle();
+    const normalizedCity = citySlug.replace(/-/g, " ").toLowerCase();
+    const locationName = locationNameMap.get(normalizedCity);
 
-    if (!location) continue;
+    if (!locationName) continue;
 
+    const cityKey = locationName.trim().toLowerCase();
     let vendorCount = 0;
     if (role === "restaurants") {
-      const { count } = await supabaseAdmin
-        .from("restaurants")
-        .select("*", { count: "exact", head: true })
-        .eq("is_published", true)
-        .ilike("city", location.name);
-      vendorCount = count || 0;
+      vendorCount = restCounts.get(cityKey) || 0;
     } else if (role === "caterer") {
-      const { count } = await supabaseAdmin
-        .from("caterers")
-        .select("*", { count: "exact", head: true })
-        .ilike("city", location.name);
-      vendorCount = count || 0;
+      vendorCount = catCounts.get(cityKey) || 0;
     } else if (role === "planner") {
-      const { count } = await supabaseAdmin
-        .from("planners")
-        .select("*", { count: "exact", head: true })
-        .ilike("city", location.name);
-      vendorCount = count || 0;
+      vendorCount = planCounts.get(cityKey) || 0;
     }
 
     const minVendors = role === "restaurants" ? 3 : 1;
     const hasEnoughVendors = vendorCount >= minVendors;
 
-    // Restaurants city pages require strict AND gating: enough vendors AND enough intro text.
-    // This prevents sitemap.xml from listing pages that would render as noindex, follow.
-    // Other roles use the looser threshold (hasEnoughVendors is sufficient).
-    // We use page.content as the rich intro proxy (intro_md isn't in the select query).
     const introCopy: string = page.content || "";
     const hasRichIntro = introCopy.length >= 150;
 
@@ -230,9 +264,10 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
       if (finalSlug && finalSlug.startsWith("restaurants/ort/")) {
         finalSlug = finalSlug.replace("restaurants/ort/", "restaurant/ort/");
       }
-      validEntries.push({ path: `/${finalSlug}`, label: location.name });
+      validEntries.push({ path: `/${finalSlug}`, label: locationName });
     }
   }
 
+  geoLocationsCache = { data: validEntries, timestamp: now };
   return validEntries;
 });
