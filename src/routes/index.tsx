@@ -260,9 +260,7 @@ function Home() {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-20 lg:pb-36">
           <div className="max-w-[42rem]">
             {/* Eyebrow badge */}
-            <div
-              className={`transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-            >
+            <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-white/90 shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
                 {tt("Marktplatz für Gastronomie & Events", "Marketplace for hospitality & events")}
@@ -270,11 +268,7 @@ function Home() {
             </div>
 
             {/* Main headline */}
-            <h1
-              className={`mt-8 font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.25rem] leading-[0.92] text-white transition-all duration-700 delay-100 ${
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              }`}
-            >
+            <h1 className="mt-8 font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.25rem] leading-[0.92] text-white">
               {tt("Der richtige", "The right")}
               <br />
               {tt("Partner für", "partner for")}
@@ -283,11 +277,7 @@ function Home() {
             </h1>
 
             {/* Subheadline */}
-            <p
-              className={`mt-7 text-lg sm:text-xl text-white/80 max-w-[34rem] leading-relaxed transition-all duration-700 delay-200 ${
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              }`}
-            >
+            <p className="mt-7 text-lg sm:text-xl text-white/80 max-w-[34rem] leading-relaxed">
               {tt(
                 "Speisely verbindet dich mit geprüften Restaurants, Caterern und Event-Planern — von der schnellen Bestellung bis zur perfekten Veranstaltung.",
                 "Speisely connects you with vetted restaurants, caterers, and event planners — from a quick order to a perfect event.",
@@ -295,11 +285,7 @@ function Home() {
             </p>
 
             {/* AI Search Bar */}
-            <div
-              className={`mt-10 relative max-w-2xl transition-all duration-700 delay-300 ${
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              }`}
-            >
+            <div className="mt-10 relative max-w-2xl">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                   {searching ? (
@@ -342,11 +328,7 @@ function Home() {
             </div>
 
             {/* Vertical selector + CTA */}
-            <div
-              className={`mt-8 transition-all duration-700 delay-400 ${
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              }`}
-            >
+            <div className="mt-8">
               {/* Tab pills */}
               <div className="flex flex-wrap gap-2">
                 {verticals.map((v) => (
@@ -398,11 +380,7 @@ function Home() {
             </div>
 
             {/* Social proof avatars */}
-            <div
-              className={`mt-10 flex items-center gap-3 transition-all duration-700 delay-[400ms] ${
-                mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
-            >
+            <div className="mt-10 flex items-center gap-3">
               <div className="flex -space-x-1.5">
                 {(["🏨", "🍽️", "🎉"] as const).map((e, i) => (
                   <div
