@@ -213,7 +213,7 @@ function mapCaterer(r: any): Caterer {
     menu: (r.products || []).map((p: any) => ({
       name: p.name,
       desc: { de: p.description || "", en: p.description || "" },
-      price: Number(p.price),
+      price: p.price_cents ? p.price_cents / 100 : Number(p.price || 0),
       category: p.category || "Menu",
       dietary: p.dietary_tags || [],
     })),
@@ -221,66 +221,115 @@ function mapCaterer(r: any): Caterer {
 }
 
 export async function getCaterers(): Promise<Caterer[]> {
-  const { data, error } = await supabase
-    .from("storefront_settings")
-    .select(
-      "id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*), caterers(approval_status, use_generated_branding, logo_url)",
-    )
-    .eq("is_active", true)
-    .order("created_at", { ascending: false });
+  try {
+    const { data: sfData, error: sfErr } = await supabase
+      .from("storefront_settings")
+      .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes")
+      .eq("is_active", true);
 
-  if (error) {
-    console.error("Error fetching caterers:", error);
+    if (sfErr) {
+      console.error("Error fetching storefront_settings:", sfErr);
+      return fallbackCaterers.map(c => ({ ...c, isShowcase: true }));
+    }
+
+    if (!sfData || sfData.length === 0) {
+      return fallbackCaterers.map(c => ({ ...c, isShowcase: true }));
+    }
+
+    const catererIds = sfData.map(sf => sf.caterer_id).filter(Boolean);
+
+    const [catRes, menuRes] = await Promise.all([
+      supabase.from("caterers").select("id, approval_status, use_generated_branding, logo_url, owner_id").in("id", catererIds),
+      supabase.from("caterer_menu_items").select("id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available").in("caterer_id", catererIds).eq("is_available", true)
+    ]);
+
+    const catData = catRes.data || [];
+    const menuData = menuRes.data || [];
+
+    const merged = sfData
+      .map(sf => {
+        const caterer = catData.find(c => c.id === sf.caterer_id);
+        const products = menuData.filter(m => m.caterer_id === sf.caterer_id);
+        return {
+          ...sf,
+          caterers: caterer,
+          products: products
+        };
+      })
+      .filter((r: any) => r.caterers?.approval_status === "approved");
+
+    const liveCaterers = merged.map(mapCaterer);
+    const MIN_DISPLAY_COUNT = 3;
+
+    if (liveCaterers.length >= MIN_DISPLAY_COUNT) {
+      return liveCaterers;
+    }
+
+    const needed = MIN_DISPLAY_COUNT - liveCaterers.length;
+    const showcaseItems = fallbackCaterers.slice(0, needed).map((c) => ({
+      ...c,
+      isShowcase: true,
+    }));
+
+    return [...liveCaterers, ...showcaseItems];
+  } catch (err) {
+    console.error("Failed to load caterers, using fallbacks:", err);
+    return fallbackCaterers.map(c => ({ ...c, isShowcase: true }));
   }
-
-  const approvedCaterers = (data || []).filter((r: any) => r.caterers?.approval_status === "approved");
-  const liveCaterers = approvedCaterers.map(mapCaterer);
-  const MIN_DISPLAY_COUNT = 3; // Keep the threshold low for caterers since there's fewer
-
-  if (liveCaterers.length >= MIN_DISPLAY_COUNT) {
-    return liveCaterers;
-  }
-
-  const needed = MIN_DISPLAY_COUNT - liveCaterers.length;
-  const showcaseItems = fallbackCaterers.slice(0, needed).map((c) => ({
-    ...c,
-    isShowcase: true,
-  }));
-
-  return [...liveCaterers, ...showcaseItems];
 }
 
 export async function getCaterer(id: string): Promise<Caterer | undefined> {
-  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-  const query = supabase
-    .from("storefront_settings")
-    .select(
-      "id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes, products(*), caterers(approval_status, owner_id, use_generated_branding, logo_url)",
-    );
+  try {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+    let query = supabase
+      .from("storefront_settings")
+      .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes")
+      .eq("is_active", true);
 
-  const { data, error } = await (isUuid
-    ? query.or(`slug.eq.${id},id.eq.${id}`)
-    : query.eq("slug", id)
-  )
-    .eq("is_active", true)
-    .maybeSingle();
+    if (isUuid) {
+      query = query.or(`slug.eq.${id},id.eq.${id}`);
+    } else {
+      query = query.eq("slug", id);
+    }
 
-  if (!error && data) {
-    const parentCaterer = (data as any).caterers;
-    if (parentCaterer?.approval_status !== "approved") {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user?.id !== parentCaterer?.owner_id) {
-        return undefined;
+    const { data: sfData, error: sfErr } = await query.maybeSingle();
+
+    if (sfErr || !sfData) {
+      const fallback = fallbackCaterers.find((c) => c.id === id);
+      if (fallback) return { ...fallback, isShowcase: true };
+      return undefined;
+    }
+
+    const [catRes, menuRes] = await Promise.all([
+      supabase.from("caterers").select("id, approval_status, use_generated_branding, logo_url, owner_id").eq("id", sfData.caterer_id).maybeSingle(),
+      supabase.from("caterer_menu_items").select("id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available").eq("caterer_id", sfData.caterer_id).eq("is_available", true)
+    ]);
+
+    const caterer = catRes.data;
+    const products = menuRes.data || [];
+
+    if (caterer) {
+      if (caterer.approval_status !== "approved") {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.id !== caterer.owner_id) {
+          return undefined;
+        }
       }
     }
-    return mapCaterer(data);
-  }
 
-  const fallback = fallbackCaterers.find((c) => c.id === id);
-  if (fallback) {
-    return { ...fallback, isShowcase: true };
+    const merged = {
+      ...sfData,
+      caterers: caterer,
+      products: products
+    };
+
+    return mapCaterer(merged);
+  } catch (err) {
+    console.error("Failed to load caterer details, checking fallback:", err);
+    const fallback = fallbackCaterers.find((c) => c.id === id);
+    if (fallback) return { ...fallback, isShowcase: true };
+    return undefined;
   }
-  return undefined;
 }
 
 export type PromoCode = {

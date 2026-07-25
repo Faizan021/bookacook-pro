@@ -33,7 +33,7 @@ export const blogPosts: BlogPost[] = [
     slug: "what-is-speisely",
     date: "2026-05-10",
     author: "Speisely Team",
-    image: "/images/blog/what-is-speisely.png",
+    image: "/images/blog/what-is-speisely.webp",
     category: "Company",
     title: {
       de: "Was ist Speisely? Der ultimative Food- & Event-Marktplatz in Deutschland",
@@ -479,7 +479,7 @@ export const blogPosts: BlogPost[] = [
     slug: "was-kostet-ein-eventplaner",
     date: "2026-06-25",
     author: "Speisely Editorial",
-    image: "/images/blog/was-kostet-ein-eventplaner.png",
+    image: "/images/blog/was-kostet-ein-eventplaner.webp",
     category: "Event Planning",
     title: {
       de: "Was kostet ein Eventplaner? Preise und Leistungen im Überblick",
@@ -710,7 +710,7 @@ export const blogPosts: BlogPost[] = [
     slug: "catering-anbieter-deutschland-staedte",
     date: "2026-07-01",
     author: "Speisely Redaktion",
-    image: "/catering-clean.png",
+    image: "/catering-clean.webp",
     category: "Catering",
     title: {
       de: "Catering Anbieter in Deutschland: Berlin, München, Hamburg & alle Städte",
@@ -865,7 +865,7 @@ export const blogPosts: BlogPost[] = [
     slug: "catering-firmenveranstaltungen-tipps",
     date: "2026-07-01",
     author: "Speisely Redaktion",
-    image: "/catering-clean.png",
+    image: "/catering-clean.webp",
     category: "Catering",
     title: {
       de: "Catering für Firmenveranstaltungen: Tipps, Kosten & die besten Anbieter 2026",
@@ -958,7 +958,7 @@ export const blogPosts: BlogPost[] = [
     slug: "catering-preise-vergleichen-deutschland",
     date: "2026-07-01",
     author: "Speisely Redaktion",
-    image: "/catering-clean.png",
+    image: "/catering-clean.webp",
     category: "Catering",
     title: {
       de: "Catering Preise in Deutschland 2026: Vergleich & Kostenübersicht",
@@ -1039,7 +1039,7 @@ export const blogPosts: BlogPost[] = [
     slug: "alternativen-mealprep-food-de-catering",
     date: "2026-07-01",
     author: "Speisely Redaktion",
-    image: "/catering-clean.png",
+    image: "/catering-clean.webp",
     category: "Catering",
     title: {
       de: "Beste Alternativen zu mealprep.de & food.de für Catering in Deutschland 2026",
@@ -1131,7 +1131,7 @@ export const blogPosts: BlogPost[] = [
     slug: "catering-event-planung-deutschland",
     date: "2026-07-01",
     author: "Speisely Redaktion",
-    image: "/planner-clean.png",
+    image: "/planner-clean.webp",
     category: "Event Planning",
     title: {
       de: "Catering & Event-Planung in Deutschland: Alles auf einer Plattform mit Speisely",

@@ -95,10 +95,18 @@ export const createPromoCode = createServerFn()
 
     // 2. If promote_on_storefront is true, update the banner
     if (data.promote_on_storefront) {
-      const discountText =
-        data.discount_type === "percentage" ? `${data.discount_value}%` : `€${data.discount_value}`;
-
-      const bannerText = `Use code ${uppercaseCode} for ${discountText} off! 🎁`;
+      let bannerText = "";
+      if (data.discount_type === "percentage") {
+        bannerText = `Use code ${uppercaseCode} for ${data.discount_value}% off! 🎁`;
+      } else if (data.discount_type === "fixed") {
+        bannerText = `Use code ${uppercaseCode} for €${data.discount_value} off! 🎁`;
+      } else if (data.discount_type === "free_delivery") {
+        bannerText = `Use code ${uppercaseCode} for Free Delivery! 🎁`;
+      } else if (data.discount_type === "free_item") {
+        bannerText = `Use code ${uppercaseCode} for a Free ${data.free_item_name || "item"}! 🎁`;
+      } else if (data.discount_type === "bogo") {
+        bannerText = `Use code ${uppercaseCode}: Buy ${data.required_qty || 2} get 1 free! 🎁`;
+      }
 
       const { error: updateErr } = await supabase
         .from(data.vertical)
@@ -128,6 +136,14 @@ export const togglePromoCode = createServerFn()
       throw new Error("Unauthorized");
     }
 
+    // 1. Fetch promo code details before updating
+    const { data: promo } = await supabase
+      .from("promo_codes")
+      .select("code, owner_id")
+      .eq("id", data.id)
+      .maybeSingle();
+
+    // 2. Perform the toggle update
     const { error } = await supabase
       .from("promo_codes")
       .update({ is_active: data.is_active })
@@ -135,6 +151,28 @@ export const togglePromoCode = createServerFn()
       .eq("owner_id", userId); // Ensure they only toggle their own codes
 
     if (error) throw new Error(error.message);
+
+    // 3. If deactivated, automatically clean up storefront banners for this code
+    if (!data.is_active && promo) {
+      const cleanCode = promo.code.trim().toUpperCase();
+      for (const table of ["restaurants", "caterers", "planners"] as const) {
+        const { data: row } = await supabase
+          .from(table)
+          .select("id, announcement_text")
+          .eq("owner_id", userId)
+          .maybeSingle();
+
+        if (row && row.announcement_text?.toUpperCase().includes(`USE CODE ${cleanCode}`)) {
+          await supabase
+            .from(table)
+            .update({
+              announcement_active: false,
+              announcement_text: "",
+            })
+            .eq("id", row.id);
+        }
+      }
+    }
 
     return { success: true };
   });

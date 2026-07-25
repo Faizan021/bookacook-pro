@@ -294,7 +294,7 @@ function RestaurantPage() {
         dbRestaurant?.cuisine_type || "Cuisine",
       );
     }
-    return url || restaurant?.img || "/hero-cinematic.png";
+    return url || restaurant?.img || "/hero-cinematic.webp";
   }, [dbRestaurant, restaurant]);
 
   const isGeneratedBanner = useMemo(() => {

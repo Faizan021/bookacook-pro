@@ -73,7 +73,7 @@ function DailySubscriptions() {
           label: lang === "de" ? "Partner-Caterer ansehen" : "Discover Caterers",
           href: "/catering",
         }}
-        imageUrl="/images/office_catering_hero.png"
+        imageUrl="/images/office_catering_hero.webp"
         imageAlt="Corporate Office Lunch Buffet Plating Setup"
       />
 
@@ -185,7 +185,7 @@ function DailySubscriptions() {
           <div className="relative z-10 hidden md:block w-1/3 min-w-[280px]">
             <div className="absolute -inset-2 bg-gradient-to-tr from-mint/15 to-transparent rounded-[2rem] blur-2xl -z-10" />
             <img
-              src="/images/office_catering_hero.png"
+              src="/images/office_catering_hero.webp"
               alt="Workspace buffet plating setup"
               className="rounded-2xl shadow-2xl aspect-[4/3] object-cover border-2 border-white/10"
             />
@@ -239,7 +239,7 @@ function DailySubscriptions() {
             </div>
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white aspect-[4/3]">
               <img
-                src="/images/business_lunch_plating.png"
+                src="/images/business_lunch_plating.webp"
                 alt="Vibrant healthy workspace lunch dish plating"
                 className="w-full h-full object-cover"
               />

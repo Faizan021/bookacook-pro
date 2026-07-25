@@ -48,6 +48,7 @@ import { Route as AuthenticatedCatererRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as ReviewIntakeTokenRouteImport } from './routes/review.intake.$token'
 import { Route as RestaurantOrtCityRouteImport } from './routes/restaurant.ort.$city'
+import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$slug.links'
 import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
 import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
@@ -259,6 +260,11 @@ const RestaurantOrtCityRoute = RestaurantOrtCityRouteImport.update({
   path: '/restaurant/ort/$city',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RestaurantSlugLinksRoute = RestaurantSlugLinksRouteImport.update({
+  id: '/links',
+  path: '/links',
+  getParentRoute: () => RestaurantSlugRoute,
+} as any)
 const PlannerOrtCityRoute = PlannerOrtCityRouteImport.update({
   id: '/ort/$city',
   path: '/ort/$city',
@@ -364,7 +370,7 @@ export interface FileRoutesByFullPath {
   '/planner/$city': typeof PlannerCityRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
-  '/restaurant/$slug': typeof RestaurantSlugRoute
+  '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
@@ -378,6 +384,7 @@ export interface FileRoutesByFullPath {
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
+  '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
   '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -415,7 +422,7 @@ export interface FileRoutesByTo {
   '/planner/$city': typeof PlannerCityRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
-  '/restaurant/$slug': typeof RestaurantSlugRoute
+  '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth': typeof AuthIndexRoute
   '/blog': typeof BlogIndexRoute
   '/catering': typeof CateringIndexRoute
@@ -429,6 +436,7 @@ export interface FileRoutesByTo {
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
+  '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
   '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
@@ -470,7 +478,7 @@ export interface FileRoutesById {
   '/planner/$city': typeof PlannerCityRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
-  '/restaurant/$slug': typeof RestaurantSlugRoute
+  '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
@@ -484,6 +492,7 @@ export interface FileRoutesById {
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
+  '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
   '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
@@ -539,6 +548,7 @@ export interface FileRouteTypes {
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
     | '/planner/ort/$city'
+    | '/restaurant/$slug/links'
     | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/dashboard/'
@@ -590,6 +600,7 @@ export interface FileRouteTypes {
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
     | '/planner/ort/$city'
+    | '/restaurant/$slug/links'
     | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/dashboard'
@@ -644,6 +655,7 @@ export interface FileRouteTypes {
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
     | '/planner/ort/$city'
+    | '/restaurant/$slug/links'
     | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/_authenticated/dashboard/'
@@ -674,7 +686,7 @@ export interface RootRouteChildren {
   VerifyEmailRoute: typeof VerifyEmailRoute
   AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
-  RestaurantSlugRoute: typeof RestaurantSlugRoute
+  RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ApiPrintStarRoute: typeof ApiPrintStarRoute
@@ -962,6 +974,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RestaurantOrtCityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/restaurant/$slug/links': {
+      id: '/restaurant/$slug/links'
+      path: '/links'
+      fullPath: '/restaurant/$slug/links'
+      preLoaderRoute: typeof RestaurantSlugLinksRouteImport
+      parentRoute: typeof RestaurantSlugRoute
+    }
     '/planner/ort/$city': {
       id: '/planner/ort/$city'
       path: '/ort/$city'
@@ -1162,6 +1181,18 @@ const PlannerRouteChildren: PlannerRouteChildren = {
 const PlannerRouteWithChildren =
   PlannerRoute._addFileChildren(PlannerRouteChildren)
 
+interface RestaurantSlugRouteChildren {
+  RestaurantSlugLinksRoute: typeof RestaurantSlugLinksRoute
+}
+
+const RestaurantSlugRouteChildren: RestaurantSlugRouteChildren = {
+  RestaurantSlugLinksRoute: RestaurantSlugLinksRoute,
+}
+
+const RestaurantSlugRouteWithChildren = RestaurantSlugRoute._addFileChildren(
+  RestaurantSlugRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -1183,7 +1214,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyEmailRoute: VerifyEmailRoute,
   AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
-  RestaurantSlugRoute: RestaurantSlugRoute,
+  RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   ApiPrintStarRoute: ApiPrintStarRoute,

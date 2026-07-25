@@ -50,10 +50,10 @@ export const Route = createFileRoute("/catering/")({
       { property: "og:url", content: "/catering" },
     ],
     links: [
-      { rel: "preload", href: "/catering-clean.png", as: "image", fetchpriority: "high" },
+      { rel: "preload", href: "/catering-clean.webp", as: "image", fetchpriority: "high" },
       {
         rel: "preload",
-        href: "/images/event_catering_hero.png",
+        href: "/images/event_catering_hero.webp",
         as: "image",
         fetchpriority: "high",
       },
@@ -255,7 +255,7 @@ function Catering() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             fetchPriority="high"
             alt="Premium Catering Background"
             className="w-full h-full object-cover object-center"
@@ -332,7 +332,7 @@ function Catering() {
             <div className="absolute -inset-2 bg-gradient-to-tr from-[#b28a3c]/20 to-transparent rounded-[2.5rem] blur-2xl -z-10" />
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 aspect-[4/3]">
               <img
-                src="/images/event_catering_hero.png"
+                src="/images/event_catering_hero.webp"
                 fetchPriority="high"
                 alt="Premium Event and Wedding Buffet Plating"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
@@ -810,7 +810,7 @@ function Catering() {
             </div>
             <div className="relative z-10 hidden md:block w-1/3 min-w-[280px]">
               <img
-                src="/images/office_catering_hero.png"
+                src="/images/office_catering_hero.webp"
                 alt="Corporate Office Plating Buffet"
                 className="rounded-2xl shadow-2xl aspect-[4/3] object-cover border-2 border-white/10"
               />

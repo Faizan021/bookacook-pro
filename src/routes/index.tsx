@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
       { property: "og:url", content: "https://speisely.de/" },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "preload", href: "/hero-cinematic.png", as: "image", fetchpriority: "high" }],
+    links: [{ rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -228,7 +228,7 @@ function Home() {
         {/* Right-side cinematic image — desktop only */}
         <div className="absolute right-0 top-0 bottom-0 w-[48%] z-0 hidden lg:block">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             fetchPriority="high"
             alt={tt(
               "Speisely – Premium Gastronomie & Events",
@@ -245,7 +245,7 @@ function Home() {
         {/* Mobile background image (behind content, heavily dimmed) */}
         <div className="absolute inset-0 z-0 lg:hidden">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             fetchPriority="high"
             alt={tt(
               "Speisely – Premium Gastronomie & Events",
@@ -491,8 +491,8 @@ function Home() {
           >
             <div className="absolute inset-0">
               <img
-                src="/hero-cinematic.png"
-                loading="lazy"
+                src="/hero-cinematic.webp"
+                decoding="async"
                 alt="Restaurants"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -527,8 +527,8 @@ function Home() {
           >
             <div className="absolute inset-0">
               <img
-                src="/catering-clean.png"
-                loading="lazy"
+                src="/catering-clean.webp"
+                decoding="async"
                 alt="Catering"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -563,8 +563,8 @@ function Home() {
           >
             <div className="absolute inset-0">
               <img
-                src="/planner-clean.png"
-                loading="lazy"
+                src="/planner-clean.webp"
+                decoding="async"
                 alt="Event Planner"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -599,7 +599,7 @@ function Home() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             loading="lazy"
             alt="Speisely Experience"
             className="w-full h-full object-cover object-center scale-105"
@@ -656,7 +656,7 @@ function Home() {
           {/* Cinematic Image Background */}
           <div className="absolute inset-0 z-0">
             <img
-              src="/hero-cinematic.png"
+              src="/hero-cinematic.webp"
               loading="lazy"
               alt="Become a Partner"
               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"

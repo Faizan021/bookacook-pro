@@ -75,7 +75,7 @@ function EventsCatering() {
           label: lang === "de" ? "Daily Catering Subscriptions" : "Daily Catering Subscriptions",
           onClick: () => setB2bOpen(true),
         }}
-        imageUrl="/images/event_catering_hero.png"
+        imageUrl="/images/event_catering_hero.webp"
         imageAlt="Elegant Rustic Event and Wedding Tablescape"
       />
 
@@ -189,7 +189,7 @@ function EventsCatering() {
           </div>
           <div className="relative z-10 w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 hidden md:block">
             <img
-              src="/images/business_lunch_plating.png"
+              src="/images/business_lunch_plating.webp"
               alt="High-end fine dining event plating"
               className="w-full h-full object-cover"
             />

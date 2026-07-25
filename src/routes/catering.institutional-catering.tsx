@@ -75,7 +75,7 @@ function InstitutionalCatering() {
           label: lang === "de" ? "Großcaterer entdecken" : "Discover Caterers",
           href: "/catering",
         }}
-        imageUrl="/images/institutional_catering_hero.png"
+        imageUrl="/images/institutional_catering_hero.webp"
         imageAlt="Nutritious institutional meal serving tray set"
       />
 
@@ -186,7 +186,7 @@ function InstitutionalCatering() {
           </div>
           <div className="relative z-10 hidden md:block w-1/3 min-w-[280px]">
             <img
-              src="/images/institutional_catering_hero.png"
+              src="/images/institutional_catering_hero.webp"
               alt="Institutional serving tray"
               className="rounded-2xl shadow-2xl aspect-[4/3] object-cover border-2 border-white/10"
             />
@@ -200,7 +200,7 @@ function InstitutionalCatering() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white aspect-[4/3] order-last md:order-first">
               <img
-                src="/images/office_catering_hero.png"
+                src="/images/office_catering_hero.webp"
                 alt="Clean organized catering server logistics"
                 className="w-full h-full object-cover"
               />

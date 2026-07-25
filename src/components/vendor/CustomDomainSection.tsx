@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export function CustomDomainSection({
   entity,
@@ -35,7 +36,7 @@ export function CustomDomainSection({
         .toLowerCase()
         .replace(/[^a-z0-9-]/g, "-");
       await onSave(cleanSlug, cleanDomain || null);
-      alert("Domain settings updated!");
+      toast.success("Domain settings updated!");
     } catch (e: any) {
       setError(e.message || "Failed to update domain settings");
     } finally {

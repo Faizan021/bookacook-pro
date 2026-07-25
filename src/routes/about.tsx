@@ -22,7 +22,7 @@ export const Route = createFileRoute("/about")({
       },
       { property: "og:url", content: "/about" },
     ],
-    links: [{ rel: "preload", href: "/hero-cinematic.png", as: "image", fetchpriority: "high" }],
+    links: [{ rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" }],
   }),
   component: About,
 });
@@ -38,7 +38,7 @@ function About() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             fetchPriority="high"
             alt="About Us Background"
             className="w-full h-full object-cover object-center scale-105"

@@ -201,7 +201,7 @@ function RestaurantsDirectory() {
           <div className="relative overflow-hidden min-h-[480px] md:min-h-[540px] flex items-center pt-16 pb-20 lg:pt-20 lg:pb-28">
             {/* Cinematic background image */}
             <img
-              src="/hero-cinematic.png"
+              src="/hero-cinematic.webp"
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover object-center"
@@ -254,7 +254,7 @@ function RestaurantsDirectory() {
                 <div className="absolute -inset-2 bg-gradient-to-tr from-[#f2d896]/20 to-transparent rounded-[2.5rem] blur-2xl -z-10" />
                 <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/20 aspect-[4/3] bg-forest/40">
                   <img
-                    src="/images/restaurant_hero_food.png"
+                    src="/images/restaurant_hero_food.webp"
                     fetchPriority="high"
                     alt="Fresh Gourmet Restaurant Dishes"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"

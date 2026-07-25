@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
  * PageHero — Shared cinematic dark hero section.
  *
  * Matches the homepage / partners / blog visual language:
- * - Dark forest background with /hero-cinematic.png
+ * - Dark forest background with /hero-cinematic.webp
  * - Gold (#b28a3c) accent badge
  * - White headline + subtitle text
  * - Optional primary CTA button and secondary ghost button
@@ -54,7 +54,7 @@ export function PageHero({
       {/* ── Cinematic Background (matches homepage / partners) ── */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/hero-cinematic.png"
+          src="/hero-cinematic.webp"
           alt="Speisely Background"
           className="w-full h-full object-cover object-center scale-105"
         />

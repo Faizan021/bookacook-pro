@@ -68,7 +68,7 @@ function ContactRoute() {
       <section className="relative overflow-hidden min-h-[60vh] flex items-center pt-16 pb-24 lg:pt-20 lg:pb-36">
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             fetchPriority="high"
             alt="Contact Us Background"
             className="w-full h-full object-cover object-center"

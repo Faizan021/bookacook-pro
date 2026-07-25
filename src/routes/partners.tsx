@@ -36,7 +36,7 @@ function Partners() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             alt="Partners Background"
             className="w-full h-full object-cover object-center scale-105"
           />

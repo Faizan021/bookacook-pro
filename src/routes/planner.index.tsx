@@ -47,7 +47,7 @@ export const Route = createFileRoute("/planner/")({
       },
       { property: "og:url", content: "/planner" },
     ],
-    links: [{ rel: "preload", href: "/planner-clean.png", as: "image", fetchpriority: "high" }],
+    links: [{ rel: "preload", href: "/planner-clean.webp", as: "image", fetchpriority: "high" }],
   }),
   validateSearch: z.object({
     q: z.string().optional(),
@@ -324,7 +324,7 @@ function PlannerPage() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero-cinematic.png"
+            src="/hero-cinematic.webp"
             fetchPriority="high"
             alt="Event Planner Background"
             className="w-full h-full object-cover object-center scale-105"
@@ -362,7 +362,7 @@ function PlannerPage() {
           </div>
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 aspect-[4/3] max-h-[360px] group">
             <img
-              src="/planner-clean.png"
+              src="/planner-clean.webp"
               fetchPriority="high"
               alt="Premium Event Planner"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
@@ -395,7 +395,7 @@ function PlannerPage() {
       >
         <div className="absolute inset-0 z-0">
           <img
-            src="/planner-clean.png"
+            src="/planner-clean.webp"
             loading="lazy"
             alt="Event Planner Assistant"
             className="w-full h-full object-cover object-center scale-105 group-hover:scale-110 transition-transform duration-1000 ease-out"

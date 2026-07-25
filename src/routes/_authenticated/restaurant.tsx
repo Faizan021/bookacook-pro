@@ -1983,31 +1983,31 @@ function SettingsGeneralSection({ restaurant }: { restaurant: any }) {
     {
       id: "pizza",
       title: tt("Pizza & Italienisch", "Pizza & Italian"),
-      url: "/images/restaurant_banner_preset.png",
+      url: "/images/restaurant_banner_preset.webp",
       tag: "🍕 Italian",
     },
     {
       id: "burger",
       title: tt("Burger & BBQ Grill", "Burger & BBQ Grill"),
-      url: "/images/banner_burger.png",
+      url: "/images/banner_burger.webp",
       tag: "🍔 BBQ Grill",
     },
     {
       id: "sushi",
       title: tt("Sushi & Asiatisch", "Sushi & Asian"),
-      url: "/images/banner_sushi.png",
+      url: "/images/banner_sushi.webp",
       tag: "🍣 Asian Fusion",
     },
     {
       id: "schnitzel",
       title: tt("Schnitzel & Deutsch", "Schnitzel & German"),
-      url: "/images/banner_schnitzel.png",
+      url: "/images/banner_schnitzel.webp",
       tag: "🥩 Traditional",
     },
     {
       id: "healthy",
       title: tt("Salat & Healthy Bowls", "Salad & Bowls"),
-      url: "/images/banner_healthy.png",
+      url: "/images/banner_healthy.webp",
       tag: "🥗 Healthy Bowls",
     },
   ];
