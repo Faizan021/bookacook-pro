@@ -79,6 +79,35 @@ const CITY_LIST = [
   "Düsseldorf",
   "Leipzig",
 ];
+const CATERING_FAQS = [
+  {
+    question: {
+      de: "Wie lange im Voraus sollte ich Catering buchen?",
+      en: "How far in advance should I book catering?",
+    },
+    answer: {
+      de: "Für kleinere Meetings empfehlen wir 2-3 Tage, für große Events wie Hochzeiten oder Firmenfeiern idealerweise 4-8 Wochen im Voraus.",
+      en: "For smaller meetings, we recommend 2-3 days, for large events like weddings or corporate parties ideally 4-8 weeks in advance.",
+    },
+  },
+  {
+    question: { de: "Gibt es einen Mindestbestellwert?", en: "Is there a minimum order value?" },
+    answer: {
+      de: "Das hängt vom jeweiligen Partner ab. Viele Caterer bieten Menüs ab 10 Personen an, während sich andere auf Großevents spezialisieren.",
+      en: "This depends on the respective partner. Many caterers offer menus for 10 people or more, while others specialize in large-scale events.",
+    },
+  },
+  {
+    question: {
+      de: "Können Allergien und Ernährungsformen (vegan, glutenfrei) berücksichtigt werden?",
+      en: "Can allergies and diets (vegan, gluten-free) be accommodated?",
+    },
+    answer: {
+      de: "Ja, die meisten unserer Partner bieten flexible Anpassungen für vegane, vegetarische, glutenfreie oder halal-zertifizierte Menüs an.",
+      en: "Yes, most of our partners offer flexible adjustments for vegan, vegetarian, gluten-free, or halal-certified menus.",
+    },
+  },
+];
 
 function Catering() {
   const search = Route.useSearch();
@@ -107,15 +136,21 @@ function Catering() {
     );
   }, [allCaterers]);
 
-  const cats: { id: CatId; label: string }[] = [
-    { id: "all", label: lang === "de" ? "Alle" : "All" },
-    { id: "corporate", label: lang === "de" ? "B2B & Office Catering" : "B2B & Office Catering" },
-    { id: "wedding", label: lang === "de" ? "Hochzeit" : "Wedding" },
-    { id: "business", label: lang === "de" ? "Business Lunch" : "Business Lunch" },
-    { id: "private", label: lang === "de" ? "Privates Dinner" : "Private Dinner" },
-    { id: "ramadan", label: lang === "de" ? "Ramadan Iftar" : "Ramadan Iftar" },
-    { id: "christmas", label: lang === "de" ? "Weihnachtsfeier" : "Christmas Party" },
-  ];
+  const cats = useMemo(
+    () => [
+      { id: "all" as const, label: lang === "de" ? "Alle" : "All" },
+      {
+        id: "corporate" as const,
+        label: lang === "de" ? "B2B & Office Catering" : "B2B & Office Catering",
+      },
+      { id: "wedding" as const, label: lang === "de" ? "Hochzeit" : "Wedding" },
+      { id: "business" as const, label: lang === "de" ? "Business Lunch" : "Business Lunch" },
+      { id: "private" as const, label: lang === "de" ? "Privates Dinner" : "Private Dinner" },
+      { id: "ramadan" as const, label: lang === "de" ? "Ramadan Iftar" : "Ramadan Iftar" },
+      { id: "christmas" as const, label: lang === "de" ? "Weihnachtsfeier" : "Christmas Party" },
+    ],
+    [lang],
+  );
 
   const menuOptions = useMemo(() => {
     const s = new Set<string>();
@@ -161,63 +196,36 @@ function Catering() {
     document.getElementById("listings-section")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const cateringFaqs = [
-    {
-      question: {
-        de: "Wie lange im Voraus sollte ich Catering buchen?",
-        en: "How far in advance should I book catering?",
+  const jsonLd = useMemo(
+    () => [
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        itemListElement: visible.map((c, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: {
+            "@type": "FoodEstablishment",
+            name: c.name,
+            url: `https://speisely.de/catering/${c.id}`,
+          },
+        })),
       },
-      answer: {
-        de: "Für kleinere Meetings empfehlen wir 2-3 Tage, für große Events wie Hochzeiten oder Firmenfeiern idealerweise 4-8 Wochen im Voraus.",
-        en: "For smaller meetings, we recommend 2-3 days, for large events like weddings or corporate parties ideally 4-8 weeks in advance.",
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: CATERING_FAQS.map((faq) => ({
+          "@type": "Question",
+          name: faq.question[lang as "de" | "en"],
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer[lang as "de" | "en"],
+          },
+        })),
       },
-    },
-    {
-      question: { de: "Gibt es einen Mindestbestellwert?", en: "Is there a minimum order value?" },
-      answer: {
-        de: "Das hängt vom jeweiligen Partner ab. Viele Caterer bieten Menüs ab 10 Personen an, während sich andere auf Großevents spezialisieren.",
-        en: "This depends on the respective partner. Many caterers offer menus for 10 people or more, while others specialize in large-scale events.",
-      },
-    },
-    {
-      question: {
-        de: "Können Allergien und Ernährungsformen (vegan, glutenfrei) berücksichtigt werden?",
-        en: "Can allergies and diets (vegan, gluten-free) be accommodated?",
-      },
-      answer: {
-        de: "Ja, die meisten unserer Partner bieten flexible Anpassungen für vegane, vegetarische, glutenfreie oder halal-zertifizierte Menüs an.",
-        en: "Yes, most of our partners offer flexible adjustments for vegan, vegetarian, gluten-free, or halal-certified menus.",
-      },
-    },
-  ];
-
-  const jsonLd = [
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      itemListElement: visible.map((c, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        item: {
-          "@type": "FoodEstablishment",
-          name: c.name,
-          url: `https://speisely.de/catering/${c.id}`,
-        },
-      })),
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: cateringFaqs.map((faq) => ({
-        "@type": "Question",
-        name: faq.question[lang as "de" | "en"],
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: faq.answer[lang as "de" | "en"],
-        },
-      })),
-    },
-  ];
+    ],
+    [visible, lang],
+  );
 
   function FilterField({
     icon,
@@ -553,7 +561,7 @@ function Catering() {
               <Link
                 key={c.id}
                 to="/catering/$slug"
-                params={{ slug: (c as any).slug || c.id }}
+                params={{ slug: (c as { slug?: string; id: string }).slug || c.id }}
                 className="surface-card overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-3xl border border-[#eadfce]/40 hover:border-forest/30 group text-left"
               >
                 <div className="overflow-hidden aspect-[4/3] relative">
@@ -885,7 +893,7 @@ function Catering() {
           </p>
         </div>
         <div className="space-y-6">
-          {cateringFaqs.map((faq, index) => (
+          {CATERING_FAQS.map((faq, index) => (
             <div key={index} className="bg-white p-6 rounded-2xl border border-[#eadfce] shadow-sm">
               <h3 className="text-lg font-bold text-forest mb-2">
                 {faq.question[lang as "de" | "en"]}

@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { classifySearchIntent } from "@/lib/search/ai.functions";
 import { trackEvent } from "@/utils/posthog";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   ArrowRight,
   ShoppingBag,
@@ -13,10 +13,14 @@ import {
   ChevronRight,
   Star,
   Loader2,
+  UtensilsCrossed,
+  GlassWater,
+  PartyPopper,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { toast } from "sonner";
+import { motion, LayoutGroup, useReducedMotion } from "framer-motion";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,6 +63,7 @@ function Home() {
   const navigate = useNavigate();
   const { t, lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const shouldReduceMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
   const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">(
     "catering",
@@ -84,37 +89,43 @@ function Home() {
     }
   }, []);
 
-  const verticals = [
-    {
-      key: "restaurant" as const,
-      emoji: "🍽️",
-      label: tt("Restaurants", "Restaurants"),
-      sublabel: tt("Sofort bestellen", "Order now"),
-      to: "/instant-order" as const,
-      trackKey: "instant_order_cta_clicked",
-      cta: tt("Restaurants entdecken", "Discover restaurants"),
-    },
-    {
-      key: "catering" as const,
-      emoji: "🥂",
-      label: tt("Catering", "Catering"),
-      sublabel: tt("Events & Business", "Events & Business"),
-      to: "/catering" as const,
-      trackKey: "catering_cta_clicked",
-      cta: tt("Caterer entdecken", "Discover caterers"),
-    },
-    {
-      key: "planner" as const,
-      emoji: "✨",
-      label: tt("Event-Planung", "Event Planning"),
-      sublabel: tt("Hochzeiten & mehr", "Weddings & more"),
-      to: "/planner" as const,
-      trackKey: "planner_cta_clicked",
-      cta: tt("Planer entdecken", "Discover planners"),
-    },
-  ];
+  const verticals = useMemo(
+    () => [
+      {
+        key: "restaurant" as const,
+        icon: <UtensilsCrossed className="h-4 w-4" />,
+        label: tt("Restaurants", "Restaurants"),
+        sublabel: tt("Sofort bestellen", "Order now"),
+        to: "/instant-order" as const,
+        trackKey: "instant_order_cta_clicked",
+        cta: tt("Restaurants entdecken", "Discover restaurants"),
+      },
+      {
+        key: "catering" as const,
+        icon: <GlassWater className="h-4 w-4" />,
+        label: tt("Catering", "Catering"),
+        sublabel: tt("Events & Business", "Events & Business"),
+        to: "/catering" as const,
+        trackKey: "catering_cta_clicked",
+        cta: tt("Caterer entdecken", "Discover caterers"),
+      },
+      {
+        key: "planner" as const,
+        icon: <Sparkles className="h-4 w-4" />,
+        label: tt("Event-Planung", "Event Planning"),
+        sublabel: tt("Hochzeiten & mehr", "Weddings & more"),
+        to: "/planner" as const,
+        trackKey: "planner_cta_clicked",
+        cta: tt("Planer entdecken", "Discover planners"),
+      },
+    ],
+    [lang],
+  );
 
-  const current = verticals.find((v) => v.key === activeVertical)!;
+  const current = useMemo(
+    () => verticals.find((v) => v.key === activeVertical)!,
+    [verticals, activeVertical],
+  );
 
   const classify = useServerFn(classifySearchIntent);
   const [searching, setSearching] = useState(false);
@@ -124,7 +135,7 @@ function Home() {
     setSearching(true);
     try {
       const res = await classify({ data: { query: searchQuery.trim() } });
-      
+
       let toPath: "/instant-order" | "/catering" | "/planner" = "/instant-order";
       if (res.vertical === "catering") {
         toPath = "/catering";
@@ -132,7 +143,7 @@ function Home() {
         toPath = "/planner";
       }
 
-      const searchParams: Record<string, any> = {
+      const searchParams: Record<string, string | number | undefined> = {
         q: searchQuery.trim(),
       };
       if (res.parameters?.location) {
@@ -147,74 +158,78 @@ function Home() {
 
       navigate({
         to: toPath,
-        search: searchParams as any,
+        search: searchParams as Record<string, string>,
       });
 
       if (res.intent === "B2B") {
         toast.info(
           tt(
             `KI hat B2B-Anfrage erkannt (${res.vertical === "catering" ? "Catering" : "Event-Planer"}). Leite weiter...`,
-            `AI detected B2B query (${res.vertical === "catering" ? "Catering" : "Event Planner"}). Routing...`
-          )
+            `AI detected B2B query (${res.vertical === "catering" ? "Catering" : "Event Planner"}). Routing...`,
+          ),
         );
       } else {
-        toast.info(
-          tt(
-            "Leite weiter zur Restaurantsuche...",
-            "Routing to restaurant search..."
-          )
-        );
+        toast.info(tt("Leite weiter zur Restaurantsuche...", "Routing to restaurant search..."));
       }
-    } catch (e: any) {
-      navigate({ to: current.to, search: { q: searchQuery } as any });
+    } catch (e: unknown) {
+      navigate({ to: current.to, search: { q: searchQuery } as Record<string, string> });
     } finally {
       setSearching(false);
     }
   }
 
-  const stats = [
-    { value: "47+", label: tt("Geprüfte Partner", "Vetted partners") },
-    { value: "3", label: tt("Service-Bereiche", "Service areas") },
-    { value: "100%", label: tt("Kostenlos für dich", "Free for you") },
-    { value: "0€", label: tt("Versteckte Gebühren", "Hidden fees") },
-  ];
+  const stats = useMemo(
+    () => [
+      { value: "47+", label: tt("Geprüfte Partner", "Vetted partners") },
+      { value: "3", label: tt("Service-Bereiche", "Service areas") },
+      { value: "100%", label: tt("Kostenlos für dich", "Free for you") },
+      { value: "0€", label: tt("Versteckte Gebühren", "Hidden fees") },
+    ],
+    [lang],
+  );
 
-  const steps = [
-    {
-      step: "01",
-      icon: <Sparkles className="h-6 w-6" />,
-      title: tt("Entdecken", "Discover"),
-      body: tt(
-        "Stöbere durch geprüfte Restaurants, Caterer und Event-Planer in deiner Region — kostenlos und ohne Anmeldung.",
-        "Browse vetted restaurants, caterers, and event planners in your region — free and without sign-up.",
-      ),
-    },
-    {
-      step: "02",
-      icon: <Users className="h-6 w-6" />,
-      title: tt("Anfragen", "Inquire"),
-      body: tt(
-        "Sende dein Catering-Briefing oder deine Event-Anfrage direkt an passende Partner — transparent und ohne Mittelsmänner.",
-        "Send your catering brief or event inquiry directly to matched partners — transparent and without middlemen.",
-      ),
-    },
-    {
-      step: "03",
-      icon: <CheckCircle2 className="h-6 w-6" />,
-      title: tt("Genießen", "Enjoy"),
-      body: tt(
-        "Erhalte Angebote, vergleiche Partner und buche direkt. Kein Overhead, keine versteckten Gebühren.",
-        "Receive offers, compare partners and book directly. No overhead, no hidden fees.",
-      ),
-    },
-  ];
+  const steps = useMemo(
+    () => [
+      {
+        step: "01",
+        icon: <Sparkles className="h-6 w-6" />,
+        title: tt("Entdecken", "Discover"),
+        body: tt(
+          "Stöbere durch geprüfte Restaurants, Caterer und Event-Planer in deiner Region — kostenlos und ohne Anmeldung.",
+          "Browse vetted restaurants, caterers, and event planners in your region — free and without sign-up.",
+        ),
+      },
+      {
+        step: "02",
+        icon: <Users className="h-6 w-6" />,
+        title: tt("Anfragen", "Inquire"),
+        body: tt(
+          "Sende dein Catering-Briefing oder deine Event-Anfrage direkt an passende Partner — transparent und ohne Mittelsmänner.",
+          "Send your catering brief or event inquiry directly to matched partners — transparent and without middlemen.",
+        ),
+      },
+      {
+        step: "03",
+        icon: <CheckCircle2 className="h-6 w-6" />,
+        title: tt("Genießen", "Enjoy"),
+        body: tt(
+          "Erhalte Angebote, vergleiche Partner und buche direkt. Kein Overhead, keine versteckten Gebühren.",
+          "Receive offers, compare partners and book directly. No overhead, no hidden fees.",
+        ),
+      },
+    ],
+    [lang],
+  );
 
-  const partnerFeatures = [
-    tt("Neue Kunden", "New customers"),
-    tt("Direktkontakt", "Direct contact"),
-    tt("Kein Overhead", "No overhead"),
-    tt("Transparente Preise", "Transparent pricing"),
-  ];
+  const partnerFeatures = useMemo(
+    () => [
+      tt("Neue Kunden", "New customers"),
+      tt("Direktkontakt", "Direct contact"),
+      tt("Kein Overhead", "No overhead"),
+      tt("Transparente Preise", "Transparent pricing"),
+    ],
+    [lang],
+  );
 
   return (
     <SiteShell>
@@ -258,34 +273,86 @@ function Home() {
 
         {/* Hero text content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-20 lg:pb-36">
-          <div className="max-w-[42rem]">
+          <motion.div
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.08,
+                },
+              },
+            }}
+            initial="hidden"
+            animate="visible"
+            className="max-w-[42rem]"
+          >
             {/* Eyebrow badge */}
-            <div>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                },
+              }}
+            >
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-white/90 shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
                 {tt("Marktplatz für Gastronomie & Events", "Marketplace for hospitality & events")}
               </span>
-            </div>
+            </motion.div>
 
             {/* Main headline */}
-            <h1 className="mt-8 font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.25rem] leading-[0.92] text-white">
+            <motion.h1
+              variants={{
+                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                },
+              }}
+              className="mt-8 font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.25rem] leading-[0.92] text-white"
+            >
               {tt("Der richtige", "The right")}
               <br />
               {tt("Partner für", "partner for")}
               <br />
               <span className="text-[#b28a3c]">{tt("jedes Erlebnis.", "every experience.")}</span>
-            </h1>
+            </motion.h1>
 
             {/* Subheadline */}
-            <p className="mt-7 text-lg sm:text-xl text-white/80 max-w-[34rem] leading-relaxed">
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                },
+              }}
+              className="mt-7 text-lg sm:text-xl text-white/80 max-w-[34rem] leading-relaxed"
+            >
               {tt(
                 "Speisely verbindet dich mit geprüften Restaurants, Caterern und Event-Planern — von der schnellen Bestellung bis zur perfekten Veranstaltung.",
                 "Speisely connects you with vetted restaurants, caterers, and event planners — from a quick order to a perfect event.",
               )}
-            </p>
+            </motion.p>
 
             {/* AI Search Bar */}
-            <div className="mt-10 relative max-w-2xl">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                },
+              }}
+              className="mt-10 relative max-w-2xl"
+            >
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                   {searching ? (
@@ -325,34 +392,55 @@ function Home() {
                   )}
                 </button>
               </div>
-            </div>
+            </motion.div>
 
             {/* Vertical selector + CTA */}
-            <div className="mt-8">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                },
+              }}
+              className="mt-8"
+            >
               {/* Tab pills */}
-              <div className="flex flex-wrap gap-2">
-                {verticals.map((v) => (
-                  <button
-                    key={v.key}
-                    id={`hero-tab-${v.key}`}
-                    type="button"
-                    onClick={() => setActiveVertical(v.key)}
-                    className={`flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 border ${
-                      activeVertical === v.key
-                        ? "bg-white text-forest border-white shadow-lg shadow-white/10"
-                        : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
-                    }`}
-                  >
-                    <span className="text-base leading-none">{v.emoji}</span>
-                    <span>{v.label}</span>
-                    {activeVertical !== v.key && (
-                      <span className="hidden sm:block text-[10px] text-white/50 font-medium">
-                        {v.sublabel}
+              <LayoutGroup id="heroTabs">
+                <div className="flex flex-wrap gap-2 relative">
+                  {verticals.map((v) => (
+                    <button
+                      key={v.key}
+                      id={`hero-tab-${v.key}`}
+                      type="button"
+                      onClick={() => setActiveVertical(v.key)}
+                      className={`relative flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
+                        activeVertical === v.key
+                          ? "text-forest border-transparent"
+                          : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
+                      }`}
+                    >
+                      {activeVertical === v.key && (
+                        <motion.div
+                          layoutId="activeTabPill"
+                          className="absolute inset-0 bg-white rounded-full -z-10"
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <span className="relative z-10 flex items-center gap-2.5">
+                        {v.icon}
+                        <span>{v.label}</span>
+                        {activeVertical !== v.key && (
+                          <span className="hidden sm:block text-[10px] text-white/50 font-medium">
+                            {v.sublabel}
+                          </span>
+                        )}
                       </span>
-                    )}
-                  </button>
-                ))}
-              </div>
+                    </button>
+                  ))}
+                </div>
+              </LayoutGroup>
 
               {/* Primary + secondary CTAs */}
               <div className="mt-5 flex items-center gap-4">
@@ -377,25 +465,32 @@ function Home() {
                   <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
-            </div>
+            </motion.div>
 
             {/* Social proof avatars */}
-            <div className="mt-10 flex items-center gap-3">
-              <div className="flex -space-x-1.5">
-                {(["🏨", "🍽️", "🎉"] as const).map((e, i) => (
-                  <div
-                    key={i}
-                    className="h-8 w-8 rounded-full bg-white border-2 border-cream shadow-sm grid place-items-center text-sm"
-                  >
-                    {e}
-                  </div>
-                ))}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                },
+              }}
+              className="mt-10 flex items-center gap-4 text-white/70"
+            >
+              <div className="flex items-center gap-2 pb-0.5">
+                <Building2 className="h-4 w-4 text-[#b28a3c] shrink-0" />
+                <span className="text-[10px] text-white/30">•</span>
+                <UtensilsCrossed className="h-4 w-4 text-[#b28a3c] shrink-0" />
+                <span className="text-[10px] text-white/30">•</span>
+                <PartyPopper className="h-4 w-4 text-[#b28a3c] shrink-0" />
               </div>
               <p className="text-sm text-white/55">
                 {tt("47+ Partner in ganz Deutschland", "47+ partners across Germany")}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

@@ -65,15 +65,27 @@ import { updateMyConsent } from "@/lib/consent.functions";
 import { CommunicationPreferences } from "@/components/vendor/CommunicationPreferences";
 import { printEventBrief } from "@/utils/printEventBrief";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
-import { MarketingSEOSection } from "@/components/vendor/MarketingSEOSection";
+import { CatererOnlinePresence } from "@/components/vendor/CatererOnlinePresence";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
 export const Route = createFileRoute("/_authenticated/caterer")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>): { tab?: string } => {
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): {
+    tab?: string;
+    section?: "social" | "visibility" | "promo";
+  } => {
+    const rawSection = search.section as string | undefined;
+    const validatedSection =
+      rawSection === "social" || rawSection === "visibility" || rawSection === "promo"
+        ? rawSection
+        : "social";
+
     return {
       tab: search.tab as string | undefined,
+      section: validatedSection,
     };
   },
   beforeLoad: async () => {
@@ -2600,8 +2612,8 @@ function CatererDashboard() {
         {activeTab === "menu" && <CatererMenuSection />}
         {activeTab === "promotions" && <PromotionsSection vertical="caterers" />}
         {activeTab === "marketing-seo" && (
-          <MarketingSEOSection
-            entity={q.data.caterer}
+          <CatererOnlinePresence
+            caterer={q.data.caterer}
             onSave={async (slug, domain, seoTitle, seoDescription) => {
               const { updateMyCatererSettings } = await import("@/lib/caterer/queries.functions");
               await updateMyCatererSettings({

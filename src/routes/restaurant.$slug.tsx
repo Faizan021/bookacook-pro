@@ -68,6 +68,135 @@ const searchSchema = z.object({
   action: z.string().optional(),
 });
 
+const DRINK_CATEGORIES = [
+  "drinks",
+  "beverages",
+  "soft drinks",
+  "getränke",
+  "alkoholfrei",
+  "bier",
+  "wein",
+  "juice",
+  "säfte",
+];
+const DESSERT_CATEGORIES = ["desserts", "dessert", "nachspeisen", "süßspeisen", "eis", "sweet"];
+const SIDE_CATEGORIES = [
+  "sides",
+  "salads",
+  "salad",
+  "beilagen",
+  "snacks",
+  "vorspeisen",
+  "soup",
+  "suppen",
+];
+
+const DRINK_WORDS = [
+  "cola",
+  "fanta",
+  "sprite",
+  "wasser",
+  "water",
+  "bier",
+  "beer",
+  "wein",
+  "wine",
+  "saft",
+  "juice",
+  "getränk",
+  "getränke",
+  "drink",
+  "drinks",
+  "pepsi",
+  "mezzo",
+  "spezi",
+  "eistee",
+  "pils",
+  "radler",
+  "selters",
+  "schorle",
+  "fizz",
+  "apfelschorle",
+  "limonade",
+  "softdrink",
+  "ayran",
+  "uludag",
+  "bionade",
+  "club-mate",
+];
+const DESSERT_WORDS = [
+  "cake",
+  "kuchen",
+  "dessert",
+  "desserts",
+  "nachspeise",
+  "nachspeisen",
+  "sweet",
+  "muffin",
+  "muffins",
+  "waffel",
+  "waffeln",
+  "brownie",
+  "brownies",
+  "tiramisu",
+  "pfannkuchen",
+  "pudding",
+  "sorbet",
+  "crepe",
+  "crêpe",
+];
+const SIDE_WORDS = [
+  "pommes",
+  "krokette",
+  "kroketten",
+  "beilage",
+  "beilagen",
+  "salat",
+  "salate",
+  "salad",
+  "salads",
+  "ketchup",
+  "mayo",
+  "sauce",
+  "saucen",
+  "soße",
+  "soßen",
+  "dipp",
+  "dip",
+  "dips",
+  "brot",
+  "brötchen",
+  "bread",
+  "nuggets",
+  "onionrings",
+  "rice",
+  "reis",
+  "fritten",
+  "coleslaw",
+  "tzatziki",
+  "aioli",
+  "edamame",
+];
+
+const TIME_SLOTS = [
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "17:00",
+  "17:30",
+  "18:00",
+  "18:30",
+  "19:00",
+  "19:30",
+  "20:00",
+  "20:30",
+  "21:00",
+  "21:30",
+];
+
 export const Route = createFileRoute("/restaurant/$slug")({
   validateSearch: (search) => searchSchema.parse(search),
   loader: async ({ params }) => {
@@ -393,29 +522,6 @@ function RestaurantPage() {
   const normalizedMenu = useMemo(() => {
     if (!restaurant?.menu) return [];
 
-    const DRINK_CATEGORIES = [
-      "drinks",
-      "beverages",
-      "soft drinks",
-      "getränke",
-      "alkoholfrei",
-      "bier",
-      "wein",
-      "juice",
-      "säfte",
-    ];
-    const DESSERT_CATEGORIES = ["desserts", "dessert", "nachspeisen", "süßspeisen", "eis", "sweet"];
-    const SIDE_CATEGORIES = [
-      "sides",
-      "salads",
-      "salad",
-      "beilagen",
-      "snacks",
-      "vorspeisen",
-      "soup",
-      "suppen",
-    ];
-
     return restaurant.menu.map((item: any, index: number) => {
       const cat = (item.category || "").trim().toLowerCase();
       let role: "drink" | "dessert" | "side" | "main" = "main";
@@ -432,108 +538,21 @@ function RestaurantPage() {
         const itemName = (item.name || "").trim().toLowerCase();
         const words = itemName.split(/[\s,.(\-/)(]+/);
 
-        const drinkWords = [
-          "cola",
-          "fanta",
-          "sprite",
-          "wasser",
-          "water",
-          "bier",
-          "beer",
-          "wein",
-          "wine",
-          "saft",
-          "juice",
-          "getränk",
-          "getränke",
-          "drink",
-          "drinks",
-          "pepsi",
-          "mezzo",
-          "spezi",
-          "eistee",
-          "pils",
-          "radler",
-          "selters",
-          "schorle",
-          "fizz",
-          "apfelschorle",
-          "limonade",
-          "softdrink",
-          "ayran",
-          "uludag",
-          "bionade",
-          "club-mate",
-        ];
-        const dessertWords = [
-          "cake",
-          "kuchen",
-          "dessert",
-          "desserts",
-          "nachspeise",
-          "nachspeisen",
-          "sweet",
-          "muffin",
-          "muffins",
-          "waffel",
-          "waffeln",
-          "brownie",
-          "brownies",
-          "tiramisu",
-          "pfannkuchen",
-          "pudding",
-          "sorbet",
-          "crepe",
-          "crêpe",
-        ];
-        const sideWords = [
-          "pommes",
-          "krokette",
-          "kroketten",
-          "beilage",
-          "beilagen",
-          "salat",
-          "salate",
-          "salad",
-          "salads",
-          "ketchup",
-          "mayo",
-          "sauce",
-          "saucen",
-          "soße",
-          "soßen",
-          "dipp",
-          "dip",
-          "dips",
-          "brot",
-          "brötchen",
-          "bread",
-          "nuggets",
-          "onionrings",
-          "rice",
-          "reis",
-          "fritten",
-          "coleslaw",
-          "tzatziki",
-          "aioli",
-          "edamame",
-        ];
-
         if (
-          drinkWords.some((w) => words.includes(w)) ||
+          DRINK_WORDS.some((w) => words.includes(w)) ||
           itemName.includes("coca-cola") ||
           itemName.includes("red bull") ||
           itemName.includes("redbull")
         ) {
           role = "drink";
         } else if (
-          dessertWords.some((w) => words.includes(w)) ||
+          DESSERT_WORDS.some((w) => words.includes(w)) ||
           itemName.includes("eis") ||
           itemName.includes("süß")
         ) {
           role = "dessert";
         } else if (
-          sideWords.some((w) => words.includes(w)) ||
+          SIDE_WORDS.some((w) => words.includes(w)) ||
           itemName.includes("onion rings") ||
           itemName.includes("sauce") ||
           itemName.includes("soße") ||
@@ -954,25 +973,6 @@ function RestaurantPage() {
     reservationTime: "19:00",
     notes: "",
   });
-
-  const TIME_SLOTS = [
-    "11:30",
-    "12:00",
-    "12:30",
-    "13:00",
-    "13:30",
-    "14:00",
-    "17:00",
-    "17:30",
-    "18:00",
-    "18:30",
-    "19:00",
-    "19:30",
-    "20:00",
-    "20:30",
-    "21:00",
-    "21:30",
-  ];
 
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
 

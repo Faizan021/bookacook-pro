@@ -58,15 +58,27 @@ import { CustomDomainSection } from "@/components/vendor/CustomDomainSection";
 import { useI18n } from "@/i18n/I18nProvider";
 import { printEventBrief } from "@/utils/printEventBrief";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
-import { MarketingSEOSection } from "@/components/vendor/MarketingSEOSection";
+import { PlannerOnlinePresence } from "@/components/vendor/PlannerOnlinePresence";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard/planner")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>): { tab?: string } => {
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): {
+    tab?: string;
+    section?: "social" | "visibility" | "promo";
+  } => {
+    const rawSection = search.section as string | undefined;
+    const validatedSection =
+      rawSection === "social" || rawSection === "visibility" || rawSection === "promo"
+        ? rawSection
+        : "social";
+
     return {
       tab: search.tab as string | undefined,
+      section: validatedSection,
     };
   },
   beforeLoad: async () => {
@@ -1798,8 +1810,8 @@ function PlannerDashboard() {
           />
         )}
         {activeTab === "marketing-seo" && (
-          <MarketingSEOSection
-            entity={q.data.planner}
+          <PlannerOnlinePresence
+            planner={q.data.planner}
             onSave={async (slug, domain, seoTitle, seoDescription) => {
               const { updateMyPlannerSettings } = await import("@/lib/planner/mutations.functions");
               await updateMyPlannerSettings({
