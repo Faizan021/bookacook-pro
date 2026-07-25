@@ -797,8 +797,8 @@ function PromotionsSection({
   const qc = useQueryClient();
 
   const q = useSuspenseQuery({
-    queryKey: ["promotions"],
-    queryFn: () => fetchPromos(),
+    queryKey: ["promotions", vertical],
+    queryFn: () => fetchPromos({ data: { vertical } }),
   });
 
   const [code, setCode] = useState("");
@@ -849,7 +849,7 @@ function PromotionsSection({
           ends_at: endsAt ? new Date(endsAt).toISOString() : undefined,
         },
       });
-      await qc.invalidateQueries({ queryKey: ["promotions"] });
+      await qc.invalidateQueries({ queryKey: ["promotions", vertical] });
       setCode("");
       setValue("");
       setAppliesTo("all");
@@ -1148,7 +1148,7 @@ function PromotionsSection({
                       onChange={async (e) => {
                         const active = e.target.checked;
                         await togglePromo({ data: { id: p.id, is_active: active } });
-                        qc.invalidateQueries({ queryKey: ["promotions"] });
+                        qc.invalidateQueries({ queryKey: ["promotions", vertical] });
                         if (active) toast.success(tt("Aktiviert", "Activated"));
                         else toast.success(tt("Deaktiviert", "Deactivated"));
                       }}

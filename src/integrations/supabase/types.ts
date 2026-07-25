@@ -1704,6 +1704,7 @@ export type Database = {
           owner_id: string;
           required_qty: number | null;
           starts_at: string | null;
+          vertical: string;
         };
         Insert: {
           applies_to_product_name?: string | null;
@@ -1719,6 +1720,7 @@ export type Database = {
           owner_id: string;
           required_qty?: number | null;
           starts_at?: string | null;
+          vertical?: string | null;
         };
         Update: {
           applies_to_product_name?: string | null;
@@ -1734,6 +1736,7 @@ export type Database = {
           owner_id?: string;
           required_qty?: number | null;
           starts_at?: string | null;
+          vertical?: string | null;
         };
         Relationships: [];
       };

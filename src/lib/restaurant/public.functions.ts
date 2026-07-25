@@ -276,16 +276,22 @@ async function calculatePromoDiscount(
   promoCode: string | undefined,
   subtotalCents: number,
   validatedItems: Array<{ name: string; price_cents: number; quantity: number }>,
+  vertical?: "restaurants" | "caterers" | "planners",
 ) {
   if (!promoCode) return { discountCents: 0, freeDelivery: false };
 
-  const { data: promo, error: promoErr } = await supabaseAdmin
+  let query = supabaseAdmin
     .from("promo_codes")
     .select("*")
     .eq("owner_id", ownerId)
     .eq("code", promoCode.toUpperCase())
-    .eq("is_active", true)
-    .maybeSingle();
+    .eq("is_active", true);
+
+  if (vertical) {
+    query = query.eq("vertical", vertical);
+  }
+
+  const { data: promo, error: promoErr } = await query.maybeSingle();
 
   if (!promo) return { discountCents: 0, freeDelivery: false, error: "Invalid code" };
 
@@ -369,6 +375,7 @@ export const validatePromoCode = createServerFn({ method: "POST" })
       data.promoCode,
       subtotalCents,
       validatedItems,
+      "restaurants",
     );
     if (result.error) {
       return { success: false, error: result.error };
@@ -543,6 +550,7 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
       data.promoCode,
       subtotalCents,
       validatedItems,
+      "restaurants",
     );
 
     if (data.promoCode && promoResult.error) {

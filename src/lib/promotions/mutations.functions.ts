@@ -83,6 +83,7 @@ export const createPromoCode = createServerFn()
       starts_at: data.starts_at || null,
       ends_at: data.ends_at || null,
       is_active: true,
+      vertical: data.vertical,
     });
 
     if (insertErr) {
