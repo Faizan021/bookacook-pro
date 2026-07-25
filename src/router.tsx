@@ -94,7 +94,7 @@ export const getRouter = () => {
     history: createAppHistory(),
     context: { queryClient },
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
+    defaultPreloadStaleTime: 30000,
   });
 
   return router;
