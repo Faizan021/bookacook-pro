@@ -31,6 +31,7 @@ import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
 import { StorefrontPromoTeaser } from "@/components/StorefrontPromoTeaser";
 import { upsertConsentRecord } from "@/lib/consent.functions";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 import {
   Dialog,
@@ -890,7 +891,7 @@ function RestaurantPage() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       if (session?.user) {
         setCurrentUser(session.user);
         supabase
@@ -898,7 +899,7 @@ function RestaurantPage() {
           .select("role")
           .eq("user_id", session.user.id)
           .maybeSingle()
-          .then(({ data }) => {
+          .then(({ data }: any) => {
             setUserRole(data?.role || "customer");
           });
       } else {
