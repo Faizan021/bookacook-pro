@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { optionalSupabaseAuth, requireSupabaseAuth } from "@/lib/auth/role-middleware";
 import { requireRole } from "@/lib/auth/role-middleware";
 import { sendPartnerNotificationEmail } from "@/lib/email.functions";
+import { parsedItemSchema, type ParsedMenuItem } from "@/lib/restaurant/menu-import.functions";
 
 async function resolveOwnedCaterer(supabase: any, userId: string) {
   const { data } = await supabase
@@ -119,17 +121,18 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.slug);
+
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      data.slug,
+    );
     const query = supabaseAdmin
       .from("caterers")
       .select(
         "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
       );
 
-    const { data: caterer, error: cErr } = await (isUuid
-      ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`)
-      : query.eq("slug", data.slug)
+    const { data: caterer, error: cErr } = await (
+      isUuid ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`) : query.eq("slug", data.slug)
     ).maybeSingle();
 
     if (cErr || !caterer) return null;
@@ -319,14 +322,15 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
 
     // Resolve the caterer UUID by slug
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.catererSlug);
-    const query = supabase
-      .from("caterers")
-      .select("id");
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      data.catererSlug,
+    );
+    const query = supabase.from("caterers").select("id");
 
-    const { data: caterer } = await (isUuid
-      ? query.or(`slug.eq.${data.catererSlug},id.eq.${data.catererSlug}`)
-      : query.eq("slug", data.catererSlug)
+    const { data: caterer } = await (
+      isUuid
+        ? query.or(`slug.eq.${data.catererSlug},id.eq.${data.catererSlug}`)
+        : query.eq("slug", data.catererSlug)
     ).maybeSingle();
 
     if (!caterer) {
@@ -391,4 +395,31 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
     }
 
     return { ok: true };
+  });
+
+export const bulkImportCatererMenuItems = createServerFn({ method: "POST" })
+  .middleware([requireRole("caterer")])
+  .validator((input: { items: ParsedMenuItem[] }) =>
+    z.object({ items: z.array(parsedItemSchema).min(1).max(1000) }).parse(input),
+  )
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const caterer = await resolveOwnedCaterer(supabase, userId);
+    if (!caterer) throw new Error("No caterer storefront for this account");
+
+    const rows = data.items.map((item: ParsedMenuItem) => ({
+      caterer_id: caterer.id,
+      name: item.name?.trim() || "",
+      description: item.description?.trim() || null,
+      price_cents: item.price_cents || 0,
+      category: item.category?.trim() || "Catering",
+      unit: "Person",
+      serves: 1,
+      is_available: true,
+      image_url: null,
+    }));
+
+    const { error } = await supabase.from("caterer_menu_items").insert(rows);
+    if (error) throw new Error(error.message);
+    return { ok: true, count: rows.length };
   });

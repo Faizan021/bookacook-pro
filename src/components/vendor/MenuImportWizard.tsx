@@ -26,6 +26,7 @@ import {
   fetchUrlContent,
   type ParsedMenuItem,
 } from "@/lib/restaurant/menu-import.functions";
+import { bulkImportCatererMenuItems } from "@/lib/caterer/menu.functions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -84,7 +85,7 @@ function parseTextToItems(text: string): ReviewRow[] {
   const rows: ReviewRow[] = [];
 
   // Regex: optional number+dot, then name, optional description dots/spaces, then price
-  const lineRe = /^(?:\d+[\.\)]\s*)?(.+?)\s*[.]{3,}\s*([\d,.\s€$£¥]+(?:EUR|USD)?)\s*$/i;
+  const lineRe = /^(?:\d+[.)]\s*)?(.+?)\s*[.]{3,}\s*([\d,.\s€$£¥]+(?:EUR|USD)?)\s*$/i;
   // Simpler "name\tprice" split
   const tabRe = /^(.+?)\t+([\d,.€$£¥\s]+)$/;
   // "name, price" split
@@ -371,13 +372,20 @@ function ReviewTable({
 interface MenuImportWizardProps {
   onClose: () => void;
   onImported: () => void;
+  vertical?: "restaurant" | "caterer";
 }
 
-export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps) {
+export function MenuImportWizard({
+  onClose,
+  onImported,
+  vertical = "restaurant",
+}: MenuImportWizardProps) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const qc = useQueryClient();
-  const importFn = useServerFn(bulkImportMenuItems);
+  const importFn = useServerFn(
+    vertical === "caterer" ? bulkImportCatererMenuItems : bulkImportMenuItems,
+  );
   const fetchUrlFn = useServerFn(fetchUrlContent);
 
   const [step, setStep] = useState<WizardStep>("select");
@@ -516,7 +524,11 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
       await importFn({ data: { items } });
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["restaurant", "products"] });
+      if (vertical === "caterer") {
+        qc.invalidateQueries({ queryKey: ["caterer", "menu"] });
+      } else {
+        qc.invalidateQueries({ queryKey: ["restaurant", "products"] });
+      }
       setStep("done");
       onImported();
     },
@@ -757,7 +769,8 @@ export function MenuImportWizard({ onClose, onImported }: MenuImportWizardProps)
                 }}
               >
                 <span>
-                  {(saveMut.error as any)?.message ?? tt("Speichern fehlgeschlagen", "Save failed")}
+                  {(saveMut.error as Error)?.message ??
+                    tt("Speichern fehlgeschlagen", "Save failed")}
                 </span>
                 <span className="text-xs underline font-medium">
                   {tt("Klicken zum ersten Fehler", "Click to jump to first error")}

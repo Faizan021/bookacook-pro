@@ -66,6 +66,7 @@ import { CommunicationPreferences } from "@/components/vendor/CommunicationPrefe
 import { printEventBrief } from "@/utils/printEventBrief";
 import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner";
 import { CatererOnlinePresence } from "@/components/vendor/CatererOnlinePresence";
+import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
 
 import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
 
@@ -1041,6 +1042,10 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
 }
 
 function CatererMenuSection() {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const [showImportWizard, setShowImportWizard] = useState(false);
+
   const fetchMenu = useServerFn(getMyCatererMenu);
   const remove = useServerFn(deleteCatererMenuItem);
   const qc = useQueryClient();
@@ -1057,9 +1062,42 @@ function CatererMenuSection() {
 
   return (
     <section className="space-y-4">
-      <div className="flex items-baseline justify-between">
-        <h2 className="font-display text-2xl">Menu Manager</h2>
-        <span className="text-sm text-muted-foreground">{q.data.menu.length} items</span>
+      {showImportWizard && (
+        <MenuImportWizard
+          vertical="caterer"
+          onClose={() => setShowImportWizard(false)}
+          onImported={() => {
+            qc.invalidateQueries({ queryKey: ["caterer", "menu"] });
+            setShowImportWizard(false);
+          }}
+        />
+      )}
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <h2 className="font-display text-2xl text-forest">
+            {tt("Speisekarte verwalten", "Menu Manager")}
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            {tt(
+              "Verwalte hier deine Catering-Angebote und Buffet-Pakete.",
+              "Manage your catering offerings and buffet packages here.",
+            )}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setShowImportWizard(true)}
+            className="gap-2 border-forest/20 text-forest hover:bg-forest/5 rounded-xl text-xs font-semibold shrink-0"
+          >
+            📋 {tt("Speisekarte importieren", "Import Menu")}
+          </Button>
+          <span className="text-xs font-medium bg-forest/5 text-forest/70 px-2.5 py-1 rounded-full border border-forest/10 shrink-0">
+            {q.data.menu.length} {tt("Angebote", "Items")}
+          </span>
+        </div>
       </div>
       <div className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">
         <div className="space-y-4">

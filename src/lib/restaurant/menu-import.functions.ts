@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireRole } from "@/lib/auth/role-middleware";
+import { requireRole, requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
-const parsedItemSchema = z.object({
+export const parsedItemSchema = z.object({
   name: z.string().min(1).max(120),
   description: z.string().max(500).optional().default(""),
   price_cents: z.number().int().min(0).max(10_000_00),
@@ -22,7 +22,7 @@ export const bulkImportMenuItems = createServerFn({ method: "POST" })
     z.object({ items: z.array(parsedItemSchema).min(1).max(1000) }).parse(input),
   )
   .handler(async ({ context, data }) => {
-    const { supabase, userId } = context as any;
+    const { supabase, userId } = context;
 
     const { data: restaurant } = await supabase
       .from("restaurants")
@@ -41,7 +41,7 @@ export const bulkImportMenuItems = createServerFn({ method: "POST" })
       image_url: null,
     }));
 
-    const { error } = await supabase.from("restaurant_products").insert(rows as any);
+    const { error } = await supabase.from("restaurant_products").insert(rows);
 
     if (error) throw new Error(error.message);
     return { ok: true, count: rows.length };
@@ -51,7 +51,7 @@ export const bulkImportMenuItems = createServerFn({ method: "POST" })
  * Fetches HTML/Text content of a website on the server side to bypass CORS restrictions.
  */
 export const fetchUrlContent = createServerFn({ method: "POST" })
-  .middleware([requireRole("restaurant_owner")])
+  .middleware([requireSupabaseAuth()])
   .validator((input: { url: string }) => z.object({ url: z.string().url() }).parse(input))
   .handler(async ({ data }) => {
     try {
