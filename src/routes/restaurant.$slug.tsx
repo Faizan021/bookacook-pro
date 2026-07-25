@@ -312,8 +312,17 @@ function RestaurantPage() {
   const getActiveOfferFn = useServerFn(getActiveSurplusOffer);
   const { data: activeSurplusOffer } = useQuery({
     queryKey: ["restaurant", restaurant?.id, "active-surplus-offer"],
-    queryFn: () => getActiveOfferFn({ data: { restaurantId: restaurant?.id || "" } }),
+    queryFn: async () => {
+      try {
+        if (!restaurant?.id) return null;
+        return await getActiveOfferFn({ data: { restaurantId: restaurant.id } });
+      } catch (e) {
+        console.error("Failed to fetch active surplus offer:", e);
+        return null;
+      }
+    },
     enabled: !!restaurant?.id,
+    retry: false,
   });
 
   const [surplusEvictedMessage, setSurplusEvictedMessage] = useState<string | null>(null);

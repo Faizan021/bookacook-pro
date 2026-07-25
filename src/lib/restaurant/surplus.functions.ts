@@ -392,26 +392,32 @@ export const getSurplusOffers = createServerFn({ method: "GET" })
 export const getActiveSurplusOffer = createServerFn({ method: "GET" })
   .validator(z.object({ restaurantId: z.string().uuid() }))
   .handler(async ({ data: input }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    try {
+      if (!input?.restaurantId) return null;
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Query active offers
-    const nowStr = new Date().toISOString();
-    const { data: offers, error } = await supabaseAdmin
-      .from("surplus_offers")
-      .select(
-        "id, menu_item_id, item_name, original_price_cents, surplus_price_cents, initial_quantity, current_quantity, start_time, end_time, status, fulfillment_mode",
-      )
-      .eq("restaurant_id", input.restaurantId)
-      .eq("status", "active")
-      .lte("start_time", nowStr)
-      .gt("end_time", nowStr)
-      .gt("current_quantity", 0)
-      .order("created_at", { ascending: false });
+      // Query active offers
+      const nowStr = new Date().toISOString();
+      const { data: offers, error } = await supabaseAdmin
+        .from("surplus_offers")
+        .select(
+          "id, menu_item_id, item_name, original_price_cents, surplus_price_cents, initial_quantity, current_quantity, start_time, end_time, status, fulfillment_mode",
+        )
+        .eq("restaurant_id", input.restaurantId)
+        .eq("status", "active")
+        .lte("start_time", nowStr)
+        .gt("end_time", nowStr)
+        .gt("current_quantity", 0)
+        .order("created_at", { ascending: false });
 
-    if (error || !offers || offers.length === 0) {
+      if (error || !offers || offers.length === 0) {
+        return null;
+      }
+
+      // Return the latest active valid offer
+      return offers[0];
+    } catch (e) {
+      console.error("[getActiveSurplusOffer] Error fetching active surplus offer", e);
       return null;
     }
-
-    // Return the latest active valid offer
-    return offers[0];
   });
