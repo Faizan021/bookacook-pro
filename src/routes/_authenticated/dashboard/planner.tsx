@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Sparkles, Plus, Loader2, Tag, Ticket } from "lucide-react";
+import { Sparkles, Plus, Loader2, Tag, Ticket, Pencil, X, Info } from "lucide-react";
 import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import {
   createFileRoute,
@@ -435,11 +435,31 @@ function ServiceForm({
           </button>
         </div>
         {imagePreview && (
-          <img
-            src={imagePreview}
-            alt=""
-            className="h-28 w-full rounded-lg object-cover shadow-sm border border-border"
-          />
+          <div className="relative group rounded-xl overflow-hidden border border-border">
+            <img
+              src={imagePreview}
+              alt=""
+              className="h-32 w-full object-cover shadow-sm"
+            />
+            {isAiPresetImage(imagePath || imagePreview) && (
+              <span className="absolute bottom-2 left-2 bg-black/75 backdrop-blur-md text-white text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm border border-white/15">
+                <Sparkles className="w-2.5 h-2.5 text-amber-400" />
+                <span>{tt("Symbolbild (Serviervorschlag)", "Illustrative Sample Photo")}</span>
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                setImagePath(null);
+                setImagePreview(null);
+                toast.info(tt("Bild entfernt", "Picture removed"));
+              }}
+              className="absolute top-2 right-2 bg-black/80 hover:bg-rose-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg shadow backdrop-blur-sm transition-all flex items-center gap-1 cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>{tt("Bild entfernen", "Remove picture")}</span>
+            </button>
+          </div>
         )}
         <input
           ref={fileRef}
@@ -451,16 +471,37 @@ function ServiceForm({
             if (f) handleFile(f);
           }}
         />
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="w-full"
-          disabled={uploading}
-          onClick={() => fileRef.current?.click()}
-        >
-          {uploading ? "Uploading…" : imagePreview ? tt("Eigenes Bild ändern", "Replace custom image") : tt("Eigenes Bild hochladen", "Upload custom image")}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="flex-1 text-xs"
+            disabled={uploading}
+            onClick={() => fileRef.current?.click()}
+          >
+            {uploading
+              ? "Uploading…"
+              : imagePreview
+                ? tt("Eigenes Bild ändern", "Replace custom image")
+                : tt("Eigenes Bild hochladen", "Upload custom image")}
+          </Button>
+          {imagePreview && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 text-xs font-semibold px-3 border border-rose-200 cursor-pointer"
+              onClick={() => {
+                setImagePath(null);
+                setImagePreview(null);
+                toast.info(tt("Bild entfernt", "Picture removed"));
+              }}
+            >
+              {tt("Kein Bild", "No picture")}
+            </Button>
+          )}
+        </div>
         <div className="pt-2 space-y-1.5">
           <Label className="text-[11px] text-muted-foreground">{tt("Oder 1-Klick Food-Foto Galerie:", "Or select 1-click food photo preset:")}</Label>
           <div className="grid grid-cols-4 gap-1.5">
@@ -494,6 +535,15 @@ function ServiceForm({
               );
             })}
           </div>
+          <p className="text-[10px] text-muted-foreground/80 flex items-start gap-1 pt-1 leading-normal">
+            <Info className="w-3 h-3 text-forest/70 shrink-0 mt-0.5" />
+            <span>
+              {tt(
+                "Hinweis: Vorlagensequenzen dienen als professionelle Serviervorschläge (Symbolfotos).",
+                "Note: Preset images act as professional marketing sample photos (Illustrative sample).",
+              )}
+            </span>
+          </p>
         </div>
       </div>
       {err && <p className="text-sm text-destructive">{err}</p>}
