@@ -1745,7 +1745,69 @@ function RequestsSection() {
   );
 }
 
-function PlannerDashboard() {
+class DashboardErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; isAuthError: boolean; message: string }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, isAuthError: false, message: "" };
+  }
+
+  static getDerivedStateFromError(error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    const isAuth =
+      msg.includes("Unauthorized") ||
+      msg.includes("401") ||
+      msg.includes("No authorization") ||
+      msg.includes("session") ||
+      msg.includes("sign in");
+    return { hasError: true, isAuthError: isAuth, message: msg };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error("[PlannerDashboardErrorBoundary]", error);
+    if (this.state.isAuthError) {
+      setTimeout(() => {
+        window.location.href = "/auth";
+      }, 100);
+    }
+  }
+
+  render() {
+    if (!this.state.hasError) return this.props.children;
+    if (this.state.isAuthError) {
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-cream">
+          <div className="surface-card p-10 text-center max-w-sm">
+            <p className="text-muted-foreground font-semibold text-sm">Session expired. Redirecting to sign in…</p>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-cream p-6">
+        <div className="surface-card p-8 text-center max-w-md space-y-4">
+          <h3 className="font-display text-xl text-forest">Dashboard Section Loading Error</h3>
+          <p className="text-xs text-muted-foreground">{this.state.message || "An unexpected error occurred while rendering this section."}</p>
+          <div className="flex justify-center gap-3 pt-2">
+            <button
+              onClick={() => this.setState({ hasError: false, isAuthError: false, message: "" })}
+              className="px-4 py-2 bg-forest text-white text-xs font-semibold rounded-full hover:bg-forest/90"
+            >
+              Try Again
+            </button>
+            <a href="/dashboard/planner" className="px-4 py-2 border border-forest/20 text-forest text-xs font-semibold rounded-full hover:bg-forest/5">
+              Reset Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+function PlannerDashboardInner() {
   const fetchServices = useServerFn(getMyPlannerServices);
   const q = useSuspenseQuery({
     queryKey: ["planner", "services"],
@@ -1755,7 +1817,10 @@ function PlannerDashboard() {
   useSpeiselyPing(q.data?.planner?.id, ["catering_briefs", "brief_messages", "planner_requests"]);
 
   const search = Route.useSearch();
-  const activeTab = search.tab || "overview";
+  let activeTab = search.tab || "overview";
+  if (activeTab === "settings" || activeTab === "settings-general" || activeTab === "settings-storefront" || activeTab.startsWith("settings-")) {
+    activeTab = "profile";
+  }
   const qc = useQueryClient();
 
   if (!q.data?.planner) {
@@ -1823,5 +1888,13 @@ function PlannerDashboard() {
         )}
       </React.Suspense>
     </VendorLayout>
+  );
+}
+
+function PlannerDashboard() {
+  return (
+    <DashboardErrorBoundary>
+      <PlannerDashboardInner />
+    </DashboardErrorBoundary>
   );
 }
