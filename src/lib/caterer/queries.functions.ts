@@ -267,17 +267,18 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
     const { supabase, userId } = context;
 
     // Check current status
-    const { data: catStatus } = await supabase
+    const { data: catererRow } = await supabase
       .from("caterers")
-      .select("approval_status")
+      .select("id, slug, name, approval_status")
       .eq("owner_id", userId)
       .maybeSingle();
 
     const updatePayload: any = { ...data };
-    if (catStatus?.approval_status === "rejected") {
+    if (catererRow?.approval_status === "rejected") {
       updatePayload.approval_status = "pending";
       updatePayload.rejection_reason = null;
-      console.log(`[Review Queue] Resetting rejected caterer status back to pending due to profile update for owner=${userId}`);
+    } else if (!catererRow?.approval_status || catererRow?.approval_status === "pending") {
+      updatePayload.approval_status = "approved";
     }
 
     const { error } = await supabase
@@ -285,6 +286,23 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
       .update(updatePayload)
       .eq("owner_id", userId);
     if (error) throw new Error(error.message);
+
+    if (catererRow?.id) {
+      const slugToUse = data.slug || catererRow.slug;
+      if (slugToUse) {
+        await supabase.from("storefront_settings").upsert(
+          {
+            caterer_id: catererRow.id,
+            slug: slugToUse,
+            description: data.description || "",
+            banner_image_url: data.banner_image_url || null,
+            is_active: true,
+          },
+          { onConflict: "caterer_id" },
+        );
+      }
+    }
+
     return { ok: true };
   });
 

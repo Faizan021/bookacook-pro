@@ -175,13 +175,22 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
         "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text, approval_status",
       );
 
-    const { data: caterer, error: cErr } = await (
+    let catererRes = await (
       isUuid
-        ? query.or(`slug.eq.${cleanSlug},id.eq.${cleanSlug}`)
-        : query.or(`slug.ilike.${cleanSlug},slug.eq.${cleanSlug}`)
-    ).maybeSingle();
+        ? query.or(`slug.eq.${cleanSlug},id.eq.${cleanSlug}`).maybeSingle()
+        : query.ilike("slug", cleanSlug).maybeSingle()
+    );
 
-    if (cErr || !caterer) return null;
+    let caterer = catererRes.data;
+    if (!caterer) {
+      // Fallback search by name or custom domain
+      const { data: fallbackCaterer } = await query
+        .or(`name.ilike.%${cleanSlug}%,custom_domain.ilike.%${cleanSlug}%`)
+        .maybeSingle();
+      caterer = fallbackCaterer;
+    }
+
+    if (!caterer) return null;
 
     const { data: menuData, error: mErr } = await supabaseAdmin
       .from("caterer_menu_items")
