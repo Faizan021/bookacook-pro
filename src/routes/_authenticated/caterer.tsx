@@ -5,7 +5,6 @@ import {
   useRouter,
   useLocation,
   redirect,
-  isRedirect,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
@@ -68,7 +67,7 @@ import { PrintOnboardingBanner } from "@/components/vendor/PrintOnboardingBanner
 import { CatererOnlinePresence } from "@/components/vendor/CatererOnlinePresence";
 import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
 
-import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
+
 
 export const Route = createFileRoute("/_authenticated/caterer")({
   ssr: false,
@@ -89,29 +88,18 @@ export const Route = createFileRoute("/_authenticated/caterer")({
       section: validatedSection,
     };
   },
-  beforeLoad: async () => {
-    try {
-      const profile = await getUserProfile();
-      if (!profile.roles.includes("partner")) {
-        throw redirect({
-          to: "/auth",
-          search: {
-            signup: undefined,
-            message: `Please sign in with a Business Partner account.`,
-            logout: "true",
-          },
-        });
-      }
-    } catch (err) {
-      if (isRedirect(err)) {
-        throw err;
-      }
-      console.error("beforeLoad error on caterer dashboard:", err);
+  beforeLoad: async ({ context }) => {
+    // Role enforcement is handled server-side by requireRole("caterer") on every
+    // server function. This lightweight guard just prevents non-partners from
+    // seeing the dashboard shell, using cached session data (no network call).
+    const { data: { session } } = await supabase.auth.getSession();
+    const metaRole = session?.user?.user_metadata?.role;
+    if (!session?.user || !metaRole || metaRole === "customer") {
       throw redirect({
         to: "/auth",
         search: {
           signup: undefined,
-          message: "Session expired or unauthorized. Please sign in again.",
+          message: "Please sign in with a Business Partner account.",
           logout: "true",
         },
       });

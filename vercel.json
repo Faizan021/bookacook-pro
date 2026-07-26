@@ -2,7 +2,6 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "outputDirectory": "dist",
   "redirects": [
     { "source": "/catering/ort/:city", "destination": "/catering/:city", "permanent": true },
     { "source": "/planner/ort/:city", "destination": "/planner/:city", "permanent": true },

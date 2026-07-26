@@ -22,7 +22,6 @@ import {
   useRouter,
   useLocation,
   redirect,
-  isRedirect,
   useNavigate,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -80,7 +79,7 @@ import { CommunicationPreferences } from "@/components/vendor/CommunicationPrefe
 import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
 import { SubscriptionTermsModal } from "@/components/vendor/SubscriptionTermsModal";
 
-import { getUserProfile } from "@/lib/auth/get-user-profile.functions";
+
 import { KitchenPrinterSettings } from "@/components/vendor/KitchenPrinterSettings";
 import { SurplusOffersSection } from "@/components/vendor/SurplusOffersSection";
 
@@ -111,29 +110,18 @@ export const Route = createFileRoute("/_authenticated/restaurant")({
       billing_cancel: search.billing_cancel as string | undefined,
     };
   },
-  beforeLoad: async () => {
-    try {
-      const profile = await getUserProfile();
-      if (!profile.roles.includes("partner")) {
-        throw redirect({
-          to: "/auth",
-          search: {
-            signup: undefined,
-            message: `Please sign in with a Business Partner account.`,
-            logout: "true",
-          } as any,
-        });
-      }
-    } catch (err) {
-      if (isRedirect(err)) {
-        throw err;
-      }
-      console.error("beforeLoad error on restaurant dashboard:", err);
+  beforeLoad: async ({ context }) => {
+    // Role enforcement is handled server-side by requireRole("restaurant_owner") on every
+    // server function. This lightweight guard just prevents non-partners from
+    // seeing the dashboard shell, using cached session data (no network call).
+    const { data: { session } } = await supabase.auth.getSession();
+    const metaRole = session?.user?.user_metadata?.role;
+    if (!session?.user || !metaRole || metaRole === "customer") {
       throw redirect({
         to: "/auth",
         search: {
           signup: undefined,
-          message: "Session expired or unauthorized. Please sign in again.",
+          message: "Please sign in with a Business Partner account.",
           logout: "true",
         } as any,
       });

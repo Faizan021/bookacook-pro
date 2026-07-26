@@ -85,6 +85,8 @@ export const getRouter = () => {
       queries: {
         refetchOnWindowFocus: false,
         retry: 1,
+        staleTime: 5 * 60 * 1000,   // 5 minutes — prevents redundant refetches on tab switches & component mounts
+        gcTime: 10 * 60 * 1000,     // 10 minutes — keep inactive cache in memory longer
       },
     },
   });

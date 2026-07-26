@@ -295,17 +295,21 @@ export const getCatererKPIs = createServerFn({ method: "GET" })
     const caterer = await resolveOwnedCaterer(supabase, userId);
     if (!caterer) return null;
 
-    const { data: briefs, error } = await supabase
-      .from("catering_briefs")
-      .select("id, status, budget_cents")
-      .eq("preferred_caterer_id", caterer.id);
+    const [
+      { data: briefs, error },
+      { count: profileViews },
+    ] = await Promise.all([
+      supabase
+        .from("catering_briefs")
+        .select("id, status, budget_cents")
+        .eq("preferred_caterer_id", caterer.id),
+      supabase
+        .from("storefront_page_views")
+        .select("*", { count: "exact", head: true })
+        .eq("vendor_id", caterer.id),
+    ]);
 
     if (error) throw new Error(error.message);
-
-    const { count: profileViews } = await supabase
-      .from("storefront_page_views")
-      .select("*", { count: "exact", head: true })
-      .eq("vendor_id", caterer.id);
 
     const completed = briefs?.filter((b: any) => b.status === "booked") || [];
     const pending = briefs?.filter((b: any) => !["booked", "cancelled"].includes(b.status)) || [];

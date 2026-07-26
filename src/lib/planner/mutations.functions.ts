@@ -235,17 +235,21 @@ export const getPlannerKPIs = createServerFn({ method: "GET" })
     const planner = await resolveOwnedPlanner(supabase, userId);
     if (!planner) return null;
 
-    const { data: requests, error } = await (supabase as any)
-      .from("planner_requests")
-      .select("id, status, budget_cents")
-      .eq("planner_id", planner.id);
+    const [
+      { data: requests, error },
+      { count: profileViews },
+    ] = await Promise.all([
+      (supabase as any)
+        .from("planner_requests")
+        .select("id, status, budget_cents")
+        .eq("planner_id", planner.id),
+      supabase
+        .from("storefront_page_views")
+        .select("*", { count: "exact", head: true })
+        .eq("vendor_id", planner.id),
+    ]);
 
     if (error) throw new Error(error.message);
-
-    const { count: profileViews } = await supabase
-      .from("storefront_page_views")
-      .select("*", { count: "exact", head: true })
-      .eq("vendor_id", planner.id);
 
     const completed = requests?.filter((r: any) => r.status === "completed") || [];
     const pending =

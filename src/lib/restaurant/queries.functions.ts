@@ -104,28 +104,30 @@ export const getRestaurantKPIs = createServerFn({ method: "GET" })
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const { data: orders, error } = await supabase
-      .from("restaurant_orders")
-      .select("id, total_cents, status, created_at, referral_source")
-      .eq("restaurant_id", restaurant.id);
-
-    if (error) throw new Error(error.message);
-
-    const { data: reservations } = await supabase
-      .from("table_reservations")
-      .select("id, status, created_at")
-      .eq("restaurant_id", restaurant.id);
-
-    const { count: profileViewsToday } = await supabase
-      .from("storefront_page_views")
-      .select("*", { count: "exact", head: true })
-      .eq("vendor_id", restaurant.id)
-      .gte("created_at", today.toISOString());
-
-    const { count: totalProducts } = await supabase
-      .from("restaurant_products")
-      .select("*", { count: "exact", head: true })
-      .eq("restaurant_id", restaurant.id);
+    const [
+      { data: orders, error },
+      { data: reservations },
+      { count: profileViewsToday },
+      { count: totalProducts },
+    ] = await Promise.all([
+      supabase
+        .from("restaurant_orders")
+        .select("id, total_cents, status, created_at, referral_source")
+        .eq("restaurant_id", restaurant.id),
+      supabase
+        .from("table_reservations")
+        .select("id, status, created_at")
+        .eq("restaurant_id", restaurant.id),
+      supabase
+        .from("storefront_page_views")
+        .select("*", { count: "exact", head: true })
+        .eq("vendor_id", restaurant.id)
+        .gte("created_at", today.toISOString()),
+      supabase
+        .from("restaurant_products")
+        .select("*", { count: "exact", head: true })
+        .eq("restaurant_id", restaurant.id),
+    ]);
 
     const pendingOrders = orders?.filter((o: any) => o.status === "pending") || [];
     const ordersTodayList = orders?.filter((o: any) => new Date(o.created_at) >= today) || [];
@@ -215,28 +217,28 @@ export const getRestaurantActivityFeed = createServerFn({ method: "GET" })
     const restaurant = await resolveOwnedRestaurant(supabase, userId);
     if (!restaurant) return [];
 
-    const { data: orders } = await supabase
-      .from("restaurant_orders")
-      .select("id, customer_name, status, created_at")
-      .eq("restaurant_id", restaurant.id)
-      .order("created_at", { ascending: false })
-      .limit(10);
-
-    const { data: reservations } = await supabase
-      .from("table_reservations")
-      .select(
-        "id, first_name, last_name, guest_count, reservation_date, reservation_time, status, created_at",
-      )
-      .eq("restaurant_id", restaurant.id)
-      .order("created_at", { ascending: false })
-      .limit(10);
-
-    const { data: products } = await supabase
-      .from("restaurant_products")
-      .select("id, name, created_at")
-      .eq("restaurant_id", restaurant.id)
-      .order("created_at", { ascending: false })
-      .limit(10);
+    const [{ data: orders }, { data: reservations }, { data: products }] = await Promise.all([
+      supabase
+        .from("restaurant_orders")
+        .select("id, customer_name, status, created_at")
+        .eq("restaurant_id", restaurant.id)
+        .order("created_at", { ascending: false })
+        .limit(10),
+      supabase
+        .from("table_reservations")
+        .select(
+          "id, first_name, last_name, guest_count, reservation_date, reservation_time, status, created_at",
+        )
+        .eq("restaurant_id", restaurant.id)
+        .order("created_at", { ascending: false })
+        .limit(10),
+      supabase
+        .from("restaurant_products")
+        .select("id, name, created_at")
+        .eq("restaurant_id", restaurant.id)
+        .order("created_at", { ascending: false })
+        .limit(10),
+    ]);
 
     const events: any[] = [];
 

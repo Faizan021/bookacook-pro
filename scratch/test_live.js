@@ -19,7 +19,8 @@ async function main() {
 
   console.log("Navigating to https://speisely.de/...");
   try {
-    await page.goto("https://speisely.de/", { waitUntil: "networkidle" });
+    await page.goto("https://speisely.de/", { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(2000);
     console.log("Successfully navigated. Page title:", await page.title());
   } catch (e) {
     console.error("Navigation failed:", e);
