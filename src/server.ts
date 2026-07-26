@@ -7,6 +7,8 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
+const domainCache = new Map<string, string>();
+
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
@@ -92,43 +94,33 @@ export default {
 
           const subPath = url.pathname === "/" ? "" : url.pathname;
 
-          // Check restaurants
-          let res = await fetch(
-            `${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`,
-            {
+          // Check domain cache first
+          const domainCacheKey = `${searchColumn}:${searchValue}`;
+          let cachedPath = domainCache.get(domainCacheKey);
+
+          if (cachedPath) {
+            targetPath = `${cachedPath}${subPath}`;
+          } else {
+            const fetchOpts = {
               headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
-            },
-          );
-          let data = await res.json();
-          if (data && data.length > 0) {
-            targetPath = `/restaurant/${data[0].slug}${subPath}`;
-          }
+            };
 
-          // Check caterers
-          if (!targetPath) {
-            res = await fetch(
-              `${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`,
-              {
-                headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
-              },
-            );
-            data = await res.json();
-            if (data && data.length > 0) {
-              targetPath = `/catering/${data[0].slug}${subPath}`;
-            }
-          }
+            // Query restaurants, caterers, planners concurrently
+            const [resRest, resCat, resPlan] = await Promise.all([
+              fetch(`${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`, fetchOpts).then(r => r.json()).catch(() => []),
+              fetch(`${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`, fetchOpts).then(r => r.json()).catch(() => []),
+              fetch(`${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`, fetchOpts).then(r => r.json()).catch(() => []),
+            ]);
 
-          // Check planners
-          if (!targetPath) {
-            res = await fetch(
-              `${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`,
-              {
-                headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
-              },
-            );
-            data = await res.json();
-            if (data && data.length > 0) {
-              targetPath = `/planner/${data[0].slug}${subPath}`;
+            if (resRest && resRest.length > 0) {
+              domainCache.set(domainCacheKey, `/restaurant/${resRest[0].slug}`);
+              targetPath = `/restaurant/${resRest[0].slug}${subPath}`;
+            } else if (resCat && resCat.length > 0) {
+              domainCache.set(domainCacheKey, `/catering/${resCat[0].slug}`);
+              targetPath = `/catering/${resCat[0].slug}${subPath}`;
+            } else if (resPlan && resPlan.length > 0) {
+              domainCache.set(domainCacheKey, `/planner/${resPlan[0].slug}`);
+              targetPath = `/planner/${resPlan[0].slug}${subPath}`;
             }
           }
 
@@ -146,14 +138,18 @@ export default {
           let staticPath = null;
           const subPath = url.pathname === "/" ? "" : url.pathname;
 
-          // Dynamically import data fetchers
-          const { getRestaurants } = await import("./data/restaurants");
-          const { getCaterers } = await import("./data/caterers");
-          const { getPlanners } = await import("./data/planners");
+          // Dynamically import data fetchers concurrently
+          const [{ getRestaurants }, { getCaterers }, { getPlanners }] = await Promise.all([
+            import("./data/restaurants"),
+            import("./data/caterers"),
+            import("./data/planners"),
+          ]);
 
-          const restaurants = await getRestaurants();
-          const caterers = await getCaterers();
-          const planners = await getPlanners();
+          const [restaurants, caterers, planners] = await Promise.all([
+            getRestaurants(),
+            getCaterers(),
+            getPlanners(),
+          ]);
 
           if (restaurants.find((r) => r.id === targetSlug))
             staticPath = `/restaurant/${targetSlug}${subPath}`;
@@ -195,6 +191,23 @@ export default {
             headers: newHeaders,
           });
         }
+      }
+
+      const reqUrl = new URL(request.url);
+      const isPublicRoute =
+        request.method === "GET" &&
+        !reqUrl.pathname.startsWith("/_authenticated") &&
+        !reqUrl.pathname.startsWith("/api") &&
+        !reqUrl.pathname.startsWith("/_server");
+
+      const contentType = finalResponse.headers.get("content-type") || "";
+      if (isPublicRoute && contentType.includes("text/html") && !finalResponse.headers.has("cache-control")) {
+        const newHeaders = new Headers(finalResponse.headers);
+        newHeaders.set("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=300");
+        finalResponse = new Response(finalResponse.body, {
+          status: finalResponse.status,
+          headers: newHeaders,
+        });
       }
 
       return finalResponse;

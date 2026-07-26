@@ -15,8 +15,8 @@ export const BRIEF_STATUSES = [
 ] as const;
 export type BriefStatus = (typeof BRIEF_STATUSES)[number];
 
-async function resolveOwnedCaterer(supabase: any, userId: string) {
-  const { data } = await supabase.from("caterers").select("*").eq("owner_id", userId).maybeSingle();
+async function resolveOwnedCaterer(supabase: any, userId: string, select = "*") {
+  const { data } = await supabase.from("caterers").select(select).eq("owner_id", userId).maybeSingle();
   return data;
 }
 

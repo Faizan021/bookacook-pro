@@ -3,8 +3,8 @@ import { z } from "zod";
 import { requireRole } from "@/lib/auth/role-middleware";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 
-async function resolveOwnedPlanner(supabase: any, userId: string) {
-  const { data } = await supabase.from("planners").select("*").eq("owner_id", userId).maybeSingle();
+async function resolveOwnedPlanner(supabase: any, userId: string, select = "*") {
+  const { data } = await supabase.from("planners").select(select).eq("owner_id", userId).maybeSingle();
   return data;
 }
 

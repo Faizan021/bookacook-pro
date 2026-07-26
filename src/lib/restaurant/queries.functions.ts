@@ -14,10 +14,10 @@ const ORDER_STATUSES = [
 ] as const;
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
-async function resolveOwnedRestaurant(supabase: any, userId: string) {
+async function resolveOwnedRestaurant(supabase: any, userId: string, select = "*") {
   const { data } = await supabase
     .from("restaurants")
-    .select("*")
+    .select(select)
     .eq("owner_id", userId)
     .maybeSingle();
   return data;

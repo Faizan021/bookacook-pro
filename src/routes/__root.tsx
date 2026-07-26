@@ -14,16 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider } from "../i18n/I18nProvider";
 import { CookieBanner } from "../components/CookieBanner";
 import { Analytics } from "@vercel/analytics/react";
-import { initPostHog } from "../utils/posthog";
-import posthog from "posthog-js";
-import * as Sentry from "@sentry/react";
 
-if (typeof window !== "undefined") {
-  Sentry.init({
-    dsn: "https://9a2bcf7470d25fb0f32cdae74a09c335@o4511677378002944.ingest.de.sentry.io/4511677391306832",
-    // We only enable basic error monitoring to keep V1 lightweight (no tracing/replays)
-  });
-}
 
 function NotFoundComponent() {
   return (
@@ -210,15 +201,23 @@ function RootComponent() {
   const pathname = router.state.location.pathname;
 
   useEffect(() => {
-    initPostHog();
-  }, []);
-
-  useEffect(() => {
     if (typeof window !== "undefined") {
-      posthog.capture("$pageview", {
-        $current_url: window.location.href,
-        $pathname: pathname,
-      });
+      Promise.all([
+        import("@sentry/react"),
+        import("../utils/posthog"),
+        import("posthog-js"),
+      ])
+        .then(([SentryModule, { initPostHog }, posthogModule]) => {
+          SentryModule.init({
+            dsn: "https://9a2bcf7470d25fb0f32cdae74a09c335@o4511677378002944.ingest.de.sentry.io/4511677391306832",
+          });
+          initPostHog();
+          posthogModule.default.capture("$pageview", {
+            $current_url: window.location.href,
+            $pathname: pathname,
+          });
+        })
+        .catch(() => {});
     }
   }, [pathname]);
 
