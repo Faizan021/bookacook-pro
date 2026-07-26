@@ -2800,55 +2800,117 @@ function LogisticsSection() {
 
   const caterer = q.data?.caterer;
 
-  const [serviceAreas, setServiceAreas] = useState((caterer as any)?.service_areas || "");
+  // Initialize service areas token chips
+  const rawAreas = (caterer as any)?.service_areas || "";
+  const initialChips = React.useMemo(() => {
+    return rawAreas
+      .split(/[,;\n\s]+/)
+      .map((s: string) => s.trim())
+      .filter(Boolean);
+  }, [rawAreas]);
+
+  const [postalChips, setPostalChips] = useState<string[]>(initialChips);
+  const [chipInput, setChipInput] = useState("");
   const [deliveryFee, setDeliveryFee] = useState(((caterer as any)?.delivery_fee_cents || 0) / 100);
   const [minDelivery, setMinDelivery] = useState(((caterer as any)?.min_delivery_cents || 0) / 100);
   const [maxDistance, setMaxDistance] = useState((caterer as any)?.max_delivery_distance_km || 0);
   const [acceptsInquiries, setAcceptsInquiries] = useState(
     (caterer as any)?.accepts_inquiries ?? true,
   );
+
+  // Option B: Outside-Area Inquiry Intake Toggle
+  const [acceptsOutsideAreas, setAcceptsOutsideAreas] = useState<boolean>(
+    (caterer as any)?.seo_logistics_details?.includes("outside_areas:false") ? false : true,
+  );
+
+  // Option B: Logistics Pricing Mode ("custom_quote" vs "fixed_fee")
+  const [pricingMode, setPricingMode] = useState<"custom_quote" | "fixed_fee">(
+    (caterer as any)?.seo_logistics_details?.includes("pricing_mode:fixed") ? "fixed_fee" : "custom_quote",
+  );
+
   const [saving, setSaving] = useState(false);
 
   if (!caterer) return null;
 
+  function handleAddChip() {
+    const trimmed = chipInput.trim();
+    if (!trimmed) return;
+    const newItems = trimmed
+      .split(/[,;\n\s]+/)
+      .map((s) => s.trim())
+      .filter((s) => s && !postalChips.includes(s));
+
+    if (newItems.length > 0) {
+      setPostalChips([...postalChips, ...newItems]);
+      setChipInput("");
+    }
+  }
+
+  function handleRemoveChip(indexToRemove: number) {
+    setPostalChips(postalChips.filter((_, idx) => idx !== indexToRemove));
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" || e.key === "," || e.key === " ") {
+      e.preventDefault();
+      handleAddChip();
+    }
+  }
+
   async function handleSave() {
     setSaving(true);
     try {
+      const combinedServiceAreas = postalChips.join(", ");
+      const logisticsMetaStr = `pricing_mode:${pricingMode};outside_areas:${acceptsOutsideAreas}`;
+
       await upsert({
         data: {
           name: caterer!.name, // Required by schema
-          service_areas: serviceAreas,
-          delivery_fee_cents: Math.round(deliveryFee * 100),
+          service_areas: combinedServiceAreas,
+          delivery_fee_cents: pricingMode === "custom_quote" ? 0 : Math.round(deliveryFee * 100),
           min_delivery_cents: Math.round(minDelivery * 100),
           max_delivery_distance_km: maxDistance,
           accepts_inquiries: acceptsInquiries,
+          seo_logistics_details: logisticsMetaStr,
         },
       });
-      toast.success("Logistics settings saved successfully!");
+      toast.success(
+        tt("Logistik-Einstellungen erfolgreich gespeichert!", "Logistics settings saved successfully!"),
+      );
       qc.invalidateQueries({ queryKey: ["caterer"] });
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(e.message || tt("Fehler beim Speichern", "Failed to save settings"));
     } finally {
       setSaving(false);
     }
   }
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 text-left">
       <div className="flex flex-col gap-1">
-        <h2 className="font-display text-2xl">Logistics & Delivery</h2>
-        <p className="text-sm text-muted-foreground">
-          Manage where you deliver, delivery fees, and minimum order requirements.
+        <h2 className="font-display text-2xl text-forest">
+          {tt("Logistik & Lieferoptionen", "Logistics & Delivery")}
+        </h2>
+        <p className="text-xs text-muted-foreground">
+          {tt(
+            "Verwalte deine primären Liefergebiete, Anfragen-Regeln und Catering-Logistikpreise.",
+            "Manage your primary service zones, inquiry preferences, and catering logistics pricing.",
+          )}
         </p>
       </div>
-      <div className="surface-card p-6 space-y-8 max-w-3xl">
-        <div className="flex items-center justify-between border border-border/60 rounded-2xl p-4 bg-[#f8faf9]">
+
+      <div className="surface-card p-6 space-y-8 max-w-3xl bg-white border border-[#eadfce]/40 rounded-3xl shadow-sm">
+        {/* Toggle 1: General Inquiry Acceptance */}
+        <div className="flex items-center justify-between border border-[#eadfce]/60 rounded-2xl p-4 bg-[#f8faf9]">
           <div>
-            <Label htmlFor="accepts-inquiries" className="font-semibold text-forest">
-              Accept Inquiries
+            <Label htmlFor="accepts-inquiries" className="font-semibold text-forest text-sm">
+              {tt("Neue Catering-Anfragen annehmen", "Accept New Inquiries")}
             </Label>
-            <p className="text-[10px] text-muted-foreground mt-0.5">
-              Allows customers to submit new catering event inquiries.
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              {tt(
+                "Ermöglicht Kunden, neue Anfragen für Catering-Events einzureichen.",
+                "Allows clients to submit new event inquiries on your storefront.",
+              )}
             </p>
           </div>
           <Switch
@@ -2858,73 +2920,224 @@ function LogisticsSection() {
           />
         </div>
 
-        <div className="space-y-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2">
-            <span className="text-forest">📍</span> Service Areas / Postal Codes
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Enter a comma-separated list of postal codes (e.g., 10115, 10117, 10119, 10435). This
-            ensures customers only see your catering brand if you can fulfill their order.
-          </p>
-          <Input
-            value={serviceAreas}
-            onChange={(e) => setServiceAreas(e.target.value)}
-            placeholder="e.g. 10115, 10117, 10119, 10435"
-            className="text-lg py-6"
+        {/* Toggle 2: Option B Out-of-Area Leads Intake */}
+        <div className="flex items-center justify-between border border-[#eadfce]/60 rounded-2xl p-4 bg-[#f8faf9]">
+          <div>
+            <Label htmlFor="accepts-outside-areas" className="font-semibold text-forest text-sm flex items-center gap-1.5">
+              <span>🌐</span>
+              {tt(
+                "Anfragen außerhalb der primären Gebiete erlauben?",
+                "Accept inquiries from outside primary areas?",
+              )}
+            </Label>
+            <p className="text-[11px] text-muted-foreground mt-0.5 max-w-lg leading-relaxed">
+              {tt(
+                "Ermöglicht Kunden aus Nachbarregionen, individuelle Anfragen zu stellen. Du kannst jedes Angebot flexibel annehmen oder ablehnen.",
+                "Allows potential clients from neighboring regions to send inquiry requests. You maintain full flexibility to accept or decline each proposal based on event scale.",
+              )}
+            </p>
+          </div>
+          <Switch
+            id="accepts-outside-areas"
+            checked={acceptsOutsideAreas}
+            onCheckedChange={setAcceptsOutsideAreas}
           />
         </div>
 
-        <div className="space-y-4 pt-4 border-t border-border">
-          <h3 className="font-semibold text-lg flex items-center gap-2">
-            <span className="text-forest">🚚</span> Delivery Rules
+        {/* Section 2: Tokenized Postal Codes / Service Areas */}
+        <div className="space-y-3 pt-2">
+          <h3 className="font-semibold text-base text-forest flex items-center gap-2">
+            <span>📍</span> {tt("Primäre Liefergebiete & Postleitzahlen", "Primary Service Areas & Postal Codes")}
           </h3>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            {tt(
+              "Gib Postleitzahlen oder Ortsteile ein (z. B. 41061, 41063, Düsseldorf, Köln). Drücke Komma, Leerzeichen oder Eingabe zum Hinzufügen.",
+              "Enter postal codes or zone names (e.g. 41061, 41063, Düsseldorf). Press Enter, Space, or Comma to add.",
+            )}
+          </p>
 
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label>Base Delivery Fee (€)</Label>
-              <Input
-                type="number"
-                min="0"
-                step="1"
-                value={deliveryFee || ""}
-                onChange={(e) => setDeliveryFee(parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
-              />
-              <p className="text-xs text-muted-foreground">Fee added to the quote for delivery.</p>
+          {/* Postal Code Chips Display */}
+          <div className="border border-[#eadfce] rounded-2xl p-3 bg-white space-y-3">
+            <div className="flex flex-wrap gap-2 items-center min-h-[38px]">
+              {postalChips.map((chip, idx) => (
+                <span
+                  key={chip + idx}
+                  className="inline-flex items-center gap-1.5 bg-forest/10 border border-forest/20 text-forest font-medium text-xs px-3 py-1 rounded-full shadow-xs transition hover:bg-forest/15"
+                >
+                  <span>{chip}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveChip(idx)}
+                    className="text-forest/60 hover:text-rose-600 font-bold ml-0.5 text-xs rounded-full w-4 h-4 inline-flex items-center justify-center"
+                    title={tt("Entfernen", "Remove")}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+              {postalChips.length === 0 && (
+                <span className="text-xs text-muted-foreground/60 italic">
+                  {tt("Noch keine Gebiete hinzugefügt. Gib oben PLZs ein.", "No service areas added yet. Enter zip codes above.")}
+                </span>
+              )}
             </div>
-            <div className="space-y-2">
-              <Label>Minimum Delivery Value (€)</Label>
+
+            <div className="flex items-center gap-2 pt-1 border-t border-[#eadfce]/40">
               <Input
-                type="number"
-                min="0"
-                step="1"
-                value={minDelivery || ""}
-                onChange={(e) => setMinDelivery(parseFloat(e.target.value) || 0)}
-                placeholder="0.00"
+                value={chipInput}
+                onChange={(e) => setChipInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={tt("z. B. 41061 oder Düsseldorf eingeben…", "e.g. enter 41061 or Düsseldorf…")}
+                className="text-sm bg-gray-50/50 border-[#eadfce] focus-visible:ring-forest rounded-xl"
               />
-              <p className="text-xs text-muted-foreground">
-                Minimum subtotal required to accept an order.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label>Max Delivery Distance (km)</Label>
-              <Input
-                type="number"
-                min="0"
-                step="1"
-                value={maxDistance || ""}
-                onChange={(e) => setMaxDistance(parseFloat(e.target.value) || 0)}
-                placeholder="20"
-              />
-              <p className="text-xs text-muted-foreground">
-                Maximum radius you are willing to travel.
-              </p>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleAddChip}
+                className="shrink-0 text-xs border-forest/20 text-forest hover:bg-forest/5 rounded-xl font-medium"
+              >
+                + {tt("Hinzufügen", "Add")}
+              </Button>
             </div>
           </div>
         </div>
 
-        <Button onClick={handleSave} disabled={saving} className="w-full mt-4">
-          {saving ? "Saving..." : "Save Logistics"}
+        {/* Section 3: Catering Delivery Pricing Mode */}
+        <div className="space-y-4 pt-4 border-t border-[#eadfce]/40">
+          <h3 className="font-semibold text-base text-forest flex items-center gap-2">
+            <span>🚚</span> {tt("Catering-Lieferkosten & Logistik-Modell", "Catering Logistics & Delivery Pricing")}
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Mode 1: Custom Quote Delivery Pricing */}
+            <div
+              onClick={() => setPricingMode("custom_quote")}
+              className={`cursor-pointer border rounded-2xl p-4 transition-all flex flex-col justify-between space-y-2 ${
+                pricingMode === "custom_quote"
+                  ? "border-forest bg-forest/5 ring-1 ring-forest/30"
+                  : "border-[#eadfce] bg-white hover:border-forest/40"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-forest">
+                  {tt("Individuelles Angebot", "Custom Quote Pricing")}
+                </span>
+                <input
+                  type="radio"
+                  name="pricing_mode"
+                  checked={pricingMode === "custom_quote"}
+                  onChange={() => setPricingMode("custom_quote")}
+                  className="accent-forest"
+                />
+              </div>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                {tt(
+                  "Lieferkosten werden im Angebot individuell berechnet (basierend auf Entfernung, Personal & Transport).",
+                  "Delivery & logistics costs will be calculated individually per event proposal.",
+                )}
+              </p>
+            </div>
+
+            {/* Mode 2: Fixed Base Fee */}
+            <div
+              onClick={() => setPricingMode("fixed_fee")}
+              className={`cursor-pointer border rounded-2xl p-4 transition-all flex flex-col justify-between space-y-2 ${
+                pricingMode === "fixed_fee"
+                  ? "border-forest bg-forest/5 ring-1 ring-forest/30"
+                  : "border-[#eadfce] bg-white hover:border-forest/40"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-forest">
+                  {tt("Feste Grundgebühr", "Fixed Base Fee")}
+                </span>
+                <input
+                  type="radio"
+                  name="pricing_mode"
+                  checked={pricingMode === "fixed_fee"}
+                  onChange={() => setPricingMode("fixed_fee")}
+                  className="accent-forest"
+                />
+              </div>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                {tt(
+                  "Festpreis für Anfahrt + Mindestbestellwert für alle Bestellungen festlegen.",
+                  "Set a fixed base delivery fee and minimum subtotal for all bookings.",
+                )}
+              </p>
+            </div>
+          </div>
+
+          {/* Conditional Delivery Fee Controls when Fixed Fee mode active */}
+          {pricingMode === "fixed_fee" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold">{tt("Liefergebühr (€)", "Delivery Fee (€)")}</Label>
+                <Input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={deliveryFee || ""}
+                  onChange={(e) => setDeliveryFee(parseFloat(e.target.value) || 0)}
+                  placeholder="0.00"
+                  className="bg-white border-[#eadfce] rounded-xl text-sm"
+                />
+                <p className="text-[10px] text-muted-foreground">
+                  {tt("Pauschale Anfahrtsgebühr", "Flat rate delivery fee")}
+                </p>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold">{tt("Mindestbestellwert (€)", "Minimum Order (€)")}</Label>
+                <Input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={minDelivery || ""}
+                  onChange={(e) => setMinDelivery(parseFloat(e.target.value) || 0)}
+                  placeholder="0.00"
+                  className="bg-white border-[#eadfce] rounded-xl text-sm"
+                />
+                <p className="text-[10px] text-muted-foreground">
+                  {tt("Mindestwert pro Auftrag", "Minimum event subtotal")}
+                </p>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-semibold">{tt("Max. Radius (km)", "Max Radius (km)")}</Label>
+                <Input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={maxDistance || ""}
+                  onChange={(e) => setMaxDistance(parseFloat(e.target.value) || 0)}
+                  placeholder="20"
+                  className="bg-white border-[#eadfce] rounded-xl text-sm"
+                />
+                <p className="text-[10px] text-muted-foreground">
+                  {tt("Maximaler Lieferradius", "Maximum delivery radius")}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 bg-forest/5 rounded-2xl border border-forest/15 text-left text-[11px] text-forest/80 leading-relaxed flex items-center gap-2">
+              <span className="text-base">💡</span>
+              <span>
+                {tt(
+                  "Individuelles Angebot gewählt: Liefer- und Transportkosten werden für jede Anfrage direkt bei der Angebotserstellung kalkuliert.",
+                  "Custom quote mode active: Transport and staffing logistics will be entered individually when creating event proposals.",
+                )}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <Button
+          onClick={handleSave}
+          disabled={saving}
+          className="w-full mt-4 bg-forest hover:bg-forest/90 text-white font-semibold py-3 rounded-2xl transition shadow-sm"
+        >
+          {saving
+            ? tt("Wird gespeichert…", "Saving Logistics…")
+            : tt("Logistik-Einstellungen speichern", "Save Logistics Settings")}
         </Button>
       </div>
     </section>
