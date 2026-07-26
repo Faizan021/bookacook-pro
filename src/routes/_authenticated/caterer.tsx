@@ -1497,6 +1497,8 @@ function OverviewSection({ caterer }: { caterer: any }) {
 }
 
 function BusinessProfileSection() {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const qc = useQueryClient();
   const fetchBriefs = useServerFn(getCatererBriefs);
   const q = useQuery({
