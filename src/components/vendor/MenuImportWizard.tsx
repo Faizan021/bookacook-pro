@@ -30,7 +30,7 @@ import { bulkImportCatererMenuItems } from "@/lib/caterer/menu.functions";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type ImportMethod = "url" | "pdf" | "image" | "csv";
+type ImportMethod = "url" | "pdf" | "image" | "csv" | "text";
 
 type WizardStep = "select" | "parse" | "review" | "done";
 
@@ -419,6 +419,7 @@ export function MenuImportWizard({
   const [step, setStep] = useState<WizardStep>("select");
   const [method, setMethod] = useState<ImportMethod | null>(null);
   const [urlInput, setUrlInput] = useState("");
+  const [textInput, setTextInput] = useState("");
   const [parseError, setParseError] = useState<string | null>(null);
   const [isParsing, setIsParsing] = useState(false);
   const [rows, setRows] = useState<ReviewRow[]>([]);
@@ -443,6 +444,8 @@ export function MenuImportWizard({
             const plainText = html.replace(/<[^>]+>/g, " ");
             parsed = parseTextToItems(plainText);
           }
+        } else if (selectedMethod === "text") {
+          parsed = parseTextToItems(textInput);
         } else if (selectedMethod === "csv" && file) {
           const text = await readFileAsText(file);
           // Detect by extension whether to use CSV parser or text parser
@@ -498,7 +501,7 @@ export function MenuImportWizard({
         setIsParsing(false);
       }
     },
-    [urlInput, fetchUrlFn],
+    [urlInput, textInput, fetchUrlFn],
   );
 
   // ── Row handlers ────────────────────────────────────────────────────────────
@@ -627,6 +630,15 @@ export function MenuImportWizard({
                     ),
                   },
                   {
+                    id: "text" as ImportMethod,
+                    emoji: "📝",
+                    label: tt("Text einfügen", "Copy & Paste Text"),
+                    desc: tt(
+                      "Text Ihrer Speisekarte kopieren & einfügen",
+                      "Paste your menu text directly",
+                    ),
+                  },
+                  {
                     id: "pdf" as ImportMethod,
                     emoji: "📄",
                     label: "PDF",
@@ -687,6 +699,23 @@ export function MenuImportWizard({
               </div>
             )}
 
+            {/* Text input */}
+            {method === "text" && (
+              <div className="space-y-2">
+                <Label htmlFor="import-text">{tt("Speisekarte Text", "Menu Text")}</Label>
+                <Textarea
+                  id="import-text"
+                  placeholder={tt(
+                    "Fügen Sie hier den Text ein. Beispiel:\nRustika 13,90 € pro Person\n- Kartoffel-Lauchsuppe\n- Krustenbraten...",
+                    "Paste text here. Example:\nRustika 13,90 € pro Person\n- Soup\n- Pork roast...",
+                  )}
+                  className="min-h-[160px] font-mono text-xs"
+                  value={textInput}
+                  onChange={(e) => setTextInput(e.target.value)}
+                />
+              </div>
+            )}
+
             {/* File inputs */}
             {(method === "pdf" || method === "image" || method === "csv") && (
               <div>
@@ -723,10 +752,13 @@ export function MenuImportWizard({
               <Button type="button" variant="outline" onClick={onClose}>
                 {tt("Abbrechen", "Cancel")}
               </Button>
-              {method === "url" && (
+              {(method === "url" || method === "text") && (
                 <Button
                   type="button"
-                  disabled={method === "url" && !urlInput.trim()}
+                  disabled={
+                    (method === "url" && !urlInput.trim()) ||
+                    (method === "text" && !textInput.trim())
+                  }
                   onClick={() => runParse(method!)}
                   className="bg-brand-orange hover:bg-brand-orange/90 text-white"
                 >
