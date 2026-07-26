@@ -84,14 +84,31 @@ function parseTextToItems(text: string): ReviewRow[] {
 
   const rows: ReviewRow[] = [];
 
-  // Regex: optional number+dot, then name, optional description dots/spaces, then price
+  // Regexes
   const lineRe = /^(?:\d+[.)]\s*)?(.+?)\s*[.]{3,}\s*([\d,.\s€$£¥]+(?:EUR|USD)?)\s*$/i;
-  // Simpler "name\tprice" split
   const tabRe = /^(.+?)\t+([\d,.€$£¥\s]+)$/;
-  // "name, price" split
   const commaRe = /^(.+?),\s*([\d,.€$£¥\s]+)$/;
 
+  // Smart Price Regexes
+  const currencyPriceRe =
+    /^(.*?)\s+([\d,.]+)\s*(?:€|eur|usd|chf)\s*(?:pro\s*Person|per\s*Person|p\.P\.)?\s*$/i;
+  const proPersonPriceRe = /^(.*?)\s+([\d,.]+)\s*(?:pro\s*Person|per\s*Person|p\.P\.)\s*$/i;
+  const simpleDecimalPriceRe = /^(.*?)\s+(\d+(?:[.,]\d{1,2}))\s*$/;
+
   for (const line of lines) {
+    // Check if it's a bullet point or description line for the previous item
+    const bulletMatch = line.match(/^[-*•+o]\s*(.+)$/);
+    if ((bulletMatch || /^[a-zäöü]/.test(line)) && rows.length > 0) {
+      const descLine = bulletMatch ? bulletMatch[1] : line;
+      const lastRow = rows[rows.length - 1];
+      if (lastRow.description) {
+        lastRow.description += "\n" + descLine;
+      } else {
+        lastRow.description = descLine;
+      }
+      continue;
+    }
+
     // Skip obvious section headers (all caps, no price digits)
     if (/^[A-ZÄÖÜ\s]{4,}$/.test(line) && !/\d/.test(line)) continue;
 
@@ -102,6 +119,9 @@ function parseTextToItems(text: string): ReviewRow[] {
     const m1 = lineRe.exec(line);
     const m2 = tabRe.exec(line);
     const m3 = commaRe.exec(line);
+    const m4 = currencyPriceRe.exec(line);
+    const m5 = proPersonPriceRe.exec(line);
+    const m6 = simpleDecimalPriceRe.exec(line);
 
     if (m1) {
       name = cleanText(m1[1]);
@@ -112,8 +132,16 @@ function parseTextToItems(text: string): ReviewRow[] {
     } else if (m3) {
       name = cleanText(m3[1]);
       priceCents = parsePrice(m3[2]);
+    } else if (m4) {
+      name = cleanText(m4[1]);
+      priceCents = parsePrice(m4[2]);
+    } else if (m5) {
+      name = cleanText(m5[1]);
+      priceCents = parsePrice(m5[2]);
+    } else if (m6) {
+      name = cleanText(m6[1]);
+      priceCents = parsePrice(m6[2]);
     } else {
-      // Plain line: use as name, price stays 0 for user to fill in
       name = cleanText(line);
     }
 
