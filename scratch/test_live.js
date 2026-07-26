@@ -17,9 +17,9 @@ async function main() {
     }
   });
 
-  console.log("Navigating to https://speisely.de/...");
+  console.log("Navigating to https://speisely-v2-eimwgchu3-ahmadfaizan01-3720s-projects.vercel.app/...");
   try {
-    await page.goto("https://speisely.de/", { waitUntil: "domcontentloaded" });
+    await page.goto("https://speisely-v2-eimwgchu3-ahmadfaizan01-3720s-projects.vercel.app/", { waitUntil: "domcontentloaded", timeout: 45000 });
     await page.waitForTimeout(2000);
     console.log("Successfully navigated. Page title:", await page.title());
   } catch (e) {

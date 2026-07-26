@@ -242,15 +242,20 @@ function Home() {
 
         {/* Right-side cinematic image — desktop only */}
         <div className="absolute right-0 top-0 bottom-0 w-[48%] z-0 hidden lg:block">
-          <img
-            src="/hero-cinematic.webp"
-            fetchPriority="high"
-            alt={tt(
-              "Speisely – Premium Gastronomie & Events",
-              "Speisely – Premium Hospitality & Events",
-            )}
-            className="w-full h-full object-cover object-center"
-          />
+          <picture>
+            <source srcSet="/hero-cinematic.webp" type="image/webp" />
+            <img
+              src="/hero-cinematic.webp"
+              fetchPriority="high"
+              decoding="async"
+              sizes="50vw"
+              alt={tt(
+                "Speisely – Premium Gastronomie & Events",
+                "Speisely – Premium Hospitality & Events",
+              )}
+              className="w-full h-full object-cover object-center"
+            />
+          </picture>
           {/* Left-side gradient fade so text is never blocked */}
           <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/80 to-transparent" />
           {/* Subtle bottom vignette */}
@@ -259,15 +264,20 @@ function Home() {
 
         {/* Mobile background image (behind content, heavily dimmed) */}
         <div className="absolute inset-0 z-0 lg:hidden">
-          <img
-            src="/hero-cinematic.webp"
-            fetchPriority="high"
-            alt={tt(
-              "Speisely – Premium Gastronomie & Events",
-              "Speisely – Premium Hospitality & Events",
-            )}
-            className="w-full h-full object-cover object-center"
-          />
+          <picture>
+            <source srcSet="/hero-cinematic.webp" type="image/webp" />
+            <img
+              src="/hero-cinematic.webp"
+              fetchPriority="high"
+              decoding="async"
+              sizes="100vw"
+              alt={tt(
+                "Speisely – Premium Gastronomie & Events",
+                "Speisely – Premium Hospitality & Events",
+              )}
+              className="w-full h-full object-cover object-center"
+            />
+          </picture>
           <div className="absolute inset-0 bg-forest/85" />
         </div>
 
