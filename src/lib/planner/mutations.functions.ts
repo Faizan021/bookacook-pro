@@ -32,7 +32,7 @@ export const getMyPlannerServices = createServerFn({ method: "GET" })
     const services = await Promise.all(
       (data ?? []).map(async (s: any) => {
         if (!s.image_url) return { ...s, image_signed_url: null as string | null };
-        if (/^https?:\/\//i.test(s.image_url)) return { ...s, image_signed_url: s.image_url };
+        if (/^https?:\/\//i.test(s.image_url) || s.image_url.startsWith("/")) return { ...s, image_signed_url: s.image_url };
         const { data: signed } = await supabase.storage
           .from("planner-services")
           .createSignedUrl(s.image_url, 60 * 60);

@@ -189,6 +189,65 @@ function CreatePlannerForm() {
   );
 }
 
+const EVENT_PACKAGE_PHOTO_PRESETS = [
+  {
+    id: "catering_event",
+    title_de: "🥂 Event & Buffet",
+    title_en: "🥂 Event & Buffet",
+    keywords: ["buffet", "catering", "event", "platte", "fingerfood", "auswahl"],
+    url: "/images/event_catering_hero.webp",
+  },
+  {
+    id: "fine_dining",
+    title_de: "🍽️ Fine Dining & Plating",
+    title_en: "🍽️ Fine Dining & Plating",
+    keywords: ["gourmet", "fine", "dining", "menü", "gang", "dessert", "kuchen", "dinner"],
+    url: "/images/restaurant_hero_food.webp",
+  },
+  {
+    id: "office_lunch",
+    title_de: "💼 Business & Meeting",
+    title_en: "💼 Business & Meeting",
+    keywords: ["business", "lunch", "häppchen", "canapé", "brötchen", "bites", "office", "meeting"],
+    url: "/images/office_catering_hero.webp",
+  },
+  {
+    id: "meat",
+    title_de: "🥩 Steak & Premium Meat",
+    title_en: "🥩 Steak & Premium Meat",
+    keywords: ["rinder", "beef", "filet", "speck", "braten", "roast", "steak", "fleisch"],
+    url: "/images/business_lunch_plating.webp",
+  },
+  {
+    id: "burger",
+    title_de: "🍔 BBQ & Street Food",
+    title_en: "🍔 BBQ & Street Food",
+    keywords: ["burger", "bbq", "grill", "pulled", "fries", "street"],
+    url: "/images/banner_burger.webp",
+  },
+  {
+    id: "sushi",
+    title_de: "🍣 Sushi & Seafood",
+    title_en: "🍣 Sushi & Seafood",
+    keywords: ["sushi", "maki", "nigiri", "lachs", "salmon", "asia", "fisch"],
+    url: "/images/banner_sushi.webp",
+  },
+  {
+    id: "healthy",
+    title_de: "🥗 Vegan & Healthy",
+    title_en: "🥗 Vegan & Healthy",
+    keywords: ["salat", "salad", "bowl", "healthy", "vegan", "veggie", "vegetarisch"],
+    url: "/images/banner_healthy.webp",
+  },
+  {
+    id: "schnitzel",
+    title_de: "🍖 Traditional German",
+    title_en: "🍖 Traditional German",
+    keywords: ["schnitzel", "cordon", "kartoffel", "klassiker"],
+    url: "/images/banner_schnitzel.webp",
+  },
+];
+
 function ServiceForm({
   plannerId,
   editing,
@@ -217,6 +276,22 @@ function ServiceForm({
   const [uploading, setUploading] = useState(false);
   const [generatingAi, setGeneratingAi] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  function handleSuggestAiPhoto() {
+    const query = `${title} ${description}`.toLowerCase();
+    const matched = EVENT_PACKAGE_PHOTO_PRESETS.find((p) =>
+      p.keywords.some((k) => query.includes(k)),
+    );
+    const selected = matched || EVENT_PACKAGE_PHOTO_PRESETS[0];
+    setImagePath(selected.url);
+    setImagePreview(selected.url);
+    toast.success(
+      tt(
+        `KI hat das Foto "${lang === "de" ? selected.title_de : selected.title_en}" vorgeschlagen!`,
+        `AI suggested "${lang === "de" ? selected.title_de : selected.title_en}" photo!`,
+      ),
+    );
+  }
 
   async function handleGenerateAiDescription() {
     if (!title.trim()) {
@@ -336,7 +411,7 @@ function ServiceForm({
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="sprice">Starting from (EUR)</Label>
+        <Label htmlFor="sprice">{tt("Ab Preis (EUR)", "Starting from (EUR)")}</Label>
         <Input
           id="sprice"
           type="number"
@@ -347,13 +422,23 @@ function ServiceForm({
           required
         />
       </div>
-      <div className="space-y-1.5">
-        <Label>Image</Label>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label>{tt("Bild (Optional)", "Image (Optional)")}</Label>
+          <button
+            type="button"
+            onClick={handleSuggestAiPhoto}
+            className="inline-flex items-center gap-1 text-[11px] font-semibold text-forest hover:opacity-80 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>{tt("KI-Bild vorschlagen", "Suggest AI Photo")}</span>
+          </button>
+        </div>
         {imagePreview && (
           <img
             src={imagePreview}
             alt=""
-            className="h-28 w-full rounded-lg object-cover shadow-sm"
+            className="h-28 w-full rounded-lg object-cover shadow-sm border border-border"
           />
         )}
         <input
@@ -370,11 +455,46 @@ function ServiceForm({
           type="button"
           variant="outline"
           size="sm"
+          className="w-full"
           disabled={uploading}
           onClick={() => fileRef.current?.click()}
         >
-          {uploading ? "Uploading…" : imagePreview ? "Replace image" : "Upload image"}
+          {uploading ? "Uploading…" : imagePreview ? tt("Eigenes Bild ändern", "Replace custom image") : tt("Eigenes Bild hochladen", "Upload custom image")}
         </Button>
+        <div className="pt-2 space-y-1.5">
+          <Label className="text-[11px] text-muted-foreground">{tt("Oder 1-Klick Food-Foto Galerie:", "Or select 1-click food photo preset:")}</Label>
+          <div className="grid grid-cols-4 gap-1.5">
+            {EVENT_PACKAGE_PHOTO_PRESETS.map((preset) => {
+              const isSelected = imagePath === preset.url;
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => {
+                    setImagePath(preset.url);
+                    setImagePreview(preset.url);
+                    toast.success(
+                      tt(
+                        `Preset "${lang === "de" ? preset.title_de : preset.title_en}" ausgewählt!`,
+                        `Selected "${lang === "de" ? preset.title_de : preset.title_en}" preset!`,
+                      ),
+                    );
+                  }}
+                  className={`group relative overflow-hidden rounded-lg border text-left transition-all cursor-pointer ${
+                    isSelected
+                      ? "border-forest ring-2 ring-forest/30 scale-[1.02]"
+                      : "border-border hover:border-forest/50"
+                  }`}
+                >
+                  <img src={preset.url} alt={preset.title_en} className="h-12 w-full object-cover" />
+                  <div className="p-1 text-[9px] font-medium truncate bg-white/95 dark:bg-card text-foreground">
+                    {lang === "de" ? preset.title_de : preset.title_en}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
       {err && <p className="text-sm text-destructive">{err}</p>}
       <div className="flex gap-2">

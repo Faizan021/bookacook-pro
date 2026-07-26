@@ -875,6 +875,65 @@ function BriefsSection() {
   );
 }
 
+const FOOD_PHOTO_PRESETS = [
+  {
+    id: "meat",
+    title_de: "🥩 Fleisch & Braten",
+    title_en: "🥩 Meat & Roast",
+    keywords: ["rinder", "beef", "filet", "speck", "braten", "roast", "steak", "fleisch", "schwein", "pork"],
+    url: "/images/business_lunch_plating.webp",
+  },
+  {
+    id: "burger",
+    title_de: "🍔 Burger & BBQ",
+    title_en: "🍔 Burger & BBQ",
+    keywords: ["burger", "bbq", "grill", "pulled", "fries", "pommes"],
+    url: "/images/banner_burger.webp",
+  },
+  {
+    id: "sushi",
+    title_de: "🍣 Sushi & Asia",
+    title_en: "🍣 Sushi & Asian",
+    keywords: ["sushi", "maki", "nigiri", "lachs", "salmon", "asia", "wok", "ramen"],
+    url: "/images/banner_sushi.webp",
+  },
+  {
+    id: "healthy",
+    title_de: "🥗 Salat & Bowls",
+    title_en: "🥗 Salads & Bowls",
+    keywords: ["salat", "salad", "bowl", "healthy", "vegan", "veggie", "vegetarisch", "gemüse"],
+    url: "/images/banner_healthy.webp",
+  },
+  {
+    id: "schnitzel",
+    title_de: "🍖 Schnitzel",
+    title_en: "🍖 Schnitzel",
+    keywords: ["schnitzel", "cordon", "kartoffel", "klassiker", "jäger"],
+    url: "/images/banner_schnitzel.webp",
+  },
+  {
+    id: "catering_event",
+    title_de: "🥂 Buffet & Event",
+    title_en: "🥂 Buffet & Event",
+    keywords: ["buffet", "catering", "event", "platte", "fingerfood", "auswahl"],
+    url: "/images/event_catering_hero.webp",
+  },
+  {
+    id: "office_lunch",
+    title_de: "💼 Business Lunch",
+    title_en: "💼 Business Lunch",
+    keywords: ["business", "lunch", "häppchen", "canapé", "brötchen", "bites", "office"],
+    url: "/images/office_catering_hero.webp",
+  },
+  {
+    id: "fine_dining",
+    title_de: "🍽️ Fine Dining",
+    title_en: "🍽️ Fine Dining",
+    keywords: ["gourmet", "fine", "dining", "menü", "gang", "dessert", "kuchen", "vorspeise"],
+    url: "/images/restaurant_hero_food.webp",
+  },
+];
+
 function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void }) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
@@ -894,6 +953,22 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
   const [uploading, setUploading] = useState(false);
   const [generatingAi, setGeneratingAi] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  function handleSuggestAiPhoto() {
+    const query = `${name} ${category}`.toLowerCase();
+    const matched = FOOD_PHOTO_PRESETS.find((p) =>
+      p.keywords.some((k) => query.includes(k)),
+    );
+    const selected = matched || FOOD_PHOTO_PRESETS[0];
+    setImagePath(selected.url);
+    setImagePreview(selected.url);
+    toast.success(
+      tt(
+        `KI hat das Foto "${lang === "de" ? selected.title_de : selected.title_en}" vorgeschlagen!`,
+        `AI suggested "${lang === "de" ? selected.title_de : selected.title_en}" photo!`,
+      ),
+    );
+  }
 
   async function handleGenerateAiDescription() {
     if (!name.trim()) {
@@ -1022,7 +1097,7 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div className="space-y-1.5">
-          <Label>Price (€)</Label>
+          <Label>{tt("Preis (€)", "Price (€)")}</Label>
           <Input
             type="number"
             step="0.01"
@@ -1033,7 +1108,7 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
           />
         </div>
         <div className="space-y-1.5">
-          <Label>Unit</Label>
+          <Label>{tt("Einheit", "Unit")}</Label>
           <Input
             value={unit}
             onChange={(e) => setUnit(e.target.value)}
@@ -1042,7 +1117,7 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
           />
         </div>
         <div className="space-y-1.5">
-          <Label>Serves</Label>
+          <Label>{tt("Portionen", "Serves")}</Label>
           <Input
             type="number"
             min="1"
@@ -1052,13 +1127,23 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
           />
         </div>
       </div>
-      <div className="space-y-1.5">
-        <Label>Image (Optional)</Label>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label>{tt("Bild (Optional)", "Image (Optional)")}</Label>
+          <button
+            type="button"
+            onClick={handleSuggestAiPhoto}
+            className="inline-flex items-center gap-1 text-[11px] font-semibold text-forest hover:opacity-80 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>{tt("KI-Bild vorschlagen", "Suggest AI Photo")}</span>
+          </button>
+        </div>
         {imagePreview && (
           <img
             src={imagePreview}
             alt=""
-            className="h-24 w-full rounded-lg object-cover shadow-sm mb-2"
+            className="h-28 w-full rounded-lg object-cover shadow-sm border border-border"
           />
         )}
         <input
@@ -1079,8 +1164,42 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
           disabled={uploading}
           onClick={() => fileRef.current?.click()}
         >
-          {uploading ? "Uploading…" : imagePreview ? "Replace image" : "Upload image"}
+          {uploading ? "Uploading…" : imagePreview ? tt("Eigenes Bild ändern", "Replace custom image") : tt("Eigenes Bild hochladen", "Upload custom image")}
         </Button>
+        <div className="pt-2 space-y-1.5">
+          <Label className="text-[11px] text-muted-foreground">{tt("Oder 1-Klick Food-Foto Galerie:", "Or select 1-click food photo preset:")}</Label>
+          <div className="grid grid-cols-4 gap-1.5">
+            {FOOD_PHOTO_PRESETS.map((preset) => {
+              const isSelected = imagePath === preset.url;
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => {
+                    setImagePath(preset.url);
+                    setImagePreview(preset.url);
+                    toast.success(
+                      tt(
+                        `Preset "${lang === "de" ? preset.title_de : preset.title_en}" ausgewählt!`,
+                        `Selected "${lang === "de" ? preset.title_de : preset.title_en}" preset!`,
+                      ),
+                    );
+                  }}
+                  className={`group relative overflow-hidden rounded-lg border text-left transition-all cursor-pointer ${
+                    isSelected
+                      ? "border-forest ring-2 ring-forest/30 scale-[1.02]"
+                      : "border-border hover:border-forest/50"
+                  }`}
+                >
+                  <img src={preset.url} alt={preset.title_en} className="h-12 w-full object-cover" />
+                  <div className="p-1 text-[9px] font-medium truncate bg-white/95 dark:bg-card text-foreground">
+                    {lang === "de" ? preset.title_de : preset.title_en}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
       {err && <p className="text-sm text-destructive">{err}</p>}
       <Button type="submit" className="w-full" disabled={mut.isPending || uploading}>

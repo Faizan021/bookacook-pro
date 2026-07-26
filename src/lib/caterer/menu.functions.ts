@@ -33,7 +33,7 @@ export const getMyCatererMenu = createServerFn({ method: "GET" })
     const menu = await Promise.all(
       (data ?? []).map(async (m: any) => {
         if (!m.image_url) return { ...m, image_signed_url: null as string | null };
-        if (/^https?:\/\//i.test(m.image_url)) return { ...m, image_signed_url: m.image_url };
+        if (/^https?:\/\//i.test(m.image_url) || m.image_url.startsWith("/")) return { ...m, image_signed_url: m.image_url };
         const { data: signed } = await supabase.storage
           .from("caterer-menu")
           .createSignedUrl(m.image_url, 60 * 60);
