@@ -60,12 +60,12 @@ export function generateSvgLogo(businessName?: string, category?: string): strin
 }
 
 export function generateSvgBanner(businessName?: string, category?: string): string {
-  const safeName = businessName || "Restaurant";
+  const safeName = businessName || "Speisely Partner";
   const colors = getBrandColors(safeName);
-  const catText = category ? category : "Speisely Marketplace Partner";
+  const catText = category ? category.toUpperCase() : "SPEISELY MARKETPLACE PARTNER";
 
-  // Dynamically calculate font size based on business name length to prevent crop clipping on cards
-  let fontSize = 64;
+  // Dynamically calculate font size based on business name length to prevent crop clipping
+  let fontSize = 56;
   if (safeName.length > 25) {
     fontSize = 32;
   } else if (safeName.length > 20) {
@@ -73,61 +73,67 @@ export function generateSvgBanner(businessName?: string, category?: string): str
   } else if (safeName.length > 15) {
     fontSize = 44;
   } else if (safeName.length > 10) {
-    fontSize = 52;
+    fontSize = 48;
   }
 
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400">
       <defs>
-        <linearGradient id="banner-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="${colors.start}" />
-          <stop offset="100%" stop-color="${colors.end}" />
+          <stop offset="60%" stop-color="${colors.end}" />
+          <stop offset="100%" stop-color="#0b1710" />
         </linearGradient>
-        <linearGradient id="glow-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.15" />
-          <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0" />
+        <linearGradient id="gold-accent" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#f2d896" />
+          <stop offset="100%" stop-color="#b28a3c" />
         </linearGradient>
-        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.03" />
+        <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse">
+          <circle cx="15" cy="15" r="1.5" fill="#ffffff" fill-opacity="0.04" />
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#banner-grad)" />
-      <rect width="100%" height="100%" fill="url(#grid)" />
 
-      <!-- Dynamic creative shapes / Abstract plates -->
-      <circle cx="150" cy="80" r="120" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.1" />
-      <circle cx="150" cy="80" r="80" fill="none" stroke="#ffffff" stroke-width="2" stroke-opacity="0.05" stroke-dasharray="5 5" />
-      <circle cx="1050" cy="320" r="160" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.1" />
-      <circle cx="1050" cy="320" r="120" fill="none" stroke="#ffffff" stroke-width="2" stroke-opacity="0.05" stroke-dasharray="10 5" />
+      <!-- Rich Gradient Background -->
+      <rect width="100%" height="100%" fill="url(#bg-grad)" />
+      <rect width="100%" height="100%" fill="url(#dots)" />
 
-      <!-- Large glowing background blobs -->
-      <circle cx="600" cy="200" r="280" fill="#ffffff" fill-opacity="0.02" filter="blur(30px)" />
-      <circle cx="200" cy="300" r="180" fill="${colors.start}" fill-opacity="0.2" filter="blur(50px)" />
-      <circle cx="1000" cy="100" r="220" fill="${colors.end}" fill-opacity="0.2" filter="blur(60px)" />
+      <!-- Organic Food & Event Plates Illumination -->
+      <circle cx="180" cy="100" r="160" fill="none" stroke="url(#gold-accent)" stroke-width="1.5" stroke-opacity="0.15" />
+      <circle cx="180" cy="100" r="110" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.08" stroke-dasharray="6 6" />
+      <circle cx="1020" cy="300" r="200" fill="none" stroke="url(#gold-accent)" stroke-width="1.5" stroke-opacity="0.15" />
+      <circle cx="1020" cy="300" r="140" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.08" stroke-dasharray="8 8" />
 
-      <!-- Elegant wave ribbon for restaurant flavor -->
-      <path d="M-100,280 C300,180 400,380 800,280 C1000,230 1100,330 1300,280" fill="none" stroke="url(#glow-grad)" stroke-width="4" stroke-opacity="0.3" />
-      <path d="M-100,290 C300,190 400,390 800,290 C1000,240 1100,340 1300,290" fill="none" stroke="url(#glow-grad)" stroke-width="2" stroke-opacity="0.15" stroke-dasharray="10 10" />
+      <!-- Center Ambient Glow -->
+      <circle cx="600" cy="200" r="300" fill="#f2d896" fill-opacity="0.04" filter="blur(40px)" />
 
-      <!-- Center-aligned typography (safe from cropping) -->
-      <g transform="translate(600, 210)" text-anchor="middle">
-        <!-- Drop shadow text -->
-        <text font-family="'Outfit', 'Inter', sans-serif" font-size="${fontSize}" font-weight="900" fill="#000000" fill-opacity="0.2" letter-spacing="-1" dy="4">
-          ${businessName}
+      <!-- Center Typography Group -->
+      <g transform="translate(600, 195)" text-anchor="middle">
+        <!-- Subtitle Eyebrow -->
+        <rect x="-140" y="-85" width="280" height="26" rx="13" fill="#ffffff" fill-opacity="0.08" />
+        <text y="-68" font-family="'Inter', sans-serif" font-size="11" font-weight="800" fill="#f2d896" letter-spacing="3">
+          ${catText}
         </text>
-        <text font-family="'Outfit', 'Inter', sans-serif" font-size="${fontSize}" font-weight="900" fill="#ffffff" letter-spacing="-1">
-          ${businessName}
+
+        <!-- Main Business Title -->
+        <text font-family="'Outfit', 'Playfair Display', Georgia, serif" font-size="${fontSize}" font-weight="900" fill="#000000" fill-opacity="0.3" letter-spacing="-1" dy="16">
+          ${safeName}
         </text>
-        <text y="52" font-family="'Inter', sans-serif" font-size="20" font-weight="600" fill="#ffffff" fill-opacity="0.75" letter-spacing="2" text-transform="uppercase">
-          ✨ ${catText} ✨
+        <text font-family="'Outfit', 'Playfair Display', Georgia, serif" font-size="${fontSize}" font-weight="900" fill="#ffffff" letter-spacing="-1" dy="12">
+          ${safeName}
+        </text>
+
+        <!-- Divider & Motto -->
+        <line x1="-80" y1="52" x2="80" y2="52" stroke="url(#gold-accent)" stroke-width="2" stroke-opacity="0.6" />
+        <text y="78" font-family="'Inter', sans-serif" font-size="14" font-weight="600" fill="#ffffff" fill-opacity="0.8" letter-spacing="2">
+          SPEISELY PREMIUM STOREFRONT
         </text>
       </g>
 
-      <!-- Framing corners -->
-      <path d="M 40 60 L 40 40 L 60 40" fill="none" stroke="#ffffff" stroke-width="2" stroke-opacity="0.2" />
-      <path d="M 1160 60 L 1160 40 L 1140 40" fill="none" stroke="#ffffff" stroke-width="2" stroke-opacity="0.2" />
-      <path d="M 40 340 L 40 360 L 60 360" fill="none" stroke="#ffffff" stroke-width="2" stroke-opacity="0.2" />
-      <path d="M 1160 340 L 1160 360 L 1140 360" fill="none" stroke="#ffffff" stroke-width="2" stroke-opacity="0.2" />
+      <!-- Corner Frame Elements -->
+      <path d="M 50 60 L 50 50 L 60 50" fill="none" stroke="#f2d896" stroke-width="2" stroke-opacity="0.3" />
+      <path d="M 1150 60 L 1150 50 L 1140 50" fill="none" stroke="#f2d896" stroke-width="2" stroke-opacity="0.3" />
+      <path d="M 50 340 L 50 350 L 60 350" fill="none" stroke="#f2d896" stroke-width="2" stroke-opacity="0.3" />
+      <path d="M 1150 340 L 1150 350 L 1140 350" fill="none" stroke="#f2d896" stroke-width="2" stroke-opacity="0.3" />
     </svg>
   `;
 

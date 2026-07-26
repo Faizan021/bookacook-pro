@@ -1581,6 +1581,39 @@ function BusinessProfileSection() {
     }
   }
 
+  const CATERING_BANNER_PRESETS = [
+    {
+      id: "event",
+      title: tt("Event & Buffet Catering", "Event & Buffet Catering"),
+      url: "/images/event_catering_hero.webp",
+      tag: "🥂 Event Buffet",
+    },
+    {
+      id: "office",
+      title: tt("Business & Office Catering", "Business & Office Catering"),
+      url: "/images/office_catering_hero.webp",
+      tag: "💼 Office Catering",
+    },
+    {
+      id: "bbq",
+      title: tt("BBQ & Grill Catering", "BBQ & Grill Catering"),
+      url: "/images/banner_burger.webp",
+      tag: "🍖 BBQ & Grill",
+    },
+    {
+      id: "fine_dining",
+      title: tt("Fine Dining & Plated", "Fine Dining & Plated"),
+      url: "/images/business_lunch_plating.webp",
+      tag: "🍽️ Plated Menu",
+    },
+    {
+      id: "institutional",
+      title: tt("Großverpflegung & Kantine", "Institutional & Event"),
+      url: "/images/institutional_catering_hero.webp",
+      tag: "🏫 Institutional",
+    },
+  ];
+
   return (
     <section className="space-y-6">
       <div className="flex flex-col gap-1">
@@ -1590,50 +1623,144 @@ function BusinessProfileSection() {
         </p>
       </div>
       <div className="surface-card p-6 space-y-8 max-w-3xl">
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label>Logo</Label>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2 flex flex-col items-start">
+            <Label>{tt("Logo Bild", "Logo Image")}</Label>
             <div
-              onClick={() => logoRef.current?.click()}
-              className="w-24 h-24 rounded-full border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-forest transition-colors"
+              onClick={() => !uploading && logoRef.current?.click()}
+              className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-full p-1 flex items-center justify-center w-32 h-32 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
             >
               {logoPreview ? (
-                <img src={logoPreview} className="w-full h-full object-cover" />
+                <>
+                  <img
+                    src={logoPreview}
+                    className="object-contain w-full h-full rounded-full p-1 bg-white"
+                    alt="Logo"
+                  />
+                  <div className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-[10px] font-semibold rounded-full">
+                    {tt("Ändern", "Change")}
+                  </div>
+                </>
               ) : (
-                <span className="text-xs text-muted-foreground">Upload</span>
+                <div className="text-center space-y-1">
+                  <span className="text-xl block">📸</span>
+                  <span className="text-[9px] font-semibold text-forest/70 block">
+                    {tt("Logo wählen", "Choose Logo")}
+                  </span>
+                </div>
               )}
+              <input
+                ref={logoRef}
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) handleImage(e.target.files[0], "logo");
+                }}
+              />
             </div>
-            <input
-              ref={logoRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files?.[0]) handleImage(e.target.files[0], "logo");
-              }}
-            />
+            <p className="text-[10px] text-muted-foreground mt-1">
+              {tt(
+                "Empfohlen: Quadratisches Logo/Icon (512x512 px). Wenn Ihr Logo breiten Text enthält, laden Sie es als Banner hoch.",
+                "Recommended: Square Logo or Icon (512x512 px). If your logo has wide text, upload it as Banner Image.",
+              )}
+            </p>
           </div>
-          <div className="space-y-2">
-            <Label>Banner Image</Label>
+
+          <div className="space-y-2 md:col-span-2">
+            <Label>{tt("Banner Bild", "Banner Image")}</Label>
             <div
-              onClick={() => bannerRef.current?.click()}
-              className="w-full h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-forest transition-colors"
+              onClick={() => !uploading && bannerRef.current?.click()}
+              className="cursor-pointer border border-dashed border-[#e2e8e4] hover:border-forest/40 hover:bg-[#f8faf9] rounded-2xl p-1 flex flex-col items-center justify-center w-full h-32 bg-[#f8faf9] transition-all duration-200 overflow-hidden relative group"
             >
               {bannerPreview ? (
-                <img src={bannerPreview} className="w-full h-full object-cover" />
+                <>
+                  <img
+                    src={bannerPreview}
+                    className="object-cover w-full h-full rounded-2xl"
+                    alt="Banner"
+                  />
+                  <div className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-xs font-semibold rounded-2xl">
+                    {tt("Bild ändern", "Change Image")}
+                  </div>
+                </>
               ) : (
-                <span className="text-xs text-muted-foreground">Upload Banner</span>
+                <div className="text-center space-y-1">
+                  <span className="text-2xl block">🖼️</span>
+                  <span className="text-[10px] font-semibold text-forest/70 block">
+                    {tt("Banner wählen", "Choose Banner")}
+                  </span>
+                </div>
               )}
+              <input
+                ref={bannerRef}
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) handleImage(e.target.files[0], "banner");
+                }}
+              />
             </div>
-            <input
-              ref={bannerRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files?.[0]) handleImage(e.target.files[0], "banner");
-              }}
-            />
+            <p className="text-[10px] text-muted-foreground mt-1">
+              {tt(
+                "Empfohlen: Breites Banner-Bild (1200x400 px, 3:1 Format) oder wählen Sie eine Vorlage unten.",
+                "Recommended: Wide Banner Image (1200x400 px, 3:1 Aspect Ratio) or select a preset below.",
+              )}
+            </p>
+          </div>
+        </div>
+
+        {/* Catering Banner Presets Gallery */}
+        <div className="pt-3 space-y-2">
+          <Label className="text-xs font-bold text-forest flex items-center gap-1.5">
+            ✨ {tt("Catering-Banner Galerie", "Catering Banner Presets Gallery")}
+          </Label>
+          <p className="text-[11px] text-forest/60">
+            {tt(
+              "Wählen Sie aus verschiedenen hochauflösenden Catering-Fotografien für Ihre Event-Ausrichtung:",
+              "Choose from distinct high-resolution catering photography themes matching your service:",
+            )}
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 pt-1">
+            {CATERING_BANNER_PRESETS.map((preset) => {
+              const isSelected = bannerPath === preset.url;
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => {
+                    setBannerPath(preset.url);
+                    setBannerPreview(preset.url);
+                    setUseGeneratedBranding(false);
+                    toast.success(
+                      tt(
+                        `Catering-Vorlage ausgewählt: ${preset.title}`,
+                        `Preset selected: ${preset.title}`,
+                      ),
+                    );
+                  }}
+                  className={`group relative rounded-xl overflow-hidden border-2 text-left transition-all cursor-pointer aspect-[3/1.8] flex flex-col justify-between p-2 ${
+                    isSelected
+                      ? "border-forest ring-2 ring-forest/20 shadow-md"
+                      : "border-stone-200 hover:border-forest/50 hover:shadow-sm"
+                  }`}
+                >
+                  <img
+                    src={preset.url}
+                    alt={preset.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                  <span className="relative z-10 text-[9px] font-bold text-white bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded self-start">
+                    {preset.tag}
+                  </span>
+                  <span className="relative z-10 text-[10px] font-bold text-white leading-tight drop-shadow">
+                    {preset.title}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
