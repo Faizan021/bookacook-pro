@@ -1648,7 +1648,13 @@ function OverviewSection({ caterer }: { caterer: any }) {
     {
       id: "logistics",
       label: t("Verfügbarkeit & Logistik einrichten", "Set availability & logistics"),
-      done: !!(caterer.delivery_fee_cents || caterer.min_delivery_cents),
+      done: !!(
+        (caterer.service_areas && caterer.service_areas.trim().length > 0) ||
+        caterer.delivery_fee_cents ||
+        caterer.min_delivery_cents ||
+        caterer.max_delivery_distance_km ||
+        caterer.seo_logistics_details
+      ),
       desc: t(
         "Definiere Liefergebühren, Mindestbestellwert und Grenzen.",
         "Define pricing rules, delivery fees, and boundaries.",
