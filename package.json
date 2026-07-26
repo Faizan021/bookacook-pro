@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "smoke:test": "node scripts/smoke_test.js",
+    "verify:graph": "node scripts/verify_agent_graph.js",
     "prepare": "husky"
   },
   "dependencies": {

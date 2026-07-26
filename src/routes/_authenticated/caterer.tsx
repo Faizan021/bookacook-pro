@@ -1931,7 +1931,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
                 {t("Storefront öffnen ↗", "Open Storefront ↗")}
               </a>
               <a
-                href={`https://${caterer.slug}.speisely.de`}
+                href={caterer.custom_domain ? `https://${caterer.custom_domain}` : `/catering/${caterer.slug}?subdomain=1`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full text-center rounded-full border border-forest/25 text-[10px] font-bold text-forest py-2 hover:bg-forest/5 transition cursor-pointer"

@@ -85,6 +85,26 @@ If these exist, the task is NOT complete.
 - Check that unrelated areas were not disturbed.
 - Especially protect: dashboard behavior, auth/session flow, storefront rendering, role boundaries, payment/Stripe logic, production stability.
 
+
+### 3.1 Enforced Graph-Style Execution Pipeline (Multi-Agent Architecture)
+
+Every code change must execute through this 5-node graph pipeline:
+
+```
+[Node 1: Planner] -> [Node 2: Worker Code] -> [Node 3: Static Scope Reviewer] -> [Node 4: Build & Smoke Verifier]
+                                                    |                                         |
+                                                    v (If Scope / Build Error)               v
+                                                    +------------------<----------------------+
+                                                                        |
+                                                                (Feedback Loop back to Node 2)
+```
+
+- **Node 1 (Planner):** Map component boundaries and dependencies before touching code.
+- **Node 2 (Worker):** Implement the smallest safe, low-risk change.
+- **Node 3 (Static Scope Reviewer):** Execute `npm run verify:graph` to audit component function scoping (`t is not defined`, missing hooks, broken links) before building.
+- **Node 4 (Verifier):** Execute `npm run build` AND `npm run smoke:test` to confirm 100% compilation and zero production crash markers.
+- **Node 5 (Feedback Loop):** If Node 3 or Node 4 returns ANY error, automatically loop back to Node 2 to correct the root cause *before* presenting results to the user.
+
 #### E. Report like a reviewer
 Before closing the task, return:
 1. what changed,
