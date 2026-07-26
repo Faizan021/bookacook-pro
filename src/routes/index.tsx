@@ -83,7 +83,21 @@ function Home() {
       ) {
         const subdomain = host.replace(".speisely.de", "").trim();
         if (subdomain) {
-          window.location.replace(`/restaurant/${subdomain}${window.location.search}`);
+          import("@/lib/caterer/menu.functions").then(({ resolveSubdomainVendor }) => {
+            resolveSubdomainVendor({ data: { subdomain } })
+              .then((res) => {
+                if (res.type === "catering") {
+                  window.location.replace(`/catering/${res.slug}${window.location.search}`);
+                } else if (res.type === "planner") {
+                  window.location.replace(`/planner/${res.slug}${window.location.search}`);
+                } else {
+                  window.location.replace(`/restaurant/${res.slug}${window.location.search}`);
+                }
+              })
+              .catch(() => {
+                window.location.replace(`/catering/${subdomain}${window.location.search}`);
+              });
+          });
         }
       }
     }

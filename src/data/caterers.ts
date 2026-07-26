@@ -292,30 +292,43 @@ export async function getCaterer(id: string): Promise<Caterer | undefined> {
       query = query.eq("slug", id);
     }
 
-    const { data: sfData, error: sfErr } = await query.maybeSingle();
+    let { data: sfData, error: sfErr } = await query.maybeSingle();
 
-    if (sfErr || !sfData) {
-      const fallback = fallbackCaterers.find((c) => c.id === id);
-      if (fallback) return { ...fallback, isShowcase: true };
-      return undefined;
+    if (!sfData) {
+      // Fallback: Query caterers table directly
+      const { data: catData } = await (
+        isUuid
+          ? supabase.from("caterers").select("*").or(`slug.eq.${id},id.eq.${id}`).maybeSingle()
+          : supabase.from("caterers").select("*").ilike("slug", id).maybeSingle()
+      );
+
+      if (catData) {
+        sfData = {
+          id: catData.id,
+          caterer_id: catData.id,
+          slug: catData.slug || id,
+          description: catData.description || "",
+          banner_image_url: catData.banner_image_url || null,
+          accepts_delivery: true,
+          accepts_pickup: true,
+          delivery_fee: (catData.delivery_fee_cents || 0) / 100,
+          min_order_amount: (catData.min_delivery_cents || 0) / 100,
+          estimated_prep_time_minutes: 60,
+        };
+      } else {
+        const fallback = fallbackCaterers.find((c) => c.id === id);
+        if (fallback) return { ...fallback, isShowcase: true };
+        return undefined;
+      }
     }
 
     const [catRes, menuRes] = await Promise.all([
-      supabase.from("caterers").select("id, approval_status, use_generated_branding, logo_url, owner_id").eq("id", sfData.caterer_id).maybeSingle(),
+      supabase.from("caterers").select("id, name, slug, approval_status, use_generated_branding, logo_url, owner_id, phone, business_address, service_areas").eq("id", sfData.caterer_id).maybeSingle(),
       supabase.from("caterer_menu_items").select("id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available").eq("caterer_id", sfData.caterer_id).eq("is_available", true)
     ]);
 
     const caterer = catRes.data;
     const products = menuRes.data || [];
-
-    if (caterer) {
-      if (caterer.approval_status !== "approved") {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user?.id !== caterer.owner_id) {
-          return undefined;
-        }
-      }
-    }
 
     const merged = {
       ...sfData,

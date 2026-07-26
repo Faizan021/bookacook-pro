@@ -117,22 +117,68 @@ export const deleteCatererMenuItem = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+export const resolveSubdomainVendor = createServerFn({ method: "GET" })
+  .inputValidator((input: { subdomain: string }) => z.object({ subdomain: z.string() }).parse(input))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sub = data.subdomain.toLowerCase().trim();
+
+    // 1. Check caterers
+    const { data: caterer } = await supabaseAdmin
+      .from("caterers")
+      .select("slug, custom_domain")
+      .or(`slug.ilike.${sub},custom_domain.ilike.%${sub}%`)
+      .maybeSingle();
+
+    if (caterer) {
+      return { type: "catering" as const, slug: caterer.slug };
+    }
+
+    // 2. Check restaurants
+    const { data: restaurant } = await supabaseAdmin
+      .from("restaurants")
+      .select("slug, custom_domain")
+      .or(`slug.ilike.${sub},custom_domain.ilike.%${sub}%`)
+      .maybeSingle();
+
+    if (restaurant) {
+      return { type: "restaurant" as const, slug: restaurant.slug };
+    }
+
+    // 3. Check planners
+    const { data: planner } = await supabaseAdmin
+      .from("planners")
+      .select("slug, custom_domain")
+      .or(`slug.ilike.${sub},custom_domain.ilike.%${sub}%`)
+      .maybeSingle();
+
+    if (planner) {
+      return { type: "planner" as const, slug: planner.slug };
+    }
+
+    // Default fallback: catering
+    return { type: "catering" as const, slug: sub };
+  });
+
 export const getPublicCatererProfile = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const cleanSlug = data.slug.toLowerCase().trim();
 
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      data.slug,
+      cleanSlug,
     );
     const query = supabaseAdmin
       .from("caterers")
       .select(
-        "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
+        "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text, approval_status",
       );
 
     const { data: caterer, error: cErr } = await (
-      isUuid ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`) : query.eq("slug", data.slug)
+      isUuid
+        ? query.or(`slug.eq.${cleanSlug},id.eq.${cleanSlug}`)
+        : query.or(`slug.ilike.${cleanSlug},slug.eq.${cleanSlug}`)
     ).maybeSingle();
 
     if (cErr || !caterer) return null;

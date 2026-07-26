@@ -1923,7 +1923,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
 
             <div className="pt-2 flex flex-col gap-2">
               <a
-                href={`https://${caterer.slug}.speisely.de`}
+                href={caterer.custom_domain ? `https://${caterer.custom_domain}` : `/catering/${caterer.slug}`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full text-center rounded-full bg-forest text-[10px] font-bold text-white py-2 hover:opacity-90 transition cursor-pointer"
@@ -1931,10 +1931,12 @@ function OverviewSection({ caterer }: { caterer: any }) {
                 {t("Storefront öffnen ↗", "Open Storefront ↗")}
               </a>
               <a
-                href="#profile"
-                className="w-full text-center rounded-full border border-forest/25 text-[10px] font-bold text-forest py-2 hover:bg-forest/5 transition"
+                href={`https://${caterer.slug}.speisely.de`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full text-center rounded-full border border-forest/25 text-[10px] font-bold text-forest py-2 hover:bg-forest/5 transition cursor-pointer"
               >
-                {t("Domain-Setup bearbeiten", "Edit Domain Setup")}
+                {t("Subdomain öffnen ↗", "Open Subdomain ↗")}
               </a>
             </div>
           </div>
