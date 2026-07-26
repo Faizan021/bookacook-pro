@@ -9,7 +9,7 @@ import {
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Sparkles, Plus, Loader2, Tag, Ticket } from "lucide-react";
+import { Sparkles, Plus, Loader2, Tag, Ticket, Pencil } from "lucide-react";
 import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
@@ -934,7 +934,17 @@ const FOOD_PHOTO_PRESETS = [
   },
 ];
 
-function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void }) {
+function MenuForm({
+  catererId,
+  editing,
+  onDone,
+  onCancel,
+}: {
+  catererId: string;
+  editing?: any | null;
+  onDone: () => void;
+  onCancel?: () => void;
+}) {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const upsert = useServerFn(upsertCatererMenuItem);
@@ -953,6 +963,32 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
   const [uploading, setUploading] = useState(false);
   const [generatingAi, setGeneratingAi] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (editing) {
+      setName(editing.name ?? "");
+      setCategory(editing.category ?? "Menü");
+      setDescription(editing.description ?? "");
+      setPrice(editing.price_cents ? (editing.price_cents / 100).toString() : "");
+      setUnit(editing.unit ?? "Person");
+      setServes((editing.serves ?? 1).toString());
+      setImagePath(editing.image_url ?? null);
+      setImagePreview(editing.image_signed_url ?? editing.image_url ?? null);
+    } else {
+      resetForm();
+    }
+  }, [editing]);
+
+  function resetForm() {
+    setName("");
+    setCategory("Menü");
+    setDescription("");
+    setPrice("");
+    setUnit("Person");
+    setServes("1");
+    setImagePath(null);
+    setImagePreview(null);
+  }
 
   function handleSuggestAiPhoto() {
     const query = `${name} ${category}`.toLowerCase();
@@ -1010,7 +1046,13 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
     mutationFn: (vars: any) => upsert({ data: vars }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["caterer", "menu"] });
+      resetForm();
       onDone();
+      toast.success(
+        editing
+          ? tt("Angebot erfolgreich aktualisiert!", "Item updated successfully!")
+          : tt("Neues Angebot hinzugefügt!", "New item added!"),
+      );
     },
     onError: (e: any) => setErr(e.message ?? "Failed"),
   });
@@ -1045,6 +1087,7 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
         const cents = Math.round(parseFloat(price || "0") * 100);
         if (!name || !category) return;
         mut.mutate({
+          id: editing?.id,
           category,
           name,
           description,
@@ -1055,7 +1098,24 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
         });
       }}
     >
-      <h3 className="font-display text-lg">{tt("Menüartikel hinzufügen", "Add Menu Item")}</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="font-display text-lg">
+          {editing
+            ? tt("Menüartikel bearbeiten", "Edit Menu Item")
+            : tt("Menüartikel hinzufügen", "Add Menu Item")}
+        </h3>
+        {editing && onCancel && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={onCancel}
+            className="text-xs text-muted-foreground hover:text-foreground h-7"
+          >
+            {tt("Abbrechen", "Cancel")}
+          </Button>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
           <Label>{tt("Name", "Name")}</Label>
@@ -1202,9 +1262,25 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
         </div>
       </div>
       {err && <p className="text-sm text-destructive">{err}</p>}
-      <Button type="submit" className="w-full" disabled={mut.isPending || uploading}>
-        {mut.isPending ? "Saving…" : "Add to menu"}
-      </Button>
+      <div className="flex gap-2">
+        {editing && onCancel && (
+          <Button
+            type="button"
+            variant="outline"
+            className="w-1/3 text-xs"
+            onClick={onCancel}
+          >
+            {tt("Abbrechen", "Cancel")}
+          </Button>
+        )}
+        <Button type="submit" className="flex-1" disabled={mut.isPending || uploading}>
+          {mut.isPending
+            ? "Saving…"
+            : editing
+              ? tt("Änderungen speichern", "Save changes")
+              : tt("Hinzufügen", "Add to menu")}
+        </Button>
+      </div>
     </form>
   );
 }
@@ -1213,6 +1289,8 @@ function CatererMenuSection() {
   const { lang } = useI18n();
   const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const [showImportWizard, setShowImportWizard] = useState(false);
+  const [editingItem, setEditingItem] = useState<any | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
 
   const fetchMenu = useServerFn(getMyCatererMenu);
   const remove = useServerFn(deleteCatererMenuItem);
@@ -1223,8 +1301,25 @@ function CatererMenuSection() {
   });
   const delMut = useMutation({
     mutationFn: (id: string) => remove({ data: { id } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["caterer", "menu"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["caterer", "menu"] });
+      if (editingItem) setEditingItem(null);
+    },
   });
+
+  const menuItems = q.data?.menu ?? [];
+
+  // Extract unique categories dynamically from menu items
+  const categories = React.useMemo(() => {
+    const cats = Array.from(new Set(menuItems.map((m: any) => m.category).filter(Boolean)));
+    return cats as string[];
+  }, [menuItems]);
+
+  // Filter items based on selected category tab
+  const filteredMenu = React.useMemo(() => {
+    if (selectedCategory === "ALL") return menuItems;
+    return menuItems.filter((m: any) => m.category === selectedCategory);
+  }, [menuItems, selectedCategory]);
 
   if (!q.data?.caterer) return null;
 
@@ -1263,79 +1358,144 @@ function CatererMenuSection() {
             📋 {tt("Speisekarte importieren", "Import Menu")}
           </Button>
           <span className="text-xs font-medium bg-forest/5 text-forest/70 px-2.5 py-1 rounded-full border border-forest/10 shrink-0">
-            {q.data.menu.length} {tt("Angebote", "Items")}
+            {menuItems.length} {tt("Angebote", "Items")}
           </span>
         </div>
       </div>
+
+      {/* Category Filter Tabs */}
+      {categories.length > 0 && (
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-border/40 scrollbar-none">
+          <button
+            type="button"
+            onClick={() => setSelectedCategory("ALL")}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+              selectedCategory === "ALL"
+                ? "bg-forest text-cream shadow-sm"
+                : "bg-forest/5 text-forest hover:bg-forest/10"
+            }`}
+          >
+            {tt("Alle Angebote", "All Items")} ({menuItems.length})
+          </button>
+          {categories.map((cat) => {
+            const count = menuItems.filter((m: any) => m.category === cat).length;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
+                  selectedCategory === cat
+                    ? "bg-forest text-cream shadow-sm"
+                    : "bg-forest/5 text-forest hover:bg-forest/10"
+                }`}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <div className="grid gap-6 lg:grid-cols-[1fr_360px] items-start">
         <div className="space-y-4">
-          {q.data.menu.length === 0 ? (
+          {filteredMenu.length === 0 ? (
             <div className="surface-card p-6 text-center border-2 border-dashed border-[#eadfce]/55 rounded-3xl bg-cream/5 flex flex-col items-center justify-center min-h-[300px] space-y-3">
               <span className="text-2xl">🍽️</span>
               <h3 className="font-display text-base font-bold text-forest">
-                No catering packages yet
+                {selectedCategory === "ALL"
+                  ? tt("Noch keine Angebote erstellt", "No catering packages yet")
+                  : tt(`Keine Angebote in Kategorie "${selectedCategory}"`, `No items in category "${selectedCategory}"`)}
               </h3>
               <p className="text-xs text-muted-foreground max-w-sm text-center leading-relaxed">
-                Create your first menu item or buffet package using the builder form on the right.
-                Once added, packages will show up here as client-facing menu cards.
+                {tt(
+                  "Erstelle deine Speisen und Pakete mit dem Formular auf der rechten Seite.",
+                  "Create your menu items or buffet packages using the builder form on the right.",
+                )}
               </p>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
-              {q.data.menu.map((m: any) => (
-                <article
-                  key={m.id}
-                  className="surface-card overflow-hidden border border-[#eadfce]/35 rounded-3xl bg-white shadow-sm flex flex-col justify-between hover:shadow-md transition"
-                >
-                  <div>
-                    {m.image_signed_url ? (
-                      <img src={m.image_signed_url} alt="" className="h-32 w-full object-cover" />
-                    ) : (
-                      <div className="flex h-32 w-full items-center justify-center bg-mint/20 text-2xl">
-                        🥂
-                      </div>
-                    )}
-                    <div className="p-4 space-y-1.5 text-left">
-                      <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center rounded-full bg-forest/10 px-2 py-0.5 text-[9px] font-bold text-forest uppercase tracking-wider">
-                          {m.category}
-                        </span>
-                      </div>
-                      <h4 className="font-display font-bold text-base text-forest line-clamp-1">
-                        {m.name}
-                      </h4>
-                      {m.description && (
-                        <p className="line-clamp-2 text-[11px] text-muted-foreground leading-relaxed">
-                          {m.description}
-                        </p>
+              {filteredMenu.map((m: any) => {
+                const isCurrentlyEditing = editingItem?.id === m.id;
+                return (
+                  <article
+                    key={m.id}
+                    className={`surface-card overflow-hidden border rounded-3xl bg-white shadow-sm flex flex-col justify-between hover:shadow-md transition ${
+                      isCurrentlyEditing ? "ring-2 ring-forest border-forest" : "border-[#eadfce]/35"
+                    }`}
+                  >
+                    <div>
+                      {m.image_signed_url ? (
+                        <img src={m.image_signed_url} alt="" className="h-32 w-full object-cover" />
+                      ) : (
+                        <div className="flex h-32 w-full items-center justify-center bg-mint/20 text-2xl">
+                          🥂
+                        </div>
                       )}
+                      <div className="p-4 space-y-1.5 text-left">
+                        <div className="flex items-center justify-between">
+                          <span className="inline-flex items-center rounded-full bg-forest/10 px-2 py-0.5 text-[9px] font-bold text-forest uppercase tracking-wider">
+                            {m.category}
+                          </span>
+                          {isCurrentlyEditing && (
+                            <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                              {tt("Wird bearbeitet", "Editing")}
+                            </span>
+                          )}
+                        </div>
+                        <h4 className="font-display font-bold text-base text-forest line-clamp-1">
+                          {m.name}
+                        </h4>
+                        {m.description && (
+                          <p className="line-clamp-2 text-[11px] text-muted-foreground leading-relaxed">
+                            {m.description}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="p-4 pt-0 border-t border-[#eadfce]/20 mt-3 flex items-center justify-between">
-                    <p className="text-xs">
-                      <span className="font-display font-bold text-base text-forest">
-                        €{(m.price_cents / 100).toFixed(2)}
-                      </span>
-                      <span className="text-muted-foreground text-[10px] ml-1">
-                        / {m.unit} (serves ~{m.serves})
-                      </span>
-                    </p>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="text-xs h-7 px-2.5 rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-                      disabled={delMut.isPending}
-                      onClick={() => delMut.mutate(m.id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </article>
-              ))}
+                    <div className="p-4 pt-0 border-t border-[#eadfce]/20 mt-3 flex items-center justify-between">
+                      <p className="text-xs">
+                        <span className="font-display font-bold text-base text-forest">
+                          €{(m.price_cents / 100).toFixed(2)}
+                        </span>
+                        <span className="text-muted-foreground text-[10px] ml-1">
+                          / {m.unit} (serves ~{m.serves})
+                        </span>
+                      </p>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-xs h-7 px-2.5 rounded-lg border-forest/20 text-forest hover:bg-forest/5 gap-1 font-semibold cursor-pointer"
+                          onClick={() => setEditingItem(m)}
+                        >
+                          <Pencil className="w-3 h-3" />
+                          <span>{tt("Bearbeiten", "Edit")}</span>
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-xs h-7 px-2.5 rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50 cursor-pointer"
+                          disabled={delMut.isPending}
+                          onClick={() => delMut.mutate(m.id)}
+                        >
+                          {tt("Löschen", "Delete")}
+                        </Button>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           )}
         </div>
-        <MenuForm catererId={q.data.caterer.id} onDone={() => {}} />
+        <MenuForm
+          catererId={q.data.caterer.id}
+          editing={editingItem}
+          onDone={() => setEditingItem(null)}
+          onCancel={() => setEditingItem(null)}
+        />
       </div>
     </section>
   );
