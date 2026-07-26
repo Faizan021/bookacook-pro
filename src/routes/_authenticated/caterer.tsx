@@ -9,7 +9,7 @@ import {
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { Sparkles, Plus, Loader2, Tag, Ticket, Pencil, X, Info } from "lucide-react";
+import { Sparkles, Plus, Loader2, Tag, Ticket, Pencil, X, Info, ChevronRight } from "lucide-react";
 import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
@@ -1613,6 +1613,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
         "Konfiguriere deinen Catering-Markennamen und die Subdomain.",
         "Configure your catering brand name and subdomain.",
       ),
+      tab: "settings",
     },
     {
       id: "profile",
@@ -1622,7 +1623,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
         "Füge ein Logo, Bannerbild und eine Beschreibung hinzu.",
         "Add a logo, banner image, and business description.",
       ),
-      link: "#profile",
+      tab: "settings",
     },
     {
       id: "category",
@@ -1632,7 +1633,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
         "Konfiguriere Liefergebiete, um regionale Nachfrage zu sichern.",
         "Configure delivery zones to capture regional demand.",
       ),
-      link: "#logistics",
+      tab: "settings",
     },
     {
       id: "menu",
@@ -1642,7 +1643,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
         "Erstelle Menükarten und Preise für deine Kunden.",
         "Create menu cards and pricing for clients to view.",
       ),
-      link: "#menu",
+      tab: "menu",
     },
     {
       id: "logistics",
@@ -1652,7 +1653,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
         "Definiere Liefergebühren, Mindestbestellwert und Grenzen.",
         "Define pricing rules, delivery fees, and boundaries.",
       ),
-      link: "#logistics",
+      tab: "settings",
     },
   ];
 
@@ -1802,51 +1803,78 @@ function OverviewSection({ caterer }: { caterer: any }) {
               </div>
 
               {/* Checklist Items */}
-              <div className="space-y-3 pt-1">
-                {steps.map((s, idx) => (
-                  <div key={s.id} className="flex gap-2.5 items-start">
-                    <div
-                      className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 text-[8px] font-bold mt-0.5 border ${
-                        s.done
-                          ? "bg-forest border-forest text-white"
-                          : nextStep?.id === s.id
-                            ? "border-forest text-forest bg-forest/10"
-                            : "border-muted text-muted-foreground"
+              <div className="space-y-1.5 pt-1">
+                {steps.map((s, idx) => {
+                  const isNext = nextStep?.id === s.id;
+                  return (
+                    <Link
+                      key={s.id}
+                      to="/caterer"
+                      search={{ tab: s.tab }}
+                      className={`group flex items-start gap-2.5 p-2 rounded-xl border transition-all cursor-pointer ${
+                        isNext
+                          ? "bg-white border-forest/30 shadow-sm hover:border-forest hover:bg-forest/5"
+                          : s.done
+                            ? "bg-transparent border-transparent hover:bg-forest/5"
+                            : "bg-transparent border-transparent hover:bg-forest/5"
                       }`}
                     >
-                      {s.done ? "✓" : idx + 1}
-                    </div>
-                    <div className="min-w-0">
-                      <h4
-                        className={`text-[11px] font-bold ${s.done ? "text-forest/60 line-through" : "text-forest"}`}
+                      <div
+                        className={`h-4 w-4 rounded-full flex items-center justify-center shrink-0 text-[8px] font-bold mt-0.5 border ${
+                          s.done
+                            ? "bg-forest border-forest text-white"
+                            : isNext
+                              ? "border-forest text-forest bg-forest/10"
+                              : "border-muted text-muted-foreground"
+                        }`}
                       >
-                        {s.label}
-                      </h4>
-                      {!s.done && nextStep?.id === s.id && (
-                        <p className="text-[10px] text-forest/75 mt-0.5 leading-relaxed bg-white/60 p-1.5 rounded-lg border border-border/20">
-                          {s.desc}
-                          {s.link && (
-                            <a
-                              href={s.link}
-                              className="block mt-1 font-semibold text-forest hover:underline text-[9px]"
-                            >
-                              {t("Jetzt einrichten →", "Configure now →")}
-                            </a>
-                          )}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                        {s.done ? "✓" : idx + 1}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between">
+                          <h4
+                            className={`text-[11px] font-bold group-hover:text-forest transition-colors ${
+                              s.done ? "text-forest/60 line-through" : "text-forest"
+                            }`}
+                          >
+                            {s.label}
+                          </h4>
+                          <span className="text-[10px] text-forest/70 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5 shrink-0 ml-1">
+                            <span>{t("Öffnen", "Open")}</span>
+                            <ChevronRight className="w-3 h-3" />
+                          </span>
+                        </div>
+                        {isNext && (
+                          <div className="mt-1 space-y-1">
+                            <p className="text-[10px] text-forest/75 leading-relaxed bg-forest/5 p-1.5 rounded-lg border border-forest/10">
+                              {s.desc}
+                            </p>
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-forest group-hover:underline">
+                              <span>{t("Jetzt konfigurieren", "Configure now")}</span>
+                              <ChevronRight className="w-3 h-3" />
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
 
               {!allDone && nextStep && (
-                <div className="pt-2 border-t border-border/30">
-                  <p className="text-[9px] text-muted-foreground">
-                    {t("Nächster empfohlener Schritt: ", "Next recommended action: ")}
-                    <span className="font-semibold text-forest">{nextStep.label}</span>
+                <Link
+                  to="/caterer"
+                  search={{ tab: nextStep.tab }}
+                  className="block pt-2 border-t border-border/30 group hover:opacity-90 cursor-pointer"
+                >
+                  <p className="text-[10px] text-muted-foreground flex items-center justify-between">
+                    <span>
+                      {t("Nächster empfohlener Schritt: ", "Next recommended action: ")}
+                      <span className="font-semibold text-forest underline">{nextStep.label}</span>
+                    </span>
+                    <ChevronRight className="w-3.5 h-3.5 text-forest group-hover:translate-x-0.5 transition-transform" />
                   </p>
-                </div>
+                </Link>
               )}
             </div>
           )}
