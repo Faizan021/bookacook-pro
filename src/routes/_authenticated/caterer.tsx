@@ -2308,15 +2308,15 @@ function BusinessProfileSection() {
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label className="flex items-center justify-between text-xs font-semibold text-forest">
-                <span>{t("Telefon", "Phone")}</span>
+                <span>{tt("Telefon", "Phone")}</span>
                 <span className="text-[10px] text-muted-foreground font-normal">
-                  ({t("Optional & Geschützt", "Optional & Private")})
+                  ({tt("Optional & Geschützt", "Optional & Private")})
                 </span>
               </Label>
               <Input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder={t(
+                placeholder={tt(
                   "Nicht öffentlich (Plattform-Schutz)",
                   "Hidden from public customers",
                 )}
@@ -2325,15 +2325,15 @@ function BusinessProfileSection() {
             </div>
             <div className="space-y-1.5">
               <Label className="flex items-center justify-between text-xs font-semibold text-forest">
-                <span>{t("Adresse", "Address")}</span>
+                <span>{tt("Adresse", "Address")}</span>
                 <span className="text-[10px] text-muted-foreground font-normal">
-                  ({t("Optional & Geschützt", "Optional & Private")})
+                  ({tt("Optional & Geschützt", "Optional & Private")})
                 </span>
               </Label>
               <Input
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder={t(
+                placeholder={tt(
                   "Nicht öffentlich (Plattform-Schutz)",
                   "Hidden from public customers",
                 )}
@@ -2344,10 +2344,10 @@ function BusinessProfileSection() {
           <div className="p-3 bg-forest/5 rounded-xl border border-forest/15 text-left space-y-1">
             <p className="text-[11px] font-semibold text-forest flex items-center gap-1.5">
               <span>🔒</span>{" "}
-              {t("Plattform-Datenschutz & Anfragenschutz", "Platform Privacy & Disintermediation Protection")}
+              {tt("Plattform-Datenschutz & Anfragenschutz", "Platform Privacy & Disintermediation Protection")}
             </p>
             <p className="text-[10px] text-forest/75 leading-relaxed">
-              {t(
+              {tt(
                 "Telefon und Adresse sind optional und werden niemals öffentlich auf Ihrem Storefront angezeigt. Alle Kundenanfragen, Angebote und Verträge laufen sicher über Speisely.",
                 "Phone and Address are optional and never published on your public storefront. All customer inquiries, proposals, and bookings are handled securely through Speisely.",
               )}
