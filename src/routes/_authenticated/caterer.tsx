@@ -1653,7 +1653,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
         "Definiere Liefergebühren, Mindestbestellwert und Grenzen.",
         "Define pricing rules, delivery fees, and boundaries.",
       ),
-      tab: "settings",
+      tab: "logistics",
     },
   ];
 
@@ -2788,6 +2788,8 @@ function PromotionsSection({
 }
 
 function LogisticsSection() {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const qc = useQueryClient();
   const fetchBriefs = useServerFn(getCatererBriefs);
   const q = useSuspenseQuery({
@@ -3034,7 +3036,7 @@ function ServiceCategoriesGuidance() {
           <div className="mt-6 pt-4 border-t border-[#eadfce]/30 grid grid-cols-2 gap-3">
             <Link
               to="/caterer"
-              search={{ tab: "settings" }}
+              search={{ tab: "logistics" }}
               className="inline-flex items-center justify-center rounded-full bg-forest text-[10px] font-semibold text-white px-3 py-2 hover:opacity-90 transition text-center cursor-pointer"
             >
               {t("Logistik einrichten", "Configure logistics")}
