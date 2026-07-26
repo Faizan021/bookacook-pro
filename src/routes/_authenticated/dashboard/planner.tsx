@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Plus, Loader2, Tag, Ticket } from "lucide-react";
+import { Sparkles, Plus, Loader2, Tag, Ticket } from "lucide-react";
+import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import {
   createFileRoute,
   Link,
@@ -197,7 +198,10 @@ function ServiceForm({
   editing: any | null;
   onDone: () => void;
 }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const upsert = useServerFn(upsertPlannerService);
+  const generateAiCopy = useServerFn(generateGastronomyCopy);
   const qc = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -211,7 +215,44 @@ function ServiceForm({
     editing?.image_signed_url ?? null,
   );
   const [uploading, setUploading] = useState(false);
+  const [generatingAi, setGeneratingAi] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  async function handleGenerateAiDescription() {
+    if (!title.trim()) {
+      toast.error(
+        tt(
+          "Bitte geben Sie zuerst einen Namen/Titel für das Paket ein.",
+          "Please enter a package title first.",
+        ),
+      );
+      return;
+    }
+    setGeneratingAi(true);
+    try {
+      const res = await generateAiCopy({
+        data: {
+          type: "menu_item",
+          name: title.trim(),
+          category: "Event Service Package",
+        },
+      });
+      const text = lang === "de" ? res.desc_de : res.desc_en;
+      if (text) {
+        setDescription(text);
+        toast.success(
+          tt("KI-Beschreibung erfolgreich erstellt!", "AI description generated successfully!"),
+        );
+      }
+    } catch (e: any) {
+      toast.error(
+        e.message ||
+          tt("Fehler beim Generieren der KI-Beschreibung", "Failed to generate AI description"),
+      );
+    } finally {
+      setGeneratingAi(false);
+    }
+  }
 
   const mut = useMutation({
     mutationFn: (vars: any) => upsert({ data: vars }),
@@ -260,13 +301,33 @@ function ServiceForm({
         });
       }}
     >
-      <h3 className="font-display text-lg">{editing ? "Edit service" : "Add service package"}</h3>
+      <h3 className="font-display text-lg">{editing ? tt("Paket bearbeiten", "Edit service") : tt("Service-Paket hinzufügen", "Add service package")}</h3>
       <div className="space-y-1.5">
-        <Label htmlFor="stitle">Title</Label>
+        <Label htmlFor="stitle">{tt("Titel / Name", "Title")}</Label>
         <Input id="stitle" value={title} onChange={(e) => setTitle(e.target.value)} required />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="sdesc">Description</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="sdesc">{tt("Beschreibung", "Description")}</Label>
+          <button
+            type="button"
+            onClick={handleGenerateAiDescription}
+            disabled={generatingAi || !title.trim()}
+            className="inline-flex items-center gap-1 text-[11px] font-semibold text-forest hover:opacity-80 disabled:opacity-50 transition-all cursor-pointer"
+          >
+            {generatingAi ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>{tt("Generiere...", "Generating...")}</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>{tt("Mit KI schreiben", "Write with AI")}</span>
+              </>
+            )}
+          </button>
+        </div>
         <Textarea
           id="sdesc"
           rows={3}

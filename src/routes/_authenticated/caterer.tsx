@@ -10,6 +10,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { Sparkles, Plus, Loader2, Tag, Ticket } from "lucide-react";
+import { generateGastronomyCopy } from "@/lib/restaurant/ai.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
 import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
@@ -875,7 +876,10 @@ function BriefsSection() {
 }
 
 function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void }) {
+  const { lang } = useI18n();
+  const tt = (de: string, en: string) => (lang === "de" ? de : en);
   const upsert = useServerFn(upsertCatererMenuItem);
+  const generateAiCopy = useServerFn(generateGastronomyCopy);
   const qc = useQueryClient();
   const fileRef = React.useRef<HTMLInputElement>(null);
 
@@ -888,7 +892,44 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
   const [imagePath, setImagePath] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [generatingAi, setGeneratingAi] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  async function handleGenerateAiDescription() {
+    if (!name.trim()) {
+      toast.error(
+        tt(
+          "Bitte geben Sie zuerst einen Namen für das Menü/Gericht ein.",
+          "Please enter a menu item name first.",
+        ),
+      );
+      return;
+    }
+    setGeneratingAi(true);
+    try {
+      const res = await generateAiCopy({
+        data: {
+          type: "menu_item",
+          name: name.trim(),
+          category: category || "Catering",
+        },
+      });
+      const text = lang === "de" ? res.desc_de : res.desc_en;
+      if (text) {
+        setDescription(text);
+        toast.success(
+          tt("KI-Beschreibung erfolgreich erstellt!", "AI description generated successfully!"),
+        );
+      }
+    } catch (e: any) {
+      toast.error(
+        e.message ||
+          tt("Fehler beim Generieren der KI-Beschreibung", "Failed to generate AI description"),
+      );
+    } finally {
+      setGeneratingAi(false);
+    }
+  }
 
   const mut = useMutation({
     mutationFn: (vars: any) => upsert({ data: vars }),
@@ -939,14 +980,14 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
         });
       }}
     >
-      <h3 className="font-display text-lg">Add Menu Item</h3>
+      <h3 className="font-display text-lg">{tt("Menüartikel hinzufügen", "Add Menu Item")}</h3>
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1.5">
-          <Label>Name</Label>
+          <Label>{tt("Name", "Name")}</Label>
           <Input value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div className="space-y-1.5">
-          <Label>Category</Label>
+          <Label>{tt("Kategorie", "Category")}</Label>
           <Input
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -956,7 +997,27 @@ function MenuForm({ catererId, onDone }: { catererId: string; onDone: () => void
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label>Description</Label>
+        <div className="flex items-center justify-between">
+          <Label>{tt("Beschreibung", "Description")}</Label>
+          <button
+            type="button"
+            onClick={handleGenerateAiDescription}
+            disabled={generatingAi || !name.trim()}
+            className="inline-flex items-center gap-1 text-[11px] font-semibold text-forest hover:opacity-80 disabled:opacity-50 transition-all cursor-pointer"
+          >
+            {generatingAi ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>{tt("Generiere...", "Generating...")}</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>{tt("Mit KI schreiben", "Write with AI")}</span>
+              </>
+            )}
+          </button>
+        </div>
         <Textarea rows={2} value={description} onChange={(e) => setDescription(e.target.value)} />
       </div>
       <div className="grid grid-cols-3 gap-3">
