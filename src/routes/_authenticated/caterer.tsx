@@ -1964,8 +1964,8 @@ function BusinessProfileSection() {
   );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [serviceAreas, setServiceAreas] = useState((caterer as any).service_areas || "");
-  const [certifications, setCertifications] = useState((caterer as any).certifications || "");
+  const [serviceAreas, setServiceAreas] = useState((caterer as any)?.service_areas || "");
+  const [certifications, setCertifications] = useState((caterer as any)?.certifications || "");
 
   const logoRef = React.useRef<HTMLInputElement>(null);
   const bannerRef = React.useRef<HTMLInputElement>(null);

@@ -688,7 +688,7 @@ function BusinessProfileSection() {
   );
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [serviceAreas, setServiceAreas] = useState((planner as any).service_areas || "");
+  const [serviceAreas, setServiceAreas] = useState((planner as any)?.service_areas || "");
 
   const logoRef = React.useRef<HTMLInputElement>(null);
   const bannerRef = React.useRef<HTMLInputElement>(null);
