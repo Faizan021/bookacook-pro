@@ -48,6 +48,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { getPublicCatererReviews } from "@/lib/reviews/public.functions";
 
+import { isValidCateringCity } from "@/data/geo/taxonomy";
+
 const catererQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: ["catererProfile", slug],
@@ -63,6 +65,9 @@ const catererQueryOptions = (slug: string) =>
   });
 export const Route = createFileRoute("/catering/$slug")({
   loader: async ({ params, context }) => {
+    if (isValidCateringCity(params.slug)) {
+      throw redirect({ href: `/catering/ort/${params.slug}`, statusCode: 301 });
+    }
     let profile = null;
     try {
       profile = await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));

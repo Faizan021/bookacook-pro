@@ -34,12 +34,10 @@ import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
-import { Route as PlannerCityRouteImport } from './routes/planner.$city'
 import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
 import { Route as CateringEventsRouteImport } from './routes/catering.events'
 import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
 import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
-import { Route as CateringCityRouteImport } from './routes/catering.$city'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-password'
 import { Route as AuthenticatedRestaurantRouteImport } from './routes/_authenticated/restaurant'
@@ -187,11 +185,6 @@ const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
   path: '/$city-$eventType',
   getParentRoute: () => PlannerRoute,
 } as any)
-const PlannerCityRoute = PlannerCityRouteImport.update({
-  id: '/$city',
-  path: '/$city',
-  getParentRoute: () => PlannerRoute,
-} as any)
 const CateringInstitutionalCateringRoute =
   CateringInstitutionalCateringRouteImport.update({
     id: '/institutional-catering',
@@ -212,11 +205,6 @@ const CateringDailyCateringSubscriptionsRoute =
 const CateringSlugRoute = CateringSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
-  getParentRoute: () => CateringRoute,
-} as any)
-const CateringCityRoute = CateringCityRouteImport.update({
-  id: '/$city',
-  path: '/$city',
   getParentRoute: () => CateringRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
@@ -362,12 +350,10 @@ export interface FileRoutesByFullPath {
   '/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/catering/$city': typeof CateringCityRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
-  '/planner/$city': typeof PlannerCityRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -414,12 +400,10 @@ export interface FileRoutesByTo {
   '/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/catering/$city': typeof CateringCityRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
-  '/planner/$city': typeof PlannerCityRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -470,12 +454,10 @@ export interface FileRoutesById {
   '/_authenticated/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/catering/$city': typeof CateringCityRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
-  '/planner/$city': typeof PlannerCityRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -526,12 +508,10 @@ export interface FileRouteTypes {
     | '/restaurant'
     | '/auth/update-password'
     | '/blog/$slug'
-    | '/catering/$city'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
     | '/catering/institutional-catering'
-    | '/planner/$city'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -578,12 +558,10 @@ export interface FileRouteTypes {
     | '/restaurant'
     | '/auth/update-password'
     | '/blog/$slug'
-    | '/catering/$city'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
     | '/catering/institutional-catering'
-    | '/planner/$city'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -633,12 +611,10 @@ export interface FileRouteTypes {
     | '/_authenticated/restaurant'
     | '/auth/update-password'
     | '/blog/$slug'
-    | '/catering/$city'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
     | '/catering/institutional-catering'
-    | '/planner/$city'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -876,13 +852,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerCityEventTypeRouteImport
       parentRoute: typeof PlannerRoute
     }
-    '/planner/$city': {
-      id: '/planner/$city'
-      path: '/$city'
-      fullPath: '/planner/$city'
-      preLoaderRoute: typeof PlannerCityRouteImport
-      parentRoute: typeof PlannerRoute
-    }
     '/catering/institutional-catering': {
       id: '/catering/institutional-catering'
       path: '/institutional-catering'
@@ -909,13 +878,6 @@ declare module '@tanstack/react-router' {
       path: '/$slug'
       fullPath: '/catering/$slug'
       preLoaderRoute: typeof CateringSlugRouteImport
-      parentRoute: typeof CateringRoute
-    }
-    '/catering/$city': {
-      id: '/catering/$city'
-      path: '/$city'
-      fullPath: '/catering/$city'
-      preLoaderRoute: typeof CateringCityRouteImport
       parentRoute: typeof CateringRoute
     }
     '/blog/$slug': {
@@ -1138,7 +1100,6 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface CateringRouteChildren {
-  CateringCityRoute: typeof CateringCityRoute
   CateringSlugRoute: typeof CateringSlugRoute
   CateringDailyCateringSubscriptionsRoute: typeof CateringDailyCateringSubscriptionsRoute
   CateringEventsRoute: typeof CateringEventsRoute
@@ -1148,7 +1109,6 @@ interface CateringRouteChildren {
 }
 
 const CateringRouteChildren: CateringRouteChildren = {
-  CateringCityRoute: CateringCityRoute,
   CateringSlugRoute: CateringSlugRoute,
   CateringDailyCateringSubscriptionsRoute:
     CateringDailyCateringSubscriptionsRoute,
@@ -1163,7 +1123,6 @@ const CateringRouteWithChildren = CateringRoute._addFileChildren(
 )
 
 interface PlannerRouteChildren {
-  PlannerCityRoute: typeof PlannerCityRoute
   PlannerCityEventTypeRoute: typeof PlannerCityEventTypeRoute
   PlannerSlugRoute: typeof PlannerSlugRoute
   PlannerIndexRoute: typeof PlannerIndexRoute
@@ -1171,7 +1130,6 @@ interface PlannerRouteChildren {
 }
 
 const PlannerRouteChildren: PlannerRouteChildren = {
-  PlannerCityRoute: PlannerCityRoute,
   PlannerCityEventTypeRoute: PlannerCityEventTypeRoute,
   PlannerSlugRoute: PlannerSlugRoute,
   PlannerIndexRoute: PlannerIndexRoute,

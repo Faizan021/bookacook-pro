@@ -76,6 +76,8 @@ export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
     return { ...planner, services: services || [], promoCodes };
   });
 
+import { isValidPlannerCity } from "@/data/geo/taxonomy";
+
 const plannerQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: ["plannerProfile", slug],
@@ -84,6 +86,9 @@ const plannerQueryOptions = (slug: string) =>
 
 export const Route = createFileRoute("/planner/$slug")({
   loader: async ({ params, context }) => {
+    if (isValidPlannerCity(params.slug)) {
+      throw redirect({ href: `/planner/ort/${params.slug}`, statusCode: 301 });
+    }
     const profile = await context.queryClient.ensureQueryData(plannerQueryOptions(params.slug));
     const fullPlanner = await getPlanner(params.slug);
     if (!fullPlanner) {

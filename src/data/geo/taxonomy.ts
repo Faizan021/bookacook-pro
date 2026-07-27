@@ -25,3 +25,5 @@ export type CateringCity = typeof CATERING_CITIES[number];
 export const isValidCateringCity = (slug: string): slug is CateringCity => {
   return CATERING_CITIES.includes(slug as CateringCity);
 };
+
+export const isValidPlannerCity = isValidCateringCity;
