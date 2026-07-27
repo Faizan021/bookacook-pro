@@ -589,7 +589,9 @@ function Home() {
             <div className="absolute inset-0">
               <img
                 src="/hero-cinematic.webp"
+                loading="lazy"
                 decoding="async"
+                sizes="(min-width: 768px) 33vw, 100vw"
                 alt="Restaurants"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -625,7 +627,9 @@ function Home() {
             <div className="absolute inset-0">
               <img
                 src="/catering-clean.webp"
+                loading="lazy"
                 decoding="async"
+                sizes="(min-width: 768px) 33vw, 100vw"
                 alt="Catering"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -661,7 +665,9 @@ function Home() {
             <div className="absolute inset-0">
               <img
                 src="/planner-clean.webp"
+                loading="lazy"
                 decoding="async"
+                sizes="(min-width: 768px) 33vw, 100vw"
                 alt="Event Planner"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
               />
@@ -698,6 +704,8 @@ function Home() {
           <img
             src="/hero-cinematic.webp"
             loading="lazy"
+            decoding="async"
+            sizes="100vw"
             alt="Speisely Experience"
             className="w-full h-full object-cover object-center scale-105"
           />
@@ -755,6 +763,8 @@ function Home() {
             <img
               src="/hero-cinematic.webp"
               loading="lazy"
+              decoding="async"
+              sizes="100vw"
               alt="Become a Partner"
               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
             />
