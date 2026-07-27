@@ -347,21 +347,25 @@ function BriefCard({
       </dl>
       {item.notes && <p className="mt-3 text-sm italic text-muted-foreground">"{item.notes}"</p>}
 
-      {item.status === "quoted" && (
-        <div className="mt-4 p-4 rounded-xl bg-[#eadfce]/30 border border-[#eadfce] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div>
-            <h4 className="font-semibold text-forest text-sm">Proposal Received</h4>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Pay the 10% booking deposit of {price((item.budget_cents || 0) * 0.1)} to secure this
-              service.
+      {(item.status === "quoted" || (item.status === "quote_requested" && (item.budget_cents || 0) > 0)) && item.status !== "booked" && item.status !== "confirmed" && (
+        <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-cream/20 to-emerald-50 border border-emerald-300 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left shadow-sm">
+          <div className="space-y-1">
+            <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">
+              ⚡ 10% Plattform-Anzahlung (Stripe)
+            </span>
+            <h4 className="font-display font-bold text-forest text-sm">
+              {item.status === "quoted" ? "Angebot erhalten!" : "Anfrage eingereicht & berechnet"}
+            </h4>
+            <p className="text-xs text-forest/75 leading-relaxed">
+              Zahle 10% Anzahlung (<strong>{price((item.budget_cents || 0) * 0.1)}</strong> von Gesamtsumme {price(item.budget_cents || 0)}), um den Termin verbindlich zu sichern.
             </p>
           </div>
           <Button
             onClick={handleAccept}
             disabled={accepting}
-            className="rounded-full bg-forest text-white hover:bg-forest/90 font-bold text-xs"
+            className="shrink-0 rounded-full bg-forest text-white hover:bg-forest/90 font-bold text-xs px-5 py-2.5 shadow-md flex items-center gap-1.5 cursor-pointer"
           >
-            {accepting ? "Processing..." : "Accept & Pay Deposit"}
+            {accepting ? "Wird geladen..." : "💳 10% Anzahlung zahlen & Buchen"}
           </Button>
         </div>
       )}

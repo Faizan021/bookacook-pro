@@ -24,8 +24,8 @@ export const acceptProposal = createServerFn({ method: "POST" })
       throw new Error("You are not authorized to accept this proposal");
     }
 
-    if (brief.status !== "quoted") {
-      throw new Error("This brief is not in a quoted state and cannot be accepted");
+    if (brief.status !== "quoted" && brief.status !== "quote_requested") {
+      throw new Error("This brief is not in a quotable state and cannot be accepted");
     }
 
     // Deposit is 10% of the quoted amount (budget_cents)
