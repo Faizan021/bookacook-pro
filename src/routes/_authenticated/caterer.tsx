@@ -1673,6 +1673,44 @@ function OverviewSection({ caterer }: { caterer: any }) {
         <h2 className="font-display text-2xl">{t("Übersicht", "Overview")}</h2>
       </div>
 
+      {q.data.pendingOrders > 0 && (
+        <Link
+          to="/caterer"
+          search={{ tab: "briefs" }}
+          className="group block relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#10b981] via-[#047857] to-[#065f46] p-6 text-white shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 border-2 border-emerald-400/40 cursor-pointer text-left"
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md grid place-items-center shrink-0 animate-bounce">
+                <Sparkles className="h-6 w-6 text-yellow-300" />
+              </div>
+              <div className="space-y-1">
+                <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-extrabold uppercase tracking-widest text-emerald-100">
+                  <span className="h-2 w-2 rounded-full bg-yellow-400 animate-ping" />
+                  {t("Neue Anfrage Erhalten!", "New Lead Received!")}
+                </span>
+                <h3 className="font-display text-xl font-bold text-white">
+                  {t(
+                    `Du hast ${q.data.pendingOrders} neue Catering-Anfrage(n) erhalten!`,
+                    `You have ${q.data.pendingOrders} new catering inquiry lead(s) awaiting your reply!`,
+                  )}
+                </h3>
+                <p className="text-xs text-emerald-100/90">
+                  {t(
+                    "Klicke hier, um die Anfrage-Details zu öffnen, dem Kunden zu schreiben und ein Angebot abzugeben.",
+                    "Click anywhere to view lead details, message the client, and send an official proposal.",
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="shrink-0 flex items-center gap-2 bg-white text-forest px-5 py-3 rounded-full font-bold text-xs shadow-md group-hover:bg-cream group-hover:translate-x-1 transition-all">
+              <span>{t("Anfrage öffnen", "View Lead & Reply")}</span>
+              <ChevronRight className="h-4 w-4 text-forest" />
+            </div>
+          </div>
+        </Link>
+      )}
+
       <div className="grid lg:grid-cols-[1fr_320px] gap-6 items-start">
         {/* Left Column: KPI Metrics Grid */}
         <div className="space-y-6">
@@ -1770,17 +1808,7 @@ function OverviewSection({ caterer }: { caterer: any }) {
             </div>
           </div>
 
-          {q.data.pendingOrders > 0 && (
-            <div className="rounded-2xl bg-forest/10 border border-forest/20 p-4 text-left shadow-sm">
-              <p className="text-forest font-medium text-xs flex items-center gap-2">
-                <span>⏱️</span>{" "}
-                {t(
-                  `Sie haben ${q.data.pendingOrders} offene Anfragen, die Aufmerksamkeit erfordern. Gehen Sie zum Reiter "Anfragen", um Details zu sehen.`,
-                  `You have ${q.data.pendingOrders} pending leads that require attention. Go to the Leads tab to view details.`,
-                )}
-              </p>
-            </div>
-          )}
+
 
           {/* Service Categories Guidance */}
           <ServiceCategoriesGuidance />

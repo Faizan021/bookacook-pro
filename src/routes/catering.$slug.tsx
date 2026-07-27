@@ -180,6 +180,15 @@ function CatererPage() {
   const submitBrief = useServerFn(submitCateringBrief);
   const [submittingBrief, setSubmittingBrief] = useState(false);
 
+  const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
+  const [inquiryForm, setInquiryForm] = useState({
+    eventDate: "",
+    postalCodeCity: "",
+    guestCount: 20,
+    eventType: "Familienfeier / Event",
+    notes: "",
+  });
+
   const [b2bOpen, setB2bOpen] = useState(false);
   const handleB2bOpenChange = (open: boolean) => {
     setB2bOpen(open);
@@ -556,72 +565,20 @@ function CatererPage() {
           )}
           <button
             disabled={belowMin || submittingBrief}
-            onClick={async () => {
-              const currentTotalCount = totalCount;
-              const currentTotalAmount = finalTotal;
-
-              try {
-                setSubmittingBrief(true);
-
-                // Prepare selected items summary for notes
-                const itemsText = cartItems
-                  .map((i) => `- ${i.qty}x ${i.name} (€${(i.price * i.qty).toFixed(2)})`)
-                  .join("\n");
-                const notes = `[ONLINE STOREFRONT INQUIRY]\nSelected Items:\n${itemsText}\n\nTotal: €${currentTotalAmount.toFixed(2)}`;
-
-                // Default event date 7 days in future
-                const eventDate = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
-
-                if (catererProfile?.id) {
-                  await submitBrief({
-                    data: {
-                      catererId: catererProfile.id,
-                      eventType: "Menu Selection Inquiry",
-                      eventDate,
-                      guestCount: currentTotalCount,
-                      budgetCents: Math.round(currentTotalAmount * 100),
-                      location: catererProfile.area || "Online Storefront Inquiry",
-                      notes,
-                    },
-                  });
-                }
-
-                trackEvent("reservation_submitted", {
-                  catererId: catererProfile?.id || "unknown",
-                  type: "catering",
-                  isB2b: false,
-                  totalCount: currentTotalCount,
-                  finalTotal: currentTotalAmount,
-                });
-
-                toast.success(
-                  t(
-                    `Anfrage über ${currentTotalCount} Artikel gesendet. ${catererProfile?.name || "Der Caterer"} meldet sich in Kürze.`,
-                    `Inquiry sent for ${currentTotalCount} items. ${catererProfile?.name || "The caterer"} will get back to you shortly.`,
-                  ),
-                );
-                setSubmittedSummary({ count: currentTotalCount, total: currentTotalAmount });
-                setSuccessModalOpen(true);
-                setCart({});
-                if (isMobile) setMobileCartOpen(false);
-              } catch (err: any) {
-                toast.error(
-                  t("Fehler beim Senden der Anfrage: ", "Error sending inquiry: ") + err.message,
-                );
-              } finally {
-                setSubmittingBrief(false);
-              }
+            onClick={() => {
+              const defaultDate = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
+              setInquiryForm((prev) => ({
+                ...prev,
+                guestCount: totalCount,
+                eventDate: prev.eventDate || defaultDate,
+                postalCodeCity: prev.postalCodeCity || "41061 Mönchengladbach",
+              }));
+              setInquiryModalOpen(true);
             }}
             className="mt-5 w-full rounded-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white py-3 font-semibold shadow-md transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {submittingBrief ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <>
-                <CheckCircle2 className="h-5 w-5" />
-                {t("Anfrage senden", "Send inquiry")} · ab €{finalTotal.toFixed(2)}
-              </>
-            )}
+            <CheckCircle2 className="h-5 w-5" />
+            {t("Anfrage senden", "Send inquiry")} · ab €{finalTotal.toFixed(2)}
           </button>
           <p className="mt-2 text-xs text-forest/60">
             {t("Der Caterer bestätigt deine Anfrage.", "The caterer confirms your request.")}
@@ -1534,6 +1491,183 @@ function CatererPage() {
           </div>
         )}
       </section>
+
+      {/* Inquiry Details Modal (Asks for Event Date & Delivery Location/Postal Code) */}
+      <Dialog open={inquiryModalOpen} onOpenChange={setInquiryModalOpen}>
+        <DialogContent className="sm:max-w-[480px] bg-[#fdfaf5] text-forest border-[#eadfce] p-6 rounded-3xl text-left">
+          <DialogHeader>
+            <DialogTitle className="font-display text-2xl text-forest">
+              {t("Anfragedetails eingeben", "Complete Inquiry Details")}
+            </DialogTitle>
+            <p className="text-xs text-forest/70">
+              {t(
+                `Bitte gib dein Event-Datum und deine Postleitzahl / Ort an, damit ${catererProfile?.name} die Anfrage prüfen kann.`,
+                `Please specify your event date and delivery location so ${catererProfile?.name} can review and confirm availability.`,
+              )}
+            </p>
+          </DialogHeader>
+
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const currentTotalCount = totalCount;
+              const currentTotalAmount = finalTotal;
+
+              try {
+                setSubmittingBrief(true);
+                const itemsText = cartItems
+                  .map((i) => `- ${i.qty}x ${i.name} (€${(i.price * i.qty).toFixed(2)})`)
+                  .join("\n");
+
+                const notes = `[ONLINE STOREFRONT INQUIRY]\nEvent Type: ${inquiryForm.eventType}\nDelivery Location: ${inquiryForm.postalCodeCity}\nSelected Items:\n${itemsText}\n\nNotes:\n${inquiryForm.notes || "None"}\n\nTotal: €${currentTotalAmount.toFixed(2)}`;
+
+                if (catererProfile?.id) {
+                  await submitBrief({
+                    data: {
+                      catererId: catererProfile.id,
+                      eventType: inquiryForm.eventType,
+                      eventDate:
+                        inquiryForm.eventDate ||
+                        new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0],
+                      guestCount: inquiryForm.guestCount || currentTotalCount,
+                      budgetCents: Math.round(currentTotalAmount * 100),
+                      location:
+                        inquiryForm.postalCodeCity || catererProfile.area || "Storefront Location",
+                      notes,
+                    },
+                  });
+                }
+
+                trackEvent("reservation_submitted", {
+                  catererId: catererProfile?.id || "unknown",
+                  type: "catering",
+                  isB2b: false,
+                  totalCount: currentTotalCount,
+                  finalTotal: currentTotalAmount,
+                });
+
+                toast.success(
+                  t(
+                    `Anfrage erfolgreich gesendet! ${catererProfile?.name || "Der Caterer"} meldet sich in Kürze.`,
+                    `Inquiry sent successfully! ${catererProfile?.name || "The caterer"} will get back to you shortly.`,
+                  ),
+                );
+                setSubmittedSummary({ count: currentTotalCount, total: currentTotalAmount });
+                setInquiryModalOpen(false);
+                setSuccessModalOpen(true);
+                setCart({});
+                if (isMobile) setMobileCartOpen(false);
+              } catch (err: any) {
+                toast.error(
+                  t("Fehler beim Senden der Anfrage: ", "Error sending inquiry: ") + err.message,
+                );
+              } finally {
+                setSubmittingBrief(false);
+              }
+            }}
+            className="space-y-4 mt-3"
+          >
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-forest">
+                  {t("Event-Datum *", "Event Date *")}
+                </Label>
+                <Input
+                  type="date"
+                  required
+                  min={new Date().toISOString().split("T")[0]}
+                  value={inquiryForm.eventDate}
+                  onChange={(e) => setInquiryForm({ ...inquiryForm, eventDate: e.target.value })}
+                  className="bg-white border-[#eadfce] text-xs h-10"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-forest">
+                  {t("PLZ / Lieferort *", "Postal Code / City *")}
+                </Label>
+                <Input
+                  required
+                  placeholder="e.g. 41061 Mönchengladbach"
+                  value={inquiryForm.postalCodeCity}
+                  onChange={(e) =>
+                    setInquiryForm({ ...inquiryForm, postalCodeCity: e.target.value })
+                  }
+                  className="bg-white border-[#eadfce] text-xs h-10"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-forest">
+                  {t("Gästeanzahl", "Guest Count")}
+                </Label>
+                <Input
+                  type="number"
+                  min="1"
+                  required
+                  value={inquiryForm.guestCount}
+                  onChange={(e) =>
+                    setInquiryForm({ ...inquiryForm, guestCount: parseInt(e.target.value) || 1 })
+                  }
+                  className="bg-white border-[#eadfce] text-xs h-10"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-bold text-forest">
+                  {t("Anlass / Event-Typ", "Occasion / Event Type")}
+                </Label>
+                <Select
+                  value={inquiryForm.eventType}
+                  onValueChange={(val) => setInquiryForm({ ...inquiryForm, eventType: val })}
+                >
+                  <SelectTrigger className="bg-white border-[#eadfce] text-xs h-10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#fdfaf5] border-[#eadfce] text-forest">
+                    <SelectItem value="Familienfeier / Event">Familienfeier / Event</SelectItem>
+                    <SelectItem value="Geburtstag">Geburtstag</SelectItem>
+                    <SelectItem value="Hochzeit">Hochzeit</SelectItem>
+                    <SelectItem value="Firmen-Event">Firmen-Event</SelectItem>
+                    <SelectItem value="Private Dinner">Private Dinner</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-xs font-bold text-forest">
+                {t("Zusätzliche Wünsche (optional)", "Special Notes (Optional)")}
+              </Label>
+              <Textarea
+                rows={2}
+                placeholder={t(
+                  "Besondere Hinweise zur Anlieferung, Allergien etc...",
+                  "Delivery notes, dietary requests...",
+                )}
+                value={inquiryForm.notes}
+                onChange={(e) => setInquiryForm({ ...inquiryForm, notes: e.target.value })}
+                className="bg-white border-[#eadfce] text-xs"
+              />
+            </div>
+
+            <button
+              disabled={submittingBrief}
+              type="submit"
+              className="mt-2 w-full rounded-full bg-forest text-white py-3 font-semibold text-sm hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer shadow-md"
+            >
+              {submittingBrief ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  <CheckCircle2 className="h-4 w-4" />
+                  {t("Anfrage jetzt verbindlich senden", "Confirm & Send Inquiry")}
+                </>
+              )}
+            </button>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {/* Premium Success Confirmation Modal */}
       <Dialog open={successModalOpen} onOpenChange={setSuccessModalOpen}>

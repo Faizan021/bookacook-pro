@@ -233,6 +233,25 @@ export function mapDbCaterer(c: any): Caterer {
     }
   }
 
+  // Format service area cleanly instead of dumping 20+ raw postal codes
+  let areaDisplay = c.service_areas || "Mönchengladbach & Region";
+  if (areaDisplay.includes(",") && areaDisplay.split(",").length > 3) {
+    if (areaDisplay.includes("41") || areaDisplay.includes("47")) {
+      areaDisplay = "Mönchengladbach & Region";
+    } else {
+      areaDisplay = "Regionale Zustellung";
+    }
+  }
+
+  // Determine appropriate dietary/specialty tags based on caterer profile
+  let dietaryTags = ["Buffet-Klassiker", "Event-Service"];
+  const catererNameLower = (c.name || "").toLowerCase();
+  if (c.certifications && c.certifications.length > 0) {
+    dietaryTags = c.certifications.split(",").map((s: string) => s.trim()).filter(Boolean);
+  } else if (catererNameLower.includes("kuepper") || catererNameLower.includes("küpper") || catererNameLower.includes("partyservice")) {
+    dietaryTags = ["Buffet-Klassiker", "Deftige Spezialitäten"];
+  }
+
   return {
     id: c.slug || c.id,
     slug: c.slug,
@@ -251,12 +270,12 @@ export function mapDbCaterer(c: any): Caterer {
     img,
     logo: c.logo_url || undefined,
     status: "available",
-    area: c.service_areas || "Mönchengladbach",
+    area: areaDisplay,
     address: c.business_address || "",
     phone: c.phone || "",
     cat: "corporate",
     verified: true,
-    dietary: ["Vegetarisch", "Vegan"],
+    dietary: dietaryTags,
     about: { de: c.description || "", en: c.description || "" },
     packages: [],
     menu: [],
