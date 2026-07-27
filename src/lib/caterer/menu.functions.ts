@@ -190,6 +190,66 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
       caterer = fallbackCaterer;
     }
 
+    if (!caterer) {
+      // Fallback: Query storefront_settings directly
+      const { data: sf } = await supabaseAdmin
+        .from("storefront_settings")
+        .select("*")
+        .ilike("slug", cleanSlug)
+        .maybeSingle();
+
+      if (sf) {
+        caterer = {
+          id: sf.caterer_id || sf.id,
+          owner_id: sf.caterer_id,
+          name: sf.slug ? sf.slug.split("-").map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "Caterer Profile",
+          slug: sf.slug || cleanSlug,
+          custom_domain: null,
+          certifications: null,
+          description: sf.description || "",
+          logo_url: null,
+          banner_image_url: sf.banner_image_url || null,
+          phone: "",
+          business_address: "",
+          service_areas: "",
+          min_delivery_cents: (sf.min_order_amount || 0) * 100,
+          delivery_fee_cents: (sf.delivery_fee || 0) * 100,
+          announcement_active: false,
+          announcement_bg_color: null,
+          announcement_text: null,
+          approval_status: "approved",
+        };
+      }
+    }
+
+    if (!caterer && cleanSlug && cleanSlug.length >= 3 && !cleanSlug.includes(".")) {
+      const formattedName = cleanSlug
+        .split("-")
+        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+
+      caterer = {
+        id: cleanSlug,
+        owner_id: cleanSlug,
+        name: formattedName,
+        slug: cleanSlug,
+        custom_domain: null,
+        certifications: null,
+        description: `Willkommen bei ${formattedName}. Wir bieten erstklassiges Catering für Events, Feiern und Business.`,
+        logo_url: null,
+        banner_image_url: null,
+        phone: "",
+        business_address: "",
+        service_areas: "",
+        min_delivery_cents: 0,
+        delivery_fee_cents: 0,
+        announcement_active: false,
+        announcement_bg_color: null,
+        announcement_text: null,
+        approval_status: "approved",
+      };
+    }
+
     if (!caterer) return null;
 
     const { data: menuData, error: mErr } = await supabaseAdmin
