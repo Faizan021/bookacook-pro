@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   CheckCircle2,
   ChevronRight,
+  Loader2,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
@@ -177,6 +178,7 @@ function CatererPage() {
 
   const recordView = useServerFn(recordPageView);
   const submitBrief = useServerFn(submitCateringBrief);
+  const [submittingBrief, setSubmittingBrief] = useState(false);
 
   const [b2bOpen, setB2bOpen] = useState(false);
   const handleB2bOpenChange = (open: boolean) => {
@@ -553,32 +555,73 @@ function CatererPage() {
             </p>
           )}
           <button
-            disabled={belowMin}
-            onClick={() => {
+            disabled={belowMin || submittingBrief}
+            onClick={async () => {
               const currentTotalCount = totalCount;
               const currentTotalAmount = finalTotal;
-              trackEvent("reservation_submitted", {
-                catererId: catererProfile.id,
-                type: "catering",
-                isB2b: false,
-                totalCount: currentTotalCount,
-                finalTotal: currentTotalAmount,
-              });
-              toast.success(
-                t(
-                  `Anfrage über ${currentTotalCount} Artikel gesendet. ${catererProfile.name} meldet sich in Kürze.`,
-                  `Inquiry sent for ${currentTotalCount} items. ${catererProfile.name} will get back to you shortly.`,
-                ),
-              );
-              setSubmittedSummary({ count: currentTotalCount, total: currentTotalAmount });
-              setSuccessModalOpen(true);
-              setCart({});
-              if (isMobile) setMobileCartOpen(false);
+
+              try {
+                setSubmittingBrief(true);
+
+                // Prepare selected items summary for notes
+                const itemsText = cartItems
+                  .map((i) => `- ${i.qty}x ${i.name} (€${(i.price * i.qty).toFixed(2)})`)
+                  .join("\n");
+                const notes = `[ONLINE STOREFRONT INQUIRY]\nSelected Items:\n${itemsText}\n\nTotal: €${currentTotalAmount.toFixed(2)}`;
+
+                // Default event date 7 days in future
+                const eventDate = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
+
+                if (catererProfile?.id) {
+                  await submitBrief({
+                    data: {
+                      catererId: catererProfile.id,
+                      eventType: "Menu Selection Inquiry",
+                      eventDate,
+                      guestCount: currentTotalCount,
+                      budgetCents: Math.round(currentTotalAmount * 100),
+                      location: catererProfile.area || "Online Storefront Inquiry",
+                      notes,
+                    },
+                  });
+                }
+
+                trackEvent("reservation_submitted", {
+                  catererId: catererProfile?.id || "unknown",
+                  type: "catering",
+                  isB2b: false,
+                  totalCount: currentTotalCount,
+                  finalTotal: currentTotalAmount,
+                });
+
+                toast.success(
+                  t(
+                    `Anfrage über ${currentTotalCount} Artikel gesendet. ${catererProfile?.name || "Der Caterer"} meldet sich in Kürze.`,
+                    `Inquiry sent for ${currentTotalCount} items. ${catererProfile?.name || "The caterer"} will get back to you shortly.`,
+                  ),
+                );
+                setSubmittedSummary({ count: currentTotalCount, total: currentTotalAmount });
+                setSuccessModalOpen(true);
+                setCart({});
+                if (isMobile) setMobileCartOpen(false);
+              } catch (err: any) {
+                toast.error(
+                  t("Fehler beim Senden der Anfrage: ", "Error sending inquiry: ") + err.message,
+                );
+              } finally {
+                setSubmittingBrief(false);
+              }
             }}
             className="mt-5 w-full rounded-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white py-3 font-semibold shadow-md transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            <CheckCircle2 className="h-5 w-5" />
-            {t("Anfrage senden", "Send inquiry")} · ab €{finalTotal.toFixed(2)}
+            {submittingBrief ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <>
+                <CheckCircle2 className="h-5 w-5" />
+                {t("Anfrage senden", "Send inquiry")} · ab €{finalTotal.toFixed(2)}
+              </>
+            )}
           </button>
           <p className="mt-2 text-xs text-forest/60">
             {t("Der Caterer bestätigt deine Anfrage.", "The caterer confirms your request.")}

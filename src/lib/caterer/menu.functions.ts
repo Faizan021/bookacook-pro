@@ -345,7 +345,7 @@ export const getPublicCatererList = createServerFn({ method: "GET" }).handler(as
 });
 
 export const submitCateringBrief = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth()])
+  .middleware([optionalSupabaseAuth()])
   .inputValidator(
     (input: {
       catererId: string;
@@ -388,12 +388,12 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
   )
   .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { userId } = context as { userId: string };
+    const { userId } = context as { userId?: string };
 
     const insertData: any = {
-      customer_id: userId,
+      customer_id: userId || null,
       preferred_caterer_id: data.catererId,
-      status: "draft",
+      status: "quote_requested",
       event_type: data.eventType,
       event_date: data.eventDate,
       guest_count: data.guestCount,
