@@ -62,7 +62,10 @@ export const Route = createFileRoute("/catering/$slug")({
       reviewsData = await getPublicCatererReviews({ data: { catererId: profile.id } });
     }
     if (profile?.custom_domain) {
-      throw redirect({ href: `https://${profile.custom_domain}`, statusCode: 301 });
+      const cleanDomain = profile.custom_domain.toLowerCase().trim();
+      if (!cleanDomain.endsWith("speisely.de") && !cleanDomain.includes("speisely")) {
+        throw redirect({ href: `https://${cleanDomain}`, statusCode: 301 });
+      }
     }
     return { fullCaterer, reviewsData, profile };
   },
