@@ -714,13 +714,17 @@ function CatererPage() {
         {/* Redesigned Full-Width Hero Banner */}
         <div className="relative mt-6 w-full h-[300px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg">
           <img
-            src={catererProfile.img}
+            src={catererProfile.img || "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop"}
             alt={catererProfile.name}
             className="absolute inset-0 h-full w-full object-cover object-center"
             loading="eager"
             fetchPriority="high"
             width={1200}
             height={420}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
+            }}
           />
           {/* Dark gradient overlay */}
           <div
