@@ -566,12 +566,16 @@ function Catering() {
               >
                 <div className="overflow-hidden aspect-[4/3] relative">
                   <img
-                    src={c.img}
+                    src={c.img || "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop"}
                     alt={c.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     loading="lazy"
                     width={600}
                     height={450}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
+                    }}
                   />
                   <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-forest shadow-md flex items-center gap-1 border border-forest/20 uppercase tracking-wider">
                     {lang === "de" ? "Buchbar" : "Bookable"}

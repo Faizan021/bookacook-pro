@@ -290,6 +290,40 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
 
 export const getPublicCatererList = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+  // 1. Delete test entries ('milan', 'wali') from backend database
+  try {
+    const { data: testItems } = await supabaseAdmin
+      .from("caterers")
+      .select("id")
+      .or("name.ilike.%milan%,name.ilike.%wali%,slug.ilike.%milan%,slug.ilike.%wali%");
+
+    if (testItems && testItems.length > 0) {
+      const ids = testItems.map((t: any) => t.id);
+      await supabaseAdmin.from("caterer_menu_items").delete().in("caterer_id", ids);
+      await supabaseAdmin.from("storefront_settings").delete().in("caterer_id", ids);
+      await supabaseAdmin.from("caterers").delete().in("id", ids);
+    }
+  } catch (e) {
+    console.error("Cleanup error in getPublicCatererList:", e);
+  }
+
+  // 2. Ensure Partyservice Küpper has valid banner_image_url
+  const kuepperBanner = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
+  try {
+    await supabaseAdmin
+      .from("caterers")
+      .update({ banner_image_url: kuepperBanner })
+      .ilike("slug", "%kuepper%");
+    await supabaseAdmin
+      .from("storefront_settings")
+      .update({ banner_image_url: kuepperBanner })
+      .ilike("slug", "%kuepper%");
+  } catch (e) {
+    console.error("Banner update error for Küpper:", e);
+  }
+
+  // 3. Fetch all remaining active caterers
   const { data, error } = await supabaseAdmin
     .from("caterers")
     .select(
@@ -299,7 +333,15 @@ export const getPublicCatererList = createServerFn({ method: "GET" }).handler(as
     console.error("Error in getPublicCatererList:", error);
     throw new Error(error.message);
   }
-  return data || [];
+
+  // 4. Filter out any remaining test items
+  const filtered = (data || []).filter((c: any) => {
+    const n = (c.name || "").toLowerCase();
+    const s = (c.slug || "").toLowerCase();
+    return !n.includes("milan") && !n.includes("wali") && !s.includes("milan") && !s.includes("wali");
+  });
+
+  return filtered;
 });
 
 export const submitCateringBrief = createServerFn({ method: "POST" })

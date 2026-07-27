@@ -222,8 +222,9 @@ function mapCaterer(r: any): Caterer {
 }
 
 export function mapDbCaterer(c: any): Caterer {
-  let img = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
-  if (c.banner_image_url) {
+  const defaultFoodImg = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
+  let img = defaultFoodImg;
+  if (c.banner_image_url && typeof c.banner_image_url === "string") {
     if (c.banner_image_url.startsWith("http")) {
       img = c.banner_image_url;
     } else {
