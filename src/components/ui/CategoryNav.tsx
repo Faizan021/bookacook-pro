@@ -62,7 +62,7 @@ export function CategoryNav({ categories, activeCategory, onSelect }: CategoryNa
 
   return (
     <div
-      className="sticky top-16 sm:top-20 z-30 bg-[#fdfaf5]/95 backdrop-blur-md overflow-hidden border-b border-[oklch(0.85_0.05_152)] py-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 mt-6"
+      className="sticky top-[96px] sm:top-20 z-30 bg-[#fdfaf5]/95 backdrop-blur-md overflow-hidden border-b border-[oklch(0.85_0.05_152)] py-3 sm:py-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 mt-6 shadow-xs"
       ref={emblaRef}
     >
       <div className="flex gap-3 px-1">

@@ -165,15 +165,15 @@ export function SiteHeader() {
       </div>
 
       {/* Mobile nav pills */}
-      <nav className="md:hidden flex items-center gap-1.5 px-4 pb-3 overflow-x-auto no-scrollbar">
+      <nav className="md:hidden flex items-center gap-1 px-3 pb-2 overflow-x-auto no-scrollbar border-t border-forest/5 bg-cream/95">
         {navItems.map((item) => (
           <Link
             key={item.to}
             to={item.to}
-            className="shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-medium border border-transparent transition-colors text-forest/70 hover:text-forest"
+            className="shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium border border-transparent transition-colors text-forest/70 hover:text-forest"
             activeProps={{
               className:
-                "shrink-0 px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold border bg-forest !text-[oklch(0.97_0.02_92)] border-forest",
+                "shrink-0 px-2.5 py-1 rounded-full text-[11px] font-semibold border bg-forest !text-[oklch(0.97_0.02_92)] border-forest",
             }}
           >
             {item.label}

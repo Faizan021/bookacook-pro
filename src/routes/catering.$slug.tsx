@@ -721,8 +721,8 @@ function CatererPage() {
           </Link>
         )}
 
-        {/* Redesigned Full-Width Hero Banner */}
-        <div className="relative mt-6 w-full h-[300px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg">
+        {/* Redesigned Responsive Hero Banner */}
+        <div className="relative mt-6 w-full min-h-[380px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg flex flex-col justify-between p-5 sm:p-6 md:p-8">
           <img
             src={catererProfile.img || "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop"}
             alt={catererProfile.name}
@@ -741,202 +741,330 @@ function CatererPage() {
             className="absolute inset-0 z-10"
             style={{
               backgroundImage:
-                "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%)",
+                "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 55%, rgba(0,0,0,0.25) 100%)",
             }}
           />
 
-          {/* Top Right Actions */}
-          <div className="absolute top-4 right-4 md:top-6 md:right-6 z-30 flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 sm:gap-3">
-            {catererProfile.verified && (
-              <span className="rounded-full bg-[#10b981] px-4 py-2.5 text-xs md:text-sm font-bold text-white shadow-md flex items-center gap-1.5">
+          {/* Top Badge & Desktop Action Bar */}
+          <div className="relative z-20 flex items-center justify-between w-full">
+            {catererProfile.verified ? (
+              <span className="rounded-full bg-[#10b981] px-3.5 py-1.5 text-xs md:text-sm font-bold text-white shadow-md flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4" />
                 {t("GEPRÜFT", "CHECKED")}
               </span>
-            )}
-            <button
-              onClick={scrollToMenu}
-              className="group flex items-center gap-1.5 rounded-full bg-[#10b981] hover:bg-[#10b981]/90 px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
-            >
-              {t("Anfrage senden", "Send request")}
-              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
-            <Dialog open={b2bOpen} onOpenChange={handleB2bOpenChange}>
-              <DialogTrigger asChild>
-                <button className="group flex items-center gap-1.5 rounded-full border border-white bg-white/20 hover:bg-white/30 backdrop-blur-md px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer">
-                  {t("B2B Firmen-Catering", "B2B corporate catering")}
-                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[500px] bg-[#fdfaf5] text-forest border-[#eadfce]">
-                <DialogHeader>
-                  <DialogTitle className="font-display text-2xl text-forest">
-                    {t("Corporate Catering", "Corporate Catering")}
-                  </DialogTitle>
-                  <p className="text-sm text-forest/70">
-                    {t(
-                      "Richte regelmäßiges Catering für dein Büro ein. Ideal für Team-Lunches, Meetings und mehr.",
-                      "Set up recurring catering for your office. Perfect for team lunches, meetings, and more.",
-                    )}
-                  </p>
-                </DialogHeader>
-                <form onSubmit={handleB2bSubmit} className="space-y-4 mt-4">
-                  <div className="space-y-1.5">
-                    <Label>{t("Firmenname", "Company Name")}</Label>
-                    <Input
-                      required
-                      className="bg-white border-[#eadfce]"
-                      value={b2bForm.companyName}
-                      onChange={(e) =>
-                        setB2bForm((prev) => ({ ...prev, companyName: e.target.value }))
-                      }
-                      placeholder="Acme Corp"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
+            ) : <div />}
+
+            {/* Desktop Top Right Actions */}
+            <div className="hidden md:flex items-center gap-2 sm:gap-3">
+              <button
+                onClick={scrollToMenu}
+                className="group flex items-center gap-1.5 rounded-full bg-[#10b981] hover:bg-[#10b981]/90 px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
+              >
+                {t("Anfrage senden", "Send request")}
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+              <Dialog open={b2bOpen} onOpenChange={handleB2bOpenChange}>
+                <DialogTrigger asChild>
+                  <button className="group flex items-center gap-1.5 rounded-full border border-white bg-white/20 hover:bg-white/30 backdrop-blur-md px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer">
+                    {t("B2B Firmen-Catering", "B2B corporate catering")}
+                    <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px] bg-[#fdfaf5] text-forest border-[#eadfce]">
+                  <DialogHeader>
+                    <DialogTitle className="font-display text-2xl text-forest">
+                      {t("Corporate Catering", "Corporate Catering")}
+                    </DialogTitle>
+                    <p className="text-sm text-forest/70">
+                      {t(
+                        "Richte regelmäßiges Catering für dein Büro ein. Ideal für Team-Lunches, Meetings und mehr.",
+                        "Set up recurring catering for your office. Perfect for team lunches, meetings, and more.",
+                      )}
+                    </p>
+                  </DialogHeader>
+                  <form onSubmit={handleB2bSubmit} className="space-y-4 mt-4">
                     <div className="space-y-1.5">
-                      <Label>{t("Mitarbeiterzahl", "Employee Count")}</Label>
+                      <Label>{t("Firmenname", "Company Name")}</Label>
                       <Input
-                        type="number"
                         required
-                        min="1"
                         className="bg-white border-[#eadfce]"
-                        value={b2bForm.employees}
+                        value={b2bForm.companyName}
                         onChange={(e) =>
-                          setB2bForm((prev) => ({ ...prev, employees: e.target.value }))
+                          setB2bForm((prev) => ({ ...prev, companyName: e.target.value }))
+                        }
+                        placeholder="Acme Corp"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <Label>{t("Mitarbeiterzahl", "Employee Count")}</Label>
+                        <Input
+                          type="number"
+                          required
+                          min="1"
+                          className="bg-white border-[#eadfce]"
+                          value={b2bForm.employees}
+                          onChange={(e) =>
+                            setB2bForm((prev) => ({ ...prev, employees: e.target.value }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label>{t("Rhythmus", "Frequency")}</Label>
+                        <Select
+                          value={b2bForm.pattern}
+                          onValueChange={(v) => setB2bForm((prev) => ({ ...prev, pattern: v }))}
+                        >
+                          <SelectTrigger className="bg-white border-[#eadfce]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-[#fdfaf5] border-[#eadfce] text-forest">
+                            <SelectItem value="daily">
+                              {t("Täglich (Mo-Fr)", "Daily (Mon-Fri)")}
+                            </SelectItem>
+                            <SelectItem value="weekly">
+                              {t("Einmal pro Woche", "Once a week")}
+                            </SelectItem>
+                            <SelectItem value="biweekly">
+                              {t("Alle zwei Wochen", "Bi-weekly")}
+                            </SelectItem>
+                            <SelectItem value="monthly">
+                              {t("Einmal pro Monat", "Once a month")}
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>{t("Gewünschter Start", "Desired Start Date")}</Label>
+                      <Input
+                        type="date"
+                        min={new Date().toISOString().split("T")[0]}
+                        required
+                        className="bg-white border-[#eadfce]"
+                        value={b2bForm.startDate}
+                        onChange={(e) =>
+                          setB2bForm((prev) => ({ ...prev, startDate: e.target.value }))
                         }
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <Label>{t("Rhythmus", "Frequency")}</Label>
-                      <Select
-                        value={b2bForm.pattern}
-                        onValueChange={(v) => setB2bForm((prev) => ({ ...prev, pattern: v }))}
-                      >
-                        <SelectTrigger className="bg-white border-[#eadfce]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-[#fdfaf5] border-[#eadfce] text-forest">
-                          <SelectItem value="daily">
-                            {t("Täglich (Mo-Fr)", "Daily (Mon-Fri)")}
-                          </SelectItem>
-                          <SelectItem value="weekly">
-                            {t("Einmal pro Woche", "Once a week")}
-                          </SelectItem>
-                          <SelectItem value="biweekly">
-                            {t("Alle zwei Wochen", "Bi-weekly")}
-                          </SelectItem>
-                          <SelectItem value="monthly">
-                            {t("Einmal pro Monat", "Once a month")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Label>{t("Zusätzliche Wünsche", "Additional Notes")}</Label>
+                      <Textarea
+                        rows={3}
+                        className="bg-white border-[#eadfce]"
+                        value={b2bForm.notes}
+                        onChange={(e) => setB2bForm((prev) => ({ ...prev, notes: e.target.value }))}
+                        placeholder={t(
+                          "z.B. 30% vegetarisch, 10% vegan...",
+                          "e.g., 30% vegetarian, 10% vegan...",
+                        )}
+                      />
                     </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>{t("Gewünschter Start", "Desired Start Date")}</Label>
-                    <Input
-                      type="date"
-                      min={new Date().toISOString().split("T")[0]}
-                      required
-                      className="bg-white border-[#eadfce]"
-                      value={b2bForm.startDate}
-                      onChange={(e) =>
-                        setB2bForm((prev) => ({ ...prev, startDate: e.target.value }))
-                      }
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>{t("Zusätzliche Wünsche", "Additional Notes")}</Label>
-                    <Textarea
-                      rows={3}
-                      className="bg-white border-[#eadfce]"
-                      value={b2bForm.notes}
-                      onChange={(e) => setB2bForm((prev) => ({ ...prev, notes: e.target.value }))}
-                      placeholder={t(
-                        "z.B. 30% vegetarisch, 10% vegan...",
-                        "e.g., 30% vegetarian, 10% vegan...",
-                      )}
-                    />
-                  </div>
-                  <button
-                    disabled={submittingB2b}
-                    type="submit"
-                    className="mt-4 w-full rounded-full bg-forest text-white py-3 font-medium hover:opacity-90 disabled:opacity-50"
-                  >
-                    {submittingB2b
-                      ? t("Senden...", "Sending...")
-                      : t("Anfrage absenden", "Submit B2B Request")}
-                  </button>
-                </form>
-              </DialogContent>
-            </Dialog>
+                    <button
+                      disabled={submittingB2b}
+                      type="submit"
+                      className="mt-4 w-full rounded-full bg-forest text-white py-3 font-medium hover:opacity-90 disabled:opacity-50"
+                    >
+                      {submittingB2b
+                        ? t("Senden...", "Sending...")
+                        : t("Anfrage absenden", "Submit B2B Request")}
+                    </button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
-          {/* Bottom Info Overlay */}
-          <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white z-20 flex items-center gap-4 w-[calc(100%-3rem)] md:w-[calc(100%-4rem)]">
-            {catererProfile.logo && (
-              <img
-                src={catererProfile.logo}
-                alt="Logo"
-                className="w-16 h-16 md:w-24 md:h-24 rounded-full border-4 border-white shadow-md bg-white object-cover flex-shrink-0"
-              />
-            )}
-            <div className="flex flex-col gap-1 max-w-[80%] text-left">
-              <h1 className="text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-sm">
-                {catererProfile.name}
-              </h1>
-              {catererProfile?.seo_event_types_target && catererProfile.seo_event_types_target.length > 0 && (
-                <p className="text-lg md:text-xl font-medium drop-shadow-md text-white/90">
-                  {catererProfile.seo_event_types_target.join(" · ")}
-                </p>
+          {/* Bottom Info & Text Overlay */}
+          <div className="relative z-20 text-white flex flex-col gap-2.5 mt-6 sm:mt-8">
+            <div className="flex items-start gap-3 sm:gap-4">
+              {catererProfile.logo && (
+                <img
+                  src={catererProfile.logo}
+                  alt="Logo"
+                  className="w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md bg-white object-cover flex-shrink-0"
+                />
               )}
-              {catererProfile?.seo_catering_styles && catererProfile.seo_catering_styles.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {catererProfile.seo_catering_styles.map((style: string, i: number) => (
-                    <span key={i} className="text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white">
-                      {style}
-                    </span>
-                  ))}
-                </div>
-              )}
-              <div className="flex flex-col gap-2 mt-2">
-                {catererProfile.tagline && catererProfile.tagline[lang] && (
-                  <span className="text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md">
-                    {catererProfile.tagline[lang]}
-                  </span>
+              <div className="flex flex-col gap-1 text-left">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold leading-tight drop-shadow-md">
+                  {catererProfile.name}
+                </h1>
+                {catererProfile?.seo_event_types_target && catererProfile.seo_event_types_target.length > 0 && (
+                  <p className="text-xs sm:text-base md:text-lg font-medium drop-shadow-md text-white/90">
+                    {catererProfile.seo_event_types_target.join(" · ")}
+                  </p>
                 )}
               </div>
-              {storefrontUrl && (
-                <a
-                  href={storefrontUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs text-mint hover:text-white transition-colors mt-0.5 font-semibold drop-shadow-sm w-fit"
-                >
-                  <Globe className="h-3.5 w-3.5" />
-                  {t("Direkt-Storefront öffnen ↗", "Open Direct Storefront ↗")}
-                </a>
-              )}
+            </div>
+
+            {catererProfile?.seo_catering_styles && catererProfile.seo_catering_styles.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-1">
+                {catererProfile.seo_catering_styles.map((style: string, i: number) => (
+                  <span key={i} className="text-[10px] sm:text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/30 text-white">
+                    {style}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {catererProfile.tagline && catererProfile.tagline[lang] && (
+              <p className="text-xs sm:text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md leading-relaxed line-clamp-3 md:line-clamp-none">
+                {catererProfile.tagline[lang]}
+              </p>
+            )}
+
+            {storefrontUrl && (
+              <a
+                href={storefrontUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-mint hover:text-white transition-colors font-semibold drop-shadow-sm w-fit"
+              >
+                <Globe className="h-3.5 w-3.5" />
+                {t("Direkt-Storefront öffnen ↗", "Open Direct Storefront ↗")}
+              </a>
+            )}
+
+            {/* Mobile Only Clean Action Buttons Bar */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:hidden pt-3 border-t border-white/15">
+              <button
+                onClick={scrollToMenu}
+                className="w-full flex items-center justify-center gap-1.5 rounded-full bg-[#10b981] active:bg-[#10b981]/90 py-2.5 text-xs font-bold text-white shadow-md transition-all cursor-pointer"
+              >
+                {t("Anfrage senden", "Send request")}
+                <ChevronRight className="h-4 w-4" />
+              </button>
+              <Dialog open={b2bOpen} onOpenChange={handleB2bOpenChange}>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-center gap-1.5 rounded-full border border-white bg-white/20 active:bg-white/30 backdrop-blur-md py-2.5 text-xs font-bold text-white shadow-md transition-all cursor-pointer">
+                    {t("B2B Firmen-Catering", "B2B corporate catering")}
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px] bg-[#fdfaf5] text-forest border-[#eadfce]">
+                  <DialogHeader>
+                    <DialogTitle className="font-display text-2xl text-forest">
+                      {t("Corporate Catering", "Corporate Catering")}
+                    </DialogTitle>
+                    <p className="text-sm text-forest/70">
+                      {t(
+                        "Richte regelmäßiges Catering für dein Büro ein. Ideal für Team-Lunches, Meetings und mehr.",
+                        "Set up recurring catering for your office. Perfect for team lunches, meetings, and more.",
+                      )}
+                    </p>
+                  </DialogHeader>
+                  <form onSubmit={handleB2bSubmit} className="space-y-4 mt-4">
+                    <div className="space-y-1.5">
+                      <Label>{t("Firmenname", "Company Name")}</Label>
+                      <Input
+                        required
+                        className="bg-white border-[#eadfce]"
+                        value={b2bForm.companyName}
+                        onChange={(e) =>
+                          setB2bForm((prev) => ({ ...prev, companyName: e.target.value }))
+                        }
+                        placeholder="Acme Corp"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <Label>{t("Mitarbeiterzahl", "Employee Count")}</Label>
+                        <Input
+                          type="number"
+                          required
+                          min="1"
+                          className="bg-white border-[#eadfce]"
+                          value={b2bForm.employees}
+                          onChange={(e) =>
+                            setB2bForm((prev) => ({ ...prev, employees: e.target.value }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label>{t("Rhythmus", "Frequency")}</Label>
+                        <Select
+                          value={b2bForm.pattern}
+                          onValueChange={(v) => setB2bForm((prev) => ({ ...prev, pattern: v }))}
+                        >
+                          <SelectTrigger className="bg-white border-[#eadfce]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-[#fdfaf5] border-[#eadfce] text-forest">
+                            <SelectItem value="daily">
+                              {t("Täglich (Mo-Fr)", "Daily (Mon-Fri)")}
+                            </SelectItem>
+                            <SelectItem value="weekly">
+                              {t("Einmal pro Woche", "Once a week")}
+                            </SelectItem>
+                            <SelectItem value="biweekly">
+                              {t("Alle zwei Wochen", "Bi-weekly")}
+                            </SelectItem>
+                            <SelectItem value="monthly">
+                              {t("Einmal pro Monat", "Once a month")}
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>{t("Gewünschter Start", "Desired Start Date")}</Label>
+                      <Input
+                        type="date"
+                        min={new Date().toISOString().split("T")[0]}
+                        required
+                        className="bg-white border-[#eadfce]"
+                        value={b2bForm.startDate}
+                        onChange={(e) =>
+                          setB2bForm((prev) => ({ ...prev, startDate: e.target.value }))
+                        }
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>{t("Zusätzliche Wünsche", "Additional Notes")}</Label>
+                      <Textarea
+                        rows={3}
+                        className="bg-white border-[#eadfce]"
+                        value={b2bForm.notes}
+                        onChange={(e) => setB2bForm((prev) => ({ ...prev, notes: e.target.value }))}
+                        placeholder={t(
+                          "z.B. 30% vegetarisch, 10% vegan...",
+                          "e.g., 30% vegetarian, 10% vegan...",
+                        )}
+                      />
+                    </div>
+                    <button
+                      disabled={submittingB2b}
+                      type="submit"
+                      className="mt-4 w-full rounded-full bg-forest text-white py-3 font-medium hover:opacity-90 disabled:opacity-50"
+                    >
+                      {submittingB2b
+                        ? t("Senden...", "Sending...")
+                        : t("Anfrage absenden", "Submit B2B Request")}
+                    </button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
 
         {/* Enhanced Trust & Info Bar */}
-        <div className="mt-6 mb-2 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center p-5 bg-white rounded-xl border border-[#eadfce] shadow-sm">
-          <dl className="flex flex-wrap items-center gap-x-6 gap-y-4 m-0">
+        <div className="mt-6 mb-2 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center p-4 sm:p-5 bg-white rounded-xl border border-[#eadfce] shadow-sm">
+          <dl className="grid grid-cols-2 sm:flex sm:flex-wrap items-start sm:items-center gap-4 sm:gap-x-6 sm:gap-y-4 m-0 w-full md:w-auto">
             <div className="flex items-center gap-2 text-forest">
-              <ShieldCheck className="h-5 w-5" />
-              <span className="text-sm font-bold">{t("Geprüftes Profil", "Checked Profile")}</span>
+              <ShieldCheck className="h-5 w-5 shrink-0 text-[#10b981]" />
+              <span className="text-xs sm:text-sm font-bold">{t("Geprüftes Profil", "Checked Profile")}</span>
             </div>
 
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
 
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+              <dt className="text-[10px] sm:text-xs text-forest/50 font-medium uppercase tracking-wider">
                 {t("Mindestbestellung", "Min. Order")}
               </dt>
-              <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Users className="h-4 w-4 text-forest/40" /> {catererProfile.minGuests}{" "}
+              <dd className="text-xs sm:text-sm font-semibold text-forest flex items-center gap-1 m-0">
+                <Users className="h-4 w-4 text-forest/40 shrink-0" /> {catererProfile.minGuests}{" "}
                 {t("Personen", "Guests")} / €{catererProfile.minBudget}
               </dd>
             </div>
@@ -944,11 +1072,11 @@ function CatererPage() {
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
 
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+              <dt className="text-[10px] sm:text-xs text-forest/50 font-medium uppercase tracking-wider">
                 {t("Vorlaufzeit", "Lead Time")}
               </dt>
-              <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Clock className="h-4 w-4 text-forest/40" /> {catererProfile.leadTimeDays}{" "}
+              <dd className="text-xs sm:text-sm font-semibold text-forest flex items-center gap-1 m-0">
+                <Clock className="h-4 w-4 text-forest/40 shrink-0" /> {catererProfile.leadTimeDays}{" "}
                 {t("Tage", "Days")}
               </dd>
             </div>
@@ -956,23 +1084,23 @@ function CatererPage() {
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
 
             <div className="flex flex-col">
-              <dt className="text-xs text-forest/50 font-medium uppercase tracking-wider">
+              <dt className="text-[10px] sm:text-xs text-forest/50 font-medium uppercase tracking-wider">
                 {t("Liefergebiet", "Service Area")}
               </dt>
-              <dd className="text-sm font-semibold text-forest flex flex-col items-start gap-1 m-0">
+              <dd className="text-xs sm:text-sm font-semibold text-forest flex flex-col items-start gap-0.5 m-0">
                 <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4 text-forest/40" />{" "}
-                  <span className="truncate max-w-[200px]">{catererProfile?.seo_service_areas?.join(", ") || catererProfile.area}</span>
+                  <MapPin className="h-4 w-4 text-forest/40 shrink-0" />{" "}
+                  <span className="truncate max-w-[140px] sm:max-w-[200px]">{catererProfile?.seo_service_areas?.join(", ") || catererProfile.area}</span>
                 </div>
                 {catererProfile?.seo_service_radius_km && (
-                  <span className="text-xs text-forest/60">Bis {catererProfile.seo_service_radius_km} km Radius</span>
+                  <span className="text-[10px] sm:text-xs text-forest/60">Bis {catererProfile.seo_service_radius_km} km Radius</span>
                 )}
               </dd>
             </div>
           </dl>
 
           {visibleBadges.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 pt-4 md:pt-0 border-t border-[#eadfce] md:border-0 w-full md:w-auto">
+            <div className="flex flex-wrap items-center gap-1.5 pt-3 md:pt-0 border-t border-[#eadfce] md:border-0 w-full md:w-auto">
               {visibleBadges.map((badge, idx) => (
                 <span
                   key={idx}
@@ -1076,7 +1204,7 @@ function CatererPage() {
                       return (
                         <div
                           key={m.name}
-                          className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group"
+                          className="grid grid-cols-[1fr_auto] gap-3 sm:gap-4 p-3.5 sm:p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group items-start"
                         >
                           <div className="min-w-0 flex flex-col md:flex-row gap-4">
                             {m.image_signed_url && (
