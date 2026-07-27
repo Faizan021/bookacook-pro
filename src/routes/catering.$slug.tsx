@@ -180,14 +180,35 @@ function CatererPage() {
   const submitBrief = useServerFn(submitCateringBrief);
   const [submittingBrief, setSubmittingBrief] = useState(false);
 
+  const [userSession, setUserSession] = useState<any>(null);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [inquiryForm, setInquiryForm] = useState({
+    customerName: "",
+    customerEmail: "",
+    customerPhone: "",
     eventDate: "",
     postalCodeCity: "",
     guestCount: 20,
     eventType: "Familienfeier / Event",
     notes: "",
   });
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUserSession(session.user);
+        setInquiryForm((prev) => ({
+          ...prev,
+          customerName:
+            prev.customerName ||
+            session.user.user_metadata?.full_name ||
+            session.user.email?.split("@")[0] ||
+            "",
+          customerEmail: prev.customerEmail || session.user.email || "",
+        }));
+      }
+    });
+  }, []);
 
   const [b2bOpen, setB2bOpen] = useState(false);
   const handleB2bOpenChange = (open: boolean) => {
@@ -1492,17 +1513,17 @@ function CatererPage() {
         )}
       </section>
 
-      {/* Inquiry Details Modal (Asks for Event Date & Delivery Location/Postal Code) */}
+      {/* Inquiry Details Modal (Asks for Contact Info, Event Date & Delivery Location/Postal Code) */}
       <Dialog open={inquiryModalOpen} onOpenChange={setInquiryModalOpen}>
-        <DialogContent className="sm:max-w-[480px] bg-[#fdfaf5] text-forest border-[#eadfce] p-6 rounded-3xl text-left">
+        <DialogContent className="sm:max-w-[500px] bg-[#fdfaf5] text-forest border-[#eadfce] p-6 rounded-3xl text-left max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl text-forest">
               {t("Anfragedetails eingeben", "Complete Inquiry Details")}
             </DialogTitle>
             <p className="text-xs text-forest/70">
               {t(
-                `Bitte gib dein Event-Datum und deine Postleitzahl / Ort an, damit ${catererProfile?.name} die Anfrage prüfen kann.`,
-                `Please specify your event date and delivery location so ${catererProfile?.name} can review and confirm availability.`,
+                `Gib deine Kontaktdaten, Event-Datum und Postleitzahl an, damit ${catererProfile?.name} die Anfrage prüfen kann.`,
+                `Please specify your contact info, event date, and delivery location so ${catererProfile?.name} can review and confirm availability.`,
               )}
             </p>
           </DialogHeader>
@@ -1510,6 +1531,16 @@ function CatererPage() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
+              if (!inquiryForm.customerEmail || !inquiryForm.customerName) {
+                toast.error(
+                  t(
+                    "Bitte geben Sie Ihren Namen und Ihre E-Mail-Adresse an.",
+                    "Please provide your name and email address.",
+                  ),
+                );
+                return;
+              }
+
               const currentTotalCount = totalCount;
               const currentTotalAmount = finalTotal;
 
@@ -1519,7 +1550,7 @@ function CatererPage() {
                   .map((i) => `- ${i.qty}x ${i.name} (€${(i.price * i.qty).toFixed(2)})`)
                   .join("\n");
 
-                const notes = `[ONLINE STOREFRONT INQUIRY]\nEvent Type: ${inquiryForm.eventType}\nDelivery Location: ${inquiryForm.postalCodeCity}\nSelected Items:\n${itemsText}\n\nNotes:\n${inquiryForm.notes || "None"}\n\nTotal: €${currentTotalAmount.toFixed(2)}`;
+                const notes = `[ONLINE STOREFRONT INQUIRY]\nCustomer Name: ${inquiryForm.customerName}\nCustomer Email: ${inquiryForm.customerEmail}\nCustomer Phone: ${inquiryForm.customerPhone || "N/A"}\nEvent Type: ${inquiryForm.eventType}\nDelivery Location: ${inquiryForm.postalCodeCity}\nSelected Items:\n${itemsText}\n\nNotes:\n${inquiryForm.notes || "None"}\n\nTotal: €${currentTotalAmount.toFixed(2)}`;
 
                 if (catererProfile?.id) {
                   await submitBrief({
@@ -1534,6 +1565,9 @@ function CatererPage() {
                       location:
                         inquiryForm.postalCodeCity || catererProfile.area || "Storefront Location",
                       notes,
+                      customerName: inquiryForm.customerName,
+                      customerEmail: inquiryForm.customerEmail,
+                      customerPhone: inquiryForm.customerPhone,
                     },
                   });
                 }
@@ -1567,6 +1601,61 @@ function CatererPage() {
             }}
             className="space-y-4 mt-3"
           >
+            {/* Customer Contact Section */}
+            <div className="p-3.5 rounded-2xl bg-cream/30 border border-[#eadfce]/70 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-forest/70">
+                  👤 {t("Ihre Kontaktdaten", "Your Contact Info")}
+                </span>
+                {userSession ? (
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-full">
+                    ✓ {t("Angemeldet", "Logged In")}
+                  </span>
+                ) : (
+                  <Link
+                    to="/auth"
+                    search={{ redirect: window.location.pathname }}
+                    className="text-[10px] text-forest underline hover:text-emerald-700 font-semibold"
+                  >
+                    {t("Bereits Kunde? Anmelden", "Already have an account? Sign In")}
+                  </Link>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-forest">
+                    {t("Vollständiger Name *", "Full Name *")}
+                  </Label>
+                  <Input
+                    required
+                    placeholder="z.B. Max Mustermann"
+                    value={inquiryForm.customerName}
+                    onChange={(e) =>
+                      setInquiryForm({ ...inquiryForm, customerName: e.target.value })
+                    }
+                    className="bg-white border-[#eadfce] text-xs h-9"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs font-bold text-forest">
+                    {t("E-Mail-Adresse *", "Email Address *")}
+                  </Label>
+                  <Input
+                    type="email"
+                    required
+                    placeholder="max@beispiel.de"
+                    value={inquiryForm.customerEmail}
+                    onChange={(e) =>
+                      setInquiryForm({ ...inquiryForm, customerEmail: e.target.value })
+                    }
+                    className="bg-white border-[#eadfce] text-xs h-9"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Event Logistics Section */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label className="text-xs font-bold text-forest">
@@ -1587,7 +1676,7 @@ function CatererPage() {
                 </Label>
                 <Input
                   required
-                  placeholder="e.g. 41061 Mönchengladbach"
+                  placeholder="z.B. 41061 Mönchengladbach"
                   value={inquiryForm.postalCodeCity}
                   onChange={(e) =>
                     setInquiryForm({ ...inquiryForm, postalCodeCity: e.target.value })
@@ -1671,7 +1760,7 @@ function CatererPage() {
 
       {/* Premium Success Confirmation Modal */}
       <Dialog open={successModalOpen} onOpenChange={setSuccessModalOpen}>
-        <DialogContent className="sm:max-w-[440px] bg-[#fdfaf5] text-forest border-[#eadfce] text-center p-8 rounded-3xl">
+        <DialogContent className="sm:max-w-[460px] bg-[#fdfaf5] text-forest border-[#eadfce] text-center p-8 rounded-3xl">
           <div className="mx-auto w-16 h-16 rounded-full bg-[#22C55E]/15 grid place-items-center mb-4 text-[#22C55E]">
             <CheckCircle2 className="h-10 w-10 animate-bounce" />
           </div>
@@ -1698,6 +1787,34 @@ function CatererPage() {
               </div>
             </div>
           )}
+
+          {/* Account Onboarding Box for Customers */}
+          <div className="mt-4 p-4 rounded-2xl bg-forest/5 border border-forest/15 text-left text-xs space-y-2">
+            <div className="flex items-center gap-2 font-bold text-forest">
+              <span>✉️</span>
+              <span>
+                {t(
+                  `Kunden-Konto hinterlegt für ${inquiryForm.customerEmail || "deine E-Mail"}`,
+                  `Customer account linked for ${inquiryForm.customerEmail || "your email"}`,
+                )}
+              </span>
+            </div>
+            <p className="text-forest/75 text-[11px] leading-relaxed">
+              {t(
+                "Melde dich auf Speisely an, um den Bearbeitungsstand deiner Anfrage zu verfolgen, Angebote einzusehen und direkt mit dem Caterer zu chatten.",
+                "Log into Speisely to track your inquiry status, review proposals, and message the caterer directly.",
+              )}
+            </p>
+            <Link
+              to="/auth"
+              search={{ email: inquiryForm.customerEmail, redirect: "/customer" }}
+              className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-forest underline hover:text-emerald-700"
+            >
+              <span>{t("Zum Kunden-Dashboard / Anmelden", "Go to Customer Dashboard / Sign In")}</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
           <button
             onClick={() => setSuccessModalOpen(false)}
             className="mt-6 w-full rounded-full bg-forest text-white py-3 font-semibold shadow-md hover:bg-forest/90 transition cursor-pointer"

@@ -355,6 +355,9 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
       budgetCents: number;
       location: string;
       notes: string;
+      customerName?: string;
+      customerEmail?: string;
+      customerPhone?: string;
       isB2b?: boolean;
       companyName?: string;
       isRecurring?: boolean;
@@ -378,6 +381,9 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
           budgetCents: z.number().min(0),
           location: z.string(),
           notes: z.string(),
+          customerName: z.string().optional(),
+          customerEmail: z.string().optional(),
+          customerPhone: z.string().optional(),
           isB2b: z.boolean().optional(),
           companyName: z.string().optional(),
           isRecurring: z.boolean().optional(),
@@ -390,8 +396,39 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { userId } = context as { userId?: string };
 
+    let finalCustomerId = userId || null;
+
+    // If customer is not signed in but provided an email, resolve or create a customer account
+    if (!finalCustomerId && data.customerEmail) {
+      try {
+        const { data: usersList } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 });
+        const existingUser = usersList?.users?.find(
+          (u) => u.email?.toLowerCase() === data.customerEmail?.toLowerCase(),
+        );
+
+        if (existingUser) {
+          finalCustomerId = existingUser.id;
+        } else {
+          // Register customer account for non-registered guest so brief appears in customer dashboard
+          const { data: newUser } = await supabaseAdmin.auth.admin.createUser({
+            email: data.customerEmail,
+            email_confirm: true,
+            user_metadata: {
+              full_name: data.customerName || "Speisely Kunde",
+              role: "customer",
+            },
+          });
+          if (newUser?.user) {
+            finalCustomerId = newUser.user.id;
+          }
+        }
+      } catch (e) {
+        console.warn("Auto-creation of guest customer account skipped:", e);
+      }
+    }
+
     const insertData: any = {
-      customer_id: userId || null,
+      customer_id: finalCustomerId,
       preferred_caterer_id: data.catererId,
       status: "quote_requested",
       event_type: data.eventType,
