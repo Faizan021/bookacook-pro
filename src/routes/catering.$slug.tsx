@@ -21,6 +21,7 @@ import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
 import { CategoryNav } from "@/components/ui/CategoryNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useI18n } from "@/i18n/I18nProvider";
+import { toast } from "sonner";
 import { getCaterer, mockPromoCodes, PromoCode } from "@/data/caterers";
 import { getPublicCatererProfile, submitCateringBrief } from "@/lib/caterer/menu.functions";
 import { useServerFn } from "@tanstack/react-start";
@@ -200,12 +201,14 @@ function CatererPage() {
   });
   const [submittingB2b, setSubmittingB2b] = useState(false);
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
+  const [submittedSummary, setSubmittedSummary] = useState({ count: 0, total: 0 });
   const t = (de: string, en: string) => (lang === "de" ? de : en);
 
   const handleB2bSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!identity.termsAccepted) {
-      alert(
+      toast.error(
         t("Bitte akzeptieren Sie die Plattformbedingungen.", "Please accept the platform terms."),
       );
       return;
@@ -241,15 +244,16 @@ function CatererPage() {
         type: "catering",
         isB2b: true,
       });
-      alert(
+      toast.success(
         t(
           "Unternehmensanfrage erfolgreich gesendet! Der Caterer wird sich melden.",
           "Corporate request sent successfully! The caterer will be in touch.",
         ),
       );
       setB2bOpen(false);
+      setSuccessModalOpen(true);
     } catch (err: any) {
-      alert("Error: " + err.message);
+      toast.error("Error: " + err.message);
     } finally {
       setSubmittingB2b(false);
     }
@@ -551,23 +555,29 @@ function CatererPage() {
           <button
             disabled={belowMin}
             onClick={() => {
+              const currentTotalCount = totalCount;
+              const currentTotalAmount = finalTotal;
               trackEvent("reservation_submitted", {
                 catererId: catererProfile.id,
                 type: "catering",
                 isB2b: false,
-                totalCount,
-                finalTotal,
+                totalCount: currentTotalCount,
+                finalTotal: currentTotalAmount,
               });
-              alert(
+              toast.success(
                 t(
-                  `Anfrage über ${totalCount} Artikel gesendet. ${catererProfile.name} meldet sich in Kürze.`,
-                  `Inquiry sent for ${totalCount} items. ${catererProfile.name} will get back to you shortly.`,
+                  `Anfrage über ${currentTotalCount} Artikel gesendet. ${catererProfile.name} meldet sich in Kürze.`,
+                  `Inquiry sent for ${currentTotalCount} items. ${catererProfile.name} will get back to you shortly.`,
                 ),
               );
+              setSubmittedSummary({ count: currentTotalCount, total: currentTotalAmount });
+              setSuccessModalOpen(true);
+              setCart({});
               if (isMobile) setMobileCartOpen(false);
             }}
-            className="mt-5 w-full rounded-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white py-3 font-semibold shadow-md transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-5 w-full rounded-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white py-3 font-semibold shadow-md transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
+            <CheckCircle2 className="h-5 w-5" />
             {t("Anfrage senden", "Send inquiry")} · ab €{finalTotal.toFixed(2)}
           </button>
           <p className="mt-2 text-xs text-forest/60">
@@ -1353,6 +1363,44 @@ function CatererPage() {
           </div>
         )}
       </section>
+
+      {/* Premium Success Confirmation Modal */}
+      <Dialog open={successModalOpen} onOpenChange={setSuccessModalOpen}>
+        <DialogContent className="sm:max-w-[440px] bg-[#fdfaf5] text-forest border-[#eadfce] text-center p-8 rounded-3xl">
+          <div className="mx-auto w-16 h-16 rounded-full bg-[#22C55E]/15 grid place-items-center mb-4 text-[#22C55E]">
+            <CheckCircle2 className="h-10 w-10 animate-bounce" />
+          </div>
+          <DialogTitle className="font-display text-2xl text-forest text-center">
+            {t("Anfrage erfolgreich gesendet!", "Inquiry Successfully Sent!")}
+          </DialogTitle>
+          <p className="mt-2 text-sm text-forest/80 leading-relaxed text-center">
+            {t(
+              `Deine Anfrage wurde direkt an ${catererProfile?.name} übermittelt. Der Caterer prüft die Verfügbarkeit und meldet sich in Kürze bei dir.`,
+              `Your inquiry has been sent directly to ${catererProfile?.name}. The caterer will confirm availability and get back to you shortly.`,
+            )}
+          </p>
+          {submittedSummary.total > 0 && (
+            <div className="mt-4 p-4 rounded-xl bg-white border border-[#eadfce]/70 text-left text-xs space-y-1.5 shadow-sm">
+              <div className="flex justify-between font-medium text-forest">
+                <span>{t("Anzahl Artikel", "Item Count")}:</span>
+                <span className="font-semibold">{submittedSummary.count}</span>
+              </div>
+              <div className="flex justify-between font-medium text-forest">
+                <span>{t("Gesamtsumme (ca.)", "Total (approx.)")}:</span>
+                <span className="font-semibold text-base text-[#22C55E]">
+                  €{submittedSummary.total.toFixed(2)}
+                </span>
+              </div>
+            </div>
+          )}
+          <button
+            onClick={() => setSuccessModalOpen(false)}
+            className="mt-6 w-full rounded-full bg-forest text-white py-3 font-semibold shadow-md hover:bg-forest/90 transition cursor-pointer"
+          >
+            {t("Super, danke!", "Awesome, thanks!")}
+          </button>
+        </DialogContent>
+      </Dialog>
 
       <MarketplacePromiseCTA vertical="caterer" />
     </SiteShell>
