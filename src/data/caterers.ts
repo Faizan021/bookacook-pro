@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
 import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
+import { getPublicCatererList } from "@/lib/caterer/menu.functions";
 
 export type Caterer = {
   id: string;
@@ -220,47 +221,53 @@ function mapCaterer(r: any): Caterer {
   };
 }
 
+export function mapDbCaterer(c: any): Caterer {
+  let img = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
+  if (c.banner_image_url) {
+    if (c.banner_image_url.startsWith("http")) {
+      img = c.banner_image_url;
+    } else {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://athwccvgdovglcpluwnu.supabase.co";
+      img = `${supabaseUrl}/storage/v1/object/public/storefront-assets/${c.banner_image_url}`;
+    }
+  }
+
+  return {
+    id: c.slug || c.id,
+    slug: c.slug,
+    name: c.name || "Caterer",
+    tagline: {
+      de: c.description || "Individuelle Catering-Erlebnisse",
+      en: c.description || "Custom catering experiences",
+    },
+    rating: 5.0,
+    reviewCount: 12,
+    minOrder: c.min_delivery_cents ? c.min_delivery_cents / 100 : 0,
+    minGuests: 10,
+    perPerson: 15,
+    time: "7 Tage Vorlauf",
+    tags: ["Buffet", "Event", "B2B"],
+    img,
+    logo: c.logo_url || undefined,
+    status: "available",
+    area: c.service_areas || "Mönchengladbach",
+    address: c.business_address || "",
+    phone: c.phone || "",
+    cat: "corporate",
+    verified: true,
+    dietary: ["Vegetarisch", "Vegan"],
+    about: { de: c.description || "", en: c.description || "" },
+    packages: [],
+    menu: [],
+  };
+}
+
 export async function getCaterers(): Promise<Caterer[]> {
   try {
-    const { data: sfData, error: sfErr } = await supabase
-      .from("storefront_settings")
-      .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes")
-      .eq("is_active", true);
+    const list = await getPublicCatererList();
+    const liveCaterers = (list || []).map(mapDbCaterer);
 
-    if (sfErr) {
-      console.error("Error fetching storefront_settings:", sfErr);
-      return fallbackCaterers.map(c => ({ ...c, isShowcase: true }));
-    }
-
-    if (!sfData || sfData.length === 0) {
-      return fallbackCaterers.map(c => ({ ...c, isShowcase: true }));
-    }
-
-    const catererIds = sfData.map(sf => sf.caterer_id).filter(Boolean);
-
-    const [catRes, menuRes] = await Promise.all([
-      supabase.from("caterers").select("id, approval_status, use_generated_branding, logo_url, owner_id").in("id", catererIds),
-      supabase.from("caterer_menu_items").select("id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available").in("caterer_id", catererIds).eq("is_available", true)
-    ]);
-
-    const catData = catRes.data || [];
-    const menuData = menuRes.data || [];
-
-    const merged = sfData
-      .map(sf => {
-        const caterer = catData.find(c => c.id === sf.caterer_id);
-        const products = menuData.filter(m => m.caterer_id === sf.caterer_id);
-        return {
-          ...sf,
-          caterers: caterer,
-          products: products
-        };
-      })
-      .filter((r: any) => r.caterers?.approval_status === "approved");
-
-    const liveCaterers = merged.map(mapCaterer);
     const MIN_DISPLAY_COUNT = 3;
-
     if (liveCaterers.length >= MIN_DISPLAY_COUNT) {
       return liveCaterers;
     }
@@ -273,8 +280,8 @@ export async function getCaterers(): Promise<Caterer[]> {
 
     return [...liveCaterers, ...showcaseItems];
   } catch (err) {
-    console.error("Failed to load caterers, using fallbacks:", err);
-    return fallbackCaterers.map(c => ({ ...c, isShowcase: true }));
+    console.error("Failed to load caterers via server function, using fallbacks:", err);
+    return fallbackCaterers.map((c) => ({ ...c, isShowcase: true }));
   }
 }
 
