@@ -51,15 +51,30 @@ import { getPublicCatererReviews } from "@/lib/reviews/public.functions";
 const catererQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: ["catererProfile", slug],
-    queryFn: () => getPublicCatererProfile({ data: { slug } }),
+    queryFn: async () => {
+      try {
+        const res = await getPublicCatererProfile({ data: { slug } });
+        if (res) return res;
+      } catch (e) {
+        console.error("Error in getPublicCatererProfile:", e);
+      }
+      return null;
+    },
   });
 export const Route = createFileRoute("/catering/$slug")({
   loader: async ({ params, context }) => {
-    const profile = await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
+    let profile = null;
+    try {
+      profile = await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
+    } catch (err) {
+      console.error("Loader query error:", err);
+    }
     const fullCaterer = await getCaterer(params.slug);
     let reviewsData = null;
     if (profile?.id) {
-      reviewsData = await getPublicCatererReviews({ data: { catererId: profile.id } });
+      try {
+        reviewsData = await getPublicCatererReviews({ data: { catererId: profile.id } });
+      } catch (e) {}
     }
     if (profile?.custom_domain) {
       const cleanDomain = profile.custom_domain.toLowerCase().trim();
