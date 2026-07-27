@@ -107,7 +107,7 @@ export const submitPublicPlannerBrief = createServerFn({ method: "POST" })
       guest_count: data.guestCount,
       budget_cents: data.budgetCents,
       location: data.location,
-      notes: `[GUEST INQUIRY]\nName: ${data.customerName}\nEmail: ${data.customerEmail}\nPhone: ${data.customerPhone}\n\nNotes:\n${data.notes}`,
+      notes: `[GUEST INQUIRY]\nName: ${data.customerName}\n\nNotes:\n${data.notes}`,
       milestones: [
         {
           title: "Request Received",
@@ -139,7 +139,7 @@ export const submitPublicPlannerBrief = createServerFn({ method: "POST" })
             text: `Sie haben eine neue Anfrage von ${data.customerName} für ${data.eventType} (${data.guestCount} Personen) am ${eventDateStr} in ${data.location}. Budget: ${budgetStr}.`,
             html: `<p>Hallo ${planner.name},</p><p>Sie haben eine neue Event-Anfrage erhalten!</p>
                    <ul>
-                     <li><strong>Kunde:</strong> ${data.customerName} (${data.customerEmail})</li>
+                     <li><strong>Kunde:</strong> ${data.customerName}</li>
                      <li><strong>Art des Events:</strong> ${data.eventType}</li>
                      <li><strong>Datum:</strong> ${eventDateStr}</li>
                      <li><strong>Gästezahl:</strong> ${data.guestCount}</li>
@@ -147,7 +147,7 @@ export const submitPublicPlannerBrief = createServerFn({ method: "POST" })
                      <li><strong>Ort:</strong> ${data.location}</li>
                      <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
                    </ul>
-                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um auf die Anfrage zu antworten und ein Angebot zu senden.</p>`,
           },
         });
       }

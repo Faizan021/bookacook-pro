@@ -11,6 +11,7 @@ import {
 import { acceptProposal } from "@/lib/customer/mutations.functions";
 import { Button } from "@/components/ui/button";
 import { MilestoneTimeline } from "@/components/vendor/MilestoneTimeline";
+import { SecureChat } from "@/components/SecureChat";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/customer")({
@@ -280,7 +281,9 @@ function BriefCard({
   item: Extract<UnifiedActivityItem, { kind: "brief" }>;
   onUpdate: () => void;
 }) {
+  const { user } = Route.useRouteContext();
   const [accepting, setAccepting] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const acceptFn = useServerFn(acceptProposal);
   const router = useRouter();
 
@@ -364,12 +367,31 @@ function BriefCard({
       )}
 
       {target && (
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap items-center gap-3">
           <Button asChild variant="outline" size="sm">
             <Link to={target.to} params={{ slug: target.slug }}>
               {target.label}
             </Link>
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowChat(!showChat)}
+            className="text-xs font-semibold text-forest hover:bg-forest/5"
+          >
+            {showChat ? "Hide Chat" : "💬 Message Vendor"}
+          </Button>
+        </div>
+      )}
+
+      {showChat && (
+        <div className="mt-4 pt-4 border-t border-border">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+            Secure Platform Chat
+          </h4>
+          <div className="border border-border rounded-xl overflow-hidden bg-white shadow-sm">
+            <SecureChat briefId={item.id} currentUserId={user.id} />
+          </div>
         </div>
       )}
 
