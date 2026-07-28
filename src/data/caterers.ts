@@ -28,6 +28,7 @@ export type Caterer = {
   about: { de: string; en: string };
   packages: any[];
   menu?: { category?: string; [key: string]: any }[];
+  serviceCategories?: string[];
   announcement_active?: boolean;
   announcement_bg_color?: string;
   announcement_text?: string;
@@ -252,6 +253,12 @@ export function mapDbCaterer(c: any): Caterer {
     dietaryTags = ["Buffet-Klassiker", "Deftige Spezialitäten"];
   }
 
+  // Parse service categories supported by this caterer (default: all 3 for comprehensive caterers like Partyservice Küpper)
+  let categoriesSupported = ["events", "daily-catering-subscriptions", "institutional-catering"];
+  if (c.service_categories && typeof c.service_categories === "string" && c.service_categories.trim()) {
+    categoriesSupported = c.service_categories.split(",").map((s: string) => s.trim().toLowerCase()).filter(Boolean);
+  }
+
   return {
     id: c.slug || c.id,
     slug: c.slug,
@@ -266,7 +273,8 @@ export function mapDbCaterer(c: any): Caterer {
     minGuests: 10,
     perPerson: 15,
     time: "7 Tage Vorlauf",
-    tags: ["Buffet", "Event", "B2B"],
+    tags: ["Event", "B2B Subscriptions", "Gemeinschaftsverpflegung"],
+    serviceCategories: categoriesSupported,
     img,
     logo: c.logo_url || undefined,
     status: "available",

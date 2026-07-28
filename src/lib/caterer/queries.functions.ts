@@ -240,6 +240,7 @@ export const updateMyCatererSettings = createServerFn({ method: "POST" })
           city: z.string().max(100).optional(),
           postal_code: z.string().max(20).optional(),
           service_areas: z.string().optional().nullable(),
+          service_categories: z.string().optional().nullable(),
           delivery_fee_cents: z.number().optional().nullable(),
           min_delivery_cents: z.number().optional().nullable(),
           max_delivery_distance_km: z.number().optional().nullable(),
