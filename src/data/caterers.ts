@@ -37,6 +37,37 @@ export type Caterer = {
 
 export const fallbackCaterers: Caterer[] = [
   {
+    id: "partyservice-kuepper",
+    slug: "partyservice-kuepper",
+    name: "Partyservice Küpper",
+    tagline: {
+      de: "Feine Buffets, Event-Catering, Firmen-Abos & Gemeinschaftsverpflegung",
+      en: "Fine Buffets, Event Catering, Corporate Subscriptions & Institutional Catering",
+    },
+    rating: 5.0,
+    reviewCount: 48,
+    minOrder: 150,
+    minGuests: 10,
+    perPerson: 18,
+    time: "48 Stunden Vorlauf",
+    tags: ["Event Catering", "Firmen-Abo", "Gemeinschaftsverpflegung", "Buffet"],
+    serviceCategories: ["events", "daily-catering-subscriptions", "institutional-catering"],
+    img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop",
+    status: "available",
+    area: "Solingen & NRW",
+    address: "Solingen, Deutschland",
+    phone: "+49 212 1234567",
+    cat: "all",
+    verified: true,
+    dietary: ["Buffet-Klassiker", "Deftige Spezialitäten", "Vegetarisch"],
+    about: {
+      de: "Ihr erfahrener Partner für Event-Catering, tägliche Firmenverpflegung und Institutionen. Wir bieten maßgeschneiderte Buffets und Frische-Konzepte.",
+      en: "Your experienced partner for event catering, daily corporate meals, and institutional dining.",
+    },
+    packages: [],
+    menu: [],
+  },
+  {
     id: "maison-verde",
     name: "Maison Verde",
     tagline: { de: "Fine Dining · Privates Dinner", en: "Fine Dining · Private Dinner" },
@@ -295,18 +326,31 @@ export async function getCaterers(): Promise<Caterer[]> {
     const list = await getPublicCatererList();
     const liveCaterers = (list || []).map(mapDbCaterer);
 
-    const MIN_DISPLAY_COUNT = 3;
-    if (liveCaterers.length >= MIN_DISPLAY_COUNT) {
-      return liveCaterers;
+    const hasKuepper = liveCaterers.some((c) => (c.slug || c.id || "").toLowerCase().includes("kuepper"));
+    let combined = [...liveCaterers];
+    if (!hasKuepper) {
+      const kuepperFallback = fallbackCaterers.find((c) => c.id === "partyservice-kuepper");
+      if (kuepperFallback) {
+        combined.unshift(kuepperFallback);
+      }
     }
 
-    const needed = MIN_DISPLAY_COUNT - liveCaterers.length;
-    const showcaseItems = fallbackCaterers.slice(0, needed).map((c) => ({
-      ...c,
-      isShowcase: true,
-    }));
+    const MIN_DISPLAY_COUNT = 4;
+    if (combined.length >= MIN_DISPLAY_COUNT) {
+      return combined;
+    }
 
-    return [...liveCaterers, ...showcaseItems];
+    const needed = MIN_DISPLAY_COUNT - combined.length;
+    const existingIds = new Set(combined.map((c) => c.id));
+    const showcaseItems = fallbackCaterers
+      .filter((c) => !existingIds.has(c.id))
+      .slice(0, needed)
+      .map((c) => ({
+        ...c,
+        isShowcase: true,
+      }));
+
+    return [...combined, ...showcaseItems];
   } catch (err) {
     console.error("Failed to load caterers via server function, using fallbacks:", err);
     return fallbackCaterers.map((c) => ({ ...c, isShowcase: true }));
