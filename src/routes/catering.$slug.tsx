@@ -67,9 +67,6 @@ const catererQueryOptions = (slug: string) =>
   });
 export const Route = createFileRoute("/catering/$slug")({
   loader: async ({ params, context }) => {
-    if (isValidCateringCity(params.slug)) {
-      throw redirect({ href: `/catering/ort/${params.slug}`, statusCode: 301 });
-    }
     let profile = null;
     try {
       profile = await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
