@@ -13,9 +13,6 @@ export const Route = createFileRoute("/catering/ort/$city")({
   loaderDeps: ({ search }) => search,
   loader: async ({ params, deps }) => {
     const data = await getGeoPageData({ data: { role: "caterer", citySlug: params.city } });
-    if (data.indexStatus === "404") {
-      throw notFound();
-    }
     return { ...data, searchParams: deps };
   },
   head: ({ loaderData }) => {

@@ -20,52 +20,96 @@ export const getGeoPageData = createServerFn({ method: "GET" })
       .limit(1)
       .maybeSingle();
 
-    if (locErr || !location) {
-      return {
-        indexStatus: "404" as const,
-        location: null,
-        seoData: null,
-        vendors: [],
-        aggregateRating: null,
+    let locationObj = location;
+    if (!locationObj) {
+      const cityNameFormatted = data.citySlug
+        .split("-")
+        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+
+      locationObj = {
+        id: data.citySlug,
+        name: cityNameFormatted,
+        state: "Deutschland",
+        slug: data.citySlug,
       };
     }
 
     // 2. SEO Content Lookup
     const expectedSlug = `${data.role}/ort/${data.citySlug}`;
-    const { data: seoData } = await supabaseAdmin
-      .from("seo_content_pages")
-      .select("*")
-      .eq("slug", expectedSlug)
-      .eq("status", "published")
-      .maybeSingle();
+    let seoData: any = null;
+    try {
+      const { data: seo } = await supabaseAdmin
+        .from("seo_content_pages")
+        .select("*")
+        .eq("slug", expectedSlug)
+        .eq("status", "published")
+        .maybeSingle();
+      seoData = seo;
+    } catch (e) {}
 
     // 3. Vendor Lookup
     let vendors: any[] = [];
-    if (data.role === "restaurants") {
-      const { data: res } = await supabaseAdmin
-        .from("restaurants")
-        .select(
-          "id, name, slug, logo_url, banner_image_url, cuisine_type, min_order_amount, delivery_fee, accepts_pickup, accepts_delivery, city, description, service_areas",
-        )
-        .eq("is_published", true)
-        .ilike("city", location.name);
-      vendors = res || [];
-    } else if (data.role === "caterer") {
-      const { data: res } = await supabaseAdmin
-        .from("caterers")
-        .select(
-          "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
-        )
-        .ilike("city", location.name);
-      vendors = res || [];
-    } else if (data.role === "planner") {
-      const { data: res } = await supabaseAdmin
-        .from("planners")
-        .select(
-          "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
-        )
-        .ilike("city", location.name);
-      vendors = res || [];
+    try {
+      if (data.role === "restaurants") {
+        const { data: res } = await supabaseAdmin
+          .from("restaurants")
+          .select(
+            "id, name, slug, logo_url, banner_image_url, cuisine_type, min_order_amount, delivery_fee, accepts_pickup, accepts_delivery, city, description, service_areas",
+          )
+          .eq("is_published", true)
+          .ilike("city", `%${locationObj.name}%`);
+        vendors = res || [];
+
+        if (vendors.length === 0) {
+          const { data: allRes } = await supabaseAdmin
+            .from("restaurants")
+            .select(
+              "id, name, slug, logo_url, banner_image_url, cuisine_type, min_order_amount, delivery_fee, accepts_pickup, accepts_delivery, city, description, service_areas",
+            )
+            .eq("is_published", true)
+            .limit(6);
+          vendors = allRes || [];
+        }
+      } else if (data.role === "caterer") {
+        const { data: res } = await supabaseAdmin
+          .from("caterers")
+          .select(
+            "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
+          )
+          .ilike("city", `%${locationObj.name}%`);
+        vendors = res || [];
+
+        if (vendors.length === 0) {
+          const { data: allCat } = await supabaseAdmin
+            .from("caterers")
+            .select(
+              "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
+            )
+            .limit(6);
+          vendors = allCat || [];
+        }
+      } else if (data.role === "planner") {
+        const { data: res } = await supabaseAdmin
+          .from("planners")
+          .select(
+            "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
+          )
+          .ilike("city", `%${locationObj.name}%`);
+        vendors = res || [];
+
+        if (vendors.length === 0) {
+          const { data: allPlan } = await supabaseAdmin
+            .from("planners")
+            .select(
+              "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
+            )
+            .limit(6);
+          vendors = allPlan || [];
+        }
+      }
+    } catch (vErr) {
+      console.error("Vendor fetch error in getGeoPageData:", vErr);
     }
 
     // 4. Quality Evaluation
@@ -142,7 +186,7 @@ export const getGeoPageData = createServerFn({ method: "GET" })
 
     return {
       indexStatus,
-      location,
+      location: locationObj,
       seoData,
       vendors,
       aggregateRating,
