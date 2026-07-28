@@ -23,6 +23,7 @@ export function CatererOnlinePresence({
     domain: string | null,
     seoTitle: string | null,
     seoDescription: string | null,
+    serviceCategories?: string | null,
   ) => Promise<void>;
 }) {
   const { lang } = useI18n();
@@ -31,12 +32,19 @@ export function CatererOnlinePresence({
   const searchParams = useSearch({ from: "/_authenticated/caterer" }) as any;
   const navigate = useNavigate();
 
-  const activeSubTab: "social" | "visibility" | "promo" = searchParams.section || "social";
+  const activeSubTab: "social" | "categories" | "visibility" | "promo" =
+    searchParams.section || "social";
 
   const [slug, setSlug] = useState(caterer.slug || "");
   const [domain, setDomain] = useState(caterer.custom_domain || "");
   const [seoTitle, setSeoTitle] = useState(caterer.seo_title || "");
   const [seoDescription, setSeoDescription] = useState(caterer.seo_description || "");
+
+  const initialCats = caterer.service_categories
+    ? caterer.service_categories.split(",").filter(Boolean)
+    : ["events", "daily-catering-subscriptions", "institutional-catering"];
+
+  const [serviceCategories, setServiceCategories] = useState<string[]>(initialCats);
 
   const [saving, setSaving] = useState(false);
   const [generating, setGenerating] = useState(false);
@@ -92,6 +100,7 @@ export function CatererOnlinePresence({
         cleanDomain || null,
         seoTitle.trim() || null,
         seoDescription.trim() || null,
+        serviceCategories.join(","),
       );
       toast.success(
         tt("Marketing & SEO Einstellungen aktualisiert!", "Marketing & SEO settings updated!"),
@@ -106,7 +115,7 @@ export function CatererOnlinePresence({
     }
   }
 
-  const handleSubTabChange = (newSubTab: "social" | "visibility" | "promo") => {
+  const handleSubTabChange = (newSubTab: "social" | "categories" | "visibility" | "promo") => {
     navigate({ search: (prev: any) => ({ ...prev, section: newSubTab }) } as any);
   };
 
@@ -123,8 +132,8 @@ export function CatererOnlinePresence({
           </h2>
           <p className="text-sm text-muted-foreground">
             {tt(
-              "Verwalten Sie die Social-Media-Links, Google-Sichtbarkeit und Storefront-Promotion-Tools Ihres Catering-Profils.",
-              "Manage your catering profile social links, Google visibility, and storefront promotion tools in one place.",
+              "Verwalten Sie Social-Media-Links, Catering-Sparten, Google-Sichtbarkeit und Storefront-Promotion-Tools.",
+              "Manage social links, catering service categories, Google visibility, and storefront promotion tools.",
             )}
           </p>
         </div>
@@ -137,9 +146,10 @@ export function CatererOnlinePresence({
       </div>
 
       <div className="flex border-b border-[#e2e8e4] gap-6 pb-px overflow-x-auto">
-        {(["social", "visibility", "promo"] as const).map((tab) => {
+        {(["social", "categories", "visibility", "promo"] as const).map((tab) => {
           const labels: Record<string, [string, string]> = {
             social: ["Link-in-Bio & Social", "Link-in-Bio & Social"],
+            categories: ["Catering-Sparten & Zielgruppen", "Service Categories & Focus"],
             visibility: ["Google & Webseiten-Sichtbarkeit", "Google & Website Visibility"],
             promo: ["Aktions-Teaser im Storefront", "Storefront Promo Teaser"],
           };
@@ -224,6 +234,149 @@ export function CatererOnlinePresence({
                   )}
                 </p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeSubTab === "categories" && (
+          <div className="surface-card p-6 space-y-6 max-w-3xl bg-white border border-forest/10 rounded-2xl shadow-sm text-left">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="font-display font-bold text-forest text-base flex items-center gap-2">
+                  <span>🎯</span>
+                  {tt("Angebotene Catering-Sparten & Zielgruppen", "Offered Catering Service Categories")}
+                </Label>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full">
+                  {tt("Mehrfachauswahl aktiv", "Multi-Category Supported")}
+                </span>
+              </div>
+              <p className="text-xs text-forest/75 leading-relaxed">
+                {tt(
+                  "Wählen Sie alle Catering-Bereiche aus, die Ihr Betrieb anbietet. Ihr Profil wird automatisch in den passenden Speisely-Kategorieseiten und Suchfiltern gelistet.",
+                  "Select all catering service models your business handles. Your brand will appear in all matching Speisely category pages and regional search filters.",
+                )}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              {/* Option 1: Event Catering */}
+              <label
+                className={`flex items-start gap-2.5 p-4 rounded-2xl border cursor-pointer transition-all ${
+                  serviceCategories.includes("events")
+                    ? "bg-emerald-50/50 border-forest ring-1 ring-forest/20 shadow-xs"
+                    : "bg-white border-stone-200 hover:border-forest/40"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={serviceCategories.includes("events")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setServiceCategories([...serviceCategories, "events"]);
+                    } else {
+                      setServiceCategories(serviceCategories.filter((c) => c !== "events"));
+                    }
+                  }}
+                  className="mt-0.5 accent-forest rounded"
+                />
+                <div>
+                  <span className="text-xs font-bold text-forest block">
+                    🥂 {tt("Einmalige Events", "One-Off Events")}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block mt-1 leading-normal">
+                    {tt("Hochzeiten, Firmenfeiern, Partys", "Weddings, Galas, Private Parties")}
+                  </span>
+                  <span className="text-[9px] font-semibold text-emerald-700 bg-emerald-100/70 px-1.5 py-0.5 rounded mt-2 inline-block">
+                    /catering/events
+                  </span>
+                </div>
+              </label>
+
+              {/* Option 2: Daily Subscriptions / Corporate */}
+              <label
+                className={`flex items-start gap-2.5 p-4 rounded-2xl border cursor-pointer transition-all ${
+                  serviceCategories.includes("daily-catering-subscriptions")
+                    ? "bg-emerald-50/50 border-forest ring-1 ring-forest/20 shadow-xs"
+                    : "bg-white border-stone-200 hover:border-forest/40"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={serviceCategories.includes("daily-catering-subscriptions")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setServiceCategories([...serviceCategories, "daily-catering-subscriptions"]);
+                    } else {
+                      setServiceCategories(
+                        serviceCategories.filter((c) => c !== "daily-catering-subscriptions"),
+                      );
+                    }
+                  }}
+                  className="mt-0.5 accent-forest rounded"
+                />
+                <div>
+                  <span className="text-xs font-bold text-forest block">
+                    🏢 {tt("Firmen-Abos", "Corporate Subscriptions")}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block mt-1 leading-normal">
+                    {tt("Büro-Lunch, Team-Verpflegung", "Office Lunches, Recurring Teams")}
+                  </span>
+                  <span className="text-[9px] font-semibold text-emerald-700 bg-emerald-100/70 px-1.5 py-0.5 rounded mt-2 inline-block">
+                    /catering/daily-catering-subscriptions
+                  </span>
+                </div>
+              </label>
+
+              {/* Option 3: Institutional */}
+              <label
+                className={`flex items-start gap-2.5 p-4 rounded-2xl border cursor-pointer transition-all ${
+                  serviceCategories.includes("institutional-catering")
+                    ? "bg-emerald-50/50 border-forest ring-1 ring-forest/20 shadow-xs"
+                    : "bg-white border-stone-200 hover:border-forest/40"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={serviceCategories.includes("institutional-catering")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setServiceCategories([...serviceCategories, "institutional-catering"]);
+                    } else {
+                      setServiceCategories(
+                        serviceCategories.filter((c) => c !== "institutional-catering"),
+                      );
+                    }
+                  }}
+                  className="mt-0.5 accent-forest rounded"
+                />
+                <div>
+                  <span className="text-xs font-bold text-forest block">
+                    🏫 {tt("Gemeinschaftsverpflegung", "Institutional")}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground block mt-1 leading-normal">
+                    {tt("Schulen, Kitas, Pflege & Kantinen", "Schools, Kitas, Clinics & Canteens")}
+                  </span>
+                  <span className="text-[9px] font-semibold text-emerald-700 bg-emerald-100/70 px-1.5 py-0.5 rounded mt-2 inline-block">
+                    /catering/institutional-catering
+                  </span>
+                </div>
+              </label>
+            </div>
+
+            <div className="pt-4 border-t border-border flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">
+                {tt(
+                  "Speichern Sie Ihre Sparten-Auswahl, um auf den entsprechenden Seiten gelistet zu werden.",
+                  "Save your target categories to enable listing on matching discovery pages.",
+                )}
+              </p>
+              <Button
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-forest hover:bg-forest/90 text-white rounded-full px-6"
+              >
+                {saving ? tt("Speichere...", "Saving...") : tt("Sparten speichern", "Save Categories")}
+              </Button>
             </div>
           </div>
         )}

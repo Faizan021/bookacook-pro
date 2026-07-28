@@ -2410,119 +2410,28 @@ function BusinessProfileSection() {
               angezeigt. (Comma-separated, e.g. Bio, HACCP, Halal)
             </p>
           </div>
-          {/* Service Categories Selection Card */}
-          <div className="p-5 bg-gradient-to-r from-emerald-50/60 via-cream/20 to-emerald-50/60 border border-emerald-200/80 rounded-2xl space-y-3 text-left">
-            <div className="flex items-center justify-between">
-              <Label className="font-display font-bold text-forest text-sm flex items-center gap-1.5">
+          {/* Service Categories Shortcut Link */}
+          <div className="p-4 bg-gradient-to-r from-emerald-50/60 via-cream/20 to-emerald-50/60 border border-emerald-200/80 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-left">
+            <div className="space-y-1">
+              <Label className="font-display font-bold text-forest text-xs flex items-center gap-1.5">
                 <span>🎯</span>
-                {tt("Angebotene Catering-Sparten & Kategorien", "Offered Catering Service Categories")}
+                {tt("Angebotene Catering-Sparten & Zielgruppen", "Offered Catering Service Categories")}
               </Label>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
-                {tt("Mehrfachauswahl aktiv", "Multi-Category Supported")}
-              </span>
+              <p className="text-[11px] text-forest/75 leading-relaxed">
+                {tt(
+                  "Konfigurieren Sie Ihre Catering-Sparten (Einmalige Events, Firmen-Abos & Gemeinschaftsverpflegung) im Marketing & SEO Bereich.",
+                  "Manage your target service models (One-off Events, Corporate Subscriptions & Institutional) under Marketing & SEO.",
+                )}
+              </p>
             </div>
-            <p className="text-xs text-forest/75 leading-relaxed">
-              {tt(
-                "Wähle alle Catering-Bereiche aus, die dein Betrieb anbietet. Du wirst in allen entsprechenden Suchen und Kategorieseiten gelistet.",
-                "Select all catering service models your business handles. You will appear in all matching category search pages.",
-              )}
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-              {/* Option 1: Event Catering */}
-              <label
-                className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
-                  serviceCategories.includes("events")
-                    ? "bg-white border-forest ring-1 ring-forest/20 shadow-xs"
-                    : "bg-white/60 border-emerald-100 hover:border-forest/40"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={serviceCategories.includes("events")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setServiceCategories([...serviceCategories, "events"]);
-                    } else {
-                      setServiceCategories(serviceCategories.filter((c) => c !== "events"));
-                    }
-                  }}
-                  className="mt-0.5 accent-forest rounded"
-                />
-                <div>
-                  <span className="text-xs font-bold text-forest block">
-                    🥂 {tt("Einmalige Events", "One-Off Events")}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground block mt-0.5">
-                    {tt("Hochzeiten, Firmenfeiern, Partys", "Weddings, Galas, Private Parties")}
-                  </span>
-                </div>
-              </label>
-
-              {/* Option 2: Daily Subscriptions / Corporate */}
-              <label
-                className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
-                  serviceCategories.includes("daily-catering-subscriptions")
-                    ? "bg-white border-forest ring-1 ring-forest/20 shadow-xs"
-                    : "bg-white/60 border-emerald-100 hover:border-forest/40"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={serviceCategories.includes("daily-catering-subscriptions")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setServiceCategories([...serviceCategories, "daily-catering-subscriptions"]);
-                    } else {
-                      setServiceCategories(
-                        serviceCategories.filter((c) => c !== "daily-catering-subscriptions"),
-                      );
-                    }
-                  }}
-                  className="mt-0.5 accent-forest rounded"
-                />
-                <div>
-                  <span className="text-xs font-bold text-forest block">
-                    🏢 {tt("Firmen-Abos", "Corporate Subscriptions")}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground block mt-0.5">
-                    {tt("Büro-Lunch, Team-Verpflegung", "Office Lunches, Recurring Teams")}
-                  </span>
-                </div>
-              </label>
-
-              {/* Option 3: Institutional */}
-              <label
-                className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
-                  serviceCategories.includes("institutional-catering")
-                    ? "bg-white border-forest ring-1 ring-forest/20 shadow-xs"
-                    : "bg-white/60 border-emerald-100 hover:border-forest/40"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={serviceCategories.includes("institutional-catering")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setServiceCategories([...serviceCategories, "institutional-catering"]);
-                    } else {
-                      setServiceCategories(
-                        serviceCategories.filter((c) => c !== "institutional-catering"),
-                      );
-                    }
-                  }}
-                  className="mt-0.5 accent-forest rounded"
-                />
-                <div>
-                  <span className="text-xs font-bold text-forest block">
-                    🏫 {tt("Gemeinschaftsverpflegung", "Institutional")}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground block mt-0.5">
-                    {tt("Schulen, Kitas, Pflege & Kantinen", "Schools, Kitas, Clinics & Canteens")}
-                  </span>
-                </div>
-              </label>
-            </div>
+            <Link
+              to="/caterer"
+              search={{ tab: "marketing-seo", section: "categories" }}
+              className="inline-flex items-center justify-center gap-1 bg-forest text-white text-xs font-bold px-4 py-2 rounded-full hover:bg-forest/90 transition shrink-0 self-start sm:self-auto cursor-pointer"
+            >
+              <span>{tt("Sparten verwalten", "Manage Categories")}</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
 
