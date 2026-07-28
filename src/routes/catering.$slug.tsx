@@ -162,9 +162,9 @@ function CatererPage() {
   const { slug } = Route.useParams();
   const { lang } = useI18n();
   const loaderData = Route.useLoaderData() as any;
-  const { fullCaterer: caterer, reviewsData } = loaderData;
-  const { data: dbCatererOrig } = useSuspenseQuery(catererQueryOptions(slug));
-  const dbCaterer = dbCatererOrig as any;
+  const { fullCaterer: caterer, reviewsData, profile: initialProfile } = loaderData || {};
+  const { data: dbCatererOrig } = useQuery(catererQueryOptions(slug));
+  const dbCaterer = (dbCatererOrig || initialProfile) as any;
 
   const reviews = reviewsData?.reviews || [];
   const aggregates = reviewsData?.aggregates;
