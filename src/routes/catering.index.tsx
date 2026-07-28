@@ -168,14 +168,23 @@ function Catering() {
     setSort("price-asc");
   };
 
-  const filtered = allCaterers.filter((c) => {
+  const getTagline = (caterer: Caterer, l: "de" | "en") => {
+    if (!caterer || !caterer.tagline) return "";
+    if (typeof caterer.tagline === "string") return caterer.tagline;
+    return caterer.tagline[l] || caterer.tagline.de || caterer.tagline.en || "";
+  };
+
+  const filtered = (allCaterers || []).filter((c) => {
+    if (!c) return false;
     if (cat !== "all" && c.cat !== cat) return false;
-    if (city && !c.area.toLowerCase().includes(city.toLowerCase())) return false;
-    if (guests && c.minGuests > Number(guests)) return false;
+    if (city && c.area && !c.area.toLowerCase().includes(city.toLowerCase())) return false;
+    if (guests && c.minGuests && c.minGuests > Number(guests)) return false;
     if (menu && !c.menu?.some((m) => (m.category || "Menü") === menu)) return false;
     if (
       query &&
-      !`${c.name} ${c.tagline[lang]} ${c.area}`.toLowerCase().includes(query.toLowerCase())
+      !`${c.name || ""} ${getTagline(c, lang)} ${c.area || ""}`
+        .toLowerCase()
+        .includes(query.toLowerCase())
     )
       return false;
     return true;
@@ -595,10 +604,10 @@ function Catering() {
                       {c.verified && <BadgeCheck className="h-4 w-4 text-forest shrink-0" />}
                     </div>
                     <p className="text-xs text-forest/70 line-clamp-2 min-h-[2rem]">
-                      {c.tagline[lang]}
+                      {getTagline(c, lang)}
                     </p>
                     <div className="flex flex-wrap gap-1.5 pt-1">
-                      {c.dietary.map((d) => (
+                      {(c.dietary || []).map((d) => (
                         <span
                           key={d}
                           className="rounded-full bg-[#eadfce]/40 px-2.5 py-0.5 text-[10px] font-semibold text-forest border border-[#eadfce]/60"
