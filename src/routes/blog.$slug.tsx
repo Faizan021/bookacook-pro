@@ -36,7 +36,7 @@ export const Route = createFileRoute("/blog/$slug")({
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": ["Article", "NewsArticle"],
             headline: loaderData.title.de,
             description: description,
             image: ogImage,

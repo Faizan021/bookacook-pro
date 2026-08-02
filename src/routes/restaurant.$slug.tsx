@@ -321,6 +321,32 @@ export const Route = createFileRoute("/restaurant/$slug")({
             : {}),
         }),
       });
+
+      scripts.push({
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: `Kann man bei ${r.name} online bestellen?`,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: `Ja, ${r.name} bietet eine direkte Online-Bestellung für Abholung und Lieferung über Speisely an.`,
+              },
+            },
+            {
+              "@type": "Question",
+              name: `Welche Speisen bietet ${r.name} an?`,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: `${r.name} in ${city} bietet ${dbR?.seo_cuisine_target || r.tags?.[0] || "frische Spezialitäten"} an.`,
+              },
+            },
+          ],
+        }),
+      });
     }
 
     if (isValidGA) {
