@@ -3,13 +3,13 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
 import { LiveMetricsBanner } from "./LiveMetricsBanner";
 import { FastOrderGrid } from "./FastOrderGrid";
-import { PaymentSelector } from "./PaymentSelector";
 import { QuantitySelector } from "./QuantitySelector";
 import { TransactionHistory } from "./TransactionHistory";
 import { ShiftSummaryModal } from "./ShiftSummaryModal";
 import { useFestivalPos } from "@/lib/festival/useFestivalPos";
 import type { FestivalEventConfig, FestivalItem } from "@/lib/festival/types";
 import { FileText, Sparkles, Store, Globe } from "lucide-react";
+import { toast } from "sonner";
 
 interface FestivalDashboardProps {
   config: FestivalEventConfig;
@@ -36,11 +36,11 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
     resetShift,
   } = useFestivalPos({ config });
 
-  // State for instant payment modal
-  const [pendingQuickItem, setPendingQuickItem] = useState<FestivalItem | null>(null);
-
+  // 1-TAP Instant Cash Sales Flow (No extra payment modal!)
   const handleQuickOrderTap = (item: FestivalItem) => {
-    setPendingQuickItem(item);
+    recordOrder(item, "cash", 1, "");
+    const formattedPrice = (item.priceCents / 100).toFixed(2);
+    toast.success(`1x ${item.name} (${formattedPrice} €) erfassen`);
   };
 
   const handleCustomizeOrderTap = (item: FestivalItem) => {
@@ -51,15 +51,11 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
 
   const handleConfirmCustomization = () => {
     if (activeItemForCustomization) {
-      setPendingQuickItem(activeItemForCustomization);
+      recordOrder(activeItemForCustomization, "cash", selectedQuantity, selectedNotes);
+      const totalCents = activeItemForCustomization.priceCents * selectedQuantity;
+      const formattedPrice = (totalCents / 100).toFixed(2);
+      toast.success(`${selectedQuantity}x ${activeItemForCustomization.name} (${formattedPrice} €) erfassen`);
       setActiveItemForCustomization(null);
-    }
-  };
-
-  const handlePaymentSelected = (method: "cash" | "card") => {
-    if (pendingQuickItem) {
-      recordOrder(pendingQuickItem, method, selectedQuantity, selectedNotes);
-      setPendingQuickItem(null);
     }
   };
 
@@ -117,7 +113,7 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
         {/* Live Metrics Banner */}
         <LiveMetricsBanner metrics={metrics} />
 
-        {/* 6-Item Fast Counter Touch Grid */}
+        {/* 6-Item Fast Counter Touch Grid (1-Tap Instant Cash Sale) */}
         <div className="bg-white p-4 sm:p-6 rounded-3xl border border-[#eadfce] shadow-sm">
           <FastOrderGrid
             items={items}
@@ -128,15 +124,6 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
 
         {/* Transaction History & Void Action */}
         <TransactionHistory orders={shiftData.orders} onVoidLastOrder={voidLastOrder} />
-
-        {/* Payment Modal (2-Tap Fast Path) */}
-        <PaymentSelector
-          item={pendingQuickItem}
-          quantity={selectedQuantity}
-          notes={selectedNotes}
-          onSelectPayment={handlePaymentSelected}
-          onCancel={() => setPendingQuickItem(null)}
-        />
 
         {/* Customization Modal (Quantity & Notes) */}
         <QuantitySelector

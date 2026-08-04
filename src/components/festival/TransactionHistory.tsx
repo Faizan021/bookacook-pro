@@ -1,5 +1,5 @@
 import { useI18n } from "@/i18n/I18nProvider";
-import { History, RotateCcw, Banknote, CreditCard } from "lucide-react";
+import { History, RotateCcw, Banknote } from "lucide-react";
 import type { FestivalOrder } from "@/lib/festival/types";
 
 interface TransactionHistoryProps {
@@ -72,17 +72,10 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
                 <div className="flex items-center gap-2">
                   <span className="font-extrabold font-display text-sm">{order.orderId}</span>
                   <span className="text-forest/60 text-[11px]">{formatTime(order.timestamp)}</span>
-                  {order.paymentMethod === "cash" ? (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md border border-emerald-200">
-                      <Banknote className="w-3 h-3" />
-                      BAR
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-md border border-sky-200">
-                      <CreditCard className="w-3 h-3" />
-                      KARTE
-                    </span>
-                  )}
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md border border-emerald-200">
+                    <Banknote className="w-3 h-3" />
+                    BAR
+                  </span>
                 </div>
 
                 {/* Items & Total */}

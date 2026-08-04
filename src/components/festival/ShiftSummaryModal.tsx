@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { X, FileText, AlertTriangle, RotateCcw, Banknote, CreditCard, ShoppingBag } from "lucide-react";
+import { X, FileText, AlertTriangle, RotateCcw, Banknote, ShoppingBag } from "lucide-react";
 import type { FestivalEventConfig } from "@/lib/festival/types";
 
 interface ShiftSummaryModalProps {
@@ -93,38 +93,25 @@ export function ShiftSummaryModal({
           </p>
         </div>
 
-        {/* Cash vs Card Financial Breakdown */}
+        {/* Cash Reconciliation Summary */}
         <div className="bg-white p-4 rounded-2xl border border-[#eadfce] space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-forest/70 border-b border-[#eadfce] pb-2">
-            {t("Umsatz & Kassensturz", "Revenue & Cash Reconciliation")}
+            {t("Kassensturz & Soll-Bestand", "Cash Reconciliation")}
           </h4>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
-              <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-semibold">
+          
+          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex justify-between items-center">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-bold uppercase tracking-wider">
                 <Banknote className="w-4 h-4" />
-                <span>{t("Barzahlung (Soll)", "Cash Total")}</span>
+                <span>{t("Soll-Kassenbestand (Bar)", "Expected Cash Total")}</span>
               </div>
-              <div className="text-xl font-extrabold text-emerald-900 font-display">
-                {formatPrice(metrics.cashCents)}
-              </div>
+              <p className="text-[11px] text-emerald-700">
+                {t("Berechneter Kasseninhalt für diese Schicht", "Calculated drawer content for this shift")}
+              </p>
             </div>
-
-            <div className="p-3 rounded-xl bg-sky-50 border border-sky-200 space-y-1">
-              <div className="flex items-center gap-1.5 text-xs text-sky-800 font-semibold">
-                <CreditCard className="w-4 h-4" />
-                <span>{t("Kartenzahlung", "Card Total")}</span>
-              </div>
-              <div className="text-xl font-extrabold text-sky-900 font-display">
-                {formatPrice(metrics.cardCents)}
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-2 flex justify-between items-center text-base font-bold text-forest">
-            <span>{t("Gesamter Tagesumsatz:", "Total Shift Sales:")}</span>
-            <span className="text-xl font-extrabold font-display text-forest">
+            <div className="text-2xl font-extrabold text-emerald-900 font-display">
               {formatPrice(metrics.totalCents)}
-            </span>
+            </div>
           </div>
         </div>
 
@@ -135,7 +122,7 @@ export function ShiftSummaryModal({
               {t("Verkaufte Artikel", "Items Sold Breakdown")}
             </h4>
             <span className="text-xs font-bold text-forest/60">
-              {metrics.orderCount} {t("Bestellungen", "Orders")}
+              {metrics.orderCount} {t("Portionen", "Items")}
             </span>
           </div>
 
