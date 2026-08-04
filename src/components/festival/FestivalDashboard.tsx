@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
 import { LiveMetricsBanner } from "./LiveMetricsBanner";
 import { FastOrderGrid } from "./FastOrderGrid";
+import { CurrentOrderCart } from "./CurrentOrderCart";
 import { QuantitySelector } from "./QuantitySelector";
 import { TransactionHistory } from "./TransactionHistory";
 import { ShiftSummaryModal } from "./ShiftSummaryModal";
@@ -25,22 +26,35 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
     shiftData,
     metrics,
     itemizedSales,
+    cartItems,
+    cartTotalCents,
+    cartTotalQuantity,
+    addToCart,
+    updateCartQuantity,
+    removeFromCart,
+    clearCart,
+    checkoutCart,
     selectedQuantity,
     setSelectedQuantity,
     selectedNotes,
     setSelectedNotes,
     activeItemForCustomization,
     setActiveItemForCustomization,
-    recordOrder,
     voidLastOrder,
     resetShift,
   } = useFestivalPos({ config });
 
-  // 1-TAP Instant Cash Sales Flow (No extra payment modal!)
-  const handleQuickOrderTap = (item: FestivalItem) => {
-    recordOrder(item, "cash", 1, "");
-    const formattedPrice = (item.priceCents / 100).toFixed(2);
-    toast.success(`1x ${item.name} (${formattedPrice} €) erfassen`);
+  // Map cart items for FastOrderGrid badge indicator (e.g. 2x in Bon)
+  const cartSummary = useMemo(() => {
+    return cartItems.map((entry) => ({
+      itemId: entry.item.id,
+      quantity: entry.quantity,
+    }));
+  }, [cartItems]);
+
+  const handleAddToCart = (item: FestivalItem) => {
+    addToCart(item, 1);
+    toast.success(`1x ${item.name} hinzugefügt`);
   };
 
   const handleCustomizeOrderTap = (item: FestivalItem) => {
@@ -51,17 +65,15 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
 
   const handleConfirmCustomization = () => {
     if (activeItemForCustomization) {
-      recordOrder(activeItemForCustomization, "cash", selectedQuantity, selectedNotes);
-      const totalCents = activeItemForCustomization.priceCents * selectedQuantity;
-      const formattedPrice = (totalCents / 100).toFixed(2);
-      toast.success(`${selectedQuantity}x ${activeItemForCustomization.name} (${formattedPrice} €) erfassen`);
+      addToCart(activeItemForCustomization, selectedQuantity, selectedNotes);
+      toast.success(`${selectedQuantity}x ${activeItemForCustomization.name} hinzugefügt`);
       setActiveItemForCustomization(null);
     }
   };
 
   return (
     <SiteShell dotted={false}>
-      <div className="min-h-screen bg-[#fdfaf5] text-forest px-4 py-6 sm:py-8 max-w-5xl mx-auto space-y-6">
+      <div className="min-h-screen bg-[#fdfaf5] text-forest px-4 py-6 sm:py-8 max-w-5xl mx-auto space-y-6 pb-24">
         {/* Branding Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 sm:p-5 rounded-2xl border border-[#eadfce] shadow-sm">
           <div className="flex items-center gap-3">
@@ -113,14 +125,26 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
         {/* Live Metrics Banner */}
         <LiveMetricsBanner metrics={metrics} />
 
-        {/* 6-Item Fast Counter Touch Grid (1-Tap Instant Cash Sale) */}
+        {/* 6-Item Counter Touch Grid */}
         <div className="bg-white p-4 sm:p-6 rounded-3xl border border-[#eadfce] shadow-sm">
           <FastOrderGrid
             items={items}
-            onQuickOrder={handleQuickOrderTap}
+            cartSummary={cartSummary}
+            onAddToCart={handleAddToCart}
             onCustomizeOrder={handleCustomizeOrderTap}
           />
         </div>
+
+        {/* Current Customer Order Tray / Cart */}
+        <CurrentOrderCart
+          cartItems={cartItems}
+          totalCents={cartTotalCents}
+          totalQuantity={cartTotalQuantity}
+          onUpdateQuantity={updateCartQuantity}
+          onRemoveItem={removeFromCart}
+          onClearCart={clearCart}
+          onCheckout={() => checkoutCart("cash")}
+        />
 
         {/* Transaction History & Void Action */}
         <TransactionHistory orders={shiftData.orders} onVoidLastOrder={voidLastOrder} />

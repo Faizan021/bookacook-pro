@@ -10,6 +10,12 @@ import { defaultFestivalStorage } from "./storage";
 import { trackEvent } from "@/utils/posthog";
 import { toast } from "sonner";
 
+export interface CartItemEntry {
+  item: FestivalItem;
+  quantity: number;
+  notes?: string;
+}
+
 export interface UseFestivalPosOptions {
   config: FestivalEventConfig;
   storage?: IFestivalStorage;
@@ -25,6 +31,9 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
   const [selectedNotes, setSelectedNotes] = useState<string>("");
   const [activeItemForCustomization, setActiveItemForCustomization] = useState<FestivalItem | null>(null);
+
+  // Active Multi-Item Cart for Current Customer
+  const [cartItems, setCartItems] = useState<CartItemEntry[]>([]);
 
   // Load shift data on mount
   useEffect(() => {
@@ -107,28 +116,82 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
     return Object.values(itemMap).sort((a, b) => b.quantity - a.quantity);
   }, [activeOrders]);
 
-  // Process a new transaction (Instant 2-tap fast path or customized path)
-  const recordOrder = useCallback(
-    (item: FestivalItem, paymentMethod: "cash" | "card", quantity = 1, notes?: string) => {
+  // Cart Calculations
+  const cartTotalCents = useMemo(() => {
+    return cartItems.reduce((acc, entry) => acc + entry.item.priceCents * entry.quantity, 0);
+  }, [cartItems]);
+
+  const cartTotalQuantity = useMemo(() => {
+    return cartItems.reduce((acc, entry) => acc + entry.quantity, 0);
+  }, [cartItems]);
+
+  // Add Item to Cart
+  const addToCart = useCallback((item: FestivalItem, quantity = 1, notes?: string) => {
+    setCartItems((prev) => {
+      const existingIndex = prev.findIndex(
+        (entry) => entry.item.id === item.id && entry.notes === (notes || undefined)
+      );
+      if (existingIndex > -1) {
+        const updated = [...prev];
+        updated[existingIndex] = {
+          ...updated[existingIndex],
+          quantity: updated[existingIndex].quantity + quantity,
+        };
+        return updated;
+      }
+      return [...prev, { item, quantity, notes: notes || undefined }];
+    });
+  }, []);
+
+  // Adjust Cart Quantity
+  const updateCartQuantity = useCallback((itemId: string, delta: number) => {
+    setCartItems((prev) => {
+      return prev
+        .map((entry) => {
+          if (entry.item.id === itemId) {
+            const newQty = entry.quantity + delta;
+            return newQty > 0 ? { ...entry, quantity: newQty } : null;
+          }
+          return entry;
+        })
+        .filter(Boolean) as CartItemEntry[];
+    });
+  }, []);
+
+  // Remove Item from Cart
+  const removeFromCart = useCallback((itemId: string) => {
+    setCartItems((prev) => prev.filter((entry) => entry.item.id !== itemId));
+  }, []);
+
+  // Clear Cart
+  const clearCart = useCallback(() => {
+    setCartItems([]);
+  }, []);
+
+  // Checkout Current Cart (Creates a SINGLE order with all cart items!)
+  const checkoutCart = useCallback(
+    (paymentMethod: "cash" | "card" = "cash") => {
+      if (cartItems.length === 0) return;
+
       const nextNum = shiftData.lastOrderNumber + 1;
       const formattedNum = `#${String(nextNum).padStart(3, "0")}`;
-      const itemTotal = item.priceCents * quantity;
+      const totalCents = cartItems.reduce((acc, e) => acc + e.item.priceCents * e.quantity, 0);
+
+      const orderItems = cartItems.map((entry) => ({
+        id: entry.item.id,
+        name: entry.item.name,
+        quantity: entry.quantity,
+        priceCents: entry.item.priceCents,
+        notes: entry.notes,
+      }));
 
       const newOrder: FestivalOrder = {
         orderId: formattedNum,
         timestamp: new Date().toISOString(),
         restaurantId: config.restaurantId,
         paymentMethod,
-        items: [
-          {
-            id: item.id,
-            name: item.name,
-            quantity,
-            priceCents: item.priceCents,
-            notes: notes || undefined,
-          },
-        ],
-        totalCents: itemTotal,
+        items: orderItems,
+        totalCents,
         status: "Recorded",
       };
 
@@ -138,21 +201,21 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
         orders: [newOrder, ...prev.orders],
       }));
 
-      // Reset transient options
-      setSelectedQuantity(1);
-      setSelectedNotes("");
-      setActiveItemForCustomization(null);
+      // Clear active cart for next customer
+      setCartItems([]);
 
-      // Track analytics
+      const formattedPrice = (totalCents / 100).toFixed(2);
+      toast.success(`Bestellung ${formattedNum} (${formattedPrice} €) erfolgreich abkassiert!`);
+
       trackEvent("festival_order_created", {
         restaurantId: config.restaurantId,
         orderId: formattedNum,
-        totalCents: itemTotal,
+        totalCents,
         paymentMethod,
-        itemCount: quantity,
+        itemCount: orderItems.reduce((a, b) => a + b.quantity, 0),
       });
     },
-    [shiftData.lastOrderNumber, config.restaurantId]
+    [cartItems, shiftData.lastOrderNumber, config.restaurantId]
   );
 
   // Void single most recent active order
@@ -182,17 +245,16 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
     });
   }, [shiftData.orders, config.restaurantId]);
 
-  // Reset shift data (with double confirmation)
+  // Reset shift data
   const resetShift = useCallback(async () => {
-    const success = await storage.clearShiftData(config.restaurantId);
+    await storage.clearShiftData(config.restaurantId);
     setShiftData({
       shiftStartedAt: new Date().toISOString(),
       orders: [],
       lastOrderNumber: 0,
     });
-    if (success) {
-      toast.success("Schicht erfolgreich zurückgesetzt.");
-    }
+    setCartItems([]);
+    toast.success("Schicht erfolgreich zurückgesetzt.");
     trackEvent("festival_shift_reset", { restaurantId: config.restaurantId });
   }, [config.restaurantId, storage]);
 
@@ -201,13 +263,20 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
     shiftData,
     metrics,
     itemizedSales,
+    cartItems,
+    cartTotalCents,
+    cartTotalQuantity,
+    addToCart,
+    updateCartQuantity,
+    removeFromCart,
+    clearCart,
+    checkoutCart,
     selectedQuantity,
     setSelectedQuantity,
     selectedNotes,
     setSelectedNotes,
     activeItemForCustomization,
     setActiveItemForCustomization,
-    recordOrder,
     voidLastOrder,
     resetShift,
   };

@@ -1,15 +1,26 @@
 import { useState, useRef } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { SlidersHorizontal, Zap } from "lucide-react";
+import { SlidersHorizontal, Plus, ShoppingBag } from "lucide-react";
 import type { FestivalItem } from "@/lib/festival/types";
+
+interface CartItemSummary {
+  itemId: string;
+  quantity: number;
+}
 
 interface FastOrderGridProps {
   items: FestivalItem[];
-  onQuickOrder: (item: FestivalItem) => void;
+  cartSummary?: CartItemSummary[];
+  onAddToCart: (item: FestivalItem) => void;
   onCustomizeOrder: (item: FestivalItem) => void;
 }
 
-export function FastOrderGrid({ items, onQuickOrder, onCustomizeOrder }: FastOrderGridProps) {
+export function FastOrderGrid({
+  items,
+  cartSummary = [],
+  onAddToCart,
+  onCustomizeOrder,
+}: FastOrderGridProps) {
   const { t } = useI18n();
 
   // Debounce ref to prevent accidental rapid double-tapping
@@ -17,11 +28,16 @@ export function FastOrderGrid({ items, onQuickOrder, onCustomizeOrder }: FastOrd
 
   const handleTap = (item: FestivalItem) => {
     const now = Date.now();
-    if (now - lastTapTimeRef.current < 300) {
-      return; // Ignore double-tap within 300ms
+    if (now - lastTapTimeRef.current < 250) {
+      return; // Ignore double-tap within 250ms
     }
     lastTapTimeRef.current = now;
-    onQuickOrder(item);
+    onAddToCart(item);
+  };
+
+  const getCartQuantity = (itemId: string) => {
+    const found = cartSummary.find((c) => c.itemId === itemId);
+    return found ? found.quantity : 0;
   };
 
   if (!items || items.length === 0) {
@@ -38,11 +54,11 @@ export function FastOrderGrid({ items, onQuickOrder, onCustomizeOrder }: FastOrd
     <div className="space-y-3">
       <div className="flex items-center justify-between px-1">
         <span className="text-xs font-bold uppercase tracking-wider text-forest/70 flex items-center gap-1.5">
-          <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
-          {t("Schnellverkauf (2-Taps)", "Fast Counter Sales (2-Taps)")}
+          <ShoppingBag className="w-4 h-4 text-emerald-600" />
+          {t("Speisen & Getränke antippen", "Tap to add items to order")}
         </span>
         <span className="text-[11px] text-forest/60 italic">
-          {t("Direkt antippen für Sofort-Bon", "Tap item for quick receipt")}
+          {t("Mehrere Artikel pro Kunde wählbar", "Multiple items per customer")}
         </span>
       </div>
 
@@ -52,20 +68,31 @@ export function FastOrderGrid({ items, onQuickOrder, onCustomizeOrder }: FastOrd
             style: "currency",
             currency: "EUR",
           });
+          const cartQty = getCartQuantity(item.id);
+          const isInCart = cartQty > 0;
 
           return (
             <div
               key={item.id || idx}
-              className="group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl bg-white border-2 border-[#eadfce] shadow-md hover:border-forest/40 hover:shadow-lg transition active:scale-[0.98] min-h-[110px] sm:min-h-[130px] cursor-pointer"
+              className={`group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border-2 transition active:scale-[0.98] min-h-[115px] sm:min-h-[135px] cursor-pointer select-none ${
+                isInCart
+                  ? "bg-emerald-50/90 border-emerald-500 shadow-md ring-2 ring-emerald-400/30"
+                  : "bg-white border-[#eadfce] shadow-md hover:border-forest/40 hover:shadow-lg"
+              }`}
               onClick={() => handleTap(item)}
             >
+              {/* Active Cart Badge Count */}
+              {isInCart && (
+                <div className="absolute -top-2.5 -right-2.5 bg-emerald-600 text-white font-extrabold text-xs px-2.5 py-1 rounded-full shadow-md animate-in zoom-in-50 duration-150">
+                  {cartQty}x
+                </div>
+              )}
+
               {/* Item Name & Description */}
               <div className="space-y-1">
-                <div className="flex items-start justify-between gap-1">
-                  <h4 className="font-display font-bold text-base sm:text-lg text-forest line-clamp-2 leading-tight">
-                    {item.name}
-                  </h4>
-                </div>
+                <h4 className="font-display font-bold text-base sm:text-lg text-forest line-clamp-2 leading-tight">
+                  {item.name}
+                </h4>
                 {item.description && (
                   <p className="text-[11px] text-forest/65 line-clamp-1 leading-snug">
                     {item.description}
@@ -73,24 +100,31 @@ export function FastOrderGrid({ items, onQuickOrder, onCustomizeOrder }: FastOrd
                 )}
               </div>
 
-              {/* Price & Customization Action */}
+              {/* Price & Action */}
               <div className="flex items-center justify-between pt-2 border-t border-[#eadfce]/60 mt-2">
                 <span className="text-lg sm:text-xl font-extrabold text-forest font-display">
                   {formattedPrice}
                 </span>
 
-                {/* Optional Customize Button */}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onCustomizeOrder(item);
-                  }}
-                  title={t("Menge / Wunsch anpassen", "Customize Quantity / Note")}
-                  className="p-2 rounded-xl bg-cream text-forest/70 hover:text-forest hover:bg-forest/10 transition"
-                >
-                  <SlidersHorizontal className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-1">
+                  {/* Customize Button */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onCustomizeOrder(item);
+                    }}
+                    title={t("Menge / Hinweis anpassen", "Customize Quantity / Note")}
+                    className="p-2 rounded-xl bg-cream text-forest/70 hover:text-forest hover:bg-forest/10 transition cursor-pointer"
+                  >
+                    <SlidersHorizontal className="w-4 h-4" />
+                  </button>
+
+                  {/* Plus Icon Button */}
+                  <div className="p-2 rounded-xl bg-emerald-700 text-white shadow-xs group-hover:bg-emerald-800 transition">
+                    <Plus className="w-4 h-4" />
+                  </div>
+                </div>
               </div>
             </div>
           );
