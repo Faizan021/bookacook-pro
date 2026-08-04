@@ -34,6 +34,7 @@ import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
+import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
 import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
 import { Route as CateringEventsRouteImport } from './routes/catering.events'
 import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
@@ -54,6 +55,7 @@ import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.str
 import { Route as ApiPrintStarRouteImport } from './routes/api.print.star'
 import { Route as AuthenticatedRestaurantReviewsRouteImport } from './routes/_authenticated/restaurant.reviews'
 import { Route as AuthenticatedRestaurantKitchenRouteImport } from './routes/_authenticated/restaurant.kitchen'
+import { Route as AuthenticatedRestaurantFestivalRouteImport } from './routes/_authenticated/restaurant.festival'
 import { Route as AuthenticatedDashboardPlannerRouteImport } from './routes/_authenticated/dashboard/planner'
 import { Route as AuthenticatedCatererReviewsRouteImport } from './routes/_authenticated/caterer.reviews'
 import { Route as EmbedPlannerSlugInquiryRouteImport } from './routes/embed.planner.$slug.inquiry'
@@ -185,6 +187,12 @@ const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
   path: '/$city-$eventType',
   getParentRoute: () => PlannerRoute,
 } as any)
+const FestivalSchnitzelSchmiedeRoute =
+  FestivalSchnitzelSchmiedeRouteImport.update({
+    id: '/festival/schnitzel-schmiede',
+    path: '/festival/schnitzel-schmiede',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CateringInstitutionalCateringRoute =
   CateringInstitutionalCateringRouteImport.update({
     id: '/institutional-catering',
@@ -291,6 +299,12 @@ const AuthenticatedRestaurantKitchenRoute =
     path: '/kitchen',
     getParentRoute: () => AuthenticatedRestaurantRoute,
   } as any)
+const AuthenticatedRestaurantFestivalRoute =
+  AuthenticatedRestaurantFestivalRouteImport.update({
+    id: '/festival',
+    path: '/festival',
+    getParentRoute: () => AuthenticatedRestaurantRoute,
+  } as any)
 const AuthenticatedDashboardPlannerRoute =
   AuthenticatedDashboardPlannerRouteImport.update({
     id: '/dashboard/planner',
@@ -354,6 +368,7 @@ export interface FileRoutesByFullPath {
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
+  '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -363,6 +378,7 @@ export interface FileRoutesByFullPath {
   '/planner/': typeof PlannerIndexRoute
   '/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
   '/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
+  '/restaurant/festival': typeof AuthenticatedRestaurantFestivalRoute
   '/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
   '/api/print/star': typeof ApiPrintStarRoute
@@ -404,6 +420,7 @@ export interface FileRoutesByTo {
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
+  '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -413,6 +430,7 @@ export interface FileRoutesByTo {
   '/planner': typeof PlannerIndexRoute
   '/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
   '/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
+  '/restaurant/festival': typeof AuthenticatedRestaurantFestivalRoute
   '/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
   '/api/print/star': typeof ApiPrintStarRoute
@@ -458,6 +476,7 @@ export interface FileRoutesById {
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
+  '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -467,6 +486,7 @@ export interface FileRoutesById {
   '/planner/': typeof PlannerIndexRoute
   '/_authenticated/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
   '/_authenticated/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
+  '/_authenticated/restaurant/festival': typeof AuthenticatedRestaurantFestivalRoute
   '/_authenticated/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/_authenticated/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
   '/api/print/star': typeof ApiPrintStarRoute
@@ -512,6 +532,7 @@ export interface FileRouteTypes {
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
     | '/catering/institutional-catering'
+    | '/festival/schnitzel-schmiede'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -521,6 +542,7 @@ export interface FileRouteTypes {
     | '/planner/'
     | '/caterer/reviews'
     | '/dashboard/planner'
+    | '/restaurant/festival'
     | '/restaurant/kitchen'
     | '/restaurant/reviews'
     | '/api/print/star'
@@ -562,6 +584,7 @@ export interface FileRouteTypes {
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
     | '/catering/institutional-catering'
+    | '/festival/schnitzel-schmiede'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -571,6 +594,7 @@ export interface FileRouteTypes {
     | '/planner'
     | '/caterer/reviews'
     | '/dashboard/planner'
+    | '/restaurant/festival'
     | '/restaurant/kitchen'
     | '/restaurant/reviews'
     | '/api/print/star'
@@ -615,6 +639,7 @@ export interface FileRouteTypes {
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
     | '/catering/institutional-catering'
+    | '/festival/schnitzel-schmiede'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -624,6 +649,7 @@ export interface FileRouteTypes {
     | '/planner/'
     | '/_authenticated/caterer/reviews'
     | '/_authenticated/dashboard/planner'
+    | '/_authenticated/restaurant/festival'
     | '/_authenticated/restaurant/kitchen'
     | '/_authenticated/restaurant/reviews'
     | '/api/print/star'
@@ -662,6 +688,7 @@ export interface RootRouteChildren {
   VerifyEmailRoute: typeof VerifyEmailRoute
   AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -852,6 +879,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerCityEventTypeRouteImport
       parentRoute: typeof PlannerRoute
     }
+    '/festival/schnitzel-schmiede': {
+      id: '/festival/schnitzel-schmiede'
+      path: '/festival/schnitzel-schmiede'
+      fullPath: '/festival/schnitzel-schmiede'
+      preLoaderRoute: typeof FestivalSchnitzelSchmiedeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/catering/institutional-catering': {
       id: '/catering/institutional-catering'
       path: '/institutional-catering'
@@ -992,6 +1026,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRestaurantKitchenRouteImport
       parentRoute: typeof AuthenticatedRestaurantRoute
     }
+    '/_authenticated/restaurant/festival': {
+      id: '/_authenticated/restaurant/festival'
+      path: '/festival'
+      fullPath: '/restaurant/festival'
+      preLoaderRoute: typeof AuthenticatedRestaurantFestivalRouteImport
+      parentRoute: typeof AuthenticatedRestaurantRoute
+    }
     '/_authenticated/dashboard/planner': {
       id: '/_authenticated/dashboard/planner'
       path: '/dashboard/planner'
@@ -1049,12 +1090,14 @@ const AuthenticatedCatererRouteWithChildren =
   AuthenticatedCatererRoute._addFileChildren(AuthenticatedCatererRouteChildren)
 
 interface AuthenticatedRestaurantRouteChildren {
+  AuthenticatedRestaurantFestivalRoute: typeof AuthenticatedRestaurantFestivalRoute
   AuthenticatedRestaurantKitchenRoute: typeof AuthenticatedRestaurantKitchenRoute
   AuthenticatedRestaurantReviewsRoute: typeof AuthenticatedRestaurantReviewsRoute
 }
 
 const AuthenticatedRestaurantRouteChildren: AuthenticatedRestaurantRouteChildren =
   {
+    AuthenticatedRestaurantFestivalRoute: AuthenticatedRestaurantFestivalRoute,
     AuthenticatedRestaurantKitchenRoute: AuthenticatedRestaurantKitchenRoute,
     AuthenticatedRestaurantReviewsRoute: AuthenticatedRestaurantReviewsRoute,
   }
@@ -1172,6 +1215,7 @@ const rootRouteChildren: RootRouteChildren = {
   VerifyEmailRoute: VerifyEmailRoute,
   AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
+  FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
