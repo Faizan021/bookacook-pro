@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { SlidersHorizontal, Plus, ShoppingBag } from "lucide-react";
+import { SlidersHorizontal, Plus, ShoppingBag, Flame, Sparkles } from "lucide-react";
 import type { FestivalItem } from "@/lib/festival/types";
 
 interface CartItemSummary {
@@ -40,6 +40,12 @@ export function FastOrderGrid({
     return found ? found.quantity : 0;
   };
 
+  const getCategoryBorder = (category?: string) => {
+    if (category === "drink") return "hover:border-amber-400";
+    if (category === "special") return "hover:border-purple-400";
+    return "hover:border-emerald-500";
+  };
+
   if (!items || items.length === 0) {
     return (
       <div className="p-8 text-center bg-cream/40 rounded-2xl border border-[#eadfce]">
@@ -70,37 +76,46 @@ export function FastOrderGrid({
           });
           const cartQty = getCartQuantity(item.id);
           const isInCart = cartQty > 0;
+          const categoryClass = getCategoryBorder(item.category);
 
           return (
             <div
               key={item.id || idx}
-              className={`group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border-2 transition active:scale-[0.98] min-h-[115px] sm:min-h-[135px] cursor-pointer select-none ${
+              className={`group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border-2 transition active:scale-[0.98] min-h-[125px] sm:min-h-[145px] cursor-pointer select-none ${categoryClass} ${
                 isInCart
                   ? "bg-emerald-50/90 border-emerald-500 shadow-md ring-2 ring-emerald-400/30"
-                  : "bg-white border-[#eadfce] shadow-md hover:border-forest/40 hover:shadow-lg"
+                  : "bg-white border-[#eadfce] shadow-md hover:shadow-lg"
               }`}
               onClick={() => handleTap(item)}
             >
               {/* Active Cart Badge Count */}
               {isInCart && (
-                <div className="absolute -top-2.5 -right-2.5 bg-emerald-600 text-white font-extrabold text-xs px-2.5 py-1 rounded-full shadow-md animate-in zoom-in-50 duration-150">
+                <div className="absolute -top-2.5 -right-2.5 bg-emerald-600 text-white font-extrabold text-xs px-2.5 py-1 rounded-full shadow-md animate-in zoom-in-50 duration-150 z-10">
                   {cartQty}x
                 </div>
               )}
 
-              {/* Item Name & Description */}
+              {/* Item Top Row: Badge & Name */}
               <div className="space-y-1">
-                <h4 className="font-display font-bold text-base sm:text-lg text-forest line-clamp-2 leading-tight">
-                  {item.name}
-                </h4>
+                {item.badge && (
+                  <div className="flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full w-fit mb-1">
+                    <span>{item.badge}</span>
+                  </div>
+                )}
+                <div className="flex items-start gap-1.5">
+                  {item.icon && <span className="text-xl leading-none">{item.icon}</span>}
+                  <h4 className="font-display font-bold text-base sm:text-lg text-forest line-clamp-2 leading-tight">
+                    {item.name}
+                  </h4>
+                </div>
                 {item.description && (
-                  <p className="text-[11px] text-forest/65 line-clamp-1 leading-snug">
+                  <p className="text-[11px] text-forest/65 line-clamp-1 leading-snug pt-0.5">
                     {item.description}
                   </p>
                 )}
               </div>
 
-              {/* Price & Action */}
+              {/* Price & Action Row */}
               <div className="flex items-center justify-between pt-2 border-t border-[#eadfce]/60 mt-2">
                 <span className="text-lg sm:text-xl font-extrabold text-forest font-display">
                   {formattedPrice}

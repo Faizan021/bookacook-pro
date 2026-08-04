@@ -8,7 +8,9 @@ export interface FestivalItem {
   id: string;
   name: string;
   priceCents: number;
-  category?: string;
+  category?: "food" | "drink" | "special" | string;
+  icon?: string; // Emoji or icon identifier e.g. "🥪", "🍺"
+  badge?: string; // e.g. "🔥 Best Seller", "⭐ Popular"
   imageUrl?: string;
   description?: string;
 }

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { X, FileText, AlertTriangle, RotateCcw, Banknote, ShoppingBag } from "lucide-react";
+import { X, FileText, AlertTriangle, RotateCcw, Banknote, Clock } from "lucide-react";
 import type { FestivalEventConfig } from "@/lib/festival/types";
 
 interface ShiftSummaryModalProps {
   isOpen: boolean;
   config: FestivalEventConfig;
   shiftStartedAt: string;
+  lastOrderTimestamp?: string;
   metrics: {
     totalCents: number;
     cashCents: number;
@@ -23,6 +24,7 @@ export function ShiftSummaryModal({
   isOpen,
   config,
   shiftStartedAt,
+  lastOrderTimestamp,
   metrics,
   itemizedSales,
   onClose,
@@ -56,6 +58,16 @@ export function ShiftSummaryModal({
     }
   };
 
+  const formatLastOrderTime = (iso?: string) => {
+    if (!iso) return t("Keine Verkäufe", "No sales yet");
+    try {
+      const date = new Date(iso);
+      return date.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) + " Uhr";
+    } catch {
+      return "--:--";
+    }
+  };
+
   const handleExecuteReset = async () => {
     setIsResetting(true);
     try {
@@ -72,7 +84,7 @@ export function ShiftSummaryModal({
       <div className="bg-[#fdfaf5] text-forest border border-[#eadfce] w-full max-w-lg rounded-3xl p-6 shadow-2xl relative space-y-5 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-full text-forest/60 hover:text-forest hover:bg-forest/10 transition"
+          className="absolute top-4 right-4 p-2 rounded-full text-forest/60 hover:text-forest hover:bg-forest/10 transition cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
@@ -88,12 +100,12 @@ export function ShiftSummaryModal({
           <p className="text-xs text-forest/70 font-medium">
             {config.restaurantName} • {config.eventName}
           </p>
-          <p className="text-[11px] text-forest/50">
-            {t("Schichtbeginn:", "Shift Started:")} {formatShiftStart(shiftStartedAt)}
-          </p>
+          <div className="flex items-center justify-center gap-3 text-[11px] text-forest/60 pt-1">
+            <span>{t("Schichtbeginn:", "Shift Started:")} {formatShiftStart(shiftStartedAt)}</span>
+          </div>
         </div>
 
-        {/* Cash Reconciliation Summary */}
+        {/* Cash Reconciliation & Last Order Time Metric */}
         <div className="bg-white p-4 rounded-2xl border border-[#eadfce] space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-forest/70 border-b border-[#eadfce] pb-2">
             {t("Kassensturz & Soll-Bestand", "Cash Reconciliation")}
@@ -113,6 +125,17 @@ export function ShiftSummaryModal({
               {formatPrice(metrics.totalCents)}
             </div>
           </div>
+
+          {/* Last Sale Timestamp Banner */}
+          <div className="flex items-center justify-between px-3 py-2 bg-cream/60 rounded-xl text-xs">
+            <span className="flex items-center gap-1.5 text-forest/70 font-medium">
+              <Clock className="w-3.5 h-3.5 text-amber-600" />
+              {t("Letzte Bestellung:", "Last Order:")}
+            </span>
+            <span className="font-bold text-forest font-mono">
+              {formatLastOrderTime(lastOrderTimestamp)}
+            </span>
+          </div>
         </div>
 
         {/* Itemized Sales Breakdown Table */}
@@ -122,7 +145,7 @@ export function ShiftSummaryModal({
               {t("Verkaufte Artikel", "Items Sold Breakdown")}
             </h4>
             <span className="text-xs font-bold text-forest/60">
-              {metrics.orderCount} {t("Portionen", "Items")}
+              {metrics.orderCount} {t("Bestellungen", "Orders")}
             </span>
           </div>
 

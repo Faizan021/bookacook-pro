@@ -26,42 +26,55 @@ function RestaurantFestivalProductionPage() {
     pinnedItemIds: [],
   };
 
-  // Default menu items for partner festival POS
   const items: FestivalItem[] = [
     {
       id: "p1",
       name: "Hauptgericht / Special",
       priceCents: 1000,
+      category: "food",
+      icon: "🍲",
+      badge: "🔥 Best Seller",
       description: "Tages-Special am Event-Stand",
     },
     {
       id: "p2",
       name: "Beilage / Snack",
       priceCents: 400,
+      category: "food",
+      icon: "🍟",
       description: "Frisch zubereitete Beilage",
     },
     {
       id: "p3",
       name: "Erfrischungsgetränk 0.5L",
       priceCents: 350,
+      category: "drink",
+      icon: "🥤",
       description: "Kühles Getränk im Becher",
     },
     {
       id: "p4",
       name: "Bier / Special 0.5L",
       priceCents: 450,
+      category: "drink",
+      icon: "🍺",
       description: "Ausschank am Stand",
     },
     {
       id: "p5",
       name: "Kombi-Angebot / Menü",
       priceCents: 1400,
+      category: "special",
+      icon: "🍱",
+      badge: "⭐ Popular",
       description: "Hauptgericht + Beilage + Getränk",
     },
     {
       id: "p6",
       name: "Dessert / Süßspeise",
       priceCents: 300,
+      category: "special",
+      icon: "🍦",
       description: "Süßer Snack für zwischendurch",
     },
   ];
