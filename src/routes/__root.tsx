@@ -15,7 +15,6 @@ import { I18nProvider } from "../i18n/I18nProvider";
 import { CookieBanner } from "../components/CookieBanner";
 import { Analytics } from "@vercel/analytics/react";
 
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -202,14 +201,54 @@ function RootComponent() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      Promise.all([
-        import("@sentry/react"),
-        import("../utils/posthog"),
-        import("posthog-js"),
-      ])
+      // Safety shim: Instagram's in-app browser injects a JS bridge that calls
+      // window.webkit.messageHandlers.*  If that object is absent (we are a web
+      // app, not a native iOS host), it throws a TypeError that pollutes Sentry
+      // and crashes nothing meaningful. Provide a no-op Proxy so the call
+      // silently succeeds instead of throwing.
+      // See: Sentry issue 57f05768 — Instagram 440.0.0 / iOS / sendDataToNative
+      type WebkitWindow = Window & { webkit?: { messageHandlers: object } };
+      if (!(window as WebkitWindow).webkit) {
+        const noOp = { postMessage: () => {} };
+        const handlersProxy = new Proxy({}, { get: () => noOp });
+        (window as WebkitWindow).webkit = { messageHandlers: handlersProxy };
+      }
+
+      Promise.all([import("@sentry/react"), import("../utils/posthog"), import("posthog-js")])
         .then(([SentryModule, { initPostHog }, posthogModule]) => {
           SentryModule.init({
             dsn: "https://9a2bcf7470d25fb0f32cdae74a09c335@o4511677378002944.ingest.de.sentry.io/4511677391306832",
+
+            // --- Third-party browser injection noise ---
+            // These errors originate from scripts injected by Instagram, Facebook
+            // WebView, Chrome extensions, or iOS WKWebView bridges — not from
+            // Speisely code. They cannot be fixed from our codebase.
+            ignoreErrors: [
+              // Instagram / WKWebView native bridge (Sentry issue 57f05768)
+              /window\.webkit\.messageHandlers/,
+              "undefined is not an object (evaluating 'window.webkit.messageHandlers')",
+              // Generic ResizeObserver timing noise (browser bug, not actionable)
+              "ResizeObserver loop limit exceeded",
+              "ResizeObserver loop completed with undelivered notifications",
+              // Firefox cross-origin extension noise
+              "NS_ERROR_FAILURE",
+              // Safari private-mode storage access noise
+              "The operation is insecure",
+            ],
+
+            // Drop events whose stack traces originate entirely outside speisely.de
+            // (i.e. injected by extensions, in-app browsers, or third-party SDKs).
+            beforeSend(event) {
+              const frames = event.exception?.values?.[0]?.stacktrace?.frames ?? [];
+              const hasOwnFrame = frames.some(
+                (f) => f.filename && f.filename.includes("speisely.de"),
+              );
+              // If every frame is from an external origin, discard the event.
+              if (frames.length > 0 && !hasOwnFrame) {
+                return null;
+              }
+              return event;
+            },
           });
           initPostHog();
           posthogModule.default.capture("$pageview", {

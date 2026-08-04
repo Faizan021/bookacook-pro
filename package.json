@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "node scripts/verify_agent_graph.js && vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "smoke:test": "node scripts/smoke_test.js",
     "verify:graph": "node scripts/verify_agent_graph.js",
+    "smoke:test": "node scripts/smoke_test.js",
+    "smoke:full": "node scripts/smoke-test.mjs",
+    "verify:deploy": "node scripts/smoke-test.mjs",
+    "check": "node scripts/verify_agent_graph.js && tsc --noEmit && vite build && node scripts/smoke_test.js",
     "prepare": "husky"
   },
   "dependencies": {
