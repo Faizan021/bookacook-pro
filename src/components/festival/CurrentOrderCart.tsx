@@ -1,11 +1,13 @@
 import { useI18n } from "@/i18n/I18nProvider";
-import { Banknote, Trash2, Plus, Minus, ShoppingCart } from "lucide-react";
+import { Banknote, Trash2, Plus, Minus, ShoppingCart, Hash } from "lucide-react";
 import type { CartItemEntry } from "@/lib/festival/useFestivalPos";
 
 interface CurrentOrderCartProps {
   cartItems: CartItemEntry[];
   totalCents: number;
   totalQuantity: number;
+  tableNumber: string;
+  onTableNumberChange: (value: string) => void;
   onUpdateQuantity: (itemId: string, delta: number) => void;
   onRemoveItem: (itemId: string) => void;
   onClearCart: () => void;
@@ -16,6 +18,8 @@ export function CurrentOrderCart({
   cartItems,
   totalCents,
   totalQuantity,
+  tableNumber,
+  onTableNumberChange,
   onUpdateQuantity,
   onRemoveItem,
   onClearCart,
@@ -74,6 +78,30 @@ export function CurrentOrderCart({
           <Trash2 className="w-3.5 h-3.5" />
           <span>{t("Leeren", "Clear")}</span>
         </button>
+      </div>
+
+      {/* Table Number Input — Optional, Sticky Across Orders */}
+      <div className="flex items-center gap-3 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-2xl">
+        <Hash className="w-4 h-4 text-amber-700 shrink-0" />
+        <div className="flex flex-col flex-1 min-w-0">
+          <label htmlFor="festival-table-number" className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 leading-none mb-1">
+            {t("Tischnummer (optional)", "Table Number (optional)")}
+          </label>
+          <input
+            id="festival-table-number"
+            type="text"
+            value={tableNumber}
+            onChange={(e) => onTableNumberChange(e.target.value)}
+            placeholder={t("z.B. Tisch 4, T-04, Stand A ...", "e.g. Table 4, T-04, Stand A ...")}
+            maxLength={20}
+            className="bg-transparent text-sm font-bold text-forest placeholder:text-amber-700/40 outline-none border-none w-full"
+          />
+        </div>
+        {tableNumber.trim() && (
+          <span className="shrink-0 text-xs font-extrabold bg-amber-200 text-amber-900 px-2.5 py-1 rounded-xl border border-amber-300 font-display whitespace-nowrap">
+            {tableNumber.trim()}
+          </span>
+        )}
       </div>
 
       {/* Cart Item Detail Rows (Shows 4 × Item @ Price = Total) */}
@@ -148,7 +176,14 @@ export function CurrentOrderCart({
       >
         <div className="flex items-center gap-2.5">
           <Banknote className="w-7 h-7 text-emerald-200" />
-          <span className="tracking-tight">{t("💵 Pay Cash", "💵 Pay Cash")}</span>
+          <div className="flex flex-col items-start leading-tight">
+            <span className="tracking-tight">{t("💵 Pay Cash", "💵 Pay Cash")}</span>
+            {tableNumber.trim() && (
+              <span className="text-[11px] font-bold text-emerald-200 font-mono">
+                {tableNumber.trim()}
+              </span>
+            )}
+          </div>
         </div>
         <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300">
           {formattedTotal}

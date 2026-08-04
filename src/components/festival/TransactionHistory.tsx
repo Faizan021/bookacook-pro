@@ -124,10 +124,14 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
                 }`}
               >
                 {/* Order ID & Relative Timestamp & Status Pill */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-extrabold font-display text-sm">{order.orderId}</span>
                   <span className="text-forest/60 text-[11px] font-medium">{formatRelativeTimestamp(order.timestamp)}</span>
-                  
+                  {order.tableNumber && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full border border-amber-300">
+                      🪑 {order.tableNumber}
+                    </span>
+                  )}
                   {/* Status Pills */}
                   {isVoided ? (
                     <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full border border-rose-300">

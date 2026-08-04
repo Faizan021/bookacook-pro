@@ -31,6 +31,7 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
   const [selectedNotes, setSelectedNotes] = useState<string>("");
   const [activeItemForCustomization, setActiveItemForCustomization] = useState<FestivalItem | null>(null);
+  const [tableNumber, setTableNumber] = useState<string>("");
 
   // Active Multi-Item Cart for Current Customer
   const [cartItems, setCartItems] = useState<CartItemEntry[]>([]);
@@ -190,6 +191,7 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
         timestamp: new Date().toISOString(),
         restaurantId: config.restaurantId,
         paymentMethod,
+        tableNumber: tableNumber.trim() || undefined,
         items: orderItems,
         totalCents,
         status: "Recorded",
@@ -201,7 +203,7 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
         orders: [newOrder, ...prev.orders],
       }));
 
-      // Clear active cart for next customer
+      // Clear active cart for next customer (keep table number sticky)
       setCartItems([]);
 
       const formattedPrice = (totalCents / 100).toFixed(2);
@@ -213,9 +215,10 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
         totalCents,
         paymentMethod,
         itemCount: orderItems.reduce((a, b) => a + b.quantity, 0),
+        tableNumber: tableNumber.trim() || undefined,
       });
     },
-    [cartItems, shiftData.lastOrderNumber, config.restaurantId]
+    [cartItems, shiftData.lastOrderNumber, config.restaurantId, tableNumber]
   );
 
   // Void single most recent active order
@@ -271,6 +274,8 @@ export function useFestivalPos({ config, storage = defaultFestivalStorage }: Use
     removeFromCart,
     clearCart,
     checkoutCart,
+    tableNumber,
+    setTableNumber,
     selectedQuantity,
     setSelectedQuantity,
     selectedNotes,

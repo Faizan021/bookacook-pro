@@ -79,6 +79,16 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
             </div>
           </div>
 
+          {/* Table Number (shown only when present) */}
+          {order.tableNumber && (
+            <div className="flex justify-between items-center text-[11px] border-b border-dashed border-forest/30 pb-3">
+              <span className="text-forest/60">Tischnummer:</span>
+              <span className="font-extrabold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">
+                🪑 {order.tableNumber}
+              </span>
+            </div>
+          )}
+
           {/* Order ID & Payment Method */}
           <div className="flex justify-between items-center text-[11px] font-bold">
             <span>Bestellung: {order.orderId}</span>

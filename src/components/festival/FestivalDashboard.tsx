@@ -42,6 +42,8 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
     removeFromCart,
     clearCart,
     checkoutCart,
+    tableNumber,
+    setTableNumber,
     selectedQuantity,
     setSelectedQuantity,
     selectedNotes,
@@ -196,6 +198,8 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
           cartItems={cartItems}
           totalCents={cartTotalCents}
           totalQuantity={cartTotalQuantity}
+          tableNumber={tableNumber}
+          onTableNumberChange={setTableNumber}
           onUpdateQuantity={updateCartQuantity}
           onRemoveItem={removeFromCart}
           onClearCart={clearCart}

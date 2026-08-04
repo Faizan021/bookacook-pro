@@ -29,6 +29,7 @@ export interface FestivalOrder {
   restaurantId: string;
   userId?: string;
   paymentMethod: "cash" | "card";
+  tableNumber?: string; // e.g. "Tisch 4", "T-04", optional — festivals can be free-standing
   items: FestivalOrderItem[];
   totalCents: number;
   status: FestivalOrderState;
