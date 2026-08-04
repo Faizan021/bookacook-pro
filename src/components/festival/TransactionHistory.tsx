@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { History, RotateCcw, Banknote, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
+import { History, RotateCcw, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import type { FestivalOrder } from "@/lib/festival/types";
 
 interface TransactionHistoryProps {
@@ -23,10 +23,25 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
     });
   };
 
-  const formatTime = (isoString: string) => {
+  const formatRelativeTimestamp = (isoString: string) => {
     try {
       const date = new Date(isoString);
-      return date.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+      const now = new Date();
+      const isToday = date.toDateString() === now.toDateString();
+      const timeStr = date.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+
+      if (isToday) {
+        return `Heute • ${timeStr}`;
+      }
+
+      const yesterday = new Date();
+      yesterday.setDate(now.getDate() - 1);
+      if (date.toDateString() === yesterday.toDateString()) {
+        return `Gestern • ${timeStr}`;
+      }
+
+      const dateStr = date.toLocaleDateString("de-DE", { day: "2-digit", month: "short" });
+      return `${dateStr} • ${timeStr}`;
     } catch {
       return "--:--";
     }
@@ -108,10 +123,10 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
                     : "bg-[#fdfaf5] border-[#eadfce] text-forest"
                 }`}
               >
-                {/* Order ID & Time & Status Pill */}
+                {/* Order ID & Relative Timestamp & Status Pill */}
                 <div className="flex items-center gap-2">
                   <span className="font-extrabold font-display text-sm">{order.orderId}</span>
-                  <span className="text-forest/60 text-[11px] font-mono">{formatTime(order.timestamp)}</span>
+                  <span className="text-forest/60 text-[11px] font-medium">{formatRelativeTimestamp(order.timestamp)}</span>
                   
                   {/* Status Pills */}
                   {isVoided ? (
@@ -129,7 +144,7 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
 
                 {/* Items & Total */}
                 <div className="flex items-center gap-3">
-                  <span className="truncate max-w-[140px] sm:max-w-[220px] font-medium text-forest/80">
+                  <span className="truncate max-w-[130px] sm:max-w-[210px] font-medium text-forest/80">
                     {order.items.map((i) => `${i.quantity}x ${i.name}`).join(", ")}
                   </span>
                   <span className="font-extrabold text-sm text-forest font-display">

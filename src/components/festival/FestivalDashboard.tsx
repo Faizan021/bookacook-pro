@@ -7,9 +7,10 @@ import { CurrentOrderCart } from "./CurrentOrderCart";
 import { QuantitySelector } from "./QuantitySelector";
 import { TransactionHistory } from "./TransactionHistory";
 import { ShiftSummaryModal } from "./ShiftSummaryModal";
+import { ReceiptModal } from "./ReceiptModal";
 import { useFestivalPos } from "@/lib/festival/useFestivalPos";
-import type { FestivalEventConfig, FestivalItem } from "@/lib/festival/types";
-import { FileText, Sparkles, Store, Globe, CheckCircle2, HardDrive, Printer, ShieldCheck } from "lucide-react";
+import type { FestivalEventConfig, FestivalItem, FestivalOrder } from "@/lib/festival/types";
+import { FileText, Sparkles, Store, Globe, CheckCircle2, HardDrive, Printer, ShieldCheck, Clock } from "lucide-react";
 import { toast } from "sonner";
 
 interface FestivalDashboardProps {
@@ -20,6 +21,7 @@ interface FestivalDashboardProps {
 export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
   const { t, lang, setLang } = useI18n();
   const [shiftSummaryOpen, setShiftSummaryOpen] = useState(false);
+  const [receiptOrder, setReceiptOrder] = useState<FestivalOrder | null>(null);
 
   // Success Overlay Transient State
   const [successOverlay, setSuccessOverlay] = useState<{
@@ -117,7 +119,7 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
           </div>
         )}
 
-        {/* Branding Header & Live Status */}
+        {/* Subtle & Clean Branding Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 sm:p-5 rounded-3xl border border-[#eadfce] shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-forest text-white grid place-items-center font-bold text-xl shadow-md">
@@ -132,14 +134,19 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
                 <h1 className="font-display font-bold text-lg sm:text-xl text-forest">
                   {config.restaurantName}
                 </h1>
-                {/* Product Branding Badge */}
+                {/* Subtle Product Branding Badge */}
                 <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300 shadow-xs">
                   <span>🎪 FESTIVAL MODE</span>
                 </span>
               </div>
-              <p className="text-xs text-forest/70 font-medium pt-0.5">
-                {config.eventName} {config.eventNameSecondary ? `• ${config.eventNameSecondary}` : ""}
-              </p>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-forest/70 font-medium pt-0.5">
+                <span>{config.eventName} {config.eventNameSecondary ? `• ${config.eventNameSecondary}` : ""}</span>
+                <span className="hidden sm:inline text-forest/30">•</span>
+                <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-forest/60">
+                  <Clock className="w-3 h-3 text-amber-600" />
+                  {t("Schicht: Heute", "Shift: Today")}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -212,7 +219,7 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
           </div>
           <span className="flex items-center gap-1 font-bold text-emerald-800">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Speisely Festival OS v1.2</span>
+            <span>Speisely Festival OS v1.3</span>
           </span>
         </div>
 
@@ -227,7 +234,7 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
           onCancel={() => setActiveItemForCustomization(null)}
         />
 
-        {/* Shift Summary Modal */}
+        {/* Prominent Official Shift Summary Report Modal */}
         <ShiftSummaryModal
           isOpen={shiftSummaryOpen}
           config={config}
@@ -237,6 +244,14 @@ export function FestivalDashboard({ config, items }: FestivalDashboardProps) {
           itemizedSales={itemizedSales}
           onClose={() => setShiftSummaryOpen(false)}
           onResetShift={resetShift}
+        />
+
+        {/* Printable Digital Receipt Preview Modal */}
+        <ReceiptModal
+          isOpen={!!receiptOrder}
+          order={receiptOrder}
+          config={config}
+          onClose={() => setReceiptOrder(null)}
         />
       </div>
     </SiteShell>

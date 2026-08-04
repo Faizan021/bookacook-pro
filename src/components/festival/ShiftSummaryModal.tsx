@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { X, FileText, AlertTriangle, RotateCcw, Banknote, Clock } from "lucide-react";
+import { X, FileText, AlertTriangle, RotateCcw, Banknote, Clock, Calendar, Store, MapPin } from "lucide-react";
 import type { FestivalEventConfig } from "@/lib/festival/types";
 
 interface ShiftSummaryModalProps {
@@ -44,28 +44,32 @@ export function ShiftSummaryModal({
     });
   };
 
-  const formatShiftStart = (iso: string) => {
+  const formatProminentDate = (iso: string) => {
     try {
       const date = new Date(iso);
-      return date.toLocaleString("de-DE", {
+      return date.toLocaleDateString("de-DE", {
+        weekday: "long",
         day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
+        month: "long",
+        year: "numeric",
       });
     } catch {
       return iso;
     }
   };
 
-  const formatLastOrderTime = (iso?: string) => {
-    if (!iso) return t("Keine Verkäufe", "No sales yet");
+  const formatTimeOnly = (iso: string) => {
     try {
       const date = new Date(iso);
       return date.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) + " Uhr";
     } catch {
       return "--:--";
     }
+  };
+
+  const formatLastOrderTime = (iso?: string) => {
+    if (!iso) return t("Keine Verkäufe", "No sales yet");
+    return formatTimeOnly(iso);
   };
 
   const handleExecuteReset = async () => {
@@ -89,29 +93,47 @@ export function ShiftSummaryModal({
           <X className="w-5 h-5" />
         </button>
 
-        {/* Modal Header */}
-        <div className="text-center space-y-1">
-          <div className="mx-auto w-12 h-12 rounded-full bg-forest/10 grid place-items-center mb-2 text-forest">
+        {/* Official Prominent Report Header */}
+        <div className="text-center space-y-2 border-b border-[#eadfce] pb-4">
+          <div className="mx-auto w-12 h-12 rounded-full bg-forest text-cream grid place-items-center mb-1 shadow-md">
             <FileText className="w-6 h-6" />
           </div>
-          <h3 className="text-2xl font-bold font-display text-forest">
-            {t("Schichtabschluss", "Shift Summary")}
-          </h3>
-          <p className="text-xs text-forest/70 font-medium">
-            {config.restaurantName} • {config.eventName}
-          </p>
-          <div className="flex items-center justify-center gap-3 text-[11px] text-forest/60 pt-1">
-            <span>{t("Schichtbeginn:", "Shift Started:")} {formatShiftStart(shiftStartedAt)}</span>
+          <span className="inline-block text-[10px] font-extrabold uppercase tracking-widest text-emerald-900 bg-emerald-100 border border-emerald-300 px-3 py-0.5 rounded-full">
+            {t("Offizieller Schichtabschluss", "Official Shift Report")}
+          </span>
+          
+          {/* Prominent Date Display */}
+          <div className="pt-1">
+            <h3 className="text-2xl font-extrabold font-display text-forest flex items-center justify-center gap-2">
+              <Calendar className="w-5 h-5 text-amber-600" />
+              <span>{formatProminentDate(shiftStartedAt)}</span>
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-forest/80 font-semibold pt-1">
+            <span className="flex items-center gap-1">
+              <Store className="w-3.5 h-3.5 text-forest/60" />
+              {config.restaurantName}
+            </span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-forest/60" />
+              {config.eventName} {config.eventNameSecondary ? `(${config.eventNameSecondary})` : ""}
+            </span>
+          </div>
+
+          <div className="text-[11px] font-mono text-emerald-800 bg-emerald-50 py-1 px-3 rounded-xl border border-emerald-200 inline-block">
+            {t("Schichtzeitraum:", "Shift Period:")} {formatTimeOnly(shiftStartedAt)} – {t("Live (Aktiv)", "Live")}
           </div>
         </div>
 
-        {/* Cash Reconciliation & Last Order Time Metric */}
+        {/* Cash Reconciliation & Key Metrics */}
         <div className="bg-white p-4 rounded-2xl border border-[#eadfce] space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-forest/70 border-b border-[#eadfce] pb-2">
-            {t("Kassensturz & Soll-Bestand", "Cash Reconciliation")}
+            {t("Kassensturz & Kennzahlen", "Financial Metrics")}
           </h4>
           
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex justify-between items-center">
+          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex justify-between items-center">
             <div className="space-y-0.5">
               <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-bold uppercase tracking-wider">
                 <Banknote className="w-4 h-4" />
@@ -126,13 +148,24 @@ export function ShiftSummaryModal({
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-3 text-xs pt-1">
+            <div className="p-3 rounded-xl bg-cream/60 border border-[#eadfce] space-y-0.5">
+              <span className="text-forest/60 text-[11px] font-semibold">{t("Verkaufte Portionen", "Orders Count")}</span>
+              <div className="text-lg font-extrabold text-forest font-display">{metrics.orderCount}</div>
+            </div>
+            <div className="p-3 rounded-xl bg-cream/60 border border-[#eadfce] space-y-0.5">
+              <span className="text-forest/60 text-[11px] font-semibold">{t("Ø Bon-Wert", "Avg Order Value")}</span>
+              <div className="text-lg font-extrabold text-forest font-display">{formatPrice(metrics.avgOrderCents)}</div>
+            </div>
+          </div>
+
           {/* Last Sale Timestamp Banner */}
-          <div className="flex items-center justify-between px-3 py-2 bg-cream/60 rounded-xl text-xs">
-            <span className="flex items-center gap-1.5 text-forest/70 font-medium">
+          <div className="flex items-center justify-between px-3 py-2 bg-amber-50/80 rounded-xl text-xs border border-amber-200">
+            <span className="flex items-center gap-1.5 text-amber-900 font-bold">
               <Clock className="w-3.5 h-3.5 text-amber-600" />
-              {t("Letzte Bestellung:", "Last Order:")}
+              {t("Letzte Bestellung:", "Last Sale:")}
             </span>
-            <span className="font-bold text-forest font-mono">
+            <span className="font-bold text-amber-950 font-mono">
               {formatLastOrderTime(lastOrderTimestamp)}
             </span>
           </div>
