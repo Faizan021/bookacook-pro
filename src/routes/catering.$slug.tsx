@@ -8,6 +8,7 @@ import {
   Plus,
   Minus,
   ArrowLeft,
+  ArrowRight,
   Phone,
   ShoppingBag,
   Users,
@@ -49,6 +50,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { getPublicCatererReviews } from "@/lib/reviews/public.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 import { isValidCateringCity } from "@/data/geo/taxonomy";
 
@@ -1587,7 +1589,7 @@ function CatererPage() {
                 setInquiryModalOpen(false);
                 setSuccessModalOpen(true);
                 setCart({});
-                if (isMobile) setMobileCartOpen(false);
+                if (window.innerWidth < 768) setMobileCartOpen(false);
               } catch (err: any) {
                 toast.error(
                   t("Fehler beim Senden der Anfrage: ", "Error sending inquiry: ") + err.message,
@@ -1804,7 +1806,7 @@ function CatererPage() {
             </p>
             <Link
               to="/auth"
-              search={{ email: inquiryForm.customerEmail, redirect: "/customer" }}
+              search={{ redirect: "/customer" } as any}
               className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-forest underline hover:text-emerald-700"
             >
               <span>{t("Zum Kunden-Dashboard / Anmelden", "Go to Customer Dashboard / Sign In")}</span>

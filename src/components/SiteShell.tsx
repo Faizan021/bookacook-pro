@@ -32,7 +32,7 @@ export function SiteShell({ children, dotted = true }: { children: ReactNode; do
 
     return () => {
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      if (lenisInstance) lenisInstance.destroy();
+      if (lenisInstance) lenisInstance.destroy?.();
     };
   }, []);
 

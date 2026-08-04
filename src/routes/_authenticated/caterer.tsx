@@ -2059,7 +2059,7 @@ function BusinessProfileSection() {
           service_categories: serviceCategories.join(","),
           certifications,
           use_generated_branding: useGeneratedBranding,
-        },
+        } as any,
       });
       toast.success("Settings saved successfully!");
       qc.invalidateQueries({ queryKey: ["caterer"] });

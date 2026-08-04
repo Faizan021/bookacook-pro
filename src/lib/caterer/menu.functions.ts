@@ -173,7 +173,7 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
       const query = supabaseAdmin
         .from("caterers")
         .select(
-          "id, owner_id, name, slug, custom_domain, certifications, service_categories, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text, approval_status",
+          "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text, approval_status",
         );
 
       let catererRes = await (

@@ -19,6 +19,7 @@ export const Route = createFileRoute("/restaurant/ort/$city")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
     const { seoData, indexStatus, location, searchParams } = loaderData;
+    if (!location) return { meta: [] };
 
     const isFiltered = Object.keys(searchParams).length > 0;
     const meetsThreshold =

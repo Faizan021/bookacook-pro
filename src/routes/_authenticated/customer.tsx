@@ -347,7 +347,7 @@ function BriefCard({
       </dl>
       {item.notes && <p className="mt-3 text-sm italic text-muted-foreground">"{item.notes}"</p>}
 
-      {(item.status === "quoted" || (item.status === "quote_requested" && (item.budget_cents || 0) > 0)) && item.status !== "booked" && item.status !== "confirmed" && (
+      {(item.status === "quoted" || (item.status === "quote_requested" && (item.budget_cents || 0) > 0)) && (item.status as string) !== "booked" && (item.status as string) !== "confirmed" && (
         <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-cream/20 to-emerald-50 border border-emerald-300 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-left shadow-sm">
           <div className="space-y-1">
             <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full border border-emerald-200">

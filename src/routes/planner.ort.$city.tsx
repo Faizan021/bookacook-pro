@@ -13,7 +13,7 @@ export const Route = createFileRoute("/planner/ort/$city")({
   loaderDeps: ({ search }) => search,
   loader: async ({ params, deps }) => {
     const data = await getGeoPageData({ data: { role: "planner", citySlug: params.city } });
-    if (data.indexStatus === "404") {
+    if ((data.indexStatus as string) === "404") {
       throw notFound();
     }
     return { ...data, searchParams: deps };
@@ -21,6 +21,7 @@ export const Route = createFileRoute("/planner/ort/$city")({
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
     const { seoData, indexStatus, location, searchParams } = loaderData;
+    if (!location) return { meta: [] };
 
     const isFiltered = Object.keys(searchParams).length > 0;
     const meetsThreshold = (loaderData?.vendors?.length ?? 0) >= 3 && ((seoData as any)?.intro_md?.length ?? 0) >= 150;

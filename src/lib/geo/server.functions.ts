@@ -13,13 +13,14 @@ export const getGeoPageData = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // 1. Location Validity Check
-    const { data: location, error: locErr } = await supabaseAdmin
+    const { data: location } = await supabaseAdmin
       .from("german_locations")
       .select("*")
       .ilike("name", data.citySlug.replace(/-/g, " "))
       .limit(1)
       .maybeSingle();
 
+    // locationObj is always non-null: either from DB or from the fallback below.
     let locationObj = location;
     if (!locationObj) {
       const cityNameFormatted = data.citySlug
@@ -27,12 +28,17 @@ export const getGeoPageData = createServerFn({ method: "GET" })
         .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(" ");
 
+      // Cast to `any` so we can supply a minimal shape without matching the full
+      // Supabase-generated row type (slug, postal_code etc. may not exist on the schema).
       locationObj = {
         id: data.citySlug,
         name: cityNameFormatted,
         state: "Deutschland",
-        slug: data.citySlug,
-      };
+        postal_code: null,
+        type: null,
+        lat: null,
+        lng: null,
+      } as any;
     }
 
     // 2. SEO Content Lookup
@@ -58,7 +64,7 @@ export const getGeoPageData = createServerFn({ method: "GET" })
             "id, name, slug, logo_url, banner_image_url, cuisine_type, min_order_amount, delivery_fee, accepts_pickup, accepts_delivery, city, description, service_areas",
           )
           .eq("is_published", true)
-          .ilike("city", `%${locationObj.name}%`);
+          .ilike("city", `%${locationObj!.name}%`);
         vendors = res || [];
 
         if (vendors.length === 0) {
@@ -77,7 +83,7 @@ export const getGeoPageData = createServerFn({ method: "GET" })
           .select(
             "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
           )
-          .ilike("city", `%${locationObj.name}%`);
+          .ilike("city", `%${locationObj!.name}%`);
         vendors = res || [];
 
         if (vendors.length === 0) {
@@ -95,7 +101,7 @@ export const getGeoPageData = createServerFn({ method: "GET" })
           .select(
             "id, name, slug, logo_url, banner_image_url, min_delivery_cents, delivery_fee_cents, city, description",
           )
-          .ilike("city", `%${locationObj.name}%`);
+          .ilike("city", `%${locationObj!.name}%`);
         vendors = res || [];
 
         if (vendors.length === 0) {

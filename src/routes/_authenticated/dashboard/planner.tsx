@@ -62,6 +62,16 @@ import { PlannerOnlinePresence } from "@/components/vendor/PlannerOnlinePresence
 
 
 
+function isAiPresetImage(url?: string | null): boolean {
+  if (!url) return false;
+  return (
+    url.includes("/images/") ||
+    url.includes("banner_") ||
+    url.includes("preset") ||
+    url.includes("hero_")
+  );
+}
+
 export const Route = createFileRoute("/_authenticated/dashboard/planner")({
   ssr: false,
   validateSearch: (
