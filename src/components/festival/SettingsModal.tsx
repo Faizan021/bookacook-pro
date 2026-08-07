@@ -68,7 +68,7 @@ export function SettingsModal({
 
         {/* Configuration Sections */}
         <div className="space-y-4 text-xs">
-          {/* Restaurant & Festival Info Read-only Display */}
+          {/* Restaurant & Festival Info Display */}
           <div className="bg-white p-3.5 rounded-2xl border border-[#eadfce] space-y-2">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-forest/60 flex items-center gap-1.5">
               <Store className="w-3.5 h-3.5 text-forest/50" />

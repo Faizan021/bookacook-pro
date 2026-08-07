@@ -8,6 +8,7 @@ import { TransactionHistory } from "./TransactionHistory";
 import { ShiftSummaryModal } from "./ShiftSummaryModal";
 import { SettingsModal } from "./SettingsModal";
 import { ReceiptModal } from "./ReceiptModal";
+import { StartShiftModal } from "./StartShiftModal";
 import { useFestivalCashRegister } from "@/lib/festival/useFestivalCashRegister";
 import type { FestivalEventConfig, FestivalItem, FestivalOrder } from "@/lib/festival/types";
 import { FileText, Settings as SettingsIcon, Globe, CheckCircle2, HardDrive, Printer, ShieldCheck, Clock } from "lucide-react";
@@ -103,17 +104,16 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
   };
 
   const formatOperatingDateDisplay = (isoStr?: string) => {
-    if (!isoStr) return "";
+    const targetDate = isoStr ? new Date(isoStr) : new Date();
     try {
-      const date = new Date(isoStr);
-      return date.toLocaleDateString("de-DE", {
+      return targetDate.toLocaleDateString("de-DE", {
         weekday: "long",
         day: "2-digit",
         month: "long",
         year: "numeric",
       });
     } catch {
-      return isoStr;
+      return isoStr || "";
     }
   };
 
@@ -128,8 +128,19 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
     );
   }
 
+  // OPERATIONAL REQUIREMENT: If no active shift exists, render StartShiftModal!
+  const isShiftActive = shiftData !== null && shiftData.status === "active";
+
   return (
     <div className="min-h-screen bg-[#fdfaf5] text-forest font-sans select-none px-3 py-4 sm:p-6 max-w-6xl mx-auto space-y-5 pb-20 relative">
+      {/* Required Start Shift Overlay when no active shift is running */}
+      <StartShiftModal
+        isOpen={!isShiftActive}
+        config={config}
+        operatingDateStr={formatOperatingDateDisplay()}
+        onStartShift={startNewShift}
+      />
+
       {/* Satisfying Payment Success Overlay */}
       {successOverlay && (
         <div className="fixed inset-0 z-50 bg-emerald-950/70 backdrop-blur-md grid place-items-center animate-in fade-in zoom-in-95 duration-150">
