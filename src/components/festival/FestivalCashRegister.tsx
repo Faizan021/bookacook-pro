@@ -9,9 +9,11 @@ import { ShiftSummaryModal } from "./ShiftSummaryModal";
 import { SettingsModal } from "./SettingsModal";
 import { ReceiptModal } from "./ReceiptModal";
 import { StartShiftModal } from "./StartShiftModal";
+import { PwaInstallHelpModal } from "./PwaInstallHelpModal";
 import { useFestivalCashRegister } from "@/lib/festival/useFestivalCashRegister";
+import { usePwaInstall } from "@/lib/festival/usePwaInstall";
 import type { FestivalEventConfig, FestivalItem, FestivalOrder } from "@/lib/festival/types";
-import { FileText, Settings as SettingsIcon, Globe, CheckCircle2, HardDrive, Printer, ShieldCheck, Clock, Lock, Play } from "lucide-react";
+import { FileText, Settings as SettingsIcon, Globe, CheckCircle2, HardDrive, Printer, ShieldCheck, Clock, Lock, Play, Smartphone } from "lucide-react";
 import { toast } from "sonner";
 
 interface FestivalCashRegisterProps {
@@ -24,6 +26,9 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
   const [shiftSummaryOpen, setShiftSummaryOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [receiptOrder, setReceiptOrder] = useState<FestivalOrder | null>(null);
+
+  // PWA Install Hook & Handlers
+  const { isInstalled, promptInstall, showHelpModal, closeHelpModal } = usePwaInstall();
 
   // Payment Success Overlay Transient State
   const [successOverlay, setSuccessOverlay] = useState<{
@@ -150,6 +155,12 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
         onStartShift={startNewShift}
       />
 
+      {/* PWA Installation Instructions Modal for iOS Safari / Unsupported Browsers */}
+      <PwaInstallHelpModal
+        isOpen={showHelpModal}
+        onClose={closeHelpModal}
+      />
+
       {/* Satisfying Payment Success Overlay */}
       {successOverlay && (
         <div className="fixed inset-0 z-50 bg-emerald-950/70 backdrop-blur-md grid place-items-center animate-in fade-in zoom-in-95 duration-150">
@@ -191,11 +202,24 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
           </div>
 
           <div className="flex items-center gap-1.5">
+            {/* PWA App Install Button (Hidden when running in standalone installed app mode) */}
+            {!isInstalled && (
+              <button
+                type="button"
+                onClick={promptInstall}
+                className="h-11 px-3 sm:px-3.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-950 font-extrabold text-xs hover:bg-amber-200 transition cursor-pointer flex items-center gap-1.5 shadow-xs shrink-0 print:hidden"
+                title={t("App auf dem Gerät installieren", "Install App on device")}
+              >
+                <Smartphone className="w-4 h-4 text-amber-800" />
+                <span>{t("📲 App installieren", "📲 Install App")}</span>
+              </button>
+            )}
+
             {/* Settings Button (44px target) */}
             <button
               type="button"
               onClick={() => setSettingsOpen(true)}
-              className="w-11 h-11 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold hover:bg-forest/10 transition cursor-pointer flex items-center justify-center"
+              className="w-11 h-11 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold hover:bg-forest/10 transition cursor-pointer flex items-center justify-center print:hidden"
               title="Settings"
             >
               <SettingsIcon className="w-4.5 h-4.5" />
@@ -205,7 +229,7 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
             <button
               type="button"
               onClick={() => setLang(lang === "de" ? "en" : "de")}
-              className="h-11 px-3 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer flex items-center gap-1"
+              className="h-11 px-3 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer flex items-center gap-1 print:hidden"
             >
               <Globe className="w-4 h-4" />
               <span>{lang.toUpperCase()}</span>
@@ -215,7 +239,7 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
             <button
               type="button"
               onClick={() => setShiftSummaryOpen(true)}
-              className="h-11 px-3.5 rounded-xl bg-forest text-white hover:bg-forest/90 font-bold text-xs shadow-sm transition cursor-pointer flex items-center gap-1.5"
+              className="h-11 px-3.5 rounded-xl bg-forest text-white hover:bg-forest/90 font-bold text-xs shadow-sm transition cursor-pointer flex items-center gap-1.5 print:hidden"
             >
               <FileText className="w-4 h-4" />
               <span className="hidden sm:inline">{t("Schichtbericht", "Shift Report")}</span>
