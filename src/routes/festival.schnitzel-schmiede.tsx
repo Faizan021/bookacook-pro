@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FestivalDashboard } from "@/components/festival/FestivalDashboard";
+import { FestivalCashRegister } from "@/components/festival/FestivalCashRegister";
 import type { FestivalEventConfig, FestivalItem } from "@/lib/festival/types";
 
 const SCHNITZEL_SCHMIEDE_CONFIG: FestivalEventConfig = {
@@ -67,16 +67,16 @@ const SCHNITZEL_SCHMIEDE_ITEMS: FestivalItem[] = [
 export const Route = createFileRoute("/festival/schnitzel-schmiede")({
   head: () => ({
     meta: [
-      { title: "Schnitzel Schmiede — Speisely Festival Mode" },
-      { name: "description", content: "Speisely Festival Mode für Schnellverkauf & Schichtabschluss" },
+      { title: "Schnitzel Schmiede — Festival Cash Register" },
+      { name: "description", content: "Schnitzel Schmiede Festival Cash Register Pilot" },
     ],
   }),
-  component: SchnitzelSchmiedeFestivalDemoPage,
+  component: SchnitzelSchmiedeFestivalRegisterPage,
 });
 
-function SchnitzelSchmiedeFestivalDemoPage() {
+function SchnitzelSchmiedeFestivalRegisterPage() {
   return (
-    <FestivalDashboard
+    <FestivalCashRegister
       config={SCHNITZEL_SCHMIEDE_CONFIG}
       items={SCHNITZEL_SCHMIEDE_ITEMS}
     />

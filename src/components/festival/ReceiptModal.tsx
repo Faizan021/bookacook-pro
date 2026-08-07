@@ -1,6 +1,8 @@
 import { useI18n } from "@/i18n/I18nProvider";
-import { X, Printer, CheckCircle2 } from "lucide-react";
+import { X, Printer } from "lucide-react";
 import type { FestivalOrder, FestivalEventConfig } from "@/lib/festival/types";
+import { defaultPrinterAdapter } from "@/lib/festival/printer";
+import { toast } from "sonner";
 
 interface ReceiptModalProps {
   isOpen: boolean;
@@ -44,8 +46,16 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
     }
   };
 
-  const handlePrintTrigger = () => {
-    window.print();
+  const handlePrintTrigger = async () => {
+    try {
+      const success = await defaultPrinterAdapter.printReceipt(order, config);
+      if (!success) {
+        toast.error("Beleg konnte nicht gedruckt werden. Erneut versuchen.");
+      }
+    } catch (err) {
+      console.error("Print receipt error:", err);
+      toast.error("Beleg konnte nicht gedruckt werden.");
+    }
   };
 
   return (
@@ -58,13 +68,16 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
           <X className="w-5 h-5" />
         </button>
 
-        {/* Digital Thermal Receipt Preview Box */}
+        {/* Digital 80mm Thermal Receipt Preview Box */}
         <div className="bg-[#fcfbfa] p-5 rounded-2xl border border-[#eadfce] font-mono text-xs space-y-4 shadow-inner">
           {/* Header */}
           <div className="text-center space-y-1 border-b border-dashed border-forest/30 pb-3">
-            <h3 className="font-extrabold text-base tracking-wider uppercase">{config.restaurantName}</h3>
-            <p className="text-[11px] text-forest/70">{config.eventName}</p>
-            {config.eventNameSecondary && <p className="text-[10px] text-forest/60">{config.eventNameSecondary}</p>}
+            <h3 className="font-extrabold text-base tracking-wider uppercase">
+              {order.restaurantNameSnapshot || config.restaurantName}
+            </h3>
+            <p className="text-[11px] text-forest/70">
+              {order.eventNameSnapshot || config.eventName}
+            </p>
           </div>
 
           {/* Mandatory Date & Time Stamp Block */}
@@ -79,12 +92,12 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
             </div>
           </div>
 
-          {/* Table Number (shown only when present) */}
+          {/* Table Number (shown only if present) */}
           {order.tableNumber && (
             <div className="flex justify-between items-center text-[11px] border-b border-dashed border-forest/30 pb-3">
-              <span className="text-forest/60">Tischnummer:</span>
+              <span className="text-forest/60">Tisch:</span>
               <span className="font-extrabold text-amber-900 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">
-                🪑 {order.tableNumber}
+                🍽 {order.tableNumber}
               </span>
             </div>
           )}
@@ -93,7 +106,7 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
           <div className="flex justify-between items-center text-[11px] font-bold">
             <span>Bestellung: {order.orderId}</span>
             <span className="uppercase text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">
-              {order.paymentMethod === "cash" ? "BAR" : "KARTE"}
+              BAR
             </span>
           </div>
 

@@ -12,7 +12,7 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
   const { t } = useI18n();
   const [showVoidConfirm, setShowVoidConfirm] = useState(false);
 
-  const activeOrders = orders.filter((o) => o.status === "Recorded");
+  const activeOrders = orders.filter((o) => o.status === "completed");
   const lastActiveOrder = activeOrders[0]; // Most recent active order
   const hasActiveOrders = activeOrders.length > 0;
 
@@ -53,12 +53,12 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
   };
 
   return (
-    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#eadfce] shadow-sm space-y-4">
+    <div className="bg-white p-4 sm:p-5 rounded-3xl border border-[#eadfce] shadow-xs space-y-4">
       <div className="flex items-center justify-between border-b border-[#eadfce] pb-3">
         <div className="flex items-center gap-2">
           <History className="w-4.5 h-4.5 text-forest/70" />
           <h3 className="font-display font-bold text-base text-forest">
-            {t("Letzte Bestellungen", "Recent Transactions")}
+            {t("Letzte Verkäufe", "Recent Transactions")}
           </h3>
         </div>
 
@@ -69,7 +69,7 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 text-rose-800 hover:bg-rose-100 disabled:opacity-40 disabled:cursor-not-allowed font-bold text-xs transition border border-rose-300 shadow-xs cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5 text-rose-600" />
-          <span>{t("Letzte Stornieren", "Void Last Order")}</span>
+          <span>{t("Letzten Verkauf Stornieren", "Void Last Order")}</span>
         </button>
       </div>
 
@@ -112,11 +112,11 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
       ) : (
         <div className="space-y-2 max-h-[240px] overflow-y-auto pr-1">
           {orders.slice(0, 10).map((order) => {
-            const isVoided = order.status === "Voided";
+            const isVoided = order.status === "voided";
 
             return (
               <div
-                key={order.orderId + order.timestamp}
+                key={order.id || order.orderId + order.timestamp}
                 className={`p-3 rounded-2xl border flex items-center justify-between text-xs transition ${
                   isVoided
                     ? "bg-rose-50/60 border-rose-200 text-rose-800 line-through opacity-70"
@@ -129,7 +129,7 @@ export function TransactionHistory({ orders, onVoidLastOrder }: TransactionHisto
                   <span className="text-forest/60 text-[11px] font-medium">{formatRelativeTimestamp(order.timestamp)}</span>
                   {order.tableNumber && (
                     <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full border border-amber-300">
-                      🪑 {order.tableNumber}
+                      🍽 {order.tableNumber}
                     </span>
                   )}
                   {/* Status Pills */}

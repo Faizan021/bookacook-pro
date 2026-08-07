@@ -175,6 +175,7 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <link rel="manifest" href="/manifest.json" />
         <meta
           name="ahrefs-site-verification"
           content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"
@@ -212,6 +213,11 @@ function RootComponent() {
         const noOp = { postMessage: () => {} };
         const handlersProxy = new Proxy({}, { get: () => noOp });
         (window as WebkitWindow).webkit = { messageHandlers: handlersProxy };
+      }
+
+      // Register Service Worker for offline POS PWA
+      if ("serviceWorker" in navigator && window.location.pathname.includes("/festival")) {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
       }
 
       Promise.all([import("@sentry/react"), import("../utils/posthog"), import("posthog-js")])

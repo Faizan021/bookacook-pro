@@ -1,31 +1,37 @@
+import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Banknote, Trash2, Plus, Minus, ShoppingCart, Hash } from "lucide-react";
-import type { CartItemEntry } from "@/lib/festival/useFestivalPos";
+import { Banknote, Trash2, Plus, Minus, ShoppingCart, Utensils } from "lucide-react";
+import type { CartItemEntry } from "@/lib/festival/useFestivalCashRegister";
 
 interface CurrentOrderCartProps {
   cartItems: CartItemEntry[];
   totalCents: number;
   totalQuantity: number;
+  tableModeEnabled: boolean;
   tableNumber: string;
   onTableNumberChange: (value: string) => void;
   onUpdateQuantity: (itemId: string, delta: number) => void;
   onRemoveItem: (itemId: string) => void;
   onClearCart: () => void;
   onCheckout: () => void;
+  isCheckoutProcessing?: boolean;
 }
 
 export function CurrentOrderCart({
   cartItems,
   totalCents,
   totalQuantity,
+  tableModeEnabled,
   tableNumber,
   onTableNumberChange,
   onUpdateQuantity,
   onRemoveItem,
   onClearCart,
   onCheckout,
+  isCheckoutProcessing = false,
 }: CurrentOrderCartProps) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const [showCustomTableInput, setShowCustomTableInput] = useState(false);
 
   if (cartItems.length === 0) {
     return (
@@ -48,6 +54,26 @@ export function CurrentOrderCart({
     currency: "EUR",
     minimumFractionDigits: 2,
   });
+
+  const quickTables = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+
+  const handleTableSelect = (val: string) => {
+    if (val === "custom") {
+      setShowCustomTableInput(true);
+      return;
+    }
+    setShowCustomTableInput(false);
+    onTableNumberChange(val);
+  };
+
+  const getDisplayTableName = (num: string) => {
+    if (!num) return lang === "de" ? "Kein Tisch / Theke" : "No Table / Counter";
+    return num.toLowerCase().includes("tisch") || num.toLowerCase().includes("table")
+      ? num
+      : lang === "de"
+      ? `Tisch ${num}`
+      : `Table ${num}`;
+  };
 
   return (
     <div className="bg-white p-4 sm:p-5 rounded-3xl border-2 border-emerald-600 shadow-xl space-y-4 animate-in slide-in-from-bottom-3 duration-200">
@@ -80,32 +106,79 @@ export function CurrentOrderCart({
         </button>
       </div>
 
-      {/* Table Number Input — Optional, Sticky Across Orders */}
-      <div className="flex items-center gap-3 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-2xl">
-        <Hash className="w-4 h-4 text-amber-700 shrink-0" />
-        <div className="flex flex-col flex-1 min-w-0">
-          <label htmlFor="festival-table-number" className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 leading-none mb-1">
-            {t("Tischnummer (optional)", "Table Number (optional)")}
-          </label>
-          <input
-            id="festival-table-number"
-            type="text"
-            value={tableNumber}
-            onChange={(e) => onTableNumberChange(e.target.value)}
-            placeholder={t("z.B. Tisch 4, T-04, Stand A ...", "e.g. Table 4, T-04, Stand A ...")}
-            maxLength={20}
-            className="bg-transparent text-sm font-bold text-forest placeholder:text-amber-700/40 outline-none border-none w-full"
-          />
+      {/* Table Selector (Rendered ONLY if tableModeEnabled === true) */}
+      {tableModeEnabled && (
+        <div className="bg-amber-50/80 p-3 rounded-2xl border border-amber-200 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+              <Utensils className="w-3.5 h-3.5 text-amber-700" />
+              {t("Tischnummer (optional)", "Table Selection (optional)")}
+            </span>
+            {tableNumber.trim() && (
+              <span className="text-xs font-extrabold text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-lg border border-amber-300">
+                {getDisplayTableName(tableNumber.trim())}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => handleTableSelect("")}
+              className={`px-2.5 py-1 rounded-xl font-bold text-xs border transition cursor-pointer ${
+                !tableNumber.trim()
+                  ? "bg-amber-800 text-white border-amber-900 shadow-xs"
+                  : "bg-white text-forest border-amber-200 hover:bg-amber-100"
+              }`}
+            >
+              {t("Kein Tisch / Theke", "No Table / Counter")}
+            </button>
+
+            {quickTables.map((num) => (
+              <button
+                key={num}
+                type="button"
+                onClick={() => handleTableSelect(num)}
+                className={`w-8 h-8 rounded-xl font-bold text-xs border transition grid place-items-center cursor-pointer ${
+                  tableNumber === num || tableNumber === `Tisch ${num}` || tableNumber === `Table ${num}`
+                    ? "bg-amber-800 text-white border-amber-900 shadow-xs"
+                    : "bg-white text-forest border-amber-200 hover:bg-amber-100"
+                }`}
+              >
+                {num}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => handleTableSelect("custom")}
+              className={`px-2.5 py-1 rounded-xl font-bold text-xs border transition cursor-pointer ${
+                showCustomTableInput || (tableNumber && !quickTables.includes(tableNumber.replace(/\D/g, "")))
+                  ? "bg-amber-800 text-white border-amber-900 shadow-xs"
+                  : "bg-white text-forest border-amber-200 hover:bg-amber-100"
+              }`}
+            >
+              {t("Anderer...", "Other...")}
+            </button>
+          </div>
+
+          {showCustomTableInput && (
+            <div className="pt-1">
+              <input
+                type="text"
+                value={tableNumber}
+                onChange={(e) => onTableNumberChange(e.target.value)}
+                placeholder={t("z.B. Stand A, Terrasse 2...", "e.g. Stand A, Terrace 2...")}
+                maxLength={20}
+                className="w-full bg-white px-3 py-1.5 rounded-xl border border-amber-300 text-xs font-bold text-forest placeholder:text-forest/40 outline-none"
+              />
+            </div>
+          )}
         </div>
-        {tableNumber.trim() && (
-          <span className="shrink-0 text-xs font-extrabold bg-amber-200 text-amber-900 px-2.5 py-1 rounded-xl border border-amber-300 font-display whitespace-nowrap">
-            {tableNumber.trim()}
-          </span>
-        )}
-      </div>
+      )}
 
       {/* Cart Item Detail Rows (Shows 4 × Item @ Price = Total) */}
-      <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+      <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
         {cartItems.map((entry) => {
           const unitPrice = (entry.item.priceCents / 100).toFixed(2);
           const itemTotal = ((entry.item.priceCents * entry.quantity) / 100).toFixed(2);
@@ -135,7 +208,7 @@ export function CurrentOrderCart({
                 )}
               </div>
 
-              {/* Large Touch Quantity Steppers [-] 4 [+] */}
+              {/* Touch Quantity Steppers [-] 4 [+] */}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -168,22 +241,28 @@ export function CurrentOrderCart({
         })}
       </div>
 
-      {/* Unmistakable Big Cash Payment Button: 💵 Pay Cash • 34,00 € */}
+      {/* Active Table Badge Rendered Above Checkout Button */}
+      {tableModeEnabled && tableNumber.trim() && (
+        <div className="flex items-center justify-center gap-1.5 py-1 bg-amber-100/80 rounded-xl border border-amber-300 text-amber-950 font-extrabold text-xs">
+          <span>🍽</span>
+          <span>{getDisplayTableName(tableNumber.trim())}</span>
+        </div>
+      )}
+
+      {/* Primary Cash Checkout Button (Double Checkout Guarded) */}
       <button
         type="button"
+        disabled={isCheckoutProcessing}
         onClick={onCheckout}
-        className="w-full py-4 px-6 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-lg sm:text-xl shadow-lg active:scale-[0.98] transition flex items-center justify-between cursor-pointer border border-emerald-500"
+        className="w-full py-4 px-6 rounded-2xl bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-900 disabled:opacity-60 text-white font-extrabold text-lg sm:text-xl shadow-lg active:scale-[0.98] transition flex items-center justify-between cursor-pointer border border-emerald-500"
       >
         <div className="flex items-center gap-2.5">
           <Banknote className="w-7 h-7 text-emerald-200" />
-          <div className="flex flex-col items-start leading-tight">
-            <span className="tracking-tight">{t("💵 Pay Cash", "💵 Pay Cash")}</span>
-            {tableNumber.trim() && (
-              <span className="text-[11px] font-bold text-emerald-200 font-mono">
-                {tableNumber.trim()}
-              </span>
-            )}
-          </div>
+          <span className="tracking-tight">
+            {isCheckoutProcessing
+              ? t("Verarbeite...", "Processing...")
+              : t("💵 Bar bezahlen", "💵 Pay Cash")}
+          </span>
         </div>
         <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300">
           {formattedTotal}

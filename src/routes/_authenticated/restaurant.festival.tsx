@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { FestivalDashboard } from "@/components/festival/FestivalDashboard";
+import { FestivalCashRegister } from "@/components/festival/FestivalCashRegister";
 import type { FestivalEventConfig, FestivalItem } from "@/lib/festival/types";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_authenticated/restaurant/festival")({
     }
   },
   head: () => ({
-    meta: [{ title: "Speisely Festival Mode — Partner Dashboard" }],
+    meta: [{ title: "Festival Cash Register — Standalonemodus" }],
   }),
   component: RestaurantFestivalProductionPage,
 });
@@ -79,5 +79,5 @@ function RestaurantFestivalProductionPage() {
     },
   ];
 
-  return <FestivalDashboard config={config} items={items} />;
+  return <FestivalCashRegister config={config} items={items} />;
 }
