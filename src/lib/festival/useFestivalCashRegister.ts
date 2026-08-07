@@ -13,6 +13,7 @@ import {
   updateOrderStatusIDB,
   getSettingIDB,
   saveSettingIDB,
+  getShiftHistoryIDB,
 } from "./idbStorage";
 import { toast } from "sonner";
 
@@ -86,7 +87,6 @@ export function useFestivalCashRegister({ config }: UseFestivalCashRegisterOptio
             const shiftOrders = await getOrdersForShiftIDB(activeShift.shiftId);
             setOrders(shiftOrders);
           } else {
-            // NO ACTIVE SHIFT EXISTS — Require Start Shift Modal!
             setShiftData(null);
             setOrders([]);
           }
@@ -138,15 +138,41 @@ export function useFestivalCashRegister({ config }: UseFestivalCashRegisterOptio
     const orderCount = activeOrders.length;
     const avgOrderCents = orderCount > 0 ? Math.round(barUmsatzCents / orderCount) : 0;
 
+    const countedCashCents = shiftData?.countedCashCents;
+    const differenceCents =
+      typeof countedCashCents === "number" ? countedCashCents - sollKassenbestandCents : undefined;
+
     return {
       openingCashCents,
       barUmsatzCents,
       stornierungenCents,
       sollKassenbestandCents,
+      countedCashCents,
+      differenceCents,
       orderCount,
       avgOrderCents,
     };
-  }, [activeOrders, voidedOrders, shiftData?.openingCashCents]);
+  }, [activeOrders, voidedOrders, shiftData?.openingCashCents, shiftData?.countedCashCents]);
+
+  // Shift Duration Calculation
+  const shiftDurationText = useMemo(() => {
+    if (!shiftData?.shiftStartedAt) return "";
+    try {
+      const start = new Date(shiftData.shiftStartedAt).getTime();
+      const end = shiftData.shiftEndedAt ? new Date(shiftData.shiftEndedAt).getTime() : Date.now();
+      const diffMs = Math.max(0, end - start);
+
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+      if (hours > 0) {
+        return `${hours}h ${mins}m`;
+      }
+      return `${mins}m`;
+    } catch {
+      return "";
+    }
+  }, [shiftData?.shiftStartedAt, shiftData?.shiftEndedAt]);
 
   // Itemized sales breakdown for Schichtbericht
   const itemizedSales = useMemo(() => {
@@ -217,7 +243,7 @@ export function useFestivalCashRegister({ config }: UseFestivalCashRegisterOptio
 
   // Checkout Workflow: Persist to IndexedDB BEFORE payment success, Double-Checkout Guarded
   const checkoutCart = useCallback(async (): Promise<{ orderId: string; totalCents: number } | null> => {
-    if (cartItems.length === 0 || isCheckoutProcessing || !shiftData) {
+    if (cartItems.length === 0 || isCheckoutProcessing || !shiftData || shiftData.status === "closed") {
       return null;
     }
 
@@ -296,6 +322,11 @@ export function useFestivalCashRegister({ config }: UseFestivalCashRegisterOptio
 
   // Non-Destructive Voiding
   const voidLastOrder = useCallback(async () => {
+    if (shiftData?.status === "closed") {
+      toast.error("Schicht beendet — Stornierung in geschlossener Schicht nicht möglich.");
+      return;
+    }
+
     const lastActive = orders.find((o) => o.status === "completed");
     if (!lastActive) {
       toast.info("Keine aktiven Bestellungen zum Stornieren vorhanden.");
@@ -313,17 +344,25 @@ export function useFestivalCashRegister({ config }: UseFestivalCashRegisterOptio
     } else {
       toast.error("Stornierung fehlgeschlagen.");
     }
-  }, [orders]);
+  }, [orders, shiftData?.status]);
 
-  // Shift Lifecycle: Start New Shift (Triggered from StartShiftModal or ShiftSummaryModal)
+  // Shift Lifecycle: Start New Shift
   const startNewShift = useCallback(
     async (openingCashCents: number) => {
       const todayIso = new Date().toISOString();
       const todayDateStr = todayIso.split("T")[0];
+
+      // Calculate shift number e.g. "Schicht #20260807-01"
+      const existingShifts = await getShiftHistoryIDB(config.restaurantId);
+      const todayShiftsCount = existingShifts.filter((s) => s.operatingDate === todayDateStr).length;
+      const shiftNumSeq = String(todayShiftsCount + 1).padStart(2, "0");
+      const shiftNumber = `Schicht #${todayDateStr.replace(/-/g, "")}-${shiftNumSeq}`;
+
       const newShiftId = `shift_${todayDateStr.replace(/-/g, "")}_${Date.now()}`;
 
       const newShift: FestivalShiftData = {
         shiftId: newShiftId,
+        shiftNumber,
         operatingDate: todayDateStr,
         shiftStartedAt: todayIso,
         openingCashCents,
@@ -338,26 +377,36 @@ export function useFestivalCashRegister({ config }: UseFestivalCashRegisterOptio
       setCartItems([]);
       setTableNumber("");
       const formattedFloat = (openingCashCents / 100).toFixed(2);
-      toast.success(`Schicht gestartet (Anfangskassenbestand: ${formattedFloat} €)`);
+      toast.success(`${shiftNumber} gestartet (Anfangskassenbestand: ${formattedFloat} €)`);
     },
     [config.restaurantId]
   );
 
-  // Shift Lifecycle: Close Current Shift
-  const closeCurrentShift = useCallback(async () => {
-    if (!shiftData) return;
+  // Shift Lifecycle: Close Current Shift with Cash Count Difference
+  const closeCurrentShift = useCallback(
+    async (countedCashCents?: number) => {
+      if (!shiftData) return;
 
-    const endedAt = new Date().toISOString();
-    const closedShift: FestivalShiftData = {
-      ...shiftData,
-      shiftEndedAt: endedAt,
-      status: "closed",
-    };
+      const endedAt = new Date().toISOString();
+      const differenceCents =
+        typeof countedCashCents === "number"
+          ? countedCashCents - metrics.sollKassenbestandCents
+          : undefined;
 
-    await saveShiftIDB(closedShift);
-    setShiftData(closedShift);
-    toast.success("Schicht beendet & im Verlauf gesichert.");
-  }, [shiftData]);
+      const closedShift: FestivalShiftData = {
+        ...shiftData,
+        shiftEndedAt: endedAt,
+        countedCashCents,
+        differenceCents,
+        status: "closed",
+      };
+
+      await saveShiftIDB(closedShift);
+      setShiftData(closedShift);
+      toast.success(`${shiftData.shiftNumber || "Schicht"} beendet & abgeschlossen.`);
+    },
+    [shiftData, metrics.sollKassenbestandCents]
+  );
 
   return {
     isLoaded,
@@ -365,6 +414,7 @@ export function useFestivalCashRegister({ config }: UseFestivalCashRegisterOptio
     shiftData,
     orders,
     metrics,
+    shiftDurationText,
     itemizedSales,
     cartItems,
     cartTotalCents,

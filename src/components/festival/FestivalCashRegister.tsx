@@ -11,7 +11,7 @@ import { ReceiptModal } from "./ReceiptModal";
 import { StartShiftModal } from "./StartShiftModal";
 import { useFestivalCashRegister } from "@/lib/festival/useFestivalCashRegister";
 import type { FestivalEventConfig, FestivalItem, FestivalOrder } from "@/lib/festival/types";
-import { FileText, Settings as SettingsIcon, Globe, CheckCircle2, HardDrive, Printer, ShieldCheck, Clock } from "lucide-react";
+import { FileText, Settings as SettingsIcon, Globe, CheckCircle2, HardDrive, Printer, ShieldCheck, Clock, Lock, Play } from "lucide-react";
 import { toast } from "sonner";
 
 interface FestivalCashRegisterProps {
@@ -37,6 +37,7 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
     shiftData,
     orders,
     metrics,
+    shiftDurationText,
     itemizedSales,
     cartItems,
     cartTotalCents,
@@ -70,19 +71,30 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
     }));
   }, [cartItems]);
 
+  const isShiftClosed = shiftData?.status === "closed";
+  const isShiftActive = shiftData !== null && shiftData.status === "active";
+
   const handleAddToCart = (item: FestivalItem) => {
+    if (isShiftClosed) {
+      toast.error("Schicht beendet — Starte eine neue Schicht um fortzufahren.");
+      return;
+    }
     addToCart(item, 1);
     toast.success(`1x ${item.name} hinzugefügt`);
   };
 
   const handleCustomizeOrderTap = (item: FestivalItem) => {
+    if (isShiftClosed) {
+      toast.error("Schicht beendet — Starte eine neue Schicht um fortzufahren.");
+      return;
+    }
     setActiveItemForCustomization(item);
     setSelectedQuantity(1);
     setSelectedNotes("");
   };
 
   const handleConfirmCustomization = () => {
-    if (activeItemForCustomization) {
+    if (activeItemForCustomization && !isShiftClosed) {
       addToCart(activeItemForCustomization, selectedQuantity, selectedNotes);
       toast.success(`${selectedQuantity}x ${activeItemForCustomization.name} hinzugefügt`);
       setActiveItemForCustomization(null);
@@ -90,7 +102,7 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
   };
 
   const handleExecuteCheckout = async () => {
-    if (cartItems.length === 0 || isCheckoutProcessing) return;
+    if (cartItems.length === 0 || isCheckoutProcessing || isShiftClosed) return;
 
     const res = await checkoutCart();
 
@@ -128,14 +140,11 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
     );
   }
 
-  // OPERATIONAL REQUIREMENT: If no active shift exists, render StartShiftModal!
-  const isShiftActive = shiftData !== null && shiftData.status === "active";
-
   return (
     <div className="min-h-screen bg-[#fdfaf5] text-forest font-sans select-none px-3 py-4 sm:p-6 max-w-6xl mx-auto space-y-5 pb-20 relative">
       {/* Required Start Shift Overlay when no active shift is running */}
       <StartShiftModal
-        isOpen={!isShiftActive}
+        isOpen={!isShiftActive && !isShiftClosed}
         config={config}
         operatingDateStr={formatOperatingDateDisplay()}
         onStartShift={startNewShift}
@@ -175,6 +184,11 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
               <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300">
                 🎪 Festival Cash Register
               </span>
+              {shiftData?.shiftNumber && (
+                <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-emerald-950 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">
+                  {shiftData.shiftNumber}
+                </span>
+              )}
             </div>
             <div className="flex flex-wrap items-center gap-2 text-xs text-forest/70 font-medium pt-0.5">
               <span>{config.eventName} {config.eventNameSecondary ? `· ${config.eventNameSecondary}` : ""}</span>
@@ -183,6 +197,12 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
                 <Clock className="w-3.5 h-3.5 text-amber-700" />
                 {formatOperatingDateDisplay(shiftData?.operatingDate)}
               </span>
+              {shiftDurationText && (
+                <>
+                  <span className="text-forest/30">•</span>
+                  <span className="font-bold text-emerald-800">⏱ {shiftDurationText}</span>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -237,11 +257,40 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
         </div>
       </div>
 
+      {/* Locked Register Banner when shift is closed */}
+      {isShiftClosed && (
+        <div className="bg-amber-100/90 border-2 border-amber-400 p-4 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-3 shadow-md">
+          <div className="flex items-center gap-3 text-amber-950">
+            <Lock className="w-6 h-6 text-amber-800 shrink-0" />
+            <div>
+              <h3 className="font-bold text-base">
+                {t("Schicht beendet & Kasse gesperrt.", "Shift closed & cash register locked.")}
+              </h3>
+              <p className="text-xs text-amber-900 font-medium">
+                {t(
+                  "Starte eine neue Schicht um fortzufahren und neue Verkäufe abzukassieren.",
+                  "Start a new shift to continue taking customer orders."
+                )}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShiftSummaryOpen(true)}
+            className="px-5 py-2.5 rounded-xl bg-forest text-white font-extrabold text-xs hover:bg-forest/90 transition shadow-sm flex items-center gap-1.5 cursor-pointer shrink-0"
+          >
+            <Play className="w-4 h-4 text-amber-300" />
+            <span>{t("Neue Schicht starten", "Start New Shift")}</span>
+          </button>
+        </div>
+      )}
+
       {/* Live Metrics Banner */}
       <LiveMetricsBanner metrics={metrics} />
 
       {/* 6-Item Counter Touch Grid */}
-      <div className="bg-white p-4 sm:p-6 rounded-3xl border border-[#eadfce] shadow-xs">
+      <div className={`bg-white p-4 sm:p-6 rounded-3xl border border-[#eadfce] shadow-xs ${isShiftClosed ? "opacity-60 pointer-events-none" : ""}`}>
         <FastOrderGrid
           items={items}
           cartSummary={cartSummary}
@@ -251,22 +300,28 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
       </div>
 
       {/* Current Customer Order Tray / Cart */}
-      <CurrentOrderCart
-        cartItems={cartItems}
-        totalCents={cartTotalCents}
-        totalQuantity={cartTotalQuantity}
-        tableModeEnabled={tableModeEnabled}
-        tableNumber={tableNumber}
-        onTableNumberChange={setTableNumber}
-        onUpdateQuantity={updateCartQuantity}
-        onRemoveItem={removeFromCart}
-        onClearCart={clearCart}
-        onCheckout={handleExecuteCheckout}
-        isCheckoutProcessing={isCheckoutProcessing}
-      />
+      <div className={isShiftClosed ? "opacity-60 pointer-events-none" : ""}>
+        <CurrentOrderCart
+          cartItems={cartItems}
+          totalCents={cartTotalCents}
+          totalQuantity={cartTotalQuantity}
+          tableModeEnabled={tableModeEnabled}
+          tableNumber={tableNumber}
+          onTableNumberChange={setTableNumber}
+          onUpdateQuantity={updateCartQuantity}
+          onRemoveItem={removeFromCart}
+          onClearCart={clearCart}
+          onCheckout={handleExecuteCheckout}
+          isCheckoutProcessing={isCheckoutProcessing}
+        />
+      </div>
 
-      {/* Transaction History */}
-      <TransactionHistory orders={orders} onVoidLastOrder={voidLastOrder} />
+      {/* Transaction History (Tap order to preview/reprint receipt) */}
+      <TransactionHistory
+        orders={orders}
+        onVoidLastOrder={voidLastOrder}
+        onSelectOrder={(order) => setReceiptOrder(order)}
+      />
 
       {/* Footer System Badges */}
       <div className="bg-white/60 p-3 rounded-2xl border border-[#eadfce] flex flex-wrap items-center justify-between text-xs text-forest/70 gap-2">
@@ -315,6 +370,7 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
         shiftData={shiftData}
         orders={orders}
         metrics={metrics}
+        shiftDurationText={shiftDurationText}
         itemizedSales={itemizedSales}
         onClose={() => setShiftSummaryOpen(false)}
         onStartShift={startNewShift}

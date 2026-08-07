@@ -45,10 +45,13 @@ export interface FestivalOrder {
 
 export interface FestivalShiftData {
   shiftId: string; // e.g. "shift_20260807_0900"
+  shiftNumber: string; // e.g. "Schicht #20260807-01"
   operatingDate: string; // e.g. "2026-08-07"
   shiftStartedAt: string; // ISO string
   shiftEndedAt?: string; // ISO string
-  openingCashCents: number; // Anfangskassenbestand float float
+  openingCashCents: number; // Anfangskassenbestand float
+  countedCashCents?: number; // Gezählter Ist-Kassenbestand
+  differenceCents?: number; // Zähldifferenz (Ist - Soll)
   restaurantId: string;
   lastOrderNumber: number; // Highest order number allocated in shift
   status: "active" | "closed";

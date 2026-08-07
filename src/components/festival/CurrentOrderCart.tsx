@@ -243,7 +243,7 @@ export function CurrentOrderCart({
 
       {/* Active Table Badge Rendered Above Checkout Button */}
       {tableModeEnabled && tableNumber.trim() && (
-        <div className="flex items-center justify-center gap-1.5 py-1 bg-amber-100/80 rounded-xl border border-amber-300 text-amber-950 font-extrabold text-xs">
+        <div className="flex items-center justify-center gap-1.5 py-1.5 bg-emerald-100 rounded-xl border border-emerald-300 text-emerald-950 font-extrabold text-xs shadow-xs">
           <span>🍽</span>
           <span>{getDisplayTableName(tableNumber.trim())}</span>
         </div>
