@@ -59,8 +59,8 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4 animate-in fade-in duration-200">
-      <div className="bg-white text-forest border border-[#eadfce] w-full max-w-sm rounded-3xl p-6 shadow-2xl relative space-y-4">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-3 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-white text-forest border border-[#eadfce] w-[calc(100vw-24px)] max-w-sm rounded-3xl p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full text-forest/60 hover:text-forest hover:bg-forest/10 transition cursor-pointer"
@@ -69,7 +69,7 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
         </button>
 
         {/* Digital 80mm Thermal Receipt Preview Box */}
-        <div className="bg-[#fcfbfa] p-5 rounded-2xl border border-[#eadfce] font-mono text-xs space-y-4 shadow-inner">
+        <div className="bg-[#fcfbfa] p-4 sm:p-5 rounded-2xl border border-[#eadfce] font-mono text-xs space-y-3 sm:space-y-4 shadow-inner">
           {/* Header */}
           <div className="text-center space-y-1 border-b border-dashed border-forest/30 pb-3">
             <h3 className="font-extrabold text-base tracking-wider uppercase">
@@ -134,17 +134,17 @@ export function ReceiptModal({ isOpen, order, config, onClose }: ReceiptModalPro
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons (44px min target) */}
         <div className="grid grid-cols-2 gap-2 pt-1">
           <button
             onClick={onClose}
-            className="py-2.5 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer"
+            className="py-3 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer min-h-[44px]"
           >
             {t("Schließen", "Close")}
           </button>
           <button
             onClick={handlePrintTrigger}
-            className="py-2.5 rounded-xl bg-forest text-white font-bold text-xs hover:bg-forest/90 transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+            className="py-3 rounded-xl bg-forest text-white font-bold text-xs hover:bg-forest/90 transition shadow-sm flex items-center justify-center gap-1.5 cursor-pointer min-h-[44px]"
           >
             <Printer className="w-4 h-4" />
             <span>{t("Beleg Drucken", "Print Receipt")}</span>

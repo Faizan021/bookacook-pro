@@ -93,8 +93,8 @@ export function QuantitySelector({
   });
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4 animate-in fade-in duration-200">
-      <div className="bg-[#fdfaf5] text-forest border border-[#eadfce] w-full max-w-md rounded-3xl p-6 shadow-2xl relative space-y-5">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-3 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-[#fdfaf5] text-forest border border-[#eadfce] w-[calc(100vw-24px)] max-w-md rounded-3xl p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onCancel}
           className="absolute top-4 right-4 p-2 rounded-full text-forest/60 hover:text-forest hover:bg-forest/10 transition cursor-pointer"
@@ -102,11 +102,11 @@ export function QuantitySelector({
           <X className="w-5 h-5" />
         </button>
 
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-1 pr-6">
           <span className="inline-block text-[10px] font-extrabold uppercase tracking-wider text-forest/70 bg-cream border border-[#eadfce] px-3 py-1 rounded-full">
             {t("Menge & Wünsche anpassen", "Customize Quantity & Notes")}
           </span>
-          <h3 className="text-2xl font-bold font-display text-forest">{item.name}</h3>
+          <h3 className="text-xl sm:text-2xl font-bold font-display text-forest">{item.name}</h3>
         </div>
 
         {/* Quantity Stepper & Presets */}
@@ -140,7 +140,7 @@ export function QuantitySelector({
                 type="button"
                 key={num}
                 onClick={() => onQuantityChange(num)}
-                className={`px-3.5 py-1.5 rounded-xl font-bold text-xs transition border cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-xl font-bold text-xs transition border cursor-pointer min-h-[44px] ${
                   quantity === num
                     ? "bg-forest text-white border-forest shadow-sm"
                     : "bg-cream text-forest border-[#eadfce] hover:bg-forest/10"
@@ -171,7 +171,7 @@ export function QuantitySelector({
                   type="button"
                   key={chip}
                   onClick={() => handleToggleChip(chip)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-extrabold border transition cursor-pointer flex items-center gap-1 ${
+                  className={`px-3 py-2 rounded-full text-xs font-extrabold border transition cursor-pointer flex items-center gap-1 min-h-[44px] ${
                     isSelected
                       ? "bg-amber-600 text-white border-amber-700 shadow-sm"
                       : "bg-[#fdfaf5] text-forest/80 border-[#eadfce] hover:bg-cream"
@@ -196,7 +196,7 @@ export function QuantitySelector({
                   "Eigenen Wunsch eintragen (z.B. Extra scharf, Glutenfrei)...",
                   "Type custom note (e.g. Extra spicy, Gluten-free)..."
                 )}
-                className="w-full bg-[#fdfaf5] pl-9 pr-3 py-2.5 rounded-xl border border-[#eadfce] text-xs font-bold text-forest placeholder:text-forest/40 outline-none focus:ring-1 focus:ring-emerald-600"
+                className="w-full bg-[#fdfaf5] pl-9 pr-3 py-2.5 rounded-xl border border-[#eadfce] text-xs font-bold text-forest placeholder:text-forest/40 outline-none focus:ring-1 focus:ring-emerald-600 min-h-[44px]"
               />
             </div>
           </div>
@@ -207,7 +207,7 @@ export function QuantitySelector({
           <button
             type="button"
             onClick={onConfirm}
-            className="w-full py-4 rounded-2xl bg-forest text-white font-extrabold text-base hover:bg-forest/90 transition shadow-lg flex items-center justify-center gap-2 cursor-pointer border border-emerald-800"
+            className="w-full py-3.5 rounded-2xl bg-forest text-white font-extrabold text-sm sm:text-base hover:bg-forest/90 transition shadow-lg flex items-center justify-center gap-2 cursor-pointer border border-emerald-800 min-h-[48px]"
           >
             <Plus className="w-5 h-5 text-amber-300" />
             <span>
@@ -218,7 +218,7 @@ export function QuantitySelector({
           <button
             type="button"
             onClick={onCancel}
-            className="w-full py-2.5 rounded-xl bg-cream border border-[#eadfce] text-forest/80 font-bold text-xs hover:bg-forest/10 transition flex items-center justify-center gap-1.5 cursor-pointer"
+            className="w-full py-2.5 rounded-xl bg-cream border border-[#eadfce] text-forest/80 font-bold text-xs hover:bg-forest/10 transition flex items-center justify-center gap-1.5 cursor-pointer min-h-[44px]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{t("Zurück zur Speisekarte", "Back to Menu")}</span>

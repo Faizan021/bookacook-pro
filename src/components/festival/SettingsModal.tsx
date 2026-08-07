@@ -42,8 +42,8 @@ export function SettingsModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4 animate-in fade-in duration-200">
-      <div className="bg-[#fdfaf5] text-forest border border-[#eadfce] w-full max-w-md rounded-3xl p-6 shadow-2xl relative space-y-5">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-3 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-[#fdfaf5] text-forest border border-[#eadfce] w-[calc(100vw-24px)] max-w-md rounded-3xl p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-full text-forest/60 hover:text-forest hover:bg-forest/10 transition cursor-pointer"
@@ -52,8 +52,8 @@ export function SettingsModal({
         </button>
 
         {/* Modal Header */}
-        <div className="flex items-center gap-3 border-b border-[#eadfce] pb-3">
-          <div className="w-10 h-10 rounded-2xl bg-forest text-cream grid place-items-center font-bold">
+        <div className="flex items-center gap-3 border-b border-[#eadfce] pb-3 pr-6">
+          <div className="w-10 h-10 rounded-2xl bg-forest text-cream grid place-items-center font-bold shrink-0">
             <Settings className="w-5 h-5" />
           </div>
           <div>
@@ -67,7 +67,7 @@ export function SettingsModal({
         </div>
 
         {/* Configuration Sections */}
-        <div className="space-y-4 text-xs">
+        <div className="space-y-3.5 text-xs">
           {/* Restaurant & Festival Info Display */}
           <div className="bg-white p-3.5 rounded-2xl border border-[#eadfce] space-y-2">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-forest/60 flex items-center gap-1.5">
@@ -91,10 +91,10 @@ export function SettingsModal({
           </div>
 
           {/* Table Numbers Toggle */}
-          <div className="bg-white p-3.5 rounded-2xl border border-[#eadfce] flex items-center justify-between">
-            <div className="space-y-0.5 max-w-[70%]">
+          <div className="bg-white p-3.5 rounded-2xl border border-[#eadfce] flex items-center justify-between gap-2">
+            <div className="space-y-0.5 max-w-[65%]">
               <span className="font-extrabold text-forest text-xs flex items-center gap-1.5">
-                <Utensils className="w-4 h-4 text-amber-700" />
+                <Utensils className="w-4 h-4 text-amber-700 shrink-0" />
                 {t("Tischnummern Abfragen", "Enable Table Numbers")}
               </span>
               <p className="text-[11px] text-forest/60">
@@ -108,7 +108,7 @@ export function SettingsModal({
             <button
               type="button"
               onClick={() => onToggleTableMode(!tableModeEnabled)}
-              className={`px-3 py-1.5 rounded-xl font-bold text-xs border transition cursor-pointer flex items-center gap-1 ${
+              className={`px-3 py-2 rounded-xl font-bold text-xs border transition cursor-pointer flex items-center gap-1 min-h-[44px] shrink-0 ${
                 tableModeEnabled
                   ? "bg-amber-100 text-amber-900 border-amber-300 shadow-xs"
                   : "bg-gray-100 text-gray-600 border-gray-300"
@@ -129,7 +129,7 @@ export function SettingsModal({
               <button
                 type="button"
                 onClick={() => setLang("de")}
-                className={`px-2.5 py-1 rounded-lg font-bold text-xs border transition cursor-pointer ${
+                className={`px-3 py-2 rounded-xl font-bold text-xs border transition cursor-pointer min-h-[44px] ${
                   lang === "de"
                     ? "bg-forest text-white border-forest"
                     : "bg-cream text-forest border-[#eadfce]"
@@ -140,7 +140,7 @@ export function SettingsModal({
               <button
                 type="button"
                 onClick={() => setLang("en")}
-                className={`px-2.5 py-1 rounded-lg font-bold text-xs border transition cursor-pointer ${
+                className={`px-3 py-2 rounded-xl font-bold text-xs border transition cursor-pointer min-h-[44px] ${
                   lang === "en"
                     ? "bg-forest text-white border-forest"
                     : "bg-cream text-forest border-[#eadfce]"
@@ -167,7 +167,7 @@ export function SettingsModal({
               type="button"
               disabled={isExporting}
               onClick={handleExportBackup}
-              className="w-full py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-sm transition flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
               <Download className="w-4 h-4" />
               <span>{t("⬇ Komplett-Sicherung (JSON)", "⬇ Export All Data (JSON)")}</span>
@@ -179,7 +179,7 @@ export function SettingsModal({
         <button
           type="button"
           onClick={onClose}
-          className="w-full py-3 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer"
+          className="w-full py-3 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer min-h-[44px]"
         >
           {t("Fertig", "Done")}
         </button>

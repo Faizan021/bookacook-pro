@@ -1,6 +1,6 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { SlidersHorizontal, Plus, ShoppingBag, Flame, Sparkles } from "lucide-react";
+import { SlidersHorizontal, Plus, ShoppingBag } from "lucide-react";
 import type { FestivalItem } from "@/lib/festival/types";
 
 interface CartItemSummary {
@@ -63,12 +63,13 @@ export function FastOrderGrid({
           <ShoppingBag className="w-4 h-4 text-emerald-600" />
           {t("Speisen & Getränke antippen", "Tap to add items to order")}
         </span>
-        <span className="text-[11px] text-forest/60 italic">
+        <span className="text-[11px] text-forest/60 italic hidden sm:inline">
           {t("Mehrere Artikel pro Kunde wählbar", "Multiple items per customer")}
         </span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+      {/* Grid Columns: 1 col on 320-389px, 2 cols on 390px-1023px, 3 cols on 1024px+ */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {items.slice(0, 6).map((item, idx) => {
           const formattedPrice = (item.priceCents / 100).toLocaleString("de-DE", {
             style: "currency",
@@ -81,7 +82,7 @@ export function FastOrderGrid({
           return (
             <div
               key={item.id || idx}
-              className={`group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border-2 transition active:scale-[0.98] min-h-[125px] sm:min-h-[145px] cursor-pointer select-none ${categoryClass} ${
+              className={`group relative flex flex-col justify-between p-4 sm:p-5 rounded-2xl border-2 transition active:scale-[0.98] min-h-[120px] sm:min-h-[145px] cursor-pointer select-none ${categoryClass} ${
                 isInCart
                   ? "bg-emerald-50/90 border-emerald-500 shadow-md ring-2 ring-emerald-400/30"
                   : "bg-white border-[#eadfce] shadow-md hover:shadow-lg"
@@ -109,7 +110,7 @@ export function FastOrderGrid({
                   </h4>
                 </div>
                 {item.description && (
-                  <p className="text-[11px] text-forest/65 line-clamp-1 leading-snug pt-0.5">
+                  <p className="text-[11px] text-forest/65 line-clamp-1 leading-snug pt-0.5 hidden sm:block">
                     {item.description}
                   </p>
                 )}
@@ -121,8 +122,8 @@ export function FastOrderGrid({
                   {formattedPrice}
                 </span>
 
-                <div className="flex items-center gap-1">
-                  {/* Customize Button */}
+                <div className="flex items-center gap-1.5">
+                  {/* Customize Button (44px min target) */}
                   <button
                     type="button"
                     onClick={(e) => {
@@ -130,13 +131,13 @@ export function FastOrderGrid({
                       onCustomizeOrder(item);
                     }}
                     title={t("Menge / Hinweis anpassen", "Customize Quantity / Note")}
-                    className="p-2 rounded-xl bg-cream text-forest/70 hover:text-forest hover:bg-forest/10 transition cursor-pointer"
+                    className="w-11 h-11 rounded-xl bg-cream text-forest/70 hover:text-forest hover:bg-forest/10 transition cursor-pointer flex items-center justify-center"
                   >
                     <SlidersHorizontal className="w-4 h-4" />
                   </button>
 
-                  {/* Plus Icon Button */}
-                  <div className="p-2 rounded-xl bg-emerald-700 text-white shadow-xs group-hover:bg-emerald-800 transition">
+                  {/* Plus Icon Button (44px min target) */}
+                  <div className="w-11 h-11 rounded-xl bg-emerald-700 text-white shadow-xs group-hover:bg-emerald-800 transition flex items-center justify-center">
                     <Plus className="w-4 h-4" />
                   </div>
                 </div>

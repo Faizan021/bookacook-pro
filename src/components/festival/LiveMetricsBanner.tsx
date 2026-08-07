@@ -24,37 +24,38 @@ export function LiveMetricsBanner({ metrics }: LiveMetricsBannerProps) {
   };
 
   return (
-    <div className="bg-forest text-white p-3.5 sm:p-4 rounded-2xl shadow-lg border border-emerald-800/40">
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
+    <div className="bg-forest text-white p-2.5 sm:p-4 rounded-2xl shadow-lg border border-emerald-800/40">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
         {/* Total Cash Revenue */}
-        <div className="bg-white/10 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-center items-center col-span-2 sm:col-span-1">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-cream/90 uppercase tracking-wider">
-            <Banknote className="w-4 h-4 text-emerald-300" />
-            <span>{t("Bar-Umsatz", "Bar Sales Total")}</span>
+        <div className="bg-white/10 backdrop-blur-md p-2.5 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-center items-center">
+          <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-cream/90 uppercase tracking-wider">
+            <Banknote className="w-3.5 h-3.5 text-emerald-300 shrink-0" />
+            <span className="hidden sm:inline">{t("Bar-Umsatz", "Cash Sales")}</span>
+            <span className="inline sm:hidden">{t("Umsatz", "Sales")}</span>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold font-display text-white mt-1">
+          <div className="text-sm sm:text-2xl font-extrabold font-display text-white mt-0.5 truncate max-w-full">
             {formatPrice(metrics.barUmsatzCents)}
           </div>
         </div>
 
         {/* Order Count */}
-        <div className="bg-white/10 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-center items-center">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-cream/90 uppercase tracking-wider">
-            <ShoppingBag className="w-4 h-4 text-amber-300" />
-            <span>{t("Verkäufe", "Orders Count")}</span>
+        <div className="bg-white/10 backdrop-blur-md p-2.5 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-center items-center">
+          <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-cream/90 uppercase tracking-wider">
+            <ShoppingBag className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+            <span>{t("Verkäufe", "Orders")}</span>
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-display text-amber-300 mt-1">
+          <div className="text-sm sm:text-2xl font-extrabold font-display text-amber-300 mt-0.5">
             {metrics.orderCount}
           </div>
         </div>
 
         {/* Average Order Value */}
-        <div className="bg-white/10 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-center items-center">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-cream/90 uppercase tracking-wider">
-            <TrendingUp className="w-4 h-4 text-teal-300" />
-            <span>{t("Ø Bon-Wert", "Avg Order Value")}</span>
+        <div className="bg-white/10 backdrop-blur-md p-2.5 sm:p-4 rounded-xl border border-white/10 flex flex-col justify-center items-center">
+          <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs font-bold text-cream/90 uppercase tracking-wider">
+            <TrendingUp className="w-3.5 h-3.5 text-teal-300 shrink-0" />
+            <span>{t("Ø Bon", "Avg Order")}</span>
           </div>
-          <div className="text-xl sm:text-2xl font-extrabold font-display text-teal-300 mt-1">
+          <div className="text-sm sm:text-2xl font-extrabold font-display text-teal-300 mt-0.5 truncate max-w-full">
             {formatPrice(metrics.avgOrderCents)}
           </div>
         </div>

@@ -141,7 +141,7 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
   }
 
   return (
-    <div className="min-h-screen bg-[#fdfaf5] text-forest font-sans select-none px-3 py-4 sm:p-6 max-w-6xl mx-auto space-y-5 pb-20 relative">
+    <div className="min-h-screen bg-[#fdfaf5] text-forest font-sans select-none px-3 sm:px-6 py-3 sm:py-6 max-w-6xl mx-auto space-y-4 sm:space-y-5 pb-[calc(5rem+env(safe-area-inset-bottom))] sm:pb-6 overflow-x-hidden relative">
       {/* Required Start Shift Overlay when no active shift is running */}
       <StartShiftModal
         isOpen={!isShiftActive && !isShiftClosed}
@@ -170,90 +170,96 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
         </div>
       )}
 
-      {/* Operational Clean Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-[#eadfce] shadow-xs">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-forest text-white grid place-items-center font-bold text-xl shadow-md shrink-0">
-            🍽
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="font-display font-bold text-lg sm:text-xl text-forest">
-                {config.restaurantName}
-              </h1>
-              <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300">
-                🎪 Festival Cash Register
-              </span>
-              {shiftData?.shiftNumber && (
-                <span className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-emerald-950 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">
-                  {shiftData.shiftNumber}
+      {/* Operational Clean Header (Reflows into 2 rows on mobile) */}
+      <div className="flex flex-col gap-3 bg-white p-4 sm:p-5 rounded-3xl border border-[#eadfce] shadow-xs">
+        {/* Row 1: Brand, App Title, Actions */}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-forest text-white grid place-items-center font-bold text-lg sm:text-xl shadow-md shrink-0">
+              🍽
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <h1 className="font-display font-bold text-base sm:text-xl text-forest">
+                  {config.restaurantName}
+                </h1>
+                <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300">
+                  🎪 Festival Cash
                 </span>
-              )}
+              </div>
             </div>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-forest/70 font-medium pt-0.5">
-              <span>{config.eventName} {config.eventNameSecondary ? `· ${config.eventNameSecondary}` : ""}</span>
-              <span className="text-forest/30">•</span>
-              <span className="inline-flex items-center gap-1 text-amber-900 font-bold">
-                <Clock className="w-3.5 h-3.5 text-amber-700" />
-                {formatOperatingDateDisplay(shiftData?.operatingDate)}
-              </span>
-              {shiftDurationText && (
-                <>
-                  <span className="text-forest/30">•</span>
-                  <span className="font-bold text-emerald-800">⏱ {shiftDurationText}</span>
-                </>
-              )}
-            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            {/* Settings Button (44px target) */}
+            <button
+              type="button"
+              onClick={() => setSettingsOpen(true)}
+              className="w-11 h-11 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold hover:bg-forest/10 transition cursor-pointer flex items-center justify-center"
+              title="Settings"
+            >
+              <SettingsIcon className="w-4.5 h-4.5" />
+            </button>
+
+            {/* Language Switcher (44px target) */}
+            <button
+              type="button"
+              onClick={() => setLang(lang === "de" ? "en" : "de")}
+              className="h-11 px-3 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer flex items-center gap-1"
+            >
+              <Globe className="w-4 h-4" />
+              <span>{lang.toUpperCase()}</span>
+            </button>
+
+            {/* Schichtbericht Button (44px target) */}
+            <button
+              type="button"
+              onClick={() => setShiftSummaryOpen(true)}
+              className="h-11 px-3.5 rounded-xl bg-forest text-white hover:bg-forest/90 font-bold text-xs shadow-sm transition cursor-pointer flex items-center gap-1.5"
+            >
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">{t("Schichtbericht", "Shift Report")}</span>
+              <span className="inline sm:hidden">{t("Bericht", "Report")}</span>
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
-          {/* Connection Status Badge (Online vs Offline Saved) */}
+        {/* Row 2: Status & Shift Info */}
+        <div className="flex items-center justify-between border-t border-[#eadfce]/60 pt-2.5 text-xs text-forest/70 font-medium flex-wrap gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold text-forest">{config.eventName}</span>
+            {shiftData?.shiftNumber && (
+              <span className="inline-flex items-center text-[10px] font-extrabold uppercase tracking-wider text-emerald-950 bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-300">
+                {shiftData.shiftNumber}
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1 text-amber-900 font-bold">
+              <Clock className="w-3.5 h-3.5 text-amber-700" />
+              {formatOperatingDateDisplay(shiftData?.operatingDate)}
+            </span>
+            {shiftDurationText && (
+              <span className="font-bold text-emerald-800">⏱ {shiftDurationText}</span>
+            )}
+          </div>
+
           <div
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs border ${
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold text-[11px] border ${
               isOnline
                 ? "bg-emerald-50 text-emerald-900 border-emerald-200"
                 : "bg-amber-50 text-amber-900 border-amber-300"
             }`}
           >
             <span
-              className={`w-2.5 h-2.5 rounded-full ${
+              className={`w-2 h-2 rounded-full ${
                 isOnline ? "bg-emerald-500 animate-pulse" : "bg-amber-500"
               }`}
             ></span>
             <span>
               {isOnline
-                ? t("🟢 Online · Saved", "🟢 Online · Saved")
-                : t("🟠 Offline · Saved on this device", "🟠 Offline · Saved on this device")}
+                ? t("🟢 Online", "🟢 Online")
+                : t("🟠 Offline", "🟠 Offline")}
             </span>
           </div>
-
-          {/* Settings Button */}
-          <button
-            onClick={() => setSettingsOpen(true)}
-            className="p-2 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold hover:bg-forest/10 transition cursor-pointer"
-            title="Settings"
-          >
-            <SettingsIcon className="w-4 h-4" />
-          </button>
-
-          {/* Language Switcher */}
-          <button
-            onClick={() => setLang(lang === "de" ? "en" : "de")}
-            className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-cream border border-[#eadfce] text-forest font-bold text-xs hover:bg-forest/10 transition cursor-pointer"
-          >
-            <Globe className="w-3.5 h-3.5" />
-            <span>{lang.toUpperCase()}</span>
-          </button>
-
-          {/* Schichtbericht Button */}
-          <button
-            onClick={() => setShiftSummaryOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-forest text-white hover:bg-forest/90 font-bold text-xs shadow-sm transition cursor-pointer"
-          >
-            <FileText className="w-4 h-4" />
-            <span>{t("Schichtbericht", "Shift Report")}</span>
-          </button>
         </div>
       </div>
 
@@ -290,7 +296,7 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
       <LiveMetricsBanner metrics={metrics} />
 
       {/* 6-Item Counter Touch Grid */}
-      <div className={`bg-white p-4 sm:p-6 rounded-3xl border border-[#eadfce] shadow-xs ${isShiftClosed ? "opacity-60 pointer-events-none" : ""}`}>
+      <div className={`bg-white p-3 sm:p-6 rounded-3xl border border-[#eadfce] shadow-xs ${isShiftClosed ? "opacity-60 pointer-events-none" : ""}`}>
         <FastOrderGrid
           items={items}
           cartSummary={cartSummary}
@@ -328,11 +334,11 @@ export function FestivalCashRegister({ config, items }: FestivalCashRegisterProp
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-1 font-semibold">
             <HardDrive className="w-3.5 h-3.5 text-forest/60" />
-            {t("Datenbank: IndexedDB Gesichert", "Storage: IndexedDB Local")}
+            {t("IndexedDB Gesichert", "IndexedDB Saved")}
           </span>
           <span className="flex items-center gap-1 font-semibold">
             <Printer className="w-3.5 h-3.5 text-forest/60" />
-            {t("Drucker: 80mm Bereit", "Printer: 80mm Ready")}
+            {t("80mm Drucker Bereit", "80mm Printer Ready")}
           </span>
         </div>
         <span className="flex items-center gap-1 font-bold text-emerald-800">

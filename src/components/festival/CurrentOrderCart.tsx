@@ -76,198 +76,222 @@ export function CurrentOrderCart({
   };
 
   return (
-    <div className="bg-white p-4 sm:p-5 rounded-3xl border-2 border-emerald-600 shadow-xl space-y-4 animate-in slide-in-from-bottom-3 duration-200">
-      {/* Header & Clear Action */}
-      <div className="flex items-center justify-between border-b border-[#eadfce] pb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-emerald-100 text-emerald-900 grid place-items-center font-bold text-base font-display">
-            🛒
+    <>
+      <div className="bg-white p-4 sm:p-5 rounded-3xl border-2 border-emerald-600 shadow-xl space-y-4 animate-in slide-in-from-bottom-3 duration-200">
+        {/* Header & Clear Action */}
+        <div className="flex items-center justify-between border-b border-[#eadfce] pb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-2xl bg-emerald-100 text-emerald-900 grid place-items-center font-bold text-base font-display">
+              🛒
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-base text-forest flex items-center gap-2">
+                <span>{t("Aktuelle Bestellung", "Current Order")}</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-sans">
+                  {totalQuantity} {totalQuantity === 1 ? t("Artikel", "Item") : t("Artikel", "Items")}
+                </span>
+              </h3>
+              <p className="text-[11px] text-forest/60 font-medium">
+                {cartItems.length} {cartItems.length === 1 ? t("Position", "position") : t("Positionen", "positions")}
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-display font-bold text-base text-forest flex items-center gap-2">
-              <span>{t("Aktuelle Bestellung", "Current Order")}</span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-sans">
-                {totalQuantity} {totalQuantity === 1 ? t("Artikel", "Item") : t("Artikel", "Items")}
-              </span>
-            </h3>
-            <p className="text-[11px] text-forest/60 font-medium">
-              {cartItems.length} {cartItems.length === 1 ? t("Position", "position") : t("Positionen", "positions")}
-            </p>
-          </div>
+
+          <button
+            type="button"
+            onClick={onClearCart}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-50 text-rose-800 hover:bg-rose-100 font-bold text-xs border border-rose-200 transition cursor-pointer"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>{t("Leeren", "Clear")}</span>
+          </button>
         </div>
 
-        <button
-          type="button"
-          onClick={onClearCart}
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-50 text-rose-800 hover:bg-rose-100 font-bold text-xs border border-rose-200 transition cursor-pointer"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-          <span>{t("Leeren", "Clear")}</span>
-        </button>
-      </div>
-
-      {/* Table Selector (Rendered ONLY if tableModeEnabled === true) */}
-      {tableModeEnabled && (
-        <div className="bg-amber-50/80 p-3 rounded-2xl border border-amber-200 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
-              <Utensils className="w-3.5 h-3.5 text-amber-700" />
-              {t("Tischnummer (optional)", "Table Selection (optional)")}
-            </span>
-            {tableNumber.trim() && (
-              <span className="text-xs font-extrabold text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-lg border border-amber-300">
-                {getDisplayTableName(tableNumber.trim())}
+        {/* Table Selector (Rendered ONLY if tableModeEnabled === true) */}
+        {tableModeEnabled && (
+          <div className="bg-amber-50/80 p-3 rounded-2xl border border-amber-200 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                <Utensils className="w-3.5 h-3.5 text-amber-700" />
+                {t("Tischnummer (optional)", "Table Selection (optional)")}
               </span>
-            )}
-          </div>
+              {tableNumber.trim() && (
+                <span className="text-xs font-extrabold text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-lg border border-amber-300">
+                  {getDisplayTableName(tableNumber.trim())}
+                </span>
+              )}
+            </div>
 
-          <div className="flex flex-wrap items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => handleTableSelect("")}
-              className={`px-2.5 py-1 rounded-xl font-bold text-xs border transition cursor-pointer ${
-                !tableNumber.trim()
-                  ? "bg-amber-800 text-white border-amber-900 shadow-xs"
-                  : "bg-white text-forest border-amber-200 hover:bg-amber-100"
-              }`}
-            >
-              {t("Kein Tisch / Theke", "No Table / Counter")}
-            </button>
-
-            {quickTables.map((num) => (
+            <div className="flex flex-wrap items-center gap-1.5">
               <button
-                key={num}
                 type="button"
-                onClick={() => handleTableSelect(num)}
-                className={`w-8 h-8 rounded-xl font-bold text-xs border transition grid place-items-center cursor-pointer ${
-                  tableNumber === num || tableNumber === `Tisch ${num}` || tableNumber === `Table ${num}`
+                onClick={() => handleTableSelect("")}
+                className={`px-3 py-2 rounded-xl font-bold text-xs border transition cursor-pointer min-h-[44px] ${
+                  !tableNumber.trim()
                     ? "bg-amber-800 text-white border-amber-900 shadow-xs"
                     : "bg-white text-forest border-amber-200 hover:bg-amber-100"
                 }`}
               >
-                {num}
+                {t("Kein Tisch / Theke", "No Table / Counter")}
               </button>
-            ))}
 
-            <button
-              type="button"
-              onClick={() => handleTableSelect("custom")}
-              className={`px-2.5 py-1 rounded-xl font-bold text-xs border transition cursor-pointer ${
-                showCustomTableInput || (tableNumber && !quickTables.includes(tableNumber.replace(/\D/g, "")))
-                  ? "bg-amber-800 text-white border-amber-900 shadow-xs"
-                  : "bg-white text-forest border-amber-200 hover:bg-amber-100"
-              }`}
-            >
-              {t("Anderer...", "Other...")}
-            </button>
+              {quickTables.map((num) => (
+                <button
+                  key={num}
+                  type="button"
+                  onClick={() => handleTableSelect(num)}
+                  className={`w-11 h-11 rounded-xl font-bold text-xs border transition grid place-items-center cursor-pointer ${
+                    tableNumber === num || tableNumber === `Tisch ${num}` || tableNumber === `Table ${num}`
+                      ? "bg-amber-800 text-white border-amber-900 shadow-xs"
+                      : "bg-white text-forest border-amber-200 hover:bg-amber-100"
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                onClick={() => handleTableSelect("custom")}
+                className={`px-3 py-2 rounded-xl font-bold text-xs border transition cursor-pointer min-h-[44px] ${
+                  showCustomTableInput || (tableNumber && !quickTables.includes(tableNumber.replace(/\D/g, "")))
+                    ? "bg-amber-800 text-white border-amber-900 shadow-xs"
+                    : "bg-white text-forest border-amber-200 hover:bg-amber-100"
+                }`}
+              >
+                {t("Anderer...", "Other...")}
+              </button>
+            </div>
+
+            {showCustomTableInput && (
+              <div className="pt-1">
+                <input
+                  type="text"
+                  value={tableNumber}
+                  onChange={(e) => onTableNumberChange(e.target.value)}
+                  placeholder={t("z.B. Stand A, Terrasse 2...", "e.g. Stand A, Terrace 2...")}
+                  maxLength={20}
+                  className="w-full bg-white px-3 py-2 rounded-xl border border-amber-300 text-xs font-bold text-forest placeholder:text-forest/40 outline-none"
+                />
+              </div>
+            )}
           </div>
+        )}
 
-          {showCustomTableInput && (
-            <div className="pt-1">
-              <input
-                type="text"
-                value={tableNumber}
-                onChange={(e) => onTableNumberChange(e.target.value)}
-                placeholder={t("z.B. Stand A, Terrasse 2...", "e.g. Stand A, Terrace 2...")}
-                maxLength={20}
-                className="w-full bg-white px-3 py-1.5 rounded-xl border border-amber-300 text-xs font-bold text-forest placeholder:text-forest/40 outline-none"
-              />
-            </div>
-          )}
-        </div>
-      )}
+        {/* Cart Item Detail Rows (Shows 4 × Item @ Price = Total) */}
+        <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
+          {cartItems.map((entry) => {
+            const unitPrice = (entry.item.priceCents / 100).toFixed(2);
+            const itemTotal = ((entry.item.priceCents * entry.quantity) / 100).toFixed(2);
 
-      {/* Cart Item Detail Rows (Shows 4 × Item @ Price = Total) */}
-      <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
-        {cartItems.map((entry) => {
-          const unitPrice = (entry.item.priceCents / 100).toFixed(2);
-          const itemTotal = ((entry.item.priceCents * entry.quantity) / 100).toFixed(2);
+            return (
+              <div
+                key={entry.item.id + (entry.notes || "")}
+                className="flex items-center justify-between p-3.5 rounded-2xl bg-[#fdfaf5] border border-[#eadfce]"
+              >
+                <div className="space-y-1 max-w-[55%]">
+                  <div className="flex items-center gap-1.5">
+                    {entry.item.icon && <span className="text-base">{entry.item.icon}</span>}
+                    <h4 className="font-bold text-xs sm:text-sm text-forest truncate">
+                      {entry.item.name}
+                    </h4>
+                  </div>
+                  {/* Clear Math Formula Breakdown (e.g. 4 × 8,50 € = 34,00 €) */}
+                  <div className="text-xs font-bold text-forest/80">
+                    <span className="text-emerald-800 font-extrabold">{entry.quantity} ×</span> {unitPrice} €{" "}
+                    <span className="text-forest/40 font-normal">=</span>{" "}
+                    <span className="font-extrabold text-forest font-display">{itemTotal} €</span>
+                  </div>
+                  {entry.notes && (
+                    <span className="inline-block text-[10px] italic text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                      "{entry.notes}"
+                    </span>
+                  )}
+                </div>
 
-          return (
-            <div
-              key={entry.item.id + (entry.notes || "")}
-              className="flex items-center justify-between p-3.5 rounded-2xl bg-[#fdfaf5] border border-[#eadfce]"
-            >
-              <div className="space-y-1 max-w-[55%]">
+                {/* Touch Quantity Steppers (44px min target) */}
                 <div className="flex items-center gap-1.5">
-                  {entry.item.icon && <span className="text-base">{entry.item.icon}</span>}
-                  <h4 className="font-bold text-xs sm:text-sm text-forest truncate">
-                    {entry.item.name}
-                  </h4>
-                </div>
-                {/* Clear Math Formula Breakdown (e.g. 4 × 8,50 € = 34,00 €) */}
-                <div className="text-xs font-bold text-forest/80">
-                  <span className="text-emerald-800 font-extrabold">{entry.quantity} ×</span> {unitPrice} €{" "}
-                  <span className="text-forest/40 font-normal">=</span>{" "}
-                  <span className="font-extrabold text-forest font-display">{itemTotal} €</span>
-                </div>
-                {entry.notes && (
-                  <span className="inline-block text-[10px] italic text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                    "{entry.notes}"
+                  <button
+                    type="button"
+                    onClick={() => onUpdateQuantity(entry.item.id, -1)}
+                    className="w-11 h-11 rounded-2xl bg-white border border-[#eadfce] text-forest font-bold text-lg grid place-items-center hover:bg-cream active:scale-95 transition shadow-xs cursor-pointer"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="font-extrabold text-base text-forest min-w-[24px] text-center font-display">
+                    {entry.quantity}
                   </span>
-                )}
+                  <button
+                    type="button"
+                    onClick={() => onUpdateQuantity(entry.item.id, 1)}
+                    className="w-11 h-11 rounded-2xl bg-white border border-[#eadfce] text-forest font-bold text-lg grid place-items-center hover:bg-cream active:scale-95 transition shadow-xs cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onRemoveItem(entry.item.id)}
+                    className="w-10 h-10 rounded-2xl text-forest/40 hover:text-rose-600 transition flex items-center justify-center cursor-pointer"
+                    title="Entfernen"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
+            );
+          })}
+        </div>
 
-              {/* Touch Quantity Steppers [-] 4 [+] */}
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => onUpdateQuantity(entry.item.id, -1)}
-                  className="w-10 h-10 rounded-2xl bg-white border border-[#eadfce] text-forest font-bold text-lg grid place-items-center hover:bg-cream active:scale-95 transition shadow-xs cursor-pointer"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="font-extrabold text-base text-forest min-w-[24px] text-center font-display">
-                  {entry.quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => onUpdateQuantity(entry.item.id, 1)}
-                  className="w-10 h-10 rounded-2xl bg-white border border-[#eadfce] text-forest font-bold text-lg grid place-items-center hover:bg-cream active:scale-95 transition shadow-xs cursor-pointer"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onRemoveItem(entry.item.id)}
-                  className="p-2 text-forest/40 hover:text-rose-600 transition ml-1 cursor-pointer"
-                  title="Entfernen"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          );
-        })}
+        {/* Active Table Badge Rendered Above Checkout Button */}
+        {tableModeEnabled && tableNumber.trim() && (
+          <div className="flex items-center justify-center gap-1.5 py-1.5 bg-emerald-100 rounded-xl border border-emerald-300 text-emerald-950 font-extrabold text-xs shadow-xs">
+            <span>🍽</span>
+            <span>{getDisplayTableName(tableNumber.trim())}</span>
+          </div>
+        )}
+
+        {/* Primary Cash Checkout Button (Double Checkout Guarded) */}
+        <button
+          type="button"
+          disabled={isCheckoutProcessing}
+          onClick={onCheckout}
+          className="w-full py-4 px-6 rounded-2xl bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-900 disabled:opacity-60 text-white font-extrabold text-lg sm:text-xl shadow-lg active:scale-[0.98] transition flex items-center justify-between cursor-pointer border border-emerald-500"
+        >
+          <div className="flex items-center gap-2.5">
+            <Banknote className="w-7 h-7 text-emerald-200" />
+            <span className="tracking-tight">
+              {isCheckoutProcessing
+                ? t("Verarbeite...", "Processing...")
+                : t("💵 Bar bezahlen", "💵 Pay Cash")}
+            </span>
+          </div>
+          <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300">
+            {formattedTotal}
+          </div>
+        </button>
       </div>
 
-      {/* Active Table Badge Rendered Above Checkout Button */}
-      {tableModeEnabled && tableNumber.trim() && (
-        <div className="flex items-center justify-center gap-1.5 py-1.5 bg-emerald-100 rounded-xl border border-emerald-300 text-emerald-950 font-extrabold text-xs shadow-xs">
-          <span>🍽</span>
-          <span>{getDisplayTableName(tableNumber.trim())}</span>
-        </div>
-      )}
-
-      {/* Primary Cash Checkout Button (Double Checkout Guarded) */}
-      <button
-        type="button"
-        disabled={isCheckoutProcessing}
-        onClick={onCheckout}
-        className="w-full py-4 px-6 rounded-2xl bg-emerald-700 hover:bg-emerald-800 disabled:bg-emerald-900 disabled:opacity-60 text-white font-extrabold text-lg sm:text-xl shadow-lg active:scale-[0.98] transition flex items-center justify-between cursor-pointer border border-emerald-500"
-      >
-        <div className="flex items-center gap-2.5">
-          <Banknote className="w-7 h-7 text-emerald-200" />
-          <span className="tracking-tight">
-            {isCheckoutProcessing
-              ? t("Verarbeite...", "Processing...")
-              : t("💵 Bar bezahlen", "💵 Pay Cash")}
+      {/* Sticky Mobile Checkout Bar (Visible on mobile screens when cart has items) */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#eadfce] p-3 shadow-2xl pb-[calc(0.75rem+env(safe-area-inset-bottom))] px-4 flex items-center justify-between gap-3 sm:hidden animate-in slide-in-from-bottom duration-200">
+        <div className="flex flex-col">
+          <span className="text-xs font-bold text-forest/70">
+            {totalQuantity} {totalQuantity === 1 ? t("Artikel", "Item") : t("Artikel", "Items")}
+          </span>
+          <span className="font-display font-extrabold text-xl text-emerald-900">
+            {formattedTotal}
           </span>
         </div>
-        <div className="font-display font-extrabold text-2xl sm:text-3xl text-amber-300">
-          {formattedTotal}
-        </div>
-      </button>
-    </div>
+
+        <button
+          type="button"
+          disabled={isCheckoutProcessing}
+          onClick={onCheckout}
+          className="py-3 px-5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-60 text-white font-extrabold text-base shadow-lg transition flex items-center gap-2 cursor-pointer border border-emerald-500 shrink-0"
+        >
+          <Banknote className="w-5 h-5 text-emerald-200" />
+          <span>{isCheckoutProcessing ? t("Verarbeite...", "Processing...") : t("💵 Bar bezahlen", "💵 Pay Cash")}</span>
+        </button>
+      </div>
+    </>
   );
 }

@@ -1,7 +1,6 @@
 /**
- * Utility to convert Euro currency amounts in cents to German words.
- * Example: 50000 cents -> "Fünfhundert Euro"
- * Example: 25050 cents -> "Zweihundertfünfzig Euro und fünfzig Cent"
+ * Schnitzel Schmiede Festival Cash Register — Euro Number-to-Words Converter
+ * Supports German & English formatting for currency floats.
  */
 
 const ONES = ["", "ein", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun"];
@@ -20,11 +19,10 @@ const TEENS = [
 ];
 const TENS = ["", "zehn", "zwanzig", "dreißig", "vierzig", "fünfzig", "sechzig", "siebzig", "achtzig", "neunzig"];
 
-function convertUnderThousand(n: number, isEnd = false): string {
+function convertUnderThousandDE(n: number, isEnd = false): string {
   if (n === 0) return "";
 
   let result = "";
-
   const hundreds = Math.floor(n / 100);
   const remainder = n % 100;
 
@@ -70,14 +68,14 @@ export function numberToGermanWords(totalCents: number): string {
   } else if (euros === 1) {
     euroWords = "Ein Euro";
   } else if (euros < 1000) {
-    const raw = convertUnderThousand(euros, true);
+    const raw = convertUnderThousandDE(euros, true);
     euroWords = raw.charAt(0).toUpperCase() + raw.slice(1) + " Euro";
   } else if (euros < 1000000) {
     const thousands = Math.floor(euros / 1000);
     const remainder = euros % 1000;
 
-    const thousandPart = thousands === 1 ? "eintausend" : convertUnderThousand(thousands) + "tausend";
-    const remainderPart = convertUnderThousand(remainder, true);
+    const thousandPart = thousands === 1 ? "eintausend" : convertUnderThousandDE(thousands) + "tausend";
+    const remainderPart = convertUnderThousandDE(remainder, true);
 
     const raw = thousandPart + remainderPart;
     euroWords = raw.charAt(0).toUpperCase() + raw.slice(1) + " Euro";
@@ -86,11 +84,56 @@ export function numberToGermanWords(totalCents: number): string {
   }
 
   if (cents > 0) {
-    const centWords = convertUnderThousand(cents, true);
-    return `${euroWords} und ${centWords} Cent`;
+    const centWords = convertUnderThousandDE(cents, true);
+    const centSuffix = cents === 1 ? "Cent" : "Cent";
+    return `${euroWords} und ${centWords} ${centSuffix}`;
   }
 
   return euroWords;
+}
+
+const EN_ONES = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+const EN_TEENS = [
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen",
+  "seventeen",
+  "eighteen",
+  "nineteen",
+];
+const EN_TENS = ["", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+
+function convertUnderThousandEN(n: number): string {
+  if (n === 0) return "";
+  let res = "";
+  const hundreds = Math.floor(n / 100);
+  const remainder = n % 100;
+
+  if (hundreds > 0) {
+    res += EN_ONES[hundreds] + " hundred";
+    if (remainder > 0) res += " ";
+  }
+
+  if (remainder > 0) {
+    if (remainder < 10) {
+      res += EN_ONES[remainder];
+    } else if (remainder >= 10 && remainder < 20) {
+      res += EN_TEENS[remainder - 10];
+    } else {
+      const tensDigit = Math.floor(remainder / 10);
+      const onesDigit = remainder % 10;
+      res += EN_TENS[tensDigit];
+      if (onesDigit > 0) {
+        res += "-" + EN_ONES[onesDigit];
+      }
+    }
+  }
+
+  return res;
 }
 
 export function numberToEnglishWords(totalCents: number): string {
@@ -98,9 +141,29 @@ export function numberToEnglishWords(totalCents: number): string {
   const euros = Math.floor(totalCents / 100);
   const cents = totalCents % 100;
 
-  let str = `${euros.toLocaleString("en-US")} euro${euros === 1 ? "" : "s"}`;
-  if (cents > 0) {
-    str += ` and ${cents} cent${cents === 1 ? "" : "s"}`;
+  let euroWords = "";
+  if (euros === 0) {
+    euroWords = "Zero euros";
+  } else if (euros === 1) {
+    euroWords = "One euro";
+  } else if (euros < 1000) {
+    const raw = convertUnderThousandEN(euros);
+    euroWords = raw.charAt(0).toUpperCase() + raw.slice(1) + " euros";
+  } else if (euros < 1000000) {
+    const thousands = Math.floor(euros / 1000);
+    const remainder = euros % 1000;
+    const thouPart = thousands === 1 ? "one thousand" : convertUnderThousandEN(thousands) + " thousand";
+    const remPart = convertUnderThousandEN(remainder);
+    const raw = (thouPart + (remPart ? " " + remPart : "")).trim();
+    euroWords = raw.charAt(0).toUpperCase() + raw.slice(1) + " euros";
+  } else {
+    euroWords = `${euros.toLocaleString("en-US")} euros`;
   }
-  return str.charAt(0).toUpperCase() + str.slice(1);
+
+  if (cents > 0) {
+    const centWords = convertUnderThousandEN(cents);
+    return `${euroWords} and ${centWords} cent${cents === 1 ? "" : "s"}`;
+  }
+
+  return euroWords;
 }
