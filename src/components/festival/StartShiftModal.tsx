@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { Play, Banknote, Calendar, Store, MapPin } from "lucide-react";
+import { Play, Calendar, Store, MapPin } from "lucide-react";
 import type { FestivalEventConfig } from "@/lib/festival/types";
 
 interface StartShiftModalProps {
@@ -67,13 +67,13 @@ export function StartShiftModal({
 
         {/* Start Shift Form */}
         <form onSubmit={handleStart} className="space-y-5">
-          <div className="bg-white p-4 rounded-2xl border border-[#eadfce] space-y-3">
-            <label htmlFor="opening-cash-input" className="block text-xs font-bold uppercase tracking-wider text-forest/70">
-              {t("Anfangskassenbestand (Wechselgeld)", "Opening Cash Float")}
+          <div className="bg-white p-5 rounded-2xl border-2 border-[#eadfce] space-y-3">
+            <label htmlFor="opening-cash-input" className="block text-xs font-extrabold uppercase tracking-wider text-forest">
+              {t("Anfangskassenbestand (Wechselgeld in €)", "Opening Cash Float (in €)")} <span className="text-rose-600 font-bold">*</span>
             </label>
 
             <div className="relative flex items-center">
-              <span className="absolute left-4 font-display font-extrabold text-xl text-forest/60">
+              <span className="absolute left-4 font-display font-extrabold text-2xl text-forest/60">
                 €
               </span>
               <input
@@ -82,14 +82,15 @@ export function StartShiftModal({
                 value={openingCashInput}
                 onChange={(e) => setOpeningCashInput(e.target.value)}
                 placeholder="0,00"
-                className="w-full pl-10 pr-4 py-3.5 rounded-xl border-2 border-emerald-600 bg-[#fdfaf5] font-display font-extrabold text-2xl text-forest outline-none focus:ring-2 focus:ring-emerald-500 transition text-right"
+                required
+                className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-emerald-600 bg-[#fdfaf5] font-display font-extrabold text-2xl text-forest outline-none focus:ring-2 focus:ring-emerald-500 transition text-right shadow-xs"
               />
             </div>
 
-            <p className="text-[11px] text-forest/60 italic leading-snug">
+            <p className="text-xs text-forest/70 font-medium italic leading-snug">
               {t(
-                "Bargeld, das sich zu Beginn bereits in der Kasse befindet.",
-                "Cash already present in the drawer float at shift start."
+                "PFLICHTFELD: Gib den exakten Wechselgeldbetrag in der Kasse vor dem ersten Verkauf ein.",
+                "MANDATORY: Enter the exact cash float present in the register drawer before starting sales."
               )}
             </p>
           </div>
@@ -100,7 +101,7 @@ export function StartShiftModal({
             className="w-full py-4 rounded-2xl bg-forest hover:bg-forest/90 disabled:opacity-50 text-white font-extrabold text-base shadow-lg transition flex items-center justify-center gap-2 cursor-pointer border border-emerald-800"
           >
             <Play className="w-5 h-5 text-amber-300" />
-            <span>{isSubmitting ? t("Schicht wird gestartet...", "Starting Shift...") : t("Schicht starten", "Start Shift")}</span>
+            <span>{isSubmitting ? t("Schicht wird gestartet...", "Starting Shift...") : t("Neue Schicht jetzt starten", "Start Shift Now")}</span>
           </button>
         </form>
       </div>

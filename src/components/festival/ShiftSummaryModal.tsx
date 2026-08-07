@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { X, FileText, AlertTriangle, Banknote, Clock, Calendar, Store, MapPin, Download, Play, StopCircle, Printer, CheckCircle2 } from "lucide-react";
+import { X, FileText, AlertTriangle, Calendar, Store, MapPin, Download, Play, StopCircle, Printer, CheckCircle2 } from "lucide-react";
 import type { FestivalEventConfig, FestivalOrder, FestivalShiftData } from "@/lib/festival/types";
 import { exportShiftToCSV } from "@/lib/festival/exportUtils";
 import { toast } from "sonner";
@@ -179,7 +179,7 @@ export function ShiftSummaryModal({
             </span>
           </div>
 
-          <div className="flex items-center justify-center gap-3 text-[11px] font-mono text-emerald-800 bg-emerald-50 py-1 px-3 rounded-xl border border-emerald-200 inline-block">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-mono text-emerald-800 bg-emerald-50 py-1 px-3 rounded-xl border border-emerald-200 inline-block">
             <span>
               {t("Zeitraum:", "Period:")} {formatTimeOnly(shiftData.shiftStartedAt)} –{" "}
               {isShiftClosed ? formatTimeOnly(shiftData.shiftEndedAt || "") : t("Aktiv", "Active")}
@@ -358,28 +358,46 @@ export function ShiftSummaryModal({
         {/* Start / Close Shift Controls */}
         <div className="pt-1 print:hidden">
           {isShiftClosed ? (
-            <div className="bg-amber-50 p-4 rounded-2xl border border-amber-300 space-y-3 text-center">
-              <div className="flex items-center justify-center gap-2 text-amber-900 font-extrabold text-sm">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+            <div className="bg-amber-50 p-5 rounded-2xl border-2 border-amber-300 space-y-4 text-left">
+              <div className="flex items-center justify-center gap-2 text-amber-950 font-extrabold text-sm border-b border-amber-200 pb-2.5 text-center">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                 <span>{t("Schicht beendet & abgeschlossen.", "Shift is closed & completed.")}</span>
               </div>
-              <div className="flex items-center gap-2 max-w-xs mx-auto pt-1">
-                <input
-                  type="text"
-                  value={openingCashInput}
-                  onChange={(e) => setOpeningCashInput(e.target.value)}
-                  placeholder="0,00"
-                  className="w-24 px-3 py-2.5 rounded-xl border border-amber-300 bg-white font-bold text-xs text-center outline-none"
-                />
-                <button
-                  disabled={isProcessing}
-                  onClick={handleExecuteStartShift}
-                  className="flex-1 py-2.5 rounded-xl bg-forest text-white font-bold text-xs hover:bg-forest/90 transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <Play className="w-4 h-4 text-amber-300" />
-                  <span>{t("Neue Schicht starten", "Start New Shift")}</span>
-                </button>
+
+              {/* Labeled, Self-Explanatory Opening Cash Input for New Shift */}
+              <div className="space-y-2">
+                <label htmlFor="new-shift-opening-cash" className="block text-xs font-extrabold uppercase tracking-wider text-amber-950">
+                  {t("Anfangskassenbestand für neue Schicht (Wechselgeld in €)", "Opening Cash Float for New Shift (in €)")} <span className="text-rose-600 font-bold">*</span>
+                </label>
+                <div className="relative flex items-center">
+                  <span className="absolute left-3.5 font-extrabold text-lg text-amber-900">
+                    €
+                  </span>
+                  <input
+                    id="new-shift-opening-cash"
+                    type="text"
+                    value={openingCashInput}
+                    onChange={(e) => setOpeningCashInput(e.target.value)}
+                    placeholder="0,00"
+                    className="w-full pl-9 pr-4 py-3 rounded-xl border-2 border-emerald-600 bg-white font-extrabold text-lg text-forest outline-none focus:ring-2 focus:ring-emerald-500 shadow-xs"
+                  />
+                </div>
+                <p className="text-[11px] font-medium text-amber-900/80 italic">
+                  {t(
+                    "PFLICHTFELD: Exakter Wechselgeldbetrag in der Kasse vor dem ersten Verkauf der neuen Schicht.",
+                    "MANDATORY: Exact cash float in the register before starting sales for the new shift."
+                  )}
+                </p>
               </div>
+
+              <button
+                disabled={isProcessing}
+                onClick={handleExecuteStartShift}
+                className="w-full py-3.5 rounded-xl bg-forest hover:bg-forest/90 disabled:opacity-50 text-white font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2 cursor-pointer border border-emerald-800"
+              >
+                <Play className="w-4 h-4 text-amber-300" />
+                <span>{isProcessing ? t("Neue Schicht wird gestartet...", "Starting New Shift...") : t("Neue Schicht jetzt starten", "Start New Shift Now")}</span>
+              </button>
             </div>
           ) : !confirmClose ? (
             <button
