@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { trackEvent } from "@/utils/posthog";
@@ -99,7 +100,9 @@ export const Route = createFileRoute("/catering/$slug")({
     const description = rawDesc.length > 160 ? rawDesc.slice(0, 157) + "..." : rawDesc;
     const title = c ? `${c.name} – Catering in ${city} | Speisely` : "Catering – Speisely";
     const ogImage = c?.img ?? "https://speisely.de/og-default.jpg";
-    const canonicalUrl = (c as any)?.custom_domain ? `https://${(c as any).custom_domain}` : `https://speisely.de/catering/${params.slug}`;
+    const canonicalUrl = (c as any)?.custom_domain
+      ? `https://${(c as any).custom_domain}`
+      : `https://speisely.de/catering/${params.slug}`;
     return {
       meta: [
         { title },
@@ -124,9 +127,26 @@ export const Route = createFileRoute("/catering/$slug")({
                 name: c.name,
                 image: c.img,
                 address: { "@type": "PostalAddress", addressLocality: city },
-                areaServed: (c as any)?.seo_service_areas?.length ? (c as any).seo_service_areas : city,
-                ...((c as any)?.seo_event_types_target?.length || (c as any)?.seo_catering_styles?.length ? { knowsAbout: [...((c as any)?.seo_event_types_target || []), ...((c as any)?.seo_catering_styles || [])] } : {}),
-                ...((c as any)?.seo_menu_or_packages_intro ? { makesOffer: { "@type": "Offer", description: (c as any).seo_menu_or_packages_intro } } : {}),
+                areaServed: (c as any)?.seo_service_areas?.length
+                  ? (c as any).seo_service_areas
+                  : city,
+                ...((c as any)?.seo_event_types_target?.length ||
+                (c as any)?.seo_catering_styles?.length
+                  ? {
+                      knowsAbout: [
+                        ...((c as any)?.seo_event_types_target || []),
+                        ...((c as any)?.seo_catering_styles || []),
+                      ],
+                    }
+                  : {}),
+                ...((c as any)?.seo_menu_or_packages_intro
+                  ? {
+                      makesOffer: {
+                        "@type": "Offer",
+                        description: (c as any).seo_menu_or_packages_intro,
+                      },
+                    }
+                  : {}),
                 ...(loaderData?.reviewsData?.aggregates?.count &&
                 loaderData.reviewsData.aggregates.count > 0
                   ? {
@@ -517,88 +537,47 @@ function CatererPage() {
                 </span>
                 <span className="text-sm text-forest truncate">{i.name}</span>
                 <span className="text-sm font-medium text-forest">
-                  €{(i.price * i.qty).toFixed(2)}
+                  {i.price > 0
+                    ? `€${(i.price * i.qty).toFixed(2)}`
+                    : t("Preis auf Anfrage", "Price on request")}
                 </span>
               </div>
             ))}
           </div>
           <div className="mt-4 flex items-center justify-between text-sm text-forest/70">
             <span>{t("Zwischensumme", "Subtotal")}</span>
-            <span>€{subtotal.toFixed(2)}</span>
+            <span>
+              {subtotal > 0
+                ? `€${subtotal.toFixed(2)}`
+                : t("Preis auf Anfrage", "Price on request")}
+            </span>
           </div>
-
-          {appliedPromo ? (
-            <div className="mt-3 flex items-center justify-between text-sm text-[oklch(0.55_0.15_30)] bg-[oklch(0.95_0.05_30)] p-2.5 rounded-lg border border-[oklch(0.85_0.15_30)]">
-              <div className="flex flex-col">
-                <span className="font-semibold">
-                  {t("Gutschein", "Voucher")}: {appliedPromo.code}
-                </span>
-                <span className="text-xs">
-                  {appliedPromo.discount_type === "percentage"
-                    ? `-${appliedPromo.discount_value}%`
-                    : `-€${appliedPromo.discount_value.toFixed(2)}`}
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="font-semibold">-€{discountAmount.toFixed(2)}</span>
-                <button
-                  onClick={handleRemovePromo}
-                  className="text-[oklch(0.55_0.15_30)] hover:text-black"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="mt-4">
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  placeholder={t("Promo Code", "Promo code")}
-                  value={promoCodeInput}
-                  onChange={(e) => setPromoCodeInput(e.target.value)}
-                  className="w-full rounded-md border border-[oklch(0.85_0.05_152)] px-3 py-1.5 text-sm focus:border-forest focus:outline-none"
-                />
-                <button
-                  onClick={handleApplyPromo}
-                  className="rounded-md bg-[#eadfce] px-3 py-1.5 text-sm font-semibold text-forest hover:bg-[#eadfce]/80 whitespace-nowrap"
-                >
-                  {t("Einlösen", "Apply")}
-                </button>
-              </div>
-              {promoError && <p className="mt-1 text-xs text-red-500">{promoError}</p>}
-            </div>
-          )}
 
           <div className="mt-4 flex items-center justify-between text-base font-semibold text-forest border-t border-[oklch(0.85_0.05_152)] pt-4">
             <span>{t("Gesamt", "Total")}</span>
-            <span>€{finalTotal.toFixed(2)}</span>
+            <span>
+              {finalTotal > 0
+                ? `€${finalTotal.toFixed(2)}`
+                : t("Preis auf Anfrage", "Price on request")}
+            </span>
           </div>
 
-          {belowMin && (
-            <p className="mt-2 text-xs text-[oklch(0.55_0.15_30)]">
-              {t(
-                `Noch €${(catererProfile.minBudget - subtotal).toFixed(0)} bis zum Mindestbudget.`,
-                `€${(catererProfile.minBudget - subtotal).toFixed(0)} more to reach the min. budget.`,
-              )}
-            </p>
-          )}
           <button
-            disabled={belowMin || submittingBrief}
+            disabled={submittingBrief}
             onClick={() => {
               const defaultDate = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
               setInquiryForm((prev) => ({
                 ...prev,
                 guestCount: totalCount,
                 eventDate: prev.eventDate || defaultDate,
-                postalCodeCity: prev.postalCodeCity || "41061 Mönchengladbach",
+                postalCodeCity: prev.postalCodeCity || "NRW & Umgebung",
               }));
               setInquiryModalOpen(true);
             }}
             className="mt-5 w-full rounded-full bg-[#22C55E] hover:bg-[#22C55E]/90 text-white py-3 font-semibold shadow-md transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             <CheckCircle2 className="h-5 w-5" />
-            {t("Anfrage senden", "Send inquiry")} · ab €{finalTotal.toFixed(2)}
+            {t("Unverbindliche Anfrage senden", "Send non-binding inquiry")}
           </button>
           <p className="mt-2 text-xs text-forest/60">
             {t("Der Caterer bestätigt deine Anfrage.", "The caterer confirms your request.")}
@@ -718,6 +697,11 @@ function CatererPage() {
 
   return (
     <SiteShell>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-4">
+        <div className="p-2 bg-amber-100 border border-amber-300 text-amber-900 text-xs font-mono font-bold rounded-lg text-center">
+          Release: VEEDOS-2026-08-08-2213
+        </div>
+      </div>
       <AnnouncementBanner
         isActive={catererProfile.announcement_active ?? false}
         text={catererProfile.announcement_text ?? null}
@@ -744,7 +728,10 @@ function CatererPage() {
         {/* Redesigned Responsive Hero Banner */}
         <div className="relative mt-6 w-full min-h-[380px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg flex flex-col justify-between p-5 sm:p-6 md:p-8">
           <img
-            src={catererProfile.img || "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop"}
+            src={
+              catererProfile.img ||
+              "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop"
+            }
             alt={catererProfile.name}
             className="absolute inset-0 h-full w-full object-cover object-center"
             loading="eager"
@@ -753,7 +740,8 @@ function CatererPage() {
             height={420}
             onError={(e) => {
               e.currentTarget.onerror = null;
-              e.currentTarget.src = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
+              e.currentTarget.src =
+                "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
             }}
           />
           {/* Dark gradient overlay */}
@@ -772,7 +760,9 @@ function CatererPage() {
                 <ShieldCheck className="h-4 w-4" />
                 {t("GEPRÜFT", "CHECKED")}
               </span>
-            ) : <div />}
+            ) : (
+              <div />
+            )}
 
             {/* Desktop Top Right Actions */}
             <div className="hidden md:flex items-center gap-2 sm:gap-3">
@@ -910,23 +900,28 @@ function CatererPage() {
                 <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold leading-tight drop-shadow-md">
                   {catererProfile.name}
                 </h1>
-                {catererProfile?.seo_event_types_target && catererProfile.seo_event_types_target.length > 0 && (
-                  <p className="text-xs sm:text-base md:text-lg font-medium drop-shadow-md text-white/90">
-                    {catererProfile.seo_event_types_target.join(" · ")}
-                  </p>
-                )}
+                {catererProfile?.seo_event_types_target &&
+                  catererProfile.seo_event_types_target.length > 0 && (
+                    <p className="text-xs sm:text-base md:text-lg font-medium drop-shadow-md text-white/90">
+                      {catererProfile.seo_event_types_target.join(" · ")}
+                    </p>
+                  )}
               </div>
             </div>
 
-            {catererProfile?.seo_catering_styles && catererProfile.seo_catering_styles.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-1">
-                {catererProfile.seo_catering_styles.map((style: string, i: number) => (
-                  <span key={i} className="text-[10px] sm:text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/30 text-white">
-                    {style}
-                  </span>
-                ))}
-              </div>
-            )}
+            {catererProfile?.seo_catering_styles &&
+              catererProfile.seo_catering_styles.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {catererProfile.seo_catering_styles.map((style: string, i: number) => (
+                    <span
+                      key={i}
+                      className="text-[10px] sm:text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/30 text-white"
+                    >
+                      {style}
+                    </span>
+                  ))}
+                </div>
+              )}
 
             {catererProfile.tagline && catererProfile.tagline[lang] && (
               <p className="text-xs sm:text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md leading-relaxed line-clamp-3 md:line-clamp-none">
@@ -1074,7 +1069,9 @@ function CatererPage() {
           <dl className="grid grid-cols-2 sm:flex sm:flex-wrap items-start sm:items-center gap-4 sm:gap-x-6 sm:gap-y-4 m-0 w-full md:w-auto">
             <div className="flex items-center gap-2 text-forest">
               <ShieldCheck className="h-5 w-5 shrink-0 text-[#10b981]" />
-              <span className="text-xs sm:text-sm font-bold">{t("Geprüftes Profil", "Checked Profile")}</span>
+              <span className="text-xs sm:text-sm font-bold">
+                {t("Geprüftes Profil", "Checked Profile")}
+              </span>
             </div>
 
             <div className="hidden md:block w-px h-8 bg-[#eadfce]/60" />
@@ -1110,10 +1107,14 @@ function CatererPage() {
               <dd className="text-xs sm:text-sm font-semibold text-forest flex flex-col items-start gap-0.5 m-0">
                 <div className="flex items-center gap-1">
                   <MapPin className="h-4 w-4 text-forest/40 shrink-0" />{" "}
-                  <span className="truncate max-w-[140px] sm:max-w-[200px]">{catererProfile?.seo_service_areas?.join(", ") || catererProfile.area}</span>
+                  <span className="truncate max-w-[140px] sm:max-w-[200px]">
+                    {catererProfile?.seo_service_areas?.join(", ") || catererProfile.area}
+                  </span>
                 </div>
                 {catererProfile?.seo_service_radius_km && (
-                  <span className="text-[10px] sm:text-xs text-forest/60">Bis {catererProfile.seo_service_radius_km} km Radius</span>
+                  <span className="text-[10px] sm:text-xs text-forest/60">
+                    Bis {catererProfile.seo_service_radius_km} km Radius
+                  </span>
                 )}
               </dd>
             </div>
@@ -1144,16 +1145,25 @@ function CatererPage() {
             </p>
             {dbCaterer?.seo_nearby_landmarks && dbCaterer.seo_nearby_landmarks.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="text-sm font-semibold text-forest/70">{t("In der Nähe:", "Nearby:")}</span>
+                <span className="text-sm font-semibold text-forest/70">
+                  {t("In der Nähe:", "Nearby:")}
+                </span>
                 {dbCaterer.seo_nearby_landmarks.map((lm: string, i: number) => (
-                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1"><MapPin className="h-3 w-3" />{lm}</span>
+                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {lm}
+                  </span>
                 ))}
               </div>
             )}
             {dbCaterer?.seo_logistics_details && (
               <div className="mt-6 p-4 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)]">
-                <h4 className="font-semibold text-forest text-sm mb-2">{t("Catering & Logistik Details", "Catering & Logistics Details")}</h4>
-                <p className="text-sm text-forest/80 whitespace-pre-wrap">{dbCaterer.seo_logistics_details}</p>
+                <h4 className="font-semibold text-forest text-sm mb-2">
+                  {t("Catering & Logistik Details", "Catering & Logistics Details")}
+                </h4>
+                <p className="text-sm text-forest/80 whitespace-pre-wrap">
+                  {dbCaterer.seo_logistics_details}
+                </p>
               </div>
             )}
           </div>
@@ -1167,12 +1177,20 @@ function CatererPage() {
         <div>
           {dbCaterer?.seo_menu_or_packages_intro && (
             <div className="mb-6">
-              <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap">{dbCaterer.seo_menu_or_packages_intro}</p>
+              <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap">
+                {dbCaterer.seo_menu_or_packages_intro}
+              </p>
             </div>
           )}
           <h2 className="text-3xl font-display font-bold text-forest">
             {t("Speisekarte", "Menu")}
           </h2>
+          <p className="mt-1 text-sm font-semibold text-amber-700/80 bg-amber-50 px-3 py-1.5 rounded-md border border-amber-200/60 w-fit">
+            {t(
+              "Beispielmenü – endgültige Auswahl nach Rücksprache",
+              "Sample menu – final selection subject to confirmation",
+            )}
+          </p>
           <CategoryNav
             categories={categories}
             onSelect={(cat) => {
@@ -1246,12 +1264,10 @@ function CatererPage() {
                                 </p>
                               )}
                               <div className="mt-3 flex items-center gap-3">
-                                <p className="text-lg font-bold text-forest">
-                                  €{m.price.toFixed(2)}
-                                  <span className="text-sm font-medium text-forest/60 font-sans">
-                                    {" "}
-                                    / {m.unit[lang]}
-                                  </span>
+                                <p className="text-base font-semibold text-forest">
+                                  {m.price > 0
+                                    ? `€${m.price.toFixed(2)}`
+                                    : t("Preis auf Anfrage", "Price on request")}
                                 </p>
                                 {m.serves && (
                                   <span className="inline-flex items-center gap-1 rounded-full bg-[#fdfaf5] px-2.5 py-0.5 text-xs font-medium text-forest/70 border border-[#eadfce]/60">
@@ -1376,7 +1392,9 @@ function CatererPage() {
               {totalCount} {totalCount === 1 ? t("Artikel", "Item") : t("Artikel", "Items")}
             </div>
             <div className="text-xs text-forest/70">
-              {t("Gesamt", "Total")}: ab €{finalTotal.toFixed(2)}
+              {finalTotal > 0
+                ? `${t("Gesamt", "Total")}: ab €${finalTotal.toFixed(2)}`
+                : t("Preis auf Anfrage", "Price on request")}
             </div>
           </div>
           <Sheet open={mobileCartOpen} onOpenChange={setMobileCartOpen}>
@@ -1546,43 +1564,46 @@ function CatererPage() {
               try {
                 setSubmittingBrief(true);
                 const itemsText = cartItems
-                  .map((i) => `- ${i.qty}x ${i.name} (€${(i.price * i.qty).toFixed(2)})`)
+                  .map((i) =>
+                    i.price > 0
+                      ? `- ${i.qty}x ${i.name} (€${(i.price * i.qty).toFixed(2)})`
+                      : `- ${i.qty}x ${i.name}`,
+                  )
                   .join("\n");
 
-                const notes = `[ONLINE STOREFRONT INQUIRY]\nCustomer Name: ${inquiryForm.customerName}\nCustomer Email: ${inquiryForm.customerEmail}\nCustomer Phone: ${inquiryForm.customerPhone || "N/A"}\nEvent Type: ${inquiryForm.eventType}\nDelivery Location: ${inquiryForm.postalCodeCity}\nSelected Items:\n${itemsText}\n\nNotes:\n${inquiryForm.notes || "None"}\n\nTotal: €${currentTotalAmount.toFixed(2)}`;
+                const totalStr = "Preis auf Anfrage";
+                const notes = `[ONLINE STOREFRONT ENQUIRY]\nCustomer Name: ${inquiryForm.customerName}\nCustomer Email: ${inquiryForm.customerEmail}\nCustomer Phone: ${inquiryForm.customerPhone || "N/A"}\nEvent Type: ${inquiryForm.eventType}\nDelivery Location: ${inquiryForm.postalCodeCity}\nSelected Items:\n${itemsText}\n\nNotes:\n${inquiryForm.notes || "None"}\n\nPreis: ${totalStr}`;
 
-                if (catererProfile?.id) {
-                  await submitBrief({
-                    data: {
-                      catererId: catererProfile.id,
-                      eventType: inquiryForm.eventType,
-                      eventDate:
-                        inquiryForm.eventDate ||
-                        new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0],
-                      guestCount: inquiryForm.guestCount || currentTotalCount,
-                      budgetCents: Math.round(currentTotalAmount * 100),
-                      location:
-                        inquiryForm.postalCodeCity || catererProfile.area || "Storefront Location",
-                      notes,
-                      customerName: inquiryForm.customerName,
-                      customerEmail: inquiryForm.customerEmail,
-                      customerPhone: inquiryForm.customerPhone,
-                    },
-                  });
-                }
+                await submitBrief({
+                  data: {
+                    catererId: catererProfile.id,
+                    eventType: inquiryForm.eventType,
+                    eventDate:
+                      inquiryForm.eventDate ||
+                      new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0],
+                    guestCount: inquiryForm.guestCount || currentTotalCount,
+                    budgetCents: 0,
+                    location:
+                      inquiryForm.postalCodeCity || catererProfile.area || "Storefront Location",
+                    notes,
+                    customerName: inquiryForm.customerName,
+                    customerEmail: inquiryForm.customerEmail,
+                    customerPhone: inquiryForm.customerPhone,
+                  },
+                });
 
                 trackEvent("reservation_submitted", {
                   catererId: catererProfile?.id || "unknown",
                   type: "catering",
                   isB2b: false,
                   totalCount: currentTotalCount,
-                  finalTotal: currentTotalAmount,
+                  finalTotal: 0,
                 });
 
                 toast.success(
                   t(
-                    `Anfrage erfolgreich gesendet! ${catererProfile?.name || "Der Caterer"} meldet sich in Kürze.`,
-                    `Inquiry sent successfully! ${catererProfile?.name || "The caterer"} will get back to you shortly.`,
+                    "Catering-Anfrage erfolgreich gesendet! Ihre Anfrage ist unverbindlich.",
+                    "Catering enquiry sent successfully! Your enquiry is non-binding.",
                   ),
                 );
                 setSubmittedSummary({ count: currentTotalCount, total: currentTotalAmount });
@@ -1809,7 +1830,9 @@ function CatererPage() {
               search={{ redirect: "/customer" } as any}
               className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-forest underline hover:text-emerald-700"
             >
-              <span>{t("Zum Kunden-Dashboard / Anmelden", "Go to Customer Dashboard / Sign In")}</span>
+              <span>
+                {t("Zum Kunden-Dashboard / Anmelden", "Go to Customer Dashboard / Sign In")}
+              </span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>

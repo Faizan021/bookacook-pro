@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
 import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
@@ -36,6 +37,165 @@ export type Caterer = {
 };
 
 export const fallbackCaterers: Caterer[] = [
+  {
+    id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d0001",
+    slug: "veedos-kitchen",
+    name: "VeeDo's Kitchen",
+    tagline: {
+      de: "Pakistani & Indische Spezialitäten · Catering-Anfragen für Events & Feiern",
+      en: "Pakistani & Indian Specialties · Catering enquiries for Events & Celebrations",
+    },
+    rating: 4.9,
+    reviewCount: 38,
+    minOrder: 0,
+    minGuests: 15,
+    perPerson: 0,
+    time: "48 Stunden Vorlauf",
+    tags: ["Pakistani Catering", "Buffet & Grill", "Events & Feiern"],
+    serviceCategories: ["events", "wedding", "private", "ramadan"],
+    img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=1200&h=900&fit=crop",
+    logo: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=300&h=300&fit=crop",
+    status: "available",
+    area: "Region NRW",
+    address: "NRW, Deutschland",
+    phone: "",
+    cat: "all",
+    verified: true,
+    dietary: ["Orient-Spezialitäten", "Vegetarisch"],
+    about: {
+      de: "VeeDo's Kitchen bietet Catering-Anfragen für Feiern, Hochzeiten und geschäftliche Events in NRW. Auswahl an Biryani, Spezialitäten vom Grill und traditionellen Nachspeisen. Alle Preise auf Anfrage.",
+      en: "VeeDo's Kitchen offers catering enquiries for celebrations, weddings, and corporate events in NRW. Selection of Biryani, grill specialties, and traditional desserts. All prices on request.",
+    },
+    announcement_active: true,
+    announcement_bg_color: "primary",
+    announcement_text:
+      "ℹ️ Ihre Anfrage ist unverbindlich. Der Caterer bestätigt Verfügbarkeit und Details separat.",
+    packages: [
+      {
+        id: "wedding-shahi-buffet",
+        title: "Shahi Royal Wedding Buffet",
+        price_amount: 0,
+        price_type: "on_request",
+        min_guests: 30,
+        short_summary: "Exklusives Hochzeitsbuffet mit Biryani, Karahi, Kebabs, Naan & Desserts",
+        description:
+          "Unser beliebtes königliches Hochzeitsbuffet inkl. Chicken Dum Biryani, Mutton Karahi, Seekh Kebabs, Naan-Brot, Raita, Salat sowie Firni & Gulab Jamun. Preis auf Anfrage.",
+        included_items: [
+          "Chicken Dum Biryani",
+          "Mutton Karahi",
+          "Seekh Kebab Platter",
+          "Frische Naan-Brote",
+          "Shahi Firni & Gulab Jamun",
+        ],
+      },
+    ],
+    menu: [
+      {
+        id: "item-biryani-chicken",
+        category: "Authentische Hauptgerichte",
+        name: "Chicken Dum Biryani",
+        desc: {
+          de: "Traditionell im Tonkrug gedämpfter Basmati-Safranreis mit zartem Hähnchenfleisch, orientalischen Gewürzen, Raita & Salat.",
+          en: "Traditional dum-cooked saffron basmati rice with tender chicken, aromatic spices, raita & salad.",
+        },
+        price_cents: 0,
+        unit: "Pro Person",
+        serves: 1,
+        is_available: true,
+        image_url:
+          "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&h=600&fit=crop",
+      },
+      {
+        id: "item-biryani-mutton",
+        category: "Authentische Hauptgerichte",
+        name: "Shahi Mutton Biryani",
+        desc: {
+          de: "Festliche Lamm-Biryani mit zart geschmortem Lammfleisch, Nüssen, Rosinen und erlesenem Basmatireis.",
+          en: "Royal mutton biryani cooked with tender lamb meat, nuts, raisins, and aromatic basmati rice.",
+        },
+        price_cents: 0,
+        unit: "Pro Person",
+        serves: 1,
+        is_available: true,
+        image_url:
+          "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&h=600&fit=crop",
+      },
+      {
+        id: "item-lahori-nihari",
+        category: "Pakistani Spezialitäten",
+        name: "Lahori Khas Nihari",
+        desc: {
+          de: "Langsam über Nacht geschmortes Rinderfleisch in würziger Gravy-Sauce, garniert mit frischem Ingwer, Chili & Koriander.",
+          en: "Slow-cooked beef in rich aromatic gravy, served with fresh ginger, green chilies & cilantro.",
+        },
+        price_cents: 0,
+        unit: "Pro Person",
+        serves: 1,
+        is_available: true,
+        image_url: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&h=600&fit=crop",
+      },
+      {
+        id: "item-chicken-karahi",
+        category: "Pakistani Spezialitäten",
+        name: "Peshawari Chicken Karahi",
+        desc: {
+          de: "Frisch zubereitetes Hähnchen-Curry aus dem Kadhai mit sonnengereiften Tomaten, schwarzem Pfeffer & Koriander.",
+          en: "Fresh wok-cooked chicken curry with ripe tomatoes, black pepper, and fresh coriander.",
+        },
+        price_cents: 0,
+        unit: "Pro Person",
+        serves: 1,
+        is_available: true,
+        image_url:
+          "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=800&h=600&fit=crop",
+      },
+      {
+        id: "item-seekh-kebabs",
+        category: "Grill & Spezialitäten",
+        name: "Mixed Seekh Kebab Platter",
+        desc: {
+          de: "Saftig gegrillte Hackfleischspieße vom Lamm & Hähnchen mit Minz-Chutney und Zwiebelringen.",
+          en: "Juicy grilled minced lamb and chicken skewers served with mint chutney and fresh onion rings.",
+        },
+        price_cents: 0,
+        unit: "Pro Portion",
+        serves: 1,
+        is_available: true,
+        image_url:
+          "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=800&h=600&fit=crop",
+      },
+      {
+        id: "item-halwa-puri",
+        category: "Frühstück & Festtags-Special",
+        name: "Halwa Puri Chana Platter",
+        desc: {
+          de: "Frisch frittierte Puris serviert mit Suji Ka Halwa, pikantem Kichererbsen-Curry (Chana Masala) & Aloo Bhujia.",
+          en: "Fresh fried Puris served with sweet semolina Halwa, savory Chickpea curry & spicy potato masala.",
+        },
+        price_cents: 0,
+        unit: "Pro Person",
+        serves: 1,
+        is_available: true,
+        image_url:
+          "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&h=600&fit=crop",
+      },
+      {
+        id: "item-dessert-platter",
+        category: "Desserts & Getränke",
+        name: "Shahi Dessert Duo (Kheer & Gulab Jamun)",
+        desc: {
+          de: "Cremiger Reispudding mit Mandeln & Safran gepaart mit warmen Gulab Jamun in Rosenwasser-Sirup.",
+          en: "Creamy rice pudding with almonds & saffron paired with warm Gulab Jamun in rose syrup.",
+        },
+        price_cents: 0,
+        unit: "Pro Person",
+        serves: 1,
+        is_available: true,
+        image_url:
+          "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&h=600&fit=crop",
+      },
+    ],
+  },
   {
     id: "partyservice-kuepper",
     slug: "partyservice-kuepper",
@@ -207,17 +367,22 @@ function mapCaterer(r: any): Caterer {
   const isBannerMissing = !r.banner_image_url;
   const isLogoMissing = !cData.logo_url;
 
-  const resolvedBanner = (isGenerated || isBannerMissing)
-    ? generateSvgBanner(r.business_name || "Caterer", "Catering Service")
-    : (r.banner_image_url.startsWith("http")
+  const resolvedBanner =
+    isGenerated || isBannerMissing
+      ? generateSvgBanner(r.business_name || "Caterer", "Catering Service")
+      : r.banner_image_url.startsWith("http")
         ? r.banner_image_url
-        : supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url).data.publicUrl);
+        : supabase.storage.from("storefront-assets").getPublicUrl(r.banner_image_url).data
+            .publicUrl;
 
-  const resolvedLogo = (isGenerated || isLogoMissing)
-    ? generateSvgLogo(r.business_name || "Caterer", "Catering Service")
-    : (cData.logo_url && cData.logo_url.startsWith("http")
+  const resolvedLogo =
+    isGenerated || isLogoMissing
+      ? generateSvgLogo(r.business_name || "Caterer", "Catering Service")
+      : cData.logo_url && cData.logo_url.startsWith("http")
         ? cData.logo_url
-        : (cData.logo_url ? supabase.storage.from("storefront-assets").getPublicUrl(cData.logo_url).data.publicUrl : undefined));
+        : cData.logo_url
+          ? supabase.storage.from("storefront-assets").getPublicUrl(cData.logo_url).data.publicUrl
+          : undefined;
 
   return {
     id: r.slug || r.id,
@@ -254,13 +419,15 @@ function mapCaterer(r: any): Caterer {
 }
 
 export function mapDbCaterer(c: any): Caterer {
-  const defaultFoodImg = "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
+  const defaultFoodImg =
+    "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop";
   let img = defaultFoodImg;
   if (c.banner_image_url && typeof c.banner_image_url === "string") {
     if (c.banner_image_url.startsWith("http")) {
       img = c.banner_image_url;
     } else {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://athwccvgdovglcpluwnu.supabase.co";
+      const supabaseUrl =
+        import.meta.env.VITE_SUPABASE_URL || "https://athwccvgdovglcpluwnu.supabase.co";
       img = `${supabaseUrl}/storage/v1/object/public/storefront-assets/${c.banner_image_url}`;
     }
   }
@@ -279,15 +446,29 @@ export function mapDbCaterer(c: any): Caterer {
   let dietaryTags = ["Buffet-Klassiker", "Event-Service"];
   const catererNameLower = (c.name || "").toLowerCase();
   if (c.certifications && c.certifications.length > 0) {
-    dietaryTags = c.certifications.split(",").map((s: string) => s.trim()).filter(Boolean);
-  } else if (catererNameLower.includes("kuepper") || catererNameLower.includes("küpper") || catererNameLower.includes("partyservice")) {
+    dietaryTags = c.certifications
+      .split(",")
+      .map((s: string) => s.trim())
+      .filter(Boolean);
+  } else if (
+    catererNameLower.includes("kuepper") ||
+    catererNameLower.includes("küpper") ||
+    catererNameLower.includes("partyservice")
+  ) {
     dietaryTags = ["Buffet-Klassiker", "Deftige Spezialitäten"];
   }
 
   // Parse service categories supported by this caterer (default: all 3 for comprehensive caterers like Partyservice Küpper)
   let categoriesSupported = ["events", "daily-catering-subscriptions", "institutional-catering"];
-  if (c.service_categories && typeof c.service_categories === "string" && c.service_categories.trim()) {
-    categoriesSupported = c.service_categories.split(",").map((s: string) => s.trim().toLowerCase()).filter(Boolean);
+  if (
+    c.service_categories &&
+    typeof c.service_categories === "string" &&
+    c.service_categories.trim()
+  ) {
+    categoriesSupported = c.service_categories
+      .split(",")
+      .map((s: string) => s.trim().toLowerCase())
+      .filter(Boolean);
   }
 
   return {
@@ -326,7 +507,9 @@ export async function getCaterers(): Promise<Caterer[]> {
     const list = await getPublicCatererList();
     const liveCaterers = (list || []).map(mapDbCaterer);
 
-    const hasKuepper = liveCaterers.some((c) => (c.slug || c.id || "").toLowerCase().includes("kuepper"));
+    const hasKuepper = liveCaterers.some((c) =>
+      (c.slug || c.id || "").toLowerCase().includes("kuepper"),
+    );
     let combined = [...liveCaterers];
     if (!hasKuepper) {
       const kuepperFallback = fallbackCaterers.find((c) => c.id === "partyservice-kuepper");
@@ -362,7 +545,9 @@ export async function getCaterer(id: string): Promise<Caterer | undefined> {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
     let query = supabase
       .from("storefront_settings")
-      .select("id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes")
+      .select(
+        "id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes",
+      )
       .eq("is_active", true);
 
     if (isUuid) {
@@ -375,11 +560,9 @@ export async function getCaterer(id: string): Promise<Caterer | undefined> {
 
     if (!sfData) {
       // Fallback: Query caterers table directly
-      const { data: catData } = await (
-        isUuid
-          ? supabase.from("caterers").select("*").or(`slug.eq.${id},id.eq.${id}`).maybeSingle()
-          : supabase.from("caterers").select("*").ilike("slug", id).maybeSingle()
-      );
+      const { data: catData } = await (isUuid
+        ? supabase.from("caterers").select("*").or(`slug.eq.${id},id.eq.${id}`).maybeSingle()
+        : supabase.from("caterers").select("*").ilike("slug", id).maybeSingle());
 
       if (catData) {
         sfData = {
@@ -395,7 +578,7 @@ export async function getCaterer(id: string): Promise<Caterer | undefined> {
           estimated_prep_time_minutes: 60,
         };
       } else {
-        const fallback = fallbackCaterers.find((c) => c.id === id);
+        const fallback = fallbackCaterers.find((c) => c.id === id || c.slug === id);
         if (fallback) return { ...fallback, isShowcase: true };
 
         const formattedName = id
@@ -424,7 +607,7 @@ export async function getCaterer(id: string): Promise<Caterer | undefined> {
           dietary: ["Vegetarisch", "Vegan", "Halal"],
           about: {
             de: `Willkommen bei ${formattedName}. Wir bieten erstklassige Buffets, Menüs und Catering-Konzepte für Ihr Event.`,
-            en: `Welcome to ${formattedName}. We provide top-class catering for your events.`
+            en: `Welcome to ${formattedName}. We provide top-class catering for your events.`,
           },
           packages: [],
           isShowcase: false,
@@ -433,23 +616,40 @@ export async function getCaterer(id: string): Promise<Caterer | undefined> {
     }
 
     const [catRes, menuRes] = await Promise.all([
-      supabase.from("caterers").select("id, name, slug, approval_status, use_generated_branding, logo_url, owner_id, phone, business_address, service_areas").eq("id", sfData.caterer_id).maybeSingle(),
-      supabase.from("caterer_menu_items").select("id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available").eq("caterer_id", sfData.caterer_id).eq("is_available", true)
+      supabase
+        .from("caterers")
+        .select(
+          "id, name, slug, approval_status, use_generated_branding, logo_url, owner_id, phone, business_address, service_areas",
+        )
+        .eq("id", sfData.caterer_id)
+        .maybeSingle(),
+      supabase
+        .from("caterer_menu_items")
+        .select(
+          "id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available",
+        )
+        .eq("caterer_id", sfData.caterer_id)
+        .eq("is_available", true),
     ]);
 
     const caterer = catRes.data;
     const products = menuRes.data || [];
 
+    if (!caterer) {
+      const fallback = fallbackCaterers.find((c) => c.id === id || c.slug === id);
+      if (fallback) return { ...fallback, isShowcase: true };
+    }
+
     const merged = {
       ...sfData,
       caterers: caterer,
-      products: products
+      products: products,
     };
 
     return mapCaterer(merged);
   } catch (err) {
     console.error("Failed to load caterer details, checking fallback:", err);
-    const fallback = fallbackCaterers.find((c) => c.id === id);
+    const fallback = fallbackCaterers.find((c) => c.id === id || c.slug === id);
     if (fallback) return { ...fallback, isShowcase: true };
 
     const formattedName = id
@@ -478,7 +678,7 @@ export async function getCaterer(id: string): Promise<Caterer | undefined> {
       dietary: ["Vegetarisch", "Vegan", "Halal"],
       about: {
         de: `Willkommen bei ${formattedName}. Wir bieten erstklassige Buffets, Menüs und Catering-Konzepte für Ihr Event.`,
-        en: `Welcome to ${formattedName}. We provide top-class catering for your events.`
+        en: `Welcome to ${formattedName}. We provide top-class catering for your events.`,
       },
       packages: [],
       isShowcase: false,

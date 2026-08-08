@@ -14,6 +14,7 @@ import {
   getAdminOrders,
   getMonetizationListings,
   getFeaturedSlotLimits,
+  getAdminCateringEnquiries,
 } from "@/lib/admin/queries.functions";
 import {
   updateUserRole,
@@ -74,10 +75,18 @@ function AdminPage() {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const [activeTab, setActiveTab] = useState<
-    "overview" | "analytics" | "users" | "listings" | "orders" | "ai-tools" | "surplus-policies"
+    | "overview"
+    | "analytics"
+    | "users"
+    | "listings"
+    | "orders"
+    | "enquiries"
+    | "ai-tools"
+    | "surplus-policies"
   >("overview");
   const [aiSubTab, setAiSubTab] = useState<"drafts" | "sitemap" | "competitor" | "geo">("drafts");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedEnquiryModal, setSelectedEnquiryModal] = useState<any>(null);
 
   // Sub-tab for listings
   const [listingSubTab, setListingSubTab] = useState<"restaurants" | "caterers" | "planners">(
@@ -89,6 +98,7 @@ function AdminPage() {
   const fetchUsers = useServerFn(getAdminUsers);
   const fetchListings = useServerFn(getAdminListings);
   const fetchOrders = useServerFn(getAdminOrders);
+  const fetchEnquiries = useServerFn(getAdminCateringEnquiries);
 
   const mutateRole = useServerFn(updateUserRole);
   const mutatePublish = useServerFn(toggleListingPublish);
@@ -168,6 +178,12 @@ function AdminPage() {
   const ordersQuery = useQuery({
     queryKey: ["admin", "orders"],
     queryFn: () => fetchOrders(),
+    enabled: !!isAdmin,
+  });
+
+  const enquiriesQuery = useQuery({
+    queryKey: ["admin", "enquiries"],
+    queryFn: () => fetchEnquiries(),
     enabled: !!isAdmin,
   });
 
@@ -448,6 +464,20 @@ function AdminPage() {
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Orders & Bookings</span>
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("enquiries");
+              setSearchTerm("");
+            }}
+            className={`py-3 px-4 font-medium text-sm border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === "enquiries"
+                ? "border-forest text-forest font-bold"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            }`}
+          >
+            <CheckCircle className="w-4 h-4 text-emerald-600" />
+            <span>Catering-Anfragen</span>
           </button>
           <button
             onClick={() => {
@@ -1186,6 +1216,149 @@ function AdminPage() {
                 </tbody>
               </table>
             </div>
+          </div>
+        )}
+
+        {/* Tab: Catering-Anfragen */}
+        {activeTab === "enquiries" && (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-6 space-y-6">
+            <div className="border-b border-gray-100 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 font-heading">Catering-Anfragen</h3>
+                <p className="text-sm text-gray-500">
+                  Übersicht aller eingegangenen unverbindlichen Catering-Anfragen
+                </p>
+              </div>
+              <div className="relative max-w-sm w-full">
+                <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Suche nach Caterer, Datum, Event..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    <th className="py-3 px-6">ID / Datum</th>
+                    <th className="py-3 px-6">Caterer</th>
+                    <th className="py-3 px-6">Event & Gäste</th>
+                    <th className="py-3 px-6">Ort</th>
+                    <th className="py-3 px-6">Status</th>
+                    <th className="py-3 px-6">Aktion</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 text-sm">
+                  {enquiriesQuery.data
+                    ?.filter((b: any) =>
+                      searchTerm
+                        ? (b.notes || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          (b.caterers?.name || "")
+                            .toLowerCase()
+                            .includes(searchTerm.toLowerCase()) ||
+                          (b.event_type || "").toLowerCase().includes(searchTerm.toLowerCase())
+                        : true,
+                    )
+                    .map((b: any) => (
+                      <tr key={b.id} className="hover:bg-gray-50/50">
+                        <td className="py-4 px-6 font-mono text-xs text-gray-500">
+                          <div>{b.id.substring(0, 8)}...</div>
+                          <div className="text-[10px] text-gray-400">
+                            {new Date(b.created_at).toLocaleDateString("de-DE")}
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 font-semibold text-gray-900">
+                          {b.caterers?.name || b.caterer_slug || "VeeDo's Kitchen"}
+                        </td>
+                        <td className="py-4 px-6">
+                          <div className="font-medium text-gray-900">{b.event_type}</div>
+                          <div className="text-xs text-gray-500">
+                            {b.guest_count} Gäste · {b.event_date}
+                          </div>
+                        </td>
+                        <td className="py-4 px-6 text-gray-600">{b.location}</td>
+                        <td className="py-4 px-6">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {b.status}
+                          </span>
+                        </td>
+                        <td className="py-4 px-6">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setSelectedEnquiryModal(b)}
+                          >
+                            Details anzeigen
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  {(!enquiriesQuery.data || enquiriesQuery.data.length === 0) && (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-gray-400">
+                        Keine Catering-Anfragen vorhanden.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Modal for viewing complete details */}
+            {selectedEnquiryModal && (
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+                  <div className="flex justify-between items-center border-b pb-3">
+                    <h4 className="font-bold text-lg text-gray-900">
+                      Anfrage Details ({selectedEnquiryModal.id.substring(0, 8)})
+                    </h4>
+                    <button
+                      onClick={() => setSelectedEnquiryModal(null)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="space-y-3 text-sm">
+                    <div>
+                      <strong>Caterer:</strong>{" "}
+                      {selectedEnquiryModal.caterers?.name ||
+                        selectedEnquiryModal.caterer_slug ||
+                        "VeeDo's Kitchen"}
+                    </div>
+                    <div>
+                      <strong>Event Typ:</strong> {selectedEnquiryModal.event_type}
+                    </div>
+                    <div>
+                      <strong>Datum:</strong> {selectedEnquiryModal.event_date}
+                    </div>
+                    <div>
+                      <strong>Gästezahl:</strong> {selectedEnquiryModal.guest_count} Personen
+                    </div>
+                    <div>
+                      <strong>Ort:</strong> {selectedEnquiryModal.location}
+                    </div>
+                    <div>
+                      <strong>Preis:</strong> Preis auf Anfrage
+                    </div>
+                    <div className="pt-2 border-t">
+                      <strong>Notizen & Ausgewählte Speisen:</strong>
+                      <pre className="mt-1 p-3 bg-gray-50 rounded-lg text-xs font-sans whitespace-pre-wrap text-gray-700 max-h-48 overflow-y-auto">
+                        {selectedEnquiryModal.notes || "Keine Notizen"}
+                      </pre>
+                    </div>
+                  </div>
+                  <div className="pt-3 border-t flex justify-end">
+                    <Button onClick={() => setSelectedEnquiryModal(null)}>Schließen</Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

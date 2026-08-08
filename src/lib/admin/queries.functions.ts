@@ -478,3 +478,19 @@ export const getFeaturedSlotLimits = createServerFn({ method: "GET" })
     if (error) throw new Error("Failed to fetch featured slot limits: " + error.message);
     return data ?? [];
   });
+
+export const getAdminCateringEnquiries = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth()])
+  .handler(async ({ context }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await verifyAdmin(supabaseAdmin, userId);
+
+    const { data: briefs, error } = await supabaseAdmin
+      .from("catering_briefs")
+      .select("*, caterers:preferred_caterer_id(name, slug)")
+      .order("created_at", { ascending: false });
+
+    if (error) throw new Error("Failed to fetch catering enquiries: " + error.message);
+    return briefs ?? [];
+  });
