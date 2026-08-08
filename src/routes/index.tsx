@@ -84,6 +84,9 @@ export const Route = createFileRoute("/")({
     links: [{ rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" }],
     scripts: [
       {
+        children: `(function(){try{var h=window.location.hostname.toLowerCase();if(h.endsWith('.speisely.de')&&h!=='speisely.de'&&h!=='www.speisely.de'&&h!=='app.speisely.de'&&h!=='admin.speisely.de'){var sub=h.replace('.speisely.de','').trim();if(sub&&!window.location.pathname.startsWith('/catering/')&&!window.location.pathname.startsWith('/restaurant/')&&!window.location.pathname.startsWith('/planner/')){window.location.replace('/catering/'+sub+window.location.search);}}}catch(e){}})();`,
+      },
+      {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
@@ -112,6 +115,40 @@ function Home() {
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname.toLowerCase();
+      if (
+        host.endsWith(".speisely.de") &&
+        host !== "speisely.de" &&
+        host !== "www.speisely.de" &&
+        host !== "app.speisely.de" &&
+        host !== "admin.speisely.de"
+      ) {
+        const subdomain = host.replace(".speisely.de", "").trim();
+        if (
+          subdomain &&
+          !window.location.pathname.startsWith("/catering/") &&
+          !window.location.pathname.startsWith("/restaurant/") &&
+          !window.location.pathname.startsWith("/planner/")
+        ) {
+          import("@/lib/caterer/menu.functions").then(({ resolveSubdomainVendor }) => {
+            resolveSubdomainVendor({ data: { subdomain } })
+              .then((res) => {
+                const target =
+                  res.type === "catering"
+                    ? `/catering/${res.slug}${window.location.search}`
+                    : res.type === "planner"
+                      ? `/planner/${res.slug}${window.location.search}`
+                      : `/restaurant/${res.slug}${window.location.search}`;
+                window.location.replace(target);
+              })
+              .catch(() => {
+                window.location.replace(`/catering/${subdomain}${window.location.search}`);
+              });
+          });
+        }
+      }
+    }
   }, []);
 
   const verticals = useMemo(
