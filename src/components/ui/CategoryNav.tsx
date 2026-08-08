@@ -61,34 +61,35 @@ export function CategoryNav({ categories, activeCategory, onSelect }: CategoryNa
   if (!categories || categories.length === 0) return null;
 
   return (
-    <div
-      className="sticky top-[96px] sm:top-20 z-30 bg-[#fdfaf5]/95 backdrop-blur-md overflow-hidden border-b border-[oklch(0.85_0.05_152)] py-3 sm:py-4 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 mt-6 shadow-xs"
-      ref={emblaRef}
-    >
-      <div className="flex gap-3 px-1">
-        {categories.map((cat) => {
-          const isActive = activeCategory === cat;
-          return (
-            <button
-              key={cat}
-              onClick={() => onSelect(cat)}
-              className={`flex shrink-0 flex-col items-center gap-2 rounded-xl border p-3 min-w-[84px] transition-all
-                ${
-                  isActive
-                    ? "border-forest bg-forest text-[oklch(0.97_0.02_92)] shadow-md"
-                    : "border-border/60 bg-cream/80 shadow-sm text-forest hover:border-forest/50 hover:bg-cream"
-                }
-              `}
-            >
-              <div
-                className={`grid h-10 w-10 place-items-center rounded-full text-2xl ${isActive ? "bg-white/20" : "bg-mint"}`}
+    <div className="sticky top-[64px] sm:top-[72px] z-30 mt-6 bg-[#fdfaf5]/95 backdrop-blur-md border-b border-[oklch(0.85_0.05_152)] shadow-sm">
+      <div ref={emblaRef} className="overflow-hidden">
+        <div className="flex gap-3 py-3 sm:py-4 px-4 sm:px-6 lg:px-10">
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => onSelect(cat)}
+                className={`flex shrink-0 flex-col items-center gap-2 rounded-xl border p-3 min-w-[80px] max-w-[100px] transition-all cursor-pointer
+                  ${
+                    isActive
+                      ? "border-forest bg-forest text-[oklch(0.97_0.02_92)] shadow-md"
+                      : "border-border/60 bg-cream/80 shadow-sm text-forest hover:border-forest/50 hover:bg-cream"
+                  }
+                `}
               >
-                {getCategoryIcon(cat)}
-              </div>
-              <span className="text-xs font-semibold whitespace-nowrap">{cat}</span>
-            </button>
-          );
-        })}
+                <div
+                  className={`grid h-9 w-9 place-items-center rounded-full text-xl ${isActive ? "bg-white/20" : "bg-mint"}`}
+                >
+                  {getCategoryIcon(cat)}
+                </div>
+                <span className="text-[11px] font-semibold text-center leading-tight line-clamp-2">
+                  {cat}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

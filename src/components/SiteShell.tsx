@@ -37,9 +37,11 @@ export function SiteShell({ children, dotted = true }: { children: ReactNode; do
   }, []);
 
   return (
-    <div className={`min-h-screen ${dotted ? "bg-mint-dotted" : "bg-background"}`}>
+    <div
+      className={`min-h-screen w-full overflow-x-hidden ${dotted ? "bg-mint-dotted" : "bg-background"}`}
+    >
       <SiteHeader />
-      <main>{children}</main>
+      <main className="w-full">{children}</main>
       <SiteFooter />
     </div>
   );
