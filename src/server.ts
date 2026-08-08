@@ -73,6 +73,7 @@ export default {
             host.endsWith(".speisely.de") &&
             host !== "www.speisely.de" &&
             host !== "app.speisely.de" &&
+            host !== "admin.speisely.de" &&
             host !== "speisely.de";
           let searchColumn = "custom_domain";
           let searchValue = host;
@@ -96,7 +97,7 @@ export default {
 
           // Check domain cache first
           const domainCacheKey = `${searchColumn}:${searchValue}`;
-          let cachedPath = domainCache.get(domainCacheKey);
+          const cachedPath = domainCache.get(domainCacheKey);
 
           if (cachedPath) {
             targetPath = `${cachedPath}${subPath}`;
@@ -107,9 +108,24 @@ export default {
 
             // Query restaurants, caterers, planners concurrently
             const [resRest, resCat, resPlan] = await Promise.all([
-              fetch(`${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`, fetchOpts).then(r => r.json()).catch(() => []),
-              fetch(`${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`, fetchOpts).then(r => r.json()).catch(() => []),
-              fetch(`${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`, fetchOpts).then(r => r.json()).catch(() => []),
+              fetch(
+                `${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`,
+                fetchOpts,
+              )
+                .then((r) => r.json())
+                .catch(() => []),
+              fetch(
+                `${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`,
+                fetchOpts,
+              )
+                .then((r) => r.json())
+                .catch(() => []),
+              fetch(
+                `${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`,
+                fetchOpts,
+              )
+                .then((r) => r.json())
+                .catch(() => []),
             ]);
 
             if (resRest && resRest.length > 0) {
@@ -151,12 +167,17 @@ export default {
             getPlanners(),
           ]);
 
-          if (restaurants.find((r) => r.id === targetSlug))
+          // Compare against slug (the URL-friendly name), not id (UUID)
+          if (restaurants.find((r) => (r.slug ?? r.id) === targetSlug))
             staticPath = `/restaurant/${targetSlug}${subPath}`;
-          else if (caterers.find((r) => r.id === targetSlug))
+          else if (caterers.find((r) => (r.slug ?? r.id) === targetSlug))
             staticPath = `/catering/${targetSlug}${subPath}`;
-          else if (planners.find((r) => r.id === targetSlug))
+          else if (planners.find((r) => (r.slug ?? r.id) === targetSlug))
             staticPath = `/planner/${targetSlug}${subPath}`;
+          else {
+            // Final fallback: treat the subdomain itself as a catering slug
+            staticPath = `/catering/${targetSlug}${subPath}`;
+          }
 
           if (staticPath) {
             const newUrl = new URL(staticPath, request.url);
@@ -201,9 +222,16 @@ export default {
         !reqUrl.pathname.startsWith("/_server");
 
       const contentType = finalResponse.headers.get("content-type") || "";
-      if (isPublicRoute && contentType.includes("text/html") && !finalResponse.headers.has("cache-control")) {
+      if (
+        isPublicRoute &&
+        contentType.includes("text/html") &&
+        !finalResponse.headers.has("cache-control")
+      ) {
         const newHeaders = new Headers(finalResponse.headers);
-        newHeaders.set("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=300");
+        newHeaders.set(
+          "Cache-Control",
+          "public, max-age=0, s-maxage=60, stale-while-revalidate=300",
+        );
         finalResponse = new Response(finalResponse.body, {
           status: finalResponse.status,
           headers: newHeaders,

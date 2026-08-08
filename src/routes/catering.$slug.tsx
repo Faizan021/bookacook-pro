@@ -570,7 +570,7 @@ function CatererPage() {
                 ...prev,
                 guestCount: totalCount,
                 eventDate: prev.eventDate || defaultDate,
-                postalCodeCity: prev.postalCodeCity || "NRW & Umgebung",
+                postalCodeCity: prev.postalCodeCity || catererProfile?.area || "",
               }));
               setInquiryModalOpen(true);
             }}
@@ -1201,7 +1201,7 @@ function CatererPage() {
                 {t("Gästeanzahl", "Guest Count")}
               </h3>
               <p className="text-sm text-forest/70">
-                {t("Basis für das dynamische Angebot", "Baseline for your dynamic quote")}
+                {t("Gästeanzahl für Ihre Anfrage", "Number of guests for your enquiry")}
               </p>
             </div>
             <div className="flex items-center gap-4 bg-white p-1 rounded-full shadow-sm border border-[oklch(0.85_0.05_152)]">
