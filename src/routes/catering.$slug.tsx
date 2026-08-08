@@ -378,6 +378,21 @@ function CatererPage() {
     };
   }
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname.toLowerCase();
+      if (
+        host.endsWith(".speisely.de") &&
+        host !== "speisely.de" &&
+        host !== "www.speisely.de" &&
+        host !== "app.speisely.de" &&
+        host !== "admin.speisely.de"
+      ) {
+        window.location.replace(`https://speisely.de/catering/${slug}${window.location.search}`);
+      }
+    }
+  }, [slug]);
+
   const storefrontUrl = dbCaterer?.custom_domain
     ? `https://${dbCaterer.custom_domain}`
     : `https://${dbCaterer?.slug || slug}.speisely.de`;
