@@ -24,7 +24,7 @@ describe("VeeDo's Kitchen Storefront & Enquiry Tests", () => {
     expect(result).toBeDefined();
     expect(result?.name).toBe("VeeDo's Kitchen");
     expect(result?.slug).toBe("veedos-kitchen");
-    expect(result?.area).toBe("Region NRW");
+    expect(result?.area).toBe("Berlin & Umgebung");
     expect(result?.menu.length).toBe(72);
     expect(result?.packages?.length).toBe(8);
     expect(result?.isShowcase).toBe(true);

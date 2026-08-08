@@ -697,11 +697,6 @@ function CatererPage() {
 
   return (
     <SiteShell>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-4">
-        <div className="p-2 bg-amber-100 border border-amber-300 text-amber-900 text-xs font-mono font-bold rounded-lg text-center">
-          Release: VEEDOS-2026-08-08-2213
-        </div>
-      </div>
       <AnnouncementBanner
         isActive={catererProfile.announcement_active ?? false}
         text={catererProfile.announcement_text ?? null}
@@ -1185,10 +1180,10 @@ function CatererPage() {
           <h2 className="text-3xl font-display font-bold text-forest">
             {t("Speisekarte", "Menu")}
           </h2>
-          <p className="mt-1 text-sm font-semibold text-amber-700/80 bg-amber-50 px-3 py-1.5 rounded-md border border-amber-200/60 w-fit">
+          <p className="mt-2 text-sm font-medium text-emerald-800 bg-emerald-50 px-3.5 py-2 rounded-lg border border-emerald-200/80 w-fit">
             {t(
-              "Beispielmenü – endgültige Auswahl nach Rücksprache",
-              "Sample menu – final selection subject to confirmation",
+              "💡 Sollten Sie ein gewünschtes Gericht nicht in der Speisekarte finden, kontaktieren Sie uns bitte direkt.",
+              "💡 If you require any other dish, please contact us directly.",
             )}
           </p>
           <CategoryNav
@@ -1269,7 +1264,7 @@ function CatererPage() {
                                     ? `€${m.price.toFixed(2)}`
                                     : t("Preis auf Anfrage", "Price on request")}
                                 </p>
-                                {m.serves && (
+                                {m.price > 0 && m.serves && (
                                   <span className="inline-flex items-center gap-1 rounded-full bg-[#fdfaf5] px-2.5 py-0.5 text-xs font-medium text-forest/70 border border-[#eadfce]/60">
                                     <Users className="h-3 w-3" />{" "}
                                     {t(`~${m.serves} Pers.`, `~${m.serves} pax`)}
@@ -1535,11 +1530,14 @@ function CatererPage() {
         <DialogContent className="sm:max-w-[500px] bg-[#fdfaf5] text-forest border-[#eadfce] p-6 rounded-3xl text-left max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl text-forest">
-              {t("Anfragedetails eingeben", "Complete Inquiry Details")}
+              {t(
+                `Anfrage an ${catererProfile?.name} senden`,
+                `Send Enquiry to ${catererProfile?.name}`,
+              )}
             </DialogTitle>
             <p className="text-xs text-forest/70">
               {t(
-                `Gib deine Kontaktdaten, Event-Datum und Postleitzahl an, damit ${catererProfile?.name} die Anfrage prüfen kann.`,
+                `Bitte geben Sie Ihre Kontaktdaten, das Eventdatum und den Lieferort an, damit ${catererProfile?.name} Ihre Anfrage prüfen und die Verfügbarkeit bestätigen kann.`,
                 `Please specify your contact info, event date, and delivery location so ${catererProfile?.name} can review and confirm availability.`,
               )}
             </p>
