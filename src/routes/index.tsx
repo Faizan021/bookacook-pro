@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { classifySearchIntent } from "@/lib/search/ai.functions";
 import { trackEvent } from "@/utils/posthog";
@@ -23,6 +23,46 @@ import { toast } from "sonner";
 import { motion, LayoutGroup, useReducedMotion } from "framer-motion";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    if (typeof window !== "undefined") {
+      const host = window.location.hostname.toLowerCase();
+      if (
+        host.endsWith(".speisely.de") &&
+        host !== "speisely.de" &&
+        host !== "www.speisely.de" &&
+        host !== "app.speisely.de" &&
+        host !== "admin.speisely.de"
+      ) {
+        const subdomain = host.replace(".speisely.de", "").trim();
+        if (subdomain) {
+          try {
+            const { resolveSubdomainVendor } = await import("@/lib/caterer/menu.functions");
+            const res = await resolveSubdomainVendor({ data: { subdomain } });
+            if (res.type === "catering") {
+              throw redirect({ to: "/catering/$slug", params: { slug: res.slug } });
+            } else if (res.type === "planner") {
+              throw redirect({ to: "/planner/$slug", params: { slug: res.slug } });
+            } else {
+              throw redirect({ to: "/restaurant/$slug", params: { slug: res.slug } });
+            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (e: any) {
+            if (
+              e?.isRedirect ||
+              e?.status === 301 ||
+              e?.status === 302 ||
+              e?.to ||
+              e?.href ||
+              e?.options
+            ) {
+              throw e;
+            }
+            throw redirect({ to: "/catering/$slug", params: { slug: subdomain } });
+          }
+        }
+      }
+    }
+  },
   head: () => ({
     meta: [
       { title: "Speisely – Restaurants, Catering & Event-Planung finden" },
@@ -72,35 +112,6 @@ function Home() {
 
   useEffect(() => {
     setMounted(true);
-    if (typeof window !== "undefined") {
-      const host = window.location.hostname.toLowerCase();
-      if (
-        host.endsWith(".speisely.de") &&
-        host !== "speisely.de" &&
-        host !== "www.speisely.de" &&
-        host !== "app.speisely.de" &&
-        host !== "admin.speisely.de"
-      ) {
-        const subdomain = host.replace(".speisely.de", "").trim();
-        if (subdomain) {
-          import("@/lib/caterer/menu.functions").then(({ resolveSubdomainVendor }) => {
-            resolveSubdomainVendor({ data: { subdomain } })
-              .then((res) => {
-                if (res.type === "catering") {
-                  window.location.replace(`/catering/${res.slug}${window.location.search}`);
-                } else if (res.type === "planner") {
-                  window.location.replace(`/planner/${res.slug}${window.location.search}`);
-                } else {
-                  window.location.replace(`/restaurant/${res.slug}${window.location.search}`);
-                }
-              })
-              .catch(() => {
-                window.location.replace(`/catering/${subdomain}${window.location.search}`);
-              });
-          });
-        }
-      }
-    }
   }, []);
 
   const verticals = useMemo(
