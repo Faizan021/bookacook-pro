@@ -562,6 +562,14 @@ function CatererPage() {
             </span>
           </div>
 
+          {cartItems.length > 0 &&
+            catererProfile?.announcement_active &&
+            catererProfile?.announcement_text && (
+              <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 leading-relaxed">
+                {catererProfile.announcement_text}
+              </div>
+            )}
+
           <button
             disabled={submittingBrief}
             onClick={() => {
@@ -697,11 +705,6 @@ function CatererPage() {
 
   return (
     <SiteShell>
-      <AnnouncementBanner
-        isActive={catererProfile.announcement_active ?? false}
-        text={catererProfile.announcement_text ?? null}
-        bgColor={catererProfile.announcement_bg_color ?? null}
-      />
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-8">
         {dbCaterer?.city ? (
           <Link
