@@ -469,29 +469,38 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
       .eq("id", data.catererId)
       .maybeSingle();
 
+    let targetEmail: string | null = null;
     if (caterer?.owner_id) {
       const { data: user } = await supabaseAdmin.auth.admin.getUserById(caterer.owner_id);
       if (user?.user?.email) {
-        const eventDateStr = new Date(data.eventDate).toLocaleDateString("de-DE");
-        const budgetStr = `€${(data.budgetCents / 100).toFixed(2)}`;
-        await sendPartnerNotificationEmail({
-          data: {
-            to: user.user.email,
-            subject: `Neue Catering-Anfrage für ${eventDateStr}`,
-            text: `Sie haben eine neue Anfrage für ${data.eventType} (${data.guestCount} Personen) am ${eventDateStr} in ${data.location}. Budget: ${budgetStr}.`,
-            html: `<p>Hallo ${caterer.name},</p><p>Sie haben eine neue Catering-Anfrage erhalten!</p>
-                   <ul>
-                     <li><strong>Art des Events:</strong> ${data.eventType}</li>
-                     <li><strong>Datum:</strong> ${eventDateStr}</li>
-                     <li><strong>Gästezahl:</strong> ${data.guestCount}</li>
-                     <li><strong>Budget:</strong> ${budgetStr}</li>
-                     <li><strong>Ort:</strong> ${data.location}</li>
-                   </ul>
-                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
-          },
-        });
+        targetEmail = user.user.email;
       }
     }
+
+    // Fallback to platform admin email if owner account is not linked yet
+    if (!targetEmail) {
+      targetEmail = "faizan.ahmed01213@gmail.com";
+    }
+
+    const eventDateStr = new Date(data.eventDate).toLocaleDateString("de-DE");
+    const budgetStr = `€${(data.budgetCents / 100).toFixed(2)}`;
+    await sendPartnerNotificationEmail({
+      data: {
+        to: targetEmail,
+        subject: `Neue Catering-Anfrage für ${caterer?.name || "VeeDo's Kitchen"} (${eventDateStr})`,
+        text: `Sie haben eine neue Anfrage für ${data.eventType} (${data.guestCount} Personen) am ${eventDateStr} in ${data.location}. Budget: ${budgetStr}.`,
+        html: `<p>Hallo ${caterer?.name || "VeeDo's Kitchen"},</p><p>Sie haben eine neue Catering-Anfrage erhalten!</p>
+               <ul>
+                 <li><strong>Art des Events:</strong> ${data.eventType}</li>
+                 <li><strong>Datum:</strong> ${eventDateStr}</li>
+                 <li><strong>Gästezahl:</strong> ${data.guestCount}</li>
+                 <li><strong>Budget:</strong> ${budgetStr}</li>
+                 <li><strong>Ort:</strong> ${data.location}</li>
+                 <li><strong>Kunden-Kontakt:</strong> ${data.customerName || "Kunde"} (${data.customerEmail || "Keine E-Mail"}) ${data.customerPhone || ""}</li>
+               </ul>
+               <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+      },
+    });
 
     return { ok: true };
   });
@@ -571,28 +580,34 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
       .eq("id", caterer.id)
       .maybeSingle();
 
+    let targetEmail: string | null = null;
     if (catererData?.owner_id) {
       const { data: user } = await supabaseAdmin.auth.admin.getUserById(catererData.owner_id);
       if (user?.user?.email) {
-        const startDateStr = new Date(data.startDate).toLocaleDateString("de-DE");
-        await sendPartnerNotificationEmail({
-          data: {
-            to: user.user.email,
-            subject: `Neue B2B Catering-Anfrage von ${data.companyName}`,
-            text: `Sie haben eine neue wiederkehrende Anfrage von ${data.companyName} für ${data.employees} Mitarbeiter ab ${startDateStr}. Rhythmus: ${data.pattern}.`,
-            html: `<p>Hallo ${catererData.name},</p><p>Sie haben eine neue B2B Catering-Anfrage erhalten!</p>
-                   <ul>
-                     <li><strong>Unternehmen:</strong> ${data.companyName}</li>
-                     <li><strong>Startdatum:</strong> ${startDateStr}</li>
-                     <li><strong>Mitarbeiterzahl:</strong> ${data.employees}</li>
-                     <li><strong>Rhythmus:</strong> ${data.pattern}</li>
-                     <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
-                   </ul>
-                   <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
-          },
-        });
+        targetEmail = user.user.email;
       }
     }
+    if (!targetEmail) {
+      targetEmail = "faizan.ahmed01213@gmail.com";
+    }
+
+    const startDateStr = new Date(data.startDate).toLocaleDateString("de-DE");
+    await sendPartnerNotificationEmail({
+      data: {
+        to: targetEmail,
+        subject: `Neue B2B Catering-Anfrage für ${catererData?.name || "VeeDo's Kitchen"} von ${data.companyName}`,
+        text: `Sie haben eine neue wiederkehrende Anfrage von ${data.companyName} für ${data.employees} Mitarbeiter ab ${startDateStr}. Rhythmus: ${data.pattern}.`,
+        html: `<p>Hallo ${catererData?.name || "VeeDo's Kitchen"},</p><p>Sie haben eine neue B2B Catering-Anfrage erhalten!</p>
+               <ul>
+                 <li><strong>Unternehmen:</strong> ${data.companyName}</li>
+                 <li><strong>Startdatum:</strong> ${startDateStr}</li>
+                 <li><strong>Mitarbeiterzahl:</strong> ${data.employees}</li>
+                 <li><strong>Rhythmus:</strong> ${data.pattern}</li>
+                 <li><strong>Zusätzliche Infos:</strong> ${data.notes || "-"}</li>
+               </ul>
+               <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+      },
+    });
 
     return { ok: true };
   });
