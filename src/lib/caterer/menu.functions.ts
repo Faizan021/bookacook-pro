@@ -502,21 +502,48 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
         : data.eventDate || "Auf Anfrage";
       const budgetStr = data.budgetCents > 0 ? `€${(data.budgetCents / 100).toFixed(2)}` : "Auf Anfrage";
 
+      const catererName = caterer?.name || "VeeDo's Kitchen";
+      const formattedNotes = data.notes || "Keine besonderen Anmerkungen.";
+
+      const htmlBody = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #16372f; border: 1px solid #eadfce; border-radius: 16px; overflow: hidden; padding: 24px; background: #fdfaf5;">
+          <div style="background: #1A4D2E; color: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 20px;">
+            <h2 style="margin: 0; font-size: 20px;">🍽️ Neue Catering-Anfrage für ${catererName}</h2>
+            <p style="margin: 6px 0 0 0; font-size: 13px; opacity: 0.95;">Event-Datum: <strong>${eventDateStr}</strong></p>
+          </div>
+
+          <h3 style="color: #1A4D2E; margin-top: 0; font-size: 16px;">📋 Event & Lieferübersicht</h3>
+          <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 20px;">
+            <tr style="border-b: 1px solid #eee;"><td style="padding: 8px 0; color: #555;">Art des Events:</td><td style="font-weight: bold; text-align: right; color: #1A4D2E;">${data.eventType}</td></tr>
+            <tr style="border-b: 1px solid #eee;"><td style="padding: 8px 0; color: #555;">Gästeanzahl:</td><td style="font-weight: bold; text-align: right; color: #1A4D2E;">${data.guestCount} Personen</td></tr>
+            <tr style="border-b: 1px solid #eee;"><td style="padding: 8px 0; color: #555;">Event-Datum:</td><td style="font-weight: bold; text-align: right; color: #1A4D2E;">${eventDateStr}</td></tr>
+            <tr style="border-b: 1px solid #eee;"><td style="padding: 8px 0; color: #555;">Lieferort / Stadt:</td><td style="font-weight: bold; text-align: right; color: #1A4D2E;">${data.location}</td></tr>
+          </table>
+
+          <div style="background: white; border: 1px solid #eadfce; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+            <h3 style="color: #1A4D2E; margin: 0 0 10px 0; font-size: 15px;">🛒 Ausgewählte Speisen & Details:</h3>
+            <pre style="font-family: inherit; font-size: 13px; white-space: pre-wrap; margin: 0; color: #222; line-height: 1.6; background: #fdfaf5; padding: 12px; rounded-lg; border: 1px solid #eee;">${formattedNotes}</pre>
+          </div>
+
+          <div style="background: #eef7f2; border: 1px solid #ccebd9; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+            <h3 style="color: #1A4D2E; margin: 0 0 10px 0; font-size: 15px;">👤 Kunden-Kontaktdaten (Direkt kontaktieren):</h3>
+            <p style="margin: 4px 0; font-size: 13px;"><strong>Name:</strong> ${data.customerName || "Kunde"}</p>
+            <p style="margin: 4px 0; font-size: 13px;"><strong>E-Mail:</strong> <a href="mailto:${data.customerEmail}" style="color: #1A4D2E; font-weight: bold;">${data.customerEmail || "Keine E-Mail"}</a></p>
+            ${data.customerPhone ? `<p style="margin: 4px 0; font-size: 13px;"><strong>Telefon / WhatsApp:</strong> <a href="tel:${data.customerPhone}" style="color: #1A4D2E; font-weight: bold;">${data.customerPhone}</a></p>` : ""}
+          </div>
+
+          <div style="text-align: center; margin-top: 24px;">
+            <a href="https://speisely.de/caterer" style="background-color: #1A4D2E; color: white; padding: 14px 28px; text-decoration: none; border-radius: 50px; font-weight: bold; display: inline-block;">Anfrage im Dashboard prüfen & Bestätigen ➔</a>
+          </div>
+        </div>
+      `;
+
       await sendPartnerNotificationEmail({
         data: {
           to: targetEmail,
-          subject: `Neue Catering-Anfrage für ${caterer?.name || "VeeDo's Kitchen"} (${eventDateStr})`,
-          text: `Sie haben eine neue Anfrage für ${data.eventType} (${data.guestCount} Personen) am ${eventDateStr} in ${data.location}. Budget: ${budgetStr}.`,
-          html: `<p>Hallo ${caterer?.name || "VeeDo's Kitchen"},</p><p>Sie haben eine neue Catering-Anfrage erhalten!</p>
-                 <ul>
-                   <li><strong>Art des Events:</strong> ${data.eventType}</li>
-                   <li><strong>Datum:</strong> ${eventDateStr}</li>
-                   <li><strong>Gästezahl:</strong> ${data.guestCount}</li>
-                   <li><strong>Budget:</strong> ${budgetStr}</li>
-                   <li><strong>Ort:</strong> ${data.location}</li>
-                   <li><strong>Kunden-Kontakt:</strong> ${data.customerName || "Kunde"} (${data.customerEmail || "Keine E-Mail"}) ${data.customerPhone || ""}</li>
-                 </ul>
-                 <p>Melden Sie sich in Ihrem Speisely Dashboard an, um die Anfrage zu überprüfen.</p>`,
+          subject: `Neue Catering-Anfrage für ${catererName} (${eventDateStr})`,
+          text: `Sie haben eine neue Anfrage für ${data.eventType} (${data.guestCount} Personen) am ${eventDateStr} in ${data.location}.\n\nSpeisen & Details:\n${formattedNotes}\n\nKunde: ${data.customerName} (${data.customerEmail}, ${data.customerPhone || "keine Tel."})`,
+          html: htmlBody,
         },
       });
     } catch (emailErr: any) {
