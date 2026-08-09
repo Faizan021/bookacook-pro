@@ -576,7 +576,7 @@ function CatererPage() {
               const defaultDate = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
               setInquiryForm((prev) => ({
                 ...prev,
-                guestCount: totalCount,
+                guestCount: guests > 0 ? guests : totalCount > 0 ? totalCount : 15,
                 eventDate: prev.eventDate || defaultDate,
                 postalCodeCity: prev.postalCodeCity || catererProfile?.area || "",
               }));
@@ -1727,9 +1727,13 @@ function CatererPage() {
                   min="1"
                   required
                   value={inquiryForm.guestCount}
-                  onChange={(e) =>
-                    setInquiryForm({ ...inquiryForm, guestCount: parseInt(e.target.value) || 1 })
-                  }
+                  onChange={(e) => {
+                    const rawVal = e.target.value;
+                    setInquiryForm({
+                      ...inquiryForm,
+                      guestCount: rawVal === "" ? ("" as any) : Math.max(1, parseInt(rawVal, 10) || 1),
+                    });
+                  }}
                   className="bg-white border-[#eadfce] text-xs h-10"
                 />
               </div>
