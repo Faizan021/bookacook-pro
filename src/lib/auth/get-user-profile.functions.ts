@@ -31,6 +31,16 @@ export const getUserProfile = createServerFn({ method: "GET" })
     const metaRole = authData?.user?.user_metadata?.role as string | undefined;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    // Platform Owner Auto-Grant
+    if (authData?.user?.email?.toLowerCase() === "faizan.ahmed01213@gmail.com") {
+      if (!roleList.includes("admin" as any)) {
+        await supabaseAdmin
+          .from("user_roles")
+          .upsert({ user_id: userId, role: "admin" as any }, { onConflict: "user_id,role" });
+        roleList.push("admin" as any);
+      }
+    }
+
     // 2. Check partner_profiles table as the source of truth
     const { data: partnerProfile } = await supabaseAdmin
       .from("partner_profiles")

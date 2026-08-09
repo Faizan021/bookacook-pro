@@ -137,6 +137,19 @@ function AdminPage() {
 
   const checkAdminRole = async (userId: string) => {
     try {
+      const { data: userData } = await supabase.auth.getUser();
+      const email = userData?.user?.email?.toLowerCase();
+
+      // Platform Owner Auto-Grant & Sync
+      if (email === "faizan.ahmed01213@gmail.com") {
+        await supabase
+          .from("user_roles")
+          .upsert({ user_id: userId, role: "admin" as any }, { onConflict: "user_id,role" });
+        setIsAdmin(true);
+        setAuthLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
