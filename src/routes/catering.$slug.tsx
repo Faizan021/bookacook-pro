@@ -1553,11 +1553,11 @@ function CatererPage() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              if (!inquiryForm.customerEmail || !inquiryForm.customerName) {
+              if (!inquiryForm.customerEmail || !inquiryForm.customerName || !inquiryForm.customerPhone) {
                 toast.error(
                   t(
-                    "Bitte geben Sie Ihren Namen und Ihre E-Mail-Adresse an.",
-                    "Please provide your name and email address.",
+                    "Bitte geben Sie Ihren Namen, Ihre E-Mail-Adresse und Ihre Telefonnummer an.",
+                    "Please provide your name, email address, and phone number.",
                   ),
                 );
                 return;
@@ -1653,7 +1653,7 @@ function CatererPage() {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <Label className="text-xs font-bold text-forest">
                     {t("Vollständiger Name *", "Full Name *")}
@@ -1679,6 +1679,21 @@ function CatererPage() {
                     value={inquiryForm.customerEmail}
                     onChange={(e) =>
                       setInquiryForm({ ...inquiryForm, customerEmail: e.target.value })
+                    }
+                    className="bg-white border-[#eadfce] text-xs h-9"
+                  />
+                </div>
+                <div className="space-y-1 sm:col-span-2">
+                  <Label className="text-xs font-bold text-forest">
+                    {t("Telefonnummer (für Rückfragen & WhatsApp) *", "Phone Number (for SMS & WhatsApp) *")}
+                  </Label>
+                  <Input
+                    type="tel"
+                    required
+                    placeholder="+49 176 12345678"
+                    value={inquiryForm.customerPhone}
+                    onChange={(e) =>
+                      setInquiryForm({ ...inquiryForm, customerPhone: e.target.value })
                     }
                     className="bg-white border-[#eadfce] text-xs h-9"
                   />
