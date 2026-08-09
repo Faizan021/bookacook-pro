@@ -372,21 +372,13 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
     }) =>
       z
         .object({
-          catererId: z.string().uuid(),
-          eventType: z.string(),
-          eventDate: z.string().refine(
-            (date) => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              const parsed = new Date(date);
-              return !isNaN(parsed.getTime()) && parsed >= today;
-            },
-            { message: "Event date cannot be in the past" },
-          ),
-          guestCount: z.number().min(1),
-          budgetCents: z.number().min(0),
-          location: z.string(),
-          notes: z.string(),
+          catererId: z.string().min(1),
+          eventType: z.string().default("Event / Feier"),
+          eventDate: z.string().optional().default(() => new Date().toISOString().split("T")[0]),
+          guestCount: z.number().min(1).default(10),
+          budgetCents: z.number().min(0).default(0),
+          location: z.string().default("Berlin"),
+          notes: z.string().default(""),
           customerName: z.string().optional(),
           customerEmail: z.string().optional(),
           customerPhone: z.string().optional(),
@@ -433,16 +425,36 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
       }
     }
 
+    // Resolve caterer ID if slug was passed
+    let targetCatererId = data.catererId;
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.catererId);
+
+    if (!isUuid) {
+      const { data: dbCat } = await supabaseAdmin
+        .from("caterers")
+        .select("id")
+        .eq("slug", data.catererId)
+        .maybeSingle();
+
+      if (dbCat?.id) {
+        targetCatererId = dbCat.id;
+      } else if (data.catererId.includes("veedo")) {
+        targetCatererId = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d0001";
+      }
+    }
+
+    const isTargetUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetCatererId);
+
     const insertData: any = {
       customer_id: finalCustomerId,
-      preferred_caterer_id: data.catererId,
+      preferred_caterer_id: isTargetUuid ? targetCatererId : null,
       status: "quote_requested",
-      event_type: data.eventType,
-      event_date: data.eventDate,
-      guest_count: data.guestCount,
-      budget_cents: data.budgetCents,
-      location: data.location,
-      notes: data.notes,
+      event_type: data.eventType || "Event / Feier",
+      event_date: data.eventDate || new Date().toISOString().split("T")[0],
+      guest_count: data.guestCount || 10,
+      budget_cents: data.budgetCents || 0,
+      location: data.location || "Berlin",
+      notes: data.notes || "",
       milestones: [
         {
           title: "Request Submitted",

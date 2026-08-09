@@ -589,11 +589,15 @@ function Catering() {
                   <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-forest shadow-md flex items-center gap-1 border border-forest/20 uppercase tracking-wider">
                     {lang === "de" ? "Buchbar" : "Bookable"}
                   </div>
-                  {c.isShowcase && (
+                  {c.verified ? (
+                    <div className="absolute top-4 left-4 bg-[#10b981] backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-white shadow-md flex items-center gap-1 uppercase tracking-wider">
+                      <ShieldCheck className="h-3 w-3" /> {lang === "de" ? "Geprüfter Partner" : "Verified Partner"}
+                    </div>
+                  ) : c.isShowcase ? (
                     <div className="absolute top-4 left-4 bg-forest/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-white shadow-md flex items-center gap-1 uppercase tracking-wider">
                       Demo Provider
                     </div>
-                  )}
+                  ) : null}
                 </div>
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div className="space-y-2">

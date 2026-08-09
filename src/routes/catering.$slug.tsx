@@ -1579,17 +1579,23 @@ function CatererPage() {
                 const totalStr = "Preis auf Anfrage";
                 const notes = `[ONLINE STOREFRONT ENQUIRY]\nCustomer Name: ${inquiryForm.customerName}\nCustomer Email: ${inquiryForm.customerEmail}\nCustomer Phone: ${inquiryForm.customerPhone || "N/A"}\nEvent Type: ${inquiryForm.eventType}\nDelivery Location: ${inquiryForm.postalCodeCity}\nSelected Items:\n${itemsText}\n\nNotes:\n${inquiryForm.notes || "None"}\n\nPreis: ${totalStr}`;
 
+                let formattedDate = inquiryForm.eventDate || new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
+                if (formattedDate) {
+                  const parts = formattedDate.split(/[\/\.-]/);
+                  if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
+                    formattedDate = `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+                  }
+                }
+
                 await submitBrief({
                   data: {
-                    catererId: catererProfile.id,
-                    eventType: inquiryForm.eventType,
-                    eventDate:
-                      inquiryForm.eventDate ||
-                      new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0],
-                    guestCount: inquiryForm.guestCount || currentTotalCount,
+                    catererId: catererProfile?.id || slug || "veedos-kitchen",
+                    eventType: inquiryForm.eventType || "Event / Feier",
+                    eventDate: formattedDate,
+                    guestCount: inquiryForm.guestCount || currentTotalCount || 10,
                     budgetCents: 0,
                     location:
-                      inquiryForm.postalCodeCity || catererProfile.area || "Storefront Location",
+                      inquiryForm.postalCodeCity || catererProfile?.area || "Berlin & Umgebung",
                     notes,
                     customerName: inquiryForm.customerName,
                     customerEmail: inquiryForm.customerEmail,

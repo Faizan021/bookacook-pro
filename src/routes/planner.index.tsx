@@ -1214,11 +1214,15 @@ function PlannerDirectory({
                   <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full text-[10px] font-bold text-forest shadow-md flex items-center gap-1 border border-forest/20 uppercase tracking-wider">
                     {tt("Buchbar", "Bookable")}
                   </div>
-                  {p.isShowcase && (
+                  {p.verified ? (
+                    <div className="absolute top-3 left-3 bg-[#10b981] backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-white shadow-md flex items-center gap-1 uppercase tracking-wider">
+                      <ShieldCheck className="h-3 w-3" /> {tt("Geprüfter Partner", "Verified Partner")}
+                    </div>
+                  ) : p.isShowcase ? (
                     <div className="absolute top-3 left-3 bg-forest/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-white shadow-md flex items-center gap-1 uppercase tracking-wider">
                       Demo Provider
                     </div>
-                  )}
+                  ) : null}
                 </div>
                 <div className="p-5 flex-1 flex flex-col text-left">
                   <div className="flex items-center gap-2">
