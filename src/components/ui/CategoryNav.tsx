@@ -92,8 +92,8 @@ export function CategoryNav({ categories, activeCategory, onSelect }: CategoryNa
   if (!categories || categories.length === 0) return null;
 
   return (
-    <div className="sticky top-[96px] md:top-[72px] z-30 mt-4 sm:mt-6 bg-[#fdfaf5]/95 backdrop-blur-md border-b border-[oklch(0.85_0.05_152)] shadow-sm">
-      <div className="relative">
+    <div className="sticky top-[96px] md:top-[72px] z-30 mt-4 sm:mt-6 bg-[#fdfaf5]/95 backdrop-blur-md border-b border-[oklch(0.85_0.05_152)] shadow-sm w-full min-w-0 overflow-hidden">
+      <div className="relative w-full min-w-0">
         {/* Left fade + button */}
         {canScrollPrev && (
           <>
@@ -122,8 +122,8 @@ export function CategoryNav({ categories, activeCategory, onSelect }: CategoryNa
           </>
         )}
 
-        <div ref={emblaRef} className="overflow-hidden">
-          <div className="flex gap-3 py-3 sm:py-4 px-4 sm:px-6 lg:px-10">
+        <div ref={emblaRef} className="overflow-hidden w-full min-w-0">
+          <div className="flex gap-3 py-3 sm:py-4 px-2 sm:px-4">
             {categories.map((cat) => {
               const isActive = activeCategory === cat;
               return (

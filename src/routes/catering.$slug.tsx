@@ -1170,12 +1170,12 @@ function CatererPage() {
 
       <section
         id="menu"
-        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 grid gap-8 lg:grid-cols-[1fr_22rem] pb-16 scroll-mt-24"
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 grid gap-8 lg:grid-cols-[1fr_22rem] pb-16 scroll-mt-24 w-full min-w-0 overflow-hidden"
       >
-        <div>
+        <div className="min-w-0 w-full overflow-hidden">
           {dbCaterer?.seo_menu_or_packages_intro && (
             <div className="mb-6">
-              <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap">
+              <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap break-words">
                 {dbCaterer.seo_menu_or_packages_intro}
               </p>
             </div>
@@ -1183,7 +1183,7 @@ function CatererPage() {
           <h2 className="text-3xl font-display font-bold text-forest">
             {t("Speisekarte", "Menu")}
           </h2>
-          <p className="mt-2 text-sm font-medium text-emerald-800 bg-emerald-50 px-3.5 py-2 rounded-lg border border-emerald-200/80 w-fit">
+          <p className="mt-2 text-sm font-medium text-emerald-800 bg-emerald-50 px-3.5 py-2 rounded-lg border border-emerald-200/80 max-w-full">
             {t(
               "💡 Sollten Sie ein gewünschtes Gericht nicht in der Speisekarte finden, kontaktieren Sie uns bitte direkt.",
               "💡 If you require any other dish, please contact us directly.",
@@ -1198,7 +1198,7 @@ function CatererPage() {
             }}
           />
 
-          <div className="mt-8 mb-8 p-4 sm:p-6 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="mt-8 mb-8 p-4 sm:p-6 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)] flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full min-w-0">
             <div>
               <h3 className="font-display text-lg text-forest">
                 {t("Gästeanzahl", "Guest Count")}
@@ -1228,11 +1228,11 @@ function CatererPage() {
               </button>
             </div>
           </div>
-          <div className="mt-8 space-y-10">
+          <div className="mt-8 space-y-10 w-full min-w-0">
             {categories.map((cat) => (
-              <div key={cat} id={`category-${cat}`} className="scroll-mt-32">
+              <div key={cat} id={`category-${cat}`} className="scroll-mt-32 w-full min-w-0">
                 <h3 className="font-display text-2xl text-forest">{cat}</h3>
-                <div className="mt-4 grid gap-4">
+                <div className="mt-4 grid gap-4 w-full min-w-0">
                   {catererProfile.menu
                     .filter((m: any) => (m.category || "Menü") === cat)
                     .map((m: any) => {
@@ -1240,7 +1240,7 @@ function CatererPage() {
                       return (
                         <div
                           key={m.name}
-                          className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-3 sm:gap-4 p-4 sm:p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group items-start sm:items-center"
+                          className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-3 sm:gap-4 p-4 sm:p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group items-start sm:items-center w-full min-w-0 overflow-hidden"
                         >
                           <div className="min-w-0 flex flex-row gap-3 sm:gap-4 items-start w-full">
                             {m.image_signed_url && (
@@ -1252,12 +1252,12 @@ function CatererPage() {
                                 />
                               </div>
                             )}
-                            <div className="min-w-0 flex-1">
-                              <h4 className="font-display text-base sm:text-lg font-bold text-forest leading-snug">
+                            <div className="min-w-0 flex-1 w-full">
+                              <h4 className="font-display text-base sm:text-lg font-bold text-forest leading-snug break-words">
                                 {m.name}
                               </h4>
                               {m.desc[lang] && (
-                                <p className="text-xs sm:text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">
+                                <p className="text-xs sm:text-sm text-forest/70 mt-1 leading-relaxed max-w-xl break-words">
                                   {m.desc[lang]}
                                 </p>
                               )}
