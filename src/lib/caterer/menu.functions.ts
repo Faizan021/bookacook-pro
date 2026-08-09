@@ -425,31 +425,25 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
       }
     }
 
-    // Resolve caterer ID if slug was passed
-    let targetCatererId = data.catererId;
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.catererId);
+    // Verify if caterer actually exists in production DB by ID or Slug
+    let validDbCatererId: string | null = null;
 
-    if (!isUuid) {
-      const { data: dbCat } = await supabaseAdmin
-        .from("caterers")
-        .select("id")
-        .eq("slug", data.catererId)
-        .maybeSingle();
+    if (data.catererId) {
+      const isUuidCandidate = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.catererId);
+      const query = supabaseAdmin.from("caterers").select("id");
+      
+      const { data: dbCat } = isUuidCandidate
+        ? await query.eq("id", data.catererId).maybeSingle()
+        : await query.eq("slug", data.catererId).maybeSingle();
 
       if (dbCat?.id) {
-        targetCatererId = dbCat.id;
-      } else if (data.catererId.includes("veedo")) {
-        targetCatererId = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d0001";
-      } else if (data.catererId.includes("kuepper") || data.catererId.includes("küpper")) {
-        targetCatererId = "partyservice-kuepper";
+        validDbCatererId = dbCat.id;
       }
     }
 
-    const isTargetUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetCatererId);
-
     const insertData: any = {
       customer_id: finalCustomerId,
-      preferred_caterer_id: isTargetUuid ? targetCatererId : null,
+      preferred_caterer_id: validDbCatererId,
       status: "quote_requested",
       event_type: data.eventType || "Event / Feier",
       event_date: data.eventDate || new Date().toISOString().split("T")[0],
@@ -484,11 +478,13 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
 
     // Notify Caterer via Email
     try {
-      const { data: caterer } = await supabaseAdmin
-        .from("caterers")
-        .select("name, owner_id")
-        .eq("id", targetCatererId)
-        .maybeSingle();
+      const { data: caterer } = validDbCatererId
+        ? await supabaseAdmin
+            .from("caterers")
+            .select("name, owner_id")
+            .eq("id", validDbCatererId)
+            .maybeSingle()
+        : { data: null };
 
       let targetEmail: string = "faizan.ahmed01213@gmail.com";
       if (caterer?.owner_id) {
