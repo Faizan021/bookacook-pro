@@ -1286,7 +1286,10 @@ function AdminPage() {
                           </div>
                         </td>
                         <td className="py-4 px-6 font-semibold text-gray-900">
-                          {b.caterers?.name || b.caterer_slug || "VeeDo's Kitchen"}
+                          {b.caterers?.name ||
+                            ((b.caterer_slug || "").includes("kuepper")
+                              ? "Partyservice Küpper"
+                              : b.caterer_slug || "VeeDo's Kitchen")}
                         </td>
                         <td className="py-4 px-6">
                           <div className="font-medium text-gray-900">{b.event_type}</div>
@@ -1341,8 +1344,9 @@ function AdminPage() {
                     <div>
                       <strong>Caterer:</strong>{" "}
                       {selectedEnquiryModal.caterers?.name ||
-                        selectedEnquiryModal.caterer_slug ||
-                        "VeeDo's Kitchen"}
+                        ((selectedEnquiryModal.caterer_slug || "").includes("kuepper")
+                          ? "Partyservice Küpper"
+                          : selectedEnquiryModal.caterer_slug || "VeeDo's Kitchen")}
                     </div>
                     <div>
                       <strong>Event Typ:</strong> {selectedEnquiryModal.event_type}

@@ -440,6 +440,8 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
         targetCatererId = dbCat.id;
       } else if (data.catererId.includes("veedo")) {
         targetCatererId = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d0001";
+      } else if (data.catererId.includes("kuepper") || data.catererId.includes("küpper")) {
+        targetCatererId = "partyservice-kuepper";
       }
     }
 
@@ -502,7 +504,11 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
         : data.eventDate || "Auf Anfrage";
       const budgetStr = data.budgetCents > 0 ? `€${(data.budgetCents / 100).toFixed(2)}` : "Auf Anfrage";
 
-      const catererName = caterer?.name || "VeeDo's Kitchen";
+      const catererName =
+        caterer?.name ||
+        (data.catererId.includes("kuepper") || data.catererId.includes("küpper")
+          ? "Partyservice Küpper"
+          : "VeeDo's Kitchen");
       const formattedNotes = data.notes || "Keine besonderen Anmerkungen.";
 
       const htmlBody = `
