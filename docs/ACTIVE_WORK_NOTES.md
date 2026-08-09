@@ -46,9 +46,18 @@ _This document serves as the active working memory for ongoing tasks, context up
 
 ### Active: Permanent Security Rule & Exposure Remediation
 
-- **Goal:** Eliminate data leaks via select(\*) on mixed public/private tables and enforce stage-gated lead protection.
+- **Goal:** Eliminate data leaks via select(*) on mixed public/private tables and enforce stage-gated lead protection.
 - **Status:** Storefront public data leak remediation is `implemented` (all three loaders refactored to explicit safe fields). Lead protection is `implemented` (stage-gated reveal of PII at the "booked" status).
-- **Next Steps:** Proceed to next unstarted tasks.
+
+## 3. Current Temporary Lead-Capture State
+
+- VeeDo’s Kitchen and Partyservice Küpper currently use storefront slugs: `veedos-kitchen` and `partyservice-kuepper`.
+- The identifier `9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d0001` has valid UUID syntax but is not a verified production `caterers.id`.
+- UUID-format validation does not prove that a corresponding caterer exists. The server queries the production `caterers` table first before assigning `preferred_caterer_id`.
+- Until a verified database record exists, `preferred_caterer_id` remains `null` and the storefront slug is handled non-relationally.
+- Enquiries are routed to `faizan.ahmed01213@gmail.com` through the temporary notification workflow.
+- Faizan manually reviews each enquiry and forwards it to the appropriate caterer in accordance with customer privacy notices.
+- The migration `20260808000001_caterer_multitenant_pipeline.sql` remains unapplied in production until schema, RLS, and onboarding checks are completed.
 
 ### Active: Permanent Security Rule & Exposure Remediation
 
