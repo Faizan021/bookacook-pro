@@ -724,7 +724,7 @@ function CatererPage() {
         )}
 
         {/* Redesigned Responsive Hero Banner */}
-        <div className="relative mt-6 w-full min-h-[380px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg flex flex-col justify-between p-5 sm:p-6 md:p-8">
+        <div className="relative mt-4 sm:mt-6 w-full min-h-[340px] sm:min-h-[380px] md:h-[420px] overflow-hidden rounded-2xl shadow-lg flex flex-col justify-between p-4 sm:p-6 md:p-8">
           <img
             src={
               catererProfile.img ||
@@ -885,17 +885,17 @@ function CatererPage() {
           </div>
 
           {/* Bottom Info & Text Overlay */}
-          <div className="relative z-20 text-white flex flex-col gap-2.5 mt-6 sm:mt-8">
+          <div className="relative z-20 text-white flex flex-col gap-2 sm:gap-2.5 mt-4 sm:mt-8">
             <div className="flex items-start gap-3 sm:gap-4">
               {catererProfile.logo && (
                 <img
                   src={catererProfile.logo}
                   alt="Logo"
-                  className="w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md bg-white object-cover flex-shrink-0"
+                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md bg-white object-cover flex-shrink-0"
                 />
               )}
-              <div className="flex flex-col gap-1 text-left">
-                <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold leading-tight drop-shadow-md">
+              <div className="flex flex-col gap-1 text-left min-w-0">
+                <h1 className="text-xl sm:text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-md break-words">
                   {catererProfile.name}
                 </h1>
                 {catererProfile?.seo_event_types_target &&
@@ -1064,7 +1064,7 @@ function CatererPage() {
 
         {/* Enhanced Trust & Info Bar */}
         <div className="mt-6 mb-2 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center p-4 sm:p-5 bg-white rounded-xl border border-[#eadfce] shadow-sm">
-          <dl className="grid grid-cols-2 sm:flex sm:flex-wrap items-start sm:items-center gap-4 sm:gap-x-6 sm:gap-y-4 m-0 w-full md:w-auto">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-start sm:items-center gap-3 sm:gap-x-6 sm:gap-y-4 m-0 w-full md:w-auto">
             <div className="flex items-center gap-2 text-forest">
               <ShieldCheck className="h-5 w-5 shrink-0 text-[#10b981]" />
               <span className="text-xs sm:text-sm font-bold">
@@ -1105,7 +1105,7 @@ function CatererPage() {
               <dd className="text-xs sm:text-sm font-semibold text-forest flex flex-col items-start gap-0.5 m-0">
                 <div className="flex items-center gap-1">
                   <MapPin className="h-4 w-4 text-forest/40 shrink-0" />{" "}
-                  <span className="truncate max-w-[140px] sm:max-w-[200px]">
+                  <span className="truncate max-w-[200px]">
                     {catererProfile?.seo_service_areas?.join(", ") || catererProfile.area}
                   </span>
                 </div>
@@ -1198,7 +1198,7 @@ function CatererPage() {
             }}
           />
 
-          <div className="mt-8 mb-8 p-6 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="mt-8 mb-8 p-4 sm:p-6 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="font-display text-lg text-forest">
                 {t("Gästeanzahl", "Guest Count")}
@@ -1207,7 +1207,7 @@ function CatererPage() {
                 {t("Gästeanzahl für Ihre Anfrage", "Number of guests for your enquiry")}
               </p>
             </div>
-            <div className="flex items-center gap-4 bg-white p-1 rounded-full shadow-sm border border-[oklch(0.85_0.05_152)]">
+            <div className="flex items-center gap-4 bg-white p-1 rounded-full shadow-sm border border-[oklch(0.85_0.05_152)] w-fit">
               <button
                 onClick={() => setGuests(Math.max(1, guests - 5))}
                 className="h-10 w-10 grid place-items-center rounded-full text-forest hover:bg-[#eadfce] transition"
@@ -1240,35 +1240,35 @@ function CatererPage() {
                       return (
                         <div
                           key={m.name}
-                          className="grid grid-cols-[1fr_auto] gap-3 sm:gap-4 p-3.5 sm:p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group items-start"
+                          className="flex flex-col sm:grid sm:grid-cols-[1fr_auto] gap-3 sm:gap-4 p-4 sm:p-5 bg-white border border-[#eadfce] rounded-xl shadow-sm hover:shadow-md hover:border-forest/30 transition-all duration-300 group items-start sm:items-center"
                         >
-                          <div className="min-w-0 flex flex-col md:flex-row gap-4">
+                          <div className="min-w-0 flex flex-row gap-3 sm:gap-4 items-start w-full">
                             {m.image_signed_url && (
                               <div className="shrink-0">
                                 <img
                                   src={m.image_signed_url}
                                   alt=""
-                                  className="h-24 w-24 md:h-32 md:w-32 object-cover rounded-lg border border-[#eadfce]/50"
+                                  className="h-20 w-20 sm:h-28 sm:w-28 object-cover rounded-lg border border-[#eadfce]/50"
                                 />
                               </div>
                             )}
-                            <div>
-                              <h4 className="font-display text-lg font-bold text-forest">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-display text-base sm:text-lg font-bold text-forest leading-snug">
                                 {m.name}
                               </h4>
                               {m.desc[lang] && (
-                                <p className="text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">
+                                <p className="text-xs sm:text-sm text-forest/70 mt-1 leading-relaxed max-w-xl">
                                   {m.desc[lang]}
                                 </p>
                               )}
-                              <div className="mt-3 flex items-center gap-3">
-                                <p className="text-base font-semibold text-forest">
+                              <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                                <p className="text-sm sm:text-base font-semibold text-forest">
                                   {m.price > 0
                                     ? `€${m.price.toFixed(2)}`
                                     : t("Preis auf Anfrage", "Price on request")}
                                 </p>
                                 {m.price > 0 && m.serves && (
-                                  <span className="inline-flex items-center gap-1 rounded-full bg-[#fdfaf5] px-2.5 py-0.5 text-xs font-medium text-forest/70 border border-[#eadfce]/60">
+                                  <span className="inline-flex items-center gap-1 rounded-full bg-[#fdfaf5] px-2 py-0.5 text-[11px] font-medium text-forest/70 border border-[#eadfce]/60">
                                     <Users className="h-3 w-3" />{" "}
                                     {t(`~${m.serves} Pers.`, `~${m.serves} pax`)}
                                   </span>
@@ -1276,37 +1276,41 @@ function CatererPage() {
                               </div>
                             </div>
                           </div>
-                          {qty === 0 ? (
-                            <button
-                              onClick={() => updateQty(m.name, m.unit.en === "person" ? guests : 1)}
-                              className="h-10 px-5 rounded-full bg-[#eadfce] text-forest hover:bg-forest hover:text-white transition whitespace-nowrap text-sm font-semibold pulse-btn"
-                            >
-                              {t("Hinzufügen", "Add")}
-                            </button>
-                          ) : (
-                            <div className="inline-flex items-center gap-1 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10">
+                          <div className="flex justify-end sm:justify-center items-center pt-2 sm:pt-0 border-t border-[#eadfce]/30 sm:border-0 w-full sm:w-auto">
+                            {qty === 0 ? (
                               <button
-                                onClick={() => updateQty(m.name, qty - 1)}
-                                className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10"
-                                aria-label="-"
+                                onClick={() =>
+                                  updateQty(m.name, m.unit.en === "person" ? guests : 1)
+                                }
+                                className="h-10 px-5 rounded-full bg-[#eadfce] text-forest hover:bg-forest hover:text-white transition whitespace-nowrap text-sm font-semibold pulse-btn"
                               >
-                                <Minus className="h-4 w-4" />
+                                {t("Hinzufügen", "Add")}
                               </button>
-                              <input
-                                type="number"
-                                value={qty}
-                                onChange={(e) => updateQty(m.name, parseInt(e.target.value) || 0)}
-                                className="w-10 text-center bg-transparent border-none text-sm font-semibold focus:outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none text-white text-forest"
-                              />
-                              <button
-                                onClick={() => updateQty(m.name, qty + 1)}
-                                className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10 pulse-btn"
-                                aria-label="+"
-                              >
-                                <Plus className="h-4 w-4" />
-                              </button>
-                            </div>
-                          )}
+                            ) : (
+                              <div className="inline-flex items-center gap-1 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10">
+                                <button
+                                  onClick={() => updateQty(m.name, qty - 1)}
+                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10"
+                                  aria-label="-"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </button>
+                                <input
+                                  type="number"
+                                  value={qty}
+                                  onChange={(e) => updateQty(m.name, parseInt(e.target.value) || 0)}
+                                  className="w-10 text-center bg-transparent border-none text-sm font-semibold focus:outline-none appearance-none [&::-webkit-inner-spin-button]:appearance-none text-white text-forest"
+                                />
+                                <button
+                                  onClick={() => updateQty(m.name, qty + 1)}
+                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10 pulse-btn"
+                                  aria-label="+"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       );
                     })}

@@ -92,7 +92,7 @@ export function CategoryNav({ categories, activeCategory, onSelect }: CategoryNa
   if (!categories || categories.length === 0) return null;
 
   return (
-    <div className="sticky top-[64px] sm:top-[72px] z-30 mt-6 bg-[#fdfaf5]/95 backdrop-blur-md border-b border-[oklch(0.85_0.05_152)] shadow-sm">
+    <div className="sticky top-[96px] md:top-[72px] z-30 mt-4 sm:mt-6 bg-[#fdfaf5]/95 backdrop-blur-md border-b border-[oklch(0.85_0.05_152)] shadow-sm">
       <div className="relative">
         {/* Left fade + button */}
         {canScrollPrev && (
