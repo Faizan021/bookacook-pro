@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speisely — Social Media Campaign Kit (Carousel & Reel)</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2canvas for 1-click 1080x1350 / 1080x1920 exports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    body {
+      background-color: #0d1a15;
+      color: #FBF7EE;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* 4:5 Aspect Ratio Container (1080x1350 scale) */
+    .slide-4-5 {
+      width: 432px;
+      height: 540px; /* 1080x1350 scaled to 40% on screen */
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      background-color: #173C32;
+      flex-shrink: 0;
+    }
+
+    /* 9:16 Reel Container (1080x1920 scale) */
+    .reel-9-16 {
+      width: 360px;
+      height: 640px; /* 1080x1920 scaled to 33.3% on screen */
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      background-color: #0c1813;
+      border: 4px solid #173C32;
+    }
+
+    .ken-burns {
+      animation: kenBurnsAnim 12s infinite alternate ease-in-out;
+    }
+
+    @keyframes kenBurnsAnim {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.08) translate(-1%, -1%); }
+      100% { transform: scale(1.15) translate(1%, 1%); }
+    }
+  </style>
+</head>
+<body class="p-6 md:p-12 min-h-screen">
+
+  <div class="max-w-7xl mx-auto space-y-12">
+    
+    <!-- Top Header -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-white/10">
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#E6B84A]/20 text-[#E6B84A] border border-[#E6B84A]/30 rounded-full text-xs font-black uppercase tracking-wider">
+          Social Launch Kit · Phase 1
+        </div>
+        <h1 class="text-3xl md:text-4xl font-serif font-black text-white">
+          Schnitzel Schmiede × Speisely Magazin
+        </h1>
+        <p class="text-sm text-white/70">
+          Offizielle Social-Media-Kampagne: 4:5 Meta Carousel (Heute) & 9:16 Short Reel (Morgen)
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="https://www.speisely.de/magazin/schnitzel-schmiede" target="_blank" class="px-5 py-2.5 bg-white/10 hover:bg-white text-white hover:text-[#173C32] rounded-xl font-bold text-xs transition border border-white/15">
+          Live-Artikel ansehen ↗
+        </a>
+        <button onclick="downloadAllSlides()" class="px-6 py-2.5 bg-[#E6B84A] hover:bg-white text-[#173C32] rounded-xl font-extrabold text-xs shadow-lg transition">
+          ⬇ Alle 5 Carousel-Slides herunterladen
+        </button>
+      </div>
+    </header>
+
+    <!-- =========================================================================
+         SECTION 1: META CAROUSEL (4:5 Format · 1080 × 1350 px)
+         ========================================================================= -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-[#E6B84A] uppercase tracking-widest">Tag 1 · Heute</span>
+          <h2 class="text-2xl font-serif font-bold text-white">1. Meta Carousel (5 Vertical Slides · 4:5)</h2>
+        </div>
+        <span class="text-xs text-white/50 hidden sm:inline-block">Format: 1080 × 1350 px (Optimiert für Instagram & Facebook Feed)</span>
+      </div>
+
+      <!-- Carousel Slides Container -->
+      <div class="flex gap-6 overflow-x-auto pb-6 pt-2 no-scrollbar">
+        
+        <!-- SLIDE 1 -->
+        <div id="slide-1" class="slide-4-5 flex flex-col justify-between p-8 text-white">
+          <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1080&q=90" alt="Schnitzel Schmiede" class="w-full h-full object-cover opacity-50 filter contrast-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#173C32] via-[#173C32]/60 to-transparent"></div>
+          </div>
+          
+          <div class="relative z-10 flex justify-between items-center">
+            <div class="h-8 w-auto">
+              <img src="speisely_logo.png" alt="Speisely" class="h-full w-auto object-contain">
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-black/40 px-2.5 py-1 rounded-full backdrop-blur">
+              1 / 5
+            </span>
+          </div>
+
+          <div class="relative z-10 space-y-3">
+            <span class="text-xs font-extrabold uppercase tracking-widest text-[#E6B84A]">
+              Partner-Story
+            </span>
+            <h3 class="font-serif text-3xl font-black leading-tight text-white">
+              Schnitzel Schmiede beim EineStadt-Fest 2026
+            </h3>
+            <p class="text-xs text-[#DDEEE3] font-medium leading-relaxed pt-1">
+              Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach.
+            </p>
+          </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div id="slide-2" class="slide-4-5 flex flex-col justify-between p-8 text-white bg-[#173C32]">
+          <div class="flex justify-between items-center z-10">
+            <span class="text-xs font-extrabold text-[#DDEEE3] uppercase tracking-widest">Speisely Magazin</span>
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2.5 py-1 rounded-full">
+              2 / 5
+            </span>
+          </div>
+
+          <div class="my-auto space-y-4 z-10 text-center">
+            <span class="font-mono text-7xl font-black text-[#E6B84A] block leading-none">2013</span>
+            <h3 class="font-serif text-3xl font-black text-white leading-tight">
+              Seit 2013 Teil der kulinarischen Meile
+            </h3>
+            <p class="text-xs text-[#DDEEE3] font-medium leading-relaxed max-w-xs mx-auto">
+              Über 13 Jahre Fest-Tradition und ein fester Treffpunkt für Genießer auf dem EineStadt-Fest.
+            </p>
+          </div>
+
+          <div class="flex justify-between items-center text-[10px] font-bold text-white/50 uppercase pt-4 border-t border-white/10 z-10">
+            <span>Tradition & Kontinuität</span>
+            <span>speisely.de</span>
+          </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div id="slide-3" class="slide-4-5 flex flex-col justify-between p-8 text-white">
+          <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1080&q=90" alt="Festmeile Atmosphäre" class="w-full h-full object-cover opacity-40">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#173C32] via-[#173C32]/70 to-[#173C32]/30"></div>
+          </div>
+
+          <div class="relative z-10 flex justify-between items-center">
+            <span class="text-xs font-extrabold text-[#E6B84A] uppercase tracking-widest">Gourmet-Meile</span>
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-black/40 px-2.5 py-1 rounded-full">
+              3 / 5
+            </span>
+          </div>
+
+          <div class="relative z-10 space-y-4">
+            <div class="inline-block px-3 py-1 bg-[#E6B84A] text-[#173C32] rounded-lg text-xs font-black uppercase tracking-wider">
+              14.–16. August · Mönchengladbach
+            </div>
+            <h3 class="font-serif text-3xl font-black text-white leading-tight">
+              Drei Tage Feststimmung auf der Brucknerallee
+            </h3>
+            <p class="text-xs text-[#DDEEE3] leading-relaxed">
+              Bühnenprogramm, KidsWorld, Kunsthandwerk und kulinarische Vielfalt auf dem 22. Stadtfest.
+            </p>
+          </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div id="slide-4" class="slide-4-5 flex flex-col justify-between p-8 text-white bg-[#0c1813]">
+          <div class="flex justify-between items-center z-10">
+            <div class="h-8 w-auto">
+              <img src="speisely_logo.png" alt="Speisely" class="h-full w-auto object-contain">
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2.5 py-1 rounded-full">
+              4 / 5
+            </span>
+          </div>
+
+          <div class="my-auto space-y-5 z-10">
+            <span class="text-xs font-extrabold text-[#E6B84A] uppercase tracking-widest">Partnernetzwerk</span>
+            <h3 class="font-serif text-3xl font-black text-white leading-tight">
+              Eine lokale Partner-Story von Speisely
+            </h3>
+            <p class="text-xs text-white/80 leading-relaxed">
+              Speisely stellt lokale Restaurants, Caterer und Eventanbieter vor und macht die Geschichten hinter ihren Angeboten sichtbar.
+            </p>
+            <div class="space-y-2 pt-2 border-t border-white/15 text-[11px] font-bold text-[#E6B84A]">
+              <div>✓ Restaurant & Schnitzelgerichte</div>
+              <div>✓ Catering & Partyservice</div>
+              <div>✓ Lieferservice für Events</div>
+            </div>
+          </div>
+
+          <div class="text-[10px] font-bold text-white/50 uppercase border-t border-white/10 pt-3 z-10">
+            Redaktionelle Partner-Story
+          </div>
+        </div>
+
+        <!-- SLIDE 5 (CTA) -->
+        <div id="slide-5" class="slide-4-5 flex flex-col justify-between p-8 text-center text-white bg-[#173C32]">
+          <div class="flex justify-between items-center z-10">
+            <span class="text-xs font-bold text-[#DDEEE3] uppercase tracking-widest">Ausgabe 01 · 2026</span>
+            <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-black/40 px-2.5 py-1 rounded-full">
+              5 / 5
+            </span>
+          </div>
+
+          <div class="my-auto space-y-6 z-10">
+            <div class="w-14 h-14 rounded-full bg-white/10 border border-white/20 p-2 mx-auto flex items-center justify-center">
+              <img src="speisely_logo.png" alt="Speisely" class="w-full h-full object-contain">
+            </div>
+
+            <h3 class="font-serif text-3xl font-black text-white leading-tight">
+              Jetzt die vollständige Story lesen
+            </h3>
+
+            <div class="pt-2">
+              <div class="inline-block px-5 py-3 bg-[#E6B84A] text-[#173C32] font-black text-xs uppercase tracking-wider rounded-xl shadow-lg">
+                speisely.de/magazin ➔
+              </div>
+            </div>
+
+            <p class="text-[11px] text-[#DDEEE3]/80">
+              Link in Bio @speisely
+            </p>
+          </div>
+
+          <div class="text-[9px] text-white/40 border-t border-white/10 pt-3 z-10">
+            © 2026 Speisely · Alle Rechte vorbehalten
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         SECTION 2: COPY & CAPTION ASSETS
+         ========================================================================= -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Instagram Caption Box -->
+      <div class="p-8 rounded-3xl bg-[#173C32] border border-white/10 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📸 Instagram Caption</span>
+          </h3>
+          <button onclick="copyToClipboard('ig-caption-text')" class="px-3 py-1 bg-[#E6B84A] text-[#173C32] rounded-lg text-xs font-bold hover:bg-white transition">
+            Text kopieren
+          </button>
+        </div>
+
+        <div id="ig-caption-text" class="p-4 rounded-xl bg-black/30 text-xs text-white/90 leading-relaxed font-mono whitespace-pre-wrap select-all">Seit 2013 gehört die Schnitzel Schmiede zum EineStadt-Fest in Mönchengladbach. 🍽️
+
+Auch 2026 war sie wieder Teil der kulinarischen Meile, die vom 14. bis 16. August Besucherinnen und Besucher zusammenbrachte.
+
+In unserer neuen Speisely Partner-Story erzählen wir von dieser langjährigen Fest-Tradition und stellen den lokalen Partner näher vor.
+
+👉 Jetzt die vollständige Story lesen:
+Link in Bio (@speisely) oder direkt auf speisely.de/magazin
+
+Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
+
+#Speisely #SchnitzelSchmiede #EineStadtFest #Mönchengladbach #Gastronomie #Catering #Stadtfest #PartnerStory</div>
+
+        <p class="text-[11px] text-[#E6B84A] font-semibold">
+          💡 Hinweis: Den Link <code class="bg-black/30 px-1 py-0.5 rounded">https://www.speisely.de/magazin/schnitzel-schmiede</code> in der Instagram-Bio platzieren.
+        </p>
+      </div>
+
+      <!-- Facebook Post Box -->
+      <div class="p-8 rounded-3xl bg-[#173C32] border border-white/10 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>📘 Facebook Post</span>
+          </h3>
+          <button onclick="copyToClipboard('fb-caption-text')" class="px-3 py-1 bg-[#E6B84A] text-[#173C32] rounded-lg text-xs font-bold hover:bg-white transition">
+            Text kopieren
+          </button>
+        </div>
+
+        <div id="fb-caption-text" class="p-4 rounded-xl bg-black/30 text-xs text-white/90 leading-relaxed font-mono whitespace-pre-wrap select-all">Seit 2013 gehört die Schnitzel Schmiede zum EineStadt-Fest in Mönchengladbach. 🍽️
+
+Auch 2026 war sie wieder Teil der kulinarischen Meile, die vom 14. bis 16. August Besucherinnen und Besucher zusammenbrachte.
+
+In unserer neuen Speisely Partner-Story erzählen wir von dieser langjährigen Fest-Tradition und stellen den lokalen Partner näher vor.
+
+👉 Jetzt die vollständige Story lesen:
+https://www.speisely.de/magazin/schnitzel-schmiede
+
+Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
+
+#Speisely #SchnitzelSchmiede #EineStadtFest #Mönchengladbach #Gastronomie #Catering #Stadtfest #PartnerStory</div>
+
+        <p class="text-[11px] text-[#DDEEE3] font-semibold">
+          💡 Hinweis: Auf Facebook wird die OpenGraph-Vorschaukarte für <code class="bg-black/30 px-1 py-0.5 rounded">/magazin/schnitzel-schmiede</code> automatisch generiert.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- =========================================================================
+         SECTION 3: SHORT REEL (9:16 Format · 1080 × 1920 px, 12-15s)
+         ========================================================================= -->
+    <section class="space-y-6 pt-6 border-t border-white/10">
+      <div>
+        <span class="text-xs font-bold text-[#E6B84A] uppercase tracking-widest">Tag 2 · Morgen</span>
+        <h2 class="text-2xl font-serif font-bold text-white">2. Short Reel Storyboard (9:16 · 12–15s)</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Live Reel Animated Preview Player -->
+        <div class="lg:col-span-5 flex flex-col items-center">
+          <div id="reel-player" class="reel-9-16 flex flex-col justify-between p-8 text-white relative">
+            
+            <!-- Video Frame Backgrounds -->
+            <div id="reel-bg" class="absolute inset-0 z-0 ken-burns">
+              <img id="reel-img" src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1080&q=90" alt="Reel Frame" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/60"></div>
+            </div>
+
+            <!-- Meta Safe Zone: Top Header -->
+            <div class="relative z-10 pt-4 flex justify-between items-center">
+              <div class="h-7 w-auto">
+                <img src="speisely_logo.png" alt="Speisely" class="h-full w-auto object-contain">
+              </div>
+              <span id="reel-timer-badge" class="px-2.5 py-0.5 bg-black/60 text-[#E6B84A] rounded-full text-[10px] font-mono font-bold">
+                00:00 / 00:12
+              </span>
+            </div>
+
+            <!-- Meta Safe Zone: Center Overlay Text -->
+            <div class="relative z-10 text-center space-y-3 px-2 my-auto">
+              <span id="reel-eyebrow" class="text-xs font-extrabold text-[#E6B84A] uppercase tracking-widest">
+                Seit 2013 dabei
+              </span>
+              <h3 id="reel-title" class="font-serif text-3xl font-black text-white leading-tight">
+                Schnitzel Schmiede
+              </h3>
+              <p id="reel-subtext" class="text-xs text-[#DDEEE3] font-medium leading-relaxed max-w-xs mx-auto">
+                EineStadt-Fest Mönchengladbach
+              </p>
+            </div>
+
+            <!-- Meta Safe Zone: Bottom CTA -->
+            <div class="relative z-10 pb-6 text-center space-y-2">
+              <div id="reel-cta-btn" class="inline-block px-4 py-2 bg-[#E6B84A] text-[#173C32] font-black text-xs uppercase tracking-wider rounded-xl shadow-lg">
+                Jetzt lesen · Link in Bio
+              </div>
+              <div class="text-[10px] text-white/60 font-semibold">
+                speisely.de/magazin
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Reel Play/Pause Controls -->
+          <div class="flex items-center gap-4 mt-4">
+            <button onclick="playReel()" class="px-5 py-2 bg-[#173C32] hover:bg-[#E6B84A] hover:text-[#173C32] text-white border border-white/20 rounded-full text-xs font-bold transition flex items-center gap-2">
+              <span>▶ Animation Abspielen</span>
+            </button>
+            <button onclick="pauseReel()" class="px-4 py-2 bg-white/10 hover:bg-white text-white hover:text-black rounded-full text-xs font-bold transition">
+              ⏸ Pause
+            </button>
+          </div>
+        </div>
+
+        <!-- Reel Storyboard Timeline Steps -->
+        <div class="lg:col-span-7 space-y-4">
+          
+          <div class="p-6 rounded-2xl bg-[#173C32] border border-white/10 flex items-start gap-4">
+            <div class="font-mono text-xl font-black text-[#E6B84A] shrink-0">0–3s</div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Szene 1: Food-Fokus & Tradition</h4>
+              <p class="text-xs text-white/70 mt-1">
+                <strong>Bild:</strong> Heiß serviertes Schnitzel aus der Pfanne.<br>
+                <strong>Text:</strong> „Seit 2013 dabei“ · Schnitzel Schmiede
+              </p>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#173C32] border border-white/10 flex items-start gap-4">
+            <div class="font-mono text-xl font-black text-[#E6B84A] shrink-0">3–6s</div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Szene 2: Festmeile Atmosphäre</h4>
+              <p class="text-xs text-white/70 mt-1">
+                <strong>Bild:</strong> Kulinarische Meile Brucknerallee Mönchengladbach.<br>
+                <strong>Text:</strong> „Schnitzel Schmiede beim EineStadt-Fest“
+              </p>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#173C32] border border-white/10 flex items-start gap-4">
+            <div class="font-mono text-xl font-black text-[#E6B84A] shrink-0">6–9s</div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Szene 3: Magazin-Einblick</h4>
+              <p class="text-xs text-white/70 mt-1">
+                <strong>Bild:</strong> Redaktioneller Story-Ausschnitt auf speisely.de.<br>
+                <strong>Text:</strong> „Eine neue Speisely Partner-Story“
+              </p>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-[#173C32] border border-white/10 flex items-start gap-4">
+            <div class="font-mono text-xl font-black text-[#E6B84A] shrink-0">9–12s</div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Szene 4: Speisely Closing Screen (Call to Action)</h4>
+              <p class="text-xs text-white/70 mt-1">
+                <strong>Bild:</strong> Speisely Brand Emblem & Gold Badge.<br>
+                <strong>Text:</strong> „Jetzt lesen · Link in Bio @speisely“
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Copy helper
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Text erfolgreich in die Zwischenablage kopiert!");
+      });
+    }
+
+    // Download Carousel Slide as High-Res PNG
+    async function downloadAllSlides() {
+      for (let i = 1; i <= 5; i++) {
+        const slide = document.getElementById('slide-' + i);
+        const canvas = await html2canvas(slide, { scale: 2.5 });
+        const link = document.createElement('a');
+        link.download = 'speisely_carousel_slide_0' + i + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
+    }
+
+    // Interactive Reel Player Simulation
+    let reelTimer = null;
+    let currentSecond = 0;
+
+    const reelScenes = [
+      {
+        start: 0,
+        end: 3,
+        eyebrow: "Seit 2013 dabei",
+        title: "SCHNITZEL SCHMIEDE",
+        subtext: "13 Jahre Fest-Tradition in Mönchengladbach",
+        img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1080&q=90"
+      },
+      {
+        start: 3,
+        end: 6,
+        eyebrow: "Kulinarische Meile",
+        title: "EINESTADT-FEST 2026",
+        subtext: "14.–16. August · Mönchengladbach",
+        img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1080&q=90"
+      },
+      {
+        start: 6,
+        end: 9,
+        eyebrow: "Speisely Magazin",
+        title: "NEUE PARTNER-STORY",
+        subtext: "Echte Geschichten lokaler Betriebe",
+        img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1080&q=90"
+      },
+      {
+        start: 9,
+        end: 12,
+        eyebrow: "Jetzt Entdecken",
+        title: "LINK IN BIO",
+        subtext: "speisely.de/magazin",
+        img: "https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1080&q=90"
+      }
+    ];
+
+    function updateReelScene(sec) {
+      const scene = reelScenes.find(s => sec >= s.start && sec < s.end) || reelScenes[0];
+      document.getElementById("reel-img").src = scene.img;
+      document.getElementById("reel-eyebrow").innerText = scene.eyebrow;
+      document.getElementById("reel-title").innerText = scene.title;
+      document.getElementById("reel-subtext").innerText = scene.subtext;
+      document.getElementById("reel-timer-badge").innerText = "00:" + (sec < 10 ? "0" : "") + sec + " / 00:12";
+    }
+
+    function playReel() {
+      if (reelTimer) clearInterval(reelTimer);
+      currentSecond = 0;
+      updateReelScene(currentSecond);
+      reelTimer = setInterval(() => {
+        currentSecond++;
+        if (currentSecond > 12) currentSecond = 0;
+        updateReelScene(currentSecond);
+      }, 1000);
+    }
+
+    function pauseReel() {
+      if (reelTimer) clearInterval(reelTimer);
+    }
+
+    // Auto-start reel preview
+    playReel();
+  </script>
+
+</body>
+</html>

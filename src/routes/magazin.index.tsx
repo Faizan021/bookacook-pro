@@ -135,7 +135,7 @@ function MagazinIndexPage() {
                 </h2>
                 <p className="text-base text-[#173C32]/75 leading-relaxed">
                   Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach: 13 Jahre
-                  Fest-Tradition, handwerkliche Frische und Live-Gastronomie.
+                  Fest-Tradition und ein vertrauter Platz auf der kulinarischen Meile.
                 </p>
               </div>
 

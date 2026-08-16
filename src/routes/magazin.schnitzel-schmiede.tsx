@@ -9,12 +9,12 @@ export const Route = createFileRoute("/magazin/schnitzel-schmiede")({
       {
         name: "description",
         content:
-          "Kulinarische Meile Mönchengladbach: Die Fest-Story der Schnitzel Schmiede beim EineStadt-Fest 2026. Tradition seit 2013, Live-Gastronomie, Catering & Partyservice.",
+          "Kulinarische Meile Mönchengladbach: Die Fest-Story der Schnitzel Schmiede beim EineStadt-Fest 2026. 13 Jahre Fest-Tradition und ein vertrauter Platz auf der kulinarischen Meile.",
       },
       {
         name: "keywords",
         content:
-          "Schnitzel Schmiede, EineStadt-Fest 2026, Mönchengladbach, Gourmet-Meile, Catering Mönchengladbach, Schnitzel Catering NRW, Speisely Magazin, Live-Gastronomie",
+          "Schnitzel Schmiede, EineStadt-Fest 2026, Mönchengladbach, Gourmet-Meile, Catering Mönchengladbach, Schnitzel Catering NRW, Speisely Magazin",
       },
       {
         property: "og:title",

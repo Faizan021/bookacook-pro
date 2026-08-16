@@ -791,7 +791,7 @@ function Home() {
 
               <p className="text-white/75 text-base sm:text-lg leading-relaxed max-w-xl">
                 Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach: 13 Jahre
-                Fest-Tradition, handwerkliche Frische und Live-Gastronomie.
+                Fest-Tradition und ein vertrauter Platz auf der kulinarischen Meile.
               </p>
 
               <div className="pt-2 flex items-center gap-3">
