@@ -35,6 +35,7 @@ import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
+import { Route as MagazinSpeiselyVisitsRouteImport } from './routes/magazin.speisely-visits'
 import { Route as MagazinSchnitzelSchmiedeRouteImport } from './routes/magazin.schnitzel-schmiede'
 import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
 import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
@@ -46,11 +47,13 @@ import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-pas
 import { Route as AuthenticatedRestaurantRouteImport } from './routes/_authenticated/restaurant'
 import { Route as AuthenticatedCustomerRouteImport } from './routes/_authenticated/customer'
 import { Route as AuthenticatedCatererRouteImport } from './routes/_authenticated/caterer'
+import { Route as MagazinSpeiselyVisitsIndexRouteImport } from './routes/magazin.speisely-visits.index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as ReviewIntakeTokenRouteImport } from './routes/review.intake.$token'
 import { Route as RestaurantOrtCityRouteImport } from './routes/restaurant.ort.$city'
 import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$slug.links'
 import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
+import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
 import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
@@ -194,6 +197,11 @@ const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
   path: '/$city-$eventType',
   getParentRoute: () => PlannerRoute,
 } as any)
+const MagazinSpeiselyVisitsRoute = MagazinSpeiselyVisitsRouteImport.update({
+  id: '/magazin/speisely-visits',
+  path: '/magazin/speisely-visits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MagazinSchnitzelSchmiedeRoute =
   MagazinSchnitzelSchmiedeRouteImport.update({
     id: '/magazin/schnitzel-schmiede',
@@ -253,6 +261,12 @@ const AuthenticatedCatererRoute = AuthenticatedCatererRouteImport.update({
   path: '/caterer',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const MagazinSpeiselyVisitsIndexRoute =
+  MagazinSpeiselyVisitsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+  } as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
     id: '/dashboard/',
@@ -279,6 +293,12 @@ const PlannerOrtCityRoute = PlannerOrtCityRouteImport.update({
   path: '/ort/$city',
   getParentRoute: () => PlannerRoute,
 } as any)
+const MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute =
+  MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport.update({
+    id: '/shawarma-albaik-berlin',
+    path: '/shawarma-albaik-berlin',
+    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+  } as any)
 const CheckoutDepositBookingIdRoute =
   CheckoutDepositBookingIdRouteImport.update({
     id: '/checkout/deposit/$bookingId',
@@ -383,6 +403,7 @@ export interface FileRoutesByFullPath {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
+  '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -400,11 +421,13 @@ export interface FileRoutesByFullPath {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
   '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/magazin/speisely-visits/': typeof MagazinSpeiselyVisitsIndexRoute
   '/dashboard/planner/reviews': typeof AuthenticatedDashboardPlannerReviewsRoute
   '/api/stripe/connect/callback': typeof ApiStripeConnectCallbackRoute
   '/embed/catering/$slug/brief-intake': typeof EmbedCateringSlugBriefIntakeRoute
@@ -454,11 +477,13 @@ export interface FileRoutesByTo {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
   '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsIndexRoute
   '/dashboard/planner/reviews': typeof AuthenticatedDashboardPlannerReviewsRoute
   '/api/stripe/connect/callback': typeof ApiStripeConnectCallbackRoute
   '/embed/catering/$slug/brief-intake': typeof EmbedCateringSlugBriefIntakeRoute
@@ -495,6 +520,7 @@ export interface FileRoutesById {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
+  '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -512,11 +538,13 @@ export interface FileRoutesById {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
   '/restaurant/ort/$city': typeof RestaurantOrtCityRoute
   '/review/intake/$token': typeof ReviewIntakeTokenRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/magazin/speisely-visits/': typeof MagazinSpeiselyVisitsIndexRoute
   '/_authenticated/dashboard/planner/reviews': typeof AuthenticatedDashboardPlannerReviewsRoute
   '/api/stripe/connect/callback': typeof ApiStripeConnectCallbackRoute
   '/embed/catering/$slug/brief-intake': typeof EmbedCateringSlugBriefIntakeRoute
@@ -553,6 +581,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/schnitzel-schmiede'
+    | '/magazin/speisely-visits'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -570,11 +599,13 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
     | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/dashboard/'
+    | '/magazin/speisely-visits/'
     | '/dashboard/planner/reviews'
     | '/api/stripe/connect/callback'
     | '/embed/catering/$slug/brief-intake'
@@ -624,11 +655,13 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
     | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/dashboard'
+    | '/magazin/speisely-visits'
     | '/dashboard/planner/reviews'
     | '/api/stripe/connect/callback'
     | '/embed/catering/$slug/brief-intake'
@@ -664,6 +697,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/schnitzel-schmiede'
+    | '/magazin/speisely-visits'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -681,11 +715,13 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
     | '/restaurant/ort/$city'
     | '/review/intake/$token'
     | '/_authenticated/dashboard/'
+    | '/magazin/speisely-visits/'
     | '/_authenticated/dashboard/planner/reviews'
     | '/api/stripe/connect/callback'
     | '/embed/catering/$slug/brief-intake'
@@ -715,6 +751,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   MagazinSchnitzelSchmiedeRoute: typeof MagazinSchnitzelSchmiedeRoute
+  MagazinSpeiselyVisitsRoute: typeof MagazinSpeiselyVisitsRouteWithChildren
   RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -913,6 +950,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerCityEventTypeRouteImport
       parentRoute: typeof PlannerRoute
     }
+    '/magazin/speisely-visits': {
+      id: '/magazin/speisely-visits'
+      path: '/magazin/speisely-visits'
+      fullPath: '/magazin/speisely-visits'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/schnitzel-schmiede': {
       id: '/magazin/schnitzel-schmiede'
       path: '/magazin/schnitzel-schmiede'
@@ -990,6 +1034,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCatererRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/magazin/speisely-visits/': {
+      id: '/magazin/speisely-visits/'
+      path: '/'
+      fullPath: '/magazin/speisely-visits/'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsIndexRouteImport
+      parentRoute: typeof MagazinSpeiselyVisitsRoute
+    }
     '/_authenticated/dashboard/': {
       id: '/_authenticated/dashboard/'
       path: '/dashboard'
@@ -1024,6 +1075,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/planner/ort/$city'
       preLoaderRoute: typeof PlannerOrtCityRouteImport
       parentRoute: typeof PlannerRoute
+    }
+    '/magazin/speisely-visits/shawarma-albaik-berlin': {
+      id: '/magazin/speisely-visits/shawarma-albaik-berlin'
+      path: '/shawarma-albaik-berlin'
+      fullPath: '/magazin/speisely-visits/shawarma-albaik-berlin'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport
+      parentRoute: typeof MagazinSpeiselyVisitsRoute
     }
     '/checkout/deposit/$bookingId': {
       id: '/checkout/deposit/$bookingId'
@@ -1223,6 +1281,22 @@ const PlannerRouteChildren: PlannerRouteChildren = {
 const PlannerRouteWithChildren =
   PlannerRoute._addFileChildren(PlannerRouteChildren)
 
+interface MagazinSpeiselyVisitsRouteChildren {
+  MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute: typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
+  MagazinSpeiselyVisitsIndexRoute: typeof MagazinSpeiselyVisitsIndexRoute
+}
+
+const MagazinSpeiselyVisitsRouteChildren: MagazinSpeiselyVisitsRouteChildren = {
+  MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute:
+    MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute,
+  MagazinSpeiselyVisitsIndexRoute: MagazinSpeiselyVisitsIndexRoute,
+}
+
+const MagazinSpeiselyVisitsRouteWithChildren =
+  MagazinSpeiselyVisitsRoute._addFileChildren(
+    MagazinSpeiselyVisitsRouteChildren,
+  )
+
 interface RestaurantSlugRouteChildren {
   RestaurantSlugLinksRoute: typeof RestaurantSlugLinksRoute
 }
@@ -1258,6 +1332,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   MagazinSchnitzelSchmiedeRoute: MagazinSchnitzelSchmiedeRoute,
+  MagazinSpeiselyVisitsRoute: MagazinSpeiselyVisitsRouteWithChildren,
   RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
