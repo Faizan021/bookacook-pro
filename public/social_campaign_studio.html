@@ -3,58 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Speisely — Social Media Campaign Kit (Branded Carousel & Reel)</title>
+  <title>Speisely — Social Media Campaign Studio (Official Launch Kit)</title>
   
-  <!-- Fonts -->
+  <!-- Fonts: Fraunces & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- html2canvas for 1-click 1080x1350 / 1080x1920 exports -->
+  <!-- html2canvas for 1-click 1080x1350 PNG export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
     body {
-      background-color: #0c1813;
+      background-color: #08110e;
       color: #FBF7EE;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* 4:5 Aspect Ratio Container (1080x1350 scale) */
+    .font-serif-brand {
+      font-family: 'Fraunces', Georgia, serif;
+    }
+
+    /* 4:5 Aspect Ratio Container (1080x1350 px export scale) */
     .slide-4-5 {
       width: 420px;
       height: 525px; /* 4:5 ratio */
       position: relative;
       overflow: hidden;
-      border-radius: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      border-radius: 28px;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.85);
       background-color: #173C32;
       flex-shrink: 0;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1.5px solid rgba(230, 184, 74, 0.25);
     }
 
-    /* 9:16 Reel Container (1080x1920 scale) */
+    /* 9:16 Reel Container (1080x1920 px export scale) */
     .reel-9-16 {
       width: 360px;
       height: 640px; /* 9:16 ratio */
       position: relative;
       overflow: hidden;
-      border-radius: 28px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+      border-radius: 32px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95);
       background-color: #0c1813;
-      border: 4px solid #173C32;
+      border: 3px solid #E6B84A;
     }
 
     .ken-burns {
-      animation: kenBurnsAnim 12s infinite alternate ease-in-out;
+      animation: kenBurnsAnim 14s infinite alternate ease-in-out;
     }
 
     @keyframes kenBurnsAnim {
       0% { transform: scale(1) translate(0, 0); }
       50% { transform: scale(1.08) translate(-1%, -1%); }
-      100% { transform: scale(1.15) translate(1%, 1%); }
+      100% { transform: scale(1.14) translate(1%, 1%); }
     }
   </style>
 </head>
@@ -66,21 +70,22 @@
     <header class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-white/10">
       <div class="space-y-3">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#E6B84A]/20 text-[#E6B84A] border border-[#E6B84A]/30 rounded-full text-xs font-black uppercase tracking-wider">
-          Speisely Brand Campaign · Phase 1
+          <span class="w-2 h-2 rounded-full bg-[#E6B84A] animate-pulse"></span>
+          Offizielle Speisely Kampagne · 2026
         </div>
-        <h1 class="text-3xl md:text-5xl font-serif font-black text-white leading-tight">
-          Speisely Magazin Social Kit
+        <h1 class="text-3xl md:text-5xl font-serif-brand font-black text-white leading-tight">
+          Social Campaign Studio
         </h1>
         <p class="text-sm sm:text-base text-white/70 max-w-2xl leading-relaxed">
-          Starke Markenpräsenz für <strong>Speisely</strong> als führende Plattform für Gastronomie, Catering & Event-Planung in Deutschland.
+          Kreativ-Kit zur Promotion von <strong>Speisely</strong> & der neuen Partner-Story: 5 kuratierte Carousel-Slides (4:5) und 1 animated Reel (9:16).
         </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-3">
-        <a href="https://www.speisely.de/magazin/schnitzel-schmiede" target="_blank" class="px-5 py-3 bg-white/10 hover:bg-white text-white hover:text-[#173C32] rounded-xl font-bold text-xs transition border border-white/15">
-          Live-Artikel auf speisely.de ↗
+        <a href="https://www.speisely.de/magazin/schnitzel-schmiede" target="_blank" class="px-5 py-3 bg-white/10 hover:bg-white text-white hover:text-[#173C32] rounded-2xl font-bold text-xs transition border border-white/15">
+          Live-Artikel ansehen ↗
         </a>
-        <button onclick="downloadAllSlides()" class="px-6 py-3 bg-[#E6B84A] hover:bg-white text-[#173C32] rounded-xl font-extrabold text-xs shadow-xl transition flex items-center gap-2">
+        <button onclick="downloadAllSlides()" class="px-6 py-3.5 bg-[#E6B84A] hover:bg-white text-[#173C32] rounded-2xl font-extrabold text-xs shadow-2xl transition flex items-center gap-2">
           <span>⬇ Alle 5 Slides als PNG herunterladen</span>
         </button>
       </div>
@@ -93,46 +98,62 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
           <span class="text-xs font-bold text-[#E6B84A] uppercase tracking-widest">Tag 1 · Heute</span>
-          <h2 class="text-2xl sm:text-3xl font-serif font-bold text-white">1. Branded Meta Carousel (5 Slides · 4:5 Format)</h2>
+          <h2 class="text-2xl sm:text-3xl font-serif-brand font-bold text-white">1. Meta Carousel (5 Slides · 4:5 Format)</h2>
         </div>
-        <span class="text-xs text-white/50">Format: 1080 × 1350 px (Optimiert für Instagram & Facebook Feed)</span>
+        <span class="text-xs text-white/50">Format: 1080 × 1350 px (Optimiert für Instagram & Facebook)</span>
       </div>
 
-      <!-- Carousel Slides Container with Prominent Speisely Branding -->
+      <!-- Carousel Slides Container -->
       <div class="flex gap-6 overflow-x-auto pb-6 pt-2 no-scrollbar">
         
         <!-- SLIDE 1: Cover & Hero Story -->
         <div class="flex flex-col items-center gap-3 shrink-0">
           <div id="slide-1" class="slide-4-5 flex flex-col justify-between p-7 text-white">
+            <!-- Background Image -->
             <div class="absolute inset-0 z-0">
-              <img src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1080&q=90" alt="Schnitzel Schmiede" class="w-full h-full object-cover opacity-45 filter contrast-115">
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0c1813] via-[#173C32]/70 to-[#173C32]/40"></div>
+              <img src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1080&q=90" alt="Schnitzel Schmiede" class="w-full h-full object-cover opacity-60 filter contrast-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#08110e] via-[#173C32]/60 to-[#173C32]/40"></div>
             </div>
             
-            {/* Header with Official Speisely Logo */}
-            <div class="relative z-10 flex justify-between items-center bg-black/40 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/10">
-              <div class="flex items-center gap-2">
-                <img src="/speisely_logo.png" alt="Speisely" class="h-6 w-auto object-contain">
-                <span class="text-xs font-black uppercase tracking-wider text-white">Speisely Magazin</span>
+            <!-- Official Speisely Header Pill -->
+            <div class="relative z-10 flex justify-between items-center bg-[#08110e]/75 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/15 shadow-lg">
+              <div class="flex items-center gap-2.5">
+                <div class="h-7 w-7 grid place-items-center rounded-full bg-[#E6B84A] text-[#173C32] shrink-0 shadow">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-4 w-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <g transform="translate(4,4)">
+                      <g transform="rotate(45, 12, 12) translate(5, 0)">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                        <path d="M7 2v20" />
+                      </g>
+                      <g transform="rotate(-45, 12, 12) translate(-7.5, 0)">
+                        <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[11px] font-black uppercase tracking-wider text-white leading-none">SPEISELY</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-[#E6B84A]">MAGAZIN</span>
+                </div>
               </div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2 py-0.5 rounded-full">
-                Ausgabe 01 · 1/5
+              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2.5 py-0.5 rounded-full border border-white/10">
+                STORY 01 · 1/5
               </span>
             </div>
 
-            {/* Bottom Content */}
-            <div class="relative z-10 space-y-2.5">
-              <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#E6B84A] text-[#173C32] rounded-full text-[11px] font-black uppercase tracking-wider shadow">
+            <!-- Content Area -->
+            <div class="relative z-10 space-y-3">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#E6B84A] text-[#173C32] rounded-full text-[10px] font-black uppercase tracking-wider shadow-md">
                 <span>Partner-Story · Mönchengladbach</span>
               </div>
-              <h3 class="font-serif text-3xl font-black leading-tight text-white drop-shadow-md">
+              <h3 class="font-serif-brand text-3xl font-black leading-tight text-white drop-shadow-lg">
                 Schnitzel Schmiede beim EineStadt-Fest 2026
               </h3>
-              <p class="text-xs text-[#DDEEE3] font-medium leading-relaxed">
+              <p class="text-xs text-[#DDEEE3] font-medium leading-relaxed drop-shadow">
                 13 Jahre Fest-Tradition und ein vertrauter Platz auf der kulinarischen Meile.
               </p>
-              <div class="pt-1 flex items-center justify-between text-[10px] font-bold text-white/60 uppercase border-t border-white/15">
-                <span>speisely.de/magazin</span>
+              <div class="pt-2 flex items-center justify-between text-[10px] font-bold text-white/70 uppercase border-t border-white/20">
+                <span class="text-[#E6B84A]">speisely.de/magazin</span>
                 <span>Wische nach links ➔</span>
               </div>
             </div>
@@ -145,21 +166,40 @@
 
         <!-- SLIDE 2: Tradition & Heritage -->
         <div class="flex flex-col items-center gap-3 shrink-0">
-          <div id="slide-2" class="slide-4-5 flex flex-col justify-between p-7 text-white bg-[#173C32]">
-            {/* Header */}
-            <div class="flex justify-between items-center bg-black/30 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/10 z-10">
-              <div class="flex items-center gap-2">
-                <img src="/speisely_logo.png" alt="Speisely" class="h-6 w-auto object-contain">
-                <span class="text-xs font-black uppercase tracking-wider text-white">Speisely Magazin</span>
+          <div id="slide-2" class="slide-4-5 flex flex-col justify-between p-7 text-white bg-gradient-to-br from-[#173C32] via-[#0e251f] to-[#08110e]">
+            <!-- Header -->
+            <div class="flex justify-between items-center bg-[#08110e]/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/15 z-10">
+              <div class="flex items-center gap-2.5">
+                <div class="h-7 w-7 grid place-items-center rounded-full bg-[#E6B84A] text-[#173C32] shrink-0 shadow">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-4 w-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <g transform="translate(4,4)">
+                      <g transform="rotate(45, 12, 12) translate(5, 0)">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                        <path d="M7 2v20" />
+                      </g>
+                      <g transform="rotate(-45, 12, 12) translate(-7.5, 0)">
+                        <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[11px] font-black uppercase tracking-wider text-white leading-none">SPEISELY</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-[#E6B84A]">MAGAZIN</span>
+                </div>
               </div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2 py-0.5 rounded-full">
+              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2.5 py-0.5 rounded-full">
                 2 / 5
               </span>
             </div>
 
-            <div class="my-auto space-y-4 z-10 text-center px-2">
-              <span class="font-mono text-6xl font-black text-[#E6B84A] block leading-none tracking-tight">2013 – 2026</span>
-              <h3 class="font-serif text-3xl font-black text-white leading-tight">
+            <!-- Heritage Badge Center -->
+            <div class="my-auto space-y-4 z-10 text-center px-4">
+              <div class="inline-block p-4 rounded-3xl bg-white/5 border border-white/10 shadow-inner">
+                <span class="text-xs font-black uppercase tracking-[0.2em] text-[#E6B84A] block mb-1">Tradition seit</span>
+                <span class="font-serif-brand text-6xl font-black text-white block leading-none tracking-tight">2013</span>
+              </div>
+              <h3 class="font-serif-brand text-2xl sm:text-3xl font-black text-white leading-tight">
                 Seit 2013 Teil der kulinarischen Meile
               </h3>
               <p class="text-xs text-[#DDEEE3] font-medium leading-relaxed max-w-xs mx-auto">
@@ -167,9 +207,9 @@
               </p>
             </div>
 
-            <div class="flex justify-between items-center text-[10px] font-bold text-white/50 uppercase pt-3 border-t border-white/10 z-10">
+            <div class="flex justify-between items-center text-[10px] font-bold text-white/60 uppercase pt-3 border-t border-white/15 z-10">
               <span>Authentische Gastronomie</span>
-              <span>speisely.de</span>
+              <span class="text-[#E6B84A]">speisely.de</span>
             </div>
           </div>
 
@@ -182,17 +222,32 @@
         <div class="flex flex-col items-center gap-3 shrink-0">
           <div id="slide-3" class="slide-4-5 flex flex-col justify-between p-7 text-white">
             <div class="absolute inset-0 z-0">
-              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1080&q=90" alt="Festmeile Atmosphäre" class="w-full h-full object-cover opacity-35">
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0c1813] via-[#173C32]/80 to-[#173C32]/40"></div>
+              <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1080&q=90" alt="Festmeile Atmosphäre" class="w-full h-full object-cover opacity-45 filter contrast-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#08110e] via-[#173C32]/75 to-[#173C32]/45"></div>
             </div>
 
-            {/* Header */}
-            <div class="relative z-10 flex justify-between items-center bg-black/40 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/10">
-              <div class="flex items-center gap-2">
-                <img src="/speisely_logo.png" alt="Speisely" class="h-6 w-auto object-contain">
-                <span class="text-xs font-black uppercase tracking-wider text-white">Speisely Magazin</span>
+            <!-- Header -->
+            <div class="relative z-10 flex justify-between items-center bg-[#08110e]/75 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/15">
+              <div class="flex items-center gap-2.5">
+                <div class="h-7 w-7 grid place-items-center rounded-full bg-[#E6B84A] text-[#173C32] shrink-0 shadow">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-4 w-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <g transform="translate(4,4)">
+                      <g transform="rotate(45, 12, 12) translate(5, 0)">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                        <path d="M7 2v20" />
+                      </g>
+                      <g transform="rotate(-45, 12, 12) translate(-7.5, 0)">
+                        <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[11px] font-black uppercase tracking-wider text-white leading-none">SPEISELY</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-[#E6B84A]">MAGAZIN</span>
+                </div>
               </div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2 py-0.5 rounded-full">
+              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-white/10 px-2.5 py-0.5 rounded-full">
                 3 / 5
               </span>
             </div>
@@ -201,14 +256,15 @@
               <div class="inline-block px-3 py-1 bg-[#E6B84A] text-[#173C32] rounded-full text-[10px] font-black uppercase tracking-wider shadow">
                 14.–16. August · Mönchengladbach
               </div>
-              <h3 class="font-serif text-3xl font-black text-white leading-tight">
+              <h3 class="font-serif-brand text-3xl font-black text-white leading-tight">
                 Drei Tage Feststimmung auf der Brucknerallee
               </h3>
               <p class="text-xs text-[#DDEEE3] leading-relaxed">
                 Bühnenprogramm, KidsWorld, Kunsthandwerk und kulinarische Vielfalt auf dem 22. Stadtfest.
               </p>
-              <div class="pt-1 text-[10px] font-bold text-white/50 uppercase border-t border-white/15">
-                Speisely Partner-Story
+              <div class="pt-2 flex items-center justify-between text-[10px] font-bold text-white/70 uppercase border-t border-white/20">
+                <span>Kuratierte Reportage</span>
+                <span class="text-[#E6B84A]">speisely.de</span>
               </div>
             </div>
           </div>
@@ -220,35 +276,61 @@
 
         <!-- SLIDE 4: Speisely Platform Showcase -->
         <div class="flex flex-col items-center gap-3 shrink-0">
-          <div id="slide-4" class="slide-4-5 flex flex-col justify-between p-7 text-white bg-[#0c1813]">
-            {/* Header */}
-            <div class="flex justify-between items-center bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/10 z-10">
-              <div class="flex items-center gap-2">
-                <img src="/speisely_logo.png" alt="Speisely" class="h-6 w-auto object-contain">
-                <span class="text-xs font-black uppercase tracking-wider text-[#E6B84A]">Über Speisely</span>
+          <div id="slide-4" class="slide-4-5 flex flex-col justify-between p-7 text-white bg-gradient-to-br from-[#0c1813] via-[#173C32] to-[#08110e]">
+            <!-- Header -->
+            <div class="flex justify-between items-center bg-[#08110e]/75 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/15 z-10">
+              <div class="flex items-center gap-2.5">
+                <div class="h-7 w-7 grid place-items-center rounded-full bg-[#E6B84A] text-[#173C32] shrink-0 shadow">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-4 w-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <g transform="translate(4,4)">
+                      <g transform="rotate(45, 12, 12) translate(5, 0)">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                        <path d="M7 2v20" />
+                      </g>
+                      <g transform="rotate(-45, 12, 12) translate(-7.5, 0)">
+                        <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[11px] font-black uppercase tracking-wider text-[#E6B84A] leading-none">SPEISELY</span>
+                  <span class="text-[8px] font-bold uppercase tracking-widest text-white/80">MARKTPLATZ</span>
+                </div>
               </div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-white/80 bg-white/10 px-2 py-0.5 rounded-full">
+              <span class="text-[10px] font-black uppercase tracking-widest text-white/80 bg-white/10 px-2.5 py-0.5 rounded-full">
                 4 / 5
               </span>
             </div>
 
             <div class="my-auto space-y-4 z-10 px-2">
-              <span class="text-xs font-extrabold text-[#E6B84A] uppercase tracking-widest">Marktplatz für Deutschland</span>
-              <h3 class="font-serif text-2xl sm:text-3xl font-black text-white leading-tight">
+              <span class="text-[11px] font-black text-[#E6B84A] uppercase tracking-widest block">Marktplatz für Deutschland</span>
+              <h3 class="font-serif-brand text-2xl sm:text-3xl font-black text-white leading-tight">
                 Lokale Gastronomie & Catering entdecken
               </h3>
               <p class="text-xs text-white/80 leading-relaxed">
                 Speisely verbindet Restaurants, Caterer und Event-Planer mit Kunden in ganz Deutschland — direkt, transparent und ohne versteckte Gebühren.
               </p>
+              
+              <!-- 3 Service Pill Cards -->
               <div class="grid grid-cols-3 gap-2 pt-2 text-center text-[10px] font-extrabold">
-                <div class="p-2 rounded-xl bg-white/5 border border-white/10 text-[#E6B84A]">🍽️ Restaurants</div>
-                <div class="p-2 rounded-xl bg-white/5 border border-white/10 text-[#E6B84A]">🚚 Catering</div>
-                <div class="p-2 rounded-xl bg-white/5 border border-white/10 text-[#E6B84A]">🎪 Event-Planer</div>
+                <div class="p-2.5 rounded-2xl bg-black/40 border border-white/10 text-white">
+                  <div class="text-base mb-0.5">🍽️</div>
+                  <span class="text-[#E6B84A]">Restaurants</span>
+                </div>
+                <div class="p-2.5 rounded-2xl bg-black/40 border border-white/10 text-white">
+                  <div class="text-base mb-0.5">🚚</div>
+                  <span class="text-[#E6B84A]">Catering</span>
+                </div>
+                <div class="p-2.5 rounded-2xl bg-black/40 border border-white/10 text-white">
+                  <div class="text-base mb-0.5">🎪</div>
+                  <span class="text-[#E6B84A]">Event-Planer</span>
+                </div>
               </div>
             </div>
 
-            <div class="text-[10px] font-bold text-white/50 uppercase border-t border-white/10 pt-3 z-10 text-center">
-              speisely.de · Made in Germany
+            <div class="text-[10px] font-bold text-white/60 uppercase border-t border-white/15 pt-3 z-10 text-center">
+              speisely.de · Geprüfte Partner in deiner Stadt
             </div>
           </div>
 
@@ -259,36 +341,46 @@
 
         <!-- SLIDE 5: Direct Speisely Call-to-Action -->
         <div class="flex flex-col items-center gap-3 shrink-0">
-          <div id="slide-5" class="slide-4-5 flex flex-col justify-between p-7 text-center text-white bg-[#173C32]">
-            {/* Header */}
-            <div class="flex justify-between items-center bg-black/30 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/10 z-10">
+          <div id="slide-5" class="slide-4-5 flex flex-col justify-between p-7 text-center text-white bg-gradient-to-br from-[#173C32] via-[#0d221c] to-[#08110e]">
+            <!-- Header -->
+            <div class="flex justify-between items-center bg-[#08110e]/60 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/15 z-10">
               <span class="text-xs font-bold text-[#DDEEE3] uppercase tracking-widest">Ausgabe 01 · 2026</span>
-              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-black/40 px-2 py-0.5 rounded-full">
+              <span class="text-[10px] font-black uppercase tracking-widest text-[#E6B84A] bg-black/40 px-2.5 py-0.5 rounded-full">
                 5 / 5
               </span>
             </div>
 
             <div class="my-auto space-y-4 z-10 px-2">
-              <div class="w-16 h-16 rounded-full bg-white/10 border border-white/20 p-2 mx-auto flex items-center justify-center shadow-lg">
-                <img src="/speisely_logo.png" alt="Speisely" class="w-full h-full object-contain">
+              <div class="w-16 h-16 rounded-full bg-[#E6B84A] text-[#173C32] p-3 mx-auto flex items-center justify-center shadow-2xl border-2 border-white/30">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-9 w-9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <g transform="translate(4,4)">
+                    <g transform="rotate(45, 12, 12) translate(5, 0)">
+                      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                      <path d="M7 2v20" />
+                    </g>
+                    <g transform="rotate(-45, 12, 12) translate(-7.5, 0)">
+                      <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                    </g>
+                  </g>
+                </svg>
               </div>
 
-              <h3 class="font-serif text-3xl font-black text-white leading-tight">
+              <h3 class="font-serif-brand text-3xl font-black text-white leading-tight">
                 Jetzt die vollständige Story lesen
               </h3>
 
               <div class="pt-2">
-                <div class="inline-block px-6 py-3.5 bg-[#E6B84A] text-[#173C32] font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl">
+                <div class="inline-block px-7 py-3.5 bg-[#E6B84A] text-[#173C32] font-black text-xs uppercase tracking-wider rounded-2xl shadow-2xl">
                   speisely.de/magazin ➔
                 </div>
               </div>
 
-              <p class="text-xs text-[#DDEEE3] font-bold">
+              <p class="text-xs text-[#DDEEE3] font-bold pt-1">
                 Link in Bio @speisely
               </p>
             </div>
 
-            <div class="text-[9px] text-white/50 border-t border-white/10 pt-3 z-10">
+            <div class="text-[9px] text-white/50 border-t border-white/15 pt-3 z-10">
               © 2026 Speisely · Lokale Partner & Catering entdecken
             </div>
           </div>
@@ -305,12 +397,12 @@
          SECTION 2: HOW TO POST ON INSTAGRAM & FACEBOOK
          ========================================================================= -->
     <section class="p-8 rounded-3xl bg-[#173C32]/60 border border-white/10 space-y-6">
-      <h3 class="text-xl font-serif font-bold text-white flex items-center gap-3">
-        <span>📱 Anleitung zum Veröffentlichen (Instagram & Facebook)</span>
+      <h3 class="text-xl font-serif-brand font-bold text-white flex items-center gap-3">
+        <span>📱 Schritt-für-Schritt Anleitung zum Veröffentlichen</span>
       </h3>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs text-white/80 leading-relaxed">
-        <div class="space-y-3 p-6 rounded-2xl bg-black/30 border border-white/10">
+        <div class="space-y-3 p-6 rounded-2xl bg-black/40 border border-white/10">
           <h4 class="font-bold text-sm text-[#E6B84A]">1. Auf Instagram veröffentlichen:</h4>
           <ol class="list-decimal pl-4 space-y-2">
             <li>Lade alle 5 Slides mit den Buttons oben herunter.</li>
@@ -321,7 +413,7 @@
           </ol>
         </div>
 
-        <div class="space-y-3 p-6 rounded-2xl bg-black/30 border border-white/10">
+        <div class="space-y-3 p-6 rounded-2xl bg-black/40 border border-white/10">
           <h4 class="font-bold text-sm text-[#E6B84A]">2. Auf Facebook veröffentlichen:</h4>
           <ol class="list-decimal pl-4 space-y-2">
             <li>Öffne deine Facebook-Seite und starte einen <strong>neuen Beitrag</strong>.</li>
@@ -349,7 +441,7 @@
           </button>
         </div>
 
-        <div id="ig-caption-text" class="p-4 rounded-xl bg-black/30 text-xs text-white/90 leading-relaxed font-mono whitespace-pre-wrap select-all">Seit 2013 gehört die Schnitzel Schmiede zum EineStadt-Fest in Mönchengladbach. 🍽️
+        <div id="ig-caption-text" class="p-4 rounded-xl bg-black/40 text-xs text-white/90 leading-relaxed font-mono whitespace-pre-wrap select-all">Seit 2013 gehört die Schnitzel Schmiede zum EineStadt-Fest in Mönchengladbach. 🍽️
 
 Auch 2026 war sie wieder Teil der kulinarischen Meile, die vom 14. bis 16. August Besucherinnen und Besucher zusammenbrachte.
 
@@ -374,7 +466,7 @@ Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
           </button>
         </div>
 
-        <div id="fb-caption-text" class="p-4 rounded-xl bg-black/30 text-xs text-white/90 leading-relaxed font-mono whitespace-pre-wrap select-all">Seit 2013 gehört die Schnitzel Schmiede zum EineStadt-Fest in Mönchengladbach. 🍽️
+        <div id="fb-caption-text" class="p-4 rounded-xl bg-black/40 text-xs text-white/90 leading-relaxed font-mono whitespace-pre-wrap select-all">Seit 2013 gehört die Schnitzel Schmiede zum EineStadt-Fest in Mönchengladbach. 🍽️
 
 Auch 2026 war sie wieder Teil der kulinarischen Meile, die vom 14. bis 16. August Besucherinnen und Besucher zusammenbrachte.
 
@@ -396,14 +488,14 @@ Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
     <section class="space-y-6 pt-6 border-t border-white/10">
       <div>
         <span class="text-xs font-bold text-[#E6B84A] uppercase tracking-widest">Tag 2 · Morgen</span>
-        <h2 class="text-2xl font-serif font-bold text-white">3. Short Reel Storyboard (9:16 · 12–15s)</h2>
+        <h2 class="text-2xl font-serif-brand font-bold text-white">3. Short Reel Storyboard (9:16 · 12–15s)</h2>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         <!-- Live Reel Animated Preview Player -->
         <div class="lg:col-span-5 flex flex-col items-center">
-          <div id="reel-player" class="reel-9-16 flex flex-col justify-between p-8 text-white relative">
+          <div id="reel-player" class="reel-9-16 flex flex-col justify-between p-7 text-white relative">
             
             <!-- Video Frame Backgrounds -->
             <div id="reel-bg" class="absolute inset-0 z-0 ken-burns">
@@ -411,11 +503,23 @@ Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
               <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/60"></div>
             </div>
 
-            <!-- Meta Safe Zone: Top Header -->
-            <div class="relative z-10 pt-4 flex justify-between items-center bg-black/40 backdrop-blur px-3 py-1.5 rounded-2xl border border-white/15">
+            <!-- Top Header with Official Emblem -->
+            <div class="relative z-10 pt-2 flex justify-between items-center bg-black/50 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-white/15 shadow">
               <div class="flex items-center gap-2">
-                <img src="/speisely_logo.png" alt="Speisely" class="h-6 w-auto object-contain">
-                <span class="text-xs font-black uppercase tracking-wider text-white">Speisely</span>
+                <div class="h-6 w-6 grid place-items-center rounded-full bg-[#E6B84A] text-[#173C32] shrink-0 shadow">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="h-3.5 w-3.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                    <g transform="translate(4,4)">
+                      <g transform="rotate(45, 12, 12) translate(5, 0)">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+                        <path d="M7 2v20" />
+                      </g>
+                      <g transform="rotate(-45, 12, 12) translate(-7.5, 0)">
+                        <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+                <span class="text-xs font-black uppercase tracking-wider text-white">SPEISELY</span>
               </div>
               <span id="reel-timer-badge" class="px-2.5 py-0.5 bg-black/60 text-[#E6B84A] rounded-full text-[10px] font-mono font-bold">
                 00:00 / 00:12
@@ -427,7 +531,7 @@ Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
               <span id="reel-eyebrow" class="text-xs font-extrabold text-[#E6B84A] uppercase tracking-widest">
                 Seit 2013 dabei
               </span>
-              <h3 id="reel-title" class="font-serif text-3xl font-black text-white leading-tight">
+              <h3 id="reel-title" class="font-serif-brand text-3xl font-black text-white leading-tight">
                 Schnitzel Schmiede
               </h3>
               <p id="reel-subtext" class="text-xs text-[#DDEEE3] font-medium leading-relaxed max-w-xs mx-auto">
@@ -486,7 +590,7 @@ Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
           <div class="p-6 rounded-2xl bg-[#173C32] border border-white/10 flex items-start gap-4">
             <div class="font-mono text-xl font-black text-[#E6B84A] shrink-0">6–9s</div>
             <div>
-              <h4 class="font-bold text-white text-sm">Szene 3: Speisely Magazin & Plattform</h4>
+              <h4 class="font-bold text-white text-sm">Szene 3: Speisely Magazin & Marktplatz</h4>
               <p class="text-xs text-white/70 mt-1">
                 <strong>Bild:</strong> Speisely Magazin Story & Branding.<br>
                 <strong>Text:</strong> „Eine neue Speisely Partner-Story“
@@ -558,7 +662,7 @@ Speisely – lokale Gastronomie, Cateringpartner und Eventanbieter entdecken.
         eyebrow: "Kulinarische Meile",
         title: "EINESTADT-FEST 2026",
         subtext: "14.–16. August · Mönchengladbach",
-        img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1080&q=90"
+        img: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1080&q=90"
       },
       {
         start: 6,
