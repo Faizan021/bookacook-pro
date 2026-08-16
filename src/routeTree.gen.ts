@@ -28,12 +28,14 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlannerIndexRouteImport } from './routes/planner.index'
+import { Route as MagazinIndexRouteImport } from './routes/magazin.index'
 import { Route as CateringIndexRouteImport } from './routes/catering.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
+import { Route as MagazinSchnitzelSchmiedeRouteImport } from './routes/magazin.schnitzel-schmiede'
 import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
 import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
 import { Route as CateringEventsRouteImport } from './routes/catering.events'
@@ -157,6 +159,11 @@ const PlannerIndexRoute = PlannerIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PlannerRoute,
 } as any)
+const MagazinIndexRoute = MagazinIndexRouteImport.update({
+  id: '/magazin/',
+  path: '/magazin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CateringIndexRoute = CateringIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -187,6 +194,12 @@ const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
   path: '/$city-$eventType',
   getParentRoute: () => PlannerRoute,
 } as any)
+const MagazinSchnitzelSchmiedeRoute =
+  MagazinSchnitzelSchmiedeRouteImport.update({
+    id: '/magazin/schnitzel-schmiede',
+    path: '/magazin/schnitzel-schmiede',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const FestivalSchnitzelSchmiedeRoute =
   FestivalSchnitzelSchmiedeRouteImport.update({
     id: '/festival/schnitzel-schmiede',
@@ -369,12 +382,14 @@ export interface FileRoutesByFullPath {
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
+  '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
+  '/magazin/': typeof MagazinIndexRoute
   '/planner/': typeof PlannerIndexRoute
   '/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
   '/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
@@ -421,12 +436,14 @@ export interface FileRoutesByTo {
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
+  '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth': typeof AuthIndexRoute
   '/blog': typeof BlogIndexRoute
   '/catering': typeof CateringIndexRoute
+  '/magazin': typeof MagazinIndexRoute
   '/planner': typeof PlannerIndexRoute
   '/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
   '/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
@@ -477,12 +494,14 @@ export interface FileRoutesById {
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
+  '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
+  '/magazin/': typeof MagazinIndexRoute
   '/planner/': typeof PlannerIndexRoute
   '/_authenticated/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
   '/_authenticated/dashboard/planner': typeof AuthenticatedDashboardPlannerRouteWithChildren
@@ -533,12 +552,14 @@ export interface FileRouteTypes {
     | '/catering/events'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
+    | '/magazin/schnitzel-schmiede'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
     | '/auth/'
     | '/blog/'
     | '/catering/'
+    | '/magazin/'
     | '/planner/'
     | '/caterer/reviews'
     | '/dashboard/planner'
@@ -585,12 +606,14 @@ export interface FileRouteTypes {
     | '/catering/events'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
+    | '/magazin/schnitzel-schmiede'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
     | '/auth'
     | '/blog'
     | '/catering'
+    | '/magazin'
     | '/planner'
     | '/caterer/reviews'
     | '/dashboard/planner'
@@ -640,12 +663,14 @@ export interface FileRouteTypes {
     | '/catering/events'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
+    | '/magazin/schnitzel-schmiede'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
     | '/auth/'
     | '/blog/'
     | '/catering/'
+    | '/magazin/'
     | '/planner/'
     | '/_authenticated/caterer/reviews'
     | '/_authenticated/dashboard/planner'
@@ -689,9 +714,11 @@ export interface RootRouteChildren {
   AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
+  MagazinSchnitzelSchmiedeRoute: typeof MagazinSchnitzelSchmiedeRoute
   RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  MagazinIndexRoute: typeof MagazinIndexRoute
   ApiPrintStarRoute: typeof ApiPrintStarRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
@@ -837,6 +864,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerIndexRouteImport
       parentRoute: typeof PlannerRoute
     }
+    '/magazin/': {
+      id: '/magazin/'
+      path: '/magazin'
+      fullPath: '/magazin/'
+      preLoaderRoute: typeof MagazinIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/catering/': {
       id: '/catering/'
       path: '/'
@@ -878,6 +912,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/planner/$city-$eventType'
       preLoaderRoute: typeof PlannerCityEventTypeRouteImport
       parentRoute: typeof PlannerRoute
+    }
+    '/magazin/schnitzel-schmiede': {
+      id: '/magazin/schnitzel-schmiede'
+      path: '/magazin/schnitzel-schmiede'
+      fullPath: '/magazin/schnitzel-schmiede'
+      preLoaderRoute: typeof MagazinSchnitzelSchmiedeRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/festival/schnitzel-schmiede': {
       id: '/festival/schnitzel-schmiede'
@@ -1216,9 +1257,11 @@ const rootRouteChildren: RootRouteChildren = {
   AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
+  MagazinSchnitzelSchmiedeRoute: MagazinSchnitzelSchmiedeRoute,
   RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  MagazinIndexRoute: MagazinIndexRoute,
   ApiPrintStarRoute: ApiPrintStarRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
   CheckoutDepositBookingIdRoute: CheckoutDepositBookingIdRoute,

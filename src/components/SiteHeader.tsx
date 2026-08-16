@@ -59,6 +59,7 @@ export function SiteHeader() {
     { to: "/restaurants", label: t("nav.restaurants") },
     { to: "/catering", label: t("nav.catering") },
     { to: "/planner", label: "Event Planner" },
+    { to: "/magazin", label: "Magazin" },
     { to: "/partners", label: t("nav.partners") },
     { to: "/about", label: t("nav.about") },
     { to: "/contact", label: t("nav.contact") },

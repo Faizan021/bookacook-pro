@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speisely Magazin — 3D Flipbook Reader (Ausgabe 01 · 2026)</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- StPageFlip (HTML5 3D Page Turning Engine) -->
+  <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --forest-black: #0c1813;
+      --forest-deep: #173C32;
+      --cream-paper: #fbf7ee;
+      --gold-foil: #E6B84A;
+      --gold-dark: #b8860b;
+      --rust-accent: #c4401c;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #1a2f26 0%, #0d1a15 100%);
+      color: #173C32;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    /* Flipbook Page Base Styling */
+    .page {
+      background-color: var(--cream-paper);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .page.-hard {
+      background-color: #0c1813;
+      border: 1px solid rgba(230, 184, 74, 0.3);
+    }
+
+    .page-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Spine and Page Shadows */
+    .page-left {
+      border-right: 1px solid rgba(0,0,0,0.08);
+      background: linear-gradient(to right, #fbf7ee 0%, #fbf7ee 95%, #ede6d8 100%);
+    }
+
+    .page-right {
+      border-left: 1px solid rgba(0,0,0,0.08);
+      background: linear-gradient(to left, #fbf7ee 0%, #fbf7ee 95%, #ede6d8 100%);
+    }
+
+    .page-right-dark {
+      background: linear-gradient(to left, #0c1813 0%, #0c1813 95%, #07100c 100%);
+    }
+
+    /* Flipbook Container */
+    #flipbook-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      position: relative;
+      perspective: 2500px;
+    }
+
+    /* UI Controls Toolbar */
+    .flip-toolbar {
+      background: rgba(12, 24, 19, 0.94);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(230, 184, 74, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .toolbar-btn {
+      color: #FBF7EE;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toolbar-btn:hover {
+      color: #E6B84A;
+      transform: translateY(-1px);
+    }
+
+    /* 3-Column Editorial Grid for Magazine */
+    .editorial-3col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      font-size: 8.5px;
+      line-height: 1.5;
+      color: #242e28;
+      text-align: justify;
+    }
+
+    .editorial-3col p.lead::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      float: left;
+      line-height: 0.8;
+      margin-right: 6px;
+      color: var(--rust-accent);
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================================
+       TOP READER BAR
+       ========================================================================= -->
+  <header class="w-full px-6 py-3.5 flex items-center justify-between z-50 flip-toolbar border-b border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="h-8 w-auto rounded overflow-hidden">
+        <img src="speisely_logo.png" alt="Speisely" class="h-full w-auto object-contain">
+      </div>
+      <span class="text-xs font-semibold text-gold tracking-wider uppercase hidden sm:inline-block">
+        3D Magazin Reader · Ausgabe 01 · 2026
+      </span>
+    </div>
+
+    <div class="flex items-center gap-4 text-xs text-cream/80">
+      <span id="page-indicator" class="font-bold text-gold">Seite 1 von 4</span>
+      <a href="schnitzel_schmiede_story.html" class="px-3.5 py-1 bg-white/10 hover:bg-gold hover:text-forest text-cream rounded-full font-bold transition-all text-xs border border-white/20">
+        Scroll-Story Ansicht
+      </a>
+      <button onclick="toggleFullScreen()" class="p-1.5 hover:text-gold transition">
+        ⛶ Vollbild
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       3D FLIPBOOK VIEWPORT
+       ========================================================================= -->
+  <main id="flipbook-wrapper" class="p-4 sm:p-8">
+    <div id="magazine-book">
+      
+      <!-- ================= PAGE 1: HARD COVER (A4) ================= -->
+      <div class="page -hard">
+        <div class="page-content bg-black">
+          <img src="speisely_magazine_cover_v2.png" alt="Speisely Magazin Cover" class="w-full h-full object-cover">
+        </div>
+      </div>
+
+      <!-- ================= PAGE 2: 3-COLUMN STORY (LEFT PAGE) ================= -->
+      <div class="page page-left">
+        <div class="page-content p-8 sm:p-10 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center text-[8px] font-extrabold uppercase tracking-widest text-[#57685f] border-b border-[#e2d9c9] pb-2 mb-4">
+              <span>Speisely Magazin · Food & Culture</span>
+              <span class="text-[#c4401c]">Partner-Story · MG</span>
+            </div>
+
+            <div class="mb-4">
+              <h1 class="font-serif text-2xl font-black text-[#0c1813] leading-tight mb-1">
+                Heiß, laut, fettig – und verdammt gut.
+              </h1>
+              <p class="text-[10.5px] font-bold text-[#c4401c]">
+                Warum die Schlange vor dem Schnitzel-Stand immer die längste ist
+              </p>
+            </div>
+
+            <div class="editorial-3col">
+              <!-- Col 1 -->
+              <div>
+                <p class="lead">Es ist 19:30 Uhr auf der Festmeile. Die Musik vom Hauptplatz wummert herüber, Lichterketten flammen auf und überall liegt dieser unverwechselbare Duft: geschmolzene Butter, frische Zitrone und das heiße Zischen frischer Panade.</p>
+                
+                <div class="bg-[#c4401c] text-white p-2.5 rounded my-2 shadow-sm">
+                  <p class="font-sans text-[9px] font-bold leading-tight">
+                    „Wenn auf der Festmeile die ersten Pfannen zischen, zählt nur eines: Heiß, goldbraun und saftig.“
+                  </p>
+                </div>
+                <p>Am Stand herrscht Hochbetrieb im Minutentakt. Hier gibt es ehrliches Handwerk für echte Genießer.</p>
+              </div>
+
+              <!-- Col 2 -->
+              <div>
+                <p>Der erste Biss liefert genau diesen satten Crunch. Außen die wellige, goldbraune Kruste, innen zartes Qualitätsfleisch, abgerundet durch frische Zitrone.</p>
+
+                <p class="font-bold text-[#c4401c] text-[8.5px] mt-2 mb-1">Frische ohne Kompromisse</p>
+                <p>Während viele Großveranstaltungen auf vorgegarte Ware setzen, hält die Schnitzel Schmiede an der traditionellen Einzelzubereitung fest. Jedes Schnitzel wird frisch paniert und heiß serviert.</p>
+
+                <p class="font-bold text-[#c4401c] text-[8.5px] mt-2 mb-1">Tradition seit 2013</p>
+                <p>Seit 2013 ist das Team fester Bestandteil des EineStadt-Fests in Mönchengladbach.</p>
+              </div>
+
+              <!-- Col 3 -->
+              <div>
+                <div class="rounded overflow-hidden mb-2 shadow">
+                  <img src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=500&q=85" alt="Goldbraunes Schnitzel" class="w-full h-24 object-cover">
+                </div>
+                <p class="text-[7.5px] text-[#57685f] italic mb-2">Frisch aus der Pfanne serviert.</p>
+                <p>„Ein gutes Schnitzel braucht keine Geheimnisse“, erklärt das Team. „Gutes Fleisch, lockere Panade und die richtige Hitze in der Pfanne.“</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center text-[7.5px] font-extrabold text-[#8c9b93] uppercase border-t border-[#e2d9c9] pt-2">
+            <span>02 | Speisely Magazin</span>
+            <span>Ausgabe 01 · 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= PAGE 3: FEATURE SPREAD (RIGHT PAGE) ================= -->
+      <div class="page page-right-dark">
+        <div class="page-content p-8 sm:p-10 text-white flex flex-col justify-between">
+          <div class="space-y-4">
+            <div class="flex items-center gap-2">
+              <span class="text-gold font-bold text-sm">⚡</span>
+              <div>
+                <h3 class="text-xs font-black uppercase tracking-wider text-white">SCHNITZEL SCHMIEDE</h3>
+                <span class="text-[7.5px] text-gold uppercase tracking-wider">Gastronomie · Catering · Lieferservice</span>
+              </div>
+            </div>
+
+            <h2 class="font-serif text-2xl font-black text-white leading-tight">
+              Echtes Handwerk.<br>
+              Heißer Crunch.<br>
+              Für dein Event in NRW.
+            </h2>
+
+            <p class="text-[9px] text-[#DDEEE3] leading-relaxed">
+              Vom legendären EineStadt-Fest direkt zu deiner Veranstaltung: Frisches Schnitzel-Catering und Partyservice für 20 bis 500+ Personen.
+            </p>
+
+            <ul class="space-y-2 text-[8px] text-[#e2e8f0]">
+              <li class="flex items-start gap-2">
+                <span class="text-gold font-bold">/</span>
+                <span><strong>Frisch aus der Pfanne:</strong> Frisch paniert und goldbraun gebraten.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-gold font-bold">/</span>
+                <span><strong>Kompletter Event-Service:</strong> Inklusive Pommes, hausgemachten Saucen & Salaten.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-gold font-bold">/</span>
+                <span><strong>Über 13 Jahre Erfahrung:</strong> Mehr als 100.000 begeisterte Gäste.</span>
+              </li>
+            </ul>
+
+            <div class="pt-3 border-t border-white/15">
+              <div class="text-[7.5px] font-bold text-gold uppercase tracking-wider mb-1">Auf Speisely entdecken:</div>
+              <a href="https://www.speisely.de/restaurants" target="_blank" class="inline-block px-3 py-1.5 bg-gold text-[#0c1813] font-black text-[9px] uppercase tracking-wider rounded shadow">
+                Partner auf Speisely ansehen ➔
+              </a>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center text-[7.5px] font-bold text-white/50 uppercase border-t border-white/10 pt-2">
+            <span>In Kooperation mit Schnitzel Schmiede</span>
+            <span>Speisely.de | 03</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= PAGE 4: BACK COVER (HARD) ================= -->
+      <div class="page -hard">
+        <div class="page-content p-8 sm:p-12 text-center bg-[#0c1813] text-white flex flex-col justify-between items-center">
+          <div class="w-16 h-16 rounded-full bg-[#173C32] p-1 shadow-2xl flex items-center justify-center mt-6">
+            <img src="speisely_logo.png" alt="Speisely Logo" class="w-full h-full object-contain">
+          </div>
+
+          <div class="space-y-4 max-w-xs">
+            <span class="text-[9px] font-extrabold text-gold uppercase tracking-widest">Der Faire Marktplatz</span>
+            <h2 class="font-serif text-2xl font-black text-white leading-tight">
+              Gutes Essen entdecken. Lokale Partner finden.
+            </h2>
+            <p class="text-[9px] text-white/70 leading-relaxed">
+              Verbinde dich mit den besten Restaurants, Caterern und Eventanbietern deiner Region auf speisely.de.
+            </p>
+
+            <div class="pt-2">
+              <a href="https://www.speisely.de/" target="_blank" class="inline-block px-6 py-2.5 bg-gold hover:bg-white text-[#0c1813] font-black text-[10px] uppercase tracking-wider rounded-xl shadow-lg transition">
+                Speisely.de Besuchen ➔
+              </a>
+            </div>
+          </div>
+
+          <div class="text-[8px] text-white/40 border-t border-white/10 pt-3 w-full">
+            © 2026 Speisely · Ausgabe 01 · Alle Rechte vorbehalten
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       BOTTOM FLIPBOOK CONTROLS TOOLBAR
+       ========================================================================= -->
+  <footer class="w-full px-6 py-3.5 flex items-center justify-center z-50 flip-toolbar border-t border-white/10">
+    <div class="flex items-center gap-6">
+      <button id="btn-prev" class="toolbar-btn px-4 py-2 bg-white/10 hover:bg-gold hover:text-forest rounded-full font-bold text-xs flex items-center gap-2 border border-white/15">
+        <span>← Vorherige Seite</span>
+      </button>
+
+      <span class="text-xs text-cream/70 font-semibold hidden sm:inline-block">
+        💡 Klicke auf die Ecken oder ziehe mit der Maus zum Blättern
+      </span>
+
+      <button id="btn-next" class="toolbar-btn px-4 py-2 bg-gold text-forest hover:bg-white rounded-full font-bold text-xs flex items-center gap-2 shadow-lg">
+        <span>Nächste Seite →</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       PAGEFLIP INITIALIZATION SCRIPT
+       ========================================================================= -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const pageFlip = new St.PageFlip(document.getElementById("magazine-book"), {
+        width: 450, // Single page width
+        height: 620, // Single page height
+        size: "stretch",
+        minWidth: 300,
+        maxWidth: 600,
+        minHeight: 400,
+        maxHeight: 850,
+        showCover: true,
+        useMouseEvents: true,
+        flippingTime: 800,
+        usePortrait: true,
+        startPage: 0,
+        drawShadow: true,
+        maxShadowOpacity: 0.6
+      });
+
+      // Load DOM pages into 3D Flip engine
+      pageFlip.loadFromHTML(document.querySelectorAll(".page"));
+
+      const indicator = document.getElementById("page-indicator");
+
+      // Update indicator on page turn
+      pageFlip.on("flip", (e) => {
+        const current = e.data + 1;
+        const total = pageFlip.getPageCount();
+        if (current === 1) {
+          indicator.innerText = "Cover (Seite 1 von " + total + ")";
+        } else if (current === total) {
+          indicator.innerText = "Rückseite (Seite " + total + " von " + total + ")";
+        } else {
+          indicator.innerText = "Seiten " + current + "–" + (current + 1) + " von " + total;
+        }
+      });
+
+      // Control Buttons
+      document.getElementById("btn-prev").addEventListener("click", () => {
+        pageFlip.flipPrev();
+      });
+
+      document.getElementById("btn-next").addEventListener("click", () => {
+        pageFlip.flipNext();
+      });
+
+      // Keyboard arrow keys
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") pageFlip.flipNext();
+        if (e.key === "ArrowLeft") pageFlip.flipPrev();
+      });
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

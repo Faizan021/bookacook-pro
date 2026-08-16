@@ -2,7 +2,13 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
 import { z } from "zod";
 
-export type UserRole = "customer" | "restaurant_owner" | "caterer" | "planner" | "partner";
+export type UserRole =
+  | "customer"
+  | "restaurant_owner"
+  | "caterer"
+  | "planner"
+  | "partner"
+  | "admin";
 
 // SEC-2: Roles that may be restored from signup metadata during self-healing.
 // "admin" is intentionally excluded — it can never be granted via metadata.
@@ -33,11 +39,11 @@ export const getUserProfile = createServerFn({ method: "GET" })
 
     // Platform Owner Auto-Grant
     if (authData?.user?.email?.toLowerCase() === "faizan.ahmed01213@gmail.com") {
-      if (!roleList.includes("admin" as any)) {
+      if (!roleList.includes("admin")) {
         await supabaseAdmin
           .from("user_roles")
-          .upsert({ user_id: userId, role: "admin" as any }, { onConflict: "user_id,role" });
-        roleList.push("admin" as any);
+          .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
+        roleList.push("admin");
       }
     }
 
@@ -48,12 +54,14 @@ export const getUserProfile = createServerFn({ method: "GET" })
       .eq("user_id", userId)
       .maybeSingle();
 
+    type DbRole = "customer" | "restaurant_owner" | "caterer" | "planner" | "admin";
+
     if (partnerProfile) {
       const partnerRole = partnerProfile.partner_type as UserRole;
       if (!roleList.includes(partnerRole)) {
         await supabaseAdmin
           .from("user_roles")
-          .insert({ user_id: userId, role: partnerRole as any });
+          .insert({ user_id: userId, role: partnerRole as DbRole });
         roleList.push(partnerRole);
         console.log(
           `[Role] Self-healed missing partner role "${partnerRole}" from partner_profiles for user=${userId}`,
@@ -62,7 +70,9 @@ export const getUserProfile = createServerFn({ method: "GET" })
     } else if (metaRole && metaRole !== "customer" && !roleList.includes(metaRole as UserRole)) {
       // Fallback to metadata role if no partner profile exists yet (e.g. during fresh signup)
       if (SELF_HEALABLE_ROLES.includes(metaRole as UserRole)) {
-        await supabaseAdmin.from("user_roles").insert({ user_id: userId, role: metaRole as any });
+        await supabaseAdmin
+          .from("user_roles")
+          .insert({ user_id: userId, role: metaRole as DbRole });
         roleList.push(metaRole as UserRole);
         console.log(
           `[Role] Self-healed missing role "${metaRole}" from metadata for user=${userId}`,

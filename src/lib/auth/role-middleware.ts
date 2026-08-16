@@ -133,7 +133,11 @@ export const requireRole = (role: UserRole) =>
   createMiddleware({ type: "function" })
     .middleware([requireSupabaseAuth()])
     .server(async ({ next, context }) => {
-      const { supabase: supabaseCtx, userId, claims } = context as {
+      const {
+        supabase: supabaseCtx,
+        userId,
+        claims,
+      } = context as {
         supabase: typeof supabase;
         userId: string;
         claims: Record<string, unknown>;
@@ -162,13 +166,14 @@ export const requireRole = (role: UserRole) =>
       let roleList = (roles ?? []).map((r) => r.role as unknown as UserRole);
 
       // Platform Owner Auto-Grant
-      if (claims?.email?.toLowerCase() === "faizan.ahmed01213@gmail.com") {
-        if (!roleList.includes("admin" as any)) {
+      const email = (claims as Record<string, unknown>)?.email;
+      if (typeof email === "string" && email.toLowerCase() === "faizan.ahmed01213@gmail.com") {
+        if (!roleList.includes("admin")) {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
           await supabaseAdmin
             .from("user_roles")
-            .upsert({ user_id: userId, role: "admin" as any }, { onConflict: "user_id,role" });
-          roleList.push("admin" as any);
+            .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id,role" });
+          roleList.push("admin");
         }
       }
 
@@ -178,9 +183,10 @@ export const requireRole = (role: UserRole) =>
       if (roleList.length === 0 && metaRole) {
         if (SELF_HEALABLE_ROLES.includes(metaRole as UserRole)) {
           const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          await supabaseAdmin
-            .from("user_roles")
-            .insert({ user_id: userId, role: metaRole as unknown as Database["public"]["Enums"]["app_role"] });
+          await supabaseAdmin.from("user_roles").insert({
+            user_id: userId,
+            role: metaRole as unknown as Database["public"]["Enums"]["app_role"],
+          });
           roleList = [metaRole as UserRole];
 
           console.log(
@@ -236,4 +242,3 @@ export const requireRole = (role: UserRole) =>
         },
       });
     });
-

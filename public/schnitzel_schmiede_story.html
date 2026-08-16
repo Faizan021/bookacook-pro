@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schnitzel Schmiede beim EineStadt-Fest 2026 — Speisely Magazin</title>
+  
+  <!-- Modern Editorial Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: '#173C32',
+            cream: '#FBF7EE',
+            mint: '#DDEEE3',
+            leaf: '#7FA46B',
+            gold: '#E6B84A',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html {
+      background-color: #173C32;
+      color: #173C32;
+      scroll-behavior: smooth;
+    }
+
+    ::selection {
+      background-color: #E6B84A;
+      color: #173C32;
+    }
+
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+
+    .reveal-on-scroll.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .huge-number {
+      font-feature-settings: "tnum";
+      font-variant-numeric: tabular-nums;
+      line-height: 0.8;
+      letter-spacing: -0.06em;
+    }
+  </style>
+</head>
+<body class="font-sans bg-cream text-forest overflow-x-hidden antialiased selection:bg-gold selection:text-forest">
+
+  <!-- =========================================================================
+       1. SINGLE STICKY HEADER WITH OFFICIAL SPEISELY LOGO
+       ========================================================================= -->
+  <header class="sticky top-0 z-50 w-full bg-forest/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3 flex items-center justify-between shadow-lg">
+    <a href="https://www.speisely.de/" class="flex items-center gap-3 group">
+      <div class="h-10 w-auto rounded-lg overflow-hidden flex items-center justify-center">
+        <img src="speisely_logo.png" alt="Speisely Logo" class="h-full w-auto object-contain">
+      </div>
+    </a>
+
+    <div class="flex items-center gap-3">
+      <span class="hidden sm:inline-block text-xs font-semibold text-mint uppercase tracking-wider">
+        Magazin · Partner-Story
+      </span>
+      <a href="https://www.speisely.de/restaurants" class="px-4 py-2 bg-gold hover:bg-white text-forest rounded-full text-xs font-extrabold tracking-tight transition-all shadow-md">
+        Speisely öffnen
+      </a>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       CHAPTER 1 — CINEMATIC OPENING (2. Unmistakable Genuine Schnitzel Hero)
+       ========================================================================= -->
+  <section class="relative min-h-[92vh] w-full flex items-end justify-start bg-forest text-cream overflow-hidden px-6 sm:px-12 lg:px-20 pb-16 lg:pb-24 pt-20">
+    <div class="absolute inset-0 z-0">
+      <img 
+        src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=2000&q=85" 
+        alt="Goldbraunes Schnitzel frisch aus der Pfanne" 
+        class="w-full h-full object-cover object-center opacity-40 filter contrast-110 brightness-95 scale-105"
+      >
+      <div class="absolute inset-0 bg-gradient-to-t from-forest via-forest/70 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-forest/95 via-forest/60 to-transparent"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl space-y-6 reveal-on-scroll">
+      <div class="flex items-center gap-3">
+        <span class="px-3.5 py-1 bg-gold/20 border border-gold/40 text-gold rounded-full text-xs font-extrabold uppercase tracking-widest">
+          Speisely Partner-Story
+        </span>
+        <span class="text-xs font-semibold text-mint/80 uppercase tracking-wider">
+          14. – 16. August 2026
+        </span>
+      </div>
+
+      <div class="space-y-3">
+        <p class="font-display text-lg sm:text-2xl font-bold text-gold uppercase tracking-wider">
+          EineStadt-Fest 2026 · Mönchengladbach
+        </p>
+        <h1 class="font-serif text-5xl sm:text-7xl lg:text-8xl font-black text-cream leading-[0.95] tracking-tight">
+          SCHNITZEL<br>SCHMIEDE
+        </h1>
+        <p class="font-serif text-xl sm:text-3xl text-mint font-semibold italic">
+          Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach.
+        </p>
+      </div>
+
+      <div class="pt-4 flex items-center gap-3 text-xs font-semibold text-mint/70 uppercase tracking-widest animate-pulse">
+        <span>Scrollen um den Festbericht zu lesen</span>
+        <span>↓</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CHAPTER 2 — DIE FESTMEILE 2026 (5. Correct WDR Attribution)
+       ========================================================================= -->
+  <section class="relative min-h-[85vh] w-full bg-cream text-forest py-24 sm:py-32 px-6 sm:px-12 lg:px-20 flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.04] select-none">
+      <span class="font-display font-black text-[35vw] leading-none text-forest huge-number">
+        2026
+      </span>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto space-y-10 text-left">
+      <div class="space-y-3 reveal-on-scroll">
+        <span class="px-3.5 py-1 bg-mint text-forest font-bold text-xs uppercase tracking-widest rounded-full">
+          22. Stadtfest-Jubiläum
+        </span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-forest leading-tight">
+          Schnitzel Schmiede beim EineStadt-Fest 2026
+        </h2>
+      </div>
+
+      <div class="space-y-6 text-lg sm:text-xl text-forest/85 leading-relaxed font-normal reveal-on-scroll">
+        <p>
+          Vom <strong>14. bis 16. August 2026</strong> verwandelte das EineStadt-Fest die Brucknerallee, Richard-Wagner-Straße und Breite Straße erneut in eine lebendige kulinarische, musikalische und künstlerische Meile.
+        </p>
+        <p>
+          Zum zweiundzwanzigsten Mal verband das Fest die Stadtteile mit einem abwechslungsreichen Bühnenprogramm, der großen KidsWorld, einem Kunst- und Handwerkermarkt sowie der beliebten Gourmet-Meile mit internationalen kulinarischen Angeboten.
+        </p>
+        <p>
+          Auch die <strong>Schnitzel Schmiede</strong> war 2026 wieder Teil des gastronomischen Angebots. Mit frisch zubereiteten und heiß servierten Schnitzeln ergänzte sie die kulinarische Vielfalt des Stadtfestes.
+        </p>
+      </div>
+
+      <!-- 5. Corrected WDR Attribution -->
+      <div class="p-8 rounded-3xl bg-forest/5 border-l-4 border-gold reveal-on-scroll">
+        <blockquote class="font-serif text-xl sm:text-2xl text-forest font-bold italic leading-snug">
+          „Die Messe des guten Geschmacks für Mönchengladbach und die Region.“
+        </blockquote>
+        <div class="text-xs font-extrabold text-leaf uppercase tracking-widest mt-3">
+          — WDR Lokalzeit Düsseldorf, Live-Berichterstattung vom EineStadt-Fest 2013
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CHAPTER 3 — TRADITION SEIT 2013 (3. Unmistakable Schnitzel Photo)
+       ========================================================================= -->
+  <section class="relative min-h-[90vh] w-full bg-forest text-cream py-24 sm:py-32 px-6 sm:px-12 lg:px-20">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      
+      <div class="lg:col-span-6 relative reveal-on-scroll">
+        <div class="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black">
+          <img 
+            src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1200&q=85" 
+            alt="Frisch zubereitetes Schnitzel Wiener Art"
+            class="w-full h-full object-cover"
+          >
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/80 via-transparent to-transparent"></div>
+          <div class="absolute bottom-6 left-6">
+            <span class="px-4 py-1.5 bg-gold text-forest text-xs font-black uppercase tracking-widest rounded-full shadow-lg">
+              Heiß serviert
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 space-y-8">
+        <div class="space-y-3 reveal-on-scroll">
+          <span class="font-display text-5xl sm:text-7xl font-black text-gold huge-number">2013</span>
+          <h3 class="font-serif text-3xl sm:text-4xl font-bold text-cream">
+            Beständigkeit auf der Gourmet-Meile
+          </h3>
+          <p class="text-base sm:text-lg text-cream/80 leading-relaxed pt-2">
+            Bereits seit 2013 nimmt die Schnitzel Schmiede am EineStadt-Fest teil. Durch diese langjährige Beteiligung ist sie für viele Besucherinnen und Besucher zu einem vertrauten Bestandteil der Gourmet-Meile geworden.
+          </p>
+        </div>
+
+        <div class="space-y-5 pt-2">
+          <div class="flex items-start gap-4 reveal-on-scroll">
+            <span class="font-display text-2xl font-bold text-gold/60">01</span>
+            <p class="text-lg font-semibold text-cream">Die Musik läuft über die Festmeile.</p>
+          </div>
+          <div class="flex items-start gap-4 reveal-on-scroll">
+            <span class="font-display text-2xl font-bold text-gold/60">02</span>
+            <p class="text-lg font-semibold text-cream">Besucherinnen und Besucher ziehen durch die Straßen.</p>
+          </div>
+          <div class="flex items-start gap-4 reveal-on-scroll">
+            <span class="font-display text-2xl font-bold text-gold/60">03</span>
+            <p class="text-lg font-semibold text-cream">Frisch zubereitete Schnitzel werden heiß serviert.</p>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-white/5 border-l-4 border-gold backdrop-blur-sm reveal-on-scroll">
+          <blockquote class="font-serif text-xl font-bold text-gold italic">
+            „Frisch zubereitet. Heiß serviert.“
+          </blockquote>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CHAPTER 4 — AUF SPEISELY ENTDECKT (Clean Centered Editorial Layout)
+       ========================================================================= -->
+  <section class="relative min-h-[75vh] w-full bg-cream text-forest py-24 sm:py-32 px-6 sm:px-12 lg:px-20 flex items-center justify-center text-center">
+    <div class="max-w-4xl mx-auto space-y-8">
+      
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-mint text-forest font-bold text-xs uppercase tracking-widest rounded-full reveal-on-scroll">
+        Partnernetzwerk
+      </div>
+
+      <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-forest leading-[1.05] tracking-tight reveal-on-scroll">
+        AUF SPEISELY ENTDECKT.
+      </h2>
+
+      <p class="text-xl sm:text-2xl text-forest/90 font-medium leading-relaxed max-w-2xl mx-auto reveal-on-scroll">
+        Speisely stellt lokale Restaurants, Caterer und Eventanbieter vor und macht die Geschichten hinter ihren Angeboten sichtbar.
+      </p>
+
+      <!-- Real Partner Directory Link -->
+      <div class="pt-4 reveal-on-scroll">
+        <a 
+          href="https://www.speisely.de/restaurants" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-forest text-gold hover:bg-gold hover:text-forest font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
+        >
+          <span>Partner auf Speisely entdecken</span>
+          <span>➔</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CHAPTER 5 — EIN PARTNER. FÜNF MÖGLICHKEITEN. (6 & 7. Clean Editorial Lines)
+       ========================================================================= -->
+  <section class="relative min-h-[90vh] w-full bg-forest text-cream py-24 sm:py-32 px-6 sm:px-12 lg:px-20 flex items-center">
+    <div class="max-w-5xl mx-auto w-full space-y-16">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Giant Number 5 -->
+        <div class="lg:col-span-4 flex items-center justify-center reveal-on-scroll">
+          <div class="font-display font-black text-[30vw] lg:text-[18vw] text-gold/90 leading-none select-none huge-number drop-shadow-2xl">
+            5
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 space-y-8">
+          <div class="space-y-3 reveal-on-scroll">
+            <span class="text-xs font-bold text-mint uppercase tracking-widest">Leistungsangebot</span>
+            <h2 class="font-serif text-4xl sm:text-5xl font-black text-cream leading-tight">
+              EIN PARTNER.<br>FÜNF MÖGLICHKEITEN.
+            </h2>
+          </div>
+
+          <!-- Clean Numbered Editorial Lines (Zero text collisions, verified terms only) -->
+          <div class="space-y-4 border-t border-white/15 pt-6 reveal-on-scroll">
+            <div class="flex items-center gap-6 py-2 border-b border-white/10">
+              <span class="font-display text-lg font-bold text-gold">01</span>
+              <span class="font-serif text-xl sm:text-2xl font-bold text-cream tracking-wide">RESTAURANT</span>
+            </div>
+            <div class="flex items-center gap-6 py-2 border-b border-white/10">
+              <span class="font-display text-lg font-bold text-gold">02</span>
+              <span class="font-serif text-xl sm:text-2xl font-bold text-cream tracking-wide">SCHNITZELGERICHTE</span>
+            </div>
+            <div class="flex items-center gap-6 py-2 border-b border-white/10">
+              <span class="font-display text-lg font-bold text-gold">03</span>
+              <span class="font-serif text-xl sm:text-2xl font-bold text-cream tracking-wide">CATERING</span>
+            </div>
+            <div class="flex items-center gap-6 py-2 border-b border-white/10">
+              <span class="font-display text-lg font-bold text-gold">04</span>
+              <span class="font-serif text-xl sm:text-2xl font-bold text-cream tracking-wide">PARTYSERVICE</span>
+            </div>
+            <div class="flex items-center gap-6 py-2 border-b border-white/10">
+              <span class="font-display text-lg font-bold text-gold">05</span>
+              <span class="font-serif text-xl sm:text-2xl font-bold text-cream tracking-wide">LIEFERSERVICE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-8 rounded-3xl bg-white/5 border border-white/10 max-w-4xl mx-auto text-center reveal-on-scroll">
+        <p class="text-base sm:text-lg text-cream/90 leading-relaxed">
+          Die Schnitzel Schmiede ist Teil des Speisely Partnernetzwerks. Über Speisely entdecken Gäste lokale Betriebe, lernen ihre Angebote kennen und finden Restaurant-, Catering- oder Eventmöglichkeiten für ihren Anlass.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CHAPTER 6 — SPEISELY GATEWAY (10. No duplicate logo above headline)
+       ========================================================================= -->
+  <section class="relative min-h-[85vh] w-full bg-cream text-forest py-24 sm:py-32 px-6 sm:px-12 lg:px-20">
+    <div class="max-w-5xl mx-auto space-y-16">
+      
+      <div class="space-y-6 text-center max-w-3xl mx-auto reveal-on-scroll">
+        <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-forest leading-[1.05] tracking-tight">
+          GUTES ESSEN ENTDECKEN.<br>LOKALE PARTNER FINDEN.
+        </h2>
+        <p class="text-lg sm:text-xl text-forest/80 font-normal leading-relaxed">
+          Speisely verbindet Gäste mit Restaurants, Caterern und Eventanbietern. Entdecke authentische Geschichten, finde passende Angebote und frage direkt beim jeweiligen Anbieter an.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal-on-scroll">
+        <a href="https://www.speisely.de/restaurants" class="group p-8 rounded-3xl bg-white border border-forest/10 hover:border-gold shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="text-xs font-extrabold text-gold uppercase tracking-widest">01 · Speiselokal</span>
+            <h3 class="font-serif text-2xl font-bold text-forest">RESTAURANTS ENTDECKEN</h3>
+            <p class="text-xs text-forest/70 leading-relaxed">
+              Lokale Restaurants, ihre Angebote und die Geschichten dahinter kennenlernen.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-bold text-forest group-hover:text-gold transition-colors pt-2">
+            <span>Restaurants ansehen</span>
+            <span>➔</span>
+          </div>
+        </a>
+
+        <a href="https://www.speisely.de/catering" class="group p-8 rounded-3xl bg-forest text-cream border border-forest hover:border-gold shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="text-xs font-extrabold text-gold uppercase tracking-widest">02 · Event-Food</span>
+            <h3 class="font-serif text-2xl font-bold text-cream group-hover:text-gold transition-colors">
+              CATERING ANFRAGEN
+            </h3>
+            <p class="text-xs text-cream/70 leading-relaxed">
+              Anforderungen beschreiben und passende Cateringpartner entdecken.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-bold text-gold pt-2">
+            <span>Catering finden</span>
+            <span>➔</span>
+          </div>
+        </a>
+
+        <a href="https://www.speisely.de/planner" class="group p-8 rounded-3xl bg-white border border-forest/10 hover:border-gold shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-4">
+          <div class="space-y-2">
+            <span class="text-xs font-extrabold text-gold uppercase tracking-widest">03 · Full-Service</span>
+            <h3 class="font-serif text-2xl font-bold text-forest">EVENTS PLANEN</h3>
+            <p class="text-xs text-forest/70 leading-relaxed">
+              Passende Anbieter für private und geschäftliche Veranstaltungen finden.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-bold text-forest group-hover:text-gold transition-colors pt-2">
+            <span>Planung starten</span>
+            <span>➔</span>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       CHAPTER 7 — CONVERSION FINALE (9. Verified Public Disclaimer)
+       ========================================================================= -->
+  <section class="relative min-h-[80vh] w-full bg-forest text-cream py-24 px-6 sm:px-12 lg:px-20 flex flex-col justify-between items-center text-center">
+    
+    <div class="max-w-4xl mx-auto space-y-10 my-auto reveal-on-scroll">
+      <div class="space-y-4">
+        <span class="text-xs font-bold text-gold uppercase tracking-widest">Gemeinsam Genießen</span>
+        <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-cream leading-tight">
+          DEIN NÄCHSTES KULINARISCHES ERLEBNIS BEGINNT HIER.
+        </h2>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-5 pt-4">
+        <div class="w-full sm:w-auto space-y-2">
+          <span class="block text-[11px] font-bold text-mint uppercase tracking-wider">Für Gäste</span>
+          <a 
+            href="https://www.speisely.de/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-gold hover:bg-white text-forest font-bold text-sm uppercase tracking-wider rounded-2xl shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5"
+          >
+            <span>Speisely Entdecken</span>
+            <span>➔</span>
+          </a>
+        </div>
+
+        <div class="w-full sm:w-auto space-y-2">
+          <span class="block text-[11px] font-bold text-mint uppercase tracking-wider">Für Betriebe</span>
+          <a 
+            href="https://www.speisely.de/partners" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/10 hover:bg-white hover:text-forest text-cream border border-white/25 font-bold text-sm uppercase tracking-wider rounded-2xl backdrop-blur-md shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5"
+          >
+            <span>Partner Werden</span>
+            <span>➔</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Refined Public Disclaimer -->
+    <div class="max-w-3xl mx-auto pt-16 border-t border-white/10 text-center space-y-3 reveal-on-scroll">
+      <p class="text-xs text-cream/60 leading-relaxed font-normal">
+        Diese redaktionelle Partner-Story basiert auf öffentlich zugänglichen Informationen sowie auf freigegebenem Bildmaterial. Sie ist eine redaktionelle Präsentation und keine unabhängige Restaurantbewertung.
+      </p>
+      <div class="text-[11px] text-cream/40 font-semibold tracking-wider">
+        © 2026 Speisely · Redaktionelle Partner-Story · speisely.de
+      </div>
+    </div>
+
+  </section>
+
+  <!-- =========================================================================
+       SCROLL INTERSECTION OBSERVER
+       ========================================================================= -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+      });
+
+      document.querySelectorAll(".reveal-on-scroll").forEach((el) => {
+        observer.observe(el);
+      });
+    });
+  </script>
+
+</body>
+</html>

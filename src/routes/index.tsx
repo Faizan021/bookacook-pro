@@ -744,6 +744,77 @@ function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────
+          SPEISELY MAGAZIN — Partner-Stories & City Festivals (DEO / GEO)
+      ───────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-24 border-t border-forest/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#b28a3c] flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              {tt("Speisely Magazin · Partner-Stories", "Speisely Magazine · Partner Stories")}
+            </span>
+            <h2 className="mt-3 font-display text-4xl sm:text-5xl text-forest leading-[1.05]">
+              {tt("Echte Geschichten.", "Real Stories.")}
+              <br />
+              {tt("Regionale Meister & Feste.", "Regional Masters & Festivals.")}
+            </h2>
+          </div>
+
+          <Link
+            to="/magazin"
+            className="inline-flex items-center gap-2 text-sm font-bold text-forest hover:text-[#b28a3c] transition-colors self-start md:self-auto"
+          >
+            <span>{tt("Alle Magazin-Stories ansehen", "View all magazine stories")}</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* Featured Pilot Story Banner */}
+        <Link
+          to="/magazin/schnitzel-schmiede"
+          className="group relative block overflow-hidden rounded-[2.5rem] bg-[#173C32] text-white shadow-2xl transition-all duration-500 hover:-translate-y-1 hover:shadow-forest/30"
+        >
+          <div className="grid lg:grid-cols-12 gap-8 items-center p-8 sm:p-12 lg:p-14">
+            <div className="lg:col-span-7 space-y-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="px-3 py-1 bg-[#E6B84A] text-[#173C32] rounded-full text-xs font-black uppercase tracking-wider">
+                  Ausgabe 01 · 2026
+                </span>
+                <span className="text-xs font-semibold text-[#DDEEE3]">
+                  Mönchengladbach · EineStadt-Fest
+                </span>
+              </div>
+
+              <h3 className="font-display text-3xl sm:text-4xl lg:text-5xl text-white leading-tight group-hover:text-[#E6B84A] transition-colors">
+                Schnitzel Schmiede beim EineStadt-Fest 2026
+              </h3>
+
+              <p className="text-white/75 text-base sm:text-lg leading-relaxed max-w-xl">
+                Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach: 13 Jahre
+                Fest-Tradition, handwerkliche Frische und Live-Gastronomie.
+              </p>
+
+              <div className="pt-2 flex items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#E6B84A] text-[#173C32] px-6 py-3 text-sm font-extrabold shadow-lg group-hover:bg-white transition-colors">
+                  Story lesen
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
+                <span className="text-xs text-white/50 font-medium">5 Min. Lesezeit</span>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 relative aspect-[16/10] sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-black">
+              <img
+                src="/speisely_magazine_cover_v2.png"
+                alt="Schnitzel Schmiede Magazin Cover"
+                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
+          </div>
+        </Link>
+      </section>
+
+      {/* ─────────────────────────────────────────────────
           HOW IT WORKS — 3-step process
       ───────────────────────────────────────────────── */}
       <section className="relative py-20 lg:py-28 overflow-hidden">
