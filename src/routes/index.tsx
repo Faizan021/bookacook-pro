@@ -803,14 +803,12 @@ function Home() {
               </div>
             </div>
 
-            <div className="lg:col-span-5 flex items-center justify-center p-2">
-              <div className="relative w-full max-w-[340px] aspect-[1/1.414] rounded-2xl overflow-hidden shadow-2xl border border-white/20 group-hover:scale-[1.02] transition-transform duration-500 bg-[#FBF7EE]">
-                <img
-                  src="/speisely_magazine_cover_v2.png"
-                  alt="Schnitzel Schmiede Magazin Cover"
-                  className="w-full h-full object-contain"
-                />
-              </div>
+            <div className="lg:col-span-5 relative aspect-[16/10] sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-black">
+              <img
+                src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1200&q=85"
+                alt="Schnitzel Schmiede beim EineStadt-Fest 2026"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
             </div>
           </div>
         </Link>

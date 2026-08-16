@@ -65,50 +65,38 @@ function MagazinIndexPage() {
       />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-24 pt-8">
-        {/* Navigation / Filter Tabs & 3D Reader CTA */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 border-b border-[#173C32]/10 mb-10">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setActiveFilter("all")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                activeFilter === "all"
-                  ? "bg-[#173C32] text-white shadow"
-                  : "bg-white/80 text-[#173C32] hover:bg-[#173C32]/10 border border-[#173C32]/15"
-              }`}
-            >
-              Alle Ausgaben
-            </button>
-            <button
-              onClick={() => setActiveFilter("festivals")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                activeFilter === "festivals"
-                  ? "bg-[#173C32] text-white shadow"
-                  : "bg-white/80 text-[#173C32] hover:bg-[#173C32]/10 border border-[#173C32]/15"
-              }`}
-            >
-              Stadtfeste & Gourmet-Meilen
-            </button>
-            <button
-              onClick={() => setActiveFilter("portraits")}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                activeFilter === "portraits"
-                  ? "bg-[#173C32] text-white shadow"
-                  : "bg-white/80 text-[#173C32] hover:bg-[#173C32]/10 border border-[#173C32]/15"
-              }`}
-            >
-              Partner-Stories
-            </button>
-          </div>
-
-          <a
-            href="/magazin_flipbook.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#E6B84A] hover:bg-[#173C32] text-[#173C32] hover:text-white rounded-full text-xs font-extrabold shadow-md transition-all self-start sm:self-auto"
+        {/* Navigation / Filter Tabs */}
+        <div className="flex items-center gap-2 pb-8 border-b border-[#173C32]/10 mb-10 overflow-x-auto no-scrollbar">
+          <button
+            onClick={() => setActiveFilter("all")}
+            className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+              activeFilter === "all"
+                ? "bg-[#173C32] text-white shadow"
+                : "bg-white/80 text-[#173C32] hover:bg-[#173C32]/10 border border-[#173C32]/15"
+            }`}
           >
-            <BookOpen className="w-4 h-4" />
-            <span>3D Flipbook Reader öffnen</span>
-          </a>
+            Alle Ausgaben
+          </button>
+          <button
+            onClick={() => setActiveFilter("festivals")}
+            className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+              activeFilter === "festivals"
+                ? "bg-[#173C32] text-white shadow"
+                : "bg-white/80 text-[#173C32] hover:bg-[#173C32]/10 border border-[#173C32]/15"
+            }`}
+          >
+            Stadtfeste & Gourmet-Meilen
+          </button>
+          <button
+            onClick={() => setActiveFilter("portraits")}
+            className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+              activeFilter === "portraits"
+                ? "bg-[#173C32] text-white shadow"
+                : "bg-white/80 text-[#173C32] hover:bg-[#173C32]/10 border border-[#173C32]/15"
+            }`}
+          >
+            Partner-Stories
+          </button>
         </div>
 
         {/* Stories Grid */}
@@ -118,39 +106,42 @@ function MagazinIndexPage() {
             to="/magazin/schnitzel-schmiede"
             className="group surface-card flex flex-col md:flex-row overflow-hidden hover:ring-2 hover:ring-[#173C32] transition rounded-3xl shadow-xl border border-[#173C32]/10 bg-white md:col-span-2 lg:col-span-3"
           >
-            {/* Full Magazine Cover Showcase */}
-            <div className="relative md:w-5/12 lg:w-4/12 bg-[#0c1813] p-4 sm:p-6 flex items-center justify-center">
-              <div className="relative w-full max-w-[320px] aspect-[1/1.414] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:scale-[1.02] transition-transform duration-500">
-                <img
-                  src="/speisely_magazine_cover_v2.png"
-                  alt="Schnitzel Schmiede beim EineStadt-Fest 2026 — Cover"
-                  className="w-full h-full object-contain bg-[#FBF7EE]"
-                />
+            {/* Authentic Food Photo */}
+            <div className="relative md:w-5/12 lg:w-5/12 overflow-hidden bg-[#173C32] min-h-[260px] md:min-h-[340px]">
+              <img
+                src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1200&q=85"
+                alt="Schnitzel Schmiede beim EineStadt-Fest 2026"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent md:hidden" />
+              <div className="absolute top-4 left-4 flex gap-2">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#173C32]/95 backdrop-blur text-[#E6B84A] px-3.5 py-1 text-xs font-extrabold shadow-lg border border-white/10">
+                  <Sparkles className="w-3 h-3" /> Story 01 · 2026
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur text-[#173C32] px-3 py-1 text-xs font-bold shadow-md">
+                  <MapPin className="w-3 h-3 text-[#173C32]" /> Mönchengladbach
+                </span>
               </div>
             </div>
 
-            <div className="flex flex-1 flex-col p-6 sm:p-10 justify-between md:w-7/12 lg:w-8/12">
+            <div className="flex flex-1 flex-col p-6 sm:p-10 justify-between md:w-7/12 lg:w-7/12">
               <div className="space-y-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#173C32] text-[#E6B84A] px-3.5 py-1 text-xs font-extrabold shadow-sm">
-                    <Sparkles className="w-3 h-3" /> Ausgabe 01 · 2026
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#DDEEE3] text-[#173C32] px-3 py-1 text-xs font-bold">
-                    <MapPin className="w-3 h-3 text-[#173C32]" /> Mönchengladbach
-                  </span>
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#173C32]/60">
+                  <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" />
+                  <span>14. – 16. August 2026 · EineStadt-Fest</span>
                 </div>
-                <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
+                <h2 className="font-serif text-2xl sm:text-4xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-tight">
                   Schnitzel Schmiede beim EineStadt-Fest 2026
                 </h2>
-                <p className="text-sm text-[#173C32]/75 leading-relaxed">
+                <p className="text-base text-[#173C32]/75 leading-relaxed">
                   Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach: 13 Jahre
                   Fest-Tradition, handwerkliche Frische und Live-Gastronomie.
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-[#173C32]/10 flex items-center justify-between">
+              <div className="mt-8 pt-4 border-t border-[#173C32]/10 flex items-center justify-between">
                 <span className="inline-flex items-center gap-2 text-sm font-extrabold text-[#173C32] group-hover:text-[#b8860b]">
-                  <span>Story lesen</span>
+                  <span>Vollständige Story lesen</span>
                   <ArrowRight className="w-4 h-4" />
                 </span>
                 <span className="text-xs text-[#173C32]/50 font-medium">5 Min. Lesezeit</span>

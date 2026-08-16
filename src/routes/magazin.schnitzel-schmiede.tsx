@@ -167,16 +167,6 @@ function SchnitzelSchmiedeStoryPage() {
             ← Magazin Übersicht
           </Link>
 
-          <a
-            href="/magazin_flipbook.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3.5 py-1.5 bg-white/10 hover:bg-white/20 text-[#FBF7EE] border border-white/20 rounded-full text-xs font-bold tracking-tight transition-all flex items-center gap-1.5"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-[#E6B84A]" />
-            <span className="hidden sm:inline">3D Flipbook</span>
-          </a>
-
           <Link
             to="/restaurants"
             className="px-4 py-2 bg-[#E6B84A] hover:bg-white text-[#173C32] rounded-full text-xs font-extrabold tracking-tight transition-all shadow-md"
