@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-ro
 import { useServerFn } from "@tanstack/react-start";
 import { classifySearchIntent } from "@/lib/search/ai.functions";
 import { trackEvent } from "@/utils/posthog";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   ArrowRight,
   ShoppingBag,
@@ -105,7 +105,7 @@ export const Route = createFileRoute("/")({
 function Home() {
   const navigate = useNavigate();
   const { t, lang } = useI18n();
-  const tt = (de: string, en: string) => (lang === "de" ? de : en);
+  const tt = useCallback((de: string, en: string) => (lang === "de" ? de : en), [lang]);
   const shouldReduceMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
   const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">(
@@ -181,7 +181,7 @@ function Home() {
         cta: tt("Planer entdecken", "Discover planners"),
       },
     ],
-    [lang],
+    [tt],
   );
 
   const current = useMemo(
@@ -247,7 +247,7 @@ function Home() {
       { value: "100%", label: tt("Kostenlos für dich", "Free for you") },
       { value: "0€", label: tt("Versteckte Gebühren", "Hidden fees") },
     ],
-    [lang],
+    [tt],
   );
 
   const steps = useMemo(
@@ -280,7 +280,7 @@ function Home() {
         ),
       },
     ],
-    [lang],
+    [tt],
   );
 
   const partnerFeatures = useMemo(
@@ -290,7 +290,7 @@ function Home() {
       tt("Kein Overhead", "No overhead"),
       tt("Transparente Preise", "Transparent pricing"),
     ],
-    [lang],
+    [tt],
   );
 
   return (
@@ -803,12 +803,14 @@ function Home() {
               </div>
             </div>
 
-            <div className="lg:col-span-5 relative aspect-[16/10] sm:aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-white/15 bg-black">
-              <img
-                src="/speisely_magazine_cover_v2.png"
-                alt="Schnitzel Schmiede Magazin Cover"
-                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-              />
+            <div className="lg:col-span-5 flex items-center justify-center p-2">
+              <div className="relative w-full max-w-[340px] aspect-[1/1.414] rounded-2xl overflow-hidden shadow-2xl border border-white/20 group-hover:scale-[1.02] transition-transform duration-500 bg-[#FBF7EE]">
+                <img
+                  src="/speisely_magazine_cover_v2.png"
+                  alt="Schnitzel Schmiede Magazin Cover"
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
           </div>
         </Link>

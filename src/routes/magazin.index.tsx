@@ -116,29 +116,28 @@ function MagazinIndexPage() {
           {/* Pilot Story Card: Schnitzel Schmiede */}
           <Link
             to="/magazin/schnitzel-schmiede"
-            className="group surface-card flex flex-col overflow-hidden hover:ring-2 hover:ring-[#173C32] transition rounded-3xl shadow-xl border border-[#173C32]/10 bg-white"
+            className="group surface-card flex flex-col md:flex-row overflow-hidden hover:ring-2 hover:ring-[#173C32] transition rounded-3xl shadow-xl border border-[#173C32]/10 bg-white md:col-span-2 lg:col-span-3"
           >
-            <div className="relative aspect-[16/10] overflow-hidden bg-[#173C32]">
-              <img
-                src="/speisely_magazine_cover_v2.png"
-                alt="Schnitzel Schmiede beim EineStadt-Fest 2026 — Cover"
-                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute top-4 left-4 flex gap-2">
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#173C32]/95 backdrop-blur text-[#E6B84A] px-3.5 py-1 text-xs font-extrabold shadow-lg border border-white/10">
-                  <Sparkles className="w-3 h-3" /> Ausgabe 01
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur text-[#173C32] px-3 py-1 text-xs font-bold shadow-md">
-                  <MapPin className="w-3 h-3 text-[#E6B84A]" /> Mönchengladbach
-                </span>
+            {/* Full Magazine Cover Showcase */}
+            <div className="relative md:w-5/12 lg:w-4/12 bg-[#0c1813] p-4 sm:p-6 flex items-center justify-center">
+              <div className="relative w-full max-w-[320px] aspect-[1/1.414] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:scale-[1.02] transition-transform duration-500">
+                <img
+                  src="/speisely_magazine_cover_v2.png"
+                  alt="Schnitzel Schmiede beim EineStadt-Fest 2026 — Cover"
+                  className="w-full h-full object-contain bg-[#FBF7EE]"
+                />
               </div>
             </div>
 
-            <div className="flex flex-1 flex-col p-6 sm:p-8 justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#173C32]/60">
-                  <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" />
-                  <span>14. – 16. August 2026 · EineStadt-Fest</span>
+            <div className="flex flex-1 flex-col p-6 sm:p-10 justify-between md:w-7/12 lg:w-8/12">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[#173C32] text-[#E6B84A] px-3.5 py-1 text-xs font-extrabold shadow-sm">
+                    <Sparkles className="w-3 h-3" /> Ausgabe 01 · 2026
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-[#DDEEE3] text-[#173C32] px-3 py-1 text-xs font-bold">
+                    <MapPin className="w-3 h-3 text-[#173C32]" /> Mönchengladbach
+                  </span>
                 </div>
                 <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
                   Schnitzel Schmiede beim EineStadt-Fest 2026
