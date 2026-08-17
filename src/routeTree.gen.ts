@@ -54,6 +54,7 @@ import { Route as RestaurantOrtCityRouteImport } from './routes/restaurant.ort.$
 import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$slug.links'
 import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
+import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
 import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
@@ -299,6 +300,12 @@ const MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute =
     path: '/shawarma-albaik-berlin',
     getParentRoute: () => MagazinSpeiselyVisitsRoute,
   } as any)
+const MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute =
+  MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport.update({
+    id: '/mandy-restaurant-berlin-neukoelln',
+    path: '/mandy-restaurant-berlin-neukoelln',
+    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+  } as any)
 const CheckoutDepositBookingIdRoute =
   CheckoutDepositBookingIdRouteImport.update({
     id: '/checkout/deposit/$bookingId',
@@ -421,6 +428,7 @@ export interface FileRoutesByFullPath {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
@@ -477,6 +485,7 @@ export interface FileRoutesByTo {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
@@ -538,6 +547,7 @@ export interface FileRoutesById {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
@@ -599,6 +609,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
@@ -655,6 +666,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
@@ -715,6 +727,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
@@ -1083,6 +1096,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport
       parentRoute: typeof MagazinSpeiselyVisitsRoute
     }
+    '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': {
+      id: '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
+      path: '/mandy-restaurant-berlin-neukoelln'
+      fullPath: '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport
+      parentRoute: typeof MagazinSpeiselyVisitsRoute
+    }
     '/checkout/deposit/$bookingId': {
       id: '/checkout/deposit/$bookingId'
       path: '/checkout/deposit/$bookingId'
@@ -1282,11 +1302,14 @@ const PlannerRouteWithChildren =
   PlannerRoute._addFileChildren(PlannerRouteChildren)
 
 interface MagazinSpeiselyVisitsRouteChildren {
+  MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute: typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   MagazinSpeiselyVisitsIndexRoute: typeof MagazinSpeiselyVisitsIndexRoute
 }
 
 const MagazinSpeiselyVisitsRouteChildren: MagazinSpeiselyVisitsRouteChildren = {
+  MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute:
+    MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute,
   MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute:
     MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute,
   MagazinSpeiselyVisitsIndexRoute: MagazinSpeiselyVisitsIndexRoute,

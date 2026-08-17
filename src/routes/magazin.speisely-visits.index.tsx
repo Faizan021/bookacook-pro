@@ -279,6 +279,67 @@ function SpeiselyVisitsPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Mandy Article Card */}
+            <Link
+              to="/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln"
+              className="group flex flex-col overflow-hidden rounded-3xl shadow-lg border border-[#173C32]/10 bg-white hover:ring-2 hover:ring-[#7FA46B] transition"
+            >
+              <div className="relative overflow-hidden h-60 bg-[#0c1813]">
+                <img
+                  src="/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.jpg"
+                  alt={
+                    isDe
+                      ? "Mandy Lamm für zwei mit Reis, Cashews, Kräutern und roter Sauce in Berlin-Neukölln"
+                      : "Mandy Lamb for two with rice, cashews, herbs and red spicy sauce in Berlin-Neukölln"
+                  }
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  width="800"
+                  height="600"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7FA46B] text-white px-3 py-1 text-xs font-extrabold shadow">
+                    <Eye className="w-3 h-3" aria-hidden="true" />
+                    Speisely Visits
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 text-[#173C32] px-2.5 py-1 text-xs font-bold shadow">
+                    <MapPin className="w-3 h-3" aria-hidden="true" />
+                    Berlin-Neukölln
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col flex-1 p-6 space-y-3">
+                <div className="flex items-center gap-2 text-xs text-[#173C32]/50 font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
+                  <span>
+                    {isDe
+                      ? "17. August 2026 · Wildenbruchstraße, Berlin"
+                      : "August 17, 2026 · Wildenbruchstraße, Berlin"}
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
+                  {isDe
+                    ? "Warum wir bei Mandy natürlich Mandy bestellen mussten"
+                    : "Why at Mandy We Naturally Had to Order Mandy"}
+                </h3>
+                <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
+                  {isDe
+                    ? "Speisely besucht Mandy in Berlin-Neukölln. Wir bestellen Mandy Lamm für zwei, Getränke und Chai – und zahlen zusammen rund 45 Euro."
+                    : "Speisely visits Mandy in Berlin-Neukölln. We order Mandy Lamb for two, drinks, and chai — paying around 45 Euros total."}
+                </p>
+                <div className="pt-2 border-t border-[#173C32]/10 flex items-center justify-between">
+                  <span className="text-sm font-bold text-[#173C32] group-hover:text-[#b8860b] flex items-center gap-1.5 transition-colors">
+                    {isDe ? "Story lesen" : "Read Story"}{" "}
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  </span>
+                  <span className="text-xs text-[#173C32]/40">
+                    {isDe ? "5 Min. Lesezeit" : "5 min read"}
+                  </span>
+                </div>
+              </div>
+            </Link>
+
             {/* Albaik Article Card */}
             <Link
               to="/magazin/speisely-visits/shawarma-albaik-berlin"

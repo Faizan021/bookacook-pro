@@ -57,6 +57,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly",
             priority: "0.8",
           },
+          {
+            path: "/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln",
+            lastmod: "2026-08-17",
+            changefreq: "monthly",
+            priority: "0.8",
+          },
           ...restaurants.map((r) => ({
             path: `/restaurant/${r.id}`,
             lastmod: today,
