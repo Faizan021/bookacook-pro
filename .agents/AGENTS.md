@@ -21,9 +21,10 @@ You must follow the rules below for every task.
 When permanent repo docs exist, read them first:
 1. `AGENTS.md` / `.agents/AGENTS.md`
 2. `docs/PROJECT_TRUTH.md`
-3. `docs/DECISIONS.md`
-4. `docs/PERFORMANCE_RULES.md`
-5. `docs/ACTIVE_WORK_NOTES.md`
+3. `docs/EDITORIAL_STYLE_GUIDE.md`
+4. `docs/DECISIONS.md`
+5. `docs/PERFORMANCE_RULES.md`
+6. `docs/ACTIVE_WORK_NOTES.md`
 
 If code and docs conflict:
 - trust the verified codebase over stale docs,
@@ -147,6 +148,7 @@ Use files, not chat memory, as the source of truth.
 Permanent rules belong in:
 - `AGENTS.md` / `.agents/AGENTS.md`
 - `docs/PROJECT_TRUTH.md`
+- `docs/EDITORIAL_STYLE_GUIDE.md`
 - `docs/DECISIONS.md`
 - `docs/PERFORMANCE_RULES.md`
 
