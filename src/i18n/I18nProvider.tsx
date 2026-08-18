@@ -8,10 +8,37 @@ const dict: Dict = {
   "nav.instant": { de: "Essen sofort bestellen", en: "Instant Food Order" },
   "nav.restaurants": { de: "Restaurants", en: "Restaurants" },
   "nav.catering": { de: "Catering", en: "Catering" },
-  "nav.partners": { de: "Für Partner", en: "For partners" },
+  "nav.planner": { de: "Event Planner", en: "Event Planner" },
+  "nav.magazine": { de: "Magazin", en: "Magazine" },
+  "nav.magazine.all": { de: "Alle Beiträge", en: "All Articles" },
+  "nav.magazine.visits": { de: "Restaurantbesuche", en: "Restaurant Visits" },
+  "nav.magazine.community": { de: "Speisely Community", en: "Speisely Community" },
+  "nav.magazine.tips": { de: "Food-Tipps", en: "Food Tips" },
+  "nav.partners": { de: "Für Partner", en: "For Partners" },
+  "nav.partners.overview": { de: "Partnerübersicht", en: "Partner Overview" },
+  "nav.partners.pricing": { de: "Preise", en: "Pricing" },
+  "nav.partners.join": { de: "Partner werden", en: "Become a Partner" },
+  "nav.aboutGroup": { de: "Über Speisely", en: "About Speisely" },
   "nav.about": { de: "Über uns", en: "About Us" },
   "nav.contact": { de: "Kontakt", en: "Contact" },
   "nav.register": { de: "Registrieren", en: "Register" },
+
+  "cookie.text": {
+    de: "Wir verwenden Cookies, um unsere Website zu verbessern und dir ein besseres Erlebnis zu bieten.",
+    en: "We use cookies to improve our website and provide you with a better experience.",
+  },
+  "cookie.privacy": {
+    de: "Datenschutzbestimmungen",
+    en: "Privacy Policy",
+  },
+  "cookie.customize": {
+    de: "Anpassen",
+    en: "Customize",
+  },
+  "cookie.accept": {
+    de: "Alle akzeptieren",
+    en: "Accept all",
+  },
 
   "home.eyebrow": {
     de: "Ein Marktplatz. Drei Wege zu genießen.",

@@ -51,6 +51,7 @@ export function SiteFooter() {
             { label: t("nav.catering"), to: "/catering" },
             { label: t("Event-Planer", "Event Planner"), to: "/planner" },
             { label: "Magazin", to: "/magazin" },
+            { label: "Speisely Community", to: "/community" },
             { label: "FAQ", to: "/faq" },
             { label: "Blog", to: "/blog" },
           ]}

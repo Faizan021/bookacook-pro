@@ -116,27 +116,6 @@ function SpeiselyVisitsPage() {
 
   return (
     <SiteShell>
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-5">
-        <ol className="flex items-center gap-2 text-xs text-[#173C32]/50 font-medium">
-          <li>
-            <Link to="/" className="hover:text-[#173C32] transition-colors">
-              Speisely
-            </Link>
-          </li>
-          <li aria-hidden="true">›</li>
-          <li>
-            <Link to="/magazin" className="hover:text-[#173C32] transition-colors">
-              {isDe ? "Magazin" : "Magazine"}
-            </Link>
-          </li>
-          <li aria-hidden="true">›</li>
-          <li aria-current="page" className="text-[#173C32] font-semibold">
-            Speisely Visits
-          </li>
-        </ol>
-      </nav>
-
       <PageHero
         eyebrow={
           isDe
@@ -151,7 +130,28 @@ function SpeiselyVisitsPage() {
         }
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-24">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-24 pt-8">
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="mb-8">
+          <ol className="flex items-center gap-2 text-xs text-[#173C32]/60 font-medium">
+            <li>
+              <Link to="/" className="hover:text-[#173C32] transition-colors">
+                Speisely
+              </Link>
+            </li>
+            <li aria-hidden="true">›</li>
+            <li>
+              <Link to="/magazin" className="hover:text-[#173C32] transition-colors">
+                {isDe ? "Magazin" : "Magazine"}
+              </Link>
+            </li>
+            <li aria-hidden="true">›</li>
+            <li aria-current="page" className="text-[#173C32] font-semibold">
+              Speisely Visits
+            </li>
+          </ol>
+        </nav>
+
         {/* How Speisely Visits works */}
         <section className="mb-16" aria-labelledby="visits-erklaerung">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

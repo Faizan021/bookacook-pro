@@ -22,6 +22,7 @@ import { Route as InstantOrderRouteImport } from './routes/instant-order'
 import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
@@ -132,6 +133,11 @@ const FaqRoute = FaqRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CateringRoute = CateringRouteImport.update({
@@ -386,6 +392,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/catering': typeof CateringRouteWithChildren
+  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -445,6 +452,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -505,6 +513,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/catering': typeof CateringRouteWithChildren
+  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -567,6 +576,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/catering'
+    | '/community'
     | '/contact'
     | '/faq'
     | '/impressum'
@@ -626,6 +636,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/community'
     | '/contact'
     | '/faq'
     | '/impressum'
@@ -685,6 +696,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/catering'
+    | '/community'
     | '/contact'
     | '/faq'
     | '/impressum'
@@ -747,6 +759,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   CateringRoute: typeof CateringRouteWithChildren
+  CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   ImpressumRoute: typeof ImpressumRoute
@@ -870,6 +883,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering': {
@@ -1338,6 +1358,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   CateringRoute: CateringRouteWithChildren,
+  CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   ImpressumRoute: ImpressumRoute,
