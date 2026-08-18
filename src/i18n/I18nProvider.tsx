@@ -13,7 +13,7 @@ const dict: Dict = {
   "nav.magazine.all": { de: "Alle Beiträge", en: "All Articles" },
   "nav.magazine.visits": { de: "Restaurantbesuche", en: "Restaurant Visits" },
   "nav.magazine.community": { de: "Speisely Community", en: "Speisely Community" },
-  "nav.magazine.tips": { de: "Food-Tipps", en: "Food Tips" },
+  "nav.magazine.tips": { de: "News & Trends", en: "News & Trends" },
   "nav.partners": { de: "Für Partner", en: "For Partners" },
   "nav.partners.overview": { de: "Partnerübersicht", en: "Partner Overview" },
   "nav.partners.pricing": { de: "Preise", en: "Pricing" },

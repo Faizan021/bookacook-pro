@@ -21,6 +21,7 @@ import {
   Eye,
   Users,
   Lightbulb,
+  TrendingUp,
   Briefcase,
   DollarSign,
   UserPlus,
@@ -192,7 +193,7 @@ export function SiteHeader() {
                   to="/blog"
                   className="flex items-center w-full text-forest text-xs font-semibold"
                 >
-                  <Lightbulb className="mr-2.5 h-4 w-4 text-[#E6B84A]" aria-hidden="true" />
+                  <TrendingUp className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
                   <span>{t("nav.magazine.tips")}</span>
                 </Link>
               </DropdownMenuItem>

@@ -9,11 +9,11 @@ import { PageHero } from "@/components/PageHero";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Blog — Speisely" },
+      { title: "News & Trends — Speisely Blog" },
       {
         name: "description",
         content:
-          "Insights, Trends und Tipps rund um Catering, Eventplanung und Food Delivery in Deutschland.",
+          "News, Trends und Einblicke rund um Catering, Eventplanung und kulinarische Entdeckungen in Deutschland.",
       },
     ],
   }),
@@ -27,8 +27,8 @@ function BlogIndex() {
   return (
     <SiteShell>
       <PageHero
-        eyebrow="Speisely Blog"
-        heading={tt("News, Insights & Trends", "News, Insights & Trends")}
+        eyebrow={tt("SPEISELY BLOG", "SPEISELY BLOG")}
+        heading={tt("News & Trends", "News & Trends")}
         subtext={tt(
           "Die neuesten Entwicklungen in den Bereichen Food Delivery, Eventplanung und Premium-Catering in Deutschland.",
           "The latest developments in food delivery, event planning, and premium catering in Germany.",
