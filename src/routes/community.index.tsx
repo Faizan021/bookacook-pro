@@ -22,7 +22,7 @@ import {
   Lock,
 } from "lucide-react";
 
-export const Route = createFileRoute("/community")({
+export const Route = createFileRoute("/community/")({
   head: () => ({
     meta: [
       {

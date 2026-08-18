@@ -22,7 +22,6 @@ import { Route as InstantOrderRouteImport } from './routes/instant-order'
 import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CommunityRouteImport } from './routes/community'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
@@ -30,6 +29,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlannerIndexRouteImport } from './routes/planner.index'
 import { Route as MagazinIndexRouteImport } from './routes/magazin.index'
+import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as CateringIndexRouteImport } from './routes/catering.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
@@ -135,11 +135,6 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CommunityRoute = CommunityRouteImport.update({
-  id: '/community',
-  path: '/community',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CateringRoute = CateringRouteImport.update({
   id: '/catering',
   path: '/catering',
@@ -173,6 +168,11 @@ const MagazinIndexRoute = MagazinIndexRouteImport.update({
   id: '/magazin/',
   path: '/magazin/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityIndexRoute = CommunityIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CommunityRoute,
 } as any)
 const CateringIndexRoute = CateringIndexRouteImport.update({
   id: '/',
@@ -392,7 +392,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/catering': typeof CateringRouteWithChildren
-  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -424,6 +423,7 @@ export interface FileRoutesByFullPath {
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
+  '/community/': typeof CommunityIndexRoute
   '/magazin/': typeof MagazinIndexRoute
   '/planner/': typeof PlannerIndexRoute
   '/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
@@ -452,7 +452,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -482,6 +481,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthIndexRoute
   '/blog': typeof BlogIndexRoute
   '/catering': typeof CateringIndexRoute
+  '/community': typeof CommunityIndexRoute
   '/magazin': typeof MagazinIndexRoute
   '/planner': typeof PlannerIndexRoute
   '/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
@@ -513,7 +513,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/catering': typeof CateringRouteWithChildren
-  '/community': typeof CommunityRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/impressum': typeof ImpressumRoute
@@ -545,6 +544,7 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/catering/': typeof CateringIndexRoute
+  '/community/': typeof CommunityIndexRoute
   '/magazin/': typeof MagazinIndexRoute
   '/planner/': typeof PlannerIndexRoute
   '/_authenticated/caterer/reviews': typeof AuthenticatedCatererReviewsRoute
@@ -576,7 +576,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/catering'
-    | '/community'
     | '/contact'
     | '/faq'
     | '/impressum'
@@ -608,6 +607,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/blog/'
     | '/catering/'
+    | '/community/'
     | '/magazin/'
     | '/planner/'
     | '/caterer/reviews'
@@ -636,7 +636,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/community'
     | '/contact'
     | '/faq'
     | '/impressum'
@@ -666,6 +665,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/blog'
     | '/catering'
+    | '/community'
     | '/magazin'
     | '/planner'
     | '/caterer/reviews'
@@ -696,7 +696,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/admin'
     | '/catering'
-    | '/community'
     | '/contact'
     | '/faq'
     | '/impressum'
@@ -728,6 +727,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/blog/'
     | '/catering/'
+    | '/community/'
     | '/magazin/'
     | '/planner/'
     | '/_authenticated/caterer/reviews'
@@ -759,7 +759,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   CateringRoute: typeof CateringRouteWithChildren
-  CommunityRoute: typeof CommunityRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   ImpressumRoute: typeof ImpressumRoute
@@ -885,13 +884,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/community': {
-      id: '/community'
-      path: '/community'
-      fullPath: '/community'
-      preLoaderRoute: typeof CommunityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/catering': {
       id: '/catering'
       path: '/catering'
@@ -940,6 +932,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/magazin/'
       preLoaderRoute: typeof MagazinIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/community/': {
+      id: '/community/'
+      path: '/'
+      fullPath: '/community/'
+      preLoaderRoute: typeof CommunityIndexRouteImport
+      parentRoute: typeof CommunityRoute
     }
     '/catering/': {
       id: '/catering/'
@@ -1358,7 +1357,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   CateringRoute: CateringRouteWithChildren,
-  CommunityRoute: CommunityRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   ImpressumRoute: ImpressumRoute,
