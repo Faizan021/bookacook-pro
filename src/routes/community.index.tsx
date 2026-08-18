@@ -6,41 +6,35 @@ import {
   Mail,
   Instagram,
   Utensils,
-  Camera,
-  Video,
-  Heart,
-  MapPin,
   PartyPopper,
   Sparkles,
   CheckCircle2,
-  HelpCircle,
-  Clock,
-  ShieldCheck,
   ArrowRight,
-  MessageCircle,
-  AlertCircle,
-  Lock,
+  MapPin,
+  Camera,
+  Shield,
+  Send,
 } from "lucide-react";
 
 export const Route = createFileRoute("/community/")({
   head: () => ({
     meta: [
       {
-        title: "Speisely Community – Teile deine Erfahrung, Fotos und Videos | Speisely",
+        title: "Speisely Community – Echte Erlebnisse, Fotos & Food Stories | Speisely",
       },
       {
         name: "description",
         content:
-          "Teile dein Restaurant-, Catering- oder Eventerlebnis mit der Speisely Community. Sende uns deine Fotos, Videos und die Geschichte dahinter.",
+          "Entdecke echte Restaurantbesuche, Catering-Erlebnisse und Food-Momente aus der Speisely Community. Teile deine eigenen Fotos, Videos und Geschichten mit uns.",
       },
       {
         property: "og:title",
-        content: "Speisely Community – Teile deine Erfahrung, Fotos und Videos",
+        content: "Speisely Community – Echte Erlebnisse, Fotos & Food Stories",
       },
       {
         property: "og:description",
         content:
-          "Teile dein Restaurant-, Catering- oder Eventerlebnis mit der Speisely Community. Sende uns deine Fotos, Videos und die Geschichte dahinter.",
+          "Entdecke echte Restaurantbesuche, Catering-Erlebnisse und Food-Momente aus der Speisely Community. Teile deine eigenen Fotos, Videos und Geschichten mit uns.",
       },
       {
         property: "og:url",
@@ -73,89 +67,39 @@ function CommunityPage() {
   )}&body=${encodeURIComponent(emailBody)}`;
   const instagramHref = "https://www.instagram.com/speisely/";
 
-  const shareItems = isDe
+  const shareCategories = isDe
     ? [
         {
           icon: Utensils,
-          title: "Restaurant- oder Caféentdeckung",
-          desc: "Dein Besuch beim Lieblingsitaliener, Street-Food-Spot oder neuen Café in deiner Nachbarschaft.",
+          title: "Restaurant & Café",
+          desc: "Restaurantbesuche, Cafés, besondere Gerichte und lokale Entdeckungen.",
         },
         {
           icon: PartyPopper,
-          title: "Catering-Erlebnis",
-          desc: "Gelungenes Fingerfood bei einer Feier, ein Food-Truck auf einem Event oder ein Hochzeitsmenü.",
+          title: "Catering",
+          desc: "Catering-Erlebnisse bei Feiern, Hochzeiten, Firmenveranstaltungen oder privaten Anlässen.",
         },
         {
           icon: Sparkles,
-          title: "Food-Event oder Feier",
-          desc: "Stadtfeste, Gourmet-Meilen, kulinarische Märkte oder private Feierlichkeiten.",
-        },
-        {
-          icon: Heart,
-          title: "Besonderes Gericht oder Food-Moment",
-          desc: "Ein außergewöhnliches Menü, ein Lieblingsgericht oder ein Geschmackserlebnis zum Teilen.",
-        },
-        {
-          icon: MessageCircle,
-          title: "Persönliche Erfahrung & Food Story",
-          desc: "Ein Gespräch mit dem Inhaber, eine Familienrezept-Tradition oder die Geschichte hinter dem Genuss.",
-        },
-        {
-          icon: Camera,
-          title: "Eigene Fotos",
-          desc: "Authentische, selbst aufgenommene Bilder vom Essen, den Tellern und der Atmosphäre.",
-        },
-        {
-          icon: Video,
-          title: "Eigene Videos",
-          desc: "Kurze Videoclips vom Anrichten, Dampfen frischer Gerichte oder dem Geschehen vor Ort.",
-        },
-        {
-          icon: MapPin,
-          title: "Tipp aus deiner Stadt",
-          desc: "Ein echter kulinarischer Geheimtipp abseits der bekannten Touristenpfade in deiner Stadt.",
+          title: "Food Events & persönliche Geschichten",
+          desc: "Food Events, Märkte, Festivals, Familientraditionen und persönliche Food-Momente.",
         },
       ]
     : [
         {
           icon: Utensils,
-          title: "Restaurant or Café Discovery",
-          desc: "Your visit to a favorite local spot, street food vendor, or new neighborhood café.",
+          title: "Restaurant & Café",
+          desc: "Restaurant visits, cafés, memorable dishes and local discoveries.",
         },
         {
           icon: PartyPopper,
-          title: "Catering Experience",
-          desc: "Delicious finger food at a party, a food truck at an event, or a memorable celebration meal.",
+          title: "Catering",
+          desc: "Catering experiences at celebrations, weddings, corporate events or private occasions.",
         },
         {
           icon: Sparkles,
-          title: "Food Event or Celebration",
-          desc: "City food festivals, gourmet miles, culinary markets, or special gatherings.",
-        },
-        {
-          icon: Heart,
-          title: "Special Dish or Food Moment",
-          desc: "An exceptional menu, your favorite dish, or a culinary highlight worth remembering.",
-        },
-        {
-          icon: MessageCircle,
-          title: "Personal Experience & Food Story",
-          desc: "A chat with the owner, a family culinary tradition, or the story behind the table.",
-        },
-        {
-          icon: Camera,
-          title: "Your Own Photos",
-          desc: "Authentic, self-captured snapshots of the food, the presentation, and the ambient vibe.",
-        },
-        {
-          icon: Video,
-          title: "Your Own Videos",
-          desc: "Short video clips showing the preparation, steaming dishes, or the atmosphere.",
-        },
-        {
-          icon: MapPin,
-          title: "A Discovery From Your City",
-          desc: "A genuine hidden culinary gem in your city away from typical tourist spots.",
+          title: "Food Events & Personal Stories",
+          desc: "Food events, markets, festivals, family traditions and personal food moments.",
         },
       ];
 
@@ -163,60 +107,56 @@ function CommunityPage() {
     ? [
         {
           num: "1",
-          title: "Erlebnis teilen",
-          body: "Schick uns deine Erfahrung, Fotos und Videos per E-Mail, Instagram oder über unsere Kontaktseite.",
+          title: "1. Erlebnis teilen",
+          body: "Schick uns deine Geschichte und deine eigenen Fotos oder Videos per E-Mail oder Instagram.",
         },
         {
           num: "2",
-          title: "Redaktionelle Prüfung",
-          body: "Wir prüfen deine Geschichte, die wichtigsten Angaben und ob du die eingereichten Fotos und Videos verwenden darfst.",
+          title: "2. Redaktionelle Prüfung",
+          body: "Wir prüfen die Angaben, Medienrechte und den Veröffentlichungsstatus.",
         },
         {
           num: "3",
-          title: "Community Story",
-          body: "Wenn deine Einsendung zu Speisely passt, können wir mit deiner Erlaubnis daraus eine Community Story, einen Artikel, Post oder ein Reel erstellen.",
+          title: "3. Community Story",
+          body: "Wenn die Einsendung zu Speisely passt, kann daraus mit deiner Erlaubnis eine Story, ein Artikel, Post oder Reel entstehen.",
         },
       ]
     : [
         {
           num: "1",
-          title: "Share Your Experience",
-          body: "Send us your experience, photos and videos by email, Instagram or through our Contact page.",
+          title: "1. Share your experience",
+          body: "Send us your story and your own photos or videos by email or Instagram.",
         },
         {
           num: "2",
-          title: "Editorial Review",
-          body: "We review your story, important details and whether you have permission to share the submitted photos and videos.",
+          title: "2. Editorial review",
+          body: "We review the information, media rights and publication status.",
         },
         {
           num: "3",
-          title: "Community Story",
-          body: "If the submission is suitable for Speisely, we may—with your permission—turn it into a Community Story, article, post or reel.",
+          title: "3. Community Story",
+          body: "If the submission is suitable for Speisely, it may—with your permission—become a story, article, post or reel.",
         },
       ];
 
-  const checklist = isDe
+  const checklistItems = isDe
     ? [
-        "Name des Restaurants, Caterers, Events oder Ortes",
-        "Stadt und Stadtteil",
-        "Ungefähres Datum des Erlebnisses",
-        "Was hast du bestellt, entdeckt oder erlebt?",
+        "Restaurant, Caterer, Event oder Ort",
+        "Stadt und ungefähres Datum",
         "Deine persönliche Geschichte",
-        "Eigene Fotos",
-        "Eigene Videos",
-        "Gewünschter Foto- oder Videocredit",
-        "Information, falls etwas kostenlos, vergünstigt, eingeladen oder gesponsert war",
+        "Was du bestellt, entdeckt oder erlebt hast",
+        "Eigene Fotos oder Videos",
+        "Gewünschter Credit",
+        "Information über Einladung, Rabatt oder Sponsoring",
       ]
     : [
-        "Restaurant, caterer, event or location name",
-        "City and neighborhood",
-        "Approximate date of the experience",
-        "What did you order, discover or experience?",
+        "Restaurant, caterer, event or location",
+        "City and approximate date",
         "Your personal story",
-        "Your own photos",
-        "Your own videos",
-        "Preferred photo or video credit",
-        "Information about anything received free, discounted, invited or sponsored",
+        "What you ordered, discovered or experienced",
+        "Your own photos or videos",
+        "Preferred credit",
+        "Information about invitation, discount or sponsorship",
       ];
 
   const jsonLd = {
@@ -227,11 +167,11 @@ function CommunityPage() {
         "@id": "https://speisely.de/community",
         url: "https://speisely.de/community",
         name: isDe
-          ? "Speisely Community – Teile deine Erfahrung, Fotos und Videos"
-          : "Speisely Community – Share Your Experience, Photos and Videos",
+          ? "Speisely Community – Echte Erlebnisse, Fotos & Food Stories"
+          : "Speisely Community – Genuine Experiences, Photos & Food Stories",
         description: isDe
-          ? "Teile dein Restaurant-, Catering- oder Eventerlebnis mit der Speisely Community. Sende uns deine Fotos, Videos und die Geschichte dahinter."
-          : "Share your restaurant, catering or event experience with the Speisely Community. Send us your photos, videos and the story behind them.",
+          ? "Entdecke echte Restaurantbesuche, Catering-Erlebnisse und Food-Momente aus der Speisely Community."
+          : "Discover genuine restaurant visits, catering experiences and food moments from the Speisely Community.",
         inLanguage: isDe ? "de-DE" : "en-US",
       },
       {
@@ -268,7 +208,7 @@ function CommunityPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Cinematic Speisely Standard Hero Section with CTA buttons built-in */}
+      {/* 2. Hero with Email and Instagram CTAs */}
       <PageHero
         eyebrow="SPEISELY COMMUNITY"
         heading={
@@ -288,21 +228,21 @@ function CommunityPage() {
         }
         subtext={
           isDe
-            ? "Du hast ein Restaurant entdeckt, ein besonderes Catering erlebt oder einen unvergesslichen Food-Moment auf einer Veranstaltung festgehalten? Teile deine Erfahrung, Fotos, Videos und die Geschichte dahinter mit der Speisely Community. Aus ausgewählten Einsendungen können Community Stories, Artikel, Posts oder Reels entstehen."
-            : "Discovered a restaurant, enjoyed a memorable catering experience or captured a special moment at a food event? Share your experience, photos, videos and the story behind them with the Speisely Community. Selected submissions may become Community Stories, articles, posts or reels."
+            ? "Du hast ein Restaurant entdeckt, ein besonderes Catering erlebt oder einen unvergesslichen Food-Moment festgehalten? Teile deine Erfahrung, Fotos, Videos und die Geschichte dahinter mit der Speisely Community."
+            : "Discovered a restaurant, enjoyed a memorable catering experience or captured a special food moment? Share your experience, photos, videos and the story behind them with the Speisely Community."
         }
         primaryCta={{
           label: isDe ? "Erlebnis mit uns teilen" : "Share Your Experience",
           href: mailtoHref,
         }}
         secondaryCta={{
-          label: isDe ? "Auf Instagram schreiben" : "Message Us on Instagram",
+          label: isDe ? "Auf Instagram schreiben" : "Message on Instagram",
           href: instagramHref,
         }}
       />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-24 pt-8">
-        {/* Breadcrumb Navigation below Hero */}
+      <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-24 pt-8">
+        {/* Breadcrumb Navigation */}
         <nav aria-label="Breadcrumb" className="mb-8">
           <ol className="flex items-center gap-2 text-xs text-forest/60 font-medium">
             <li>
@@ -323,72 +263,139 @@ function CommunityPage() {
           </ol>
         </nav>
 
-        {/* Important photo & video guideline callout box */}
-        <div className="mb-14 surface-card p-6 sm:p-7 rounded-3xl border border-[#b28a3c]/30 bg-[#FAF7F0] shadow-xs">
-          <div className="flex items-start gap-4">
-            <div className="h-10 w-10 rounded-2xl bg-[#b28a3c]/15 text-[#b28a3c] flex items-center justify-center shrink-0 mt-0.5">
-              <Camera className="h-5 w-5" aria-hidden="true" />
-            </div>
-            <div>
-              <h3 className="font-display text-lg font-bold text-forest">
-                {isDe
-                  ? "Wichtig für deine Fotos und Videos"
-                  : "Important information about your photos and videos"}
-              </h3>
-              <p className="mt-1.5 text-xs sm:text-sm text-forest/80 leading-relaxed font-medium">
-                {isDe
-                  ? "Bitte sende uns nur Fotos und Videos, die du selbst aufgenommen hast. Darauf dürfen entweder keine identifizierbaren Personen oder ausschließlich du selbst zu sehen sein. Vor einer Veröffentlichung klären wir mit dir schriftlich, wie Speisely die ausgewählten Inhalte verwenden darf."
-                  : "Please send us only photos and videos that you created yourself. They must show either no identifiable people or only you. Before publication, we will confirm with you in writing how Speisely may use the selected content."}
-              </p>
+        {/* 3. Featured Community Story Section (Directly Below Hero) */}
+        <section className="mb-20" aria-labelledby="featured-community-story">
+          <div className="surface-card rounded-3xl border border-forest/10 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+              {/* Image Side (55% on desktop) */}
+              <div className="lg:col-span-7 relative min-h-[280px] sm:min-h-[360px] lg:min-h-[420px] bg-black/5 overflow-hidden">
+                <img
+                  src="/magazin/harput-wiesbaden/harput-fisch.jpg"
+                  alt={
+                    isDe
+                      ? "Ein Grillabend bei Harput in Wiesbaden"
+                      : "An Evening at Harput in Wiesbaden"
+                  }
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute top-4 left-4 flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-[oklch(0.97_0.02_92)] px-3.5 py-1.5 text-xs font-bold shadow-md">
+                    <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
+                    {isDe ? "Aus der Speisely Community" : "From the Speisely Community"}
+                  </span>
+                </div>
+                <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                  📸 Speisely Community
+                </div>
+              </div>
+
+              {/* Story Content Side (45% on desktop) */}
+              <div className="lg:col-span-5 p-7 sm:p-9 lg:p-10 flex flex-col justify-between bg-white">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-[#b28a3c] uppercase mb-2.5">
+                    <span>{isDe ? "NEU AUS DER COMMUNITY" : "NEW FROM THE COMMUNITY"}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs font-semibold text-forest/60 mb-3">
+                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
+                    <span>Wiesbaden</span>
+                    <span>•</span>
+                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
+                  </div>
+
+                  <h2
+                    id="featured-community-story"
+                    className="font-display text-2xl sm:text-3xl font-bold text-forest leading-tight mb-4"
+                  >
+                    {isDe
+                      ? "Ein Grillabend bei Harput in Wiesbaden"
+                      : "An Evening at Harput in Wiesbaden"}
+                  </h2>
+
+                  <p className="text-sm sm:text-base text-forest/75 leading-relaxed font-medium mb-6">
+                    {isDe
+                      ? "Zwei Teller, ein gemeinsamer Abend und ein Food-Moment aus Wiesbaden: Ein Mitglied der Speisely Community teilt seinen Besuch bei Harput."
+                      : "Two plates, one shared evening and a food moment from Wiesbaden: a member of the Speisely Community shares their visit to Harput."}
+                  </p>
+                </div>
+
+                <div>
+                  <Link
+                    to="/magazin/community/harput-wiesbaden"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-7 py-3.5 text-xs sm:text-sm font-bold shadow-md hover:bg-forest/90 hover:gap-3 transition-all"
+                  >
+                    <span>{isDe ? "Story lesen" : "Read the Story"}</span>
+                    <ArrowRight className="h-4 w-4 text-[#f2d896]" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Section 1: Was kannst du mit uns teilen? */}
-        <section className="mb-20" aria-labelledby="community-topics">
-          <div className="max-w-3xl mb-10">
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b28a3c]">
-              {isDe ? "THEMEN & VIELFALT" : "TOPICS & DIVERSITY"}
-            </span>
+        {/* 4. Short Community Explanation */}
+        <section className="mb-20" aria-labelledby="what-is-community">
+          <div className="surface-card p-8 sm:p-10 rounded-3xl border border-forest/10 max-w-4xl mx-auto shadow-xs">
             <h2
-              id="community-topics"
-              className="mt-2 font-display text-3xl sm:text-4xl text-forest font-bold"
+              id="what-is-community"
+              className="font-display text-2xl sm:text-3xl font-bold text-forest mb-4"
             >
-              {isDe ? "Was kannst du mit uns teilen?" : "What can you share with us?"}
+              {isDe ? "Was ist die Speisely Community?" : "What is the Speisely Community?"}
             </h2>
-            <p className="mt-3 text-forest/70 text-base leading-relaxed">
+            <p className="text-base sm:text-lg text-forest/80 leading-relaxed font-medium">
               {isDe
-                ? "Du brauchst keine professionelle Kamera und musst kein Influencer sein. Entscheidend ist, dass es deine echte Erfahrung und deine eigene Geschichte ist."
-                : "You don’t need a professional camera or an influencer account. What matters is that it is your genuine experience and your own story."}
+                ? "Die Speisely Community sammelt echte Erfahrungen rund um Restaurants, Catering und Food Events. Menschen aus verschiedenen Städten teilen ihre eigenen Fotos, Videos und persönlichen Geschichten mit uns. Aus ausgewählten Einsendungen entstehen redaktionelle Community Stories, Artikel, Posts oder Reels."
+                : "The Speisely Community collects genuine experiences involving restaurants, catering and food events. People from different cities share their own photos, videos and personal stories with us. Selected submissions may become editorial Community Stories, articles, posts or reels."}
             </p>
           </div>
+        </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {shareItems.map((item, idx) => {
-              const IconComponent = item.icon;
+        {/* 5. What People Can Share (3 Clear Categories) */}
+        <section className="mb-20" aria-labelledby="share-categories">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b28a3c]">
+              {isDe ? "THEMEN & KATEGORIEN" : "TOPICS & CATEGORIES"}
+            </span>
+            <h2
+              id="share-categories"
+              className="mt-2 font-display text-3xl sm:text-4xl text-forest font-bold"
+            >
+              {isDe ? "Was kannst du teilen?" : "What Can You Share?"}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {shareCategories.map((cat, idx) => {
+              const IconComp = cat.icon;
               return (
                 <div
                   key={idx}
-                  className="surface-card p-6 rounded-3xl border border-forest/10 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+                  className="surface-card p-7 rounded-3xl border border-forest/10 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>
-                    <div className="h-11 w-11 rounded-2xl bg-[#DDEEE3] flex items-center justify-center text-forest mb-4">
-                      <IconComponent className="h-5 w-5" aria-hidden="true" />
+                    <div className="h-12 w-12 rounded-2xl bg-[#DDEEE3] flex items-center justify-center text-forest mb-5">
+                      <IconComp className="h-6 w-6 text-forest" aria-hidden="true" />
                     </div>
-                    <h3 className="font-display text-lg font-bold text-forest">{item.title}</h3>
-                    <p className="mt-2 text-xs sm:text-sm text-forest/70 leading-relaxed font-medium">
-                      {item.desc}
-                    </p>
+                    <h3 className="font-display text-xl font-bold text-forest mb-2.5">
+                      {cat.title}
+                    </h3>
+                    <p className="text-sm text-forest/70 leading-relaxed font-medium">{cat.desc}</p>
                   </div>
                 </div>
               );
             })}
           </div>
+
+          <p className="mt-8 text-center text-sm sm:text-base text-forest/75 font-medium max-w-xl mx-auto">
+            {isDe
+              ? "Teile deine Erfahrung mit deinen eigenen Fotos oder Videos und erzähle uns die Geschichte dahinter."
+              : "Share your experience with your own photos or videos and tell us the story behind it."}
+          </p>
         </section>
 
-        {/* Section 2: So funktioniert es */}
+        {/* 6. How It Works (Concise 3 Steps) */}
         <section className="mb-20" aria-labelledby="how-it-works">
-          <div className="max-w-3xl mb-10">
+          <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b28a3c]">
               {isDe ? "EINFACHER ABLAUF" : "SIMPLE PROCESS"}
             </span>
@@ -401,146 +408,90 @@ function CommunityPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {steps.map((step) => (
+            {steps.map((step, idx) => (
               <div
-                key={step.num}
-                className="surface-card p-8 rounded-3xl border border-forest/10 shadow-sm flex flex-col justify-between"
+                key={idx}
+                className="surface-card p-7 sm:p-8 rounded-3xl border border-forest/10 shadow-sm flex flex-col justify-between"
               >
                 <div>
-                  <div className="h-12 w-12 rounded-full bg-forest text-[oklch(0.97_0.02_92)] flex items-center justify-center font-bold text-lg shadow-sm mb-6">
+                  <div className="h-11 w-11 rounded-full bg-forest text-[oklch(0.97_0.02_92)] flex items-center justify-center font-bold text-base shadow-xs mb-5">
                     {step.num}
                   </div>
-                  <h3 className="font-display text-xl font-bold text-forest mb-3">{step.title}</h3>
+                  <h3 className="font-display text-lg font-bold text-forest mb-2.5">
+                    {step.title}
+                  </h3>
                   <p className="text-sm text-forest/70 leading-relaxed font-medium">{step.body}</p>
                 </div>
               </div>
             ))}
           </div>
-
-          {/* Editorial clarification note */}
-          <div className="mt-8 surface-card p-6 rounded-2xl border border-forest/10 flex items-start gap-4">
-            <ShieldCheck className="h-5 w-5 text-[#b28a3c] shrink-0 mt-0.5" aria-hidden="true" />
-            <p className="text-sm text-forest/80 leading-relaxed font-medium">
-              {isDe
-                ? "Nicht jede Einsendung wird veröffentlicht. Vor einer Veröffentlichung klären wir die wichtigsten Angaben, Bild- und Videorechte, eine mögliche Einladung oder Vergünstigung sowie deinen gewünschten Credit."
-                : "Not every submission will be published. Before publication, we confirm the important details, photo and video rights, any invitation or discount, and your preferred credit."}
-            </p>
-          </div>
         </section>
 
-        {/* Section 3: Was solltest du uns schicken? (Checklist) */}
-        <section className="mb-20" aria-labelledby="submission-checklist">
-          <div className="surface-card p-8 sm:p-12 rounded-3xl border border-forest/10 shadow-sm">
-            <div className="max-w-2xl mb-8">
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b28a3c]">
-                {isDe ? "CHECKLISTE" : "CHECKLIST"}
-              </span>
-              <h2
-                id="submission-checklist"
-                className="mt-2 font-display text-3xl sm:text-4xl text-forest font-bold"
-              >
-                {isDe ? "Was solltest du uns schicken?" : "What Should You Send Us?"}
-              </h2>
-              <p className="mt-2 text-sm text-forest/70 font-medium">
-                {isDe
-                  ? "Damit wir deine Einsendung schnell verstehen und bearbeiten können, helfen uns diese Angaben:"
-                  : "These details help us quickly review and prepare your submission:"}
-              </p>
-            </div>
+        {/* 7. Compact Submission Checklist and Media Notice (2-Column Block) */}
+        <section className="mb-20" aria-labelledby="submission-requirements">
+          <div className="surface-card p-8 sm:p-10 lg:p-12 rounded-3xl border border-forest/10 shadow-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+              {/* Left Column: Checklist (7 items) */}
+              <div className="lg:col-span-7">
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#b28a3c]">
+                  {isDe ? "ÜBERSICHT" : "OVERVIEW"}
+                </span>
+                <h2
+                  id="submission-requirements"
+                  className="mt-1 font-display text-2xl sm:text-3xl text-forest font-bold mb-6"
+                >
+                  {isDe ? "Was brauchen wir von dir?" : "What do we need from you?"}
+                </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              {checklist.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-3">
-                  <CheckCircle2
-                    className="h-5 w-5 text-[#7FA46B] shrink-0 mt-0.5"
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm font-medium text-forest leading-snug">{item}</span>
+                <div className="space-y-3">
+                  {checklistItems.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      <CheckCircle2
+                        className="h-5 w-5 text-[#7FA46B] shrink-0 mt-0.5"
+                        aria-hidden="true"
+                      />
+                      <span className="text-sm font-medium text-forest leading-snug">{item}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
+              </div>
 
-        {/* Section 4: Community Stories */}
-        <section className="mb-20" aria-labelledby="community-stories">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-6 border-b border-forest/10">
-            <div>
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#b28a3c]">
-                <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-                {isDe ? "AUS DER SPEISELY COMMUNITY" : "FROM THE SPEISELY COMMUNITY"}
-              </span>
-              <h2
-                id="community-stories"
-                className="mt-1 font-display text-3xl sm:text-4xl text-forest font-bold"
-              >
-                {isDe ? "Veröffentlichte Community Stories" : "Published Community Stories"}
-              </h2>
-            </div>
-            <p className="text-sm text-forest/70 max-w-md font-medium">
-              {isDe
-                ? "Echte Entdeckungen und Berichte von Leserinnen und Lesern aus ganz Deutschland."
-                : "Genuine discoveries and stories from food lovers across Germany."}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Link
-              to="/magazin/community/harput-wiesbaden"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/harput-wiesbaden/harput-fisch.jpg"
-                    alt={
-                      isDe
-                        ? "Grillabend bei Harput in Wiesbaden"
-                        : "Grill Evening at Harput in Wiesbaden"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1 text-xs font-bold shadow-sm">
-                      <Sparkles className="h-3 w-3 text-[#E6B84A]" aria-hidden="true" />
-                      {isDe ? "Aus der Speisely Community" : "From the Community"}
-                    </span>
+              {/* Right Column: Media-Rights Notice Box */}
+              <div className="lg:col-span-5 rounded-2xl border border-[#b28a3c]/30 bg-[#FAF7F0] p-6 sm:p-7 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-forest font-bold mb-3">
+                    <Camera className="h-5 w-5 text-[#b28a3c]" aria-hidden="true" />
+                    <h3 className="font-display text-base font-bold text-forest">
+                      {isDe
+                        ? "Wichtig für deine Fotos und Videos"
+                        : "Important information about your photos and videos"}
+                    </h3>
                   </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Wiesbaden</span>
-                    <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
-                  </div>
-                  <h3 className="font-display text-xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                  <p className="text-xs sm:text-sm text-forest/80 leading-relaxed font-medium">
                     {isDe
-                      ? "Ein Grillabend bei Harput in Wiesbaden: Fisch & Spieß vom Holzkohlegrill"
-                      : "A Grill Evening at Harput in Wiesbaden: Fish & Skewer from the Charcoal Grill"}
-                  </h3>
-                  <p className="mt-2 text-xs sm:text-sm text-forest/70 line-clamp-3 leading-relaxed font-medium">
-                    {isDe
-                      ? "Ein Mitglied der Speisely Community teilt seinen Besuch bei Harput – mit ganzem gegrilltem Fisch und saftigem Hähnchenspieß mit Reis."
-                      : "A member of the Speisely Community shares their visit to Harput—featuring whole grilled fish and tender chicken skewers over rice."}
+                      ? "Bitte sende uns nur Fotos und Videos, die du selbst aufgenommen hast. Darauf dürfen entweder keine identifizierbaren Personen oder ausschließlich du selbst zu sehen sein. Vor einer Veröffentlichung klären wir mit dir schriftlich, wie Speisely die ausgewählten Inhalte verwenden darf."
+                      : "Please send us only photos and videos that you created yourself. They must show either no identifiable people or only you. Before publication, we will confirm with you in writing how Speisely may use the selected content."}
                   </p>
                 </div>
               </div>
-
-              <div className="p-6 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
+            </div>
           </div>
         </section>
 
-        {/* Section 5: Final CTA Section */}
-        <section className="relative overflow-hidden rounded-3xl bg-forest text-[oklch(0.97_0.02_92)] p-10 sm:p-16 mb-16 shadow-2xl">
+        {/* 8. Single Transparency Note */}
+        <section className="mb-20" aria-label="Transparency Policy">
+          <div className="surface-card p-6 sm:p-7 rounded-3xl border border-forest/10 flex items-start gap-4 bg-white/80">
+            <Shield className="h-5 w-5 text-[#7FA46B] shrink-0 mt-0.5" aria-hidden="true" />
+            <p className="text-xs sm:text-sm text-forest/75 leading-relaxed font-medium">
+              {isDe
+                ? "Community-Beiträge erzählen persönliche Erfahrungen von Menschen aus der Speisely Community. Sie werden privat eingereicht und vor einer Veröffentlichung redaktionell geprüft. Nicht jede Einsendung wird veröffentlicht. Es gibt keine öffentliche Kommentar-, Bewertungs- oder Rankingfunktion."
+                : "Community contributions share personal experiences from people in the Speisely Community. They are submitted privately and reviewed editorially before publication. Not every submission is published. There is no public commenting, rating or ranking feature."}
+            </p>
+          </div>
+        </section>
+
+        {/* 9. Final CTA */}
+        <section className="relative overflow-hidden rounded-3xl bg-forest text-[oklch(0.97_0.02_92)] p-8 sm:p-14 text-center shadow-2xl">
           <div className="absolute inset-0 z-0 opacity-15">
             <img
               src="/hero-cinematic.webp"
@@ -548,104 +499,45 @@ function CommunityPage() {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="relative z-10 mx-auto max-w-3xl text-center">
+          <div className="relative z-10 mx-auto max-w-2xl">
             <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#f2d896]">
               {isDe ? "MITMACHEN & TEILEN" : "PARTICIPATE & SHARE"}
             </span>
-            <h2 className="mt-3 font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
-              {isDe ? "Hast du etwas Leckeres entdeckt?" : "Discovered Something Delicious?"}
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              {isDe ? "Deine Geschichte könnte die nächste sein." : "Your story could be next."}
             </h2>
-            <p className="mt-4 text-base sm:text-lg text-white/80 max-w-xl mx-auto leading-relaxed">
+            <p className="mt-4 text-sm sm:text-base text-white/80 max-w-lg mx-auto leading-relaxed font-medium">
               {isDe
-                ? "Schick uns deinen Restaurantbesuch, deine Bilder oder deinen persönlichen Food-Tipp. Vielleicht erzählen wir deine Geschichte als Nächstes."
-                : "Send us your restaurant visit, your pictures, or your personal food tip. We might feature your story next."}
+                ? "Teile dein Restaurant-, Catering- oder Eventerlebnis mit deinen eigenen Fotos oder Videos."
+                : "Share your restaurant, catering or event experience with your own photos or videos."}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <a
                 href={mailtoHref}
-                className="inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-8 py-4 text-sm font-bold shadow-xl shadow-[#b28a3c]/30 hover:bg-[#9a7633] hover:scale-105 transition-all"
+                className="inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-7 py-3.5 text-xs sm:text-sm font-bold shadow-xl shadow-[#b28a3c]/30 hover:bg-[#9a7633] transition-all"
               >
                 <Mail className="h-4 w-4" aria-hidden="true" />
-                <span>{isDe ? "Per E-Mail kontaktieren" : "Contact via Email"}</span>
+                <span>{isDe ? "Erlebnis per E-Mail teilen" : "Share Your Experience"}</span>
               </a>
 
               <a
                 href={instagramHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Speisely Instagram Profil (Direct Message)"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/25 text-white px-7 py-4 text-sm font-semibold hover:bg-white/20 transition-all shadow-sm"
+                aria-label="Speisely Instagram Profil"
+                className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/25 text-white px-6 py-3.5 text-xs sm:text-sm font-semibold hover:bg-white/20 transition-all"
               >
                 <Instagram className="h-4 w-4 text-[#f2d896]" aria-hidden="true" />
-                <span>{isDe ? "Auf Instagram schreiben" : "Message on Instagram"}</span>
+                <span>{isDe ? "Auf Instagram schreiben" : "Message Us on Instagram"}</span>
               </a>
-
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/15 text-white/90 px-6 py-4 text-sm font-semibold hover:bg-white/15 transition-all"
-              >
-                <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                <span>{isDe ? "Andere Kontaktmöglichkeiten" : "Other Contact Options"}</span>
-              </Link>
             </div>
 
-            <p className="mt-5 text-xs text-white/60 font-medium">
+            <p className="mt-4 text-[11px] text-white/50 font-medium">
               {isDe
                 ? "Mit dem Senden erfolgt noch keine automatische Veröffentlichung."
                 : "Sending your content does not mean it will be published automatically."}
             </p>
-          </div>
-        </section>
-
-        {/* Section 6: Editorial Transparency and Safety Section */}
-        <section className="surface-card p-7 sm:p-9 rounded-3xl border border-forest/10 text-xs sm:text-sm text-forest/80 leading-relaxed space-y-4">
-          <div className="flex items-center gap-2 font-bold text-forest text-sm sm:text-base">
-            <Lock className="h-4 w-4 text-[#b28a3c]" aria-hidden="true" />
-            <span>
-              {isDe
-                ? "Transparenz, Moderation & Datenschutz"
-                : "Transparency, Moderation & Privacy"}
-            </span>
-          </div>
-          <p className="font-medium">
-            {isDe
-              ? "Community-Beiträge erzählen persönliche Erfahrungen von Menschen aus der Speisely Community. Einsendungen werden privat übermittelt und redaktionell geprüft. Sie sind nicht automatisch offizielle Speisely-Bewertungen. Nicht jede Einsendung wird veröffentlicht, und es gibt keine öffentliche Kommentar- oder Bewertungsfunktion. Vor einer Veröffentlichung klären wir die wichtigsten Angaben sowie die Nutzung der eingereichten Fotos und Videos."
-              : "Community contributions share personal experiences from people in the Speisely Community. Submissions are sent privately and reviewed editorially. They are not automatically official Speisely reviews. Not every submission is published, and there is no public commenting or rating feature. Before publication, we confirm the important details and permission to use the submitted photos and videos."}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-forest/70 pt-2 border-t border-forest/10">
-            <div className="flex items-center gap-2">
-              <span className="text-[#7FA46B] font-bold">✓</span>
-              <span>
-                {isDe
-                  ? "Keine automatische Veröffentlichung — jede Einsendung wird kuratiert."
-                  : "No automatic publishing — every submission is editorially curated."}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[#7FA46B] font-bold">✓</span>
-              <span>
-                {isDe
-                  ? "Keine Sterne-Bewertungen oder unmoderierten Kommentarspalten."
-                  : "No star rating systems or unmoderated public comment threads."}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[#7FA46B] font-bold">✓</span>
-              <span>
-                {isDe
-                  ? "Transparente Kennzeichnung bei gesponserten oder vergünstigten Besuchen."
-                  : "Transparent disclosure of sponsored, complimentary, or discounted experiences."}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[#7FA46B] font-bold">✓</span>
-              <span>
-                {isDe
-                  ? "Persönliche Kontaktdaten werden niemals ohne Erlaubnis veröffentlicht."
-                  : "Personal contact information is never published without explicit consent."}
-              </span>
-            </div>
           </div>
         </section>
       </main>
