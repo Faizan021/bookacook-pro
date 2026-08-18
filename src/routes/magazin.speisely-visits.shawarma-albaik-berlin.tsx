@@ -21,6 +21,22 @@ export const Route = createFileRoute("/magazin/speisely-visits/shawarma-albaik-b
           "Shawarma Albaik Berlin, Shawarma Sonnenallee, Shawarma Berlin Neukölln, Chicken Shawarma Berlin, nahöstliches Essen Neukölln, Restaurantbesuch Sonnenallee, Speisely Visits",
       },
       {
+        name: "geo.region",
+        content: "DE-BE",
+      },
+      {
+        name: "geo.placename",
+        content: "Berlin-Neukölln",
+      },
+      {
+        name: "geo.position",
+        content: "52.4820;13.4380",
+      },
+      {
+        name: "ICBM",
+        content: "52.4820, 13.4380",
+      },
+      {
         property: "og:title",
         content: "Shawarma Albaik Berlin: Unser Besuch auf der Sonnenallee | Speisely",
       },
@@ -74,7 +90,24 @@ export const Route = createFileRoute("/magazin/speisely-visits/shawarma-albaik-b
               publisher: {
                 "@id": "https://speisely.de/#organization",
               },
-              inLanguage: "de",
+              inLanguage: "de-DE",
+              contentLocation: {
+                "@type": "Restaurant",
+                name: "Shawarma Albaik",
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "Sonnenallee 24",
+                  addressLocality: "Berlin",
+                  postalCode: "12047",
+                  addressRegion: "Berlin",
+                  addressCountry: "DE",
+                },
+                geo: {
+                  "@type": "GeoCoordinates",
+                  latitude: 52.482,
+                  longitude: 13.438,
+                },
+              },
             },
             {
               "@type": "CollectionPage",

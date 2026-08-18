@@ -69,6 +69,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "weekly",
             priority: "0.8",
           },
+          {
+            path: "/magazin/community/harput-wiesbaden",
+            lastmod: "2026-08-18",
+            changefreq: "monthly",
+            priority: "0.8",
+          },
           ...restaurants.map((r) => ({
             path: `/restaurant/${r.id}`,
             lastmod: today,

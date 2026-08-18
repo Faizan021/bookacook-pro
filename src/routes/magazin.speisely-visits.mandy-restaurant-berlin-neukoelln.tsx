@@ -21,6 +21,22 @@ export const Route = createFileRoute("/magazin/speisely-visits/mandy-restaurant-
           "Mandy Restaurant Berlin, Mandy Happy Jemen Restaurant, Mandi Berlin, Jemenitisches Restaurant Berlin, Mandy Lamm Neukölln, Wildenbruchstraße Essen, Speisely Visits",
       },
       {
+        name: "geo.region",
+        content: "DE-BE",
+      },
+      {
+        name: "geo.placename",
+        content: "Berlin-Neukölln",
+      },
+      {
+        name: "geo.position",
+        content: "52.4842;13.4441",
+      },
+      {
+        name: "ICBM",
+        content: "52.4842, 13.4441",
+      },
+      {
         property: "og:title",
         content: "Mandy Restaurant Berlin: Jemenitisches Essen in Neukölln | Speisely",
       },
@@ -74,7 +90,24 @@ export const Route = createFileRoute("/magazin/speisely-visits/mandy-restaurant-
               publisher: {
                 "@id": "https://speisely.de/#organization",
               },
-              inLanguage: "de",
+              inLanguage: "de-DE",
+              contentLocation: {
+                "@type": "Restaurant",
+                name: "Mandy – Happy Jemen Restaurant",
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "Wildenbruchstraße 4",
+                  addressLocality: "Berlin",
+                  postalCode: "12045",
+                  addressRegion: "Berlin",
+                  addressCountry: "DE",
+                },
+                geo: {
+                  "@type": "GeoCoordinates",
+                  latitude: 52.4842,
+                  longitude: 13.4441,
+                },
+              },
             },
             {
               "@type": "CollectionPage",

@@ -18,6 +18,22 @@ export const Route = createFileRoute("/magazin/schnitzel-schmiede")({
           "Schnitzel Schmiede, EineStadt-Fest 2026, Mönchengladbach, Gourmet-Meile, Catering Mönchengladbach, Schnitzel Catering NRW, Speisely Magazin",
       },
       {
+        name: "geo.region",
+        content: "DE-NW",
+      },
+      {
+        name: "geo.placename",
+        content: "Mönchengladbach",
+      },
+      {
+        name: "geo.position",
+        content: "51.1963;6.4428",
+      },
+      {
+        name: "ICBM",
+        content: "51.1963, 6.4428",
+      },
+      {
         property: "og:title",
         content: "Schnitzel Schmiede beim EineStadt-Fest 2026 — Speisely Magazin",
       },

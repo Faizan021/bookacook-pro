@@ -56,6 +56,7 @@ import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$sl
 import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
 import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
+import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
 import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
@@ -170,9 +171,9 @@ const MagazinIndexRoute = MagazinIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunityIndexRoute = CommunityIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => CommunityRoute,
+  id: '/community/',
+  path: '/community/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CateringIndexRoute = CateringIndexRouteImport.update({
   id: '/',
@@ -312,6 +313,12 @@ const MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute =
     path: '/mandy-restaurant-berlin-neukoelln',
     getParentRoute: () => MagazinSpeiselyVisitsRoute,
   } as any)
+const MagazinCommunityHarputWiesbadenRoute =
+  MagazinCommunityHarputWiesbadenRouteImport.update({
+    id: '/magazin/community/harput-wiesbaden',
+    path: '/magazin/community/harput-wiesbaden',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CheckoutDepositBookingIdRoute =
   CheckoutDepositBookingIdRouteImport.update({
     id: '/checkout/deposit/$bookingId',
@@ -435,6 +442,7 @@ export interface FileRoutesByFullPath {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
@@ -493,6 +501,7 @@ export interface FileRoutesByTo {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
@@ -556,6 +565,7 @@ export interface FileRoutesById {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
@@ -619,6 +629,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/community/harput-wiesbaden'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
@@ -677,6 +688,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/community/harput-wiesbaden'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
@@ -739,6 +751,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/community/harput-wiesbaden'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
@@ -780,10 +793,12 @@ export interface RootRouteChildren {
   RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  CommunityIndexRoute: typeof CommunityIndexRoute
   MagazinIndexRoute: typeof MagazinIndexRoute
   ApiPrintStarRoute: typeof ApiPrintStarRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
+  MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
   RestaurantOrtCityRoute: typeof RestaurantOrtCityRoute
   ReviewIntakeTokenRoute: typeof ReviewIntakeTokenRoute
   ApiStripeConnectCallbackRoute: typeof ApiStripeConnectCallbackRoute
@@ -935,10 +950,10 @@ declare module '@tanstack/react-router' {
     }
     '/community/': {
       id: '/community/'
-      path: '/'
+      path: '/community'
       fullPath: '/community/'
       preLoaderRoute: typeof CommunityIndexRouteImport
-      parentRoute: typeof CommunityRoute
+      parentRoute: typeof rootRouteImport
     }
     '/catering/': {
       id: '/catering/'
@@ -1121,6 +1136,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
       preLoaderRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport
       parentRoute: typeof MagazinSpeiselyVisitsRoute
+    }
+    '/magazin/community/harput-wiesbaden': {
+      id: '/magazin/community/harput-wiesbaden'
+      path: '/magazin/community/harput-wiesbaden'
+      fullPath: '/magazin/community/harput-wiesbaden'
+      preLoaderRoute: typeof MagazinCommunityHarputWiesbadenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/checkout/deposit/$bookingId': {
       id: '/checkout/deposit/$bookingId'
@@ -1378,10 +1400,12 @@ const rootRouteChildren: RootRouteChildren = {
   RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
+  CommunityIndexRoute: CommunityIndexRoute,
   MagazinIndexRoute: MagazinIndexRoute,
   ApiPrintStarRoute: ApiPrintStarRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
   CheckoutDepositBookingIdRoute: CheckoutDepositBookingIdRoute,
+  MagazinCommunityHarputWiesbadenRoute: MagazinCommunityHarputWiesbadenRoute,
   RestaurantOrtCityRoute: RestaurantOrtCityRoute,
   ReviewIntakeTokenRoute: ReviewIntakeTokenRoute,
   ApiStripeConnectCallbackRoute: ApiStripeConnectCallbackRoute,

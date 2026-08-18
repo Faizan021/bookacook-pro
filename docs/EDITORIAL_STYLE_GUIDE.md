@@ -198,25 +198,41 @@ The two versions may use different sentence structures.
 
 Only produce both languages when required for that content.
 
-## 10. SEO and structured data
+## 10. SEO, GEO, and structured data
 
+Every published article and Community Story must satisfy the complete Local SEO & GEO standard:
+
+### A. Local GEO Meta Tags (Mandatory for verified locations)
+- `geo.region`: ISO-3166-2 state code (e.g. `DE-BE`, `DE-NW`, `DE-HE`, `DE-BY`, `DE-HH`)
+- `geo.placename`: City or district name (e.g. `Berlin-Neukölln`, `Wiesbaden`, `Mönchengladbach`)
+- `geo.position`: Latitude; Longitude coordinates (e.g. `50.0826;8.2367`)
+- `ICBM`: Latitude, Longitude pair (e.g. `50.0826, 8.2367`)
+
+### B. High-Intent Local Keywords
+Include verified local search keywords covering:
+- Restaurant / vendor brand name
+- Cuisine and specialty (e.g. *Türkisches Restaurant*, *Jemenitisches Essen*, *Catering*)
+- Specific dishes (e.g. *Gegrillter Fisch*, *Chicken Shawarma*, *Mandy Lamm*)
+- City, district, and street/landmark (e.g. *Wiesbaden*, *Sonnenallee*, *Schwalbacher Straße*)
+- Category labels: *Speisely Community*, *Speisely Visits*, *Speisely Magazin*
+
+### C. Crawl, Indexing & Visual Rich Snippets
+- `robots`: `index, follow, max-image-preview:large` (enables Google Discover & rich cards)
+- Canonical URL pointing to the definitive `https://speisely.de/...` path
+- Social meta: `og:title`, `og:description`, `og:image`, `og:locale` (`de_DE`), `twitter:card` (`summary_large_image`)
+- `sitemap.xml`: Every article must be registered with proper priority and lastmod date
+
+### D. Structured Data (JSON-LD)
 Prepare:
-
-- Editorial title
-- SEO title
-- Meta description
-- URL slug
-- Image alt text
-- Photo credit
-- Content type
-- Location and city when verified
+- Schema type: `Article` or `BlogPosting` (or `NewsArticle` where applicable)
+- `contentLocation`: Nested `Restaurant` or `Place` with `PostalAddress` and `GeoCoordinates`
+- `BreadcrumbList`: Complete hierarchical breadcrumbs
 
 Do not add:
-
-- Review schema
-- AggregateRating schema
-- Fake Person data
-- Unsupported claims
+- Fake `Review` schema
+- Fake `AggregateRating` schema
+- Fake `Person` author data
+- Unsupported commercial claims
 
 Use Community Story or Article positioning rather than Review positioning.
 
@@ -240,6 +256,11 @@ Before publication, confirm:
 - [ ] Photo and video rights are confirmed
 - [ ] No unauthorized identifiable person appears
 - [ ] No public complaint, rating or unsupported superlative appears
+- [ ] Local GEO tags configured (`geo.region`, `geo.placename`, `geo.position`, `ICBM`)
+- [ ] High-intent local keywords configured
+- [ ] `robots` set to `index, follow, max-image-preview:large`
+- [ ] Structured JSON-LD includes valid `contentLocation` and `GeoCoordinates`
+- [ ] URL registered in `src/routes/sitemap[.]xml.ts`
 - [ ] German and English sound natural where both are required
 - [ ] Photo credit is included
 - [ ] Metadata reflects the article accurately

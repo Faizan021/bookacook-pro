@@ -462,7 +462,7 @@ function CommunityPage() {
           </div>
         </section>
 
-        {/* Section 4: Community Stories (Approved Empty State) */}
+        {/* Section 4: Community Stories */}
         <section className="mb-20" aria-labelledby="community-stories">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 pb-6 border-b border-forest/10">
             <div>
@@ -484,28 +484,58 @@ function CommunityPage() {
             </p>
           </div>
 
-          {/* Approved Authentic Empty State */}
-          <div className="surface-card rounded-3xl border-2 border-dashed border-forest/20 p-10 sm:p-14 text-center max-w-3xl mx-auto shadow-xs">
-            <div className="h-14 w-14 rounded-full bg-[#DDEEE3] text-forest flex items-center justify-center mx-auto mb-4">
-              <Clock className="h-7 w-7 text-[#b28a3c]" aria-hidden="true" />
-            </div>
-            <h3 className="font-display text-2xl font-bold text-forest">
-              {isDe ? "Stories in Vorbereitung" : "Stories in Preparation"}
-            </h3>
-            <p className="mt-3 text-sm sm:text-base text-forest/75 max-w-lg mx-auto leading-relaxed font-medium">
-              {isDe
-                ? "Die ersten Community Stories sind unterwegs. Vielleicht beginnt die nächste mit deinem Erlebnis."
-                : "The first Community Stories are on their way. Maybe the next one will begin with your experience."}
-            </p>
-            <div className="mt-6">
-              <a
-                href={mailtoHref}
-                className="inline-flex items-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-6 py-3 text-xs sm:text-sm font-bold shadow-md hover:bg-forest/90 transition"
-              >
-                <Mail className="h-4 w-4 text-[#E6B84A]" aria-hidden="true" />
-                <span>{isDe ? "Erlebnis mit uns teilen" : "Share Your Experience"}</span>
-              </a>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Link
+              to="/magazin/community/harput-wiesbaden"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                  <img
+                    src="/magazin/harput-wiesbaden/harput-fisch.jpg"
+                    alt={
+                      isDe
+                        ? "Grillabend bei Harput in Wiesbaden"
+                        : "Grill Evening at Harput in Wiesbaden"
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-3 py-1 text-xs font-bold shadow-sm">
+                      <Sparkles className="h-3 w-3 text-[#E6B84A]" aria-hidden="true" />
+                      {isDe ? "Aus der Speisely Community" : "From the Community"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
+                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
+                    <span>Wiesbaden</span>
+                    <span>•</span>
+                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
+                  </div>
+                  <h3 className="font-display text-xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                    {isDe
+                      ? "Ein Grillabend bei Harput in Wiesbaden: Fisch & Spieß vom Holzkohlegrill"
+                      : "A Grill Evening at Harput in Wiesbaden: Fish & Skewer from the Charcoal Grill"}
+                  </h3>
+                  <p className="mt-2 text-xs sm:text-sm text-forest/70 line-clamp-3 leading-relaxed font-medium">
+                    {isDe
+                      ? "Ein Mitglied der Speisely Community teilt seinen Besuch bei Harput – mit ganzem gegrilltem Fisch und saftigem Hähnchenspieß mit Reis."
+                      : "A member of the Speisely Community shares their visit to Harput—featuring whole grilled fish and tender chicken skewers over rice."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-6 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+                <span>{isDe ? "Story lesen" : "Read Story"}</span>
+                <ArrowRight
+                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  aria-hidden="true"
+                />
+              </div>
+            </Link>
           </div>
         </section>
 
