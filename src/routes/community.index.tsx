@@ -263,18 +263,18 @@ function CommunityPage() {
           </ol>
         </nav>
 
-        {/* 3. Featured Community Story Section (Directly Below Hero) */}
+        {/* 3. Featured Community Story Section (Latest Story) */}
         <section className="mb-20" aria-labelledby="featured-community-story">
           <div className="surface-card rounded-3xl border border-forest/10 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
               {/* Image Side (55% on desktop) */}
-              <div className="lg:col-span-7 relative min-h-[280px] sm:min-h-[360px] lg:min-h-[420px] bg-black/5 overflow-hidden">
+              <div className="lg:col-span-7 relative min-h-[280px] sm:min-h-[360px] lg:min-h-[440px] bg-black/5 overflow-hidden">
                 <img
-                  src="/magazin/harput-wiesbaden/harput-fisch.jpg"
+                  src="/magazin/ariana-frankfurt/qabili-palau.jpg"
                   alt={
                     isDe
-                      ? "Ein Grillabend bei Harput in Wiesbaden"
-                      : "An Evening at Harput in Wiesbaden"
+                      ? "Qabili Palau bei Ariana in Frankfurt am Main"
+                      : "Qabili Palau at Ariana in Frankfurt am Main"
                   }
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
@@ -298,9 +298,9 @@ function CommunityPage() {
 
                   <div className="flex items-center gap-2 text-xs font-semibold text-forest/60 mb-3">
                     <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Wiesbaden</span>
+                    <span>Frankfurt am Main</span>
                     <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
+                    <span>{isDe ? "Selbst bezahlt (11,90 €)" : "Self-paid (€11.90)"}</span>
                   </div>
 
                   <h2
@@ -308,20 +308,20 @@ function CommunityPage() {
                     className="font-display text-2xl sm:text-3xl font-bold text-forest leading-tight mb-4"
                   >
                     {isDe
-                      ? "Ein Grillabend bei Harput in Wiesbaden"
-                      : "An Evening at Harput in Wiesbaden"}
+                      ? "Das Geheimnis unter dem Reisberg: Qabili Palau bei Ariana in Frankfurt"
+                      : "The Secret Beneath the Mountain of Rice: Qabili Palau at Ariana in Frankfurt"}
                   </h2>
 
                   <p className="text-sm sm:text-base text-forest/75 leading-relaxed font-medium mb-6">
                     {isDe
-                      ? "Zwei Teller, ein gemeinsamer Abend und ein Food-Moment aus Wiesbaden: Ein Mitglied der Speisely Community teilt seinen Besuch bei Harput."
-                      : "Two plates, one shared evening and a food moment from Wiesbaden: a member of the Speisely Community shares their visit to Harput."}
+                      ? "Beim Qabili Palau liegt das Entscheidende nicht oben: Ein Mitglied der Speisely Community teilt seinen Besuch bei Ariana in der Frankfurter Münchener Straße."
+                      : "With Qabili Palau, the centerpiece isn't on top: a member of the Speisely Community shares their visit to Ariana on Frankfurt's Münchener Straße."}
                   </p>
                 </div>
 
                 <div>
                   <Link
-                    to="/magazin/community/harput-wiesbaden"
+                    to="/magazin/community/ariana-restaurant-frankfurt"
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-7 py-3.5 text-xs sm:text-sm font-bold shadow-md hover:bg-forest/90 hover:gap-3 transition-all"
                   >
                     <span>{isDe ? "Story lesen" : "Read the Story"}</span>
@@ -330,6 +330,61 @@ function CommunityPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Secondary Community Stories Grid */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Link
+              to="/magazin/community/harput-wiesbaden"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                  <img
+                    src="/magazin/harput-wiesbaden/harput-fisch.jpg"
+                    alt={
+                      isDe
+                        ? "Grillabend bei Harput in Wiesbaden"
+                        : "Grill Evening at Harput in Wiesbaden"
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-[oklch(0.97_0.02_92)] px-2.5 py-1 text-[11px] font-bold shadow-xs">
+                      <Sparkles className="h-3 w-3 text-[#f2d896]" aria-hidden="true" />
+                      {isDe ? "Wiesbaden" : "Wiesbaden"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-1.5">
+                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
+                    <span>Wiesbaden</span>
+                    <span>•</span>
+                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                    {isDe
+                      ? "Ein Grillabend bei Harput in Wiesbaden"
+                      : "An Evening at Harput in Wiesbaden"}
+                  </h3>
+                  <p className="mt-2 text-xs text-forest/70 line-clamp-2 leading-relaxed font-medium">
+                    {isDe
+                      ? "Gegrillter Fisch und Hähnchenspieß mit Reis: Ein Food-Moment aus Wiesbaden."
+                      : "Whole grilled fish and chicken skewer over rice: a food moment from Wiesbaden."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+                <span>{isDe ? "Story lesen" : "Read Story"}</span>
+                <ArrowRight
+                  className="h-3.5 w-3.5 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  aria-hidden="true"
+                />
+              </div>
+            </Link>
           </div>
         </section>
 

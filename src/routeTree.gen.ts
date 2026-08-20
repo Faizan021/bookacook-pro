@@ -57,6 +57,7 @@ import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
 import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
+import { Route as MagazinCommunityArianaRestaurantFrankfurtRouteImport } from './routes/magazin.community.ariana-restaurant-frankfurt'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
 import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
@@ -319,6 +320,12 @@ const MagazinCommunityHarputWiesbadenRoute =
     path: '/magazin/community/harput-wiesbaden',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityArianaRestaurantFrankfurtRoute =
+  MagazinCommunityArianaRestaurantFrankfurtRouteImport.update({
+    id: '/magazin/community/ariana-restaurant-frankfurt',
+    path: '/magazin/community/ariana-restaurant-frankfurt',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CheckoutDepositBookingIdRoute =
   CheckoutDepositBookingIdRouteImport.update({
     id: '/checkout/deposit/$bookingId',
@@ -442,6 +449,7 @@ export interface FileRoutesByFullPath {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
@@ -501,6 +509,7 @@ export interface FileRoutesByTo {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
@@ -565,6 +574,7 @@ export interface FileRoutesById {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
+  '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
@@ -629,6 +639,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/community/ariana-restaurant-frankfurt'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
@@ -688,6 +699,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/community/ariana-restaurant-frankfurt'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
@@ -751,6 +763,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
+    | '/magazin/community/ariana-restaurant-frankfurt'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
@@ -798,6 +811,7 @@ export interface RootRouteChildren {
   ApiPrintStarRoute: typeof ApiPrintStarRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
+  MagazinCommunityArianaRestaurantFrankfurtRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
   RestaurantOrtCityRoute: typeof RestaurantOrtCityRoute
   ReviewIntakeTokenRoute: typeof ReviewIntakeTokenRoute
@@ -1144,6 +1158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityHarputWiesbadenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/ariana-restaurant-frankfurt': {
+      id: '/magazin/community/ariana-restaurant-frankfurt'
+      path: '/magazin/community/ariana-restaurant-frankfurt'
+      fullPath: '/magazin/community/ariana-restaurant-frankfurt'
+      preLoaderRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout/deposit/$bookingId': {
       id: '/checkout/deposit/$bookingId'
       path: '/checkout/deposit/$bookingId'
@@ -1405,6 +1426,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPrintStarRoute: ApiPrintStarRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
   CheckoutDepositBookingIdRoute: CheckoutDepositBookingIdRoute,
+  MagazinCommunityArianaRestaurantFrankfurtRoute:
+    MagazinCommunityArianaRestaurantFrankfurtRoute,
   MagazinCommunityHarputWiesbadenRoute: MagazinCommunityHarputWiesbadenRoute,
   RestaurantOrtCityRoute: RestaurantOrtCityRoute,
   ReviewIntakeTokenRoute: ReviewIntakeTokenRoute,
