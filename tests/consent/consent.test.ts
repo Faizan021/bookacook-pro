@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, beforeEach } from "vitest";
 import {
   getConsent,
@@ -8,9 +9,28 @@ import {
   CONSENT_STORAGE_KEY,
 } from "@/lib/consent/consent";
 
+// Polyfill localStorage and window for Node.js test environment
+const mockStorage = new Map<string, string>();
+const localStorageMock = {
+  getItem: (key: string) => mockStorage.get(key) ?? null,
+  setItem: (key: string, val: string) => mockStorage.set(key, String(val)),
+  removeItem: (key: string) => mockStorage.delete(key),
+  clear: () => mockStorage.clear(),
+  get length() {
+    return mockStorage.size;
+  },
+  key: (i: number) => Array.from(mockStorage.keys())[i] || null,
+};
+
+(globalThis as any).localStorage = localStorageMock;
+(globalThis as any).window = {
+  location: { hostname: "speisely.de" },
+  dispatchEvent: () => true,
+};
+
 describe("Speisely Cookie Consent Engine", () => {
   beforeEach(() => {
-    localStorage.clear();
+    localStorageMock.clear();
   });
 
   it("returns null when no consent has been given", () => {

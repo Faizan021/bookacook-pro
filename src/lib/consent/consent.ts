@@ -94,7 +94,7 @@ export function setConsent(consent: "accepted" | "declined"): SpeiselyConsentRec
  * Clears cookies and local storage items left by third-party analytics (Ahrefs, PostHog, Vercel).
  */
 export function clearAnalyticsStorage(): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || typeof document === "undefined") return;
 
   // 1. Remove Ahrefs DOM elements
   const ahrefsScript = document.getElementById("ahrefs-analytics-script");

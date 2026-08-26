@@ -270,15 +270,28 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
   return result;
 });
 
-async function calculatePromoDiscount(
+// Commercial promo checkout is strictly disabled during pre-launch phase
+// to prevent financial discrepancy until PostgreSQL atomic RPC and automated
+// Stripe session expiration reconciliation workers are deployed in the commercial milestone.
+export const PROMO_CODES_ENABLED = false;
+
+export async function calculatePromoDiscount(
   supabaseAdmin: any,
   ownerId: string,
-  promoCode: string | undefined,
+  promoCode: string | null | undefined,
   subtotalCents: number,
   validatedItems: Array<{ name: string; price_cents: number; quantity: number }>,
-  vertical?: "restaurants" | "caterers" | "planners",
+  vertical?: "restaurants" | "caterers" | "planners" | string,
 ) {
   if (!promoCode) return { discountCents: 0, freeDelivery: false };
+
+  if (!PROMO_CODES_ENABLED) {
+    return {
+      discountCents: 0,
+      freeDelivery: false,
+      error: "Gutscheincodes sind während der Entwicklungsphase vorübergehend deaktiviert.",
+    };
+  }
 
   let query = supabaseAdmin
     .from("promo_codes")
@@ -704,32 +717,19 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
       throw new Error("Failed to create order: no data returned from database");
     }
 
-    // 5.5 Atomic conditional update on promo_codes table
+    // 5.5 Commercial promo redemption handling
     if (promoResult.promoData?.id) {
-      try {
-        let query = supabaseAdmin
-          .from("promo_codes")
-          .update({
-            // @ts-ignore
-            times_used: (promoResult.promoData.times_used || 0) + 1,
-          })
-          .eq("id", promoResult.promoData.id)
-          .eq("is_active", true);
-
-        if (promoResult.promoData.max_uses) {
-          query = query.lt("times_used", promoResult.promoData.max_uses);
-        }
-
-        const { data: updatedPromo, error: promoIncErr } = await query.select("id, times_used");
-
-        if (promoIncErr || !updatedPromo || updatedPromo.length === 0) {
-          if (promoResult.promoData.max_uses) {
-            throw new Error("Promo code usage limit reached or concurrently redeemed.");
-          }
-        }
-      } catch (promoErr: any) {
-        console.error("[PromoCodes] Atomic redemption error:", promoErr);
-        throw promoErr;
+      if (!PROMO_CODES_ENABLED) {
+        throw new Error("Promo codes are currently disabled during the pre-commercial phase.");
+      }
+      // When enabled in production milestone, atomic redemption MUST execute via PostgreSQL RPC
+      // (e.g. UPDATE promo_codes SET times_used = times_used + 1 WHERE id = $1 AND times_used < max_uses)
+      const { error: rpcErr } = await (supabaseAdmin as any).rpc("redeem_promo_code_atomic", {
+        p_promo_id: promoResult.promoData.id,
+        p_order_id: order.id,
+      });
+      if (rpcErr) {
+        throw new Error("Promo code redemption failed: " + rpcErr.message);
       }
     }
 
