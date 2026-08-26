@@ -28,11 +28,19 @@ function Impressum() {
               "This page contains preliminary provider information for the Speisely project. Speisely is currently in an early project phase. Full legal information will be added once the organizational and legal structure is finalized.",
             )}
           </p>
-          <div className="rounded-xl bg-cream p-5 text-sm ring-1 ring-[#eadfce]">
-            <p className="font-semibold text-forest">
+          <div className="rounded-2xl bg-cream p-5 text-sm border border-forest/15">
+            <p className="font-bold text-forest flex items-center gap-2 mb-1">
+              <span>
+                {tt(
+                  "Hinweis zum Projekt- und Entwicklungsstand:",
+                  "Project & Development Status Notice:",
+                )}
+              </span>
+            </p>
+            <p className="text-forest/80 text-xs leading-relaxed">
               {tt(
-                "Hinweis: Diese rechtlichen Hinweise sind vorläufig und stellen keine Rechtsberatung dar. Für geschäftliche, rechtliche oder datenschutzrechtliche Anfragen kontaktieren Sie uns bitte unter info@speisely.de.",
-                "Note: This legal notice is preliminary and does not constitute legal advice. For business, legal, or data protection inquiries, please contact us at info@speisely.de.",
+                "Die Plattform Speisely befindet sich derzeit in einer aktiven technischen Aufbau- und Vorbereitungsphase. Die vollständigen Angaben zur juristischen Trägergesellschaft, den vertretungsberechtigten Organen sowie einer ladungsfähigen Postanschrift und Handelsregister-Eintragung werden vor Aufnahme des regulären kommerziellen Zahlungs- und Bestellbetriebs ergänzt.",
+                "The Speisely platform is currently in a pre-launch development phase. Complete corporate entity details, authorized representatives, physical service address, and commercial registry filings will be published prior to full commercial payment and transaction rollout.",
               )}
             </p>
           </div>
@@ -156,8 +164,8 @@ function Impressum() {
             {tt("Zur Startseite", "Go to homepage")} <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
-            to="/impressum"
-            className="inline-flex items-center gap-2 rounded-full bg-cream text-forest px-6 py-3 text-sm font-medium hover:bg-[#eadfce] transition-colors"
+            to="/datenschutz"
+            className="inline-flex items-center gap-2 rounded-full bg-cream text-forest px-6 py-3 text-sm font-medium hover:bg-[#eadfce] transition-colors border border-forest/10"
           >
             {tt("Datenschutzerklärung ansehen", "View privacy policy")}
           </Link>

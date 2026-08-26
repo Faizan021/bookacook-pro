@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { useI18n } from "@/i18n/I18nProvider";
+import { getConsent, setConsent } from "@/lib/consent/consent";
 import posthog from "posthog-js";
 
 export function CookieBanner() {
@@ -8,32 +9,34 @@ export function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Check if user already gave consent
-    const consent = localStorage.getItem("speisely-cookie-consent");
+    // Check if user already gave consent using unified parser
+    const consent = getConsent();
     if (!consent) {
       setVisible(true);
     }
   }, []);
 
   const handleAcceptAll = () => {
-    localStorage.setItem("speisely-cookie-consent", "accepted");
-    if (typeof window !== "undefined") {
+    setConsent("accepted");
+    try {
       posthog.opt_in_capturing();
-      posthog.startSessionRecording();
-      // Track the landing pageview that was blocked prior to opt-in
       posthog.capture("$pageview", {
         $current_url: window.location.href,
         $pathname: window.location.pathname,
       });
+    } catch (e) {
+      void e;
     }
     setVisible(false);
   };
 
   const handleCustomize = () => {
-    localStorage.setItem("speisely-cookie-consent", "declined");
-    if (typeof window !== "undefined") {
+    setConsent("declined");
+    try {
       posthog.opt_out_capturing();
       posthog.stopSessionRecording();
+    } catch (e) {
+      void e;
     }
     setVisible(false);
   };
@@ -46,7 +49,7 @@ export function CookieBanner() {
         <div className="text-[13px] md:text-sm text-forest/80 text-center md:text-left leading-normal">
           <span>{t("cookie.text")}</span>{" "}
           <a
-            href="/privacy-policy"
+            href="/datenschutz"
             className="text-[#22C55E] font-medium underline hover:text-[#22C55E]/90 transition"
           >
             {t("cookie.privacy")}

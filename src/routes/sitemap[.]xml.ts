@@ -38,6 +38,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/blog", lastmod: today, changefreq: "weekly", priority: "0.8" },
           { path: "/about", lastmod: "2026-06-01", changefreq: "monthly", priority: "0.5" },
           { path: "/impressum", lastmod: "2026-06-01", changefreq: "yearly", priority: "0.3" },
+          { path: "/datenschutz", lastmod: today, changefreq: "monthly", priority: "0.5" },
           { path: "/magazin", lastmod: "2026-08-16", changefreq: "monthly", priority: "0.8" },
           {
             path: "/magazin/schnitzel-schmiede",

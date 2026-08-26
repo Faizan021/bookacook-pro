@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -181,11 +181,6 @@ function RootShell({ children }: { children: ReactNode }) {
           content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"
         ></meta>
         <link rel="canonical" href={canonicalUrl} />
-        <script
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key="m0ja41AgfTD2NuyNepW+LA"
-          async
-        ></script>
       </head>
       <body>
         {children}
@@ -195,19 +190,63 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+import { hasAnalyticsConsent, clearAnalyticsStorage } from "@/lib/consent/consent";
+
+function sanitizeSentryUrl(rawUrl: string): string {
+  if (!rawUrl) return rawUrl;
+  try {
+    const isFullUrl = rawUrl.startsWith("http://") || rawUrl.startsWith("https://");
+    const parsed = isFullUrl ? new URL(rawUrl) : new URL(rawUrl, "https://speisely.de");
+
+    // 1. Sanitize sensitive query parameters
+    const sensitiveKeys = [
+      "token",
+      "code",
+      "session_id",
+      "email",
+      "auth",
+      "key",
+      "password",
+      "access_token",
+      "refresh_token",
+      "state",
+    ];
+    for (const key of sensitiveKeys) {
+      parsed.searchParams.delete(key);
+    }
+
+    // 2. Sanitize path segments containing UUIDs or sensitive intake/deposit tokens
+    let sanitizedPath = parsed.pathname;
+    sanitizedPath = sanitizedPath.replace(
+      /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi,
+      "[UUID_REDACTED]",
+    );
+    sanitizedPath = sanitizedPath.replace(
+      /\/review\/intake\/[^/]+/gi,
+      "/review/intake/[TOKEN_REDACTED]",
+    );
+    sanitizedPath = sanitizedPath.replace(
+      /\/checkout\/deposit\/[^/]+/gi,
+      "/checkout/deposit/[BOOKING_REDACTED]",
+    );
+    sanitizedPath = sanitizedPath.replace(/\/auth\/[^/]+\/[a-zA-Z0-9._-]+/gi, "/auth/[REDACTED]");
+
+    parsed.pathname = sanitizedPath;
+    return isFullUrl ? parsed.toString() : parsed.pathname + parsed.search;
+  } catch {
+    return "[URL_REDACTED]";
+  }
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const pathname = router.state.location.pathname;
+  const [hasConsent, setHasConsent] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Safety shim: Instagram's in-app browser injects a JS bridge that calls
-      // window.webkit.messageHandlers.*  If that object is absent (we are a web
-      // app, not a native iOS host), it throws a TypeError that pollutes Sentry
-      // and crashes nothing meaningful. Provide a no-op Proxy so the call
-      // silently succeeds instead of throwing.
-      // See: Sentry issue 57f05768 — Instagram 440.0.0 / iOS / sendDataToNative
+      // Safety shim for Instagram/in-app webview JS bridges
       type WebkitWindow = Window & { webkit?: { messageHandlers: object } };
       if (!(window as WebkitWindow).webkit) {
         const noOp = { postMessage: () => {} };
@@ -220,49 +259,110 @@ function RootComponent() {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
       }
 
-      Promise.all([import("@sentry/react"), import("../utils/posthog"), import("posthog-js")])
-        .then(([SentryModule, { initPostHog }, posthogModule]) => {
+      // 1. Initialize strictly necessary, anonymized error monitoring (Sentry)
+      import("@sentry/react")
+        .then((SentryModule) => {
           SentryModule.init({
             dsn: "https://9a2bcf7470d25fb0f32cdae74a09c335@o4511677378002944.ingest.de.sentry.io/4511677391306832",
-
-            // --- Third-party browser injection noise ---
-            // These errors originate from scripts injected by Instagram, Facebook
-            // WebView, Chrome extensions, or iOS WKWebView bridges — not from
-            // Speisely code. They cannot be fixed from our codebase.
+            sendDefaultPii: false,
+            replaysSessionSampleRate: 0,
+            replaysOnErrorSampleRate: 0,
             ignoreErrors: [
-              // Instagram / WKWebView native bridge (Sentry issue 57f05768)
               /window\.webkit\.messageHandlers/,
               "undefined is not an object (evaluating 'window.webkit.messageHandlers')",
-              // Generic ResizeObserver timing noise (browser bug, not actionable)
               "ResizeObserver loop limit exceeded",
               "ResizeObserver loop completed with undelivered notifications",
-              // Firefox cross-origin extension noise
               "NS_ERROR_FAILURE",
-              // Safari private-mode storage access noise
               "The operation is insecure",
             ],
-
-            // Drop events whose stack traces originate entirely outside speisely.de
-            // (i.e. injected by extensions, in-app browsers, or third-party SDKs).
+            beforeBreadcrumb(breadcrumb) {
+              if (breadcrumb.data?.url) {
+                breadcrumb.data.url = sanitizeSentryUrl(breadcrumb.data.url);
+              }
+              if (breadcrumb.message) {
+                breadcrumb.message = sanitizeSentryUrl(breadcrumb.message);
+              }
+              return breadcrumb;
+            },
             beforeSend(event) {
+              // Strip all user and IP identifiers
+              event.user = undefined;
+
+              // Sanitize sensitive request URLs (paths & parameters)
+              if (event.request?.url) {
+                event.request.url = sanitizeSentryUrl(event.request.url);
+              }
+
+              // Sanitize sensitive headers
+              if (event.request?.headers) {
+                delete event.request.headers["authorization"];
+                delete event.request.headers["cookie"];
+              }
+
+              // Drop third-party extension errors
               const frames = event.exception?.values?.[0]?.stacktrace?.frames ?? [];
               const hasOwnFrame = frames.some(
                 (f) => f.filename && f.filename.includes("speisely.de"),
               );
-              // If every frame is from an external origin, discard the event.
               if (frames.length > 0 && !hasOwnFrame) {
                 return null;
               }
               return event;
             },
           });
-          initPostHog();
-          posthogModule.default.capture("$pageview", {
-            $current_url: window.location.href,
-            $pathname: pathname,
-          });
         })
         .catch(() => {});
+
+      // 2. Gate optional analytics (PostHog, Ahrefs & Vercel Analytics) behind explicit cookie consent
+      const isAllowed = hasAnalyticsConsent();
+      if (isAllowed) {
+        setHasConsent(true);
+      }
+
+      const loadOptionalAnalytics = () => {
+        setHasConsent(true);
+
+        // Idempotently load Ahrefs Analytics dynamically upon consent
+        if (!document.getElementById("ahrefs-analytics-script")) {
+          const ahrefsScript = document.createElement("script");
+          ahrefsScript.id = "ahrefs-analytics-script";
+          ahrefsScript.src = "https://analytics.ahrefs.com/analytics.js";
+          ahrefsScript.setAttribute("data-key", "m0ja41AgfTD2NuyNepW+LA");
+          ahrefsScript.async = true;
+          document.head.appendChild(ahrefsScript);
+        }
+
+        // Initialize PostHog upon consent
+        Promise.all([import("../utils/posthog"), import("posthog-js")])
+          .then(([{ initPostHog }, posthogModule]) => {
+            initPostHog();
+            posthogModule.default.capture("$pageview", {
+              $current_url: window.location.href,
+              $pathname: pathname,
+            });
+          })
+          .catch(() => {});
+      };
+
+      if (isAllowed) {
+        loadOptionalAnalytics();
+      }
+
+      // Listen for consent granted/declined event from CookieBanner / /datenschutz
+      const onConsentUpdated = (e: Event) => {
+        const customEvent = e as CustomEvent<{ consent: string }>;
+        if (customEvent.detail?.consent === "accepted") {
+          loadOptionalAnalytics();
+        } else if (customEvent.detail?.consent === "declined") {
+          setHasConsent(false);
+          clearAnalyticsStorage();
+        }
+      };
+
+      window.addEventListener("speisely-consent-updated", onConsentUpdated);
+      return () => {
+        window.removeEventListener("speisely-consent-updated", onConsentUpdated);
+      };
     }
   }, [pathname]);
 
@@ -272,7 +372,7 @@ function RootComponent() {
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <CookieBanner />
-        <Analytics />
+        {hasConsent && <Analytics />}
       </I18nProvider>
     </QueryClientProvider>
   );

@@ -310,6 +310,14 @@ async function calculatePromoDiscount(
     };
   }
 
+  if ((promo as any).max_uses && (promo as any).times_used >= (promo as any).max_uses) {
+    return {
+      discountCents: 0,
+      freeDelivery: false,
+      error: "This promo code has reached its maximum usage limit",
+    };
+  }
+
   let discountCents = 0;
   let freeDelivery = false;
 
@@ -694,6 +702,35 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
     }
     if (!order) {
       throw new Error("Failed to create order: no data returned from database");
+    }
+
+    // 5.5 Atomic conditional update on promo_codes table
+    if (promoResult.promoData?.id) {
+      try {
+        let query = supabaseAdmin
+          .from("promo_codes")
+          .update({
+            // @ts-ignore
+            times_used: (promoResult.promoData.times_used || 0) + 1,
+          })
+          .eq("id", promoResult.promoData.id)
+          .eq("is_active", true);
+
+        if (promoResult.promoData.max_uses) {
+          query = query.lt("times_used", promoResult.promoData.max_uses);
+        }
+
+        const { data: updatedPromo, error: promoIncErr } = await query.select("id, times_used");
+
+        if (promoIncErr || !updatedPromo || updatedPromo.length === 0) {
+          if (promoResult.promoData.max_uses) {
+            throw new Error("Promo code usage limit reached or concurrently redeemed.");
+          }
+        }
+      } catch (promoErr: any) {
+        console.error("[PromoCodes] Atomic redemption error:", promoErr);
+        throw promoErr;
+      }
     }
 
     // 6. Handle Payment

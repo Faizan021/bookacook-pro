@@ -103,7 +103,7 @@ export function SiteFooter() {
           <ul className="space-y-2.5 text-sm">
             <FooterLink to="/contact" label={t("nav.contact")} />
             <FooterLink to="/impressum" label={t("footer.imprint")} />
-            <FooterLink to="/impressum" label={t("footer.privacy")} />
+            <FooterLink to="/datenschutz" label={t("footer.privacy")} />
             <FooterLink to="/impressum" label={t("footer.terms")} />
           </ul>
 
