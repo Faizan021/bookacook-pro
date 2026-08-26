@@ -28,7 +28,7 @@ function Impressum() {
               "This page contains preliminary provider information for the Speisely project. Speisely is currently in an early project phase. Full legal information will be added once the organizational and legal structure is finalized.",
             )}
           </p>
-          <div className="rounded-2xl bg-cream p-5 text-sm border border-forest/15">
+          <div className="rounded-2xl bg-cream p-5 text-sm border border-forest/15 space-y-2">
             <p className="font-bold text-forest flex items-center gap-2 mb-1">
               <span>
                 {tt(
@@ -36,6 +36,12 @@ function Impressum() {
                   "Project & Development Status Notice:",
                 )}
               </span>
+            </p>
+            <p className="text-forest/90 text-xs font-semibold leading-relaxed">
+              {tt(
+                "Speisely befindet sich derzeit in der Entwicklungs- und Testphase. Über diese Website werden aktuell keine kostenpflichtigen Bestellungen, Buchungen oder Verträge abgeschlossen.",
+                "Speisely is currently in a development and testing phase. No paid orders, bookings or commercial contracts are concluded via this website.",
+              )}
             </p>
             <p className="text-forest/80 text-xs leading-relaxed">
               {tt(

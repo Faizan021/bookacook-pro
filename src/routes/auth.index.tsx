@@ -22,7 +22,9 @@ type Role = "customer" | "restaurant_owner" | "caterer" | "planner" | "partner";
 
 export const Route = createFileRoute("/auth/")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>): {
+  validateSearch: (
+    s: Record<string, unknown>,
+  ): {
     signup?: string;
     message?: string;
     logout?: string;
@@ -586,6 +588,13 @@ function AuthPage() {
 
           {mode === "signup" && isPartner && (
             <div className="rounded-xl border border-forest/20 bg-forest/5 p-4 space-y-4">
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 font-medium">
+                📋{" "}
+                {tt(
+                  "Unverbindliche Interessensbekundung – es entsteht kein kostenpflichtiger Vertrag.",
+                  "Non-binding expression of interest — no paid contract is created.",
+                )}
+              </div>
               <p className="text-sm font-medium text-forest">
                 {tt("Geschäftsdetails", "Business details")}
               </p>

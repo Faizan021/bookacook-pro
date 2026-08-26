@@ -54,6 +54,7 @@ import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { getPublicRestaurantReviews } from "@/lib/reviews/public.functions";
 import { useQuery } from "@tanstack/react-query";
 import { getActiveSurplusOffer } from "@/lib/restaurant/surplus.functions";
+import { COMMERCIAL_TRANSACTIONS_ENABLED } from "@/lib/config/flags";
 
 const searchSchema = z.object({
   order_success: z.union([z.string(), z.boolean()]).optional(),
@@ -1993,19 +1994,32 @@ function RestaurantPage() {
           )}
 
           {!isMobile && (
-            <button
-              onClick={handleCheckout}
-              disabled={isGated || checkoutLoading}
-              className={`mt-5 w-full rounded-full py-3 font-semibold shadow-md transition ${
-                isGated || checkoutLoading
-                  ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
-                  : "bg-forest hover:bg-forest/90 text-white cursor-pointer"
-              }`}
-            >
-              {checkoutLoading
-                ? t("Wird geladen...", "Loading...")
-                : `${t("Zur Kasse", "Go to checkout")} • €${finalTotal.toFixed(2)}`}
-            </button>
+            <div>
+              {!COMMERCIAL_TRANSACTIONS_ENABLED && (
+                <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 font-medium text-center">
+                  ℹ️{" "}
+                  {t(
+                    "Der Bestellservice befindet sich derzeit in Vorbereitung.",
+                    "Ordering is currently being prepared.",
+                  )}
+                </div>
+              )}
+              <button
+                onClick={handleCheckout}
+                disabled={!COMMERCIAL_TRANSACTIONS_ENABLED || isGated || checkoutLoading}
+                className={`mt-3 w-full rounded-full py-3 font-semibold shadow-md transition ${
+                  !COMMERCIAL_TRANSACTIONS_ENABLED || isGated || checkoutLoading
+                    ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
+                    : "bg-forest hover:bg-forest/90 text-white cursor-pointer"
+                }`}
+              >
+                {!COMMERCIAL_TRANSACTIONS_ENABLED
+                  ? t("Bestellservice in Vorbereitung", "Ordering in preparation")
+                  : checkoutLoading
+                    ? t("Wird geladen...", "Loading...")
+                    : `${t("Zur Kasse", "Go to checkout")} • €${finalTotal.toFixed(2)}`}
+              </button>
+            </div>
           )}
         </>
       )}
@@ -2978,18 +2992,29 @@ function RestaurantPage() {
                 {renderSidebar(true)}
               </div>
               <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#eadfce] p-4 flex flex-col gap-2 pb-safe z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+                {!COMMERCIAL_TRANSACTIONS_ENABLED && (
+                  <div className="p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 font-medium text-center">
+                    ℹ️{" "}
+                    {t(
+                      "Der Bestellservice befindet sich derzeit in Vorbereitung.",
+                      "Ordering is currently being prepared.",
+                    )}
+                  </div>
+                )}
                 <button
                   onClick={handleCheckout}
-                  disabled={isGated || checkoutLoading}
+                  disabled={!COMMERCIAL_TRANSACTIONS_ENABLED || isGated || checkoutLoading}
                   className={`w-full rounded-xl py-3.5 font-bold shadow-md transition-all duration-200 ${
-                    isGated || checkoutLoading
+                    !COMMERCIAL_TRANSACTIONS_ENABLED || isGated || checkoutLoading
                       ? "bg-zinc-300 text-zinc-500 cursor-not-allowed"
                       : "bg-forest hover:bg-forest/90 text-white hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                   }`}
                 >
-                  {checkoutLoading
-                    ? t("Wird geladen...", "Loading...")
-                    : `${t("Bestellung abschicken", "Submit Order")} • €${finalTotal.toFixed(2)}`}
+                  {!COMMERCIAL_TRANSACTIONS_ENABLED
+                    ? t("Bestellservice in Vorbereitung", "Ordering in preparation")
+                    : checkoutLoading
+                      ? t("Wird geladen...", "Loading...")
+                      : `${t("Bestellung abschicken", "Submit Order")} • €${finalTotal.toFixed(2)}`}
                 </button>
               </div>
             </SheetContent>

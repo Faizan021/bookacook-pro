@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Stripe from "stripe";
 import { createHmac, randomBytes } from "crypto";
+import { COMMERCIAL_TRANSACTIONS_ENABLED } from "@/lib/config/flags";
 
 // ─── Hard-fail on missing secrets ───────────────────────────────────────────
 // Never fall back to mock/placeholder values. If a required secret is absent
@@ -132,6 +134,11 @@ export async function createSubscriptionCheckoutSession(
   customerEmail: string,
   origin: string,
 ) {
+  if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+    throw new Error(
+      "Abonnement-Checkouts sind während der Testphase deaktiviert. Keine kommerziellen Transaktionen möglich.",
+    );
+  }
   const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
@@ -165,6 +172,9 @@ export async function createSubscriptionCheckoutSession(
 }
 
 export async function createBillingPortalSession(stripeCustomerId: string, origin: string) {
+  if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+    throw new Error("Das Kunden-Portal ist während der Testphase deaktiviert.");
+  }
   const stripe = getStripe();
   const session = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,
@@ -181,6 +191,11 @@ export async function createDepositCheckoutSession(
   customerEmail: string,
   origin: string,
 ) {
+  if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+    throw new Error(
+      "Anzahlungs-Checkouts sind während der Testphase deaktiviert. Keine kommerziellen Transaktionen möglich.",
+    );
+  }
   const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
@@ -218,6 +233,11 @@ export async function createStorefrontCheckoutSession(
   cancelUrl: string,
   orderId: string,
 ) {
+  if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+    throw new Error(
+      "Direktbestell-Checkouts sind während der Testphase deaktiviert. Keine kommerziellen Transaktionen möglich.",
+    );
+  }
   const stripe = getStripe();
   const session = await stripe.checkout.sessions.create(
     {

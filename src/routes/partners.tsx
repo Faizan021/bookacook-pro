@@ -129,6 +129,12 @@ function Partners() {
               "Choose the model that fits your business best. No setup fees, cancel anytime.",
             )}
           </p>
+          <div className="mt-6 p-4 rounded-xl bg-forest/5 border border-forest/15 text-xs text-forest/80 font-medium">
+            📝{" "}
+            {lang === "de"
+              ? "Unverbindliche Interessensbekundung – es entsteht kein kostenpflichtiger Vertrag. Wir prüfen alle Partner-Anfragen manuell vor der Freischaltung."
+              : "Non-binding expression of interest — no paid contract is created. All partner requests are reviewed manually before activation."}
+          </div>
         </div>
         <div className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
           {/* Card 1: Restaurant Plan */}

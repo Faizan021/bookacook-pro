@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/lib/auth/role-middleware";
+import { COMMERCIAL_TRANSACTIONS_ENABLED } from "@/lib/config/flags";
 
 export const acceptProposal = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth()])
@@ -161,6 +163,11 @@ export const startDepositCheckout = createServerFn({ method: "POST" })
     z.object({ bookingId: z.string().uuid(), origin: z.string() }).parse(input),
   )
   .handler(async ({ context, data }) => {
+    if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+      throw new Error(
+        "Buchungsanzahlungen sind während der aktuellen Testphase deaktiviert. Keine kommerziellen Transaktionen möglich.",
+      );
+    }
     const { userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

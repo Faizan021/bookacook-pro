@@ -2,6 +2,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireRole } from "@/lib/auth/role-middleware";
+import { COMMERCIAL_TRANSACTIONS_ENABLED } from "@/lib/config/flags";
 
 export const createMyRestaurant = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
@@ -380,6 +381,11 @@ export const startStarterSubscription = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
   .validator((input: { origin: string }) => z.object({ origin: z.string() }).parse(input))
   .handler(async ({ context, data }) => {
+    if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+      throw new Error(
+        "Abonnement-Checkouts sind während der aktuellen Testphase deaktiviert. Keine kommerziellen Transaktionen möglich.",
+      );
+    }
     const { supabase, userId } = context;
 
     const { data: rest, error: restErr } = await supabase
@@ -407,6 +413,9 @@ export const openBillingPortal = createServerFn({ method: "POST" })
   .middleware([requireRole("restaurant_owner")])
   .validator((input: { origin: string }) => z.object({ origin: z.string() }).parse(input))
   .handler(async ({ context, data }) => {
+    if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+      throw new Error("Das Kunden-Portal ist während der aktuellen Testphase deaktiviert.");
+    }
     const { supabase, userId } = context;
 
     const { data: rest } = await supabase

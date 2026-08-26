@@ -270,10 +270,8 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
   return result;
 });
 
-// Commercial promo checkout is strictly disabled during pre-launch phase
-// to prevent financial discrepancy until PostgreSQL atomic RPC and automated
-// Stripe session expiration reconciliation workers are deployed in the commercial milestone.
-export const PROMO_CODES_ENABLED = false;
+import { COMMERCIAL_TRANSACTIONS_ENABLED, PROMO_CODES_ENABLED } from "@/lib/config/flags";
+export { COMMERCIAL_TRANSACTIONS_ENABLED, PROMO_CODES_ENABLED };
 
 export async function calculatePromoDiscount(
   supabaseAdmin: any,
@@ -285,7 +283,7 @@ export async function calculatePromoDiscount(
 ) {
   if (!promoCode) return { discountCents: 0, freeDelivery: false };
 
-  if (!PROMO_CODES_ENABLED) {
+  if (!COMMERCIAL_TRANSACTIONS_ENABLED || !PROMO_CODES_ENABLED) {
     return {
       discountCents: 0,
       freeDelivery: false,
@@ -468,6 +466,11 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         .parse(input),
   )
   .handler(async ({ data }) => {
+    if (!COMMERCIAL_TRANSACTIONS_ENABLED) {
+      throw new Error(
+        "Der Bestellservice befindet sich derzeit in Vorbereitung. Es werden aktuell keine kommerziellen Bestellungen entgegengenommen.",
+      );
+    }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Normalization of referral source parameter
