@@ -270,11 +270,11 @@ function CommunityPage() {
               {/* Image Side (55% on desktop) */}
               <div className="lg:col-span-7 relative min-h-[280px] sm:min-h-[360px] lg:min-h-[440px] bg-black/5 overflow-hidden">
                 <img
-                  src="/magazin/ariana-frankfurt/qabili-palau.jpg"
+                  src="/magazin/alzaeem-berlin/mix-grill-close.jpg"
                   alt={
                     isDe
-                      ? "Qabili Palau bei Ariana in Frankfurt am Main"
-                      : "Qabili Palau at Ariana in Frankfurt am Main"
+                      ? "Mix Grill und syrische Spezialitäten beim Alzaeem Restaurant in Berlin-Neukölln"
+                      : "Mix Grill and Syrian charcoal dishes at Alzaeem Restaurant in Berlin-Neukölln"
                   }
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                 />
@@ -298,9 +298,9 @@ function CommunityPage() {
 
                   <div className="flex items-center gap-2 text-xs font-semibold text-forest/60 mb-3">
                     <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Frankfurt am Main</span>
+                    <span>Berlin-Neukölln</span>
                     <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt (11,90 €)" : "Self-paid (€11.90)"}</span>
+                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
                   </div>
 
                   <h2
@@ -342,7 +342,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/ariana-frankfurt/ariana-qabili-palau.jpg"
+                    src="/magazin/ariana-frankfurt/qabili-palau.jpg"
                     alt={
                       isDe
                         ? "Qabili Palau bei Ariana in Frankfurt"
