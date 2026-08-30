@@ -290,7 +290,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/thronburger-berlin/thronburger-01.jpg"
+                    src="/magazin/thronburger-berlin/thronburger-01.jpg?v=2"
                     alt={
                       isDe
                         ? "Halal Beef Burger im Sesam-Brioche bei Thronburger Berlin"

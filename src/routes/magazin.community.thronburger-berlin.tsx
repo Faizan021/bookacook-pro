@@ -309,7 +309,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/thronburger-berlin/thronburger-01.jpg"
+                  src="/magazin/thronburger-berlin/thronburger-01.jpg?v=2"
                   alt={
                     isDe
                       ? "Halal Beef Burger im Sesam-Brioche mit geschmolzenem Käse und Süßkartoffel-Pommes bei Thronburger Berlin"
