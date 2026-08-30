@@ -1,3 +1,4 @@
+import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, MapPin, Calendar, Eye, Shield, Globe, Utensils, Info } from "lucide-react";
 import { useEffect, useRef } from "react";
