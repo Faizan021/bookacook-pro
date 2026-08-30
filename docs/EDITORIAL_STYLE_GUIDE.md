@@ -236,21 +236,52 @@ Do not add:
 
 Use Community Story or Article positioning rather than Review positioning.
 
-## 11. Marketplace connection
+## 11. Link attribution, outbound tracking & telemetry standard
+
+Every article or Community Story featuring a physical restaurant, vendor, or caterer must follow this tracking and attribution standard:
+
+### A. Dual Tracked Action Buttons (Restaurant Info Card)
+- **Primary CTA (High Intent):** `Speisekarte ansehen` / `Explore the menu` (or order link).
+- **Secondary CTA:** `Website besuchen` / `Visit [Restaurant Name]`.
+
+### B. UTM Parameter Standard for Outbound Links
+All external vendor links must include standard UTM campaign tags:
+- `utm_source=speisely`
+- `utm_medium=referral`
+- `utm_campaign=<article_slug>_community_visit` (or `_visit` for editorial visits)
+- Links must open safely in a new tab: `target="_blank" rel="noopener"` (no `rel="sponsored"` for independent community content).
+
+### C. First-Party Telemetry & Event Instrumentation
+Attach click handlers to record outbound interest in Speisely's consent-gated telemetry:
+```tsx
+trackEvent("restaurant_menu_click", {
+  restaurant_name: "KOKIO Berlin",
+  article_slug: "kokio-berlin",
+  destination: "lightspeed_menu",
+});
+
+trackEvent("restaurant_website_click", {
+  restaurant_name: "KOKIO Berlin",
+  article_slug: "kokio-berlin",
+  destination: "official_website",
+});
+```
+
+## 12. Marketplace connection
 
 Connect the story to restaurants, catering, events or Community only when the
 relationship is natural and useful.
 
 Do not add a forced sales paragraph to every editorial article.
 
-## 12. Final self-audit
+## 13. Final self-audit
 
 Before publication, confirm:
 
 - [ ] Content type is correctly identified
 - [ ] Visitor or contributor is correctly attributed
 - [ ] No fact or sensory detail was invented
-- [ ] Cultural claims are verified
+- [ ] Cultural claims are verified with cited sources
 - [ ] Prices are confirmed or omitted
 - [ ] Correct disclosure is included
 - [ ] Photo and video rights are confirmed
@@ -261,7 +292,9 @@ Before publication, confirm:
 - [ ] `robots` set to `index, follow, max-image-preview:large`
 - [ ] Structured JSON-LD includes valid `contentLocation` and `GeoCoordinates`
 - [ ] URL registered in `src/routes/sitemap[.]xml.ts`
+- [ ] Dual tracked CTAs with UTM parameters and telemetry event handlers added
 - [ ] German and English sound natural where both are required
 - [ ] Photo credit is included
 - [ ] Metadata reflects the article accurately
-- [ ] Marketplace CTA is relevant rather than forced
+- [ ] Community Grid / Hub card updated with uniform styling and new badges if applicable
+
