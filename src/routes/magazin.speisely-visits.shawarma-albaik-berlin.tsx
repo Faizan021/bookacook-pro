@@ -792,7 +792,9 @@ function AlbaikVisitPage() {
             </p>
           </div>
         </section>
-      </article>
+        
+          <AboutSpeiselySection />
+        </article>
 
       {/* CTA & Navigation Footer */}
       <section className="bg-[#173C32] text-[#FBF7EE] py-16 sm:py-24 px-6 sm:px-12 lg:px-20">

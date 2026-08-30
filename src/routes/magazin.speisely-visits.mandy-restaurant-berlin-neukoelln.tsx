@@ -984,7 +984,9 @@ function MandyArticlePage() {
             </Link>
           </div>
         </div>
-      </article>
+        
+          <AboutSpeiselySection />
+        </article>
     </div>
   );
 }

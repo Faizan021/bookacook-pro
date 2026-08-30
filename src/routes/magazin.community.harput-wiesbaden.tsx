@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
+import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 
 export const Route = createFileRoute("/magazin/community/harput-wiesbaden")({
   head: () => ({
@@ -183,8 +184,30 @@ function HarputWiesbadenCommunityArticle() {
     : "My experience for the Speisely Community";
 
   const emailBody = isDe
-    ? `Hallo Speisely,\nich möchte ein Erlebnis mit der Speisely Community teilen.\n\nRestaurant, Caterer, Event oder Ort:\nStadt:\nDatum:\nMeine Geschichte:\nWas habe ich bestellt, entdeckt oder erlebt?\nFoto-/Videocredit:\nWar etwas kostenlos, vergünstigt, eingeladen oder gesponsert?\n\nIch füge meine eigenen Fotos oder Videos dieser E-Mail bei.`
-    : `Hello Speisely,\nI would like to share an experience with the Speisely Community.\n\nRestaurant, caterer, event or location:\nCity:\nDate:\nMy story:\nWhat did I order, discover or experience?\nPhoto/video credit:\nWas anything free, discounted, invited or sponsored?\n\nI will attach my own photos or videos to this email.`;
+    ? `Hallo Speisely,
+ich möchte ein Erlebnis mit der Speisely Community teilen.
+
+Restaurant, Caterer, Event oder Ort:
+Stadt:
+Datum:
+Meine Geschichte:
+Was habe ich bestellt, entdeckt oder erlebt?
+Foto-/Videocredit:
+War etwas kostenlos, vergünstigt, eingeladen oder gesponsert?
+
+Ich füge meine eigenen Fotos oder Videos dieser E-Mail bei.`
+    : `Hello Speisely,
+I would like to share an experience with the Speisely Community.
+
+Restaurant, caterer, event or location:
+City:
+Date:
+My story:
+What did I order, discover or experience?
+Photo/video credit:
+Was anything free, discounted, invited or sponsored?
+
+I will attach my own photos or videos to this email.`;
 
   const mailtoHref = `mailto:info@speisely.de?subject=${encodeURIComponent(
     emailSubject,
@@ -475,6 +498,8 @@ function HarputWiesbadenCommunityArticle() {
               </p>
             </div>
           </div>
+          
+          <AboutSpeiselySection />
         </article>
       </div>
     </SiteShell>

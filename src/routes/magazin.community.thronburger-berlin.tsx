@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { MapPin, Shield, Users, Utensils, Mail, Instagram, Sparkles, ExternalLink, BookOpen } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
+import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 import { trackEvent } from "@/utils/posthog";
 
 export const Route = createFileRoute("/magazin/community/thronburger-berlin")({
@@ -153,8 +154,28 @@ function ThronburgerCommunityPage() {
     : "My experience for the Speisely Community";
 
   const emailBody = isDe
-    ? `Hallo Speisely,\nIch möchte ein Erlebnis mit der Speisely Community teilen.\n\nRestaurant, Caterer, Event oder Ort:\nStadt:\nDatum:\nMeine Geschichte:\nWas habe ich bestellt, entdeckt oder erlebt?\nFoto-/Videocredit:\n\nIch füge meine eigenen Fotos oder Videos dieser E-Mail bei.`
-    : `Hello Speisely,\nI would like to share an experience with the Speisely Community.\n\nRestaurant, caterer, event or location:\nCity:\nDate:\nMy story:\nWhat did I order, discover or experience?\nPhoto/video credit:\n\nI will attach my own photos or videos to this email.`;
+    ? `Hallo Speisely,
+Ich möchte ein Erlebnis mit der Speisely Community teilen.
+
+Restaurant, Caterer, Event oder Ort:
+Stadt:
+Datum:
+Meine Geschichte:
+Was habe ich bestellt, entdeckt oder erlebt?
+Foto-/Videocredit:
+
+Ich füge meine eigenen Fotos oder Videos dieser E-Mail bei.`
+    : `Hello Speisely,
+I would like to share an experience with the Speisely Community.
+
+Restaurant, caterer, event or location:
+City:
+Date:
+My story:
+What did I order, discover or experience?
+Photo/video credit:
+
+I will attach my own photos or videos to this email.`;
 
   const mailtoHref = `mailto:info@speisely.de?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
   const instagramHref = "https://www.instagram.com/speisely/";
@@ -573,6 +594,8 @@ function ThronburgerCommunityPage() {
               </p>
             </div>
           </div>
+          
+          <AboutSpeiselySection />
         </article>
 
         {/* CTA Banner: Share Your Own Food Story */}
