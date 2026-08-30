@@ -526,6 +526,8 @@ function SchnitzelSchmiedeStoryPage() {
         </div>
       </section>
 
+      <div className="max-w-4xl mx-auto px-6 py-12 bg-[#FBF7EE]"><AboutSpeiselySection /></div>
+
       {/* CHAPTER 7 — CONVERSION FINALE */}
       <section className="relative min-h-[80vh] w-full bg-[#173C32] text-[#FBF7EE] py-24 px-6 sm:px-12 lg:px-20 flex flex-col justify-between items-center text-center">
         <div className="max-w-4xl mx-auto space-y-10 my-auto story-reveal opacity-0 translate-y-6 transition-all duration-700">
