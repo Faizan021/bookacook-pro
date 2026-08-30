@@ -57,6 +57,7 @@ import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$sl
 import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
 import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
+import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
 import { Route as MagazinCommunityArianaRestaurantFrankfurtRouteImport } from './routes/magazin.community.ariana-restaurant-frankfurt'
 import { Route as MagazinCommunityAlzaeemRestaurantBerlinRouteImport } from './routes/magazin.community.alzaeem-restaurant-berlin'
@@ -321,6 +322,12 @@ const MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute =
     path: '/mandy-restaurant-berlin-neukoelln',
     getParentRoute: () => MagazinSpeiselyVisitsRoute,
   } as any)
+const MagazinCommunityKokioBerlinRoute =
+  MagazinCommunityKokioBerlinRouteImport.update({
+    id: '/magazin/community/kokio-berlin',
+    path: '/magazin/community/kokio-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunityHarputWiesbadenRoute =
   MagazinCommunityHarputWiesbadenRouteImport.update({
     id: '/magazin/community/harput-wiesbaden',
@@ -466,6 +473,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
@@ -528,6 +536,7 @@ export interface FileRoutesByTo {
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
@@ -595,6 +604,7 @@ export interface FileRoutesById {
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
@@ -662,6 +672,7 @@ export interface FileRouteTypes {
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/kokio-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
@@ -724,6 +735,7 @@ export interface FileRouteTypes {
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/kokio-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
@@ -790,6 +802,7 @@ export interface FileRouteTypes {
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/kokio-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
@@ -840,6 +853,7 @@ export interface RootRouteChildren {
   MagazinCommunityAlzaeemRestaurantBerlinRoute: typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   MagazinCommunityArianaRestaurantFrankfurtRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRoute
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
+  MagazinCommunityKokioBerlinRoute: typeof MagazinCommunityKokioBerlinRoute
   RestaurantOrtCityRoute: typeof RestaurantOrtCityRoute
   ReviewIntakeTokenRoute: typeof ReviewIntakeTokenRoute
   ApiStripeConnectCallbackRoute: typeof ApiStripeConnectCallbackRoute
@@ -1185,6 +1199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport
       parentRoute: typeof MagazinSpeiselyVisitsRoute
     }
+    '/magazin/community/kokio-berlin': {
+      id: '/magazin/community/kokio-berlin'
+      path: '/magazin/community/kokio-berlin'
+      fullPath: '/magazin/community/kokio-berlin'
+      preLoaderRoute: typeof MagazinCommunityKokioBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/harput-wiesbaden': {
       id: '/magazin/community/harput-wiesbaden'
       path: '/magazin/community/harput-wiesbaden'
@@ -1473,6 +1494,7 @@ const rootRouteChildren: RootRouteChildren = {
   MagazinCommunityArianaRestaurantFrankfurtRoute:
     MagazinCommunityArianaRestaurantFrankfurtRoute,
   MagazinCommunityHarputWiesbadenRoute: MagazinCommunityHarputWiesbadenRoute,
+  MagazinCommunityKokioBerlinRoute: MagazinCommunityKokioBerlinRoute,
   RestaurantOrtCityRoute: RestaurantOrtCityRoute,
   ReviewIntakeTokenRoute: ReviewIntakeTokenRoute,
   ApiStripeConnectCallbackRoute: ApiStripeConnectCallbackRoute,

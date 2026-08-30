@@ -334,6 +334,59 @@ function CommunityPage() {
 
           {/* Secondary Community Stories Grid */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* KOKIO Berlin */}
+            <Link
+              to="/magazin/community/kokio-berlin"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                  <img
+                    src="/magazin/kokio-berlin/kokio-boneless-02.jpg"
+                    alt={
+                      isDe
+                        ? "Korean Fried Chicken bei KOKIO in Berlin-Prenzlauer Berg"
+                        : "Korean Fried Chicken at KOKIO in Berlin-Prenzlauer Berg"
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-[oklch(0.97_0.02_92)] px-2.5 py-1 text-[11px] font-bold shadow-xs">
+                      <Sparkles className="h-3 w-3 text-[#f2d896]" aria-hidden="true" />
+                      Berlin
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-1.5">
+                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
+                    <span>Berlin-Prenzlauer Berg</span>
+                    <span>•</span>
+                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
+                  </div>
+                  <h3 className="font-display text-lg font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                    {isDe
+                      ? "Zwischen Crunch, Sauce und koreanischer Esskultur"
+                      : "Where Crunch Meets Korean Chicken Culture"}
+                  </h3>
+                  <p className="mt-2 text-xs text-forest/70 line-clamp-2 leading-relaxed font-medium">
+                    {isDe
+                      ? "Ein Speisely-Community-Besuch bei KOKIO Berlin: knuspriges Fried Chicken, hausgemachte Saucen und Chimaek-Tradition."
+                      : "A Speisely Community visit to KOKIO Berlin: crisp fried chicken, house-made sauces and chimaek culture."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+                <span>{isDe ? "Story lesen" : "Read Story"}</span>
+                <ArrowRight
+                  className="h-3.5 w-3.5 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  aria-hidden="true"
+                />
+              </div>
+            </Link>
+
             {/* Ariana Frankfurt */}
             <Link
               to="/magazin/community/ariana-restaurant-frankfurt"
