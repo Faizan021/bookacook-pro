@@ -256,13 +256,13 @@ function KokioCommunityPage() {
               <Shield className="h-4 w-4 text-[#7FA46B] shrink-0 mt-0.5" aria-hidden="true" />
               <div>
                 <span className="block text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                  {isDe ? "Besuchsart" : "Visit Type"}
+                  {isDe ? "Beitragstyp" : "Story Type"}
                 </span>
                 <strong className="font-semibold text-forest">
-                  {isDe ? "Selbst bezahlt" : "Self-paid"}
+                  {isDe ? "Community Story" : "Community Story"}
                 </strong>
                 <span className="block text-forest/70 text-xs">
-                  {isDe ? "Unabhängiger Community-Besuch" : "Independent community visit"}
+                  {isDe ? "Aus der Speisely Community" : "From the Speisely Community"}
                 </span>
               </div>
             </div>
@@ -331,14 +331,14 @@ function KokioCommunityPage() {
 
             <p>
               {isDe
-                ? "Das Chicken kommt mit einer unregelmäßigen, knusprigen Oberfläche – mit kleinen Rändern und Vertiefungen, in denen sich die Sauce sammelt. Dadurch gleicht kein Bissen dem anderen."
-                : "Sauced Korean fried chicken is an exercise in texture. The glaze settles into every ridge of the coating, giving some bites a deeper hit of flavour while leaving others noticeably crisp. Beneath it, chicken thigh provides a tender, substantial centre."}
+                ? "Das Chicken zeigt eine unregelmäßige, strukturierte Oberfläche – mit kleinen Rändern und Vertiefungen, in denen sich die glänzende Sauce sammelt. Dadurch wirkt jedes Stück auf der Platte optisch eigenständig."
+                : "Sauced Korean fried chicken is an exercise in texture. The glaze settles into every ridge of the coating, creating a visible interplay between the glossy surface and the underlying crust."}
             </p>
 
             <p>
               {isDe
-                ? "Manchmal steht die Würze im Vordergrund, manchmal die leichte Süße der Glasur. Dazwischen bleibt das saftige Hähnchenfleisch spürbar. Genau dieses Zusammenspiel aus knuspriger Hülle, Sauce und zartem Fleisch macht die Platten so einladend."
-                : "Classic fries offer a salty break between the richer bites. Sweet potato fries create a different pairing, their gentle sweetness playing especially well against a spicy or savoury sauce. Kimchi and coleslaw are also available as alternatives."}
+                ? "Dazwischen wird das Fleisch von der knusprigen Hülle und der Glasur umrahmt. Genau diese Kombination aus unregelmäßiger Panade, glänzender Sauce und warmen Pommes prägt das Bild der servierten Platten."
+                : "Beneath the glaze, the chicken is framed by its crisp, textured coating. That visual balance between coating, sauce and warm fries defines the appearance of the platters."}
             </p>
 
             {/* Photo 2 (Sweet potato fries section) */}
@@ -357,8 +357,8 @@ function KokioCommunityPage() {
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Farbenfroher Kontrast: Würzig glasiertes Chicken kombiniert mit knusprigen Süßkartoffel-Pommes."
-                    : "Colourful contrast: savoury glazed chicken paired with crisp sweet potato fries."}
+                    ? "Farbenfroher Kontrast: Dunkel glasiertes Chicken kombiniert mit knusprigen Süßkartoffel-Pommes."
+                    : "Colourful contrast: glazed chicken paired with crisp sweet potato fries."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
               </figcaption>
@@ -366,8 +366,8 @@ function KokioCommunityPage() {
 
             <p>
               {isDe
-                ? "Die Pommes bringen ihren eigenen Charakter mit. Klassische Pommes sorgen für einen salzigen Kontrast. Süßkartoffel-Pommes ergänzen das würzige Chicken mit einer sanften Süße. Alternativ können sie laut Speisekarte gegen Kimchi oder Coleslaw getauscht werden."
-                : "With several platters in front of the group, trying a second combination becomes part of the enjoyment rather than an extra decision."}
+                ? "Die Beilagen setzen optische Akzente: Klassische Pommes bringen die vertraute goldene Beilage auf den Tisch, während Süßkartoffel-Pommes für einen kräftigen orangefarbenen Kontrast sorgen. Laut Karte können alternativ auch Kimchi oder Coleslaw gewählt werden."
+                : "Classic fries provide the familiar golden side, while sweet potato fries introduce a warm orange contrast across the table. Kimchi and coleslaw are also listed as alternatives on the menu."}
             </p>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
@@ -471,14 +471,14 @@ function KokioCommunityPage() {
 
             <p>
               {isDe
-                ? "Genau dieses gemeinschaftliche Gefühl prägt auch die Bilder dieses Community-Besuchs. Mehrere Platten, verschiedene Saucen und zwei Arten von Pommes machen aus der Bestellung kein schnelles Einzelgericht, sondern ein Essen, bei dem jeder probiert und seinen eigenen Favoriten findet."
-                : "That sense of shared enjoyment is what makes this community visit feel complete. Different platters invite comparison. One sauce becomes another person’s favourite. Classic fries compete with sweet potato fries. The meal creates conversation without demanding ceremony."}
+                ? "Genau dieses gemeinschaftliche Gefühl prägt die Bilder dieses Community-Besuchs. Mehrere Platten, verschiedene Saucen und zwei Arten von Pommes machen aus der Bestellung ein gemeinsames Essen, bei dem am Tisch geteilt wird."
+                : "That sense of shared dining is what characterizes this community visit. Multiple platters, different sauces and two types of fries turn the order into a shared meal made for the whole table."}
             </p>
 
             <p>
               {isDe ? (
                 <>
-                  KOKIO bringt diese koreanische Fried-Chicken-Kultur nach Prenzlauer Berg. Das Restaurant verwendet nach eigenen Angaben frisch geliefertes, halal-zertifiziertes Hähnchen, bereitet seine koreanisch inspirierten Saucen selbst zu und frittiert das Chicken doppelt.{" "}
+                  KOKIO bringt diese koreanische Fried-Chicken-Kultur nach Prenzlauer Berg. Das Restaurant gibt auf seiner offiziellen Website an, frisch geliefertes, halal-zertifiziertes Hähnchen zu verwenden, seine Saucen selbst zuzubereiten und das Chicken doppelt zu frittieren.{" "}
                   <a
                     href="https://de.kokioberlin.com/"
                     target="_blank"
@@ -490,7 +490,7 @@ function KokioCommunityPage() {
                 </>
               ) : (
                 <>
-                  KOKIO brings that contemporary Korean chicken culture to Prenzlauer Berg. According to the restaurant, its chicken is freshly supplied and halal-certified, its Korean-inspired sauces are made in-house, and its signature texture comes from double-frying.{" "}
+                  KOKIO brings that contemporary Korean chicken culture to Prenzlauer Berg. According to information published on KOKIO's official website, the restaurant uses freshly supplied, halal-certified chicken, prepares its sauces in-house, and double-fries its chicken.{" "}
                   <a
                     href="https://de.kokioberlin.com/"
                     target="_blank"
@@ -505,8 +505,8 @@ function KokioCommunityPage() {
 
             <p className="font-medium text-forest text-lg">
               {isDe
-                ? "Knuspriges Chicken, glänzende Saucen und Pommes zum Teilen – ein Community-Besuch, bei dem die Freude bereits mit der ersten Platte beginnt."
-                : "Crisp chicken, colourful sauces and several platters made for sharing—this is the kind of meal where choosing a favourite becomes part of the fun."}
+                ? "Glänzende Saucen, strukturierte Kruste und Pommes zum Teilen – ein Food-Moment aus der Speisely Community in Berlin-Prenzlauer Berg."
+                : "Glossy sauces, crisp coating and fries for the table—a food moment shared by the Speisely Community in Berlin-Prenzlauer Berg."}
             </p>
 
             {/* Restaurant Info & Action Card */}
@@ -572,8 +572,8 @@ function KokioCommunityPage() {
               </div>
               <p className="leading-relaxed">
                 {isDe
-                  ? "Dieser Bericht basiert auf einem Besuch und Fotos aus der Speisely Community. Er spiegelt diesen persönlichen Eindruck wider und ist keine bezahlte Werbung oder offizielle Sternebewertung. Fotocredit: Speisely Community."
-                  : "This story is based on a visit and photographs shared by a Speisely Community member. It reflects that community experience and is not a star rating or an official restaurant review. Photo credit: Speisely Community."}
+                  ? "Dieser redaktionelle Beitrag basiert auf einem Besuch und Fotos aus der Speisely Community. Speisely war nicht selbst vor Ort. Der Beitrag gibt die visuellen Eindrücke der geteilten Fotos wieder und stellt keine Sternebewertung oder offizielle Restaurantbewertung dar. Fotocredit: Speisely Community."
+                  : "This editorial story is based on a visit and photographs shared by a member of the Speisely Community. Speisely was not present at the restaurant. It reflects the visual impressions of the shared photographs and does not constitute a star rating or official restaurant review. Photo credit: Speisely Community."}
               </p>
             </div>
           </div>

@@ -317,7 +317,7 @@ function CommunityPage() {
                     <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
                     <span>Berlin-Prenzlauer Berg</span>
                     <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
+                    <span>{isDe ? "Community Story" : "Community Story"}</span>
                   </div>
                   <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
                     {isDe
