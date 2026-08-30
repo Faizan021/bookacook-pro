@@ -263,81 +263,29 @@ function CommunityPage() {
           </ol>
         </nav>
 
-        {/* 3. Featured Community Story Section (Latest Story) */}
-        <section className="mb-20" aria-labelledby="featured-community-story">
-          <div className="surface-card rounded-3xl border border-forest/10 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-              {/* Image Side (55% on desktop) */}
-              <div className="lg:col-span-7 relative min-h-[280px] sm:min-h-[360px] lg:min-h-[440px] bg-black/5 overflow-hidden">
-                <img
-                  src="/magazin/alzaeem-berlin/mix-grill-close.jpg"
-                  alt={
-                    isDe
-                      ? "Mix Grill und syrische Spezialitäten beim Alzaeem Restaurant in Berlin-Neukölln"
-                      : "Mix Grill and Syrian charcoal dishes at Alzaeem Restaurant in Berlin-Neukölln"
-                  }
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                />
-                <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-[oklch(0.97_0.02_92)] px-3.5 py-1.5 text-xs font-bold shadow-md">
-                    <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
-                    {isDe ? "Aus der Speisely Community" : "From the Speisely Community"}
-                  </span>
-                </div>
-                <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                  📸 Speisely Community
-                </div>
-              </div>
-
-              {/* Story Content Side (45% on desktop) */}
-              <div className="lg:col-span-5 p-7 sm:p-9 lg:p-10 flex flex-col justify-between bg-white">
-                <div>
-                  <div className="flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-[#b28a3c] uppercase mb-2.5">
-                    <span>{isDe ? "NEU AUS DER COMMUNITY" : "NEW FROM THE COMMUNITY"}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs font-semibold text-forest/60 mb-3">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Berlin-Neukölln</span>
-                    <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
-                  </div>
-
-                  <h2
-                    id="featured-community-story"
-                    className="font-display text-2xl sm:text-3xl font-bold text-forest leading-tight mb-4"
-                  >
-                    {isDe
-                      ? "Ein Fest aus Holzkohle, Mezze und Grillgenuss"
-                      : "A Feast of Charcoal, Mezze and Grilled Flavours"}
-                  </h2>
-
-                  <p className="text-sm sm:text-base text-forest/75 leading-relaxed font-medium mb-6">
-                    {isDe
-                      ? "Mix Grill #44, syrische Grillgerichte und ein vielseitiges Kindermenü — ein Community-Besuch beim Alzaeem Restaurant an der Sonnenallee in Berlin-Neukölln."
-                      : "Mix Grill #44, Syrian charcoal-grilled dishes and a varied children's meal — a community visit to Alzaeem Restaurant on Sonnenallee in Berlin-Neukölln."}
-                  </p>
-                </div>
-
-                <div>
-                  <Link
-                    to="/magazin/community/alzaeem-restaurant-berlin"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-7 py-3.5 text-xs sm:text-sm font-bold shadow-md hover:bg-forest/90 hover:gap-3 transition-all"
-                  >
-                    <span>{isDe ? "Story lesen" : "Read the Story"}</span>
-                    <ArrowRight className="h-4 w-4 text-[#f2d896]" aria-hidden="true" />
-                  </Link>
-                </div>
-              </div>
+        {/* 3. Community Stories Grid (Uniform Size) */}
+        <section className="mb-20" aria-labelledby="community-stories-title">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2
+                id="community-stories-title"
+                className="font-display text-2xl sm:text-3xl font-bold text-forest"
+              >
+                {isDe ? "Alle Community Stories" : "All Community Stories"}
+              </h2>
+              <p className="text-sm text-forest/70 mt-1 font-medium">
+                {isDe
+                  ? "Echte Restaurantbesuche und persönliche Food-Momente aus der Speisely Community."
+                  : "Authentic restaurant visits and personal food moments from the Speisely Community."}
+              </p>
             </div>
           </div>
 
-          {/* Secondary Community Stories Grid */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* KOKIO Berlin */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* 1. KOKIO Berlin (Newest Story) */}
             <Link
               to="/magazin/community/kokio-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
             >
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
@@ -350,27 +298,33 @@ function CommunityPage() {
                     }
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-[oklch(0.97_0.02_92)] px-2.5 py-1 text-[11px] font-bold shadow-xs">
-                      <Sparkles className="h-3 w-3 text-[#f2d896]" aria-hidden="true" />
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#b28a3c] text-white px-3 py-1 text-xs font-bold shadow-md">
+                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
+                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-2.5 py-1 text-xs font-semibold backdrop-blur-xs">
                       Berlin
                     </span>
                   </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                    📸 Speisely Community
+                  </div>
                 </div>
 
-                <div className="p-5 sm:p-6">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-1.5">
+                <div className="p-6 sm:p-7">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
                     <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
                     <span>Berlin-Prenzlauer Berg</span>
                     <span>•</span>
                     <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
                   </div>
-                  <h3 className="font-display text-lg font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
                     {isDe
                       ? "Zwischen Crunch, Sauce und koreanischer Esskultur"
                       : "Where Crunch Meets Korean Chicken Culture"}
                   </h3>
-                  <p className="mt-2 text-xs text-forest/70 line-clamp-2 leading-relaxed font-medium">
+                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
                     {isDe
                       ? "Ein Speisely-Community-Besuch bei KOKIO Berlin: knuspriges Fried Chicken, hausgemachte Saucen und Chimaek-Tradition."
                       : "A Speisely Community visit to KOKIO Berlin: crisp fried chicken, house-made sauces and chimaek culture."}
@@ -378,19 +332,75 @@ function CommunityPage() {
                 </div>
               </div>
 
-              <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
                 <span>{isDe ? "Story lesen" : "Read Story"}</span>
                 <ArrowRight
-                  className="h-3.5 w-3.5 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
                   aria-hidden="true"
                 />
               </div>
             </Link>
 
-            {/* Ariana Frankfurt */}
+            {/* 2. Alzaeem Restaurant Berlin */}
+            <Link
+              to="/magazin/community/alzaeem-restaurant-berlin"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                  <img
+                    src="/magazin/alzaeem-berlin/mix-grill-close.jpg"
+                    alt={
+                      isDe
+                        ? "Mix Grill und syrische Spezialitäten beim Alzaeem Restaurant in Berlin-Neukölln"
+                        : "Mix Grill and Syrian charcoal dishes at Alzaeem Restaurant in Berlin-Neukölln"
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-3 py-1 text-xs font-bold shadow-xs">
+                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
+                      Berlin-Neukölln
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                    📸 Speisely Community
+                  </div>
+                </div>
+
+                <div className="p-6 sm:p-7">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
+                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
+                    <span>Berlin-Neukölln</span>
+                    <span>•</span>
+                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                    {isDe
+                      ? "Ein Fest aus Holzkohle, Mezze und Grillgenuss"
+                      : "A Feast of Charcoal, Mezze and Grilled Flavours"}
+                  </h3>
+                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
+                    {isDe
+                      ? "Mix Grill #44, syrische Grillgerichte und ein vielseitiges Kindermenü beim Alzaeem Restaurant an der Sonnenallee in Berlin-Neukölln."
+                      : "Mix Grill #44, Syrian charcoal-grilled dishes and a varied children's meal at Alzaeem Restaurant on Sonnenallee in Berlin-Neukölln."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+                <span>{isDe ? "Story lesen" : "Read Story"}</span>
+                <ArrowRight
+                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  aria-hidden="true"
+                />
+              </div>
+            </Link>
+
+            {/* 3. Ariana Frankfurt */}
             <Link
               to="/magazin/community/ariana-restaurant-frankfurt"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
             >
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
@@ -403,27 +413,30 @@ function CommunityPage() {
                     }
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-[oklch(0.97_0.02_92)] px-2.5 py-1 text-[11px] font-bold shadow-xs">
-                      <Sparkles className="h-3 w-3 text-[#f2d896]" aria-hidden="true" />
-                      Frankfurt
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-3 py-1 text-xs font-bold shadow-xs">
+                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
+                      Frankfurt am Main
                     </span>
+                  </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                    📸 Speisely Community
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-1.5">
+                <div className="p-6 sm:p-7">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
                     <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Frankfurt</span>
+                    <span>Frankfurt am Main</span>
                     <span>•</span>
                     <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
                   </div>
-                  <h3 className="font-display text-lg font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
                     {isDe
                       ? "Das Geheimnis unter dem Reisberg"
                       : "The Secret Beneath the Mountain of Rice"}
                   </h3>
-                  <p className="mt-2 text-xs text-forest/70 line-clamp-2 leading-relaxed font-medium">
+                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
                     {isDe
                       ? "Qabili Palau bei Ariana in Frankfurt: Wenn das Entscheidende nicht oben liegt."
                       : "Qabili Palau at Ariana Frankfurt: when the best part is hidden underneath."}
@@ -431,19 +444,19 @@ function CommunityPage() {
                 </div>
               </div>
 
-              <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
                 <span>{isDe ? "Story lesen" : "Read Story"}</span>
                 <ArrowRight
-                  className="h-3.5 w-3.5 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
                   aria-hidden="true"
                 />
               </div>
             </Link>
 
-            {/* Harput Wiesbaden */}
+            {/* 4. Harput Wiesbaden */}
             <Link
               to="/magazin/community/harput-wiesbaden"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
             >
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
@@ -456,27 +469,30 @@ function CommunityPage() {
                     }
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-[oklch(0.97_0.02_92)] px-2.5 py-1 text-[11px] font-bold shadow-xs">
-                      <Sparkles className="h-3 w-3 text-[#f2d896]" aria-hidden="true" />
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-3 py-1 text-xs font-bold shadow-xs">
+                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
                       Wiesbaden
                     </span>
                   </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                    📸 Speisely Community
+                  </div>
                 </div>
 
-                <div className="p-5 sm:p-6">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-1.5">
+                <div className="p-6 sm:p-7">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
                     <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
                     <span>Wiesbaden</span>
                     <span>•</span>
                     <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
                   </div>
-                  <h3 className="font-display text-lg font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
                     {isDe
                       ? "Ein Grillabend bei Harput in Wiesbaden"
                       : "An Evening at Harput in Wiesbaden"}
                   </h3>
-                  <p className="mt-2 text-xs text-forest/70 line-clamp-2 leading-relaxed font-medium">
+                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
                     {isDe
                       ? "Gegrillter Fisch und Hähnchenspieß mit Reis: Ein Food-Moment aus Wiesbaden."
                       : "Whole grilled fish and chicken skewer over rice: a food moment from Wiesbaden."}
@@ -484,10 +500,10 @@ function CommunityPage() {
                 </div>
               </div>
 
-              <div className="p-5 sm:p-6 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
                 <span>{isDe ? "Story lesen" : "Read Story"}</span>
                 <ArrowRight
-                  className="h-3.5 w-3.5 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
                   aria-hidden="true"
                 />
               </div>
