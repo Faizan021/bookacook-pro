@@ -315,7 +315,7 @@ I will attach my own photos or videos to this email.`;
                       ? "Halal Beef Burger im Sesam-Brioche mit geschmolzenem Käse und Süßkartoffel-Pommes bei Thronburger Berlin"
                       : "Halal beef burger with a sesame brioche, melted cheese and sweet potato fries at Thronburger Berlin"
                   }
-                  className="w-full h-auto object-cover max-h-[680px]"
+                  className="w-full h-auto block"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -398,7 +398,7 @@ I will attach my own photos or videos to this email.`;
                       ? "Draufsicht auf den Burger im Sesam-Brioche und die Schale Süßkartoffel-Pommes bei Thronburger Berlin"
                       : "Overhead view of burger in sesame brioche and sweet potato fries at Thronburger Berlin"
                   }
-                  className="w-full h-auto object-cover max-h-[680px]"
+                  className="w-full h-auto block"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -459,7 +459,7 @@ I will attach my own photos or videos to this email.`;
                       ? "Burger und Süßkartoffel-Pommes auf Holztabletts serviert bei Thronburger Berlin"
                       : "A Thronburger burger and sweet potato fries served on wooden trays"
                   }
-                  className="w-full h-auto object-cover max-h-[680px]"
+                  className="w-full h-auto block"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
