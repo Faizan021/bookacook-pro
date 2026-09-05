@@ -288,7 +288,7 @@ I will attach my own photos or videos to this email.`;
         </header>
 
         {/* Hero Photo 1 */}
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 mb-10">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
           <figure className="rounded-2xl overflow-hidden shadow-lg border border-forest/10 bg-white">
             <img
               src="/magazin/garcon-de-cafe-berlin/garcon-01.jpg"
@@ -297,16 +297,18 @@ I will attach my own photos or videos to this email.`;
                   ? "Das lichtdurchflutete Atrium von Garçon de Café im Berliner EDGE-Gebäude nahe dem Hauptbahnhof"
                   : "The light-filled atrium of Garçon de Café inside Berlin EDGE Workspaces near Hauptbahnhof"
               }
-              className="w-full h-auto max-h-[540px] object-cover"
+              className="w-full h-auto block"
               loading="eager"
             />
-            <figcaption className="p-3.5 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between">
+            <figcaption className="p-3.5 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between gap-2">
               <span>
                 {isDe
                   ? "Das lichtdurchflutete Atrium von Garçon de Café im Berliner EDGE-Gebäude nahe dem Hauptbahnhof."
                   : "The light-filled atrium of Garçon de Café inside Berlin EDGE Workspaces near Hauptbahnhof."}
               </span>
-              <span className="font-medium text-forest/60">📸 Foto: Speisely Community</span>
+              <span className="font-medium text-forest/60 shrink-0">
+                📸 Foto: Speisely Community
+              </span>
             </figcaption>
           </figure>
         </div>
@@ -375,7 +377,7 @@ I will attach my own photos or videos to this email.`;
             </section>
 
             {/* Photo 2: Rosetta */}
-            <figure className="my-8 rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
+            <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
               <img
                 src="/magazin/garcon-de-cafe-berlin/garcon-02.jpg"
                 alt={
@@ -383,16 +385,18 @@ I will attach my own photos or videos to this email.`;
                     ? "Rosetta-Latte-Art in klassischer weißer Keramiktasse auf dunklem Naturstein"
                     : "Rosetta latte art in classic white ceramic cup on dark stone counter"
                 }
-                className="w-full h-auto max-h-[500px] object-cover"
+                className="w-full h-auto block"
                 loading="lazy"
               />
-              <figcaption className="p-3 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between">
+              <figcaption className="p-3.5 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between gap-2">
                 <span>
                   {isDe
                     ? "Rosetta-Latte-Art in klassischer weißer Keramiktasse auf dunklem Naturstein."
                     : "Rosetta latte art in classic white ceramic cup on dark stone counter."}
                 </span>
-                <span className="font-medium text-forest/60">📸 Foto: Speisely Community</span>
+                <span className="font-medium text-forest/60 shrink-0">
+                  📸 Foto: Speisely Community
+                </span>
               </figcaption>
             </figure>
 
@@ -437,7 +441,7 @@ I will attach my own photos or videos to this email.`;
             </section>
 
             {/* Photo 3: Matcha & Pain au Chocolat */}
-            <figure className="my-8 rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
+            <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
               <img
                 src="/magazin/garcon-de-cafe-berlin/garcon-03.jpg"
                 alt={
@@ -445,16 +449,18 @@ I will attach my own photos or videos to this email.`;
                     ? "Matcha und Pain au Chocolat auf dem dunklen Holztisch"
                     : "Matcha latte and pain au chocolat on dark wooden table"
                 }
-                className="w-full h-auto max-h-[500px] object-cover"
+                className="w-full h-auto block"
                 loading="lazy"
               />
-              <figcaption className="p-3 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between">
+              <figcaption className="p-3.5 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between gap-2">
                 <span>
                   {isDe
                     ? "Matcha und Pain au Chocolat auf dem dunklen Holztisch."
                     : "Matcha and pain au chocolat on dark wooden table."}
                 </span>
-                <span className="font-medium text-forest/60">📸 Foto: Speisely Community</span>
+                <span className="font-medium text-forest/60 shrink-0">
+                  📸 Foto: Speisely Community
+                </span>
               </figcaption>
             </figure>
 
@@ -465,7 +471,7 @@ I will attach my own photos or videos to this email.`;
             </p>
 
             {/* Photo 4: Cappuccino & Granola Bowl */}
-            <figure className="my-8 rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
+            <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
               <img
                 src="/magazin/garcon-de-cafe-berlin/garcon-04.jpg"
                 alt={
@@ -473,16 +479,18 @@ I will attach my own photos or videos to this email.`;
                     ? "Cappuccino mit Latte Art und eine Frucht-Granola-Schale beim Community-Besuch"
                     : "Cappuccino with latte art and fruit granola bowl during community visit"
                 }
-                className="w-full h-auto max-h-[500px] object-cover"
+                className="w-full h-auto block"
                 loading="lazy"
               />
-              <figcaption className="p-3 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between">
+              <figcaption className="p-3.5 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between gap-2">
                 <span>
                   {isDe
                     ? "Cappuccino mit Latte Art und eine Frucht-Granola-Schale beim Community-Besuch."
                     : "Cappuccino with latte art and a fruit-granola bowl during the community visit."}
                 </span>
-                <span className="font-medium text-forest/60">📸 Foto: Speisely Community</span>
+                <span className="font-medium text-forest/60 shrink-0">
+                  📸 Foto: Speisely Community
+                </span>
               </figcaption>
             </figure>
 
@@ -506,7 +514,7 @@ I will attach my own photos or videos to this email.`;
             </section>
 
             {/* Photo 5: Closing Flat-Lay */}
-            <figure className="my-8 rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
+            <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
               <img
                 src="/magazin/garcon-de-cafe-berlin/garcon-05.jpg"
                 alt={
@@ -514,16 +522,18 @@ I will attach my own photos or videos to this email.`;
                     ? "Kaffee und Frucht-Granola auf dunklem Holztisch"
                     : "Coffee and fruit granola on dark wooden table"
                 }
-                className="w-full h-auto max-h-[500px] object-cover"
+                className="w-full h-auto block"
                 loading="lazy"
               />
-              <figcaption className="p-3 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between">
+              <figcaption className="p-3.5 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between gap-2">
                 <span>
                   {isDe
                     ? "Kaffee und Frucht-Granola auf dunklem Holztisch."
                     : "Coffee and fruit granola on dark wooden table."}
                 </span>
-                <span className="font-medium text-forest/60">📸 Foto: Speisely Community</span>
+                <span className="font-medium text-forest/60 shrink-0">
+                  📸 Foto: Speisely Community
+                </span>
               </figcaption>
             </figure>
           </div>
