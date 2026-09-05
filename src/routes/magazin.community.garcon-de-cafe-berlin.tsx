@@ -512,30 +512,6 @@ I will attach my own photos or videos to this email.`;
                   : "Beyond the stationary coffee shop at Invalidenstraße, Garçon de Café operates a dedicated mobile coffee catering service for events in Berlin and the surrounding area with two vintage Citroën coffee trucks (one brown and one silver) and modular indoor espresso bars."}
               </p>
             </section>
-
-            {/* Photo 5: Closing Flat-Lay */}
-            <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
-              <img
-                src="/magazin/garcon-de-cafe-berlin/garcon-05.jpg"
-                alt={
-                  isDe
-                    ? "Kaffee und Frucht-Granola auf dunklem Holztisch"
-                    : "Coffee and fruit granola on dark wooden table"
-                }
-                className="w-full h-auto block"
-                loading="lazy"
-              />
-              <figcaption className="p-3.5 text-xs text-forest/70 bg-[#F4EFE6] border-t border-forest/10 flex items-center justify-between gap-2">
-                <span>
-                  {isDe
-                    ? "Kaffee und Frucht-Granola auf dunklem Holztisch."
-                    : "Coffee and fruit granola on dark wooden table."}
-                </span>
-                <span className="font-medium text-forest/60 shrink-0">
-                  📸 Foto: Speisely Community
-                </span>
-              </figcaption>
-            </figure>
           </div>
 
           {/* SPOT-PASS INFO CARD */}
