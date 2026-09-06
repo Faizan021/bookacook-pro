@@ -7,7 +7,13 @@ test.describe("Contact Form Flow", () => {
     await page.goto("/contact");
 
     // Verify the page loaded
-    await expect(page.getByRole("heading", { name: /Kontakt|Contact/i }).first()).toBeVisible();
+    await expect(
+      page
+        .getByRole("heading", {
+          name: /Lassen Sie uns|Let's get in|Partner Support|Kontakt|Contact/i,
+        })
+        .first(),
+    ).toBeVisible();
 
     // Find the submit button
     const submitButton = page.getByRole("button", { name: /Senden|Send/i });

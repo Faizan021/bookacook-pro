@@ -41,7 +41,10 @@ test.describe("Authentication Flows", () => {
     await page.goto("/auth");
 
     // Click submit without entering data
-    await page.getByRole("button", { name: "Anmelden", exact: true }).click();
+    await page
+      .getByRole("button", { name: /Anmelden|Sign in/i, exact: true })
+      .first()
+      .click();
 
     // Expect error messages to appear for required fields
     await expect(page.locator("text=/Gültige E-Mail|Valid email/i")).toBeVisible();
@@ -53,7 +56,7 @@ test.describe("Authentication Flows", () => {
 
     // Fill out bad password
     await page
-      .getByLabel(/Passwort \*/)
+      .getByLabel(/Passwort|Password/i)
       .first()
       .fill("weak");
     await page.getByRole("button", { name: /Konto erstellen|Create account/i }).click();
