@@ -6,6 +6,19 @@ import { SiteShell } from "@/components/SiteShell";
 import { cateringFaqData, plannerFaqData } from "@/data/faq";
 
 export const Route = createFileRoute("/faq")({
+  head: () => ({
+    meta: [
+      { title: "Häufige Fragen (FAQ) — Speisely" },
+      {
+        name: "description",
+        content:
+          "Antworten auf die häufigsten Fragen zu Catering-Bestellungen, Event-Planung und Restaurant-Partnern auf Speisely.",
+      },
+      { property: "og:title", content: "Häufige Fragen (FAQ) — Speisely" },
+      { property: "og:url", content: "https://speisely.de/faq" },
+    ],
+    links: [{ rel: "canonical", href: "https://speisely.de/faq" }],
+  }),
   component: FaqPage,
 });
 

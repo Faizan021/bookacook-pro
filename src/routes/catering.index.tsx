@@ -47,9 +47,10 @@ export const Route = createFileRoute("/catering/")({
         content:
           "Geprüfte Caterer für jeden Anlass. Finde das perfekte Menü für Events, Büros oder Institutionen.",
       },
-      { property: "og:url", content: "/catering" },
+      { property: "og:url", content: "https://speisely.de/catering" },
     ],
     links: [
+      { rel: "canonical", href: "https://speisely.de/catering" },
       { rel: "preload", href: "/catering-clean.webp", as: "image", fetchpriority: "high" },
       {
         rel: "preload",

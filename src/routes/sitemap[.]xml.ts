@@ -30,7 +30,7 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const entries: SitemapEntry[] = [
           { path: "/", lastmod: today, changefreq: "weekly", priority: "1.0" },
-          { path: "/instant-order", lastmod: today, changefreq: "daily", priority: "0.9" },
+          { path: "/restaurants", lastmod: today, changefreq: "daily", priority: "0.9" },
           { path: "/catering", lastmod: today, changefreq: "weekly", priority: "0.9" },
           { path: "/planner", lastmod: today, changefreq: "weekly", priority: "0.9" },
           { path: "/speisely", lastmod: today, changefreq: "daily", priority: "0.9" },
@@ -39,6 +39,8 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/about", lastmod: "2026-06-01", changefreq: "monthly", priority: "0.5" },
           { path: "/impressum", lastmod: "2026-06-01", changefreq: "yearly", priority: "0.3" },
           { path: "/datenschutz", lastmod: today, changefreq: "monthly", priority: "0.5" },
+          { path: "/faq", lastmod: today, changefreq: "monthly", priority: "0.6" },
+          { path: "/contact", lastmod: today, changefreq: "monthly", priority: "0.5" },
           { path: "/magazin", lastmod: "2026-08-16", changefreq: "monthly", priority: "0.8" },
           {
             path: "/magazin/schnitzel-schmiede",

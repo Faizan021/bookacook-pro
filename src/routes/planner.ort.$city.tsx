@@ -29,7 +29,7 @@ export const Route = createFileRoute("/planner/ort/$city")({
       ? "noindex, follow"
       : "index, follow";
 
-    const canonicalUrl = `/planner/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
+    const canonicalUrl = `https://speisely.de/planner/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
 
     return {
       meta: [

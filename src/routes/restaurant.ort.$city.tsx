@@ -33,7 +33,7 @@ export const Route = createFileRoute("/restaurant/ort/$city")({
       `[SEO Index Gating] City: ${location.name} | Vendors count: ${loaderData?.vendors?.length ?? 0} (min 3) | Intro length: ${(seoData as any)?.intro_md?.length ?? 0} (min 150) | Status: ${finalIndexStatus}`,
     );
 
-    const canonicalUrl = `/restaurant/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
+    const canonicalUrl = `https://speisely.de/restaurant/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
 
     return {
       meta: [

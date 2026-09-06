@@ -24,6 +24,7 @@ export const Route = createFileRoute("/speisely")({
       },
       { property: "og:url", content: "https://speisely.de/speisely" },
     ],
+    links: [{ rel: "canonical", href: "https://speisely.de/speisely" }],
   }),
   component: SpeiselyFacts,
 });

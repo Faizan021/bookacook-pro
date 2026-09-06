@@ -30,9 +30,9 @@ export const Route = createFileRoute("/catering/events")({
         content:
           "Geprüfte Caterer für Hochzeiten, Firmenfeiern und Privates Plating. Jetzt vergleichen und unverbindlich anfragen.",
       },
-      { property: "og:url", content: "/catering/events" },
+      { property: "og:url", content: "https://speisely.de/catering/events" },
     ],
-    links: [{ rel: "canonical", href: "/catering/events" }],
+    links: [{ rel: "canonical", href: "https://speisely.de/catering/events" }],
   }),
   component: EventsCatering,
 });

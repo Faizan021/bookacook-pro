@@ -15,7 +15,10 @@ export const Route = createFileRoute("/blog/")({
         content:
           "News, Trends und Einblicke rund um Catering, Eventplanung und kulinarische Entdeckungen in Deutschland.",
       },
+      { property: "og:title", content: "News & Trends — Speisely Blog" },
+      { property: "og:url", content: "https://speisely.de/blog" },
     ],
+    links: [{ rel: "canonical", href: "https://speisely.de/blog" }],
   }),
   component: BlogIndex,
 });

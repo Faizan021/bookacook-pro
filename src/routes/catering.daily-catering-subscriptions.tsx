@@ -30,9 +30,9 @@ export const Route = createFileRoute("/catering/daily-catering-subscriptions")({
         content:
           "Warmes, frisches Mittagessen direkt geliefert für dein Büro. Konfiguriere deinen wöchentlichen oder täglichen Essensplan.",
       },
-      { property: "og:url", content: "/catering/daily-catering-subscriptions" },
+      { property: "og:url", content: "https://speisely.de/catering/daily-catering-subscriptions" },
     ],
-    links: [{ rel: "canonical", href: "/catering/daily-catering-subscriptions" }],
+    links: [{ rel: "canonical", href: "https://speisely.de/catering/daily-catering-subscriptions" }],
   }),
   component: DailySubscriptions,
 });

@@ -21,9 +21,9 @@ export const Route = createFileRoute("/partners")({
         property: "og:description",
         content: "Wachse mit Speisely: erreiche neue Gäste für Bestellungen, Catering und Events.",
       },
-      { property: "og:url", content: "/partners" },
+      { property: "og:url", content: "https://speisely.de/partners" },
     ],
-    links: [{ rel: "canonical", href: "/partners" }],
+    links: [{ rel: "canonical", href: "https://speisely.de/partners" }],
   }),
   component: Partners,
 });

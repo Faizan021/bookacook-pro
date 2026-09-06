@@ -180,7 +180,6 @@ function RootShell({ children }: { children: ReactNode }) {
           name="ahrefs-site-verification"
           content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"
         ></meta>
-        <link rel="canonical" href={canonicalUrl} />
       </head>
       <body>
         {children}

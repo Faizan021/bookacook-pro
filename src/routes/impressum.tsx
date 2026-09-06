@@ -5,7 +5,12 @@ import { ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/impressum")({
   head: () => ({
-    meta: [{ title: "Impressum & Legal — Speisely" }],
+    meta: [
+      { title: "Impressum & Legal — Speisely" },
+      { property: "og:title", content: "Impressum & Legal — Speisely" },
+      { property: "og:url", content: "https://speisely.de/impressum" },
+    ],
+    links: [{ rel: "canonical", href: "https://speisely.de/impressum" }],
   }),
   component: Impressum,
 });

@@ -46,9 +46,12 @@ export const Route = createFileRoute("/planner/")({
         content:
           "From event wish to concrete brief: type, date, guests, budget, diet, cuisine — matched with verified planners.",
       },
-      { property: "og:url", content: "/planner" },
+      { property: "og:url", content: "https://speisely.de/planner" },
     ],
-    links: [{ rel: "preload", href: "/planner-clean.webp", as: "image", fetchpriority: "high" }],
+    links: [
+      { rel: "canonical", href: "https://speisely.de/planner" },
+      { rel: "preload", href: "/planner-clean.webp", as: "image", fetchpriority: "high" },
+    ],
   }),
   validateSearch: z.object({
     q: z.string().optional(),

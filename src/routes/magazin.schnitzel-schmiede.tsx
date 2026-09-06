@@ -48,6 +48,7 @@ export const Route = createFileRoute("/magazin/schnitzel-schmiede")({
       { property: "og:url", content: "https://speisely.de/magazin/schnitzel-schmiede" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://speisely.de/magazin/schnitzel-schmiede" }],
     scripts: [
       {
         type: "application/ld+json",

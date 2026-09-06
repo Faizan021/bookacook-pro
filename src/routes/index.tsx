@@ -78,10 +78,13 @@ export const Route = createFileRoute("/")({
           "Speisely ist der Premium-Marktplatz für Restaurants, Catering und Event-Planung. Finde den richtigen Partner für dein Essen, dein Event oder dein Catering-Projekt.",
       },
       { property: "og:image", content: "https://speisely.de/og-default.jpg" },
-      { property: "og:url", content: "https://speisely.de/" },
+      { property: "og:url", content: "https://speisely.de" },
       { property: "og:type", content: "website" },
     ],
-    links: [{ rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" }],
+    links: [
+      { rel: "canonical", href: "https://speisely.de" },
+      { rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" },
+    ],
     scripts: [
       {
         children: `(function(){try{var h=window.location.hostname.toLowerCase();if(h.endsWith('.speisely.de')&&h!=='speisely.de'&&h!=='www.speisely.de'&&h!=='app.speisely.de'&&h!=='admin.speisely.de'){var sub=h.replace('.speisely.de','').trim();if(sub&&!window.location.pathname.startsWith('/catering/')&&!window.location.pathname.startsWith('/restaurant/')&&!window.location.pathname.startsWith('/planner/')){window.location.replace('/catering/'+sub+window.location.search);}}}catch(e){}})();`,

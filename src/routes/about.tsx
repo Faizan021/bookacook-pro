@@ -20,9 +20,12 @@ export const Route = createFileRoute("/about")({
         content:
           "Restaurant-Bestellungen, Catering und Event-Planung auf einer Plattform — kuratiert und persönlich.",
       },
-      { property: "og:url", content: "/about" },
+      { property: "og:url", content: "https://speisely.de/about" },
     ],
-    links: [{ rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" }],
+    links: [
+      { rel: "canonical", href: "https://speisely.de/about" },
+      { rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" },
+    ],
   }),
   component: About,
 });

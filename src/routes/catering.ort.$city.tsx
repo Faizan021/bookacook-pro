@@ -26,7 +26,7 @@ export const Route = createFileRoute("/catering/ort/$city")({
       ? "noindex, follow"
       : "index, follow";
 
-    const canonicalUrl = `/catering/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
+    const canonicalUrl = `https://speisely.de/catering/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
 
     return {
       meta: [

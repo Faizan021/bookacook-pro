@@ -32,9 +32,11 @@ export const Route = createFileRoute("/catering/institutional-catering")({
         content:
           "Ausgewogene Mahlzeiten für Schulen, Kitas und Heime. Zertifizierte Frischeküche, kindgerechte Rezepturen und zuverlässige Logistik.",
       },
-      { property: "og:url", content: "/catering/institutional-catering" },
+      { property: "og:url", content: "https://speisely.de/catering/institutional-catering" },
     ],
-    links: [{ rel: "canonical", href: "/catering/institutional-catering" }],
+    links: [
+      { rel: "canonical", href: "https://speisely.de/catering/institutional-catering" },
+    ],
   }),
   component: InstitutionalCatering,
 });

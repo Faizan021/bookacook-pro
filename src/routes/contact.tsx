@@ -16,6 +16,19 @@ import {
 import { sendContactEmail } from "@/lib/email.functions";
 
 export const Route = createFileRoute("/contact")({
+  head: () => ({
+    meta: [
+      { title: "Kontakt & Support — Speisely" },
+      {
+        name: "description",
+        content:
+          "Kontaktiere das Speisely-Team für Fragen, Partnerschaften oder Support zu Catering und Event-Planung.",
+      },
+      { property: "og:title", content: "Kontakt & Support — Speisely" },
+      { property: "og:url", content: "https://speisely.de/contact" },
+    ],
+    links: [{ rel: "canonical", href: "https://speisely.de/contact" }],
+  }),
   component: ContactRoute,
 });
 
