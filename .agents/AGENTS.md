@@ -185,3 +185,15 @@ A Speisely task is only “done” when all of the following are true:
 - Risk is clearly stated.
 - The result is lightweight enough for the project standard.
 - The report explains what changed and what was verified.
+
+---
+
+## 9. Mandatory LLMs.txt & Sitemap Synchronization Rule (GEO / AEO)
+
+Whenever ANY new article, blog post, Speisely Visit, community partner story, or public route is added, renamed, or updated:
+- You MUST immediately update and synchronize:
+  1. `src/routes/llms[.]txt.ts` (API route serving `/llms.txt` dynamically)
+  2. `public/llms.txt` and `public/llms-full.txt` (Static documentation for AI search crawlers)
+  3. `src/routes/sitemap[.]xml.ts` (Dynamic XML sitemap for search engines)
+- Never leave new public content, city landing pages, or partner editorial articles unmapped in `/llms.txt` or `sitemap.xml`. AI search engines (Perplexity, ChatGPT Search, Claude, Gemini) rely on these files for authoritative citations.
+

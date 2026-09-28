@@ -38,6 +38,20 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 
 ${blogUrls}
 
+## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
+
+- Mandy Restaurant (Berlin-Neukölln): ${BASE}/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
+- Shawarma Albaik (Berlin): ${BASE}/magazin/speisely-visits/shawarma-albaik-berlin
+- Kokio Korean Fried Chicken (Berlin): ${BASE}/magazin/community/kokio-berlin
+- Al Zaeem Restaurant (Berlin): ${BASE}/magazin/community/alzaeem-restaurant-berlin
+- Garçon de Café (Berlin): ${BASE}/magazin/community/garcon-de-cafe-berlin
+- Thronburger (Berlin): ${BASE}/magazin/community/thronburger-berlin
+- Harput Restaurant (Wiesbaden): ${BASE}/magazin/community/harput-wiesbaden
+- Ariana Restaurant (Frankfurt am Main): ${BASE}/magazin/community/ariana-restaurant-frankfurt
+- Schnitzel Schmiede (EineStadt-Fest Mönchengladbach): ${BASE}/magazin/schnitzel-schmiede
+- Speisely Magazin Hub: ${BASE}/magazin
+- Speisely Visits Hub: ${BASE}/magazin/speisely-visits
+
 ## Language
 
 Default: German (de). English available via language toggle.

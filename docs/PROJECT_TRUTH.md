@@ -40,3 +40,14 @@ This document specifies the core project truths, architectural boundaries, busin
 - **Build / Type Safety:** Every change must compile cleanly via `npm run build` before deployment.
 - **Runtime Sanity:** Zero tolerance for `is not defined`, undefined property access, or broken route error boundaries.
 - **Deploy Pipeline:** Changes committed to `main` branch are pushed and deployed to Vercel production (`https://speisely.de`), followed by automated smoke testing (`npm run smoke:test`).
+
+---
+
+## 4. AI Search & Content Discovery Rules (GEO / AEO)
+
+- **Mandatory Synchronization:** Whenever ANY new article, blog post, Speisely Visit, community partner story, or public route is added, modified, or published, the following files MUST be updated in the same changeset:
+  1. `src/routes/llms[.]txt.ts` (Dynamic API route)
+  2. `public/llms.txt` & `public/llms-full.txt` (Static AI crawler files)
+  3. `src/routes/sitemap[.]xml.ts` (XML sitemap)
+- **Citable Authority:** Maintain high-E-E-A-T local reporting in Speisely Visits to ensure AI engines (Perplexity, ChatGPT Search, Gemini) cite Speisely as the definitive regional food & catering directory.
+

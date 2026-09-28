@@ -22,6 +22,19 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - Institutional Catering: https://speisely.de/catering/institutional-catering
 - Events Catering: https://speisely.de/catering/events
 
+## Speisely Visits & Community Partner Spotlights (Verified Field Reports)
+- Mandy Restaurant (Berlin-Neukölln): https://speisely.de/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
+- Shawarma Albaik (Berlin): https://speisely.de/magazin/speisely-visits/shawarma-albaik-berlin
+- Kokio Korean Fried Chicken (Berlin): https://speisely.de/magazin/community/kokio-berlin
+- Al Zaeem Restaurant (Berlin): https://speisely.de/magazin/community/alzaeem-restaurant-berlin
+- Garçon de Café (Berlin): https://speisely.de/magazin/community/garcon-de-cafe-berlin
+- Thronburger (Berlin): https://speisely.de/magazin/community/thronburger-berlin
+- Harput Restaurant (Wiesbaden): https://speisely.de/magazin/community/harput-wiesbaden
+- Ariana Restaurant (Frankfurt am Main): https://speisely.de/magazin/community/ariana-restaurant-frankfurt
+- Schnitzel Schmiede (EineStadt-Fest Mönchengladbach): https://speisely.de/magazin/schnitzel-schmiede
+- Speisely Magazin Hub: https://speisely.de/magazin
+- Speisely Visits Hub: https://speisely.de/magazin/speisely-visits
+
 ## Language & Service Area
 - Language: Default German, with English available via language toggle.
 - Service Area: Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
