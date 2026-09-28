@@ -80,15 +80,37 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Speisely — Instant Food Order, Catering & Event Planning" },
+      { title: "Speisely — Marktplatz für Catering, Restaurants & Eventplanung" },
       {
         name: "description",
         content:
-          "Speisely connects spontaneous restaurant food orders, curated catering and professional event planning on one marketplace.",
+          "Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland.",
       },
       { property: "og:site_name", content: "Speisely" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:locale", content: "de_DE" },
+      {
+        property: "og:title",
+        content: "Speisely — Marktplatz für Catering, Restaurants & Eventplanung",
+      },
+      {
+        property: "og:description",
+        content:
+          "Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland.",
+      },
+      { property: "og:url", content: "https://speisely.de" },
+      { property: "og:image", content: "https://speisely.de/hero-cinematic.webp" },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "Speisely — Marktplatz für Catering, Restaurants & Eventplanung",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Catering buchen, Essen bei lokalen Restaurants bestellen und Eventplaner in ganz Deutschland finden.",
+      },
+      { name: "twitter:image", content: "https://speisely.de/hero-cinematic.webp" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -99,6 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap",
       },
+      { rel: "sitemap", type: "application/xml", href: "https://speisely.de/sitemap.xml" },
     ],
     scripts: [
       {
@@ -107,12 +130,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           {
             "@context": "https://schema.org",
             "@type": "Organization",
+            "@id": "https://speisely.de/#organization",
             name: "Speisely",
             alternateName: "Speisely Marketplace",
             description:
               "Speisely verbindet Restaurants, Caterer und Eventplaner in ganz Deutschland mit Kunden. Buchen Sie erstklassige Catering-Services, Eventplaner oder bestellen Sie Essen bei lokalen Restaurants.",
             url: "https://speisely.de",
-            logo: "https://speisely.de/favicon.svg",
+            logo: {
+              "@type": "ImageObject",
+              url: "https://speisely.de/favicon.svg",
+            },
             foundingDate: "2026",
             areaServed: {
               "@type": "Country",
@@ -128,6 +155,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               "@type": "ContactPoint",
               contactType: "customer support",
               availableLanguage: ["German", "English"],
+              email: "kontakt@speisely.de",
             },
             sameAs: [
               "https://www.linkedin.com/company/speisely",
@@ -138,9 +166,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           {
             "@context": "https://schema.org",
             "@type": "WebSite",
+            "@id": "https://speisely.de/#website",
             name: "Speisely",
             url: "https://speisely.de",
-            inLanguage: ["de", "en"],
+            inLanguage: ["de-DE", "en-US"],
+            publisher: {
+              "@id": "https://speisely.de/#organization",
+            },
             description:
               "Speisely verbindet Restaurants, Caterer und Event-Planer mit Kunden in ganz Deutschland — Sofortbestellung, Catering-Anfragen und Event-Planung auf einer Plattform.",
             datePublished: "2026-06-01",
@@ -153,6 +185,60 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               },
               "query-input": "required name=search_term_string",
             },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": "https://speisely.de/#faq",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "Was ist Speisely?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Speisely ist ein deutschlandweiter Marktplatz, der drei Services vereint: Direktbestellungen bei lokalen Restaurants (0 % Bestellprovision), ein Marktplatz für Event- und Firmen-Catering sowie ein Buchungstool für professionelle Eventplaner.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Was kostet Catering über Speisely?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Die Anfrage über Speisely ist für Kunden und Unternehmen zu 100 % kostenlos. Caterer erstellen individuelle, transparente Angebote je nach Personenzahl, Menüauswahl und Anlass.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "In welchen Städten ist Speisely verfügbar?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Speisely ist deutschlandweit aktiv, darunter in Berlin, Hamburg, München, Köln, Frankfurt am Main, Stuttgart, Düsseldorf, Leipzig, Wiesbaden und Mönchengladbach.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Wie funktioniert die Buchung von Event-Catering?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Kunden geben Anlass, Gästezahl und Datum ein. Verifizierte regionale Caterer senden maßgeschneiderte Angebote. Nach Auswahl wird der Termin per Anzahlung sicher reserviert.",
+                },
+              },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "@id": "https://speisely.de/#service-catering",
+            serviceType: "Catering Marketplace & Event Food",
+            provider: {
+              "@id": "https://speisely.de/#organization",
+            },
+            areaServed: {
+              "@type": "Country",
+              name: "Germany",
+            },
+            description:
+              "Vermittlung von verifizierten Event-Caterern, Fingerfood, Buffets, Hochzeits- und Business-Catering in ganz Deutschland.",
           },
         ]),
       },
@@ -172,9 +258,10 @@ function RootShell({ children }: { children: ReactNode }) {
   const canonicalUrl = pathname === "/" ? "https://speisely.de" : `https://speisely.de${pathname}`;
 
   return (
-    <html lang="en">
+    <html lang="de">
       <head>
         <HeadContent />
+        <link rel="canonical" href={canonicalUrl} />
         <link rel="manifest" href="/manifest.json" />
         <meta
           name="ahrefs-site-verification"

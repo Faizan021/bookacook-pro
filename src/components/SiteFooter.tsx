@@ -66,9 +66,8 @@ export function SiteFooter() {
             <FooterLink to="/partners" label={t("nav.partners")} />
             <FooterLink to="/speisely" label={t("Was ist Speisely?", "What is Speisely?")} />
             <FooterLink to="/about" label={t("nav.about")} />
-            <FooterLink to="/" label="Success Stories" />
-            <FooterLink to="/" label="Careers" />
-            <FooterLink to="/" label="Contact / Help" />
+            <FooterLink to="/magazin" label={t("Presse & Magazin", "Press & Magazine")} />
+            <FooterLink to="/contact" label={t("Kontakt & Hilfe", "Contact & Help")} />
           </ul>
           <div className="mt-5 flex gap-3">
             <a
