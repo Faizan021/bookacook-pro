@@ -456,41 +456,6 @@ I will attach my own photos or videos to this email.`;
               </figure>
             </div>
 
-            {/* Photo 6 — Moss Wall Atmosphere (HD) */}
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Atmosphäre: Grünes Moos & Kaffeekultur" : "Atmosphere: Lush Greenery & Coffee Culture"}
-            </h2>
-
-            <p>
-              {isDe
-                ? "Das Café an der Uhlandstraße unweit des Kurfürstendamms empfängt Gäste mit einer raumhohen grünen Mooswand, warmen Holztönen, bequemen Sesseln und einem leuchtenden Neonschriftzug. Neben den Desserts wird handwerklicher Kaffee serviert – vom klassischen Flat White über samtigen Cappuccino bis hin zu erfrischenden Iced-Spezialitäten, die das süße Dessert ideal ausbalancieren."
-                : "Located on Uhlandstraße just off the Kurfürstendamm, the café welcomes visitors with a floor-to-ceiling preserved moss wall, warm natural wood, cozy textured seating, and a glowing neon emblem. Alongside the cheesecakes, freshly pulled specialty coffee is served — from flat whites and silky lattes to iced drinks that balance the dessert's richness."}
-            </p>
-
-            <figure className="my-8 max-w-xl mx-auto">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-06-moss-wall-neon.webp"
-                  alt={
-                    isDe
-                      ? "Innenbereich von San Sebastian Berlin mit grüner Mooswand, Neonschriftzug und gemütlichen Holztischen"
-                      : "Interior of San Sebastian Berlin featuring green moss wall, neon logo and warm wooden tables"
-                  }
-                  className="w-full h-auto object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
-                <span>
-                  {isDe
-                    ? "Grüne Mooswand und warmes Licht im Loungebereich an der Uhlandstraße."
-                    : "Preserved moss wall and ambient lighting in the Charlottenburg lounge."}
-                </span>
-                <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
-              </figcaption>
-            </figure>
-
             <p className="font-medium text-forest text-lg pt-2">
               {isDe
                 ? "Ein Ort für echte Genießer: San Sebastian The Original® beweist eindrucksvoll, warum die baskische Käsekuchenkultur von Santiago Riveras kleiner Küche in San Sebastián bis nach Berlin zu einem weltweiten Phänomen geworden ist."
