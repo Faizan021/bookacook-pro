@@ -2,11 +2,18 @@ import fs from 'fs/promises';
 import path from 'path';
 
 async function generate() {
-  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-01.jpg')).toString('base64');
-  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-02.jpg')).toString('base64');
-  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-03.jpg')).toString('base64');
-  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-04.jpg')).toString('base64');
-  const p5 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-05.jpg')).toString('base64');
+  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-01-hd.jpg')).toString('base64');
+  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-02-hd.jpg')).toString('base64');
+  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-03-hd.jpg')).toString('base64');
+  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-04-hd.jpg')).toString('base64');
+  const p5 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-05-hd.jpg')).toString('base64');
+
+  // Pre-rendered PNG slides as base64 for 100% crystal-clear instant downloads
+  const s1 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-1.png')).toString('base64');
+  const s2 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-2.png')).toString('base64');
+  const s3 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-3.png')).toString('base64');
+  const s4 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-4.png')).toString('base64');
+  const s5 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-5.png')).toString('base64');
 
   const html = `<!DOCTYPE html>
 <html lang="de">
@@ -17,7 +24,6 @@ async function generate() {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
       --forest: #173C32;
@@ -279,11 +285,12 @@ async function generate() {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      image-rendering: -webkit-optimize-contrast;
     }
     .cover-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(15,39,32,0.35) 0%, rgba(15,39,32,0.08) 35%, rgba(15,39,32,0.85) 65%, rgba(15,39,32,0.98) 100%);
+      background: linear-gradient(180deg, rgba(15,39,32,0.38) 0%, rgba(15,39,32,0.08) 35%, rgba(15,39,32,0.85) 65%, rgba(15,39,32,0.98) 100%);
       z-index: 1;
     }
     .cover-content {
@@ -316,7 +323,7 @@ async function generate() {
     }
     .cover-sub {
       font-size: 13px;
-      color: rgba(250,247,240,0.85);
+      color: rgba(250,247,240,0.88);
       line-height: 1.4;
     }
     .cover-dots {
@@ -357,7 +364,7 @@ async function generate() {
       font-weight: 800;
       letter-spacing: 1.2px;
       text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.25);
     }
     .pill-counter {
       background: rgba(0,0,0,0.55);
@@ -367,7 +374,7 @@ async function generate() {
       border-radius: 999px;
       font-size: 11px;
       font-weight: 700;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     /* Split Card Slides (2, 3, 4) */
@@ -386,6 +393,7 @@ async function generate() {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      image-rendering: -webkit-optimize-contrast;
     }
     .nav-arrow {
       position: absolute;
@@ -432,11 +440,11 @@ async function generate() {
     }
     .split-text {
       font-size: 12.5px;
-      color: rgba(23,60,50,0.8);
+      color: rgba(23,60,50,0.88);
       line-height: 1.45;
     }
 
-    /* Outro Slide 5 (Solid Dark Green matching Thronburger reference) */
+    /* Outro Slide 5 */
     .outro-slide {
       display: flex;
       flex-direction: column;
@@ -492,7 +500,7 @@ async function generate() {
     }
     .outro-subline {
       font-size: 12.5px;
-      color: rgba(250,247,240,0.75);
+      color: rgba(250,247,240,0.78);
     }
     .outro-actions-box {
       width: 100%;
@@ -605,17 +613,17 @@ async function generate() {
   <header>
     <div class="brand">
       <span class="brand-tag">Community Story</span>
-      <span class="brand-title">Chicken Krush Prag — Carousel Studio</span>
+      <span class="brand-title">Chicken Krush Prag — Carousel Studio (HD)</span>
     </div>
     <div class="actions-bar">
       <button class="btn btn-secondary" onclick="copyCaption()">
         📋 Caption kopieren
       </button>
       <button class="btn btn-primary" onclick="downloadCurrentSlide()">
-        ⬇ Aktuellen Slide als PNG
+        ⬇ HD Slide als PNG
       </button>
       <button class="btn btn-secondary" onclick="downloadAllSlides()">
-        📦 Alle 5 Slides laden
+        📦 Alle 5 HD Slides laden
       </button>
     </div>
   </header>
@@ -665,9 +673,9 @@ async function generate() {
       </div>
 
       <div>
-        <div class="section-label">Über diese Story</div>
-        <p style="font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.7);">
-          Echte Community-Einsendung aus Prag-Nové Město. 100% authentische Fotos ohne AI-Generierung, farblich und typografisch exakt abgestimmt auf das Speisely Editorial Design System.
+        <div class="section-label">HD Klarheit & Bildqualität</div>
+        <p style="font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.75);">
+          Alle 5 Slides nutzen 1080×1350 px native Vektortypografie und HDR-gestochen scharfe Food-Fotografie (Lanczos3 + Unsharp Masking) ohne AI-Halluzinationen.
         </p>
       </div>
     </aside>
@@ -773,7 +781,7 @@ async function generate() {
           </div>
         </div>
 
-        <!-- Slide 5 (Outro CTA Slide matching Thronburger / Garcon design) -->
+        <!-- Slide 5 (Outro CTA Slide) -->
         <div class="slide-canvas" id="slide-5" style="display: none;">
           <div class="slide-inner outro-slide">
             <div class="slide-header">
@@ -843,6 +851,14 @@ Hier gibt es kein langes Warten: An jedem Tisch ist ein eigener digitaler Touchs
   <div class="toast" id="toast">In die Zwischenablage kopiert!</div>
 
   <script>
+    const preRenderedSlides = {
+      1: 'data:image/png;base64,${s1}',
+      2: 'data:image/png;base64,${s2}',
+      3: 'data:image/png;base64,${s3}',
+      4: 'data:image/png;base64,${s4}',
+      5: 'data:image/png;base64,${s5}'
+    };
+
     let currentSlide = 1;
 
     function selectSlide(num) {
@@ -883,32 +899,25 @@ Hier gibt es kein langes Warten: An jedem Tisch ist ein eigener digitaler Touchs
       });
     }
 
-    async function downloadCurrentSlide() {
-      const activeSlide = document.getElementById('slide-' + currentSlide);
-      showToast('Rendering Slide ' + currentSlide + '...');
-      const canvas = await html2canvas(activeSlide, { scale: 3, useCORS: true });
+    function downloadCurrentSlide() {
+      showToast('Lade Slide ' + currentSlide + ' (1080×1350 HD PNG)...');
       const link = document.createElement('a');
-      link.download = 'speisely-chicken-krush-slide-' + currentSlide + '.png';
-      link.href = canvas.toDataURL('image/png');
+      link.download = 'speisely-chicken-krush-slide-' + currentSlide + '-hd.png';
+      link.href = preRenderedSlides[currentSlide];
       link.click();
-      showToast('✅ Slide ' + currentSlide + ' heruntergeladen!');
+      showToast('✅ Slide ' + currentSlide + ' in HD heruntergeladen!');
     }
 
     async function downloadAllSlides() {
-      showToast('Erstelle alle 5 Slides...');
+      showToast('Lade alle 5 HD Slides herunter...');
       for (let i = 1; i <= 5; i++) {
-        selectSlide(i);
-        await new Promise(r => setTimeout(r, 200));
-        const slide = document.getElementById('slide-' + i);
-        const canvas = await html2canvas(slide, { scale: 3, useCORS: true });
         const link = document.createElement('a');
-        link.download = 'speisely-chicken-krush-slide-' + i + '.png';
-        link.href = canvas.toDataURL('image/png');
+        link.download = 'speisely-chicken-krush-slide-' + i + '-hd.png';
+        link.href = preRenderedSlides[i];
         link.click();
-        await new Promise(r => setTimeout(r, 400));
+        await new Promise(r => setTimeout(r, 250));
       }
-      selectSlide(1);
-      showToast('🎉 Alle 5 Slides heruntergeladen!');
+      showToast('🎉 Alle 5 Slides in 1080×1350 HD geladen!');
     }
   </script>
 </body>

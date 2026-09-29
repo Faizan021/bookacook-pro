@@ -10,16 +10,18 @@ async function generateSlides() {
   const W = 1080;
   const H = 1350;
 
-  // Slide 1: Cover
+  // Slide 1: Cover (with HD sharpening & vibrance)
   const coverBg = await sharp('public/magazin/chicken-krush-prag/chicken-krush-real-01.jpg')
-    .resize(W, H, { fit: 'cover', position: 'center' })
+    .resize(W, H, { fit: 'cover', position: 'center', kernel: 'lanczos3' })
+    .modulate({ brightness: 1.04, saturation: 1.15 })
+    .sharpen({ sigma: 1.4, m1: 1.2, m2: 2.2 })
     .toBuffer();
 
   const svgCover = `
     <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0f2720" stop-opacity="0.35"/>
+          <stop offset="0%" stop-color="#0f2720" stop-opacity="0.38"/>
           <stop offset="35%" stop-color="#0f2720" stop-opacity="0.08"/>
           <stop offset="65%" stop-color="#0f2720" stop-opacity="0.85"/>
           <stop offset="100%" stop-color="#0f2720" stop-opacity="0.98"/>
@@ -29,11 +31,11 @@ async function generateSlides() {
 
       <!-- Top Header -->
       <g transform="translate(60, 60)">
-        <rect width="220" height="48" rx="24" fill="#173C32" fill-opacity="0.92" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <rect width="220" height="48" rx="24" fill="#173C32" fill-opacity="0.92" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
         <text x="110" y="31" font-family="sans-serif" font-size="17" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY MAGAZIN</text>
       </g>
       <g transform="translate(${W - 170}, 60)">
-        <rect width="110" height="48" rx="24" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+        <rect width="110" height="48" rx="24" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
         <text x="55" y="31" font-family="sans-serif" font-size="19" font-weight="700" fill="#FAF7F0" text-anchor="middle">01 / 05</text>
       </g>
 
@@ -48,7 +50,7 @@ async function generateSlides() {
         <text x="0" y="175" font-family="serif" font-size="52" font-weight="800" fill="#FAF7F0">Glanz &amp; Rose Tteokbokki</text>
         
         <!-- Subline -->
-        <text x="0" y="235" font-family="sans-serif" font-size="26" font-weight="500" fill="rgba(250,247,240,0.85)">Zu Besuch bei Chicken Krush in Prag-Nové Město.</text>
+        <text x="0" y="235" font-family="sans-serif" font-size="26" font-weight="500" fill="rgba(250,247,240,0.88)">Zu Besuch bei Chicken Krush in Prag-Nové Město.</text>
 
         <!-- Dots -->
         <g transform="translate(0, 275)">
@@ -64,40 +66,42 @@ async function generateSlides() {
 
   await sharp(coverBg)
     .composite([{ input: Buffer.from(svgCover) }])
-    .png({ quality: 100 })
+    .png({ quality: 100, compressionLevel: 6 })
     .toFile(path.join(outDir, 'slide-1.png'));
-  console.log('Created slide-1.png');
+  console.log('Created slide-1.png (HD)');
 
-  // Helper for Slides 2, 3, 4
+  // Helper for Slides 2, 3, 4 (with high-clarity Lanczos3 & unsharp masking)
   async function makeSplitSlide({ num, imgPath, kicker, title, desc }) {
     const imgH = 880;
     const cardH = H - imgH;
 
     const topImg = await sharp(imgPath)
-      .resize(W, imgH, { fit: 'cover', position: 'center' })
+      .resize(W, imgH, { fit: 'cover', position: 'center', kernel: 'lanczos3' })
+      .modulate({ brightness: 1.05, saturation: 1.18 })
+      .sharpen({ sigma: 1.6, m1: 1.3, m2: 2.3 })
       .toBuffer();
 
     const svgOverlay = `
       <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
         <!-- Top Header -->
         <g transform="translate(60, 60)">
-          <rect width="235" height="48" rx="24" fill="#173C32" fill-opacity="0.92" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <rect width="235" height="48" rx="24" fill="#173C32" fill-opacity="0.92" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
           <text x="117.5" y="31" font-family="sans-serif" font-size="17" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY COMMUNITY</text>
         </g>
         <g transform="translate(${W - 170}, 60)">
-          <rect width="110" height="48" rx="24" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <rect width="110" height="48" rx="24" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
           <text x="55" y="31" font-family="sans-serif" font-size="19" font-weight="700" fill="#FAF7F0" text-anchor="middle">0${num} / 05</text>
         </g>
 
         <!-- White Bottom Card -->
         <g transform="translate(0, ${imgH})">
           <rect width="${W}" height="${cardH}" fill="#FFFFFF" />
-          <line x1="0" y1="0" x2="${W}" y2="0" stroke="rgba(23,60,50,0.1)" stroke-width="2"/>
+          <line x1="0" y1="0" x2="${W}" y2="0" stroke="rgba(23,60,50,0.12)" stroke-width="2"/>
           
           <g transform="translate(60, 65)">
             <text x="0" y="0" font-family="sans-serif" font-size="18" font-weight="800" fill="#A85C36" letter-spacing="2.5">${kicker}</text>
             <text x="0" y="55" font-family="serif" font-size="44" font-weight="700" fill="#173C32">${title}</text>
-            <text x="0" y="115" font-family="sans-serif" font-size="24" font-weight="400" fill="rgba(23,60,50,0.85)" width="960">
+            <text x="0" y="115" font-family="sans-serif" font-size="24" font-weight="400" fill="rgba(23,60,50,0.88)" width="960">
               <tspan x="0" dy="0">${desc.split('\n')[0] || ''}</tspan>
               <tspan x="0" dy="38">${desc.split('\n')[1] || ''}</tspan>
             </text>
@@ -115,9 +119,9 @@ async function generateSlides() {
         { input: topImg, top: 0, left: 0 },
         { input: Buffer.from(svgOverlay), top: 0, left: 0 }
       ])
-      .png({ quality: 100 })
+      .png({ quality: 100, compressionLevel: 6 })
       .toFile(path.join(outDir, `slide-${num}.png`));
-    console.log(`Created slide-${num}.png`);
+    console.log(`Created slide-${num}.png (HD)`);
   }
 
   // Slide 2
@@ -147,12 +151,12 @@ async function generateSlides() {
     desc: 'Dick eingekochte Sauce mit Honig, Knoblauch und Chili,\nabgerundet mit gerösteten Mandelsplittern für extra Biss.'
   });
 
-  // Slide 5 (Outro / Call-To-Action Slide matching Thronburger & Garcon reference layout)
+  // Slide 5 (Outro CTA Slide)
   const svgOutro = `
     <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="centerGlow" cx="50%" cy="45%" r="65%">
-          <stop offset="0%" stop-color="#215245" stop-opacity="0.8"/>
+          <stop offset="0%" stop-color="#215245" stop-opacity="0.85"/>
           <stop offset="100%" stop-color="#173C32" stop-opacity="1"/>
         </radialGradient>
       </defs>
@@ -162,17 +166,17 @@ async function generateSlides() {
 
       <!-- Top Header -->
       <g transform="translate(60, 60)">
-        <rect width="220" height="48" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <rect width="220" height="48" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
         <text x="110" y="31" font-family="sans-serif" font-size="17" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY MAGAZIN</text>
       </g>
       <g transform="translate(${W - 170}, 60)">
-        <rect width="110" height="48" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        <rect width="110" height="48" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
         <text x="55" y="31" font-family="sans-serif" font-size="19" font-weight="700" fill="#FAF7F0" text-anchor="middle">05 / 05</text>
       </g>
 
       <!-- Center Logo & Brand Block -->
       <g transform="translate(540, 410)" text-anchor="middle">
-        <!-- Crossed Fork & Knife Icon (Clean vector) -->
+        <!-- Crossed Fork & Knife Icon -->
         <g transform="translate(0, -90) scale(1.6)">
           <path d="M-18,-24 C-18,-15 -10,-10 -6,-6 L-24,12 C-26,14 -26,17 -24,19 C-22,21 -19,21 -17,19 L1,-1 C-3,-5 -8,-13 -18,-24 Z" fill="#E6B84A" />
           <path d="M18,-24 C18,-15 10,-10 6,-6 L24,12 C26,14 26,17 24,19 C22,21 19,21 17,19 L-1,-1 C3,-5 8,-13 18,-24 Z" fill="#E6B84A" />
@@ -193,7 +197,7 @@ async function generateSlides() {
         <text x="0" y="280" font-family="serif" font-size="52" font-weight="800" fill="#FAF7F0">auf speisely.de!</text>
 
         <!-- Subline / Prompt -->
-        <text x="0" y="355" font-family="sans-serif" font-size="26" font-weight="500" fill="rgba(250,247,240,0.75)">Authentische K-Food-Kultur in Prag-Nové Město</text>
+        <text x="0" y="355" font-family="sans-serif" font-size="26" font-weight="500" fill="rgba(250,247,240,0.78)">Authentische K-Food-Kultur in Prag-Nové Město</text>
       </g>
 
       <!-- Interaction Actions Container (Save / Share / Like) -->
@@ -221,11 +225,11 @@ async function generateSlides() {
   `;
 
   await sharp(Buffer.from(svgOutro))
-    .png({ quality: 100 })
+    .png({ quality: 100, compressionLevel: 6 })
     .toFile(path.join(outDir, 'slide-5.png'));
-  console.log('Created slide-5.png (Outro CTA)');
+  console.log('Created slide-5.png (HD Outro CTA)');
 
-  console.log('All 5 high-resolution Instagram slides rendered successfully!');
+  console.log('All 5 high-resolution Instagram slides rendered in HD successfully!');
 }
 
 generateSlides().catch(console.error);
