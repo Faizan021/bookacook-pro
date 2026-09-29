@@ -21,7 +21,6 @@ import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { toast } from "sonner";
 import { motion, LayoutGroup, useReducedMotion } from "framer-motion";
-import { SmartSearchPipeline } from "@/components/search/SmartSearchPipeline";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -741,13 +740,6 @@ function Home() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────
-          NEXT-GEN SEARCH PIPELINE (Multi-Stage Discovery)
-      ───────────────────────────────────────────────── */}
-      <section className="relative -mt-10 mb-12 px-4 sm:px-6 lg:px-8 z-20">
-        <SmartSearchPipeline />
       </section>
 
       {/* ─────────────────────────────────────────────────
