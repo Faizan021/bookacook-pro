@@ -6,9 +6,9 @@ import {
   Mail,
   Instagram,
   Sparkles,
-  Coffee,
   Share2,
   Check,
+  Award,
 } from "lucide-react";
 import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp",
+        content: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp?v=2",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -81,7 +81,7 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
                 "Karamellisierte Kruste, samtiger Kern und Schokofluss: San Sebastian Cheesecake in Berlin",
               description:
                 "Ein Speisely-Community-Besuch bei San Sebastian The Original® in Berlin-Charlottenburg: Baskische Käsekuchenkultur, Pistazienstaub, warmer Schokoguss und die Entstehungsgeschichte des Kultkuchens.",
-              image: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp",
+              image: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp?v=2",
               datePublished: "2026-09-29",
               dateModified: "2026-09-29",
               author: {
@@ -162,9 +162,11 @@ function SanSebastianCommunityPage() {
   const [copied, setCopied] = useState(false);
 
   const copyPageLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2200);
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    }
   };
 
   const emailSubject = isDe
@@ -204,7 +206,7 @@ I will attach my own photos or videos to this email.`;
     <SiteShell>
       <div className="bg-[#FAF7F0] text-forest min-h-screen">
         {/* Breadcrumb */}
-        <div className="border-b border-forest/10 bg-white/60 backdrop-blur-md sticky top-16 z-30">
+        <div className="border-b border-forest/10 bg-white/70 backdrop-blur-md sticky top-16 z-30 shadow-xs">
           <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6 flex items-center justify-between">
             <nav aria-label="Breadcrumb" className="text-xs font-medium text-forest/70 truncate">
               <ol className="flex items-center gap-1.5 flex-wrap">
@@ -235,7 +237,7 @@ I will attach my own photos or videos to this email.`;
               <button
                 type="button"
                 onClick={copyPageLink}
-                className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-forest/5 text-forest hover:bg-forest/10 transition cursor-pointer"
                 title={isDe ? "Link kopieren" : "Copy Link"}
               >
                 {copied ? (
@@ -245,8 +247,8 @@ I will attach my own photos or videos to this email.`;
                   </>
                 ) : (
                   <>
-                    <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
-                    <span className="hidden sm:inline">{isDe ? "Teilen" : "Share"}</span>
+                    <Share2 className="h-3.5 w-3.5 text-[#A85C36]" aria-hidden="true" />
+                    <span className="hidden sm:inline">{isDe ? "Story teilen" : "Share Story"}</span>
                   </>
                 )}
               </button>
@@ -281,7 +283,7 @@ I will attach my own photos or videos to this email.`;
           </p>
 
           {/* Info Card */}
-          <div className="mt-8 surface-card p-5 sm:p-6 rounded-3xl border border-forest/10 bg-white grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="mt-8 surface-card p-5 sm:p-6 rounded-3xl border border-forest/10 bg-white grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm shadow-xs">
             <div className="flex items-start gap-3">
               <MapPin className="h-4 w-4 text-[#b28a3c] shrink-0 mt-0.5" aria-hidden="true" />
               <div>
@@ -327,12 +329,12 @@ I will attach my own photos or videos to this email.`;
         <article className="mx-auto max-w-4xl px-4 sm:px-6 pb-20">
           <div className="prose prose-lg max-w-none text-forest/85 space-y-8 leading-relaxed font-normal">
             
-            {/* Photo 1 — Melted Chocolate Waterfall Slice (Framed & Standardized 4:3) */}
-            <figure className="my-8">
-              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
-                <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+            {/* Hero Photo 1 — Compact Luxury Passe-Partout Card */}
+            <figure className="my-8 max-w-xl mx-auto">
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
                   <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp"
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp?v=2"
                     alt={
                       isDe
                         ? "Frisch servierter San Sebastian Cheesecake Slice in HD-Klarheit, übergossen mit warmer Schokoladensauce"
@@ -342,6 +344,9 @@ I will attach my own photos or videos to this email.`;
                     fetchPriority="high"
                     decoding="async"
                   />
+                  <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
+                    🍫 Signature Schokofluss
+                  </div>
                 </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -379,12 +384,12 @@ I will attach my own photos or videos to this email.`;
                 : "Instead, the cake is baked at intense heat. The Maillard reaction scorches the surface to a deep mahogany-black caramel, imparting toasty toffee notes, while the interior remains intensely creamy and custardy. What started as a local Basque pintxos bar secret in the 1990s grew into one of the most celebrated dessert sensations worldwide."}
             </p>
 
-            {/* Photo 2 — Pistachio Dust on Gold Plate (Framed & Standardized 4:3) */}
-            <figure className="my-8">
-              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
-                <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+            {/* Photo 2 — Pistachio Dust on Gold Plate (Compact Framed) */}
+            <figure className="my-8 max-w-xl mx-auto">
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
                   <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.webp"
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.webp?v=2"
                     alt={
                       isDe
                         ? "San Sebastian Cheesecake Slice auf golden verziertem Teller, bestreut mit feinem sizilianischem Pistazienstaub"
@@ -394,6 +399,9 @@ I will attach my own photos or videos to this email.`;
                     loading="lazy"
                     decoding="async"
                   />
+                  <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
+                    🌱 Sizilianischer Pistazienstaub
+                  </div>
                 </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -418,12 +426,12 @@ I will attach my own photos or videos to this email.`;
                 : "At San Sebastian The Original® in Berlin, this Spanish heritage is crafted fresh daily. Stepping up to the illuminated showcase reveals a vast culinary spectrum: alongside the classic Basque original, you discover thoughtfully curated creations like Lotus Biscoff, Kinder Bueno, Oreo, Strawberry Lemon, vibrant Solero, Tiramisu, Raffaello, plus vegan and lactose-free versions."}
             </p>
 
-            {/* Photo 3 — Showcase with Varieties (Framed & Standardized 4:3) */}
-            <figure className="my-8">
-              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
-                <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+            {/* Photo 3 — Showcase with Varieties (Compact Framed) */}
+            <figure className="my-8 max-w-xl mx-auto">
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
                   <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.webp"
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.webp?v=2"
                     alt={
                       isDe
                         ? "Große Kuchentheke bei San Sebastian Berlin mit Sorten wie Lotus, Oreo, Bueno, Strawberry Lemon, Solero, Raffaello, Vegan und Protein"
@@ -433,6 +441,9 @@ I will attach my own photos or videos to this email.`;
                     loading="lazy"
                     decoding="async"
                   />
+                  <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
+                    🍰 10+ Sorten &amp; Toppings
+                  </div>
                 </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -455,13 +466,13 @@ I will attach my own photos or videos to this email.`;
                 : "The magic is in the interplay of contrasts: the deep caramelized crust cuts through the lush richness of the cream cheese. When drizzled with hot Belgian milk chocolate, dark chocolate, nutty pistachio cream, or silky salted caramel, temperature and texture harmonize beautifully. A freshly pulled double espresso or velvety flat white provides the ideal bitter counterbalance."}
             </p>
 
-            {/* Photo 4 & 5 Grid — Lotus Crumble & Mango/Hazelnut (Both Framed & Standardized 4:3) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
+            {/* Photo 4 & 5 Grid — Lotus Crumble & Mango/Hazelnut (Compact Framed 2-Column) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8 max-w-2xl mx-auto">
               <figure>
-                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
-                  <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
                     <img
-                      src="/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.webp"
+                      src="/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.webp?v=2"
                       alt={
                         isDe
                           ? "San Sebastian Cheesecake in der To-Go-Box mit reichlich Lotus Biscoff Crumble und fließendem Kern"
@@ -471,6 +482,9 @@ I will attach my own photos or videos to this email.`;
                       loading="lazy"
                       decoding="async"
                     />
+                    <div className="absolute top-2.5 left-2.5 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-white/20">
+                      🍪 Lotus Crumble
+                    </div>
                   </div>
                 </div>
                 <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
@@ -481,10 +495,10 @@ I will attach my own photos or videos to this email.`;
               </figure>
 
               <figure>
-                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
-                  <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
                     <img
-                      src="/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.webp"
+                      src="/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.webp?v=2"
                       alt={
                         isDe
                           ? "San Sebastian Cheesecake Slice mit sonnengelbem Mango-Maracuja-Spiegel und gehackten Haselnüssen"
@@ -494,6 +508,9 @@ I will attach my own photos or videos to this email.`;
                       loading="lazy"
                       decoding="async"
                     />
+                    <div className="absolute top-2.5 left-2.5 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-white/20">
+                      🥭 Mango &amp; Haselnuss
+                    </div>
                   </div>
                 </div>
                 <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
