@@ -6,21 +6,20 @@ const outDir = 'public/instagram/san-sebastian-berlin';
 const W = 1080;
 const H = 1350;
 
-// Curated HD enhanced assets
+// Curated 1200x900 HD standardized assets
 const photos = {
   hero:       'public/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.jpg',
   pistachio:  'public/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.jpg',
   showcase:   'public/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.jpg',
   lotus:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.jpg',
   mango:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.jpg',
-  moss:       'public/magazin/san-sebastian-berlin/san-sebastian-hd-06-moss-wall-neon.jpg',
 };
 
 async function generateSlides() {
   await fs.mkdir(outDir, { recursive: true });
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDE 1 — COVER (Chocolate waterfall slice HD)
+  // SLIDE 1 — COVER (Standardized HD Chocolate Waterfall)
   // ═══════════════════════════════════════════════════════════
   const coverBg = await sharp(photos.hero)
     .resize(W, H, { fit: 'cover', position: 'center', kernel: 'lanczos3' })
@@ -30,9 +29,9 @@ async function generateSlides() {
     <defs>
       <linearGradient id="bottomFade" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#0a1f1a" stop-opacity="0.0"/>
-        <stop offset="38%" stop-color="#0a1f1a" stop-opacity="0.0"/>
-        <stop offset="58%" stop-color="#0a1f1a" stop-opacity="0.62"/>
-        <stop offset="78%" stop-color="#0a1f1a" stop-opacity="0.88"/>
+        <stop offset="36%" stop-color="#0a1f1a" stop-opacity="0.0"/>
+        <stop offset="56%" stop-color="#0a1f1a" stop-opacity="0.60"/>
+        <stop offset="76%" stop-color="#0a1f1a" stop-opacity="0.88"/>
         <stop offset="100%" stop-color="#0a1f1a" stop-opacity="0.97"/>
       </linearGradient>
       <linearGradient id="topFade" x1="0" y1="0" x2="0" y2="1">
@@ -89,10 +88,10 @@ async function generateSlides() {
     .composite([{ input: Buffer.from(svgCover), top: 0, left: 0 }])
     .png({ quality: 100 })
     .toFile(path.join(outDir, 'slide-1.png'));
-  console.log('✅ slide-1.png (Cover — HD Chocolate Waterfall)');
+  console.log('✅ slide-1.png (Cover — Polished HD Chocolate Waterfall)');
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDES 2–4: Split layout
+  // SLIDES 2–4: Split layout with framed photo & crisp card
   // ═══════════════════════════════════════════════════════════
   async function makeSplitSlide({ num, imgPath, kicker, heading, body, slideNum, total = 5 }) {
     const photoH = 836;
@@ -123,13 +122,14 @@ async function generateSlides() {
           font-size="20" font-weight="900" fill="#FAF7F0" text-anchor="middle">${slideNum}/${total}</text>
       </g>
 
-      <!-- WHITE CARD -->
+      <!-- WHITE CARD WITH BORDER & ACCENT -->
       <rect x="0" y="${photoH}" width="${W}" height="${cardH}" fill="#FFFFFF"/>
-      <line x1="0" y1="${photoH}" x2="${W}" y2="${photoH}" stroke="rgba(23,60,50,0.1)" stroke-width="2"/>
+      <line x1="0" y1="${photoH}" x2="${W}" y2="${photoH}" stroke="rgba(23,60,50,0.12)" stroke-width="2"/>
+      
       <!-- Gold left accent bar -->
       <rect x="52" y="${photoH + 48}" width="6" height="${cardH - 96}" rx="3" fill="#E6B84A"/>
 
-      <!-- KICKER -->
+      <!-- KICKER (terracotta) -->
       <text x="84" y="${photoH + 94}" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif"
         font-size="20" font-weight="900" fill="#A85C36" letter-spacing="3">${kicker}</text>
 
@@ -155,7 +155,7 @@ async function generateSlides() {
       ])
       .png({ quality: 100 })
       .toFile(path.join(outDir, `slide-${num}.png`));
-    console.log(`✅ slide-${num}.png (HD)`);
+    console.log(`✅ slide-${num}.png (HD Framed)`);
   }
 
   // Slide 2 — History / Tradition (HD Pistachio on gold plate)

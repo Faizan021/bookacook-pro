@@ -1,5 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Shield, Users, Mail, Instagram, Sparkles, Heart, Coffee } from "lucide-react";
+import {
+  MapPin,
+  Shield,
+  Users,
+  Mail,
+  Instagram,
+  Sparkles,
+  Coffee,
+  Share2,
+  Check,
+} from "lucide-react";
+import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
 import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
@@ -148,6 +159,13 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
 function SanSebastianCommunityPage() {
   const { lang } = useI18n();
   const isDe = lang === "de";
+  const [copied, setCopied] = useState(false);
+
+  const copyPageLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2200);
+  };
 
   const emailSubject = isDe
     ? "Mein Erlebnis für die Speisely Community"
@@ -213,13 +231,33 @@ I will attach my own photos or videos to this email.`;
                 </li>
               </ol>
             </nav>
-            <Link
-              to="/community"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-[#7FA46B] transition"
-            >
-              <Users className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>{isDe ? "Alle Community Stories" : "All Community Stories"}</span>
-            </Link>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={copyPageLink}
+                className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition cursor-pointer"
+                title={isDe ? "Link kopieren" : "Copy Link"}
+              >
+                {copied ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" />
+                    <span className="text-emerald-700">{isDe ? "Kopiert!" : "Copied!"}</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
+                    <span className="hidden sm:inline">{isDe ? "Teilen" : "Share"}</span>
+                  </>
+                )}
+              </button>
+              <Link
+                to="/community"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-[#7FA46B] transition"
+              >
+                <Users className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>{isDe ? "Alle Stories" : "All Stories"}</span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -252,7 +290,7 @@ I will attach my own photos or videos to this email.`;
                 </span>
                 <strong className="font-semibold text-forest">San Sebastian The Original®</strong>
                 <span className="block text-forest/70 text-xs">
-                  Uhlandstraße 167, 10719 Berlin (Ku&apos;damm) &amp; Gropius Passagen
+                  Uhlandstraße 167, 10719 Berlin &amp; Gropius Passagen
                 </span>
               </div>
             </div>
@@ -289,25 +327,27 @@ I will attach my own photos or videos to this email.`;
         <article className="mx-auto max-w-4xl px-4 sm:px-6 pb-20">
           <div className="prose prose-lg max-w-none text-forest/85 space-y-8 leading-relaxed font-normal">
             
-            {/* Hero Photo 1 — Melted Chocolate Waterfall Slice (HD) */}
+            {/* Photo 1 — Melted Chocolate Waterfall Slice (Framed & Standardized 4:3) */}
             <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp"
-                  alt={
-                    isDe
-                      ? "Frisch servierter San Sebastian Cheesecake Slice in HD-Klarheit, übergossen mit warmer Schokoladensauce"
-                      : "Freshly served San Sebastian cheesecake slice in HD clarity drenched in warm chocolate sauce"
-                  }
-                  className="w-full h-auto object-cover max-h-[720px]"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+                  <img
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp"
+                    alt={
+                      isDe
+                        ? "Frisch servierter San Sebastian Cheesecake Slice in HD-Klarheit, übergossen mit warmer Schokoladensauce"
+                        : "Freshly served San Sebastian cheesecake slice in HD clarity drenched in warm chocolate sauce"
+                    }
+                    className="h-full w-full object-cover"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Der signature Moment: Ein Kuchenstück versinkt unter einem dichten, warmen Schokoladenguss."
+                    ? "Der Signature Moment: Ein Kuchenstück versinkt unter einem dichten, warmen Schokoladenguss."
                     : "The signature moment: A generous slice enveloped in a warm, glossy stream of chocolate."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
@@ -339,20 +379,22 @@ I will attach my own photos or videos to this email.`;
                 : "Instead, the cake is baked at intense heat. The Maillard reaction scorches the surface to a deep mahogany-black caramel, imparting toasty toffee notes, while the interior remains intensely creamy and custardy. What started as a local Basque pintxos bar secret in the 1990s grew into one of the most celebrated dessert sensations worldwide."}
             </p>
 
-            {/* Photo 2 — Pistachio Dust on Gold Plate (HD) */}
+            {/* Photo 2 — Pistachio Dust on Gold Plate (Framed & Standardized 4:3) */}
             <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.webp"
-                  alt={
-                    isDe
-                      ? "San Sebastian Cheesecake Slice auf golden verziertem Teller, bestreut mit feinem sizilianischem Pistazienstaub"
-                      : "San Sebastian cheesecake slice on gold-rimmed plate generously dusted with Sicilian pistachio powder"
-                  }
-                  className="w-full h-auto object-cover max-h-[640px]"
-                  loading="lazy"
-                  decoding="async"
-                />
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+                  <img
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.webp"
+                    alt={
+                      isDe
+                        ? "San Sebastian Cheesecake Slice auf golden verziertem Teller, bestreut mit feinem sizilianischem Pistazienstaub"
+                        : "San Sebastian cheesecake slice on gold-rimmed plate generously dusted with Sicilian pistachio powder"
+                    }
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
@@ -376,20 +418,22 @@ I will attach my own photos or videos to this email.`;
                 : "At San Sebastian The Original® in Berlin, this Spanish heritage is crafted fresh daily. Stepping up to the illuminated showcase reveals a vast culinary spectrum: alongside the classic Basque original, you discover thoughtfully curated creations like Lotus Biscoff, Kinder Bueno, Oreo, Strawberry Lemon, vibrant Solero, Tiramisu, Raffaello, plus vegan and lactose-free versions."}
             </p>
 
-            {/* Photo 3 — Showcase with Varieties (HD) */}
+            {/* Photo 3 — Showcase with Varieties (Framed & Standardized 4:3) */}
             <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.webp"
-                  alt={
-                    isDe
-                      ? "Große Kuchentheke bei San Sebastian Berlin mit Sorten wie Lotus, Oreo, Bueno, Strawberry Lemon, Solero, Raffaello, Vegan und Protein"
-                      : "Cheesecake display at San Sebastian Berlin featuring Lotus, Oreo, Bueno, Strawberry Lemon, Solero, Raffaello, Vegan and Protein varieties"
-                  }
-                  className="w-full h-auto object-cover max-h-[640px]"
-                  loading="lazy"
-                  decoding="async"
-                />
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+                  <img
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.webp"
+                    alt={
+                      isDe
+                        ? "Große Kuchentheke bei San Sebastian Berlin mit Sorten wie Lotus, Oreo, Bueno, Strawberry Lemon, Solero, Raffaello, Vegan und Protein"
+                        : "Cheesecake display at San Sebastian Berlin featuring Lotus, Oreo, Bueno, Strawberry Lemon, Solero, Raffaello, Vegan and Protein varieties"
+                    }
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
@@ -402,30 +446,32 @@ I will attach my own photos or videos to this email.`;
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Geschmacksprofil: Crunch, Säure und Schmelz" : "Flavor Profile: Crunch, Acidity, and Melt"}
+              {isDe ? "Geschmacksprofil: Crunch, Säure und Kaffee-Pairing" : "Flavor Profile: Crunch, Acidity, and Coffee Pairing"}
             </h2>
 
             <p>
               {isDe
-                ? "Das Geheimnis des Genusses liegt im Kontrast: Die karamellisierte, leicht herbe Kruste fängt die milde Süße des Frischkäses ab. Wird das Stück dann mit heißer belgischer Vollmilch- oder Zartbitterschokolade, nussigem Pistazienpüree oder flüssigem Salted Caramel übergossen, verschmelzen die Temperaturen zu einem reichhaltigen Gaumenerlebnis. Geröstete Mandelsplitter und knusprige Biscoff-Krumen liefern dazu den perfekten Biss."
-                : "The magic is in the interplay of contrasts: the deep caramelized crust cuts through the lush richness of the cream cheese. When drizzled with hot Belgian milk chocolate, dark chocolate, nutty pistachio cream, or silky salted caramel, temperature and texture harmonize beautifully. Toasted almond flakes and crispy Biscoff crumbles add a satisfying bite."}
+                ? "Das Geheimnis des Genusses liegt im Kontrast: Die karamellisierte, leicht herbe Kruste fängt die milde Süße des Frischkäses ab. Wird das Stück dann mit heißer belgischer Vollmilch- oder Zartbitterschokolade, nussigem Pistazienpüree oder flüssigem Salted Caramel übergossen, verschmelzen die Temperaturen zu einem reichhaltigen Gaumenerlebnis. Ein frisch gezapfter doppelter Espresso oder samtiger Flat White liefert dazu die ideale herbe Balance."
+                : "The magic is in the interplay of contrasts: the deep caramelized crust cuts through the lush richness of the cream cheese. When drizzled with hot Belgian milk chocolate, dark chocolate, nutty pistachio cream, or silky salted caramel, temperature and texture harmonize beautifully. A freshly pulled double espresso or velvety flat white provides the ideal bitter counterbalance."}
             </p>
 
-            {/* Photo 4 & 5 Grid — Lotus Crumble & Mango/Hazelnut (HD) */}
+            {/* Photo 4 & 5 Grid — Lotus Crumble & Mango/Hazelnut (Both Framed & Standardized 4:3) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
               <figure>
-                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                  <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.webp"
-                    alt={
-                      isDe
-                        ? "San Sebastian Cheesecake in der To-Go-Box mit reichlich Lotus Biscoff Crumble und fließendem Kern"
-                        : "San Sebastian cheesecake in a takeaway box with abundant Lotus Biscoff crumble and soft center"
-                    }
-                    className="w-full h-auto object-cover aspect-4/3"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                  <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+                    <img
+                      src="/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.webp"
+                      alt={
+                        isDe
+                          ? "San Sebastian Cheesecake in der To-Go-Box mit reichlich Lotus Biscoff Crumble und fließendem Kern"
+                          : "San Sebastian cheesecake in a takeaway box with abundant Lotus Biscoff crumble and soft center"
+                      }
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
                 <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
                   {isDe
@@ -435,18 +481,20 @@ I will attach my own photos or videos to this email.`;
               </figure>
 
               <figure>
-                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                  <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.webp"
-                    alt={
-                      isDe
-                        ? "San Sebastian Cheesecake Slice mit sonnengelbem Mango-Maracuja-Spiegel und gehackten Haselnüssen"
-                        : "San Sebastian cheesecake slice with bright mango-passionfruit coulis and chopped hazelnuts"
-                    }
-                    className="w-full h-auto object-cover aspect-4/3"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-2.5 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                  <div className="aspect-4/3 w-full overflow-hidden rounded-2xl bg-black/5">
+                    <img
+                      src="/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.webp"
+                      alt={
+                        isDe
+                          ? "San Sebastian Cheesecake Slice mit sonnengelbem Mango-Maracuja-Spiegel und gehackten Haselnüssen"
+                          : "San Sebastian cheesecake slice with bright mango-passionfruit coulis and chopped hazelnuts"
+                      }
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
                 <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
                   {isDe
