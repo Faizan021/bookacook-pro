@@ -13,6 +13,7 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - Catering Marketplace: https://speisely.de/catering
 - Event Planner Directory: https://speisely.de/planner
 - Partner / Pricing Page: https://speisely.de/partners
+- B2B Website-Erstellung (Custom Websites for Caterers): https://speisely.de/partner/webseiten
 - Blog: https://speisely.de/blog
 - About Us: https://speisely.de/about
 

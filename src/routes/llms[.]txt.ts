@@ -25,6 +25,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - Catering Marketplace: ${BASE}/catering
 - Event Planner Directory: ${BASE}/planner
 - Partner / Pricing Page: ${BASE}/partners
+- B2B Website-Erstellung (Websites for Caterers & Restaurants): ${BASE}/partner/webseiten
 - Blog: ${BASE}/blog
 - About Us: ${BASE}/about
 
@@ -73,6 +74,8 @@ Speisely provides three core hospitality services on a single platform:
 2. **Catering Marketplace** — Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. When a booking is confirmed, Speisely charges a success-based service fee. Supported catering types include: event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
 
 3. **Event Planning** — A CRM and planning tool for professional event planners. Clients post event briefs (budget, guest count, location, date, cuisine). Verified event planners submit tailored proposals and manage the full event lifecycle from initial inquiry to execution through a dedicated dashboard.
+
+4. **Standalone B2B Website-Erstellung** — Speisely designs and develops ultra-fast (PageSpeed 99+), high-converting custom standalone websites for caterers and restaurants (e.g. partyservicekuepper.de and haus-spaas.vercel.app) with native Speisely direct-inquiry & ordering integration, AI Overview schema graphs, and automated menu management.
 
 ---
 

@@ -37,6 +37,7 @@ import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
+import { Route as PartnerWebseitenRouteImport } from './routes/partner.webseiten'
 import { Route as MagazinSpeiselyVisitsRouteImport } from './routes/magazin.speisely-visits'
 import { Route as MagazinSchnitzelSchmiedeRouteImport } from './routes/magazin.schnitzel-schmiede'
 import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
@@ -58,6 +59,7 @@ import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
 import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
 import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
+import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
 import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
 import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes/magazin.community.garcon-de-cafe-berlin'
@@ -217,6 +219,11 @@ const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
   path: '/$city-$eventType',
   getParentRoute: () => PlannerRoute,
 } as any)
+const PartnerWebseitenRoute = PartnerWebseitenRouteImport.update({
+  id: '/partner/webseiten',
+  path: '/partner/webseiten',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MagazinSpeiselyVisitsRoute = MagazinSpeiselyVisitsRouteImport.update({
   id: '/magazin/speisely-visits',
   path: '/magazin/speisely-visits',
@@ -329,6 +336,12 @@ const MagazinCommunityThronburgerBerlinRoute =
   MagazinCommunityThronburgerBerlinRouteImport.update({
     id: '/magazin/community/thronburger-berlin',
     path: '/magazin/community/thronburger-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunitySanSebastianBerlinRoute =
+  MagazinCommunitySanSebastianBerlinRouteImport.update({
+    id: '/magazin/community/san-sebastian-berlin',
+    path: '/magazin/community/san-sebastian-berlin',
     getParentRoute: () => rootRouteImport,
   } as any)
 const MagazinCommunityKokioBerlinRoute =
@@ -473,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
+  '/partner/webseiten': typeof PartnerWebseitenRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -497,6 +511,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
+  '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
@@ -539,6 +554,7 @@ export interface FileRoutesByTo {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
+  '/partner/webseiten': typeof PartnerWebseitenRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -563,6 +579,7 @@ export interface FileRoutesByTo {
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
+  '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
@@ -610,6 +627,7 @@ export interface FileRoutesById {
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
+  '/partner/webseiten': typeof PartnerWebseitenRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -634,6 +652,7 @@ export interface FileRoutesById {
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
+  '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
@@ -681,6 +700,7 @@ export interface FileRouteTypes {
     | '/festival/schnitzel-schmiede'
     | '/magazin/schnitzel-schmiede'
     | '/magazin/speisely-visits'
+    | '/partner/webseiten'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -705,6 +725,7 @@ export interface FileRouteTypes {
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/kokio-berlin'
+    | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
@@ -747,6 +768,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/schnitzel-schmiede'
+    | '/partner/webseiten'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -771,6 +793,7 @@ export interface FileRouteTypes {
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/kokio-berlin'
+    | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
@@ -817,6 +840,7 @@ export interface FileRouteTypes {
     | '/festival/schnitzel-schmiede'
     | '/magazin/schnitzel-schmiede'
     | '/magazin/speisely-visits'
+    | '/partner/webseiten'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -841,6 +865,7 @@ export interface FileRouteTypes {
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/kokio-berlin'
+    | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
@@ -881,6 +906,7 @@ export interface RootRouteChildren {
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   MagazinSchnitzelSchmiedeRoute: typeof MagazinSchnitzelSchmiedeRoute
   MagazinSpeiselyVisitsRoute: typeof MagazinSpeiselyVisitsRouteWithChildren
+  PartnerWebseitenRoute: typeof PartnerWebseitenRoute
   RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -895,6 +921,7 @@ export interface RootRouteChildren {
   MagazinCommunityGarconDeCafeBerlinRoute: typeof MagazinCommunityGarconDeCafeBerlinRoute
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
   MagazinCommunityKokioBerlinRoute: typeof MagazinCommunityKokioBerlinRoute
+  MagazinCommunitySanSebastianBerlinRoute: typeof MagazinCommunitySanSebastianBerlinRoute
   MagazinCommunityThronburgerBerlinRoute: typeof MagazinCommunityThronburgerBerlinRoute
   RestaurantOrtCityRoute: typeof RestaurantOrtCityRoute
   ReviewIntakeTokenRoute: typeof ReviewIntakeTokenRoute
@@ -1101,6 +1128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerCityEventTypeRouteImport
       parentRoute: typeof PlannerRoute
     }
+    '/partner/webseiten': {
+      id: '/partner/webseiten'
+      path: '/partner/webseiten'
+      fullPath: '/partner/webseiten'
+      preLoaderRoute: typeof PartnerWebseitenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/speisely-visits': {
       id: '/magazin/speisely-visits'
       path: '/magazin/speisely-visits'
@@ -1246,6 +1280,13 @@ declare module '@tanstack/react-router' {
       path: '/magazin/community/thronburger-berlin'
       fullPath: '/magazin/community/thronburger-berlin'
       preLoaderRoute: typeof MagazinCommunityThronburgerBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/san-sebastian-berlin': {
+      id: '/magazin/community/san-sebastian-berlin'
+      path: '/magazin/community/san-sebastian-berlin'
+      fullPath: '/magazin/community/san-sebastian-berlin'
+      preLoaderRoute: typeof MagazinCommunitySanSebastianBerlinRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/magazin/community/kokio-berlin': {
@@ -1544,6 +1585,7 @@ const rootRouteChildren: RootRouteChildren = {
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   MagazinSchnitzelSchmiedeRoute: MagazinSchnitzelSchmiedeRoute,
   MagazinSpeiselyVisitsRoute: MagazinSpeiselyVisitsRouteWithChildren,
+  PartnerWebseitenRoute: PartnerWebseitenRoute,
   RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
@@ -1561,6 +1603,8 @@ const rootRouteChildren: RootRouteChildren = {
     MagazinCommunityGarconDeCafeBerlinRoute,
   MagazinCommunityHarputWiesbadenRoute: MagazinCommunityHarputWiesbadenRoute,
   MagazinCommunityKokioBerlinRoute: MagazinCommunityKokioBerlinRoute,
+  MagazinCommunitySanSebastianBerlinRoute:
+    MagazinCommunitySanSebastianBerlinRoute,
   MagazinCommunityThronburgerBerlinRoute:
     MagazinCommunityThronburgerBerlinRoute,
   RestaurantOrtCityRoute: RestaurantOrtCityRoute,
