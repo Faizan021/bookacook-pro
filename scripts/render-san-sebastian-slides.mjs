@@ -6,25 +6,24 @@ const outDir = 'public/instagram/san-sebastian-berlin';
 const W = 1080;
 const H = 1350;
 
+// Curated HD enhanced assets
 const photos = {
-  hero:       'public/magazin/san-sebastian-berlin/san-sebastian-05.jpg', // chocolate waterfall slice
-  showcase:   'public/magazin/san-sebastian-berlin/san-sebastian-02.jpg', // display varieties
-  plated:     'public/magazin/san-sebastian-berlin/san-sebastian-04.jpg', // two plated slices (berry & caramel)
-  pistachio:  'public/magazin/san-sebastian-berlin/san-sebastian-08.jpg', // pistachio dust on gold plate
-  lotus:      'public/magazin/san-sebastian-berlin/san-sebastian-06.jpg', // lotus biscoff box
-  mango:      'public/magazin/san-sebastian-berlin/san-sebastian-07.jpg', // mango glaze
+  hero:       'public/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.jpg',
+  pistachio:  'public/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.jpg',
+  showcase:   'public/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.jpg',
+  lotus:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.jpg',
+  mango:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.jpg',
+  moss:       'public/magazin/san-sebastian-berlin/san-sebastian-hd-06-moss-wall-neon.jpg',
 };
 
 async function generateSlides() {
   await fs.mkdir(outDir, { recursive: true });
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDE 1 — COVER (Chocolate waterfall slice)
+  // SLIDE 1 — COVER (Chocolate waterfall slice HD)
   // ═══════════════════════════════════════════════════════════
   const coverBg = await sharp(photos.hero)
     .resize(W, H, { fit: 'cover', position: 'center', kernel: 'lanczos3' })
-    .modulate({ brightness: 1.05, saturation: 1.18 })
-    .sharpen({ sigma: 1.5, m1: 1.2, m2: 2.2 })
     .toBuffer();
 
   const svgCover = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
@@ -90,10 +89,10 @@ async function generateSlides() {
     .composite([{ input: Buffer.from(svgCover), top: 0, left: 0 }])
     .png({ quality: 100 })
     .toFile(path.join(outDir, 'slide-1.png'));
-  console.log('✅ slide-1.png (Cover — Chocolate Waterfall)');
+  console.log('✅ slide-1.png (Cover — HD Chocolate Waterfall)');
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDES 2–4: Split layout (photo top 62%, white card bottom 38%)
+  // SLIDES 2–4: Split layout
   // ═══════════════════════════════════════════════════════════
   async function makeSplitSlide({ num, imgPath, kicker, heading, body, slideNum, total = 5 }) {
     const photoH = 836;
@@ -101,8 +100,6 @@ async function generateSlides() {
 
     const photo = await sharp(imgPath)
       .resize(W, photoH, { fit: 'cover', position: 'center', kernel: 'lanczos3' })
-      .modulate({ brightness: 1.05, saturation: 1.18 })
-      .sharpen({ sigma: 1.4, m1: 1.2, m2: 2.0 })
       .toBuffer();
 
     const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
@@ -158,10 +155,10 @@ async function generateSlides() {
       ])
       .png({ quality: 100 })
       .toFile(path.join(outDir, `slide-${num}.png`));
-    console.log(`✅ slide-${num}.png`);
+    console.log(`✅ slide-${num}.png (HD)`);
   }
 
-  // Slide 2 — History / Tradition (Pistachio on gold plate)
+  // Slide 2 — History / Tradition (HD Pistachio on gold plate)
   await makeSplitSlide({
     num: 2, imgPath: photos.pistachio, slideNum: 2,
     kicker: '01 · DIE LEGENDE AUS SPANIEN',
@@ -169,15 +166,15 @@ async function generateSlides() {
     body: ['Erfunden in der Pintxos-Bar La Viña:', 'Ohne Boden, bei hoher Hitze gebacken.']
   });
 
-  // Slide 3 — Flavor Profile (Plated berry & caramel slices)
+  // Slide 3 — Lotus Biscoff Crumble (HD Lotus)
   await makeSplitSlide({
-    num: 3, imgPath: photos.plated, slideNum: 3,
+    num: 3, imgPath: photos.lotus, slideNum: 3,
     kicker: '02 · DAS GESCHMACKSPROFIL',
     heading: 'Karamell trifft Schmelz',
     body: ['Dunkle Röstaromen außen, herrlich samtiger', 'Vanille-Frischkäsekern im Inneren.']
   });
 
-  // Slide 4 — Showcase & Variety
+  // Slide 4 — Showcase & Variety (HD Showcase)
   await makeSplitSlide({
     num: 4, imgPath: photos.showcase, slideNum: 4,
     kicker: '03 · DIE TOPPING-KUNST',
@@ -264,9 +261,9 @@ async function generateSlides() {
   await sharp(Buffer.from(svgOutro))
     .png({ quality: 100 })
     .toFile(path.join(outDir, 'slide-5.png'));
-  console.log('✅ slide-5.png (Outro — dark forest CTA)');
+  console.log('✅ slide-5.png (Outro — HD dark forest CTA)');
 
-  console.log('\n🎉 All 5 San Sebastian carousel slides rendered at 1080×1350 px!');
+  console.log('\n🎉 All 5 San Sebastian carousel slides rendered at 1080×1350 px in crisp HD!');
 }
 
 generateSlides().catch(console.error);

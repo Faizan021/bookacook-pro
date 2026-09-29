@@ -11,7 +11,7 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
       {
         name: "description",
         content:
-          "Karamellisierte Kruste, schmelzender Kern und warme Saucen-Güsse: Ein Speisely-Community-Besuch bei San Sebastian The Original® in Berlin-Charlottenburg – baskische Käsekuchenkultur, Pistazienstaub und Lotus Biscoff.",
+          "Karamellisierte Kruste, schmelzender Kern und warmer Schokofluss: Ein Speisely-Community-Besuch bei San Sebastian The Original® in Berlin-Charlottenburg – baskische Käsekuchenkultur, Pistazienstaub und Lotus Biscoff.",
       },
       {
         name: "keywords",
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-05.webp",
+        content: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -70,7 +70,7 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
                 "Karamellisierte Kruste, samtiger Kern und Schokofluss: San Sebastian Cheesecake in Berlin",
               description:
                 "Ein Speisely-Community-Besuch bei San Sebastian The Original® in Berlin-Charlottenburg: Baskische Käsekuchenkultur, Pistazienstaub, warmer Schokoguss und die Entstehungsgeschichte des Kultkuchens.",
-              image: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-05.webp",
+              image: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp",
               datePublished: "2026-09-29",
               dateModified: "2026-09-29",
               author: {
@@ -289,15 +289,15 @@ I will attach my own photos or videos to this email.`;
         <article className="mx-auto max-w-4xl px-4 sm:px-6 pb-20">
           <div className="prose prose-lg max-w-none text-forest/85 space-y-8 leading-relaxed font-normal">
             
-            {/* Hero Photo — Melted Chocolate Waterfall Slice */}
+            {/* Hero Photo 1 — Melted Chocolate Waterfall Slice (HD) */}
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/san-sebastian-berlin/san-sebastian-05.webp"
+                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp"
                   alt={
                     isDe
-                      ? "Frisch servierter San Sebastian Cheesecake Slice, übergossen mit warmer, glänzender Schokoladensauce"
-                      : "Freshly served San Sebastian cheesecake slice drenched in warm, glossy chocolate sauce"
+                      ? "Frisch servierter San Sebastian Cheesecake Slice in HD-Klarheit, übergossen mit warmer Schokoladensauce"
+                      : "Freshly served San Sebastian cheesecake slice in HD clarity drenched in warm chocolate sauce"
                   }
                   className="w-full h-auto object-cover max-h-[720px]"
                   fetchPriority="high"
@@ -339,11 +339,48 @@ I will attach my own photos or videos to this email.`;
                 : "Instead, the cake is baked at intense heat. The Maillard reaction scorches the surface to a deep mahogany-black caramel, imparting toasty toffee notes, while the interior remains intensely creamy and custardy. What started as a local Basque pintxos bar secret in the 1990s grew into one of the most celebrated dessert sensations worldwide."}
             </p>
 
-            {/* Photo 2 — Showcase with Varieties */}
+            {/* Photo 2 — Pistachio Dust on Gold Plate (HD) */}
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/san-sebastian-berlin/san-sebastian-02.webp"
+                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.webp"
+                  alt={
+                    isDe
+                      ? "San Sebastian Cheesecake Slice auf golden verziertem Teller, bestreut mit feinem sizilianischem Pistazienstaub"
+                      : "San Sebastian cheesecake slice on gold-rimmed plate generously dusted with Sicilian pistachio powder"
+                  }
+                  className="w-full h-auto object-cover max-h-[640px]"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
+                <span>
+                  {isDe
+                    ? "Fein gemahlener Pistazienstaub auf goldverziertem Teller: Aromatischer Kontrast zum cremigen Kern."
+                    : "Finely ground pistachio dust on a gold-accented plate: aromatic contrast to the creamy core."}
+                </span>
+                <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
+              </figcaption>
+            </figure>
+
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
+              {isDe
+                ? "Die Berliner Interpretation: Handwerk trifft Topping-Kunst"
+                : "The Berlin Interpretation: Craftsmanship Meets Topping Artistry"}
+            </h2>
+
+            <p>
+              {isDe
+                ? "Bei San Sebastian The Original® in Berlin wird diese spanische Tradition mit zeitgemäßer Handwerkskunst gefeiert. Jeden Tag werden die Kuchen frisch vor Ort gebacken. Beim Blick in die beleuchtete Vitrine fällt sofort die enorme Bandbreite auf: Neben dem klassischen baskischen Original gibt es durchdachte Sorten wie Lotus Biscoff, Kinder Bueno, Oreo, Strawberry Lemon, fruchtiges Solero, Tiramisu, Raffaello und sogar proteinreiche sowie vegane und laktosefreie Optionen."
+                : "At San Sebastian The Original® in Berlin, this Spanish heritage is crafted fresh daily. Stepping up to the illuminated showcase reveals a vast culinary spectrum: alongside the classic Basque original, you discover thoughtfully curated creations like Lotus Biscoff, Kinder Bueno, Oreo, Strawberry Lemon, vibrant Solero, Tiramisu, Raffaello, plus vegan and lactose-free versions."}
+            </p>
+
+            {/* Photo 3 — Showcase with Varieties (HD) */}
+            <figure className="my-8">
+              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
+                <img
+                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.webp"
                   alt={
                     isDe
                       ? "Große Kuchentheke bei San Sebastian Berlin mit Sorten wie Lotus, Oreo, Bueno, Strawberry Lemon, Solero, Raffaello, Vegan und Protein"
@@ -365,63 +402,6 @@ I will attach my own photos or videos to this email.`;
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe
-                ? "Die Berliner Interpretation: Handwerk trifft Topping-Kunst"
-                : "The Berlin Interpretation: Craftsmanship Meets Topping Artistry"}
-            </h2>
-
-            <p>
-              {isDe
-                ? "Bei San Sebastian The Original® in Berlin wird diese spanische Tradition mit zeitgemäßer Handwerkskunst gefeiert. Jeden Tag werden die Kuchen frisch vor Ort gebacken. Beim Blick in die beleuchtete Vitrine fällt sofort die enorme Bandbreite auf: Neben dem klassischen baskischen Original gibt es durchdachte Sorten wie Lotus Biscoff, Kinder Bueno, Oreo, Strawberry Lemon, fruchtiges Solero, Tiramisu, Raffaello und sogar proteinreiche sowie vegane und laktosefreie Optionen."
-                : "At San Sebastian The Original® in Berlin, this Spanish heritage is crafted fresh daily. Stepping up to the illuminated showcase reveals a vast culinary spectrum: alongside the classic Basque original, you discover thoughtfully curated creations like Lotus Biscoff, Kinder Bueno, Oreo, Strawberry Lemon, vibrant Solero, Tiramisu, Raffaello, plus vegan and lactose-free versions."}
-            </p>
-
-            {/* Photo 3 & 4 Grid — Plated Slices & Pistachio */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
-              <figure>
-                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                  <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-04.webp"
-                    alt={
-                      isDe
-                        ? "Zwei servierte Teller mit San Sebastian Cheesecake: Erdbeersauce und Mandelsplitter neben Karamellsauce"
-                        : "Two plated San Sebastian cheesecake slices with strawberry coulis and caramel with toasted almonds"
-                    }
-                    className="w-full h-auto object-cover aspect-4/3"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
-                  {isDe
-                    ? "Fruchtige Erdbeersauce und samtiges Karamell mit gerösteten Mandelsplittern."
-                    : "Vibrant strawberry coulis and salted caramel with toasted almond flakes."}
-                </figcaption>
-              </figure>
-
-              <figure>
-                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                  <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-08.webp"
-                    alt={
-                      isDe
-                        ? "San Sebastian Cheesecake Slice auf golden verziertem Teller, bestreut mit feinem Pistazienstaub"
-                        : "San Sebastian cheesecake slice on gold-rimmed plate generously dusted with Sicilian pistachio powder"
-                    }
-                    className="w-full h-auto object-cover aspect-4/3"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
-                  {isDe
-                    ? "Fein gemahlener Pistazienstaub auf zart schmelzendem Käsekuchen."
-                    : "Fine pistachio powder coating a velvety, melt-in-the-mouth slice."}
-                </figcaption>
-              </figure>
-            </div>
-
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
               {isDe ? "Geschmacksprofil: Crunch, Säure und Schmelz" : "Flavor Profile: Crunch, Acidity, and Melt"}
             </h2>
 
@@ -431,33 +411,12 @@ I will attach my own photos or videos to this email.`;
                 : "The magic is in the interplay of contrasts: the deep caramelized crust cuts through the lush richness of the cream cheese. When drizzled with hot Belgian milk chocolate, dark chocolate, nutty pistachio cream, or silky salted caramel, temperature and texture harmonize beautifully. Toasted almond flakes and crispy Biscoff crumbles add a satisfying bite."}
             </p>
 
-            {/* Photo 5 & 6 Grid — Mango/Hazelnut & Lotus Takeaway */}
+            {/* Photo 4 & 5 Grid — Lotus Crumble & Mango/Hazelnut (HD) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
               <figure>
                 <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                   <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-07.webp"
-                    alt={
-                      isDe
-                        ? "San Sebastian Cheesecake Slice mit sonnengelbem Mango-Maracuja-Spiegel und gehackten Haselnüssen"
-                        : "San Sebastian cheesecake slice with bright mango-passionfruit coulis and chopped hazelnuts"
-                    }
-                    className="w-full h-auto object-cover aspect-4/3"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
-                  {isDe
-                    ? "Tropische Frische: Mango-Spiegel kombiniert mit knackigen Haselnüssen."
-                    : "Tropical flair: Mango-passionfruit glaze paired with crunchy hazelnuts."}
-                </figcaption>
-              </figure>
-
-              <figure>
-                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                  <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-06.webp"
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.webp"
                     alt={
                       isDe
                         ? "San Sebastian Cheesecake in der To-Go-Box mit reichlich Lotus Biscoff Crumble und fließendem Kern"
@@ -470,13 +429,34 @@ I will attach my own photos or videos to this email.`;
                 </div>
                 <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
                   {isDe
-                    ? "Auch zum Mitnehmen: Knuspriges Lotus Biscoff Crumble auf fließendem Kern."
-                    : "To-go favorite: Crispy Lotus Biscoff crumble atop a soft, custardy slice."}
+                    ? "Knuspriges Lotus Biscoff Crumble auf fließend cremigem Kern."
+                    : "Crispy Lotus Biscoff crumble atop a luscious custardy core."}
+                </figcaption>
+              </figure>
+
+              <figure>
+                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
+                  <img
+                    src="/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.webp"
+                    alt={
+                      isDe
+                        ? "San Sebastian Cheesecake Slice mit sonnengelbem Mango-Maracuja-Spiegel und gehackten Haselnüssen"
+                        : "San Sebastian cheesecake slice with bright mango-passionfruit coulis and chopped hazelnuts"
+                    }
+                    className="w-full h-auto object-cover aspect-4/3"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
+                  {isDe
+                    ? "Fruchtige Frische: Sonnengelber Mango-Spiegel mit gerösteten Haselnüssen."
+                    : "Fruity contrast: Golden mango coulis paired with crunchy roasted hazelnuts."}
                 </figcaption>
               </figure>
             </div>
 
-            {/* Photo 7 & 8 — Ambiance & Counter */}
+            {/* Photo 6 — Moss Wall Atmosphere (HD) */}
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
               {isDe ? "Atmosphäre: Grünes Moos & Kaffeekultur" : "Atmosphere: Lush Greenery & Coffee Culture"}
             </h2>
@@ -487,59 +467,14 @@ I will attach my own photos or videos to this email.`;
                 : "Located on Uhlandstraße just off the Kurfürstendamm, the café welcomes visitors with a floor-to-ceiling preserved moss wall, warm natural wood, cozy textured seating, and a glowing neon emblem. Alongside the cheesecakes, freshly pulled specialty coffee is served — from flat whites and silky lattes to iced drinks that balance the dessert's richness."}
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
-              <figure>
-                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                  <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-03.webp"
-                    alt={
-                      isDe
-                        ? "Innenbereich von San Sebastian Berlin mit grüner Mooswand, Neonschriftzug und gemütlichen Holztischen"
-                        : "Interior of San Sebastian Berlin featuring green moss wall, neon logo and warm wooden tables"
-                    }
-                    className="w-full h-auto object-cover aspect-4/3"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
-                  {isDe
-                    ? "Grüne Mooswand und warmes Licht im Sitzbereich an der Uhlandstraße."
-                    : "Preserved moss wall and ambient lighting in the Charlottenburg dining room."}
-                </figcaption>
-              </figure>
-
-              <figure>
-                <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                  <img
-                    src="/magazin/san-sebastian-berlin/san-sebastian-01.webp"
-                    alt={
-                      isDe
-                        ? "Thekenbereich bei San Sebastian Berlin mit Barista-Siebträgermaschine und reich bestückter Dessertvitrine"
-                        : "Counter area at San Sebastian Berlin with espresso machine and fully stocked dessert showcase"
-                    }
-                    className="w-full h-auto object-cover aspect-4/3"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
-                  {isDe
-                    ? "Der Tresen: Barista-Kaffee und handgemachte Käsekuchen frisch im Angebot."
-                    : "The counter: specialty coffee and fresh artisan cheesecakes ready to serve."}
-                </figcaption>
-              </figure>
-            </div>
-
-            {/* Photo 9 — Vertical Lounge shot */}
-            <figure className="my-8 max-w-md mx-auto">
+            <figure className="my-8 max-w-xl mx-auto">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/san-sebastian-berlin/san-sebastian-09.webp"
+                  src="/magazin/san-sebastian-berlin/san-sebastian-hd-06-moss-wall-neon.webp"
                   alt={
                     isDe
-                      ? "Gesamtansicht des Loungebereichs bei San Sebastian Cheesecake in Berlin"
-                      : "Wide perspective of the lounge seating at San Sebastian Cheesecake in Berlin"
+                      ? "Innenbereich von San Sebastian Berlin mit grüner Mooswand, Neonschriftzug und gemütlichen Holztischen"
+                      : "Interior of San Sebastian Berlin featuring green moss wall, neon logo and warm wooden tables"
                   }
                   className="w-full h-auto object-cover"
                   loading="lazy"
@@ -549,8 +484,8 @@ I will attach my own photos or videos to this email.`;
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Einladender Raum für Dessert-Liebhaber mitten in Berlin-Charlottenburg."
-                    : "An inviting retreat for dessert lovers in the heart of Berlin-Charlottenburg."}
+                    ? "Grüne Mooswand und warmes Licht im Loungebereich an der Uhlandstraße."
+                    : "Preserved moss wall and ambient lighting in the Charlottenburg lounge."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
               </figcaption>
@@ -579,7 +514,7 @@ I will attach my own photos or videos to this email.`;
           <AboutSpeiselySection />
         </article>
 
-        {/* CTA Banner: Share Your Own Food Story */}
+        {/* CTA Banner */}
         <section className="border-t border-forest/10 pt-16 pb-20">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <div className="rounded-3xl bg-forest text-[oklch(0.97_0.02_92)] p-8 sm:p-10 text-center relative overflow-hidden shadow-xl">
