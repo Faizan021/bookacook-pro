@@ -347,14 +347,14 @@ I will attach my own photos or videos to this email.`;
 
             <p>
               {isDe
-                ? "Wer durch die kopfsteingepflasterten Straßen der Prager Neustadt (Nové Město) spaziert, erwartet auf den ersten Blick traditionelle böhmische Wirtshäuser mit Gulasch und Knödeln. Doch nur wenige Gehminuten vom Karlsplatz entfernt, in der ruhigeren Příčná-Straße, leuchtet ein rundes Neonschild mit einem Hähnchen-Emblem aus einer Backsteinwand: The Chicken Krush."
-                : "A stroll through the historic cobblestone streets of Prague’s Nové Město might lead you to expect traditional Bohemian taverns with hearty goulash and dumplings. Yet just off Charles Square, along quieter Příčná Street, a circular neon sign mounted on an exposed brick wall glows warmly: The Chicken Krush."}
+                ? "Unser Community-Mitglied hatte keinen großen Plan für den Abend — nur Hunger und eine Notiz auf dem Handy: Příčná-Straße, Nové Město. Das runde Leuchtschild an der Backsteinwand war nicht zu übersehen. Dahinter: warmes Licht, volle Holzbretter und der Geruch von frisch frittiertem Hähnchen."
+                : "There was no big plan for that evening — just hunger and a note on the phone: Příčná Street, Nové Město. The circular glowing sign on the brick wall was impossible to miss. Inside: warm light, full wooden boards, and the smell of freshly fried chicken."}
             </p>
 
             <p>
               {isDe
-                ? "Hier verbindet sich moderne K-Food-Kultur mit einem entspannten Restaurant-Konzept: An jedem Tisch ist ein eigener digitaler Touchscreen angebracht, über den Gäste ihre Lieblingssaucen, Portionsgrößen und Beilagen auf Tschechisch, Englisch oder Koreanisch zusammenstellen können."
-                : "The venue blends contemporary Korean food culture with an effortless dining concept: every table is fitted with its own digital touch terminal, allowing guests to customize glazes, portion sizes, and sides in Czech, English, or Korean."}
+                ? "Was sofort auffällt: Kein Kellner kommt mit der Karte. Stattdessen wartet an jedem Tisch ein eigener Touchscreen — auf Tschechisch, Englisch oder Koreanisch. Man bestellt, lehnt sich zurück und wartet. Das Essen kommt schnell."
+                : "What you notice right away: no waiter comes with a menu. Instead, every table has its own touchscreen — in Czech, English, or Korean. You order, lean back, and wait. The food arrives fast."}
             </p>
 
             {/* Photo 2 (Neon Logo) */}
@@ -383,15 +383,13 @@ I will attach my own photos or videos to this email.`;
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe
-                ? "Vom „Slow Fried“-Prinzip zum perfekten Crunch"
-                : "The Art of Slow Frying and Crisp Textures"}
+              {isDe ? "Der erste Crunch am Tisch" : "The First Crunch at the Table"}
             </h2>
 
             <p>
               {isDe
-                ? "Auf den servierten Holzbrettern fällt sofort ein kleines Detail ins Auge: Auf kleinen Schildern im Hähnchen prangt das Motto „Slow Fried. Pomalu smažené“ sowie „Taste Respect (치킨크러시)“. Korean Fried Chicken unterscheidet sich grundlegend von herkömmlichem Frittierhähnchen durch eine besonders feine Stärkepanade und präzise abgestimmte Frittierzeiten."
-                : "Looking across the wooden boards, a small detail catches the eye: little flags reading “Slow Fried. Pomalu smažené” and “Taste Respect (치킨크러시)”. Authentic Korean fried chicken distinguishes itself through a fine, delicate starch batter and carefully timed frying, creating a thin, shatteringly crisp crust."}
+                ? "Auf jedem servierten Holzbrett steckt eine kleine Flagge: „Slow Fried. Pomalu smažené“ und „Taste Respect (치킨크러시)“. Und genau so schmeckt es auch: Die Kruste ist hauchdünn, extrem kross und bricht beim ersten Hineinbeißen mit einem deutlichen Knacken. Innen dampft das Fleisch saftig und zart — genau die Balance, die gutes Korean Fried Chicken ausmacht."
+                : "Every wooden board arrives with a small flag: “Slow Fried. Pomalu smažené” and “Taste Respect (치킨크러시)”. And that is exactly what you get: a light, shatteringly crisp starch batter that breaks with a clean crunch, giving way to steaming, tender chicken inside."}
             </p>
 
             {/* Photo 3 (Taste Respect close-up) */}
@@ -412,49 +410,22 @@ I will attach my own photos or videos to this email.`;
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Goldgelbe Kruste mit deutlicher Textur: Bone-in Chicken Thigh mit Flagge „taste respect“."
+                    ? "Goldgelbe Kruste mit feiner Textur: Bone-in Chicken Thigh mit Flagge „taste respect“."
                     : "Golden, ridged crust: Bone-in chicken thigh with signature 'taste respect' banner."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
               </figcaption>
             </figure>
 
-            <p>
-              {isDe
-                ? "Das Ergebnis ist eine goldgelbe, rissige Kruste, die das Fleisch im Inneren saftig hält und auch dann nicht weich wird, wenn reichhaltige Glasuren aufgetragen werden."
-                : "The technique seals in natural moisture while preserving that vital crackle, even when dressed in thick, glossy glazes."}
-            </p>
-
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Die Geschmackswelten auf dem Tisch" : "Flavor Profiles on the Table"}
+              {isDe ? "Süße Schärfe und samtiger Kontrast" : "Sweet Heat and Snowy Contrast"}
             </h2>
 
             <p>
               {isDe
-                ? "Die geteilten Fotos aus der Community zeigen die bemerkenswerte Vielfalt, die das Menü bietet:"
-                : "The photographs shared by our community member highlight the diverse spread available on the menu:"}
+                ? "Beim Teilen am Tisch greift man automatisch von einem Brett zum nächsten: Da ist das tiefrot glänzende Yangnyeom Chicken, dick eingekocht mit Gochujang, Honig und Knoblauch, bestreut mit gerösteten Mandelsplittern — klebrig, scharf und süß zugleich. Direkt daneben die „Snow Flake“-Stücke ohne Knochen, bestäubt mit samtigem, fein-süßlichem Käsegewürz, das den Gaumen nach der Schärfe sofort wieder abfängt."
+                : "Sharing across the table means constantly switching flavours: deeply glazed Yangnyeom chicken simmered with gochujang, garlic, and honey, topped with toasted almond slivers for a sticky sweet-heat kick. Right next to it, boneless bites dusted in a velvety sweet-savory cheese seasoning that balances the spice."}
             </p>
-
-            <ul className="list-disc pl-6 space-y-3 font-normal text-forest/85">
-              <li>
-                <strong>Snow Flake Boneless:</strong>{" "}
-                {isDe
-                  ? "Zarte Hähnchenstücke ohne Knochen, bestäubt mit einem fein-süßlichen Käsegewürzpulver. Die samtige Textur des Pulvers erzeugt einen spannenden Kontrast zur heißen, krossen Panade."
-                  : "Tender boneless chicken dusted in a velvety sweet-savory cheese seasoning powder, offering a delicate snowy finish and playful textural contrast."}
-              </li>
-              <li>
-                <strong>Seoul Fried Chicken:</strong>{" "}
-                {isDe
-                  ? "Klassische Hähnchenkeulen (Thighs) mit goldbrauner Panade, gewürzt mit einer dezenten Senf-Pfeffer-Note für puren, unverfälschten Crunch."
-                  : "Classic bone-in chicken thighs with a craggy golden coating, seasoned with gentle mustard and pepper notes for unadulterated crunch."}
-              </li>
-              <li>
-                <strong>Yangnyeom Chicken:</strong>{" "}
-                {isDe
-                  ? "Der koreanische Klassiker: Glänzend überzogen mit einer klebrigen Sauce aus Gochujang (fermentierte Chilipaste), Knoblauch, Sojasauce und Honig, garniert mit gerösteten Mandelsplittern."
-                  : "The quintessential Korean favorite: coated in a sticky-glossy glaze of gochujang chili paste, garlic, soy, and honey, sprinkled with toasted almond slivers."}
-              </li>
-            </ul>
 
             {/* Photo 4 (Yangnyeom Chicken with almond flakes) */}
             <figure className="my-8">
@@ -474,29 +445,21 @@ I will attach my own photos or videos to this email.`;
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Kräftig rot glasiert und mit Mandeln verfeinert: Yangnyeom Chicken mit Käse-Pommes und Beilagensalat."
-                    : "Deeply glazed in sweet-spicy gochujang with almond slivers: Yangnyeom chicken with seasoned fries and slaw."}
+                    ? "Kräftig rot glasiert und mit Mandeln verfeinert: Yangnyeom Chicken mit Pommes und Krautsalat."
+                    : "Deeply glazed in sweet-spicy gochujang with almond slivers: Yangnyeom chicken with fries and slaw."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
               </figcaption>
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe
-                ? "Rose Tteokbokki: Cremige Schärfe in der Edelstahlpfanne"
-                : "Rose Tteokbokki: Creamy Heat in a Sizzling Pan"}
+              {isDe ? "Die heiße Pfanne in der Mitte" : "The Sizzling Pan in the Middle"}
             </h2>
 
             <p>
               {isDe
-                ? "Ein besonderes Highlight der servierten Tafel ist die glänzende Edelstahlpfanne mit Rose Tteokbokki. Tteokbokki – zylinderförmige, elastische Reiskuchen – gehören zu den beliebtesten Street-Food-Gerichten Koreas. In der modernen 'Rose'-Variante wird die scharfe Gochujang-Sauce mit Sahne oder Milch verfeinert, wodurch eine samtige, lachsfarbene Sauce entsteht."
-                : "A standout center on the dining table is the stainless-steel skillet of Rose Tteokbokki. Tteokbokki—chewy, cylindrical rice cakes—are beloved throughout Korean street food stalls. In the contemporary 'Rose' interpretation, fiery gochujang chili paste is tempered with rich cream, creating a luscious, velvety sauce."}
-            </p>
-
-            <p>
-              {isDe
-                ? "Zusammen mit kleinen Würstchen und einer leichten Kräutergarnitur bildet das Gericht die ideale Ergänzung zu den frittierten Hähnchengerichten."
-                : "Tossed with mini sausages and fresh herbs, it offers a chewy, warming companion to the crisp chicken platters."}
+                ? "Das heimliche Highlight auf dem Tisch war die glänzende Edelstahlpfanne mit Rose Tteokbokki. Die dicken, elastischen Reiskuchen baden in einer samtigen, leicht cremigen Gochujang-Sauce mit kleinen Würstchen. Zusammen mit den knusprigen Pommes, den Dipsaucen und einem kühlen Getränk entsteht genau diese ungezwungene Chimaek-Stimmung, die man sonst aus den Straßen von Seoul kennt."
+                : "The quiet highlight of the table was the stainless steel skillet of Rose Tteokbokki. Chewy, thick cylinder rice cakes swimming in a creamy, mild-spicy gochujang sauce with mini sausages. Paired with seasoned fries, cool dips, and cold drinks, it brings that relaxed Chimaek atmosphere to the heart of Prague."}
             </p>
 
             {/* Photo 5 (Full table spread with Rose Tteokbokki) */}
@@ -517,29 +480,17 @@ I will attach my own photos or videos to this email.`;
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Der ganze Tisch im Überblick: Rose Tteokbokki in der Pfanne, knuspriges Chicken, Dips und Beilagensalat."
+                    ? "Der ganze Tisch im Überblick: Rose Tteokbokki in der Pfanne, glasiertes Hähnchen, Pommes und Dips."
                     : "The full shared table: pan of Rose Tteokbokki, glazed chicken, seasoned fries, dips, and fresh side salad."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
               </figcaption>
             </figure>
 
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
+            <p className="font-medium text-forest text-lg pt-2">
               {isDe
-                ? "Beilagen, Dips und das Erlebnis des Teilens"
-                : "Sides, Dips and the Community Experience"}
-            </h2>
-
-            <p>
-              {isDe
-                ? "Ergänzt werden die Hauptgerichte durch Beilagen wie Pommes frites mit Käse- oder Honig-Butter-Gewürz (Honey Butter Seasoning), frischen Weißkrautsalat sowie verschiedene Dipsaucen wie Creamy Onion oder Ranch in kleinen Edelstahl-Kasserollen. Auch erfrischende koreanische Getränke wie Bongbong (Traubensaft mit Fruchtstücken) oder Galbae (Birnensaft) finden sich auf der Karte."
-                : "The feast is completed by french fries dusted in cheese seasoning or honey-butter spice, crisp coleslaw, and house-made dipping sauces like Creamy Onion or Ranch served in stainless steel mini-pots. Traditional Korean chilled refreshments like Bongbong (grape juice with whole grapes) and Galbae (pear juice) complete the setup."}
-            </p>
-
-            <p className="font-medium text-forest text-lg">
-              {isDe
-                ? "Ein lebendiger Food-Moment aus Prag, der zeigt, wie internationale Gastronomie und gemeinsame Esskultur Menschen an einem Tisch zusammenbringen."
-                : "A vibrant food snapshot from Prague that demonstrates how global food traditions and shared meals connect travelers across borders."}
+                ? "Ein unkomplizierter, lebendiger Abend in Prag: Reinkommen, per Touchscreen bestellen, Holzbretter teilen und den besten Crunch der Neustadt genießen."
+                : "An effortless, vibrant evening in Prague: walk in, order via touchscreen, share the wooden platters, and enjoy some of the crunchiest fried chicken in Nové Město."}
             </p>
 
             {/* Restaurant Info & Action Card */}
