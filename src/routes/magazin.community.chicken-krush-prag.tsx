@@ -45,7 +45,7 @@ export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/chicken-krush-prag/chicken-krush-01.webp",
+        content: "https://speisely.de/magazin/chicken-krush-prag/chicken-krush-real-01.webp",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -81,7 +81,7 @@ export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
                 "Goldener Crunch, Yangnyeom-Glanz und Rose Tteokbokki in den Gassen von Prag",
               description:
                 "Ein Speisely-Community-Besuch bei Chicken Krush in Prag-Nové Město: Knusprig frittiertes Hähnchen, traditionelle Saucen, digitale Tisch-Bestellung und echtes Chimaek-Feeling.",
-              image: "https://speisely.de/magazin/chicken-krush-prag/chicken-krush-01.webp",
+              image: "https://speisely.de/magazin/chicken-krush-prag/chicken-krush-real-01.webp",
               datePublished: "2026-09-29",
               dateModified: "2026-09-29",
               author: {
@@ -324,7 +324,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-01.webp"
+                  src="/magazin/chicken-krush-prag/chicken-krush-real-01.webp"
                   alt={
                     isDe
                       ? "Tisch-Setup bei Chicken Krush in Prag mit digitalem Bestellbildschirm, Snow Flake Chicken, Seoul Fried Chicken und Pommes"
@@ -361,7 +361,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md max-w-md mx-auto">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-02.webp"
+                  src="/magazin/chicken-krush-prag/chicken-krush-real-02.webp"
                   alt={
                     isDe
                       ? "Beleuchtetes THE CHICKEN KRUSH Neonschild auf rustikaler Ziegelwand in Prag"
@@ -396,7 +396,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-03.webp"
+                  src="/magazin/chicken-krush-prag/chicken-krush-real-03.webp"
                   alt={
                     isDe
                       ? "Nahaufnahme des knusprigen Seoul Fried Chicken mit Flagge 'taste respect 치킨크러시'"
@@ -431,7 +431,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-04.webp"
+                  src="/magazin/chicken-krush-prag/chicken-krush-real-04.webp"
                   alt={
                     isDe
                       ? "Glänzendes Yangnyeom Chicken mit Mandelsplittern und Flagge 'SLOW FRIED. POMALU SMAŽENÉ'"
@@ -466,7 +466,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-05.webp"
+                  src="/magazin/chicken-krush-prag/chicken-krush-real-05.webp"
                   alt={
                     isDe
                       ? "Große Tafel bei Chicken Krush Prag mit Rose Tteokbokki, Yangnyeom Chicken, Pommes und Dips zum Teilen"

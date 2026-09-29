@@ -2,11 +2,11 @@ import fs from 'fs/promises';
 import path from 'path';
 
 async function generate() {
-  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-01.jpg')).toString('base64');
-  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-02.jpg')).toString('base64');
-  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-03.jpg')).toString('base64');
-  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-04.jpg')).toString('base64');
-  const p5 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-05.jpg')).toString('base64');
+  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-01.jpg')).toString('base64');
+  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-02.jpg')).toString('base64');
+  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-03.jpg')).toString('base64');
+  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-04.jpg')).toString('base64');
+  const p5 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-05.jpg')).toString('base64');
 
   const html = `<!DOCTYPE html>
 <html lang="de">

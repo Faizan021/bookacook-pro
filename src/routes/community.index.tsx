@@ -290,7 +290,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/chicken-krush-prag/chicken-krush-01.webp"
+                    src="/magazin/chicken-krush-prag/chicken-krush-real-01.webp"
                     alt={
                       isDe
                         ? "Korean Fried Chicken, Snow Flake Seasoning und Pommes bei Chicken Krush in Prag"
