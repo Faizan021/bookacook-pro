@@ -6,20 +6,18 @@ const outDir = 'public/instagram/san-sebastian-berlin';
 const W = 1080;
 const H = 1350;
 
-// Curated 1200x900 HD standardized assets
 const photos = {
   hero:       'public/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.jpg',
   pistachio:  'public/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.jpg',
-  showcase:   'public/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.jpg',
   lotus:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.jpg',
-  mango:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-05-mango-hazelnut.jpg',
+  showcase:   'public/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.jpg',
 };
 
 async function generateSlides() {
   await fs.mkdir(outDir, { recursive: true });
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDE 1 — COVER (Standardized HD Chocolate Waterfall)
+  // SLIDE 1 — COVER (Punchy, High-Curiosity Hook)
   // ═══════════════════════════════════════════════════════════
   const coverBg = await sharp(photos.hero)
     .resize(W, H, { fit: 'cover', position: 'center', kernel: 'lanczos3' })
@@ -29,13 +27,13 @@ async function generateSlides() {
     <defs>
       <linearGradient id="bottomFade" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#0a1f1a" stop-opacity="0.0"/>
-        <stop offset="36%" stop-color="#0a1f1a" stop-opacity="0.0"/>
-        <stop offset="56%" stop-color="#0a1f1a" stop-opacity="0.60"/>
-        <stop offset="76%" stop-color="#0a1f1a" stop-opacity="0.88"/>
-        <stop offset="100%" stop-color="#0a1f1a" stop-opacity="0.97"/>
+        <stop offset="34%" stop-color="#0a1f1a" stop-opacity="0.0"/>
+        <stop offset="54%" stop-color="#0a1f1a" stop-opacity="0.62"/>
+        <stop offset="74%" stop-color="#0a1f1a" stop-opacity="0.90"/>
+        <stop offset="100%" stop-color="#0a1f1a" stop-opacity="0.98"/>
       </linearGradient>
       <linearGradient id="topFade" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#0a1f1a" stop-opacity="0.52"/>
+        <stop offset="0%" stop-color="#0a1f1a" stop-opacity="0.55"/>
         <stop offset="20%" stop-color="#0a1f1a" stop-opacity="0.0"/>
       </linearGradient>
     </defs>
@@ -55,26 +53,26 @@ async function generateSlides() {
     </g>
 
     <!-- BOTTOM CONTENT -->
-    <g transform="translate(52, ${H - 410})">
+    <g transform="translate(52, ${H - 430})">
       <!-- Gold story badge -->
       <rect width="352" height="54" rx="27" fill="#E6B84A"/>
       <text x="176" y="35" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif"
         font-size="17" font-weight="900" fill="#173C32" text-anchor="middle" letter-spacing="2">SPEISELY COMMUNITY STORY</text>
 
-      <!-- Headline -->
-      <text x="0" y="128" font-family="Georgia,'Times New Roman',serif"
-        font-size="66" font-weight="900" fill="#FFFFFF">Karamellisierte Kruste,</text>
-      <text x="0" y="208" font-family="Georgia,'Times New Roman',serif"
-        font-size="66" font-weight="900" fill="#FFFFFF">samtiger Kern &amp;</text>
-      <text x="0" y="288" font-family="Georgia,'Times New Roman',serif"
-        font-size="66" font-weight="900" fill="#FFFFFF">warmer Schokofluss</text>
+      <!-- Headline: Punchy 3-line Hook -->
+      <text x="0" y="130" font-family="Georgia,'Times New Roman',serif"
+        font-size="70" font-weight="900" fill="#FFFFFF">Fließender Kern.</text>
+      <text x="0" y="210" font-family="Georgia,'Times New Roman',serif"
+        font-size="70" font-weight="900" fill="#FFFFFF">Röstiges Karamell.</text>
+      <text x="0" y="290" font-family="Georgia,'Times New Roman',serif"
+        font-size="70" font-weight="900" fill="#FFFFFF">Reiner Schokofluss.</text>
 
       <!-- Subtitle -->
-      <text x="0" y="352" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
-        font-size="30" font-weight="400" fill="rgba(250,247,240,0.85)">Zu Besuch bei San Sebastian The Original® in Berlin.</text>
+      <text x="0" y="356" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
+        font-size="30" font-weight="500" fill="rgba(250,247,240,0.92)">Warum ganz Berlin über diesen Kuchen spricht.</text>
 
       <!-- Dot indicators -->
-      <g transform="translate(2, 396)">
+      <g transform="translate(2, 402)">
         <rect width="34" height="12" rx="6" fill="#E6B84A"/>
         <circle cx="54" cy="6" r="6" fill="rgba(250,247,240,0.32)"/>
         <circle cx="75" cy="6" r="6" fill="rgba(250,247,240,0.32)"/>
@@ -88,10 +86,10 @@ async function generateSlides() {
     .composite([{ input: Buffer.from(svgCover), top: 0, left: 0 }])
     .png({ quality: 100 })
     .toFile(path.join(outDir, 'slide-1.png'));
-  console.log('✅ slide-1.png (Cover — Polished HD Chocolate Waterfall)');
+  console.log('✅ slide-1.png (Top Creative Cover)');
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDES 2–4: Split layout with framed photo & crisp card
+  // SLIDES 2–4: Split layout
   // ═══════════════════════════════════════════════════════════
   async function makeSplitSlide({ num, imgPath, kicker, heading, body, slideNum, total = 5 }) {
     const photoH = 836;
@@ -122,14 +120,14 @@ async function generateSlides() {
           font-size="20" font-weight="900" fill="#FAF7F0" text-anchor="middle">${slideNum}/${total}</text>
       </g>
 
-      <!-- WHITE CARD WITH BORDER & ACCENT -->
+      <!-- WHITE CARD -->
       <rect x="0" y="${photoH}" width="${W}" height="${cardH}" fill="#FFFFFF"/>
       <line x1="0" y1="${photoH}" x2="${W}" y2="${photoH}" stroke="rgba(23,60,50,0.12)" stroke-width="2"/>
       
       <!-- Gold left accent bar -->
       <rect x="52" y="${photoH + 48}" width="6" height="${cardH - 96}" rx="3" fill="#E6B84A"/>
 
-      <!-- KICKER (terracotta) -->
+      <!-- KICKER -->
       <text x="84" y="${photoH + 94}" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif"
         font-size="20" font-weight="900" fill="#A85C36" letter-spacing="3">${kicker}</text>
 
@@ -139,9 +137,9 @@ async function generateSlides() {
 
       <!-- BODY -->
       <text x="84" y="${photoH + 254}" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
-        font-size="30" font-weight="400" fill="rgba(23,60,50,0.78)">${body[0]}</text>
+        font-size="30" font-weight="500" fill="rgba(23,60,50,0.85)">${body[0]}</text>
       ${body[1] ? `<text x="84" y="${photoH + 298}" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
-        font-size="30" font-weight="400" fill="rgba(23,60,50,0.78)">${body[1]}</text>` : ''}
+        font-size="30" font-weight="500" fill="rgba(23,60,50,0.85)">${body[1]}</text>` : ''}
     </svg>`;
 
     const base = await sharp({
@@ -155,35 +153,35 @@ async function generateSlides() {
       ])
       .png({ quality: 100 })
       .toFile(path.join(outDir, `slide-${num}.png`));
-    console.log(`✅ slide-${num}.png (HD Framed)`);
+    console.log(`✅ slide-${num}.png`);
   }
 
-  // Slide 2 — History / Tradition (HD Pistachio on gold plate)
+  // Slide 2 — The Spanish Origin
   await makeSplitSlide({
     num: 2, imgPath: photos.pistachio, slideNum: 2,
-    kicker: '01 · DIE LEGENDE AUS SPANIEN',
-    heading: 'Aus San Sebastián 1990',
-    body: ['Erfunden in der Pintxos-Bar La Viña:', 'Ohne Boden, bei hoher Hitze gebacken.']
+    kicker: '01 · DAS SPANISCHE GEHEIMNIS',
+    heading: '1990 in San Sebastián erfunden',
+    body: ['Kein Keksboden. Höllenhitze.', 'Das baskische Original aus der Bar La Viña.']
   });
 
-  // Slide 3 — Lotus Biscoff Crumble (HD Lotus)
+  // Slide 3 — The Texture Contrast
   await makeSplitSlide({
     num: 3, imgPath: photos.lotus, slideNum: 3,
-    kicker: '02 · DAS GESCHMACKSPROFIL',
-    heading: 'Karamell trifft Schmelz',
-    body: ['Dunkle Röstaromen außen, herrlich samtiger', 'Vanille-Frischkäsekern im Inneren.']
+    kicker: '02 · DIE PERFEKTE TEXTUR',
+    heading: 'Außen Röstbitter, innen flüssig',
+    body: ['Bricht mit dem Löffel, zergeht wie Sahne.', 'Warme Sauce trifft samtiges Vanillearoma.']
   });
 
-  // Slide 4 — Showcase & Variety (HD Showcase)
+  // Slide 4 — Modern Toppings
   await makeSplitSlide({
     num: 4, imgPath: photos.showcase, slideNum: 4,
-    kicker: '03 · DIE TOPPING-KUNST',
-    heading: 'Pistazie, Lotus &amp; Mango',
-    body: ['Von heißer belgischer Schokolade bis', 'Pistazienstaub, Bueno &amp; Lotus Biscoff.']
+    kicker: '03 · MEHR ALS NUR KÄSEKUCHEN',
+    heading: 'Pistazienstaub &amp; Lotus Crunch',
+    body: ['Vollmilch, Zartbitter, Salted Caramel —', 'oder sonnengelber Mango-Maracuja-Spiegel.']
   });
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDE 5 — OUTRO (Solid dark forest green CTA)
+  // SLIDE 5 — OUTRO (Direct CTA Hook)
   // ═══════════════════════════════════════════════════════════
   const svgOutro = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -214,26 +212,23 @@ async function generateSlides() {
       <circle cx="0" cy="-7" r="5" fill="#E6B84A"/>
     </g>
 
-    <!-- Brand wordmark -->
     <text x="540" y="470" font-family="Georgia,'Times New Roman',serif"
       font-size="82" font-weight="900" fill="#E6B84A" text-anchor="middle" letter-spacing="1">Speisely</text>
 
-    <!-- Venue name -->
     <text x="540" y="542" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif"
       font-size="22" font-weight="900" fill="#E6B84A" text-anchor="middle" letter-spacing="4">SAN SEBASTIAN THE ORIGINAL® BERLIN</text>
 
-    <!-- Gold underline -->
     <rect x="280" y="568" width="520" height="3" rx="1.5" fill="#E6B84A"/>
 
-    <!-- CTA Headline -->
+    <!-- Creative CTA Headline -->
     <text x="540" y="692" font-family="Georgia,'Times New Roman',serif"
-      font-size="64" font-weight="900" fill="#FFFFFF" text-anchor="middle">Lies die ganze Story</text>
+      font-size="64" font-weight="900" fill="#FFFFFF" text-anchor="middle">Lust auf das Original</text>
     <text x="540" y="772" font-family="Georgia,'Times New Roman',serif"
-      font-size="64" font-weight="900" fill="#FFFFFF" text-anchor="middle">auf speisely.de!</text>
+      font-size="64" font-weight="900" fill="#FFFFFF" text-anchor="middle">in Berlin bekommen?</text>
 
-    <!-- Subline -->
+    <!-- Location subline -->
     <text x="540" y="848" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
-      font-size="28" font-weight="400" fill="rgba(250,247,240,0.68)" text-anchor="middle">Baskische Käsekuchenkultur in Berlin-Charlottenburg</text>
+      font-size="28" font-weight="400" fill="rgba(250,247,240,0.72)" text-anchor="middle">Uhlandstraße 167 (Ku'damm) &amp; Gropius Passagen</text>
 
     <!-- Action icons row -->
     <rect x="148" y="930" width="784" height="94" rx="47"
@@ -248,12 +243,11 @@ async function generateSlides() {
       font-size="28" font-weight="700" fill="#FAF7F0" text-anchor="middle">❤️ Liken</text>
 
     <!-- CTA pill button -->
-    <rect x="305" y="1072" width="470" height="86" rx="43"
+    <rect x="250" y="1072" width="580" height="86" rx="43"
       fill="none" stroke="#E6B84A" stroke-width="3"/>
     <text x="540" y="1127" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif"
-      font-size="32" font-weight="900" fill="#E6B84A" text-anchor="middle" letter-spacing="2">↗ speisely.de ↗</text>
+      font-size="28" font-weight="900" fill="#E6B84A" text-anchor="middle" letter-spacing="2">↗ Ganze Story auf speisely.de ↗</text>
 
-    <!-- URL tag -->
     <text x="540" y="1298" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
       font-size="20" font-weight="400" fill="rgba(250,247,240,0.28)" text-anchor="middle">speisely.de/magazin/community/san-sebastian-berlin</text>
   </svg>`;
@@ -261,9 +255,9 @@ async function generateSlides() {
   await sharp(Buffer.from(svgOutro))
     .png({ quality: 100 })
     .toFile(path.join(outDir, 'slide-5.png'));
-  console.log('✅ slide-5.png (Outro — HD dark forest CTA)');
+  console.log('✅ slide-5.png (Creative Outro CTA)');
 
-  console.log('\n🎉 All 5 San Sebastian carousel slides rendered at 1080×1350 px in crisp HD!');
+  console.log('\n🎉 All 5 San Sebastian slides re-rendered with top creative copy!');
 }
 
 generateSlides().catch(console.error);
