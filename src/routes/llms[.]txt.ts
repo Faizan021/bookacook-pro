@@ -40,6 +40,7 @@ ${blogUrls}
 
 ## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
 
+- Chicken Krush (Prague): ${BASE}/magazin/community/chicken-krush-prag
 - Mandy Restaurant (Berlin-Neukölln): ${BASE}/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
 - Shawarma Albaik (Berlin): ${BASE}/magazin/speisely-visits/shawarma-albaik-berlin
 - Kokio Korean Fried Chicken (Berlin): ${BASE}/magazin/community/kokio-berlin

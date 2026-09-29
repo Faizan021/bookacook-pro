@@ -282,7 +282,66 @@ function CommunityPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* 1. Garçon de Café Berlin (Newest Story) */}
+            {/* 1. Chicken Krush Prag (Newest Story) */}
+            <Link
+              to="/magazin/community/chicken-krush-prag"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                  <img
+                    src="/magazin/chicken-krush-prag/chicken-krush-01.jpg"
+                    alt={
+                      isDe
+                        ? "Korean Fried Chicken, Snow Flake Seasoning und Pommes bei Chicken Krush in Prag"
+                        : "Korean Fried Chicken, Snow Flake seasoning and fries at Chicken Krush in Prague"
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#b28a3c] text-white px-3 py-1 text-xs font-bold shadow-md">
+                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
+                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-2.5 py-1 text-xs font-semibold backdrop-blur-xs">
+                      Prag-Nové Město
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                    📸 Speisely Community
+                  </div>
+                </div>
+
+                <div className="p-6 sm:p-7">
+                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
+                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
+                    <span>Prag (Příčná 9, Nové Město)</span>
+                    <span>•</span>
+                    <span>{isDe ? "Community Story" : "Community Story"}</span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
+                    {isDe
+                      ? "Goldener Crunch, Yangnyeom-Glanz und Rose Tteokbokki in Prag"
+                      : "Golden Crunch, Yangnyeom Glaze and Rose Tteokbokki in Prague"}
+                  </h3>
+                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
+                    {isDe
+                      ? "Knuspriges Korean Fried Chicken, cremiges Rose Tteokbokki, Snow-Flake-Käsepulver und digitale Tisch-Bestellung bei Chicken Krush in Prag."
+                      : "Crispy Korean fried chicken, velvety Rose Tteokbokki, snow-flake cheese seasoning and digital table ordering at Chicken Krush in Prague."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
+                <span>{isDe ? "Story lesen" : "Read Story"}</span>
+                <ArrowRight
+                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
+                  aria-hidden="true"
+                />
+              </div>
+            </Link>
+
+            {/* 2. Garçon de Café Berlin */}
             <Link
               to="/magazin/community/garcon-de-cafe-berlin"
               className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
@@ -299,10 +358,6 @@ function CommunityPage() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[#b28a3c] text-white px-3 py-1 text-xs font-bold shadow-md">
-                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
-                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
-                    </span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-2.5 py-1 text-xs font-semibold backdrop-blur-xs">
                       Berlin-Mitte
                     </span>

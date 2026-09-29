@@ -61,6 +61,7 @@ import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/
 import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
 import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes/magazin.community.garcon-de-cafe-berlin'
+import { Route as MagazinCommunityChickenKrushPragRouteImport } from './routes/magazin.community.chicken-krush-prag'
 import { Route as MagazinCommunityArianaRestaurantFrankfurtRouteImport } from './routes/magazin.community.ariana-restaurant-frankfurt'
 import { Route as MagazinCommunityAlzaeemRestaurantBerlinRouteImport } from './routes/magazin.community.alzaeem-restaurant-berlin'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
@@ -348,6 +349,12 @@ const MagazinCommunityGarconDeCafeBerlinRoute =
     path: '/magazin/community/garcon-de-cafe-berlin',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityChickenKrushPragRoute =
+  MagazinCommunityChickenKrushPragRouteImport.update({
+    id: '/magazin/community/chicken-krush-prag',
+    path: '/magazin/community/chicken-krush-prag',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunityArianaRestaurantFrankfurtRoute =
   MagazinCommunityArianaRestaurantFrankfurtRouteImport.update({
     id: '/magazin/community/ariana-restaurant-frankfurt',
@@ -486,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
@@ -551,6 +559,7 @@ export interface FileRoutesByTo {
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
@@ -621,6 +630,7 @@ export interface FileRoutesById {
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
@@ -691,6 +701,7 @@ export interface FileRouteTypes {
     | '/checkout/deposit/$bookingId'
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
+    | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/kokio-berlin'
@@ -756,6 +767,7 @@ export interface FileRouteTypes {
     | '/checkout/deposit/$bookingId'
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
+    | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/kokio-berlin'
@@ -825,6 +837,7 @@ export interface FileRouteTypes {
     | '/checkout/deposit/$bookingId'
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
+    | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/kokio-berlin'
@@ -878,6 +891,7 @@ export interface RootRouteChildren {
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
   MagazinCommunityAlzaeemRestaurantBerlinRoute: typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   MagazinCommunityArianaRestaurantFrankfurtRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  MagazinCommunityChickenKrushPragRoute: typeof MagazinCommunityChickenKrushPragRoute
   MagazinCommunityGarconDeCafeBerlinRoute: typeof MagazinCommunityGarconDeCafeBerlinRoute
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
   MagazinCommunityKokioBerlinRoute: typeof MagazinCommunityKokioBerlinRoute
@@ -1255,6 +1269,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityGarconDeCafeBerlinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/chicken-krush-prag': {
+      id: '/magazin/community/chicken-krush-prag'
+      path: '/magazin/community/chicken-krush-prag'
+      fullPath: '/magazin/community/chicken-krush-prag'
+      preLoaderRoute: typeof MagazinCommunityChickenKrushPragRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/ariana-restaurant-frankfurt': {
       id: '/magazin/community/ariana-restaurant-frankfurt'
       path: '/magazin/community/ariana-restaurant-frankfurt'
@@ -1535,6 +1556,7 @@ const rootRouteChildren: RootRouteChildren = {
     MagazinCommunityAlzaeemRestaurantBerlinRoute,
   MagazinCommunityArianaRestaurantFrankfurtRoute:
     MagazinCommunityArianaRestaurantFrankfurtRoute,
+  MagazinCommunityChickenKrushPragRoute: MagazinCommunityChickenKrushPragRoute,
   MagazinCommunityGarconDeCafeBerlinRoute:
     MagazinCommunityGarconDeCafeBerlinRoute,
   MagazinCommunityHarputWiesbadenRoute: MagazinCommunityHarputWiesbadenRoute,
