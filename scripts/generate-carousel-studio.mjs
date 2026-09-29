@@ -3,10 +3,10 @@ import path from 'path';
 
 async function generate() {
   // Original photos (HD-sharpened versions for crisp preview)
-  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-01.jpg')).toString('base64');
-  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-02.jpg')).toString('base64');
-  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-03.jpg')).toString('base64');
-  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-04.jpg')).toString('base64');
+  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/ck-new-03.jpg')).toString('base64');
+  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/ck-new-01.jpg')).toString('base64');
+  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/ck-new-05.jpg')).toString('base64');
+  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/ck-new-02.jpg')).toString('base64');
 
   // Pre-rendered HD PNG slides (1080×1350) for instant 1-click download
   const s1 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-1.png')).toString('base64');
@@ -849,3 +849,4 @@ Hier gibt es kein langes Warten: An jedem Tisch steht ein eigener Touchscreen. B
 }
 
 generate().catch(console.error);
+
