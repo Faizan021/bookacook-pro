@@ -290,7 +290,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/chicken-krush-prag/chicken-krush-01.jpg"
+                    src="/magazin/chicken-krush-prag/chicken-krush-01.webp"
                     alt={
                       isDe
                         ? "Korean Fried Chicken, Snow Flake Seasoning und Pommes bei Chicken Krush in Prag"
@@ -349,7 +349,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/garcon-de-cafe-berlin/garcon-01.jpg"
+                    src="/magazin/garcon-de-cafe-berlin/garcon-01.webp"
                     alt={
                       isDe
                         ? "Das lichtdurchflutete Atrium von Garçon de Café im Berliner EDGE-Gebäude"
@@ -404,7 +404,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/thronburger-berlin/thronburger-01.jpg?v=2"
+                    src="/magazin/thronburger-berlin/thronburger-01.webp?v=2"
                     alt={
                       isDe
                         ? "Halal Beef Burger im Sesam-Brioche bei Thronburger Berlin"
@@ -459,7 +459,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/kokio-berlin/kokio-boneless-02.jpg"
+                    src="/magazin/kokio-berlin/kokio-boneless-02.webp"
                     alt={
                       isDe
                         ? "Korean Fried Chicken bei KOKIO in Berlin-Prenzlauer Berg"
@@ -515,7 +515,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/alzaeem-berlin/mix-grill-close.jpg"
+                    src="/magazin/alzaeem-berlin/mix-grill-close.webp"
                     alt={
                       isDe
                         ? "Mix Grill und syrische Spezialitäten beim Alzaeem Restaurant in Berlin-Neukölln"
@@ -571,7 +571,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/ariana-frankfurt/qabili-palau.jpg"
+                    src="/magazin/ariana-frankfurt/qabili-palau.webp"
                     alt={
                       isDe
                         ? "Qabili Palau bei Ariana in Frankfurt"
@@ -627,7 +627,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/harput-wiesbaden/harput-fisch.jpg"
+                    src="/magazin/harput-wiesbaden/harput-fisch.webp"
                     alt={
                       isDe
                         ? "Grillabend bei Harput in Wiesbaden"

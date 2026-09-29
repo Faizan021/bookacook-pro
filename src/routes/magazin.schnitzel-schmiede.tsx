@@ -43,7 +43,7 @@ export const Route = createFileRoute("/magazin/schnitzel-schmiede")({
         content:
           "Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach. Tradition seit 2013: Entdecke die redaktionelle Fest-Story auf Speisely.",
       },
-      { property: "og:image", content: "https://speisely.de/speisely_magazine_cover_v2.png" },
+      { property: "og:image", content: "https://speisely.de/speisely_magazine_cover_v2.webp" },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://speisely.de/magazin/schnitzel-schmiede" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -92,7 +92,7 @@ export const Route = createFileRoute("/magazin/schnitzel-schmiede")({
                   url: "https://speisely.de/speisely_logo.png",
                 },
               },
-              image: "https://speisely.de/speisely_magazine_cover_v2.png",
+              image: "https://speisely.de/speisely_magazine_cover_v2.webp",
               contentLocation: {
                 "@type": "Place",
                 name: "EineStadt-Fest (Brucknerallee & Richard-Wagner-Straße)",
@@ -527,7 +527,9 @@ function SchnitzelSchmiedeStoryPage() {
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-6 py-12 bg-[#FBF7EE]"><AboutSpeiselySection /></div>
+      <div className="max-w-4xl mx-auto px-6 py-12 bg-[#FBF7EE]">
+        <AboutSpeiselySection />
+      </div>
 
       {/* CHAPTER 7 — CONVERSION FINALE */}
       <section className="relative min-h-[80vh] w-full bg-[#173C32] text-[#FBF7EE] py-24 px-6 sm:px-12 lg:px-20 flex flex-col justify-between items-center text-center">

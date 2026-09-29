@@ -48,7 +48,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/mandy-restaurant-
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.jpg",
+        content: "https://speisely.de/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp",
       },
       { property: "og:type", content: "article" },
       {
@@ -130,7 +130,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/mandy-restaurant-
                 "Speisely besucht Mandy in Berlin-Neukölln. Wir bestellen Mandy Lamm für zwei, Getränke und Chai – und zahlen zusammen rund 45 Euro.",
               image: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.jpg",
+                url: "https://speisely.de/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp",
                 width: 779,
                 height: 716,
               },
@@ -359,7 +359,7 @@ function MandyArticlePage() {
         {/* Hero Image */}
         <figure className="mb-12 rounded-3xl overflow-hidden shadow-2xl border border-[#173C32]/10 bg-[#0c1813]">
           <img
-            src="/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.jpg"
+            src="/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp"
             alt={
               isDe
                 ? "Mandy Lamm für zwei mit Reis, Cashews, Kräutern und roter Sauce in Berlin-Neukölln"
@@ -444,7 +444,7 @@ function MandyArticlePage() {
           {/* Platter Gallery Image */}
           <figure className="my-10 rounded-3xl overflow-hidden shadow-xl border border-[#173C32]/10 bg-[#0c1813]">
             <img
-              src="/magazin/mandy/mandy-reisplatte-lamm-fuer-zwei.jpg"
+              src="/magazin/mandy/mandy-reisplatte-lamm-fuer-zwei.webp"
               alt={
                 isDe
                   ? "Große gemeinsame Platte mit zwei Lammstücken und Reis bei Mandy Restaurant Berlin"
@@ -705,7 +705,7 @@ function MandyArticlePage() {
           {/* Restaurant Sign Image */}
           <figure className="my-10 rounded-3xl overflow-hidden shadow-xl border border-[#173C32]/10 bg-[#0c1813]">
             <img
-              src="/magazin/mandy/mandy-happy-jemen-restaurant-schild-berlin.jpg"
+              src="/magazin/mandy/mandy-happy-jemen-restaurant-schild-berlin.webp"
               alt={
                 isDe
                   ? "Schild von Mandy Happy Jemen Restaurant in der Wildenbruchstraße in Berlin"
@@ -913,7 +913,7 @@ function MandyArticlePage() {
               >
                 <div className="h-44 bg-[#0c1813] overflow-hidden">
                   <img
-                    src="/magazin/albaik/albaik-shawarma-rice-hero.jpg"
+                    src="/magazin/albaik/albaik-shawarma-rice-hero.webp"
                     alt={
                       isDe
                         ? "Chicken Shawarma und gelber Reis bei Shawarma Albaik in Berlin-Neukölln"
@@ -985,9 +985,9 @@ function MandyArticlePage() {
             </Link>
           </div>
         </div>
-        
-          <AboutSpeiselySection />
-        </article>
+
+        <AboutSpeiselySection />
+      </article>
     </div>
   );
 }

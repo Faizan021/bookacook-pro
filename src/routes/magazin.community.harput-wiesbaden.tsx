@@ -58,7 +58,7 @@ export const Route = createFileRoute("/magazin/community/harput-wiesbaden")({
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/harput-wiesbaden/harput-fisch.jpg",
+        content: "https://speisely.de/magazin/harput-wiesbaden/harput-fisch.webp",
       },
       { property: "og:type", content: "article" },
       {
@@ -99,7 +99,7 @@ export const Route = createFileRoute("/magazin/community/harput-wiesbaden")({
                 "Ein Mitglied der Speisely Community teilt seinen Besuch bei Harput in Wiesbaden – mit ganzem gegrilltem Fisch und saftigem Hähnchenspieß mit Reis.",
               image: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/harput-wiesbaden/harput-fisch.jpg",
+                url: "https://speisely.de/magazin/harput-wiesbaden/harput-fisch.webp",
                 width: 1200,
                 height: 675,
               },
@@ -339,7 +339,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/harput-wiesbaden/harput-fisch.jpg"
+                  src="/magazin/harput-wiesbaden/harput-fisch.webp"
                   alt={
                     isDe
                       ? "Ganzer gegrillter Fisch mit Reis und Zitrone auf einem Holzbrett bei Harput in Wiesbaden"
@@ -374,7 +374,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/harput-wiesbaden/harput-haehnchenspiesz.jpg"
+                  src="/magazin/harput-wiesbaden/harput-haehnchenspiesz.webp"
                   alt={
                     isDe
                       ? "Gegrillter Hähnchenspieß mit Reis, gegrillter Spitzpaprika und Tomate bei Harput in Wiesbaden"
@@ -498,7 +498,7 @@ I will attach my own photos or videos to this email.`;
               </p>
             </div>
           </div>
-          
+
           <AboutSpeiselySection />
         </article>
       </div>

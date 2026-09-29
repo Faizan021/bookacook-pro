@@ -1,6 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Shield, Users, Utensils, Mail, Instagram, Sparkles, ExternalLink, BookOpen } from "lucide-react";
+import {
+  MapPin,
+  Shield,
+  Users,
+  Utensils,
+  Mail,
+  Instagram,
+  Sparkles,
+  ExternalLink,
+  BookOpen,
+} from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
 import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
@@ -35,7 +44,7 @@ export const Route = createFileRoute("/magazin/community/thronburger-berlin")({
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/thronburger-berlin/thronburger-01.jpg",
+        content: "https://speisely.de/magazin/thronburger-berlin/thronburger-01.webp",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -70,7 +79,7 @@ export const Route = createFileRoute("/magazin/community/thronburger-berlin")({
               headline: "Ein Burger, viele Berliner Straßen",
               description:
                 "Ein Speisely-Community-Besuch bei Thronburger Berlin: Halal Beef Burger im dunklen Sesam-Brioche, Süßkartoffel-Pommes und ein Speisekarten-Konzept mit Berliner Straßen-Namen.",
-              image: "https://speisely.de/magazin/thronburger-berlin/thronburger-01.jpg",
+              image: "https://speisely.de/magazin/thronburger-berlin/thronburger-01.webp",
               datePublished: "2026-08-30",
               dateModified: "2026-08-30",
               author: {
@@ -180,8 +189,10 @@ I will attach my own photos or videos to this email.`;
   const mailtoHref = `mailto:info@speisely.de?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
   const instagramHref = "https://www.instagram.com/speisely/";
 
-  const menuUrl = "https://www.thronburger.de/?utm_source=speisely&utm_medium=referral&utm_campaign=thronburger_community_visit#burger";
-  const websiteUrl = "https://www.thronburger.de/?utm_source=speisely&utm_medium=referral&utm_campaign=thronburger_community_visit";
+  const menuUrl =
+    "https://www.thronburger.de/?utm_source=speisely&utm_medium=referral&utm_campaign=thronburger_community_visit#burger";
+  const websiteUrl =
+    "https://www.thronburger.de/?utm_source=speisely&utm_medium=referral&utm_campaign=thronburger_community_visit";
 
   const handleMenuClick = () => {
     trackEvent("restaurant_menu_click", {
@@ -248,9 +259,7 @@ I will attach my own photos or videos to this email.`;
           </div>
 
           <h1 className="font-display text-3xl sm:text-5xl lg:text-[44px] font-bold text-forest leading-[1.15] tracking-tight">
-            {isDe
-              ? "Ein Burger, viele Berliner Straßen"
-              : "One Burger, Many Berlin Streets"}
+            {isDe ? "Ein Burger, viele Berliner Straßen" : "One Burger, Many Berlin Streets"}
           </h1>
 
           <p className="mt-5 text-lg sm:text-xl text-forest/80 leading-relaxed font-medium">
@@ -309,7 +318,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/thronburger-berlin/thronburger-01.jpg?v=2"
+                  src="/magazin/thronburger-berlin/thronburger-01.webp?v=2"
                   alt={
                     isDe
                       ? "Halal Beef Burger im Sesam-Brioche mit geschmolzenem Käse und Süßkartoffel-Pommes bei Thronburger Berlin"
@@ -353,7 +362,14 @@ I will attach my own photos or videos to this email.`;
             <p>
               {isDe ? (
                 <>
-                  Zu den Klassikern auf der Karte zählen unter anderem der <em>Friedrichshainer</em> und der <em>Hirschburger</em> mit Rindfleisch, der knusprige Hähnchen-Burger <em>Lenbacher</em> sowie die vegetarische Variante <em>Wiesenburger</em>. Der klassische Cheeseburger trägt den Namen <em>Kreutziger</em> – kombiniert aus Sesam-Brioche, Salat, Tomate, Zwiebeln, Halal-Rindfleisch und Cheddar. Namen wie <em>Petersburger</em>, <em>Revaler</em>, <em>Krossener</em> und <em>Boxhagener</em> setzen diese Idee quer durch das Sortiment fort. Das Ergebnis ist eine Speisekarte, die sich wie ein kleiner Stadtplan von Berlin liest.{" "}
+                  Zu den Klassikern auf der Karte zählen unter anderem der <em>Friedrichshainer</em>{" "}
+                  und der <em>Hirschburger</em> mit Rindfleisch, der knusprige Hähnchen-Burger{" "}
+                  <em>Lenbacher</em> sowie die vegetarische Variante <em>Wiesenburger</em>. Der
+                  klassische Cheeseburger trägt den Namen <em>Kreutziger</em> – kombiniert aus
+                  Sesam-Brioche, Salat, Tomate, Zwiebeln, Halal-Rindfleisch und Cheddar. Namen wie{" "}
+                  <em>Petersburger</em>, <em>Revaler</em>, <em>Krossener</em> und{" "}
+                  <em>Boxhagener</em> setzen diese Idee quer durch das Sortiment fort. Das Ergebnis
+                  ist eine Speisekarte, die sich wie ein kleiner Stadtplan von Berlin liest.{" "}
                   <a
                     href="https://www.thronburger.de/"
                     target="_blank"
@@ -365,7 +381,14 @@ I will attach my own photos or videos to this email.`;
                 </>
               ) : (
                 <>
-                  The restaurant’s featured classics include the beef-based <em>Friedrichshainer</em> and <em>Hirschburger</em>, the crispy chicken <em>Lenbacher</em>, and the vegetarian <em>Wiesenburger</em>. Its classic cheeseburger is called the <em>Kreutziger</em>, combining a sesame brioche, lettuce, tomato, onion, halal beef and cheddar. Names such as <em>Petersburger</em>, <em>Revaler</em>, <em>Krossener</em> and <em>Boxhagener</em> continue the idea across the wider selection. The result is a burger menu that reads like a map of Berlin.{" "}
+                  The restaurant’s featured classics include the beef-based{" "}
+                  <em>Friedrichshainer</em> and <em>Hirschburger</em>, the crispy chicken{" "}
+                  <em>Lenbacher</em>, and the vegetarian <em>Wiesenburger</em>. Its classic
+                  cheeseburger is called the <em>Kreutziger</em>, combining a sesame brioche,
+                  lettuce, tomato, onion, halal beef and cheddar. Names such as{" "}
+                  <em>Petersburger</em>, <em>Revaler</em>, <em>Krossener</em> and{" "}
+                  <em>Boxhagener</em> continue the idea across the wider selection. The result is a
+                  burger menu that reads like a map of Berlin.{" "}
                   <a
                     href="https://www.thronburger.de/"
                     target="_blank"
@@ -392,7 +415,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/thronburger-berlin/thronburger-02.jpg"
+                  src="/magazin/thronburger-berlin/thronburger-02.webp"
                   alt={
                     isDe
                       ? "Draufsicht auf den Burger im Sesam-Brioche und die Schale Süßkartoffel-Pommes bei Thronburger Berlin"
@@ -418,13 +441,19 @@ I will attach my own photos or videos to this email.`;
             </p>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Halal-Auswahl über den klassischen Beef Burger hinaus" : "Halal choices beyond the classic beef burger"}
+              {isDe
+                ? "Halal-Auswahl über den klassischen Beef Burger hinaus"
+                : "Halal choices beyond the classic beef burger"}
             </h2>
 
             <p>
               {isDe ? (
                 <>
-                  Thronburger beschreibt sein gesamtes Speisenangebot als 100% halal. Neben Rindfleisch-Burgern umfasst die Karte auch Hähnchen-Varianten sowie vegetarische und vegane Optionen. Bei den Beilagen stehen unter anderem Curly Fries, Süßkartoffel-Pommes, Potato Wedges und Chicken Nuggets zur Auswahl, ergänzt durch Hot Dogs und Salate.{" "}
+                  Thronburger beschreibt sein gesamtes Speisenangebot als 100% halal. Neben
+                  Rindfleisch-Burgern umfasst die Karte auch Hähnchen-Varianten sowie vegetarische
+                  und vegane Optionen. Bei den Beilagen stehen unter anderem Curly Fries,
+                  Süßkartoffel-Pommes, Potato Wedges und Chicken Nuggets zur Auswahl, ergänzt durch
+                  Hot Dogs und Salate.{" "}
                   <a
                     href="https://www.thronburger.de/"
                     target="_blank"
@@ -436,7 +465,10 @@ I will attach my own photos or videos to this email.`;
                 </>
               ) : (
                 <>
-                  Thronburger describes its complete food selection as 100% halal. Alongside its beef burgers, the menu includes chicken, vegetarian and vegan options. The choice continues through the sides, including Curly Fries, Sweet Potato Fries, potato wedges and chicken nuggets, alongside hot dogs and salads.{" "}
+                  Thronburger describes its complete food selection as 100% halal. Alongside its
+                  beef burgers, the menu includes chicken, vegetarian and vegan options. The choice
+                  continues through the sides, including Curly Fries, Sweet Potato Fries, potato
+                  wedges and chicken nuggets, alongside hot dogs and salads.{" "}
                   <a
                     href="https://www.thronburger.de/"
                     target="_blank"
@@ -453,7 +485,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/thronburger-berlin/thronburger-03.jpg"
+                  src="/magazin/thronburger-berlin/thronburger-03.webp"
                   alt={
                     isDe
                       ? "Burger und Süßkartoffel-Pommes auf Holztabletts serviert bei Thronburger Berlin"
@@ -479,7 +511,11 @@ I will attach my own photos or videos to this email.`;
             <p>
               {isDe ? (
                 <>
-                  Das 2013 gegründete Konzept listet aktuell zwei Berliner Standorte: Das Restaurant in Friedrichshain befindet sich in der Neuen Bahnhofstraße 7A in direkter Nähe zum Bahnhof Ostkreuz. Ein zweiter Standort liegt in der Wilhelminenhofstraße 65 in Oberschöneweide. Die beiden Standorte verbinden unterschiedliche Kieze im Berliner Osten – während die Burgernamen das Konzept weiter durch die Stadt tragen.{" "}
+                  Das 2013 gegründete Konzept listet aktuell zwei Berliner Standorte: Das Restaurant
+                  in Friedrichshain befindet sich in der Neuen Bahnhofstraße 7A in direkter Nähe zum
+                  Bahnhof Ostkreuz. Ein zweiter Standort liegt in der Wilhelminenhofstraße 65 in
+                  Oberschöneweide. Die beiden Standorte verbinden unterschiedliche Kieze im Berliner
+                  Osten – während die Burgernamen das Konzept weiter durch die Stadt tragen.{" "}
                   <a
                     href="https://www.thronburger.de/"
                     target="_blank"
@@ -491,7 +527,11 @@ I will attach my own photos or videos to this email.`;
                 </>
               ) : (
                 <>
-                  Established in 2013, Thronburger currently lists two Berlin restaurants. The Friedrichshain location is on Neue Bahnhofstraße 7A, close to Ostkreuz. The second is situated on Wilhelminenhofstraße 65 in Oberschöneweide. The two locations connect different neighbourhoods in eastern Berlin—while the burger names carry the concept further across the city.{" "}
+                  Established in 2013, Thronburger currently lists two Berlin restaurants. The
+                  Friedrichshain location is on Neue Bahnhofstraße 7A, close to Ostkreuz. The second
+                  is situated on Wilhelminenhofstraße 65 in Oberschöneweide. The two locations
+                  connect different neighbourhoods in eastern Berlin—while the burger names carry
+                  the concept further across the city.{" "}
                   <a
                     href="https://www.thronburger.de/"
                     target="_blank"
@@ -530,10 +570,15 @@ I will attach my own photos or videos to this email.`;
                 Thronburger Berlin
               </h3>
               <div className="space-y-1 text-sm text-forest/75 mb-4">
-                <p><strong>Friedrichshain:</strong> Neue Bahnhofstraße 7A, 10245 Berlin (Nähe Ostkreuz)</p>
-                <p><strong>Oberschöneweide:</strong> Wilhelminenhofstraße 65, 12459 Berlin</p>
+                <p>
+                  <strong>Friedrichshain:</strong> Neue Bahnhofstraße 7A, 10245 Berlin (Nähe
+                  Ostkreuz)
+                </p>
+                <p>
+                  <strong>Oberschöneweide:</strong> Wilhelminenhofstraße 65, 12459 Berlin
+                </p>
               </div>
-              
+
               <div className="flex flex-wrap gap-2 text-xs text-forest/70 mb-6">
                 <span className="bg-forest/5 px-3 py-1 rounded-full border border-forest/10 font-medium">
                   {isDe ? "Halal Burger" : "Halal Burgers"}
@@ -594,7 +639,7 @@ I will attach my own photos or videos to this email.`;
               </p>
             </div>
           </div>
-          
+
           <AboutSpeiselySection />
         </article>
 

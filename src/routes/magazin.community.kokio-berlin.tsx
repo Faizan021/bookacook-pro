@@ -1,6 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Shield, Users, Utensils, Mail, Instagram, Sparkles, ExternalLink, BookOpen } from "lucide-react";
+import {
+  MapPin,
+  Shield,
+  Users,
+  Utensils,
+  Mail,
+  Instagram,
+  Sparkles,
+  ExternalLink,
+  BookOpen,
+} from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
 import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
@@ -35,7 +44,7 @@ export const Route = createFileRoute("/magazin/community/kokio-berlin")({
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/kokio-berlin/kokio-boneless-02.jpg",
+        content: "https://speisely.de/magazin/kokio-berlin/kokio-boneless-02.webp",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -70,7 +79,7 @@ export const Route = createFileRoute("/magazin/community/kokio-berlin")({
               headline: "Zwischen Crunch, Sauce und koreanischer Esskultur",
               description:
                 "Ein Speisely-Community-Besuch bei KOKIO Berlin: knuspriges Fried Chicken, verschiedene hausgemachte Saucen und ein Essen, das am schönsten gemeinsam schmeckt.",
-              image: "https://speisely.de/magazin/kokio-berlin/kokio-boneless-02.jpg",
+              image: "https://speisely.de/magazin/kokio-berlin/kokio-boneless-02.webp",
               datePublished: "2026-08-30",
               dateModified: "2026-08-30",
               author: {
@@ -182,8 +191,10 @@ I will attach my own photos or videos to this email.`;
   const mailtoHref = `mailto:info@speisely.de?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
   const instagramHref = "https://www.instagram.com/speisely/";
 
-  const menuUrl = "https://mylightspeed.app/DPJKBUDB/C-ordering?utm_source=speisely&utm_medium=referral&utm_campaign=kokio_community_visit";
-  const websiteUrl = "https://de.kokioberlin.com/?utm_source=speisely&utm_medium=referral&utm_campaign=kokio_community_visit";
+  const menuUrl =
+    "https://mylightspeed.app/DPJKBUDB/C-ordering?utm_source=speisely&utm_medium=referral&utm_campaign=kokio_community_visit";
+  const websiteUrl =
+    "https://de.kokioberlin.com/?utm_source=speisely&utm_medium=referral&utm_campaign=kokio_community_visit";
 
   const handleMenuClick = () => {
     trackEvent("restaurant_menu_click", {
@@ -311,7 +322,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/kokio-berlin/kokio-boneless-02.jpg"
+                  src="/magazin/kokio-berlin/kokio-boneless-02.webp"
                   alt={
                     isDe
                       ? "Knuspriges Fried Chicken mit Sauce und klassischen Pommes bei KOKIO Berlin"
@@ -368,7 +379,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/kokio-berlin/kokio-boneless-01.jpg"
+                  src="/magazin/kokio-berlin/kokio-boneless-01.webp"
                   alt={
                     isDe
                       ? "Korean Fried Chicken kombiniert mit Süßkartoffel-Pommes bei KOKIO Berlin"
@@ -394,7 +405,9 @@ I will attach my own photos or videos to this email.`;
             </p>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Wie Fried Chicken in Korea eine eigene Identität bekam" : "How Korea transformed fried chicken"}
+              {isDe
+                ? "Wie Fried Chicken in Korea eine eigene Identität bekam"
+                : "How Korea transformed fried chicken"}
             </h2>
 
             <p>
@@ -412,7 +425,11 @@ I will attach my own photos or videos to this email.`;
             <p>
               {isDe ? (
                 <>
-                  Entscheidend ist dabei nicht nur die Sauce. Viele koreanische Zubereitungen arbeiten mit einer dünneren Panade und doppeltem Frittieren. Dadurch entsteht eine leichte, besonders knusprige Oberfläche, die auch unter einer großzügigen Glasur noch Struktur behält. KOKIO beschreibt ebenfalls das doppelte Frittieren als Grundlage seines Chicken-Crunchs.{" "}
+                  Entscheidend ist dabei nicht nur die Sauce. Viele koreanische Zubereitungen
+                  arbeiten mit einer dünneren Panade und doppeltem Frittieren. Dadurch entsteht eine
+                  leichte, besonders knusprige Oberfläche, die auch unter einer großzügigen Glasur
+                  noch Struktur behält. KOKIO beschreibt ebenfalls das doppelte Frittieren als
+                  Grundlage seines Chicken-Crunchs.{" "}
                   <a
                     href="https://de.kokioberlin.com/"
                     target="_blank"
@@ -424,7 +441,10 @@ I will attach my own photos or videos to this email.`;
                 </>
               ) : (
                 <>
-                  Double-frying also became closely associated with Korean fried chicken. The method creates a thinner, lighter crust capable of holding sauce while preserving its crackle. KOKIO identifies double-frying as the secret behind its own crisp coating.{" "}
+                  Double-frying also became closely associated with Korean fried chicken. The method
+                  creates a thinner, lighter crust capable of holding sauce while preserving its
+                  crackle. KOKIO identifies double-frying as the secret behind its own crisp
+                  coating.{" "}
                   <a
                     href="https://de.kokioberlin.com/"
                     target="_blank"
@@ -440,7 +460,12 @@ I will attach my own photos or videos to this email.`;
             <p>
               {isDe ? (
                 <>
-                  Aus dem Essen entwickelte sich zugleich eine moderne gesellige Tradition: <strong>Chimaek</strong>. Das Wort verbindet „Chicken“ mit „Maekju“, dem koreanischen Wort für Bier. Gemeint ist jedoch mehr als nur eine Getränkebegleitung. Chimaek steht für gemeinsame Abende, Gespräche und große Chicken-Platten, die in der Mitte stehen und miteinander geteilt werden. Koreanische Filme und Serien machten diese Esskultur später weltweit bekannt.{" "}
+                  Aus dem Essen entwickelte sich zugleich eine moderne gesellige Tradition:{" "}
+                  <strong>Chimaek</strong>. Das Wort verbindet „Chicken“ mit „Maekju“, dem
+                  koreanischen Wort für Bier. Gemeint ist jedoch mehr als nur eine
+                  Getränkebegleitung. Chimaek steht für gemeinsame Abende, Gespräche und große
+                  Chicken-Platten, die in der Mitte stehen und miteinander geteilt werden.
+                  Koreanische Filme und Serien machten diese Esskultur später weltweit bekannt.{" "}
                   <a
                     href="https://www.korean-culture.org/eng/webzine/202406/sub07.html"
                     target="_blank"
@@ -452,7 +477,13 @@ I will attach my own photos or videos to this email.`;
                 </>
               ) : (
                 <>
-                  Then there is <strong>chimaek</strong>, a word combining “chicken” and <em>maekju</em>, the Korean word for beer. It describes one of South Korea’s favourite social pairings, but its meaning reaches beyond the drink: friends gathering, platters being passed around and an evening unfolding around fried chicken. Korean television helped carry this ritual to audiences around the world, turning chimaek into an internationally recognised part of contemporary K-food culture.{" "}
+                  Then there is <strong>chimaek</strong>, a word combining “chicken” and{" "}
+                  <em>maekju</em>, the Korean word for beer. It describes one of South Korea’s
+                  favourite social pairings, but its meaning reaches beyond the drink: friends
+                  gathering, platters being passed around and an evening unfolding around fried
+                  chicken. Korean television helped carry this ritual to audiences around the world,
+                  turning chimaek into an internationally recognised part of contemporary K-food
+                  culture.{" "}
                   <a
                     href="https://www.korean-culture.org/eng/webzine/202406/sub07.html"
                     target="_blank"
@@ -469,7 +500,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/kokio-berlin/kokio-boneless-03.jpg"
+                  src="/magazin/kokio-berlin/kokio-boneless-03.webp"
                   alt={
                     isDe
                       ? "Großzügige Portion Fried Chicken zum Teilen bei KOKIO Berlin"
@@ -489,7 +520,9 @@ I will attach my own photos or videos to this email.`;
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Ein Stück moderner koreanischer Esskultur in Berlin" : "A Korean social ritual, served in Berlin"}
+              {isDe
+                ? "Ein Stück moderner koreanischer Esskultur in Berlin"
+                : "A Korean social ritual, served in Berlin"}
             </h2>
 
             <p>
@@ -501,7 +534,10 @@ I will attach my own photos or videos to this email.`;
             <p>
               {isDe ? (
                 <>
-                  KOKIO bringt diese koreanische Fried-Chicken-Kultur nach Prenzlauer Berg. Das Restaurant gibt auf seiner offiziellen Website an, frisch geliefertes, halal-zertifiziertes Hähnchen zu verwenden, seine Saucen selbst zuzubereiten und das Chicken doppelt zu frittieren.{" "}
+                  KOKIO bringt diese koreanische Fried-Chicken-Kultur nach Prenzlauer Berg. Das
+                  Restaurant gibt auf seiner offiziellen Website an, frisch geliefertes,
+                  halal-zertifiziertes Hähnchen zu verwenden, seine Saucen selbst zuzubereiten und
+                  das Chicken doppelt zu frittieren.{" "}
                   <a
                     href="https://de.kokioberlin.com/"
                     target="_blank"
@@ -513,7 +549,10 @@ I will attach my own photos or videos to this email.`;
                 </>
               ) : (
                 <>
-                  KOKIO brings that contemporary Korean chicken culture to Prenzlauer Berg. According to information published on KOKIO's official website, the restaurant uses freshly supplied, halal-certified chicken, prepares its sauces in-house, and double-fries its chicken.{" "}
+                  KOKIO brings that contemporary Korean chicken culture to Prenzlauer Berg.
+                  According to information published on KOKIO's official website, the restaurant
+                  uses freshly supplied, halal-certified chicken, prepares its sauces in-house, and
+                  double-fries its chicken.{" "}
                   <a
                     href="https://de.kokioberlin.com/"
                     target="_blank"
@@ -538,13 +577,11 @@ I will attach my own photos or videos to this email.`;
                 <Utensils className="h-4 w-4" aria-hidden="true" />
                 <span>{isDe ? "Restaurant-Informationen" : "Restaurant Details"}</span>
               </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-2">
-                KOKIO Berlin
-              </h3>
+              <h3 className="font-display text-2xl font-bold text-forest mb-2">KOKIO Berlin</h3>
               <p className="text-sm text-forest/75 mb-4">
                 Hagenauer Straße 9, 10435 Berlin-Prenzlauer Berg
               </p>
-              
+
               <div className="flex flex-wrap gap-2 text-xs text-forest/70 mb-6">
                 <span className="bg-forest/5 px-3 py-1 rounded-full border border-forest/10 font-medium">
                   {isDe ? "Korean Fried Chicken" : "Korean Fried Chicken"}
@@ -600,7 +637,7 @@ I will attach my own photos or videos to this email.`;
               </p>
             </div>
           </div>
-          
+
           <AboutSpeiselySection />
         </article>
 

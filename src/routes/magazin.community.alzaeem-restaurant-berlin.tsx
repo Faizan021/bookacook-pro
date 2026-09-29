@@ -33,7 +33,7 @@ export const Route = createFileRoute("/magazin/community/alzaeem-restaurant-berl
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/alzaeem-berlin/mix-grill-spread.jpg",
+        content: "https://speisely.de/magazin/alzaeem-berlin/mix-grill-spread.webp",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -68,7 +68,7 @@ export const Route = createFileRoute("/magazin/community/alzaeem-restaurant-berl
                 "Mix Grill #44, syrische Grillgerichte und ein vielseitiges Kindermenü beim Alzaeem Restaurant in Berlin-Neukölln.",
               image: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/alzaeem-berlin/mix-grill-spread.jpg",
+                url: "https://speisely.de/magazin/alzaeem-berlin/mix-grill-spread.webp",
                 width: 1200,
                 height: 800,
               },
@@ -293,7 +293,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/alzaeem-berlin/mix-grill-close.jpg"
+                  src="/magazin/alzaeem-berlin/mix-grill-close.webp"
                   alt={
                     isDe
                       ? "Kabob und Shish Tawook auf einem Kupfertablett im Alzaeem Restaurant Neukölln"
@@ -352,7 +352,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/alzaeem-berlin/mix-grill-spread.jpg"
+                  src="/magazin/alzaeem-berlin/mix-grill-spread.webp"
                   alt={
                     isDe
                       ? "Mix Grill mit Hummus, Mutabal, Pommes und Salat im Alzaeem Restaurant Berlin-Neukölln"
@@ -391,7 +391,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/alzaeem-berlin/kinder-menu.jpg"
+                  src="/magazin/alzaeem-berlin/kinder-menu.webp"
                   alt={
                     isDe
                       ? "Kindermenü mit Mozzarella Sticks, Chicken Nuggets, Pommes, Krautsalat und Gurken"
@@ -529,7 +529,7 @@ I will attach my own photos or videos to this email.`;
               </p>
             </div>
           </div>
-          
+
           <AboutSpeiselySection />
         </article>
       </div>

@@ -46,7 +46,7 @@ export const Route = createFileRoute("/magazin/community/garcon-de-cafe-berlin")
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/garcon-de-cafe-berlin/garcon-01.jpg",
+        content: "https://speisely.de/magazin/garcon-de-cafe-berlin/garcon-01.webp",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -81,7 +81,7 @@ export const Route = createFileRoute("/magazin/community/garcon-de-cafe-berlin")
               headline: "Eine Pause aus Holz, Licht und drei Espressoshots",
               description:
                 "Ein Speisely-Community-Besuch bei Garçon de Café am Berliner EDGE-Gebäude nahe Hauptbahnhof: Specialty Coffee, detaillierte Latte Art, Frühstücksschalen und mobiles Catering.",
-              image: "https://speisely.de/magazin/garcon-de-cafe-berlin/garcon-01.jpg",
+              image: "https://speisely.de/magazin/garcon-de-cafe-berlin/garcon-01.webp",
               datePublished: "2026-09-05",
               dateModified: "2026-09-05",
               author: {
@@ -291,7 +291,7 @@ I will attach my own photos or videos to this email.`;
         <div className="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
           <figure className="rounded-2xl overflow-hidden shadow-lg border border-forest/10 bg-white">
             <img
-              src="/magazin/garcon-de-cafe-berlin/garcon-01.jpg"
+              src="/magazin/garcon-de-cafe-berlin/garcon-01.webp"
               alt={
                 isDe
                   ? "Das lichtdurchflutete Atrium von Garçon de Café im Berliner EDGE-Gebäude nahe dem Hauptbahnhof"
@@ -379,7 +379,7 @@ I will attach my own photos or videos to this email.`;
             {/* Photo 2: Rosetta */}
             <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
               <img
-                src="/magazin/garcon-de-cafe-berlin/garcon-02.jpg"
+                src="/magazin/garcon-de-cafe-berlin/garcon-02.webp"
                 alt={
                   isDe
                     ? "Rosetta-Latte-Art in klassischer weißer Keramiktasse auf dunklem Naturstein"
@@ -443,7 +443,7 @@ I will attach my own photos or videos to this email.`;
             {/* Photo 3: Matcha & Pain au Chocolat */}
             <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
               <img
-                src="/magazin/garcon-de-cafe-berlin/garcon-03.jpg"
+                src="/magazin/garcon-de-cafe-berlin/garcon-03.webp"
                 alt={
                   isDe
                     ? "Matcha und Pain au Chocolat auf dem dunklen Holztisch"
@@ -473,7 +473,7 @@ I will attach my own photos or videos to this email.`;
             {/* Photo 4: Cappuccino & Granola Bowl */}
             <figure className="my-10 max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md border border-forest/10 bg-white">
               <img
-                src="/magazin/garcon-de-cafe-berlin/garcon-04.jpg"
+                src="/magazin/garcon-de-cafe-berlin/garcon-04.webp"
                 alt={
                   isDe
                     ? "Cappuccino mit Latte Art und eine Frucht-Granola-Schale beim Community-Besuch"

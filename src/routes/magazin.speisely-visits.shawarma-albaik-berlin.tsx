@@ -48,7 +48,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/shawarma-albaik-b
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/albaik/albaik-shawarma-rice-hero.jpg",
+        content: "https://speisely.de/magazin/albaik/albaik-shawarma-rice-hero.webp",
       },
       { property: "og:type", content: "article" },
       {
@@ -128,7 +128,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/shawarma-albaik-b
                 "Speisely besucht Shawarma Albaik in Berlin-Neukölln: Chicken Shawarma, gelber Reis, Fladenbrot und ein gemeinsamer Abend mit Freunden auf der Sonnenallee.",
               image: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/albaik/albaik-shawarma-rice-hero.jpg",
+                url: "https://speisely.de/magazin/albaik/albaik-shawarma-rice-hero.webp",
                 width: 831,
                 height: 1039,
               },
@@ -334,7 +334,7 @@ function AlbaikVisitPage() {
       >
         <div className="absolute inset-0 z-0">
           <img
-            src="/magazin/albaik/albaik-shawarma-rice-hero.jpg"
+            src="/magazin/albaik/albaik-shawarma-rice-hero.webp"
             alt={
               isDe
                 ? "Chicken Shawarma und gelber Reis im Tablett bei Shawarma Albaik, Sonnenallee 28, Berlin-Neukölln"
@@ -555,7 +555,7 @@ function AlbaikVisitPage() {
           {/* Gallery Image 2 */}
           <figure className="rounded-3xl overflow-hidden shadow-lg">
             <img
-              src="/magazin/albaik/albaik-shared-platter.jpg"
+              src="/magazin/albaik/albaik-shared-platter.webp"
               alt={
                 isDe
                   ? "Warmes Fladenbrot im Vordergrund, dahinter Albaik-Schalen mit Chicken Shawarma und gelbem Reis sowie eingelegte Gurken auf dem Tisch bei Shawarma Albaik Berlin"
@@ -636,7 +636,7 @@ function AlbaikVisitPage() {
         {/* Gallery Image 3 */}
         <figure className="rounded-3xl overflow-hidden shadow-lg story-reveal opacity-0 translate-y-6 transition-all duration-700">
           <img
-            src="/magazin/albaik/albaik-beilagen-platte.jpg"
+            src="/magazin/albaik/albaik-beilagen-platte.webp"
             alt={
               isDe
                 ? "Teller mit Beilagen bei Shawarma Albaik Berlin: Knoblauchsauce, Cocktailsauce, Krautsalat, Pommes und gebackenes Fladenbrot"
@@ -793,9 +793,9 @@ function AlbaikVisitPage() {
             </p>
           </div>
         </section>
-        
-          <AboutSpeiselySection />
-        </article>
+
+        <AboutSpeiselySection />
+      </article>
 
       {/* CTA & Navigation Footer */}
       <section className="bg-[#173C32] text-[#FBF7EE] py-16 sm:py-24 px-6 sm:px-12 lg:px-20">

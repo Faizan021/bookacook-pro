@@ -31,7 +31,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/")({
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/albaik/albaik-shawarma-rice-hero.jpg",
+        content: "https://speisely.de/magazin/albaik/albaik-shawarma-rice-hero.webp",
       },
       {
         property: "og:url",
@@ -286,7 +286,7 @@ function SpeiselyVisitsPage() {
             >
               <div className="relative overflow-hidden h-60 bg-[#0c1813]">
                 <img
-                  src="/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.jpg"
+                  src="/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp"
                   alt={
                     isDe
                       ? "Mandy Lamm für zwei mit Reis, Cashews, Kräutern und roter Sauce in Berlin-Neukölln"
@@ -347,7 +347,7 @@ function SpeiselyVisitsPage() {
             >
               <div className="relative overflow-hidden h-60 bg-[#0c1813]">
                 <img
-                  src="/magazin/albaik/albaik-shawarma-rice-hero.jpg"
+                  src="/magazin/albaik/albaik-shawarma-rice-hero.webp"
                   alt={
                     isDe
                       ? "Chicken Shawarma und gelber Reis im Tablett bei Shawarma Albaik in Berlin-Neukölln"

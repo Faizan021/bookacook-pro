@@ -47,7 +47,7 @@ export const Route = createFileRoute("/magazin/community/ariana-restaurant-frank
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/ariana-frankfurt/qabili-palau.jpg",
+        content: "https://speisely.de/magazin/ariana-frankfurt/qabili-palau.webp",
       },
       { property: "og:type", content: "article" },
       {
@@ -88,7 +88,7 @@ export const Route = createFileRoute("/magazin/community/ariana-restaurant-frank
                 "Warum liegt das Fleisch beim afghanischen Qabili Palau eigentlich unter dem Reis? Ein kulinarischer Einblick aus der Speisely Community bei Ariana in Frankfurt.",
               image: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/ariana-frankfurt/qabili-palau.jpg",
+                url: "https://speisely.de/magazin/ariana-frankfurt/qabili-palau.webp",
                 width: 1200,
                 height: 675,
               },
@@ -328,7 +328,7 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/ariana-frankfurt/qabili-palau.jpg"
+                  src="/magazin/ariana-frankfurt/qabili-palau.webp"
                   alt={
                     isDe
                       ? "Qabili Palau mit langkörnigem Basmatireis, karamellisierten Möhrenstreifen und Rosinen bei Ariana in Frankfurt"
@@ -498,7 +498,7 @@ I will attach my own photos or videos to this email.`;
               </p>
             </div>
           </div>
-          
+
           <AboutSpeiselySection />
         </article>
       </div>
