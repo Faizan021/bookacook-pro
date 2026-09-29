@@ -197,3 +197,23 @@ Whenever ANY new article, blog post, Speisely Visit, community partner story, or
   3. `src/routes/sitemap[.]xml.ts` (Dynamic XML sitemap for search engines)
 - Never leave new public content, city landing pages, or partner editorial articles unmapped in `/llms.txt` or `sitemap.xml`. AI search engines (Perplexity, ChatGPT Search, Claude, Gemini) rely on these files for authoritative citations.
 
+---
+
+## 10. Mandatory Luxury Editorial Magazine Image Standard (Policy for All Articles)
+
+Whenever ANY new article, Community Story, or Speisely Visit is published, modified, or audited:
+1. **Zero Blurry / Wide Room Snapshots:**
+   - Never use wide-angle, low-light, or soft ambient room photos.
+   - Only use crisp, close-up, mouth-watering food photos, signature dishes, or sharp architectural logo details.
+2. **Unified Aspect Ratio & Dimensions:**
+   - ALL images in an article must share identical aspect ratios (strictly standard 4:3 ratio, e.g. 800×600 px or 1200×900 px).
+   - Zero dimension mismatches allowed across an article.
+3. **Luxury Passe-Partout Framing (No Giant Desktop Stretching):**
+   - Never stretch small phone photos to full-width containers across desktop screens.
+   - Every image MUST be enclosed in a compact, high-density retina frame (`max-w-xl mx-auto` or 2-column `max-w-2xl mx-auto grid`) with a double-layer gallery border:
+     `relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl`
+4. **Food Badge Overlays & Cache-Busting:**
+   - Include floating frosted-glass food badges (`🍫 Signature...`, `🔥 Slow Fried...`) on the top-left of figures.
+   - Always append cache-busting query strings (`?v=2`) to image paths so client browsers never display stale or unsharpened assets.
+
+

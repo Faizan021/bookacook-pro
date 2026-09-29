@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { MapPin, Shield, Users, Mail, Instagram, Sparkles } from "lucide-react";
+import { MapPin, Shield, Users, Mail, Instagram, Sparkles, Share2, Check } from "lucide-react";
+import { useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
 import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
@@ -30,11 +31,11 @@ export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
       {
         property: "og:description",
         content:
-          "Ein Speisely-Community-Besuch bei Chicken Krush in Prag: Knuspriges Korean Fried Chicken, cremiges Rose Tteokbokki, Snow-Flake-Käsepulver und gemeinsame Sharing-Platten.",
+          "Ein Speisely-Community-Besuch bei Chicken Krush in Prag: Knuspriges Korean Fried Chicken, traditionelle Yangnyeom-Glasur, digitale Touchscreen-Bestellung und gemeinsame Sharing-Boards.",
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/chicken-krush-prag/chicken-krush-real-01.webp",
+        content: "https://speisely.de/magazin/chicken-krush-prag/ck-hd-01-neon-emblem.webp?v=2",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -67,10 +68,10 @@ export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
                 name: "Community Story: Chicken Krush Prag | Speisely",
               },
               headline:
-                "Goldener Crunch, Yangnyeom-Glanz und Rose Tteokbokki in den Gassen von Prag",
+                "Goldener Crunch, Yangnyeom-Glanz und Sharing Boards in den Gassen von Prag",
               description:
                 "Ein Speisely-Community-Besuch bei Chicken Krush in Prag-Nové Město: Knusprig frittiertes Hähnchen, traditionelle Saucen, digitale Tisch-Bestellung und echtes Chimaek-Feeling.",
-              image: "https://speisely.de/magazin/chicken-krush-prag/chicken-krush-real-01.webp",
+              image: "https://speisely.de/magazin/chicken-krush-prag/ck-hd-01-neon-emblem.webp?v=2",
               datePublished: "2026-09-29",
               dateModified: "2026-09-29",
               author: {
@@ -105,7 +106,7 @@ export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
                   longitude: 14.4231,
                 },
                 url: "https://chickenkrush.cz",
-                servesCuisine: "Korean",
+                servesCuisine: "Korean Fried Chicken, K-Food Fusion",
               },
             },
             {
@@ -148,6 +149,15 @@ export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
 function ChickenKrushCommunityPage() {
   const { lang } = useI18n();
   const isDe = lang === "de";
+  const [copied, setCopied] = useState(false);
+
+  const copyPageLink = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    }
+  };
 
   const emailSubject = isDe
     ? "Mein Erlebnis für die Speisely Community"
@@ -186,7 +196,7 @@ I will attach my own photos or videos to this email.`;
     <SiteShell>
       <div className="bg-[#FAF7F0] text-forest min-h-screen">
         {/* Breadcrumb */}
-        <div className="border-b border-forest/10 bg-white/60 backdrop-blur-md sticky top-16 z-30">
+        <div className="border-b border-forest/10 bg-white/70 backdrop-blur-md sticky top-16 z-30 shadow-xs">
           <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6 flex items-center justify-between">
             <nav aria-label="Breadcrumb" className="text-xs font-medium text-forest/70 truncate">
               <ol className="flex items-center gap-1.5 flex-wrap">
@@ -213,13 +223,33 @@ I will attach my own photos or videos to this email.`;
                 </li>
               </ol>
             </nav>
-            <Link
-              to="/community"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-[#7FA46B] transition"
-            >
-              <Users className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>{isDe ? "Alle Community Stories" : "All Community Stories"}</span>
-            </Link>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={copyPageLink}
+                className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-forest/5 text-forest hover:bg-forest/10 transition cursor-pointer"
+                title={isDe ? "Link kopieren" : "Copy Link"}
+              >
+                {copied ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" />
+                    <span className="text-emerald-700">{isDe ? "Kopiert!" : "Copied!"}</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="h-3.5 w-3.5 text-[#A85C36]" aria-hidden="true" />
+                    <span className="hidden sm:inline">{isDe ? "Story teilen" : "Share Story"}</span>
+                  </>
+                )}
+              </button>
+              <Link
+                to="/community"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-[#7FA46B] transition"
+              >
+                <Users className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>{isDe ? "Alle Stories" : "All Stories"}</span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -232,18 +262,18 @@ I will attach my own photos or videos to this email.`;
 
           <h1 className="font-display text-3xl sm:text-5xl lg:text-[44px] font-bold text-forest leading-[1.15] tracking-tight">
             {isDe
-              ? "Goldener Crunch, Yangnyeom-Glanz und Rose Tteokbokki in Prag"
-              : "Golden Crunch, Yangnyeom Glaze and Rose Tteokbokki in Prague"}
+              ? "Goldener Crunch, Yangnyeom-Glanz und Sharing Boards in Prag"
+              : "Golden Crunch, Yangnyeom Glaze and Sharing Boards in Prague"}
           </h1>
 
           <p className="mt-5 text-lg sm:text-xl text-forest/80 leading-relaxed font-medium">
             {isDe
-              ? "Ein Community-Mitglied hat auf seiner Prag-Reise Chicken Krush in der Příčná-Straße besucht: Knusprig paniertes Hähnchen, süß-würzige Saucen, cremige Reiskuchen und ein digitaler Tisch-Service, der zum gemeinsamen Teilen einlädt."
-              : "A Speisely community member stopped by Chicken Krush on Příčná Street during a trip to Prague: crackling fried chicken, sweet-savory glazes, velvety rice cakes and tableside digital ordering built for sharing."}
+              ? "Ein Speisely-Community-Mitglied hat auf seiner Prag-Reise einen besonderen Food-Stopp eingelegt: Chicken Krush in der Příčná-Straße, Nové Město — slow-gefrittiertes Korean Chicken, dickflüssige Gochujang-Glasuren und geteilte Holzbretter."
+              : "A Speisely community member took a memorable food break during their trip to Prague: Chicken Krush on Příčná Street, Nové Město — slow-fried Korean chicken, rich gochujang glazes, and shared wooden platters."}
           </p>
 
           {/* Info Card */}
-          <div className="mt-8 surface-card p-5 sm:p-6 rounded-3xl border border-forest/10 bg-white grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="mt-8 surface-card p-5 sm:p-6 rounded-3xl border border-forest/10 bg-white grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm shadow-xs">
             <div className="flex items-start gap-3">
               <MapPin className="h-4 w-4 text-[#b28a3c] shrink-0 mt-0.5" aria-hidden="true" />
               <div>
@@ -252,7 +282,7 @@ I will attach my own photos or videos to this email.`;
                 </span>
                 <strong className="font-semibold text-forest">Chicken Krush</strong>
                 <span className="block text-forest/70 text-xs">
-                  Příčná 1632/9, 110 00 Praha 1 – Nové Město
+                  Příčná 1632/9, Praha 1 – Nové Město
                 </span>
               </div>
             </div>
@@ -288,26 +318,32 @@ I will attach my own photos or videos to this email.`;
         {/* Article Body */}
         <article className="mx-auto max-w-4xl px-4 sm:px-6 pb-20">
           <div className="prose prose-lg max-w-none text-forest/85 space-y-8 leading-relaxed font-normal">
-            {/* Photo 1 — Exterior facade */}
-            <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/chicken-krush-prag/ck-new-01.webp"
-                  alt={
-                    isDe
-                      ? "Fassade von Chicken Krush in Prag mit leuchtendem goldenem Schriftzug über dem Eingang"
-                      : "Exterior of Chicken Krush Prague with glowing golden sign above the entrance"
-                  }
-                  className="w-full h-auto object-cover max-h-[720px]"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+            
+            {/* Photo 1 — Iconic Neon Logo (Compact Luxury Passe-Partout Card) */}
+            <figure className="my-8 max-w-xl mx-auto">
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
+                  <img
+                    src="/magazin/chicken-krush-prag/ck-hd-01-neon-emblem.webp?v=2"
+                    alt={
+                      isDe
+                        ? "Beleuchtetes THE CHICKEN KRUSH Neonschild auf rustikaler Ziegelwand in Prag"
+                        : "Illuminated THE CHICKEN KRUSH neon sign on exposed brick wall in Prague"
+                    }
+                    className="h-full w-full object-cover"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
+                    ✨ The Chicken Krush
+                  </div>
+                </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Der goldene Schriftzug an der Fassade: Chicken Krush in der Přičná-Straße, Prag-Nové Město."
-                    : "The golden sign on the facade: Chicken Krush on Přičná Street, Prague-Nové Město."}
+                    ? "Das beleuchtete Markenzeichen von Chicken Krush auf rustikaler Backsteinwand in Prag-Nové Město."
+                    : "The illuminated Chicken Krush emblem on the rustic exposed brick wall in Prague-Nové Město."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
               </figcaption>
@@ -325,33 +361,38 @@ I will attach my own photos or videos to this email.`;
                 : "Every table has its own touchscreen — in Czech, English, or Korean. You order at your own pace, lean back, and soak in the atmosphere. The food arrives fast and piping hot on the wooden board."}
             </p>
 
-            {/* Photo 2 — Iconic circular neon logo on brick wall */}
-            <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md max-w-md mx-auto">
-                <img
-                  src="/magazin/chicken-krush-prag/ck-new-03.webp"
-                  alt={
-                    isDe
-                      ? "Beleuchtetes THE CHICKEN KRUSH Neonschild auf rustikaler Ziegelwand in Prag"
-                      : "Illuminated THE CHICKEN KRUSH neon sign on exposed brick wall in Prague"
-                  }
-                  className="w-full h-auto object-cover"
-                  loading="lazy"
-                  decoding="async"
-                />
+            {/* Photo 2 — Golden Exterior Facade (Compact Framed) */}
+            <figure className="my-8 max-w-xl mx-auto">
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
+                  <img
+                    src="/magazin/chicken-krush-prag/ck-hd-02-facade-sign.webp?v=2"
+                    alt={
+                      isDe
+                        ? "Fassade von Chicken Krush in Prag mit leuchtendem goldenem Schriftzug über dem Eingang"
+                        : "Exterior of Chicken Krush Prague with glowing golden sign above the entrance"
+                    }
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
+                    📍 Příčná-Straße · Nové Město
+                  </div>
+                </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
                   {isDe
-                    ? "Das ikonische beleuchtete Markenzeichen von Chicken Krush auf der Backsteinwand im Innenraum."
-                    : "The iconic illuminated Chicken Krush emblem on the exposed brick wall inside."}
+                    ? "Der goldene Schriftzug an der Fassade: Chicken Krush in der Přičná-Straße, Prag-Nové Město."
+                    : "The golden sign on the facade: Chicken Krush on Přičná Street, Prague-Nové Město."}
                 </span>
                 <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
               </figcaption>
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Der erste Crunch am Tisch" : "The First Crunch at the Table"}
+              {isDe ? "Der erste Crunch am Tisch: Slow-Fried Perfektion" : "The First Crunch at the Table: Slow-Fried Perfection"}
             </h2>
 
             <p>
@@ -360,20 +401,25 @@ I will attach my own photos or videos to this email.`;
                 : "Every wooden board arrives with a small flag: Slow Fried and Taste Respect. The batter is paper-thin, shatteringly crisp and cracks with a clean snap at the first bite. Inside, the chicken steams tender and juicy — the perfect balance that defines great Korean Fried Chicken."}
             </p>
 
-            {/* Photo 3 — Classic fried Born in Seoul chicken */}
-            <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/chicken-krush-prag/ck-new-05.webp"
-                  alt={
-                    isDe
-                      ? "Klassisches knuspriges Korean Fried Chicken mit Born in Seoul Flagge, Pommes, Coleslaw und Dips auf Holzbrett"
-                      : "Classic crispy Korean fried chicken with Born in Seoul flag, fries, coleslaw and dipping sauces on wooden board"
-                  }
-                  className="w-full h-auto object-cover max-h-[640px]"
-                  loading="lazy"
-                  decoding="async"
-                />
+            {/* Photo 3 — Classic Fried Born in Seoul (Compact Framed) */}
+            <figure className="my-8 max-w-xl mx-auto">
+              <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
+                  <img
+                    src="/magazin/chicken-krush-prag/ck-hd-03-classic-fried.webp?v=2"
+                    alt={
+                      isDe
+                        ? "Klassisches knuspriges Korean Fried Chicken mit Born in Seoul Flagge, Pommes, Coleslaw und Dips auf Holzbrett"
+                        : "Classic crispy Korean fried chicken with Born in Seoul flag, fries, coleslaw and dipping sauces on wooden board"
+                    }
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
+                    🍗 Born in Seoul · Slow Fried
+                  </div>
+                </div>
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
                 <span>
@@ -395,65 +441,60 @@ I will attach my own photos or videos to this email.`;
                 : "Sharing across the table means constantly switching flavours: deeply glazed Yangnyeom chicken simmered with gochujang, garlic, and honey, topped with toasted almond slivers for a sticky sweet-heat kick. A combination that makes every bite an experience. The dipping sauces and fresh coleslaw provide the perfect balance."}
             </p>
 
-            {/* Photo 4 — Yangnyeom Chicken with Taste Respect flag */}
-            <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/chicken-krush-prag/ck-new-02.webp"
-                  alt={
-                    isDe
-                      ? "Yangnyeom Chicken mit Taste Respect Flagge, Pommes und Dips auf Chicken Krush Serviertablett"
-                      : "Yangnyeom chicken with Taste Respect flag, fries and dipping sauces on Chicken Krush serving tray"
-                  }
-                  className="w-full h-auto object-cover max-h-[640px]"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
-                <span>
+            {/* Photo 4 & 5 Grid — Yangnyeom & Sharing Board (Compact Framed 2-Column) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8 max-w-2xl mx-auto">
+              <figure>
+                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
+                    <img
+                      src="/magazin/chicken-krush-prag/ck-hd-04-yangnyeom-glaze.webp?v=2"
+                      alt={
+                        isDe
+                          ? "Yangnyeom Chicken mit Taste Respect Flagge, Pommes und Dips auf Chicken Krush Serviertablett"
+                          : "Yangnyeom chicken with Taste Respect flag, fries and dipping sauces on Chicken Krush serving tray"
+                      }
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="absolute top-2.5 left-2.5 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-white/20">
+                      🔥 Yangnyeom Glaze
+                    </div>
+                  </div>
+                </div>
+                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
                   {isDe
-                    ? "Kräftig rot glasiertes Yangnyeom Chicken mit dem Signature Taste Respect Fähnchen, Pommes und Dips."
-                    : "Deeply glazed Yangnyeom chicken with the signature Taste Respect banner, fries and dipping sauces."}
-                </span>
-                <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
-              </figcaption>
-            </figure>
+                    ? "Kräftig rot glasiertes Yangnyeom Chicken mit Taste Respect Fähnchen."
+                    : "Deeply glazed Yangnyeom chicken with Taste Respect flag."}
+                </figcaption>
+              </figure>
 
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Das große Sharing-Brett in der Mitte" : "The Big Sharing Board in the Middle"}
-            </h2>
-
-            <p>
-              {isDe
-                ? "Das Highlight auf dem Tisch war das große Sharing-Brett mit gleich mehreren Sorten: weißglasierten Boneless Bites, klassischem fried Chicken, goldgelben Pommes, frischem Coleslaw und einer Reihe von Dipsaucen. Zusammen entsteht genau diese ungezwungene Chimaek-Stimmung, die man aus den Straßen von Seoul kennt — jetzt mitten in Prag-Nové Město."
-                : "The standout of the table was the large sharing board with multiple varieties: white-glazed boneless bites, classic fried chicken, golden fries, fresh coleslaw, and a row of dipping sauces. Together, it perfectly captures that relaxed Chimaek atmosphere from the streets of Seoul — right in the heart of Prague's Nové Město."}
-            </p>
-
-            {/* Photo 5 — Full feast sharing board */}
-            <figure className="my-8">
-              <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
-                <img
-                  src="/magazin/chicken-krush-prag/ck-new-04.webp"
-                  alt={
-                    isDe
-                      ? "Grosses Sharing-Brett bei Chicken Krush Prag mit weißglasierten Boneless Bites, Yangnyeom Chicken, Pommes, Coleslaw, Burger und Dips"
-                      : "Large sharing board at Chicken Krush Prague with white-glazed boneless bites, Yangnyeom chicken, fries, coleslaw, burger and dipping sauces"
-                  }
-                  className="w-full h-auto object-cover max-h-[680px]"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
-                <span>
+              <figure>
+                <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-forest/5">
+                    <img
+                      src="/magazin/chicken-krush-prag/ck-hd-05-sharing-board.webp?v=2"
+                      alt={
+                        isDe
+                          ? "Grosses Sharing-Brett bei Chicken Krush Prag mit weißglasierten Boneless Bites, Yangnyeom Chicken, Pommes, Coleslaw, Burger und Dips"
+                          : "Large sharing board at Chicken Krush Prague with white-glazed boneless bites, Yangnyeom chicken, fries, coleslaw, burger and dipping sauces"
+                      }
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="absolute top-2.5 left-2.5 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border border-white/20">
+                      🍽️ Sharing Board Feast
+                    </div>
+                  </div>
+                </div>
+                <figcaption className="mt-2 text-xs text-forest/70 px-1 font-medium">
                   {isDe
-                    ? "Das große Sharing-Brett: Boneless Bites mit weißer Glasur, Yangnyeom Chicken, Pommes, Burger, Coleslaw und Dips."
-                    : "The big sharing board: white-glazed boneless bites, Yangnyeom chicken, fries, burger, coleslaw and dips."}
-                </span>
-                <span className="text-[11px] text-forest/50">📸 Speisely Community</span>
-              </figcaption>
-            </figure>
+                    ? "Das große Sharing-Brett: Boneless Bites, Yangnyeom Chicken, Pommes und Dips."
+                    : "The big sharing board: white-glazed bites, Yangnyeom chicken, fries and dips."}
+                </figcaption>
+              </figure>
+            </div>
 
             <p className="font-medium text-forest text-lg pt-2">
               {isDe
@@ -469,8 +510,8 @@ I will attach my own photos or videos to this email.`;
               </div>
               <p className="leading-relaxed">
                 {isDe
-                  ? "Dieser redaktionelle Beitrag basiert auf einem Besuch und Fotos aus der Speisely Community während einer Reise nach Prag. Speisely war nicht selbst vor Ort. Der Beitrag gibt die visuellen Eindrücke der geteilten Fotos und Speisekarteninformationen wieder und stellt keine Sternebewertung oder offizielle Restaurantbewertung dar. Fotocredit: Speisely Community."
-                  : "This editorial story is based on a visit and photographs shared by a member of the Speisely Community during a trip to Prague. Speisely was not present at the restaurant. It reflects the visual impressions of the shared photographs and public menu information and does not constitute a star rating or official restaurant review. Photo credit: Speisely Community."}
+                  ? "Dieser redaktionelle Beitrag basiert auf einem Besuch und Fotografien aus der Speisely Community bei Chicken Krush in Prag. Speisely war nicht selbst vor Ort. Der Beitrag gibt die visuellen Eindrücke der geteilten Fotos und öffentlich zugänglichen Informationen wieder und stellt keine bezahlte Werbeplatzierung dar. Fotocredit: Speisely Community."
+                  : "This editorial story is based on a visit and photographs shared by members of the Speisely Community at Chicken Krush in Prague. Speisely was not directly on-site. It reflects visual impressions and public culinary information and does not constitute a paid endorsement. Photo credit: Speisely Community."}
               </p>
             </div>
           </div>
@@ -478,7 +519,7 @@ I will attach my own photos or videos to this email.`;
           <AboutSpeiselySection />
         </article>
 
-        {/* CTA Banner: Share Your Own Food Story */}
+        {/* CTA Banner */}
         <section className="border-t border-forest/10 pt-16 pb-20">
           <div className="mx-auto max-w-4xl px-4 sm:px-6">
             <div className="rounded-3xl bg-forest text-[oklch(0.97_0.02_92)] p-8 sm:p-10 text-center relative overflow-hidden shadow-xl">
@@ -494,8 +535,8 @@ I will attach my own photos or videos to this email.`;
                 </h2>
                 <p className="text-sm sm:text-base opacity-85 leading-relaxed">
                   {isDe
-                    ? "Teile deine Restaurantbesuche, Catering-Erlebnisse oder Food-Entdeckungen mit der Speisely Community. Schick uns deine Geschichte und Fotos."
-                    : "Share your restaurant visits, catering experiences or food discoveries with the Speisely Community. Send us your story and photos."}
+                    ? "Teile deine Restaurantbesuche, Café-Momente oder Food-Entdeckungen mit der Speisely Community. Schick uns deine Geschichte und Fotos."
+                    : "Share your café visits, dining highlights or sweet discoveries with the Speisely Community. Send us your story and photos."}
                 </p>
                 <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
                   <a
