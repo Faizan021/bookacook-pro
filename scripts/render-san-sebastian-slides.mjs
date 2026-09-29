@@ -65,11 +65,11 @@ async function generateSlides() {
 
       <!-- Headline (Sitting comfortably between y=760 and y=980) -->
       <text x="0" y="124" font-family="Georgia,'Times New Roman',serif"
-        font-size="64" font-weight="900" fill="#FFFFFF">12 Sorten. Ein Mythos.</text>
+        font-size="60" font-weight="900" fill="#FFFFFF">Große Vielfalt. Ein Mythos.</text>
       <text x="0" y="200" font-family="Georgia,'Times New Roman',serif"
-        font-size="64" font-weight="900" fill="#FFFFFF">Der Hype um Berlins</text>
+        font-size="60" font-weight="900" fill="#FFFFFF">Der Hype um Berlins</text>
       <text x="0" y="276" font-family="Georgia,'Times New Roman',serif"
-        font-size="64" font-weight="900" fill="#FFFFFF">cremigsten Cheesecake.</text>
+        font-size="60" font-weight="900" fill="#FFFFFF">cremigsten Cheesecake.</text>
 
       <!-- Subtitle (At y=1030, well above IG bottom overlay) -->
       <text x="0" y="340" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
@@ -86,10 +86,11 @@ async function generateSlides() {
     </g>
   </svg>`;
 
-  await sharp(coverBg)
+  const s1Buf = await sharp(coverBg)
     .composite([{ input: Buffer.from(svgCover), top: 0, left: 0 }])
     .png({ quality: 100 })
-    .toFile(path.join(outDir, 'slide-1.png'));
+    .toBuffer();
+  await fs.writeFile(path.join(outDir, 'slide-1.png'), s1Buf);
   console.log('✅ slide-1.png (Cover: Cake Showcase — Safe Zone Calibrated)');
 
   // ═══════════════════════════════════════════════════════════
@@ -150,13 +151,14 @@ async function generateSlides() {
       create: { width: W, height: H, channels: 4, background: { r: 255, g: 255, b: 255, alpha: 1 } }
     }).png().toBuffer();
 
-    await sharp(base)
+    const finalBuf = await sharp(base)
       .composite([
         { input: photo, top: 0, left: 0 },
         { input: Buffer.from(svg), top: 0, left: 0 }
       ])
       .png({ quality: 100 })
-      .toFile(path.join(outDir, `slide-${num}.png`));
+      .toBuffer();
+    await fs.writeFile(path.join(outDir, `slide-${num}.png`), finalBuf);
     console.log(`✅ slide-${num}.png`);
   }
 
@@ -256,9 +258,10 @@ async function generateSlides() {
       font-size="20" font-weight="400" fill="rgba(250,247,240,0.28)" text-anchor="middle">speisely.de/magazin/community/san-sebastian-berlin</text>
   </svg>`;
 
-  await sharp(Buffer.from(svgOutro))
+  const s5Buf = await sharp(Buffer.from(svgOutro))
     .png({ quality: 100 })
-    .toFile(path.join(outDir, 'slide-5.png'));
+    .toBuffer();
+  await fs.writeFile(path.join(outDir, 'slide-5.png'), s5Buf);
   console.log('✅ slide-5.png');
 
   console.log('\n🎉 San Sebastian 5-slide carousel updated successfully!');

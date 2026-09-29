@@ -609,7 +609,7 @@ async function generate() {
           </div>
           <div class="cover-bottom">
             <div class="pill-story">✨ Speisely Community Story</div>
-            <h1 class="cover-title">12 Sorten. Ein Mythos.<br>Der Hype um Berlins cremigsten Cheesecake.</h1>
+            <h1 class="cover-title">Große Vielfalt. Ein Mythos.<br>Der Hype um Berlins cremigsten Cheesecake.</h1>
             <p class="cover-sub">Warum jeder Bissen süchtig macht — und wo das Original wartet.</p>
             <div class="dots">
               <div class="dot on"></div>
@@ -730,7 +730,7 @@ async function generate() {
       </div>
     </div>
 
-    <div class="caption-area" id="caption">🍰 12 Sorten. Ein weltberühmter Mythos.
+    <div class="caption-area" id="caption">🍰 Große Vielfalt. Ein weltberühmter Mythos.
 
 Wusstest du, dass der originale San Sebastian Cheesecake 1990 in der baskischen Bar „La Viña“ in Nordspanien erfunden wurde? 🇪🇸
 

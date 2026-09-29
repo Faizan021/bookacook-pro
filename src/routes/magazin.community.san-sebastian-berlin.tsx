@@ -45,7 +45,8 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp?v=2",
+        content:
+          "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp?v=2",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -81,7 +82,8 @@ export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")(
                 "Karamellisierte Kruste, samtiger Kern und Schokofluss: San Sebastian Cheesecake in Berlin",
               description:
                 "Ein Speisely-Community-Besuch bei San Sebastian The Original® in Berlin-Charlottenburg: Baskische Käsekuchenkultur, Pistazienstaub, warmer Schokoguss und die Entstehungsgeschichte des Kultkuchens.",
-              image: "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp?v=2",
+              image:
+                "https://speisely.de/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp?v=2",
               datePublished: "2026-09-29",
               dateModified: "2026-09-29",
               author: {
@@ -248,7 +250,9 @@ I will attach my own photos or videos to this email.`;
                 ) : (
                   <>
                     <Share2 className="h-3.5 w-3.5 text-[#A85C36]" aria-hidden="true" />
-                    <span className="hidden sm:inline">{isDe ? "Story teilen" : "Share Story"}</span>
+                    <span className="hidden sm:inline">
+                      {isDe ? "Story teilen" : "Share Story"}
+                    </span>
                   </>
                 )}
               </button>
@@ -328,7 +332,6 @@ I will attach my own photos or videos to this email.`;
         {/* Article Body */}
         <article className="mx-auto max-w-4xl px-4 sm:px-6 pb-20">
           <div className="prose prose-lg max-w-none text-forest/85 space-y-8 leading-relaxed font-normal">
-            
             {/* Hero Photo 1 — Compact Luxury Passe-Partout Card */}
             <figure className="my-8 max-w-xl mx-auto">
               <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
@@ -442,7 +445,7 @@ I will attach my own photos or videos to this email.`;
                     decoding="async"
                   />
                   <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
-                    🍰 10+ Sorten &amp; Toppings
+                    🍰 Große Sortenvielfalt
                   </div>
                 </div>
               </div>
@@ -457,7 +460,9 @@ I will attach my own photos or videos to this email.`;
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Geschmacksprofil: Crunch, Säure und Kaffee-Pairing" : "Flavor Profile: Crunch, Acidity, and Coffee Pairing"}
+              {isDe
+                ? "Geschmacksprofil: Crunch, Säure und Kaffee-Pairing"
+                : "Flavor Profile: Crunch, Acidity, and Coffee Pairing"}
             </h2>
 
             <p>
