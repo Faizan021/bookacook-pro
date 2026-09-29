@@ -331,6 +331,8 @@ I will attach my own photos or videos to this email.`;
                       : "Table arrangement at Chicken Krush in Prague with digital order screen, Snow Flake chicken, Seoul Fried chicken and seasoned fries"
                   }
                   className="w-full h-auto object-cover max-h-[720px]"
+                  fetchPriority="high"
+                  decoding="async"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -359,13 +361,15 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md max-w-md mx-auto">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-02.png"
+                  src="/magazin/chicken-krush-prag/chicken-krush-02.jpg"
                   alt={
                     isDe
                       ? "Beleuchtetes THE CHICKEN KRUSH Neonschild auf rustikaler Ziegelwand in Prag"
                       : "Illuminated THE CHICKEN KRUSH neon wall sign on exposed brick in Prague"
                   }
                   className="w-full h-auto object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -394,13 +398,15 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-03.png"
+                  src="/magazin/chicken-krush-prag/chicken-krush-03.jpg"
                   alt={
                     isDe
                       ? "Nahaufnahme des knusprigen Seoul Fried Chicken mit Flagge 'taste respect 치킨크러시'"
                       : "Close-up of golden crispy Seoul Fried Chicken with 'taste respect 치킨크러시' flag"
                   }
                   className="w-full h-auto object-cover max-h-[640px]"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -454,13 +460,15 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-04.png"
+                  src="/magazin/chicken-krush-prag/chicken-krush-04.jpg"
                   alt={
                     isDe
                       ? "Glänzendes Yangnyeom Chicken mit Mandelsplittern und Flagge 'SLOW FRIED. POMALU SMAŽENÉ'"
                       : "Glossy Yangnyeom chicken with sliced almonds and 'SLOW FRIED. POMALU SMAŽENÉ' flag"
                   }
                   className="w-full h-auto object-cover max-h-[640px]"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
@@ -495,13 +503,15 @@ I will attach my own photos or videos to this email.`;
             <figure className="my-8">
               <div className="overflow-hidden rounded-3xl border border-forest/10 bg-black/5 shadow-md">
                 <img
-                  src="/magazin/chicken-krush-prag/chicken-krush-05.png"
+                  src="/magazin/chicken-krush-prag/chicken-krush-05.jpg"
                   alt={
                     isDe
                       ? "Große Tafel bei Chicken Krush Prag mit Rose Tteokbokki, Yangnyeom Chicken, Pommes und Dips zum Teilen"
                       : "Shared table feast at Chicken Krush Prague with Rose Tteokbokki, Yangnyeom chicken, seasoned fries, and dipping sauces"
                   }
                   className="w-full h-auto object-cover max-h-[680px]"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <figcaption className="mt-3 text-xs sm:text-sm text-forest/70 flex items-center justify-between px-2 font-medium">
