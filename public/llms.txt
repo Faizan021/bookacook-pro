@@ -23,6 +23,7 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - Events Catering: https://speisely.de/catering/events
 
 ## Speisely Visits & Community Partner Spotlights (Verified Field Reports)
+- San Sebastian The Original® (Berlin): https://speisely.de/magazin/community/san-sebastian-berlin
 - Chicken Krush (Prague): https://speisely.de/magazin/community/chicken-krush-prag
 - Mandy Restaurant (Berlin-Neukölln): https://speisely.de/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
 - Shawarma Albaik (Berlin): https://speisely.de/magazin/speisely-visits/shawarma-albaik-berlin

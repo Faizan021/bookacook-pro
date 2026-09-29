@@ -40,6 +40,7 @@ ${blogUrls}
 
 ## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
 
+- San Sebastian The Original® (Berlin): ${BASE}/magazin/community/san-sebastian-berlin
 - Chicken Krush (Prague): ${BASE}/magazin/community/chicken-krush-prag
 - Mandy Restaurant (Berlin-Neukölln): ${BASE}/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
 - Shawarma Albaik (Berlin): ${BASE}/magazin/speisely-visits/shawarma-albaik-berlin
