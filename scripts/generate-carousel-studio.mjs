@@ -2,13 +2,13 @@ import fs from 'fs/promises';
 import path from 'path';
 
 async function generate() {
-  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-01-hd.jpg')).toString('base64');
-  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-02-hd.jpg')).toString('base64');
-  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-03-hd.jpg')).toString('base64');
-  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-04-hd.jpg')).toString('base64');
-  const p5 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-05-hd.jpg')).toString('base64');
+  // Original photos (HD-sharpened versions for crisp preview)
+  const p1 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-01.jpg')).toString('base64');
+  const p2 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-02.jpg')).toString('base64');
+  const p3 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-03.jpg')).toString('base64');
+  const p4 = (await fs.readFile('public/magazin/chicken-krush-prag/chicken-krush-real-04.jpg')).toString('base64');
 
-  // Pre-rendered PNG slides as base64 for 100% crystal-clear instant downloads
+  // Pre-rendered HD PNG slides (1080×1350) for instant 1-click download
   const s1 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-1.png')).toString('base64');
   const s2 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-2.png')).toString('base64');
   const s3 = (await fs.readFile('public/instagram/chicken-krush-prag/slide-3.png')).toString('base64');
@@ -23,909 +23,829 @@ async function generate() {
   <title>Speisely Carousel Studio — Chicken Krush Prag</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
+    /* ═══════════════════════════════════════════════
+       SPEISELY BRAND TOKENS
+    ═══════════════════════════════════════════════ */
     :root {
-      --forest: #173C32;
+      --forest:      #173C32;
       --forest-dark: #0f2720;
-      --clay: #A85C36;
-      --gold: #E6B84A;
-      --sand: #FAF7F0;
-      --card-bg: #FFFFFF;
+      --forest-deep: #0a1f1a;
+      --gold:        #E6B84A;
+      --gold-light:  #f7ca5e;
+      --clay:        #A85C36;
+      --sand:        #FAF7F0;
+      --white:       #FFFFFF;
+      --sidebar-bg:  #132e26;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #12241f;
-      color: #F5EFEB;
+      background: #0d2218;
+      color: var(--sand);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Top Bar */
+    /* ─── HEADER ─── */
     header {
-      background: rgba(18, 36, 31, 0.95);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 16px 28px;
+      background: rgba(15, 39, 32, 0.97);
+      border-bottom: 1px solid rgba(230,184,74,0.2);
+      padding: 0 28px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
-
-    .brand-tag {
+    .brand-badge {
       background: var(--clay);
-      color: white;
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 4px 10px;
-      border-radius: 999px;
-    }
-
-    .brand-title {
-      font-family: 'Fraunces', serif;
-      font-size: 20px;
-      font-weight: 700;
-      color: #FAF7F0;
-    }
-
-    .actions-bar {
-      display: flex;
-      gap: 12px;
-    }
-
-    button.btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    button.btn-primary {
-      background: var(--gold);
-      color: var(--forest);
-    }
-    button.btn-primary:hover {
-      background: #f7ca5e;
-      transform: translateY(-1px);
-    }
-
-    button.btn-secondary {
-      background: rgba(255,255,255,0.12);
-      color: #FAF7F0;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    button.btn-secondary:hover {
-      background: rgba(255,255,255,0.2);
-    }
-
-    /* Main Container */
-    .app-body {
-      display: grid;
-      grid-template-columns: 360px 1fr 380px;
-      flex: 1;
-      height: calc(100vh - 65px);
-      overflow: hidden;
-    }
-
-    /* Left Sidebar: Slide Selector */
-    .sidebar {
-      background: #173C32;
-      border-right: 1px solid rgba(255,255,255,0.08);
-      padding: 24px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .section-label {
-      font-size: 11px;
+      color: #fff;
+      font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 1.5px;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .brand-name {
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--sand);
+    }
+    .brand-name span {
       color: var(--gold);
-      margin-bottom: 8px;
     }
 
-    .slide-thumbs {
+    .hdr-actions { display: flex; gap: 10px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .btn-gold  { background: var(--gold); color: var(--forest); }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(230,184,74,0.35); }
+    .btn-outline { background: transparent; color: var(--sand); border: 1.5px solid rgba(255,255,255,0.22); }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    /* ─── APP GRID ─── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr 360px;
+      flex: 1;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+    }
+
+    /* ─── LEFT SIDEBAR ─── */
+    .sidebar {
+      background: var(--forest);
+      border-right: 1px solid rgba(255,255,255,0.07);
+      padding: 28px 20px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 28px;
     }
-
-    .slide-thumb-card {
-      background: rgba(255,255,255,0.05);
-      border: 2px solid transparent;
-      border-radius: 12px;
-      padding: 12px 14px;
-      cursor: pointer;
-      transition: all 0.2s;
+    .label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .slide-list { display: flex; flex-direction: column; gap: 8px; }
+    .slide-item {
       display: flex;
       align-items: center;
       gap: 12px;
+      padding: 13px 14px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s;
+      background: rgba(255,255,255,0.04);
     }
-    .slide-thumb-card:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .slide-thumb-card.active {
+    .slide-item:hover { background: rgba(255,255,255,0.09); }
+    .slide-item.active {
       border-color: var(--gold);
-      background: rgba(230, 184, 74, 0.12);
+      background: rgba(230,184,74,0.1);
     }
-
-    .thumb-num {
-      width: 28px;
-      height: 28px;
+    .slide-num {
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.15);
-      font-weight: 800;
-      font-size: 12px;
+      background: rgba(255,255,255,0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #FAF7F0;
+      font-weight: 900;
+      font-size: 12px;
+      flex-shrink: 0;
+      transition: all 0.18s;
     }
-    .slide-thumb-card.active .thumb-num {
-      background: var(--gold);
-      color: var(--forest);
-    }
+    .slide-item.active .slide-num { background: var(--gold); color: var(--forest); }
+    .slide-label strong { font-size: 13px; font-weight: 700; display: block; color: var(--sand); }
+    .slide-label span { font-size: 11px; color: rgba(255,255,255,0.55); }
 
-    .thumb-info {
-      flex: 1;
+    .info-card {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.65);
     }
-    .thumb-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #FAF7F0;
-    }
-    .thumb-sub {
-      font-size: 11px;
-      color: rgba(255,255,255,0.6);
-      margin-top: 2px;
-    }
+    .info-card .info-title { font-weight: 700; color: var(--gold); margin-bottom: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-    /* Stage Area */
+    /* ─── STAGE ─── */
     .stage {
-      background: #0f1d19;
+      background: #0a1810;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 32px 24px;
       overflow-y: auto;
-      position: relative;
+      gap: 20px;
     }
 
-    .aspect-switch {
+    /* Aspect ratio toggle */
+    .ratio-bar {
       display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      background: rgba(255,255,255,0.08);
-      padding: 4px;
+      gap: 6px;
+      background: rgba(255,255,255,0.07);
       border-radius: 999px;
+      padding: 4px;
     }
-    .aspect-btn {
+    .ratio-btn {
+      font-size: 11.5px;
+      font-weight: 700;
       padding: 6px 14px;
       border-radius: 999px;
       border: none;
       background: transparent;
-      color: rgba(255,255,255,0.7);
-      font-size: 12px;
-      font-weight: 700;
+      color: rgba(255,255,255,0.6);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s;
     }
-    .aspect-btn.active {
-      background: var(--gold);
-      color: var(--forest);
-    }
+    .ratio-btn.on { background: var(--gold); color: var(--forest); }
 
-    /* THE SLIDE CANVAS (1080 x 1350 default Instagram Portrait) */
-    .canvas-wrapper {
-      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-      border-radius: 18px;
+    /* The slide canvas */
+    .canvas-shell {
+      border-radius: 20px;
       overflow: hidden;
-      transform-origin: center center;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.05);
+      transition: all 0.3s ease;
     }
-
     .slide-canvas {
-      width: 440px;
-      height: 550px; /* 4:5 aspect ratio */
-      background: #FAF7F0;
-      color: #173C32;
+      width: 432px;
+      height: 540px;   /* 4:5 */
       position: relative;
       overflow: hidden;
+      user-select: none;
       display: flex;
       flex-direction: column;
-      user-select: none;
     }
+    .slide-canvas.sq { width: 460px; height: 460px; }
+    .slide-canvas.st { width: 350px; height: 622px; }
 
-    .slide-canvas.ratio-1-1 {
-      width: 460px;
-      height: 460px;
-    }
-
-    .slide-canvas.ratio-9-16 {
-      width: 360px;
-      height: 640px;
-    }
-
-    /* Slide Layout Components */
-    .slide-inner {
+    /* ── COVER SLIDE ── */
+    .cover-wrap {
+      position: relative;
       width: 100%;
       height: 100%;
-      display: flex;
-      flex-direction: column;
-      position: relative;
+      overflow: hidden;
     }
-
-    /* Cover / Slide 1 */
-    .cover-hero-img {
+    .cover-photo {
       position: absolute;
-      top: 0;
-      left: 0;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      image-rendering: -webkit-optimize-contrast;
+      object-position: center;
     }
-    .cover-overlay {
+    .cover-grad {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(15,39,32,0.38) 0%, rgba(15,39,32,0.08) 35%, rgba(15,39,32,0.85) 65%, rgba(15,39,32,0.98) 100%);
-      z-index: 1;
+      background: linear-gradient(180deg,
+        rgba(10,31,26,0.5) 0%,
+        rgba(10,31,26,0.0) 20%,
+        rgba(10,31,26,0.0) 45%,
+        rgba(10,31,26,0.65) 65%,
+        rgba(10,31,26,0.90) 80%,
+        rgba(10,31,26,0.97) 100%);
     }
-    .cover-content {
-      position: relative;
-      z-index: 2;
-      margin-top: auto;
-      padding: 30px;
-      color: #FAF7F0;
+    .cover-top-grad {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,31,26,0.48) 0%, transparent 18%);
     }
-    .cover-badge {
-      display: inline-flex;
+    .slide-topbar {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
-      background: var(--gold);
-      color: var(--forest);
+      z-index: 10;
+    }
+    .pill-magazine {
+      background: var(--forest);
+      color: var(--sand);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 13px;
+      border-radius: 999px;
+    }
+    .pill-counter {
+      background: rgba(10,31,26,0.72);
+      color: var(--sand);
       font-size: 11px;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      padding: 5px 12px;
+      padding: 5px 11px;
       border-radius: 999px;
-      margin-bottom: 12px;
+      border: 1px solid rgba(250,247,240,0.22);
+    }
+    .cover-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 22px 18px;
+      z-index: 5;
+    }
+    .pill-story {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--forest);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 11px;
     }
     .cover-title {
       font-family: 'Fraunces', serif;
-      font-size: 24px;
-      line-height: 1.18;
-      font-weight: 800;
-      margin-bottom: 8px;
+      font-size: 23px;
+      font-weight: 900;
+      line-height: 1.15;
+      color: #FFFFFF;
+      margin-bottom: 7px;
     }
     .cover-sub {
-      font-size: 13px;
-      color: rgba(250,247,240,0.88);
+      font-size: 12px;
+      color: rgba(250,247,240,0.82);
       line-height: 1.4;
+      margin-bottom: 13px;
     }
-    .cover-dots {
-      display: flex;
-      gap: 6px;
-      margin-top: 14px;
-    }
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-    }
-    .dot.active {
-      background: var(--gold);
-      width: 18px;
-      border-radius: 999px;
-    }
+    .dots { display: flex; gap: 5px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.35); }
+    .dot.on { width: 17px; border-radius: 999px; background: var(--gold); }
 
-    /* Slide Top Branding */
-    .slide-header {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      right: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 3;
-    }
-    .pill-brand {
-      background: rgba(23, 60, 50, 0.92);
-      backdrop-filter: blur(8px);
-      color: #FAF7F0;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 10.5px;
-      font-weight: 800;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      border: 1px solid rgba(255,255,255,0.25);
-    }
-    .pill-counter {
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(8px);
-      color: #FAF7F0;
-      padding: 5px 11px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    /* Split Card Slides (2, 3, 4) */
-    .split-slide {
+    /* ── SPLIT SLIDE ── */
+    .split-wrap {
       display: flex;
       flex-direction: column;
       height: 100%;
-      background: #FAF7F0;
+      background: var(--white);
     }
-    .split-image-box {
-      flex: 1;
+    .split-photo-box {
       position: relative;
+      flex: 1;
       overflow: hidden;
     }
-    .split-image-box img {
+    .split-photo-box img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      image-rendering: -webkit-optimize-contrast;
     }
-    .nav-arrow {
+    .split-photo-topbar {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.85);
-      color: #173C32;
+      top: 14px;
+      left: 14px;
+      right: 14px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 800;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      z-index: 2;
+      z-index: 5;
     }
-    .nav-arrow.left { left: 14px; }
-    .nav-arrow.right { right: 14px; }
-
-    .split-card-footer {
-      padding: 22px 24px;
-      background: #FFFFFF;
-      border-top: 1px solid rgba(23,60,50,0.08);
-      position: relative;
-      z-index: 2;
-    }
-    .split-step-num {
-      font-size: 11px;
-      font-weight: 800;
+    .pill-community {
+      background: var(--forest);
+      color: var(--sand);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      padding: 6px 13px;
+      border-radius: 999px;
+    }
+    .split-photo-top-grad {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 110px;
+      background: linear-gradient(180deg, rgba(10,31,26,0.52) 0%, transparent 100%);
+    }
+    .split-card {
+      padding: 18px 20px 16px;
+      background: #FFFFFF;
+      border-top: 2px solid rgba(23,60,50,0.08);
+      position: relative;
+    }
+    .split-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--gold);
+      border-radius: 0 2px 2px 0;
+    }
+    .split-kicker {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
       color: var(--clay);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
     .split-heading {
       font-family: 'Fraunces', serif;
-      font-size: 19px;
-      font-weight: 700;
+      font-size: 20px;
+      font-weight: 800;
       color: var(--forest);
-      line-height: 1.25;
-      margin-bottom: 6px;
+      line-height: 1.2;
+      margin-bottom: 7px;
     }
-    .split-text {
-      font-size: 12.5px;
-      color: rgba(23,60,50,0.88);
-      line-height: 1.45;
+    .split-body {
+      font-size: 12px;
+      color: rgba(23,60,50,0.78);
+      line-height: 1.5;
     }
 
-    /* Outro Slide 5 */
-    .outro-slide {
+    /* ── OUTRO SLIDE ── */
+    .outro-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
       height: 100%;
-      background: radial-gradient(circle at 50% 45%, #215245 0%, #173C32 100%);
-      color: #FAF7F0;
-      padding: 30px 24px;
+      background: radial-gradient(ellipse at 50% 40%, #1e5242 0%, #173C32 55%, #0f2720 100%);
+      padding: 22px 20px;
       text-align: center;
-      position: relative;
     }
-    .outro-center {
-      margin-top: auto;
-      margin-bottom: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .outro-logo-icon {
-      margin-bottom: 8px;
-    }
-    .outro-logo-text {
-      font-family: 'Fraunces', serif;
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-    .outro-venue-sub {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .outro-accent-line {
-      width: 70px;
-      height: 2px;
-      background: var(--gold);
-      border-radius: 999px;
-      margin-bottom: 22px;
-    }
-    .outro-headline {
-      font-family: 'Fraunces', serif;
-      font-size: 24px;
-      font-weight: 800;
-      line-height: 1.2;
-      color: #FAF7F0;
-      margin-bottom: 10px;
-    }
-    .outro-subline {
-      font-size: 12.5px;
-      color: rgba(250,247,240,0.78);
-    }
-    .outro-actions-box {
+    .outro-icon { margin-bottom: 6px; }
+    .outro-brand { font-family: 'Fraunces', serif; font-size: 30px; font-weight: 900; color: var(--gold); }
+    .outro-venue { font-size: 10px; font-weight: 900; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+    .outro-divider { width: 60px; height: 2.5px; background: var(--gold); border-radius: 999px; margin: 10px auto; }
+    .outro-headline { font-family: 'Fraunces', serif; font-size: 23px; font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+    .outro-subline { font-size: 11.5px; color: rgba(250,247,240,0.65); line-height: 1.4; }
+    .outro-actions {
       width: 100%;
-      max-width: 360px;
-      background: rgba(255,255,255,0.06);
-      border: 1.5px solid rgba(230,184,74,0.35);
+      border: 1.5px solid rgba(230,184,74,0.4);
       border-radius: 999px;
-      padding: 10px 18px;
+      padding: 10px 16px;
       display: flex;
       justify-content: space-around;
-      align-items: center;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      color: #FAF7F0;
-      margin-bottom: 16px;
+      color: var(--sand);
+      margin-bottom: 12px;
     }
-    .outro-actions-box .divider {
-      width: 1px;
-      height: 16px;
-      background: rgba(255,255,255,0.2);
-    }
-    .outro-cta-btn {
-      display: inline-block;
-      border: 2px solid var(--gold);
+    .outro-cta {
+      border: 2.5px solid var(--gold);
       color: var(--gold);
-      font-size: 13.5px;
-      font-weight: 800;
+      font-size: 13px;
+      font-weight: 900;
       letter-spacing: 1px;
-      padding: 10px 24px;
+      padding: 10px 28px;
       border-radius: 999px;
     }
 
-    /* Right Sidebar: Instagram Mockup & Copy */
-    .post-panel {
-      background: #173C32;
-      border-left: 1px solid rgba(255,255,255,0.08);
-      padding: 24px;
+    /* ─── RIGHT PANEL ─── */
+    .right-panel {
+      background: var(--forest);
+      border-left: 1px solid rgba(255,255,255,0.07);
+      padding: 28px 20px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 22px;
     }
-
-    .ig-header {
+    .ig-mock {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 11px;
     }
     .ig-avatar {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: var(--forest-dark);
-      border: 2px solid var(--gold);
+      border: 2.5px solid var(--gold);
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: 'Fraunces', serif;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 900;
       color: var(--gold);
-      font-size: 14px;
+      flex-shrink: 0;
     }
-    .ig-user-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: #FAF7F0;
-    }
-    .ig-user-loc {
-      font-size: 11px;
-      color: rgba(255,255,255,0.6);
-    }
+    .ig-info .ig-name { font-size: 14px; font-weight: 800; color: var(--sand); }
+    .ig-info .ig-loc { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
 
-    .caption-box {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
+    .caption-area {
+      background: rgba(0,0,0,0.22);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
       padding: 16px;
       font-size: 12.5px;
-      line-height: 1.55;
-      color: #FAF7F0;
+      line-height: 1.6;
+      color: var(--sand);
       white-space: pre-wrap;
-      font-family: 'Inter', sans-serif;
+      flex: 1;
     }
 
+    .download-section { display: flex; flex-direction: column; gap: 8px; }
+    .download-label { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+    .download-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .dl-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      transition: all 0.18s;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--sand);
+    }
+    .dl-btn:hover { background: rgba(255,255,255,0.13); border-color: rgba(230,184,74,0.4); color: var(--gold); }
+    .dl-btn.full { grid-column: 1/-1; justify-content: center; background: rgba(230,184,74,0.12); border-color: rgba(230,184,74,0.35); }
+    .dl-btn.full:hover { background: var(--gold); color: var(--forest); }
+
+    /* Toast */
     .toast {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 28px;
+      right: 28px;
       background: var(--gold);
       color: var(--forest);
       font-weight: 800;
       font-size: 13px;
       padding: 12px 24px;
       border-radius: 999px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 35px rgba(0,0,0,0.5);
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.3s;
-      z-index: 100;
+      transform: translateY(16px);
+      transition: all 0.28s ease;
+      z-index: 200;
       pointer-events: none;
     }
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 99px; }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="brand">
-      <span class="brand-tag">Community Story</span>
-      <span class="brand-title">Chicken Krush Prag — Carousel Studio (HD)</span>
+<header>
+  <div class="brand">
+    <span class="brand-badge">Instagram Studio</span>
+    <span class="brand-name">Speisely <span>×</span> Chicken Krush Prag</span>
+  </div>
+  <div class="hdr-actions">
+    <button class="btn btn-outline" onclick="copyCaption()">📋 Caption kopieren</button>
+    <button class="btn btn-gold" onclick="downloadCurrent()">⬇ HD Slide laden</button>
+    <button class="btn btn-outline" onclick="downloadAll()">📦 Alle 5 Slides</button>
+  </div>
+</header>
+
+<div class="app-grid">
+  <!-- ═══ LEFT SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div>
+      <div class="label">Carousel Slides</div>
+      <div class="slide-list">
+        <div class="slide-item active" onclick="gotoSlide(1)" id="tab-1">
+          <div class="slide-num">1</div>
+          <div class="slide-label">
+            <strong>Cover · Headline</strong>
+            <span>Goldener Crunch &amp; Tteokbokki</span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="gotoSlide(2)" id="tab-2">
+          <div class="slide-num">2</div>
+          <div class="slide-label">
+            <strong>01 · Die Location</strong>
+            <span>Neonschein &amp; Touchscreen</span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="gotoSlide(3)" id="tab-3">
+          <div class="slide-num">3</div>
+          <div class="slide-label">
+            <strong>02 · Slow-Fried</strong>
+            <span>Crunch, der laut bricht</span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="gotoSlide(4)" id="tab-4">
+          <div class="slide-num">4</div>
+          <div class="slide-label">
+            <strong>03 · Die Glasur</strong>
+            <span>Yangnyeom &amp; Mandeln</span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="gotoSlide(5)" id="tab-5">
+          <div class="slide-num">5</div>
+          <div class="slide-label">
+            <strong>Outro · CTA</strong>
+            <span>Lies die ganze Story</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="actions-bar">
-      <button class="btn btn-secondary" onclick="copyCaption()">
-        📋 Caption kopieren
-      </button>
-      <button class="btn btn-primary" onclick="downloadCurrentSlide()">
-        ⬇ HD Slide als PNG
-      </button>
-      <button class="btn btn-secondary" onclick="downloadAllSlides()">
-        📦 Alle 5 HD Slides laden
-      </button>
+
+    <div class="info-card">
+      <div class="info-title">📐 Design System</div>
+      Exaktes Speisely Farbschema: Forest Green #173C32 · Gold #E6B84A · Clay #A85C36. Alle Fotos sind original — kein AI-generiertes Bild. Downloads als 1080×1350 px PNG.
     </div>
-  </header>
+  </aside>
 
-  <div class="app-body">
-    <!-- Left: Slide Picker -->
-    <aside class="sidebar">
-      <div>
-        <div class="section-label">Carousel Slides (5)</div>
-        <div class="slide-thumbs">
-          <div class="slide-thumb-card active" onclick="selectSlide(1)" id="thumb-1">
-            <div class="thumb-num">1</div>
-            <div class="thumb-info">
-              <div class="thumb-title">Cover · Headline</div>
-              <div class="thumb-sub">Goldener Crunch in Prag</div>
-            </div>
+  <!-- ═══ CENTER STAGE ═══ -->
+  <main class="stage">
+    <div class="ratio-bar">
+      <button class="ratio-btn on" onclick="setRatio('45', this)">4:5 Post</button>
+      <button class="ratio-btn" onclick="setRatio('11', this)">1:1 Square</button>
+      <button class="ratio-btn" onclick="setRatio('916', this)">9:16 Story</button>
+    </div>
+
+    <div class="canvas-shell">
+
+      <!-- ── SLIDE 1: COVER ── -->
+      <div class="slide-canvas" id="s1" style="display:flex">
+        <div class="cover-wrap">
+          <img class="cover-photo" src="data:image/jpeg;base64,${p1}" alt="Chicken Krush Cover">
+          <div class="cover-top-grad"></div>
+          <div class="cover-grad"></div>
+          <div class="slide-topbar">
+            <div class="pill-magazine">Speisely Magazin</div>
+            <div class="pill-counter">1 / 5</div>
           </div>
-          <div class="slide-thumb-card" onclick="selectSlide(2)" id="thumb-2">
-            <div class="thumb-num">2</div>
-            <div class="thumb-info">
-              <div class="thumb-title">01 · Die Location</div>
-              <div class="thumb-sub">Leuchtschild & Touchscreen</div>
-            </div>
-          </div>
-          <div class="slide-thumb-card" onclick="selectSlide(3)" id="thumb-3">
-            <div class="thumb-num">3</div>
-            <div class="thumb-info">
-              <div class="thumb-title">02 · Slow Fried</div>
-              <div class="thumb-sub">Hauchdünner Crunch</div>
-            </div>
-          </div>
-          <div class="slide-thumb-card" onclick="selectSlide(4)" id="thumb-4">
-            <div class="thumb-num">4</div>
-            <div class="thumb-info">
-              <div class="thumb-title">03 · Die Glasur</div>
-              <div class="thumb-sub">Yangnyeom & Mandeln</div>
-            </div>
-          </div>
-          <div class="slide-thumb-card" onclick="selectSlide(5)" id="thumb-5">
-            <div class="thumb-num">5</div>
-            <div class="thumb-info">
-              <div class="thumb-title">05 · Outro & CTA</div>
-              <div class="thumb-sub">Ganze Story auf speisely.de</div>
+          <div class="cover-bottom">
+            <div class="pill-story">✨ Speisely Community Story</div>
+            <h1 class="cover-title">Goldener Crunch, Yangnyeom-Glanz &amp; Rose Tteokbokki</h1>
+            <p class="cover-sub">Zu Besuch bei Chicken Krush in Prag-Nové Město.</p>
+            <div class="dots">
+              <div class="dot on"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <div>
-        <div class="section-label">HD Klarheit & Bildqualität</div>
-        <p style="font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.75);">
-          Alle 5 Slides nutzen 1080×1350 px native Vektortypografie und HDR-gestochen scharfe Food-Fotografie (Lanczos3 + Unsharp Masking) ohne AI-Halluzinationen.
-        </p>
-      </div>
-    </aside>
-
-    <!-- Center: Live Stage Canvas -->
-    <main class="stage">
-      <div class="aspect-switch">
-        <button class="aspect-btn active" onclick="setRatio('4-5')">Portrait 4:5 (Instagram)</button>
-        <button class="aspect-btn" onclick="setRatio('1-1')">Square 1:1</button>
-        <button class="aspect-btn" onclick="setRatio('9-16')">Story 9:16</button>
-      </div>
-
-      <div class="canvas-wrapper" id="canvas-container">
-        <!-- Slide 1 (Cover) -->
-        <div class="slide-canvas" id="slide-1" style="display: flex;">
-          <div class="slide-inner">
-            <img class="cover-hero-img" src="data:image/jpeg;base64,${p1}" alt="Chicken Krush Hero">
-            <div class="cover-overlay"></div>
-            
-            <div class="slide-header">
-              <div class="pill-brand">Speisely Magazin</div>
-              <div class="pill-counter">01 / 05</div>
-            </div>
-
-            <div class="cover-content">
-              <div class="cover-badge">✨ Speisely Community Story</div>
-              <h1 class="cover-title">Goldener Crunch, Yangnyeom-Glanz & Rose Tteokbokki</h1>
-              <p class="cover-sub">Zu Besuch bei Chicken Krush in Prag-Nové Město.</p>
-              <div class="cover-dots">
-                <div class="dot active"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-              </div>
+      <!-- ── SLIDE 2 ── -->
+      <div class="slide-canvas" id="s2" style="display:none">
+        <div class="split-wrap">
+          <div class="split-photo-box">
+            <img src="data:image/jpeg;base64,${p2}" alt="Location">
+            <div class="split-photo-top-grad"></div>
+            <div class="split-photo-topbar">
+              <div class="pill-community">Speisely Community</div>
+              <div class="pill-counter">2 / 5</div>
             </div>
           </div>
-        </div>
-
-        <!-- Slide 2 (Location / Neon Sign) -->
-        <div class="slide-canvas" id="slide-2" style="display: none;">
-          <div class="slide-inner split-slide">
-            <div class="slide-header">
-              <div class="pill-brand">Speisely Community</div>
-              <div class="pill-counter">02 / 05</div>
-            </div>
-
-            <div class="split-image-box">
-              <img src="data:image/jpeg;base64,${p2}" alt="Chicken Krush Neon Sign">
-              <div class="nav-arrow left">‹</div>
-              <div class="nav-arrow right">›</div>
-            </div>
-
-            <div class="split-card-footer">
-              <div class="split-step-num">01 · Die Location</div>
-              <h2 class="split-heading">Neonschein & Touchscreen-Order</h2>
-              <p class="split-text">Versteckt in der ruhigen Příčná-Straße: Urbanes K-Food-Ambiente mit eigener digitaler Bestellkonsole an jedem Tisch.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 3 (Slow Fried / Taste Respect) -->
-        <div class="slide-canvas" id="slide-3" style="display: none;">
-          <div class="slide-inner split-slide">
-            <div class="slide-header">
-              <div class="pill-brand">Speisely Community</div>
-              <div class="pill-counter">03 / 05</div>
-            </div>
-
-            <div class="split-image-box">
-              <img src="data:image/jpeg;base64,${p3}" alt="Slow Fried Chicken Crunch">
-              <div class="nav-arrow left">‹</div>
-              <div class="nav-arrow right">›</div>
-            </div>
-
-            <div class="split-card-footer">
-              <div class="split-step-num">02 · Das Slow-Fried-Prinzip</div>
-              <h2 class="split-heading">Hauchdünner Crunch & saftiger Kern</h2>
-              <p class="split-text">Feine Stärkepanade, punktgenau frittiert: Die Kruste bricht mit lautem Knacken, während das Fleisch innen saftig bleibt.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 4 (Yangnyeom Glaze) -->
-        <div class="slide-canvas" id="slide-4" style="display: none;">
-          <div class="slide-inner split-slide">
-            <div class="slide-header">
-              <div class="pill-brand">Speisely Community</div>
-              <div class="pill-counter">04 / 05</div>
-            </div>
-
-            <div class="split-image-box">
-              <img src="data:image/jpeg;base64,${p4}" alt="Yangnyeom Glazed Chicken">
-              <div class="nav-arrow left">‹</div>
-              <div class="nav-arrow right">›</div>
-            </div>
-
-            <div class="split-card-footer">
-              <div class="split-step-num">03 · Die Glasur</div>
-              <h2 class="split-heading">Klebrig-süße Schärfe mit Gochujang</h2>
-              <p class="split-text">Dick eingekochte Sauce mit Honig, Knoblauch und Chili, abgerundet mit gerösteten Mandeln für extra Biss.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 5 (Outro CTA Slide) -->
-        <div class="slide-canvas" id="slide-5" style="display: none;">
-          <div class="slide-inner outro-slide">
-            <div class="slide-header">
-              <div class="pill-brand">Speisely Magazin</div>
-              <div class="pill-counter">05 / 05</div>
-            </div>
-
-            <div class="outro-center">
-              <svg class="outro-logo-icon" width="48" height="48" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 8C12 17 20 22 24 26L6 44C4 46 4 49 6 51C8 53 11 53 13 51L31 31C27 27 22 19 12 8Z" fill="#E6B84A"/>
-                <path d="M48 8C48 17 40 22 36 26L54 44C56 46 56 49 54 51C52 53 49 53 47 51L29 31C33 27 38 19 48 8Z" fill="#E6B84A"/>
-                <circle cx="30" cy="26" r="3.5" fill="#E6B84A"/>
-              </svg>
-              <div class="outro-logo-text">Speisely</div>
-              <div class="outro-venue-sub">Chicken Krush Prag</div>
-              <div class="outro-accent-line"></div>
-              
-              <h2 class="outro-headline">Lies die ganze Story<br>auf speisely.de!</h2>
-              <p class="outro-subline">Authentische K-Food-Kultur in Prag-Nové Město</p>
-            </div>
-
-            <div>
-              <div class="outro-actions-box">
-                <span>🔖 Speichern</span>
-                <div class="divider"></div>
-                <span>🔗 Teilen</span>
-                <div class="divider"></div>
-                <span>❤️ Liken</span>
-              </div>
-              <div class="outro-cta-btn">↗ speisely.de ↗</div>
-            </div>
+          <div class="split-card">
+            <div class="split-kicker">01 · Die Location</div>
+            <h2 class="split-heading">Neonschein &amp; Touchscreen-Order</h2>
+            <p class="split-body">Versteckt in der ruhigen Příčná-Straße: Urbanes K-Food-Ambiente mit eigener digitaler Bestellkonsole an jedem Tisch.</p>
           </div>
         </div>
       </div>
-    </main>
 
-    <!-- Right: Instagram Post Mockup -->
-    <aside class="post-panel">
-      <div class="section-label">Instagram Post Vorschau</div>
-      <div class="ig-header">
-        <div class="ig-avatar">S</div>
-        <div>
-          <div class="ig-user-name">speisely</div>
-          <div class="ig-user-loc">Prag, Tschechische Republik</div>
+      <!-- ── SLIDE 3 ── -->
+      <div class="slide-canvas" id="s3" style="display:none">
+        <div class="split-wrap">
+          <div class="split-photo-box">
+            <img src="data:image/jpeg;base64,${p3}" alt="Slow Fried">
+            <div class="split-photo-top-grad"></div>
+            <div class="split-photo-topbar">
+              <div class="pill-community">Speisely Community</div>
+              <div class="pill-counter">3 / 5</div>
+            </div>
+          </div>
+          <div class="split-card">
+            <div class="split-kicker">02 · Das Slow-Fried-Prinzip</div>
+            <h2 class="split-heading">Hauchdünner Crunch &amp; saftiger Kern</h2>
+            <p class="split-body">Feine Stärkepanade, punktgenau frittiert: Die Kruste bricht mit lautem Knacken, während das Fleisch innen saftig bleibt.</p>
+          </div>
         </div>
       </div>
 
-      <div class="caption-box" id="caption-text">🍗 Goldener Crunch. Klebrige Gochujang-Glasur. Eine dampfende Pfanne Rose Tteokbokki in der Mitte des Tisches.
+      <!-- ── SLIDE 4 ── -->
+      <div class="slide-canvas" id="s4" style="display:none">
+        <div class="split-wrap">
+          <div class="split-photo-box">
+            <img src="data:image/jpeg;base64,${p4}" alt="Yangnyeom Glaze">
+            <div class="split-photo-top-grad"></div>
+            <div class="split-photo-topbar">
+              <div class="pill-community">Speisely Community</div>
+              <div class="pill-counter">4 / 5</div>
+            </div>
+          </div>
+          <div class="split-card">
+            <div class="split-kicker">03 · Die Glasur</div>
+            <h2 class="split-heading">Yangnyeom-Glanz mit Gochujang</h2>
+            <p class="split-body">Dick eingekochte Sauce mit Honig, Knoblauch und Chili, abgerundet mit gerösteten Mandelsplittern für extra Biss.</p>
+          </div>
+        </div>
+      </div>
 
-Ein Mitglied aus unserer Speisely Community hat auf seiner Prag-Reise einen besonderen Stopp eingelegt: @chickenkrush in der Příčná-Straße (Nové Město).
+      <!-- ── SLIDE 5: OUTRO ── -->
+      <div class="slide-canvas" id="s5" style="display:none">
+        <div class="outro-wrap">
+          <div class="slide-topbar" style="position:relative; top:auto; left:auto; right:auto; padding:0; margin-bottom:6px; width:100%;">
+            <div class="pill-magazine">Speisely Magazin</div>
+            <div class="pill-counter" style="background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.3);">5 / 5</div>
+          </div>
 
-Hier gibt es kein langes Warten: An jedem Tisch ist ein eigener digitaler Touchscreen angebracht. Bestellen, zurücklehnen und zusehen, wie die schweren Holzbretter mit frisch frittiertem Hähnchen und Beilagen serviert werden.
+          <div class="outro-icon">
+            <svg width="44" height="44" viewBox="0 0 60 60" fill="none">
+              <path d="M12 8C12 17 20 22 24 26L6 44C4 46 4 49 6 51C8 53 11 53 13 51L31 31C27 27 22 19 12 8Z" fill="#E6B84A"/>
+              <path d="M48 8C48 17 40 22 36 26L54 44C56 46 56 49 54 51C52 53 49 53 47 51L29 31C33 27 38 19 48 8Z" fill="#E6B84A"/>
+              <circle cx="30" cy="26" r="3.5" fill="#E6B84A"/>
+            </svg>
+          </div>
+          <div class="outro-brand">Speisely</div>
+          <div class="outro-venue">Chicken Krush Prag</div>
+          <div class="outro-divider"></div>
 
-👉 Swipe durch unsere Community-Story für alle Highlights vom Tisch!
+          <div>
+            <h2 class="outro-headline">Lies die ganze Story<br>auf speisely.de!</h2>
+            <p class="outro-subline">Authentische K-Food-Kultur in Prag-Nové Město</p>
+          </div>
+
+          <div style="width:100%">
+            <div class="outro-actions">
+              <span>🔖 Speichern</span>
+              <span style="width:1px;background:rgba(255,255,255,0.2);align-self:stretch"></span>
+              <span>🔗 Teilen</span>
+              <span style="width:1px;background:rgba(255,255,255,0.2);align-self:stretch"></span>
+              <span>❤️ Liken</span>
+            </div>
+            <div class="outro-cta">↗ speisely.de ↗</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /canvas-shell -->
+  </main>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <aside class="right-panel">
+    <div class="label">Instagram Vorschau</div>
+    <div class="ig-mock">
+      <div class="ig-avatar">S</div>
+      <div class="ig-info">
+        <div class="ig-name">speisely</div>
+        <div class="ig-loc">📍 Prag, Tschechische Republik</div>
+      </div>
+    </div>
+
+    <div class="caption-area" id="caption">🍗 Goldener Crunch. Klebrige Gochujang-Glasur. Eine dampfende Pfanne Rose Tteokbokki in der Mitte des Tisches.
+
+Ein Mitglied aus unserer Speisely Community hat auf seiner Prag-Reise einen besonderen Stopp eingelegt — @chickenkrush in der Příčná-Straße, Nové Město.
+
+Hier gibt es kein langes Warten: An jedem Tisch steht ein eigener Touchscreen. Bestellen, zurücklehnen, genießen.
+
+👉 Swipe für alle Highlights der Community-Story!
 
 📍 Příčná 1632/9, 110 00 Praha 1 (Nové Město)
-✦ Die ganze Geschichte jetzt im Speisely Magazin lesen auf speisely.de
+✦ Ganze Story jetzt auf speisely.de lesen
 
-#speisely #speiselycommunity #chickenkrush #praguefood #koreanfriedchicken #tteokbokki #chimaek #praguefoodguide #foodculture</div>
+#speisely #speiselycommunity #chickenkrush #praguefood #koreanfriedchicken #tteokbokki #gochujang #praguefoodguide #kfood</div>
 
-      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="copyCaption()">
-        📋 Caption in Zwischenablage
-      </button>
-    </aside>
-  </div>
+    <div class="download-section">
+      <div class="download-label">📥 1-Click HD Downloads (1080×1350 px)</div>
+      <div class="download-grid">
+        <div class="dl-btn" onclick="dl(1)">🖼 Slide 1 · Cover</div>
+        <div class="dl-btn" onclick="dl(2)">🖼 Slide 2 · Location</div>
+        <div class="dl-btn" onclick="dl(3)">🖼 Slide 3 · Crunch</div>
+        <div class="dl-btn" onclick="dl(4)">🖼 Slide 4 · Glasur</div>
+        <div class="dl-btn" onclick="dl(5)">🖼 Slide 5 · Outro</div>
+        <div class="dl-btn full" onclick="downloadAll()">🚀 Alle 5 Slides auf einmal laden</div>
+      </div>
+    </div>
 
-  <div class="toast" id="toast">In die Zwischenablage kopiert!</div>
+    <button class="btn btn-outline" style="width:100%;justify-content:center;" onclick="copyCaption()">
+      📋 Caption kopieren
+    </button>
+  </aside>
+</div>
 
-  <script>
-    const preRenderedSlides = {
-      1: 'data:image/png;base64,${s1}',
-      2: 'data:image/png;base64,${s2}',
-      3: 'data:image/png;base64,${s3}',
-      4: 'data:image/png;base64,${s4}',
-      5: 'data:image/png;base64,${s5}'
-    };
+<div class="toast" id="toast"></div>
 
-    let currentSlide = 1;
+<script>
+  const slides = { 1:'data:image/png;base64,${s1}', 2:'data:image/png;base64,${s2}', 3:'data:image/png;base64,${s3}', 4:'data:image/png;base64,${s4}', 5:'data:image/png;base64,${s5}' };
+  let current = 1;
 
-    function selectSlide(num) {
-      currentSlide = num;
-      for (let i = 1; i <= 5; i++) {
-        const slide = document.getElementById('slide-' + i);
-        if (slide) slide.style.display = (i === num ? 'flex' : 'none');
-        const thumb = document.getElementById('thumb-' + i);
-        if (thumb) {
-          if (i === num) thumb.classList.add('active');
-          else thumb.classList.remove('active');
-        }
-      }
+  function gotoSlide(n) {
+    document.getElementById('s' + current).style.display = 'none';
+    document.getElementById('tab-' + current).classList.remove('active');
+    current = n;
+    document.getElementById('s' + n).style.display = 'flex';
+    document.getElementById('tab-' + n).classList.add('active');
+  }
+
+  function setRatio(r, btn) {
+    document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const canvases = document.querySelectorAll('.slide-canvas');
+    canvases.forEach(c => {
+      c.classList.remove('sq', 'st');
+      if (r === '11') c.classList.add('sq');
+      if (r === '916') c.classList.add('st');
+    });
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  function dl(n) {
+    const a = document.createElement('a');
+    a.download = 'speisely-chicken-krush-prag-slide-' + n + '.png';
+    a.href = slides[n];
+    a.click();
+    toast('✅ Slide ' + n + ' (1080×1350 HD) geladen!');
+  }
+
+  function downloadCurrent() { dl(current); }
+
+  async function downloadAll() {
+    toast('⏳ Lade alle 5 Slides…');
+    for (let i = 1; i <= 5; i++) {
+      dl(i);
+      await new Promise(r => setTimeout(r, 280));
     }
+    setTimeout(() => toast('🎉 Alle 5 HD Slides geladen!'), 600);
+  }
 
-    function setRatio(ratio) {
-      document.querySelectorAll('.aspect-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      const canvases = document.querySelectorAll('.slide-canvas');
-      canvases.forEach(c => {
-        c.className = 'slide-canvas';
-        if (ratio === '1-1') c.classList.add('ratio-1-1');
-        if (ratio === '9-16') c.classList.add('ratio-9-16');
-      });
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    function copyCaption() {
-      const text = document.getElementById('caption-text').innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('📋 Instagram-Caption kopiert!');
-      });
-    }
-
-    function downloadCurrentSlide() {
-      showToast('Lade Slide ' + currentSlide + ' (1080×1350 HD PNG)...');
-      const link = document.createElement('a');
-      link.download = 'speisely-chicken-krush-slide-' + currentSlide + '-hd.png';
-      link.href = preRenderedSlides[currentSlide];
-      link.click();
-      showToast('✅ Slide ' + currentSlide + ' in HD heruntergeladen!');
-    }
-
-    async function downloadAllSlides() {
-      showToast('Lade alle 5 HD Slides herunter...');
-      for (let i = 1; i <= 5; i++) {
-        const link = document.createElement('a');
-        link.download = 'speisely-chicken-krush-slide-' + i + '-hd.png';
-        link.href = preRenderedSlides[i];
-        link.click();
-        await new Promise(r => setTimeout(r, 250));
-      }
-      showToast('🎉 Alle 5 Slides in 1080×1350 HD geladen!');
-    }
-  </script>
+  function copyCaption() {
+    navigator.clipboard.writeText(document.getElementById('caption').innerText).then(() => {
+      toast('📋 Caption in Zwischenablage!');
+    });
+  }
+</script>
 </body>
 </html>`;
 
-  const targetPath = 'C:/Users/ahmad/.gemini/antigravity/brain/b308feef-2d4d-4563-b7d6-d6991ec44c51/chicken_krush_carousel_studio.html';
-  await fs.writeFile(targetPath, html, 'utf8');
-  console.log('Done creating carousel studio HTML at:', targetPath);
+  const out = 'C:/Users/ahmad/.gemini/antigravity/brain/b308feef-2d4d-4563-b7d6-d6991ec44c51/chicken_krush_carousel_studio.html';
+  await fs.writeFile(out, html, 'utf8');
+  console.log('✅ Carousel Studio HTML written to:', out);
 }
 
 generate().catch(console.error);
