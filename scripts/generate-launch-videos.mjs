@@ -93,9 +93,8 @@ async function generate() {
     .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(230,184,74,0.35); }
     .btn-outline { background: transparent; color: var(--sand); border: 1.5px solid rgba(255,255,255,0.2); }
     .btn-outline:hover { background: rgba(255,255,255,0.1); }
-    .btn-record { background: #ef4444; color: white; animation: pulse 2s infinite; }
+    .btn-record { background: #ef4444; color: white; }
     .btn-record:hover { background: #dc2626; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
 
     .studio-layout {
       display: grid;
@@ -175,11 +174,11 @@ async function generate() {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 24px;
+      justify-content: space-between;
+      padding: 20px 24px;
       position: relative;
-      gap: 16px;
-      overflow: hidden;
+      gap: 12px;
+      overflow-y: auto;
     }
 
     .format-switch {
@@ -205,31 +204,35 @@ async function generate() {
 
     .viewport-container {
       position: relative;
-      border-radius: 24px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.12);
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a1f1a;
     }
 
     /* Screen Ratios */
-    .viewport-916 { width: 360px; height: 640px; }
-    .viewport-169 { width: 760px; height: 428px; }
+    .viewport-916 { width: 330px; height: 586px; }
+    .viewport-169 { width: 680px; height: 382px; }
 
     canvas#videoCanvas {
       width: 100%;
       height: 100%;
       display: block;
-      background: #000;
+      background: #0d2218;
     }
 
     /* Timeline & Controls Bar */
     .timeline-bar {
       width: 100%;
-      max-width: 760px;
-      background: rgba(15, 39, 32, 0.9);
-      border: 1px solid rgba(255,255,255,0.1);
+      max-width: 680px;
+      background: rgba(15, 39, 32, 0.95);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 16px;
-      padding: 12px 18px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       gap: 14px;
@@ -256,7 +259,7 @@ async function generate() {
     .progress-track {
       flex: 1;
       height: 8px;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.14);
       border-radius: 999px;
       cursor: pointer;
       position: relative;
@@ -272,8 +275,8 @@ async function generate() {
     .time-display {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      color: rgba(255,255,255,0.7);
-      width: 80px;
+      color: rgba(255,255,255,0.8);
+      width: 85px;
       text-align: right;
     }
 
@@ -298,7 +301,7 @@ async function generate() {
     }
     .scene-item.active {
       border-color: var(--gold);
-      background: rgba(230,184,74,0.1);
+      background: rgba(230,184,74,0.12);
     }
     .scene-time { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); font-weight: 700; margin-bottom: 2px; }
     .scene-name { font-weight: 700; color: var(--sand); }
@@ -404,7 +407,7 @@ async function generate() {
     </div>
 
     <div class="timeline-bar">
-      <button class="play-btn" id="playToggle" onclick="togglePlay()">▶</button>
+      <button class="play-btn" id="playToggle" onclick="togglePlay()">❚❚</button>
       <div class="progress-track" id="progTrack" onclick="seek(event)">
         <div class="progress-fill" id="progFill"></div>
       </div>
@@ -440,6 +443,19 @@ async function generate() {
 <img id="imgInterior" src="data:image/jpeg;base64,${interior}" style="display:none;" />
 
 <script>
+  // Universal standard rounded rectangle function (works 100% on every browser)
+  function roundRect(ctx, x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
   let activeVideo = 1;
   let isPlaying = true;
   let isRecording = false;
@@ -485,7 +501,7 @@ async function generate() {
       scenes: [
         { start: 0, end: 3.5, name: "01 · Sensory Food Hook", desc: "Luscious Belgian chocolate pour & crispy crunch." },
         { start: 3.5, end: 7.5, name: "02 · The Culinary Mission", desc: "We scout Germany's most insane culinary creations." },
-        { start: 7.5, end: 13.0, name: "03 · Featured Story: San Sebastian", desc: "Basque Cheesecake with 12+ varieties at Ku'damm." },
+        { start: 7.5, end: 13.0, name: "03 · Featured Story: San Sebastian", desc: "Basque Cheesecake with large variety at Ku'damm." },
         { start: 13.0, end: 18.0, name: "04 · Final CTA", desc: "Discover Hidden Food Gems · speisely.de/magazin" }
       ]
     }
@@ -493,13 +509,14 @@ async function generate() {
 
   function updateSceneList() {
     const v = videos[activeVideo];
-    sceneList.innerHTML = v.scenes.map((s, idx) => \`
-      <div class="scene-item \${currentTime >= s.start && currentTime < s.end ? 'active' : ''}" id="sc-\${idx}">
-        <div class="scene-time">\${s.start.toFixed(1)}s – \${s.end.toFixed(1)}s</div>
-        <div class="scene-name">\${s.name}</div>
-        <div class="scene-desc">\${s.desc}</div>
-      </div>
-    \`).join('');
+    sceneList.innerHTML = v.scenes.map((s, idx) => {
+      const isAct = currentTime >= s.start && currentTime < s.end;
+      return '<div class="scene-item ' + (isAct ? 'active' : '') + '" id="sc-' + idx + '">' +
+        '<div class="scene-time">' + s.start.toFixed(1) + 's – ' + s.end.toFixed(1) + 's</div>' +
+        '<div class="scene-name">' + s.name + '</div>' +
+        '<div class="scene-desc">' + s.desc + '</div>' +
+      '</div>';
+    }).join('');
   }
 
   function setRatio(r, btn) {
@@ -558,49 +575,54 @@ async function generate() {
   let lastTime = performance.now();
 
   function render(time) {
-    const delta = (time - lastTime) / 1000;
-    lastTime = time;
+    try {
+      const delta = (time - lastTime) / 1000;
+      lastTime = time;
 
-    if (isPlaying) {
-      currentTime += delta;
-      if (currentTime >= duration) {
-        if (isRecording) {
-          stopRecording();
+      if (isPlaying) {
+        currentTime += delta;
+        if (currentTime >= duration) {
+          if (isRecording) {
+            stopRecording();
+          }
+          currentTime = 0;
         }
-        currentTime = 0;
       }
+
+      // Update UI Progress
+      progFill.style.width = (currentTime / duration * 100) + '%';
+      const curM = Math.floor(currentTime / 60).toString().padStart(2, '0');
+      const curS = Math.floor(currentTime % 60).toString().padStart(2, '0');
+      const durM = Math.floor(duration / 60).toString().padStart(2, '0');
+      const durS = Math.floor(duration % 60).toString().padStart(2, '0');
+      timeDisp.textContent = curM + ':' + curS + ' / ' + durM + ':' + durS;
+
+      // Highlight active scene
+      const currentScenes = videos[activeVideo].scenes;
+      currentScenes.forEach((s, idx) => {
+        const el = document.getElementById('sc-' + idx);
+        if (el) {
+          if (currentTime >= s.start && currentTime < s.end) {
+            el.classList.add('active');
+          } else {
+            el.classList.remove('active');
+          }
+        }
+      });
+
+      // Clear Canvas
+      const W = canvas.width;
+      const H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // Draw Video Content based on Active Video
+      if (activeVideo === 1) renderVideo1(ctx, W, H, currentTime);
+      else if (activeVideo === 2) renderVideo2(ctx, W, H, currentTime);
+      else if (activeVideo === 3) renderVideo3(ctx, W, H, currentTime);
+
+    } catch (err) {
+      console.error("Render loop error:", err);
     }
-
-    // Update UI Progress
-    progFill.style.width = (currentTime / duration * 100) + '%';
-    const curM = Math.floor(currentTime / 60).toString().padStart(2, '0');
-    const curS = Math.floor(currentTime % 60).toString().padStart(2, '0');
-    const durM = Math.floor(duration / 60).toString().padStart(2, '0');
-    const durS = Math.floor(duration % 60).toString().padStart(2, '0');
-    timeDisp.textContent = \`\${curM}:\${curS} / \${durM}:\${durS}\`;
-
-    // Highlight active scene
-    const currentScenes = videos[activeVideo].scenes;
-    currentScenes.forEach((s, idx) => {
-      const el = document.getElementById('sc-' + idx);
-      if (el) {
-        if (currentTime >= s.start && currentTime < s.end) {
-          el.classList.add('active');
-        } else {
-          el.classList.remove('active');
-        }
-      }
-    });
-
-    // Clear Canvas
-    const W = canvas.width;
-    const H = canvas.height;
-    ctx.clearRect(0, 0, W, H);
-
-    // Draw Video Content based on Active Video
-    if (activeVideo === 1) renderVideo1(ctx, W, H, currentTime);
-    else if (activeVideo === 2) renderVideo2(ctx, W, H, currentTime);
-    else if (activeVideo === 3) renderVideo3(ctx, W, H, currentTime);
 
     requestAnimationFrame(render);
   }
@@ -638,13 +660,12 @@ async function generate() {
       ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
       ctx.strokeStyle = '#ef4444';
       ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.roundRect(-180, -160, 360, 60, 30);
+      roundRect(ctx, -180, -160, 360, 60, 30);
       ctx.fill();
       ctx.stroke();
 
       ctx.fillStyle = '#ef4444';
-      ctx.font = '900 24px Inter';
+      ctx.font = '900 24px Inter, sans-serif';
       ctx.fillText('⚠ THE CATERING HEADACHE', 0, -122);
 
       // Bold Punchline
@@ -655,7 +676,7 @@ async function generate() {
       ctx.fillText('50+ guests?', 0, 70);
 
       ctx.fillStyle = 'rgba(250, 247, 240, 0.75)';
-      ctx.font = '500 36px Inter';
+      ctx.font = '500 36px Inter, sans-serif';
       ctx.fillText('Slow quotes. Hidden fees. Chaos.', 0, 170);
       ctx.restore();
     }
@@ -681,20 +702,19 @@ async function generate() {
       ctx.fillText('Speisely', 0, 10);
 
       ctx.fillStyle = '#FAF7F0';
-      ctx.font = '900 32px Inter';
+      ctx.font = '900 32px Inter, sans-serif';
       ctx.fillText("GERMANY'S #1 EVENT FOOD HUB", 0, 80);
 
       // Feature pills
       ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.strokeStyle = 'rgba(230, 184, 74, 0.4)';
       ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.roundRect(-260, 140, 520, 70, 35);
+      roundRect(ctx, -260, 140, 520, 70, 35);
       ctx.fill();
       ctx.stroke();
 
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '700 28px Inter';
+      ctx.font = '700 28px Inter, sans-serif';
       ctx.fillText('✨ Instant Caterer & Food Matching', 0, 185);
       ctx.restore();
     }
@@ -705,7 +725,7 @@ async function generate() {
       ctx.textAlign = 'center';
 
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 26px Inter';
+      ctx.font = '900 26px Inter, sans-serif';
       ctx.fillText('⚡ WHY ORGANIZERS LOVE SPEISELY', W/2, H * 0.18);
 
       ctx.fillStyle = '#FFFFFF';
@@ -729,21 +749,20 @@ async function generate() {
         ctx.fillStyle = 'rgba(23, 60, 50, 0.85)';
         ctx.strokeStyle = 'rgba(230, 184, 74, 0.3)';
         ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        ctx.roundRect(-W * 0.4, 0, W * 0.8, 170, 24);
+        roundRect(ctx, -W * 0.4, 0, W * 0.8, 170, 24);
         ctx.fill();
         ctx.stroke();
 
         ctx.textAlign = 'left';
-        ctx.font = '52px Inter';
+        ctx.font = '52px Inter, sans-serif';
         ctx.fillText(c.icon, -W * 0.35, 105);
 
         ctx.fillStyle = '#FAF7F0';
-        ctx.font = '900 36px Inter';
+        ctx.font = '900 36px Inter, sans-serif';
         ctx.fillText(c.title, -W * 0.22, 70);
 
         ctx.fillStyle = 'rgba(250, 247, 240, 0.7)';
-        ctx.font = '500 26px Inter';
+        ctx.font = '500 26px Inter, sans-serif';
         ctx.fillText(c.sub, -W * 0.22, 120);
 
         ctx.restore();
@@ -757,7 +776,7 @@ async function generate() {
       ctx.textAlign = 'center';
 
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 24px Inter';
+      ctx.font = '900 24px Inter, sans-serif';
       ctx.fillText('📍 NATIONWIDE COVERAGE', W/2, H * 0.28);
 
       ctx.fillStyle = '#FFFFFF';
@@ -775,13 +794,12 @@ async function generate() {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
         ctx.strokeStyle = 'rgba(230, 184, 74, 0.4)';
         ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.roundRect(bx - 190, by - 45, 380, 90, 24);
+        roundRect(ctx, bx - 190, by - 45, 380, 90, 24);
         ctx.fill();
         ctx.stroke();
 
         ctx.fillStyle = '#FAF7F0';
-        ctx.font = '900 36px Inter';
+        ctx.font = '900 36px Inter, sans-serif';
         ctx.fillText('📍 ' + city, bx, by + 12);
       });
       ctx.restore();
@@ -804,16 +822,15 @@ async function generate() {
 
       // Shimmering CTA Button
       ctx.fillStyle = '#E6B84A';
-      ctx.beginPath();
-      ctx.roundRect(-280, 140, 560, 96, 48);
+      roundRect(ctx, -280, 140, 560, 96, 48);
       ctx.fill();
 
       ctx.fillStyle = '#173C32';
-      ctx.font = '900 36px Inter';
+      ctx.font = '900 36px Inter, sans-serif';
       ctx.fillText('🚀 Visit speisely.de ↗', 0, 202);
 
       ctx.fillStyle = 'rgba(250, 247, 240, 0.5)';
-      ctx.font = '500 24px Inter';
+      ctx.font = '500 24px Inter, sans-serif';
       ctx.fillText('Free event planning · Instant caterer discovery', 0, 300);
       ctx.restore();
     }
@@ -837,7 +854,7 @@ async function generate() {
       ctx.translate(W/2, H/2 - 60);
 
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 26px Inter';
+      ctx.font = '900 26px Inter, sans-serif';
       ctx.fillText('📐 SPEISELY EVENT CALCULATOR', 0, -100);
 
       ctx.fillStyle = '#FFFFFF';
@@ -846,7 +863,7 @@ async function generate() {
       ctx.fillText('do you actually need?', 0, 70);
 
       ctx.fillStyle = 'rgba(250, 247, 240, 0.75)';
-      ctx.font = '500 34px Inter';
+      ctx.font = '500 34px Inter, sans-serif';
       ctx.fillText('Stop guessing budgets & portions.', 0, 160);
       ctx.restore();
     } else if (t < 8.0) {
@@ -859,7 +876,7 @@ async function generate() {
       ctx.textAlign = 'center';
 
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 26px Inter';
+      ctx.font = '900 26px Inter, sans-serif';
       ctx.fillText('⚡ REAL-TIME BUDGET ENGINE', W/2, H * 0.16);
 
       ctx.fillStyle = '#FFFFFF';
@@ -868,13 +885,12 @@ async function generate() {
 
       // Card Container
       ctx.fillStyle = '#FFFFFF';
-      ctx.beginPath();
-      ctx.roundRect(W * 0.1, H * 0.28, W * 0.8, H * 0.52, 32);
+      roundRect(ctx, W * 0.1, H * 0.28, W * 0.8, H * 0.52, 32);
       ctx.fill();
 
       // Inside White Card
       ctx.fillStyle = '#173C32';
-      ctx.font = '900 32px Inter';
+      ctx.font = '900 32px Inter, sans-serif';
       ctx.fillText('Guest Count', W/2, H * 0.36);
 
       ctx.fillStyle = '#A85C36';
@@ -886,14 +902,12 @@ async function generate() {
       const trackW = W * 0.6;
       const trackY = H * 0.50;
       ctx.fillStyle = '#e2e8f0';
-      ctx.beginPath();
-      ctx.roundRect(trackX, trackY, trackW, 16, 8);
+      roundRect(ctx, trackX, trackY, trackW, 16, 8);
       ctx.fill();
 
       // Slider Fill & Thumb
       ctx.fillStyle = '#E6B84A';
-      ctx.beginPath();
-      ctx.roundRect(trackX, trackY, trackW * p, 16, 8);
+      roundRect(ctx, trackX, trackY, trackW * p, 16, 8);
       ctx.fill();
 
       ctx.fillStyle = '#173C32';
@@ -906,12 +920,11 @@ async function generate() {
 
       // Calculated Budget Box
       ctx.fillStyle = '#FAF7F0';
-      ctx.beginPath();
-      ctx.roundRect(W * 0.16, H * 0.58, W * 0.68, 140, 20);
+      roundRect(ctx, W * 0.16, H * 0.58, W * 0.68, 140, 20);
       ctx.fill();
 
       ctx.fillStyle = '#173C32';
-      ctx.font = '700 24px Inter';
+      ctx.font = '700 24px Inter, sans-serif';
       ctx.fillText('Estimated Catering Budget', W/2, H * 0.63);
 
       ctx.fillStyle = '#10b981';
@@ -925,7 +938,7 @@ async function generate() {
       ctx.textAlign = 'center';
 
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 26px Inter';
+      ctx.font = '900 26px Inter, sans-serif';
       ctx.fillText('🎯 INSTANT MATCHING', W/2, H * 0.22);
 
       ctx.fillStyle = '#FFFFFF';
@@ -938,13 +951,12 @@ async function generate() {
         ctx.fillStyle = 'rgba(255,255,255,0.08)';
         ctx.strokeStyle = 'rgba(230,184,74,0.4)';
         ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.roundRect(W * 0.12, by, W * 0.76, 100, 20);
+        roundRect(ctx, W * 0.12, by, W * 0.76, 100, 20);
         ctx.fill();
         ctx.stroke();
 
         ctx.fillStyle = '#FAF7F0';
-        ctx.font = '900 36px Inter';
+        ctx.font = '900 36px Inter, sans-serif';
         ctx.fillText(item, W/2, by + 62);
       });
       ctx.restore();
@@ -964,12 +976,11 @@ async function generate() {
       ctx.fillText('100% Free.', 0, 70);
 
       ctx.fillStyle = '#E6B84A';
-      ctx.beginPath();
-      ctx.roundRect(-290, 160, 580, 96, 48);
+      roundRect(ctx, -290, 160, 580, 96, 48);
       ctx.fill();
 
       ctx.fillStyle = '#173C32';
-      ctx.font = '900 34px Inter';
+      ctx.font = '900 34px Inter, sans-serif';
       ctx.fillText('📊 Try speisely.de/planner ↗', 0, 222);
       ctx.restore();
     }
@@ -982,7 +993,7 @@ async function generate() {
     if (t < 3.5) {
       // Scene 1: Chocolate pour hero
       const img = document.getElementById('imgChoc');
-      if (img.complete) {
+      if (img && img.complete) {
         ctx.drawImage(img, 0, 0, W, H);
       }
       // Vignette
@@ -995,7 +1006,7 @@ async function generate() {
       ctx.save();
       ctx.textAlign = 'left';
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 24px Inter';
+      ctx.font = '900 24px Inter, sans-serif';
       ctx.fillText('🍫 SPEISELY COMMUNITY STORY', 70, H - 240);
 
       ctx.fillStyle = '#FFFFFF';
@@ -1006,7 +1017,7 @@ async function generate() {
     } else if (t < 8.0) {
       // Scene 2: Pistachio on Gold
       const img = document.getElementById('imgPist');
-      if (img.complete) {
+      if (img && img.complete) {
         ctx.drawImage(img, 0, 0, W, H);
       }
       const v = ctx.createLinearGradient(0, H * 0.5, 0, H);
@@ -1018,7 +1029,7 @@ async function generate() {
       ctx.save();
       ctx.textAlign = 'left';
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 24px Inter';
+      ctx.font = '900 24px Inter, sans-serif';
       ctx.fillText('🌱 THE BASQUE ORIGINAL', 70, H - 240);
 
       ctx.fillStyle = '#FFFFFF';
@@ -1029,7 +1040,7 @@ async function generate() {
     } else if (t < 13.0) {
       // Scene 3: Showcase & Interior
       const img = document.getElementById('imgShow');
-      if (img.complete) {
+      if (img && img.complete) {
         ctx.drawImage(img, 0, 0, W, H);
       }
       const v = ctx.createLinearGradient(0, H * 0.45, 0, H);
@@ -1041,13 +1052,13 @@ async function generate() {
       ctx.save();
       ctx.textAlign = 'left';
       ctx.fillStyle = '#E6B84A';
-      ctx.font = '900 24px Inter';
+      ctx.font = '900 24px Inter, sans-serif';
       ctx.fillText('🍰 CURATED FOOD SPOTS', 70, H - 240);
 
       ctx.fillStyle = '#FFFFFF';
       ctx.font = '900 62px Fraunces, Georgia, serif';
       ctx.fillText('San Sebastian Berlin', 70, H - 160);
-      ctx.font = '500 36px Inter';
+      ctx.font = '500 36px Inter, sans-serif';
       ctx.fillStyle = 'rgba(250,247,240,0.85)';
       ctx.fillText('Uhlandstraße 167 (Ku\'damm)', 70, H - 90);
       ctx.restore();
@@ -1074,12 +1085,11 @@ async function generate() {
       ctx.fillText('Best Food Spots.', 0, 60);
 
       ctx.fillStyle = '#E6B84A';
-      ctx.beginPath();
-      ctx.roundRect(-280, 150, 560, 96, 48);
+      roundRect(ctx, -280, 150, 560, 96, 48);
       ctx.fill();
 
       ctx.fillStyle = '#173C32';
-      ctx.font = '900 34px Inter';
+      ctx.font = '900 34px Inter, sans-serif';
       ctx.fillText('📖 Read on speisely.de ↗', 0, 212);
       ctx.restore();
     }
