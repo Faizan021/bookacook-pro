@@ -19,9 +19,9 @@ async function generateSlides() {
     <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#0f2720" stop-opacity="0.3"/>
-          <stop offset="40%" stop-color="#0f2720" stop-opacity="0.05"/>
-          <stop offset="70%" stop-color="#0f2720" stop-opacity="0.85"/>
+          <stop offset="0%" stop-color="#0f2720" stop-opacity="0.35"/>
+          <stop offset="35%" stop-color="#0f2720" stop-opacity="0.08"/>
+          <stop offset="65%" stop-color="#0f2720" stop-opacity="0.85"/>
           <stop offset="100%" stop-color="#0f2720" stop-opacity="0.98"/>
         </linearGradient>
       </defs>
@@ -29,12 +29,12 @@ async function generateSlides() {
 
       <!-- Top Header -->
       <g transform="translate(60, 60)">
-        <rect width="210" height="48" rx="24" fill="#173C32" fill-opacity="0.9" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-        <text x="105" y="31" font-family="sans-serif" font-size="18" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY MAGAZIN</text>
+        <rect width="220" height="48" rx="24" fill="#173C32" fill-opacity="0.92" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <text x="110" y="31" font-family="sans-serif" font-size="17" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY MAGAZIN</text>
       </g>
-      <g transform="translate(${W - 130}, 60)">
-        <rect width="70" height="48" rx="24" fill="rgba(0,0,0,0.55)" />
-        <text x="35" y="31" font-family="sans-serif" font-size="20" font-weight="700" fill="#FAF7F0" text-anchor="middle">1/5</text>
+      <g transform="translate(${W - 170}, 60)">
+        <rect width="110" height="48" rx="24" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+        <text x="55" y="31" font-family="sans-serif" font-size="19" font-weight="700" fill="#FAF7F0" text-anchor="middle">01 / 05</text>
       </g>
 
       <!-- Bottom Cover Text -->
@@ -81,12 +81,12 @@ async function generateSlides() {
       <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
         <!-- Top Header -->
         <g transform="translate(60, 60)">
-          <rect width="230" height="48" rx="24" fill="#173C32" fill-opacity="0.9" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-          <text x="115" y="31" font-family="sans-serif" font-size="18" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY COMMUNITY</text>
+          <rect width="235" height="48" rx="24" fill="#173C32" fill-opacity="0.92" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <text x="117.5" y="31" font-family="sans-serif" font-size="17" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY COMMUNITY</text>
         </g>
-        <g transform="translate(${W - 130}, 60)">
-          <rect width="70" height="48" rx="24" fill="rgba(0,0,0,0.55)" />
-          <text x="35" y="31" font-family="sans-serif" font-size="20" font-weight="700" fill="#FAF7F0" text-anchor="middle">${num}/5</text>
+        <g transform="translate(${W - 170}, 60)">
+          <rect width="110" height="48" rx="24" fill="rgba(0,0,0,0.55)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+          <text x="55" y="31" font-family="sans-serif" font-size="19" font-weight="700" fill="#FAF7F0" text-anchor="middle">0${num} / 05</text>
         </g>
 
         <!-- White Bottom Card -->
@@ -147,63 +147,83 @@ async function generateSlides() {
     desc: 'Dick eingekochte Sauce mit Honig, Knoblauch und Chili,\nabgerundet mit gerösteten Mandelsplittern für extra Biss.'
   });
 
-  // Slide 5 (Feast & Spot Pass)
-  const imgH5 = 800;
-  const cardH5 = H - imgH5;
-  const topImg5 = await sharp('public/magazin/chicken-krush-prag/chicken-krush-real-05.jpg')
-    .resize(W, imgH5, { fit: 'cover', position: 'center' })
-    .toBuffer();
-
-  const svgOverlay5 = `
+  // Slide 5 (Outro / Call-To-Action Slide matching Thronburger & Garcon reference layout)
+  const svgOutro = `
     <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="centerGlow" cx="50%" cy="45%" r="65%">
+          <stop offset="0%" stop-color="#215245" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#173C32" stop-opacity="1"/>
+        </radialGradient>
+      </defs>
+      
+      <!-- Solid Dark Forest Background -->
+      <rect width="${W}" height="${H}" fill="url(#centerGlow)" />
+
       <!-- Top Header -->
       <g transform="translate(60, 60)">
-        <rect width="230" height="48" rx="24" fill="#173C32" fill-opacity="0.9" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-        <text x="115" y="31" font-family="sans-serif" font-size="18" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY COMMUNITY</text>
+        <rect width="220" height="48" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <text x="110" y="31" font-family="sans-serif" font-size="17" font-weight="800" fill="#FAF7F0" text-anchor="middle" letter-spacing="2">SPEISELY MAGAZIN</text>
       </g>
-      <g transform="translate(${W - 130}, 60)">
-        <rect width="70" height="48" rx="24" fill="rgba(0,0,0,0.55)" />
-        <text x="35" y="31" font-family="sans-serif" font-size="20" font-weight="700" fill="#FAF7F0" text-anchor="middle">5/5</text>
+      <g transform="translate(${W - 170}, 60)">
+        <rect width="110" height="48" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        <text x="55" y="31" font-family="sans-serif" font-size="19" font-weight="700" fill="#FAF7F0" text-anchor="middle">05 / 05</text>
       </g>
 
-      <!-- White Bottom Card with Spot-Pass -->
-      <g transform="translate(0, ${imgH5})">
-        <rect width="${W}" height="${cardH5}" fill="#FFFFFF" />
-        <line x1="0" y1="0" x2="${W}" y2="0" stroke="rgba(23,60,50,0.1)" stroke-width="2"/>
-        
-        <g transform="translate(60, 50)">
-          <text x="0" y="0" font-family="sans-serif" font-size="18" font-weight="800" fill="#A85C36" letter-spacing="2.5">04 · DIE TAFEL &amp; SPOT-PASS</text>
-          <text x="0" y="50" font-family="serif" font-size="42" font-weight="700" fill="#173C32">Rose Tteokbokki in der Edelstahlpfanne</text>
-          <text x="0" y="96" font-family="sans-serif" font-size="23" font-weight="400" fill="rgba(23,60,50,0.85)">Cremig-scharfe Reiskuchen, Pommes und Dips zum Teilen am Tisch.</text>
-
-          <!-- Spot Pass Box -->
-          <g transform="translate(0, 130)">
-            <rect width="960" height="130" rx="20" fill="rgba(23,60,50,0.04)" stroke="rgba(23,60,50,0.12)" stroke-width="2"/>
-            <text x="40" y="50" font-family="sans-serif" font-size="22" font-weight="600" fill="rgba(23,60,50,0.7)">📍 Ort</text>
-            <text x="160" y="50" font-family="sans-serif" font-size="22" font-weight="800" fill="#173C32">Pricna 1632/9, 110 00 Praha 1 - Nove Mesto</text>
-            
-            <line x1="40" y1="75" x2="920" y2="75" stroke="rgba(23,60,50,0.08)" stroke-width="1.5"/>
-
-            <text x="40" y="105" font-family="sans-serif" font-size="22" font-weight="600" fill="rgba(23,60,50,0.7)">✨ Story</text>
-            <text x="160" y="105" font-family="sans-serif" font-size="22" font-weight="800" fill="#173C32">speisely.de/magazin/community/chicken-krush-prag</text>
-          </g>
+      <!-- Center Logo & Brand Block -->
+      <g transform="translate(540, 410)" text-anchor="middle">
+        <!-- Crossed Fork & Knife Icon (Clean vector) -->
+        <g transform="translate(0, -90) scale(1.6)">
+          <path d="M-18,-24 C-18,-15 -10,-10 -6,-6 L-24,12 C-26,14 -26,17 -24,19 C-22,21 -19,21 -17,19 L1,-1 C-3,-5 -8,-13 -18,-24 Z" fill="#E6B84A" />
+          <path d="M18,-24 C18,-15 10,-10 6,-6 L24,12 C26,14 26,17 24,19 C22,21 19,21 17,19 L-1,-1 C3,-5 8,-13 18,-24 Z" fill="#E6B84A" />
+          <circle cx="0" cy="-6" r="3.5" fill="#E6B84A" />
         </g>
+
+        <!-- Brand Name -->
+        <text x="0" y="30" font-family="serif" font-size="68" font-weight="800" fill="#E6B84A" letter-spacing="1">Speisely</text>
+
+        <!-- Venue Subline -->
+        <text x="0" y="95" font-family="sans-serif" font-size="22" font-weight="800" fill="#E6B84A" letter-spacing="5">CHICKEN KRUSH PRAG</text>
+        
+        <!-- Accent Line -->
+        <line x1="-140" y1="118" x2="140" y2="118" stroke="#E6B84A" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Headline -->
+        <text x="0" y="215" font-family="serif" font-size="52" font-weight="800" fill="#FAF7F0">Lies die ganze Story</text>
+        <text x="0" y="280" font-family="serif" font-size="52" font-weight="800" fill="#FAF7F0">auf speisely.de!</text>
+
+        <!-- Subline / Prompt -->
+        <text x="0" y="355" font-family="sans-serif" font-size="26" font-weight="500" fill="rgba(250,247,240,0.75)">Authentische K-Food-Kultur in Prag-Nové Město</text>
+      </g>
+
+      <!-- Interaction Actions Container (Save / Share / Like) -->
+      <g transform="translate(165, 920)">
+        <rect width="750" height="92" rx="46" fill="rgba(255,255,255,0.06)" stroke="rgba(230,184,74,0.35)" stroke-width="2"/>
+        <g transform="translate(130, 55)" font-family="sans-serif" font-size="24" font-weight="700" fill="#FAF7F0" text-anchor="middle">
+          <text x="0" y="0">🔖 Speichern</text>
+        </g>
+        <line x1="250" y1="24" x2="250" y2="68" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        <g transform="translate(375, 55)" font-family="sans-serif" font-size="24" font-weight="700" fill="#FAF7F0" text-anchor="middle">
+          <text x="0" y="0">🔗 Teilen</text>
+        </g>
+        <line x1="500" y1="24" x2="500" y2="68" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+        <g transform="translate(620, 55)" font-family="sans-serif" font-size="24" font-weight="700" fill="#FAF7F0" text-anchor="middle">
+          <text x="0" y="0">❤️ Liken</text>
+        </g>
+      </g>
+
+      <!-- CTA Link Pill -->
+      <g transform="translate(340, 1070)">
+        <rect width="400" height="76" rx="38" fill="none" stroke="#E6B84A" stroke-width="3"/>
+        <text x="200" y="49" font-family="sans-serif" font-size="28" font-weight="800" fill="#E6B84A" text-anchor="middle" letter-spacing="2">↗ speisely.de ↗</text>
       </g>
     </svg>
   `;
 
-  const baseBg5 = await sharp({
-    create: { width: W, height: H, channels: 4, background: '#FAF7F0' }
-  }).png().toBuffer();
-
-  await sharp(baseBg5)
-    .composite([
-      { input: topImg5, top: 0, left: 0 },
-      { input: Buffer.from(svgOverlay5), top: 0, left: 0 }
-    ])
+  await sharp(Buffer.from(svgOutro))
     .png({ quality: 100 })
     .toFile(path.join(outDir, 'slide-5.png'));
-  console.log('Created slide-5.png');
+  console.log('Created slide-5.png (Outro CTA)');
 
   console.log('All 5 high-resolution Instagram slides rendered successfully!');
 }

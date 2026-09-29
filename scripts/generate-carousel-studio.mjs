@@ -283,7 +283,7 @@ async function generate() {
     .cover-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(15,39,32,0.3) 0%, rgba(15,39,32,0.05) 35%, rgba(15,39,32,0.88) 75%, rgba(15,39,32,0.98) 100%);
+      background: linear-gradient(180deg, rgba(15,39,32,0.35) 0%, rgba(15,39,32,0.08) 35%, rgba(15,39,32,0.85) 65%, rgba(15,39,32,0.98) 100%);
       z-index: 1;
     }
     .cover-content {
@@ -309,8 +309,8 @@ async function generate() {
     }
     .cover-title {
       font-family: 'Fraunces', serif;
-      font-size: 25px;
-      line-height: 1.15;
+      font-size: 24px;
+      line-height: 1.18;
       font-weight: 800;
       margin-bottom: 8px;
     }
@@ -348,7 +348,7 @@ async function generate() {
       z-index: 3;
     }
     .pill-brand {
-      background: rgba(23, 60, 50, 0.9);
+      background: rgba(23, 60, 50, 0.92);
       backdrop-filter: blur(8px);
       color: #FAF7F0;
       padding: 6px 14px;
@@ -367,9 +367,10 @@ async function generate() {
       border-radius: 999px;
       font-size: 11px;
       font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.15);
     }
 
-    /* Split Card Slides (2, 3, 4, 5) */
+    /* Split Card Slides (2, 3, 4) */
     .split-slide {
       display: flex;
       flex-direction: column;
@@ -435,35 +436,93 @@ async function generate() {
       line-height: 1.45;
     }
 
-    /* Outro Slide (Option in Slide 5) */
-    .spot-pass-box {
-      background: rgba(23,60,50,0.04);
-      border: 1px solid rgba(23,60,50,0.1);
-      border-radius: 12px;
-      padding: 12px 14px;
+    /* Outro Slide 5 (Solid Dark Green matching Thronburger reference) */
+    .outro-slide {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .spot-row {
-      display: flex;
+      align-items: center;
       justify-content: space-between;
-      font-size: 11.5px;
-      border-bottom: 1px solid rgba(23,60,50,0.06);
-      padding-bottom: 4px;
+      height: 100%;
+      background: radial-gradient(circle at 50% 45%, #215245 0%, #173C32 100%);
+      color: #FAF7F0;
+      padding: 30px 24px;
+      text-align: center;
+      position: relative;
     }
-    .spot-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    .outro-center {
+      margin-top: auto;
+      margin-bottom: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .spot-k {
-      color: rgba(23,60,50,0.6);
-      font-weight: 600;
+    .outro-logo-icon {
+      margin-bottom: 8px;
     }
-    .spot-v {
-      color: var(--forest);
+    .outro-logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .outro-venue-sub {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .outro-accent-line {
+      width: 70px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 999px;
+      margin-bottom: 22px;
+    }
+    .outro-headline {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #FAF7F0;
+      margin-bottom: 10px;
+    }
+    .outro-subline {
+      font-size: 12.5px;
+      color: rgba(250,247,240,0.75);
+    }
+    .outro-actions-box {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(230,184,74,0.35);
+      border-radius: 999px;
+      padding: 10px 18px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 12px;
       font-weight: 700;
+      color: #FAF7F0;
+      margin-bottom: 16px;
+    }
+    .outro-actions-box .divider {
+      width: 1px;
+      height: 16px;
+      background: rgba(255,255,255,0.2);
+    }
+    .outro-cta-btn {
+      display: inline-block;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 10px 24px;
+      border-radius: 999px;
     }
 
     /* Right Sidebar: Instagram Mockup & Copy */
@@ -556,7 +615,7 @@ async function generate() {
         ⬇ Aktuellen Slide als PNG
       </button>
       <button class="btn btn-secondary" onclick="downloadAllSlides()">
-        📦 Alle 5 Slides
+        📦 Alle 5 Slides laden
       </button>
     </div>
   </header>
@@ -598,8 +657,8 @@ async function generate() {
           <div class="slide-thumb-card" onclick="selectSlide(5)" id="thumb-5">
             <div class="thumb-num">5</div>
             <div class="thumb-info">
-              <div class="thumb-title">04 · Die Tafel</div>
-              <div class="thumb-sub">Rose Tteokbokki & Chimaek</div>
+              <div class="thumb-title">05 · Outro & CTA</div>
+              <div class="thumb-sub">Ganze Story auf speisely.de</div>
             </div>
           </div>
         </div>
@@ -608,7 +667,7 @@ async function generate() {
       <div>
         <div class="section-label">Über diese Story</div>
         <p style="font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.7);">
-          Echte Community-Einsendung aus Prag-Nové Město. Farblich und typografisch exakt abgestimmt auf das Speisely Editorial Design System.
+          Echte Community-Einsendung aus Prag-Nové Město. 100% authentische Fotos ohne AI-Generierung, farblich und typografisch exakt abgestimmt auf das Speisely Editorial Design System.
         </p>
       </div>
     </aside>
@@ -630,7 +689,7 @@ async function generate() {
             
             <div class="slide-header">
               <div class="pill-brand">Speisely Magazin</div>
-              <div class="pill-counter">1/5</div>
+              <div class="pill-counter">01 / 05</div>
             </div>
 
             <div class="cover-content">
@@ -653,7 +712,7 @@ async function generate() {
           <div class="slide-inner split-slide">
             <div class="slide-header">
               <div class="pill-brand">Speisely Community</div>
-              <div class="pill-counter">2/5</div>
+              <div class="pill-counter">02 / 05</div>
             </div>
 
             <div class="split-image-box">
@@ -675,7 +734,7 @@ async function generate() {
           <div class="slide-inner split-slide">
             <div class="slide-header">
               <div class="pill-brand">Speisely Community</div>
-              <div class="pill-counter">3/5</div>
+              <div class="pill-counter">03 / 05</div>
             </div>
 
             <div class="split-image-box">
@@ -697,7 +756,7 @@ async function generate() {
           <div class="slide-inner split-slide">
             <div class="slide-header">
               <div class="pill-brand">Speisely Community</div>
-              <div class="pill-counter">4/5</div>
+              <div class="pill-counter">04 / 05</div>
             </div>
 
             <div class="split-image-box">
@@ -714,34 +773,37 @@ async function generate() {
           </div>
         </div>
 
-        <!-- Slide 5 (Tafel & Outro) -->
+        <!-- Slide 5 (Outro CTA Slide matching Thronburger / Garcon design) -->
         <div class="slide-canvas" id="slide-5" style="display: none;">
-          <div class="slide-inner split-slide">
+          <div class="slide-inner outro-slide">
             <div class="slide-header">
-              <div class="pill-brand">Speisely Community</div>
-              <div class="pill-counter">5/5</div>
+              <div class="pill-brand">Speisely Magazin</div>
+              <div class="pill-counter">05 / 05</div>
             </div>
 
-            <div class="split-image-box">
-              <img src="data:image/jpeg;base64,${p5}" alt="Shared Table Feast">
-              <div class="nav-arrow left">‹</div>
-              <div class="nav-arrow right">›</div>
+            <div class="outro-center">
+              <svg class="outro-logo-icon" width="48" height="48" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 8C12 17 20 22 24 26L6 44C4 46 4 49 6 51C8 53 11 53 13 51L31 31C27 27 22 19 12 8Z" fill="#E6B84A"/>
+                <path d="M48 8C48 17 40 22 36 26L54 44C56 46 56 49 54 51C52 53 49 53 47 51L29 31C33 27 38 19 48 8Z" fill="#E6B84A"/>
+                <circle cx="30" cy="26" r="3.5" fill="#E6B84A"/>
+              </svg>
+              <div class="outro-logo-text">Speisely</div>
+              <div class="outro-venue-sub">Chicken Krush Prag</div>
+              <div class="outro-accent-line"></div>
+              
+              <h2 class="outro-headline">Lies die ganze Story<br>auf speisely.de!</h2>
+              <p class="outro-subline">Authentische K-Food-Kultur in Prag-Nové Město</p>
             </div>
 
-            <div class="split-card-footer">
-              <div class="split-step-num">04 · Die Tafel & Spot-Pass</div>
-              <h2 class="split-heading">Rose Tteokbokki in der Edelstahlpfanne</h2>
-              <p class="split-text">Cremig-scharfe Reiskuchen, Pommes und Dips zum Teilen am Tisch.</p>
-              <div class="spot-pass-box">
-                <div class="spot-row">
-                  <span class="spot-k">📍 Ort</span>
-                  <span class="spot-v">Příčná 1632/9, Prag-Nové Město</span>
-                </div>
-                <div class="spot-row">
-                  <span class="spot-k">✨ Story</span>
-                  <span class="spot-v">speisely.de/magazin/community/...</span>
-                </div>
+            <div>
+              <div class="outro-actions-box">
+                <span>🔖 Speichern</span>
+                <div class="divider"></div>
+                <span>🔗 Teilen</span>
+                <div class="divider"></div>
+                <span>❤️ Liken</span>
               </div>
+              <div class="outro-cta-btn">↗ speisely.de ↗</div>
             </div>
           </div>
         </div>
