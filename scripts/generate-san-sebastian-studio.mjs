@@ -3,10 +3,10 @@ import path from 'path';
 
 async function generate() {
   // Photos for preview
-  const p1 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-05.jpg')).toString('base64');
-  const p2 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-08.jpg')).toString('base64');
-  const p3 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-04.jpg')).toString('base64');
-  const p4 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-02.jpg')).toString('base64');
+  const p1 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.jpg')).toString('base64');
+  const p2 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.jpg')).toString('base64');
+  const p3 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.jpg')).toString('base64');
+  const p4 = (await fs.readFile('public/magazin/san-sebastian-berlin/san-sebastian-hd-06-moss-wall-neon.jpg')).toString('base64');
 
   // Pre-rendered HD PNG slides (1080×1350)
   const s1 = (await fs.readFile('public/instagram/san-sebastian-berlin/slide-1.png')).toString('base64');
@@ -546,29 +546,29 @@ async function generate() {
         <div class="slide-item active" onclick="gotoSlide(1)" id="tab-1">
           <div class="slide-num">1</div>
           <div class="slide-label">
-            <strong>Cover · Schokofluss</strong>
-            <span>Karamellisierte Kruste &amp; Kern</span>
+            <strong>Cover · Die Vielfalt</strong>
+            <span>12 Sorten. Ein Mythos.</span>
           </div>
         </div>
         <div class="slide-item" onclick="gotoSlide(2)" id="tab-2">
           <div class="slide-num">2</div>
           <div class="slide-label">
-            <strong>01 · Die Legende</strong>
+            <strong>01 · Das baskische Original</strong>
             <span>San Sebastián 1990 &amp; La Viña</span>
           </div>
         </div>
         <div class="slide-item" onclick="gotoSlide(3)" id="tab-3">
           <div class="slide-num">3</div>
           <div class="slide-label">
-            <strong>02 · Geschmacksprofil</strong>
-            <span>Karamell &amp; Frischkäseschmelz</span>
+            <strong>02 · Der Signature Pour</strong>
+            <span>Heiße Schokolade on Top</span>
           </div>
         </div>
         <div class="slide-item" onclick="gotoSlide(4)" id="tab-4">
           <div class="slide-num">4</div>
           <div class="slide-label">
-            <strong>03 · Topping-Kunst</strong>
-            <span>Pistazie, Lotus &amp; Mango</span>
+            <strong>03 · Die Atmosphäre</strong>
+            <span>Mooswand &amp; Neon-Vibes</span>
           </div>
         </div>
         <div class="slide-item" onclick="gotoSlide(5)" id="tab-5">
@@ -600,7 +600,7 @@ async function generate() {
       <!-- ── SLIDE 1: COVER ── -->
       <div class="slide-canvas" id="s1" style="display:flex">
         <div class="cover-wrap">
-          <img class="cover-photo" src="data:image/jpeg;base64,${p1}" alt="San Sebastian Chocolate Waterfall">
+          <img class="cover-photo" src="data:image/jpeg;base64,${p1}" alt="San Sebastian Showcase Varieties">
           <div class="cover-top-grad"></div>
           <div class="cover-grad"></div>
           <div class="slide-topbar">
@@ -609,8 +609,8 @@ async function generate() {
           </div>
           <div class="cover-bottom">
             <div class="pill-story">✨ Speisely Community Story</div>
-            <h1 class="cover-title">Karamellisierte Kruste, samtiger Kern &amp; Schokofluss</h1>
-            <p class="cover-sub">Zu Besuch bei San Sebastian The Original® in Berlin.</p>
+            <h1 class="cover-title">12 Sorten. Ein Mythos.<br>Der Hype um Berlins cremigsten Cheesecake.</h1>
+            <p class="cover-sub">Warum jeder Bissen süchtig macht — und wo das Original wartet.</p>
             <div class="dots">
               <div class="dot on"></div>
               <div class="dot"></div>
@@ -634,9 +634,9 @@ async function generate() {
             </div>
           </div>
           <div class="split-card">
-            <div class="split-kicker">01 · Die Legende aus Spanien</div>
-            <h2 class="split-heading">Aus San Sebastián 1990</h2>
-            <p class="split-body">Erfunden in der baskischen Pintxos-Bar La Viña: Ohne Keksboden, dafür bei extrem hoher Hitze gebacken für unvergleichliche Cremigkeit.</p>
+            <div class="split-kicker">01 · Das baskische Original</div>
+            <h2 class="split-heading">1990 in San Sebastián erfunden</h2>
+            <p class="split-body">Kein Keksboden. Höllenhitze. Cremiger Kern. Das Original-Rezept aus der legendären Bar La Viña.</p>
           </div>
         </div>
       </div>
@@ -645,7 +645,7 @@ async function generate() {
       <div class="slide-canvas" id="s3" style="display:none">
         <div class="split-wrap">
           <div class="split-photo-box">
-            <img src="data:image/jpeg;base64,${p3}" alt="Plated berry & caramel">
+            <img src="data:image/jpeg;base64,${p3}" alt="Warm chocolate pour">
             <div class="split-photo-top-grad"></div>
             <div class="split-photo-topbar">
               <div class="pill-community">Speisely Community</div>
@@ -653,9 +653,9 @@ async function generate() {
             </div>
           </div>
           <div class="split-card">
-            <div class="split-kicker">02 · Das Geschmacksprofil</div>
-            <h2 class="split-heading">Karamell trifft samtigen Schmelz</h2>
-            <p class="split-body">Dunkle Röstaromen an der Oberfläche fangen die Süße ab — innen zergeht der Kern löffelweich auf der Zunge.</p>
+            <div class="split-kicker">02 · Der Signature Pour</div>
+            <h2 class="split-heading">Flüssige Schokolade on Top</h2>
+            <p class="split-body">Belgische Vollmilch, Zartbitter oder Pistazie — frisch und warm vor deinen Augen übergossen.</p>
           </div>
         </div>
       </div>
@@ -664,7 +664,7 @@ async function generate() {
       <div class="slide-canvas" id="s4" style="display:none">
         <div class="split-wrap">
           <div class="split-photo-box">
-            <img src="data:image/jpeg;base64,${p4}" alt="Showcase varieties">
+            <img src="data:image/jpeg;base64,${p4}" alt="Moss wall and neon atmosphere">
             <div class="split-photo-top-grad"></div>
             <div class="split-photo-topbar">
               <div class="pill-community">Speisely Community</div>
@@ -672,9 +672,9 @@ async function generate() {
             </div>
           </div>
           <div class="split-card">
-            <div class="split-kicker">03 · Die Topping-Kunst</div>
-            <h2 class="split-heading">Pistazie, Lotus &amp; Mango-Spiegel</h2>
-            <p class="split-body">Heiße belgische Schokolade, feiner Pistazienstaub, knuspriges Lotus Biscoff oder fruchtige Glazes nach Wahl.</p>
+            <div class="split-kicker">03 · Die Atmosphäre</div>
+            <h2 class="split-heading">Grüne Mooswand &amp; Neon-Vibes</h2>
+            <p class="split-body">Ob Ku'damm oder Gropius Passagen: Purer Genuss im stylischen Boutique-Café.</p>
           </div>
         </div>
       </div>
@@ -699,8 +699,8 @@ async function generate() {
           <div class="outro-divider"></div>
 
           <div>
-            <h2 class="outro-headline">Lies die ganze Story<br>auf speisely.de!</h2>
-            <p class="outro-subline">Baskische Käsekuchenkultur in Berlin-Charlottenburg</p>
+            <h2 class="outro-headline">Lust auf das Original<br>in Berlin bekommen?</h2>
+            <p class="outro-subline">Uhlandstraße 167 (Ku'damm) &amp; Gropius Passagen</p>
           </div>
 
           <div style="width:100%">
@@ -730,28 +730,31 @@ async function generate() {
       </div>
     </div>
 
-    <div class="caption-area" id="caption">🍰 Dieser Schokofluss. Dieser löffelweiche Kern.
+    <div class="caption-area" id="caption">🍰 12 Sorten. Ein weltberühmter Mythos.
 
-Wusstest du, dass der weltberühmte San Sebastian Cheesecake 1990 von Küchenchef Santiago Rivera in der baskischen Pintxos-Bar „La Viña“ in Nordspanien erfunden wurde?
+Wusstest du, dass der originale San Sebastian Cheesecake 1990 in der baskischen Bar „La Viña“ in Nordspanien erfunden wurde? 🇪🇸
 
-Das Geheimnis: Kein Keksboden, dafür bei extrem hoher Hitze gebacken. Außen entsteht eine dunkle, fast verbrannte Karamellkruste mit tiefen Röstaromen — innen bleibt der Kern herrlich samtig und fließend.
+Das Geheimnis: Kein Keksboden, dafür bei extremer Höllenhitze gebacken. Außen entsteht eine dunkle, karamellisierte Kruste mit tiefen Röstaromen — innen bleibt der Kern fließend, cremig und löffelweich.
 
-Ein Speisely Community Mitglied hat @sansebastian.de in Berlin-Charlottenburg besucht: Von heißer belgischer Schokolade über feinsten Pistazienstaub bis hin zu Lotus Biscoff Crumble.
+Ein Speisely Community Mitglied hat @sansebastian.de in Berlin besucht:
+🍫 Heißer belgischer Schokofluss direkt am Tisch
+💚 Pistazienstaub auf edlem Goldteller
+🌿 Stylische Mooswand & Café-Vibes am Ku'damm
 
-👉 Swipe für alle Highlights der Community-Story!
+👉 Swipe nach links für die Highlights!
 
 📍 Uhlandstraße 167, 10719 Berlin (Ku'damm) & Gropius Passagen
 ✦ Ganze Story & Historie jetzt auf speisely.de lesen
 
-#speisely #speiselycommunity #sansebastiancheesecake #basqueburntcheesecake #berlinfood #berlinfoodguide #kudamm #cheesecakelovers #pistachio #lotusbiscoff #dessertberlin #berlincafe #foodguideberlin</div>
+#speisely #speiselycommunity #sansebastiancheesecake #basqueburntcheesecake #berlinfood #berlinfoodguide #kudamm #cheesecakelovers #berlindessert #foodguideberlin #foodspotsberlin #gastroberlin</div>
 
     <div class="download-section">
       <div class="download-label">📥 1-Click HD Downloads (1080×1350 px)</div>
       <div class="download-grid">
         <div class="dl-btn" onclick="dl(1)">🖼 Slide 1 · Cover</div>
-        <div class="dl-btn" onclick="dl(2)">🖼 Slide 2 · Legende</div>
-        <div class="dl-btn" onclick="dl(3)">🖼 Slide 3 · Geschmack</div>
-        <div class="dl-btn" onclick="dl(4)">🖼 Slide 4 · Toppings</div>
+        <div class="dl-btn" onclick="dl(2)">🖼 Slide 2 · Original</div>
+        <div class="dl-btn" onclick="dl(3)">🖼 Slide 3 · Schokofluss</div>
+        <div class="dl-btn" onclick="dl(4)">🖼 Slide 4 · Mooswand</div>
         <div class="dl-btn" onclick="dl(5)">🖼 Slide 5 · Outro</div>
         <div class="dl-btn full" onclick="downloadAll()">🚀 Alle 5 Slides auf einmal laden</div>
       </div>
@@ -800,32 +803,38 @@ Ein Speisely Community Mitglied hat @sansebastian.de in Berlin-Charlottenburg be
     a.download = 'speisely-san-sebastian-berlin-slide-' + n + '.png';
     a.href = slides[n];
     a.click();
-    toast('✅ Slide ' + n + ' (1080×1350 HD) geladen!');
+    toast('Slide ' + n + ' wird heruntergeladen (1080×1350 HD)...');
   }
 
   function downloadCurrent() { dl(current); }
 
-  async function downloadAll() {
-    toast('⏳ Lade alle 5 Slides…');
-    for (let i = 1; i <= 5; i++) {
-      dl(i);
-      await new Promise(r => setTimeout(r, 280));
-    }
-    setTimeout(() => toast('🎉 Alle 5 HD Slides geladen!'), 600);
+  function downloadAll() {
+    [1,2,3,4,5].forEach((n, i) => {
+      setTimeout(() => dl(n), i * 350);
+    });
+    toast('Alle 5 HD-Slides werden heruntergeladen!');
   }
 
   function copyCaption() {
-    navigator.clipboard.writeText(document.getElementById('caption').innerText).then(() => {
-      toast('📋 Caption in Zwischenablage!');
+    const text = document.getElementById('caption').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      toast('Caption in die Zwischenablage kopiert! 📋');
     });
   }
 </script>
+
 </body>
 </html>`;
 
-  const out = 'C:/Users/ahmad/.gemini/antigravity/brain/b308feef-2d4d-4563-b7d6-d6991ec44c51/san_sebastian_carousel_studio.html';
-  await fs.writeFile(out, html, 'utf8');
-  console.log('✅ San Sebastian Carousel Studio HTML written to:', out);
+  const artifactPath = path.join(
+    'C:/Users/ahmad/.gemini/antigravity/brain/b308feef-2d4d-4563-b7d6-d6991ec44c51',
+    'san_sebastian_carousel_studio.html'
+  );
+  await fs.writeFile(artifactPath, html);
+  console.log('✅ Generated artifact:', artifactPath);
+
+  await fs.writeFile('public/san-sebastian-carousel.html', html);
+  console.log('✅ Generated public file: public/san-sebastian-carousel.html');
 }
 
 generate().catch(console.error);

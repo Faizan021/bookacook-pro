@@ -7,47 +7,42 @@ const W = 1080;
 const H = 1350;
 
 const photos = {
-  hero:       'public/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.jpg',
-  pistachio:  'public/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.jpg',
-  lotus:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.jpg',
   showcase:   'public/magazin/san-sebastian-berlin/san-sebastian-hd-03-showcase-varieties.jpg',
+  pistachio:  'public/magazin/san-sebastian-berlin/san-sebastian-hd-02-pistachio-gold.jpg',
+  hero:       'public/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.jpg',
+  interior:   'public/magazin/san-sebastian-berlin/san-sebastian-hd-06-moss-wall-neon.jpg',
+  lotus:      'public/magazin/san-sebastian-berlin/san-sebastian-hd-04-lotus-biscoff.jpg',
 };
 
 async function generateSlides() {
   await fs.mkdir(outDir, { recursive: true });
 
   // ═══════════════════════════════════════════════════════════
-  // SLIDE 1 — COVER (Fixed Safe Zone & Re-framed Background)
+  // SLIDE 1 — COVER (Showcase of all cake varieties)
   // ═══════════════════════════════════════════════════════════
-  // Crop & focus strictly on the luscious chocolate pour slice
-  const coverBg = await sharp(photos.hero)
+  const coverBg = await sharp(photos.showcase)
     .resize(W, H, { fit: 'cover', position: 'center', kernel: 'lanczos3' })
     .toBuffer();
 
   const svgCover = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <!-- Bottom gradient starts higher so text is 100% legible inside safe zone -->
+      <!-- Deep dark green gradient at bottom for safe-zone text readability -->
       <linearGradient id="bottomFade" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#0a1f1a" stop-opacity="0.0"/>
-        <stop offset="28%" stop-color="#0a1f1a" stop-opacity="0.0"/>
-        <stop offset="48%" stop-color="#0a1f1a" stop-opacity="0.75"/>
-        <stop offset="68%" stop-color="#0a1f1a" stop-opacity="0.94"/>
+        <stop offset="30%" stop-color="#0a1f1a" stop-opacity="0.0"/>
+        <stop offset="50%" stop-color="#0a1f1a" stop-opacity="0.75"/>
+        <stop offset="70%" stop-color="#0a1f1a" stop-opacity="0.95"/>
         <stop offset="100%" stop-color="#0a1f1a" stop-opacity="0.99"/>
       </linearGradient>
-      <!-- Top vignette darkens background cash register -->
+      <!-- Top vignette for header contrast -->
       <linearGradient id="topFade" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#0a1f1a" stop-opacity="0.65"/>
-        <stop offset="22%" stop-color="#0a1f1a" stop-opacity="0.0"/>
+        <stop offset="25%" stop-color="#0a1f1a" stop-opacity="0.0"/>
       </linearGradient>
-      <radialGradient id="topRightDarken" cx="90%" cy="15%" r="60%">
-        <stop offset="0%" stop-color="#0a1f1a" stop-opacity="0.70"/>
-        <stop offset="100%" stop-color="#0a1f1a" stop-opacity="0.0"/>
-      </radialGradient>
     </defs>
     
     <rect width="${W}" height="${H}" fill="url(#bottomFade)"/>
     <rect width="${W}" height="320" fill="url(#topFade)"/>
-    <rect width="${W}" height="450" fill="url(#topRightDarken)"/>
 
     <!-- TOP BAR (Safe top margin = 64px) -->
     <g transform="translate(48, 64)">
@@ -61,7 +56,7 @@ async function generateSlides() {
         font-size="20" font-weight="900" fill="#FAF7F0" text-anchor="middle">1/5</text>
     </g>
 
-    <!-- CONTENT BLOCK (Shifted UP into Instagram Safe Zone, completely above IG dots) -->
+    <!-- CONTENT BLOCK (Inside Instagram Safe Zone: y=680 to y=1100) -->
     <g transform="translate(56, 680)">
       <!-- Gold story badge -->
       <rect width="352" height="52" rx="26" fill="#E6B84A"/>
@@ -70,15 +65,15 @@ async function generateSlides() {
 
       <!-- Headline (Sitting comfortably between y=760 and y=980) -->
       <text x="0" y="124" font-family="Georgia,'Times New Roman',serif"
-        font-size="64" font-weight="900" fill="#FFFFFF">Fließender Kern.</text>
+        font-size="64" font-weight="900" fill="#FFFFFF">12 Sorten. Ein Mythos.</text>
       <text x="0" y="200" font-family="Georgia,'Times New Roman',serif"
-        font-size="64" font-weight="900" fill="#FFFFFF">Röstiges Karamell.</text>
+        font-size="64" font-weight="900" fill="#FFFFFF">Der Hype um Berlins</text>
       <text x="0" y="276" font-family="Georgia,'Times New Roman',serif"
-        font-size="64" font-weight="900" fill="#FFFFFF">Reiner Schokofluss.</text>
+        font-size="64" font-weight="900" fill="#FFFFFF">cremigsten Cheesecake.</text>
 
       <!-- Subtitle (At y=1030, well above IG bottom overlay) -->
       <text x="0" y="340" font-family="'Helvetica Neue',Helvetica,Arial,sans-serif"
-        font-size="28" font-weight="500" fill="rgba(250,247,240,0.92)">Warum ganz Berlin über diesen Kuchen spricht.</text>
+        font-size="28" font-weight="500" fill="rgba(250,247,240,0.92)">Warum jeder Bissen süchtig macht — und wo das Original wartet.</text>
 
       <!-- Dot indicators (At y=1080) -->
       <g transform="translate(2, 384)">
@@ -95,7 +90,7 @@ async function generateSlides() {
     .composite([{ input: Buffer.from(svgCover), top: 0, left: 0 }])
     .png({ quality: 100 })
     .toFile(path.join(outDir, 'slide-1.png'));
-  console.log('✅ slide-1.png (Cover — Safe Zone Calibrated)');
+  console.log('✅ slide-1.png (Cover: Cake Showcase — Safe Zone Calibrated)');
 
   // ═══════════════════════════════════════════════════════════
   // SLIDES 2–4: Split layout
@@ -165,28 +160,28 @@ async function generateSlides() {
     console.log(`✅ slide-${num}.png`);
   }
 
-  // Slide 2
+  // Slide 2: The Basque Origin (Pistachio on gold plate)
   await makeSplitSlide({
     num: 2, imgPath: photos.pistachio, slideNum: 2,
-    kicker: '01 · DAS SPANISCHE GEHEIMNIS',
+    kicker: '01 · DAS BASKISCHE ORIGINAL',
     heading: '1990 in San Sebastián erfunden',
-    body: ['Kein Keksboden. Höllenhitze.', 'Das baskische Original aus der Bar La Viña.']
+    body: ['Kein Keksboden. Höllenhitze. Cremiger Kern.', 'Das Original-Rezept aus der legendären Bar La Viña.']
   });
 
-  // Slide 3
+  // Slide 3: The Signature Pour (Warm chocolate waterfall)
   await makeSplitSlide({
-    num: 3, imgPath: photos.lotus, slideNum: 3,
-    kicker: '02 · DIE PERFEKTE TEXTUR',
-    heading: 'Außen Röstbitter, innen flüssig',
-    body: ['Bricht mit dem Löffel, zergeht wie Sahne.', 'Warme Sauce trifft samtiges Vanillearoma.']
+    num: 3, imgPath: photos.hero, slideNum: 3,
+    kicker: '02 · DER SIGNATURE POUR',
+    heading: 'Flüssige Schokolade on Top',
+    body: ['Belgische Vollmilch, Zartbitter oder Pistazie —', 'frisch und warm vor deinen Augen übergossen.']
   });
 
-  // Slide 4
+  // Slide 4: The Atmosphere & Interior (Moss wall & neon sign)
   await makeSplitSlide({
-    num: 4, imgPath: photos.showcase, slideNum: 4,
-    kicker: '03 · MEHR ALS NUR KÄSEKUCHEN',
-    heading: 'Pistazienstaub &amp; Lotus Crunch',
-    body: ['Vollmilch, Zartbitter, Salted Caramel —', 'oder sonnengelber Mango-Maracuja-Spiegel.']
+    num: 4, imgPath: photos.interior, slideNum: 4,
+    kicker: '03 · DIE ATMOSPHÄRE',
+    heading: 'Grüne Mooswand &amp; Neon-Vibes',
+    body: ['Ob Ku\'damm oder Gropius Passagen:', 'Purer Genuss im stylischen Boutique-Café.']
   });
 
   // ═══════════════════════════════════════════════════════════
@@ -266,7 +261,7 @@ async function generateSlides() {
     .toFile(path.join(outDir, 'slide-5.png'));
   console.log('✅ slide-5.png');
 
-  console.log('\n🎉 Safe zone recalibration complete for all 5 slides!');
+  console.log('\n🎉 San Sebastian 5-slide carousel updated successfully!');
 }
 
 generateSlides().catch(console.error);
