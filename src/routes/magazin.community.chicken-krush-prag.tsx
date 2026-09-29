@@ -1,19 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  MapPin,
-  Shield,
-  Users,
-  Utensils,
-  Mail,
-  Instagram,
-  Sparkles,
-  ExternalLink,
-  BookOpen,
-} from "lucide-react";
+import { MapPin, Shield, Users, Mail, Instagram, Sparkles } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { SiteShell } from "@/components/SiteShell";
 import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
-import { trackEvent } from "@/utils/posthog";
 
 export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
   head: () => ({
@@ -192,27 +181,6 @@ I will attach my own photos or videos to this email.`;
 
   const mailtoHref = `mailto:info@speisely.de?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
   const instagramHref = "https://www.instagram.com/speisely/";
-
-  const menuUrl =
-    "https://wolt.com/en/cze/prague/restaurant/chicken-krush-prg?utm_source=speisely&utm_medium=referral&utm_campaign=chicken_krush_prag_community_visit";
-  const websiteUrl =
-    "https://chickenkrush.cz/?utm_source=speisely&utm_medium=referral&utm_campaign=chicken_krush_prag_community_visit";
-
-  const handleMenuClick = () => {
-    trackEvent("restaurant_menu_click", {
-      restaurant_name: "Chicken Krush Prague",
-      article_slug: "chicken-krush-prag",
-      destination: "wolt_menu",
-    });
-  };
-
-  const handleWebsiteClick = () => {
-    trackEvent("restaurant_website_click", {
-      restaurant_name: "Chicken Krush Prague",
-      article_slug: "chicken-krush-prag",
-      destination: "official_website",
-    });
-  };
 
   return (
     <SiteShell>
@@ -492,61 +460,6 @@ I will attach my own photos or videos to this email.`;
                 ? "Ein unkomplizierter, lebendiger Abend in Prag: Reinkommen, per Touchscreen bestellen, Holzbretter teilen und den besten Crunch der Neustadt genießen."
                 : "An effortless, vibrant evening in Prague: walk in, order via touchscreen, share the wooden platters, and enjoy some of the crunchiest fried chicken in Nové Město."}
             </p>
-
-            {/* Restaurant Info & Action Card */}
-            <div className="surface-card p-6 sm:p-8 rounded-3xl border border-forest/15 bg-white my-10 shadow-sm">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#b28a3c] mb-2">
-                <Utensils className="h-4 w-4" aria-hidden="true" />
-                <span>{isDe ? "Restaurant-Informationen" : "Restaurant Details"}</span>
-              </div>
-              <h3 className="font-display text-2xl font-bold text-forest mb-2">
-                Chicken Krush Prag
-              </h3>
-              <p className="text-sm text-forest/75 mb-4">
-                Příčná 1632/9, 110 00 Praha 1 – Nové Město, Tschechien
-              </p>
-
-              <div className="flex flex-wrap gap-2 text-xs text-forest/70 mb-6">
-                <span className="bg-forest/5 px-3 py-1 rounded-full border border-forest/10 font-medium">
-                  {isDe ? "Korean Fried Chicken" : "Korean Fried Chicken"}
-                </span>
-                <span className="bg-forest/5 px-3 py-1 rounded-full border border-forest/10 font-medium">
-                  {isDe ? "Yangnyeom & Snow Flake" : "Yangnyeom & Snow Flake"}
-                </span>
-                <span className="bg-forest/5 px-3 py-1 rounded-full border border-forest/10 font-medium">
-                  {isDe ? "Rose Tteokbokki" : "Rose Tteokbokki"}
-                </span>
-                <span className="bg-forest/5 px-3 py-1 rounded-full border border-forest/10 font-medium">
-                  {isDe ? "Digitale Tisch-Bestellung" : "Digital Table Ordering"}
-                </span>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <a
-                  href={menuUrl}
-                  target="_blank"
-                  rel="noopener"
-                  onClick={handleMenuClick}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-6 py-3 text-xs sm:text-sm font-bold shadow-md hover:bg-forest/90 transition-all hover:gap-2.5 cursor-pointer"
-                >
-                  <BookOpen className="h-4 w-4 text-[#f2d896]" aria-hidden="true" />
-                  <span>{isDe ? "Speisekarte & Bestellen" : "Explore Menu & Order"}</span>
-                  <ExternalLink className="h-3.5 w-3.5 opacity-70" aria-hidden="true" />
-                </a>
-
-                <a
-                  href={websiteUrl}
-                  target="_blank"
-                  rel="noopener"
-                  onClick={handleWebsiteClick}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-cream text-forest px-6 py-3 text-xs sm:text-sm font-semibold border border-forest/15 hover:bg-[#eadfce] transition-colors cursor-pointer"
-                >
-                  <span>{isDe ? "Website besuchen" : "Visit Website"}</span>
-                  <ExternalLink className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
-                </a>
-              </div>
-            </div>
 
             {/* Editorial Disclosure Box */}
             <div className="rounded-2xl bg-cream p-5 text-xs text-forest/75 border border-forest/15 space-y-2 mt-8">
