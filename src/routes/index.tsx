@@ -266,21 +266,23 @@ function Home() {
           !window.location.pathname.startsWith("/restaurant/") &&
           !window.location.pathname.startsWith("/planner/")
         ) {
-          import("@/lib/caterer/menu.functions").then(({ resolveSubdomainVendor }) => {
-            resolveSubdomainVendor({ data: { subdomain } })
-              .then((res) => {
-                const target =
-                  res.type === "catering"
-                    ? `/catering/${res.slug}${window.location.search}`
-                    : res.type === "planner"
-                      ? `/planner/${res.slug}${window.location.search}`
-                      : `/restaurant/${res.slug}${window.location.search}`;
-                window.location.replace(target);
-              })
-              .catch(() => {
-                window.location.replace(`/catering/${subdomain}${window.location.search}`);
-              });
-          });
+          import("@/lib/caterer/menu.functions")
+            .then(({ resolveSubdomainVendor }) => {
+              resolveSubdomainVendor({ data: { subdomain } })
+                .then((res) => {
+                  const target =
+                    res.type === "catering"
+                      ? `/catering/${res.slug}${window.location.search}`
+                      : res.type === "planner"
+                        ? `/planner/${res.slug}${window.location.search}`
+                        : `/restaurant/${res.slug}${window.location.search}`;
+                  window.location.replace(target);
+                })
+                .catch(() => {
+                  window.location.replace(`/catering/${subdomain}${window.location.search}`);
+                });
+            })
+            .catch(() => {});
         }
       }
     }

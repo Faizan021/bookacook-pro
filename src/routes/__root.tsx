@@ -360,6 +360,13 @@ function RootComponent() {
               "ResizeObserver loop completed with undelivered notifications",
               "NS_ERROR_FAILURE",
               "The operation is insecure",
+              "Failed to fetch",
+              "NetworkError when attempting to fetch resource.",
+              "Load failed",
+              "AbortError",
+              /TypeError: Failed to fetch/,
+              /Network request failed/,
+              /Importing a module script failed/,
             ],
             beforeBreadcrumb(breadcrumb) {
               if (breadcrumb.data?.url) {

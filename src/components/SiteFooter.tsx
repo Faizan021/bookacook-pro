@@ -13,7 +13,9 @@ export function SiteFooter() {
   const [validLocs, setValidLocs] = useState<{ path: string; label: string }[]>([]);
 
   useEffect(() => {
-    getLocs().then(setValidLocs);
+    getLocs()
+      .then(setValidLocs)
+      .catch(() => {});
   }, [getLocs]);
 
   const topCities = [
