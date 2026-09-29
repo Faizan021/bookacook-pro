@@ -356,8 +356,8 @@ I will attach my own photos or videos to this email.`;
 
             <p>
               {isDe
-                ? "Auf jedem servierten Holzbrett steckt eine kleine Flagge: „Slow Fried. Pomalu smažené" und „Taste Respect (치킨크러시)". Die Kruste ist hauchdünn, extrem kross und bricht beim ersten Hineinbeißen mit einem deutlichen Knacken. Innen dampft das Fleisch saftig und zart — genau die Balance, die gutes Korean Fried Chicken ausmacht."
-                : "Every wooden board arrives with a small flag: "Slow Fried. Pomalu smažené" and "Taste Respect (치킨크러시)". The batter is paper-thin, shatteringly crisp and cracks with a clean snap at the first bite. Inside, the chicken steams tender and juicy — the perfect balance that defines great Korean Fried Chicken."}
+                ? "Auf jedem servierten Holzbrett steckt eine kleine Flagge: Slow Fried und Taste Respect. Die Kruste ist hauchdünn, extrem kross und bricht beim ersten Hineinbeißen mit einem deutlichen Knacken. Innen dampft das Fleisch saftig und zart — genau die Balance, die gutes Korean Fried Chicken ausmacht."
+                : "Every wooden board arrives with a small flag: Slow Fried and Taste Respect. The batter is paper-thin, shatteringly crisp and cracks with a clean snap at the first bite. Inside, the chicken steams tender and juicy — the perfect balance that defines great Korean Fried Chicken."}
             </p>
 
             {/* Photo 3 — Classic fried Born in Seoul chicken */}
