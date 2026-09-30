@@ -16,6 +16,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RestaurantsRouteImport } from './routes/restaurants'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PartnersRouteImport } from './routes/partners'
+import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as InstantOrderRouteImport } from './routes/instant-order'
@@ -38,6 +39,7 @@ import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
+import { Route as PartnersWebseitenRouteImport } from './routes/partners.webseiten'
 import { Route as PartnerWebseitenRouteImport } from './routes/partner.webseiten'
 import { Route as MagazinSpeiselyVisitsRouteImport } from './routes/magazin.speisely-visits'
 import { Route as MagazinSchnitzelSchmiedeRouteImport } from './routes/magazin.schnitzel-schmiede'
@@ -114,6 +116,11 @@ const PlannerRoute = PlannerRouteImport.update({
 const PartnersRoute = PartnersRouteImport.update({
   id: '/partners',
   path: '/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
@@ -225,10 +232,15 @@ const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
   path: '/$city-$eventType',
   getParentRoute: () => PlannerRoute,
 } as any)
+const PartnersWebseitenRoute = PartnersWebseitenRouteImport.update({
+  id: '/webseiten',
+  path: '/webseiten',
+  getParentRoute: () => PartnersRoute,
+} as any)
 const PartnerWebseitenRoute = PartnerWebseitenRouteImport.update({
-  id: '/partner/webseiten',
-  path: '/partner/webseiten',
-  getParentRoute: () => rootRouteImport,
+  id: '/webseiten',
+  path: '/webseiten',
+  getParentRoute: () => PartnerRoute,
 } as any)
 const MagazinSpeiselyVisitsRoute = MagazinSpeiselyVisitsRouteImport.update({
   id: '/magazin/speisely-visits',
@@ -474,7 +486,8 @@ export interface FileRoutesByFullPath {
   '/instant-order': typeof InstantOrderRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/partners': typeof PartnersRoute
+  '/partner': typeof PartnerRouteWithChildren
+  '/partners': typeof PartnersRouteWithChildren
   '/planner': typeof PlannerRouteWithChildren
   '/restaurants': typeof RestaurantsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -494,6 +507,7 @@ export interface FileRoutesByFullPath {
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
   '/partner/webseiten': typeof PartnerWebseitenRoute
+  '/partners/webseiten': typeof PartnersWebseitenRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -545,7 +559,8 @@ export interface FileRoutesByTo {
   '/instant-order': typeof InstantOrderRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/partners': typeof PartnersRoute
+  '/partner': typeof PartnerRouteWithChildren
+  '/partners': typeof PartnersRouteWithChildren
   '/restaurants': typeof RestaurantsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/speisely': typeof SpeiselyRoute
@@ -563,6 +578,7 @@ export interface FileRoutesByTo {
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/partner/webseiten': typeof PartnerWebseitenRoute
+  '/partners/webseiten': typeof PartnersWebseitenRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -617,7 +633,8 @@ export interface FileRoutesById {
   '/instant-order': typeof InstantOrderRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/partners': typeof PartnersRoute
+  '/partner': typeof PartnerRouteWithChildren
+  '/partners': typeof PartnersRouteWithChildren
   '/planner': typeof PlannerRouteWithChildren
   '/restaurants': typeof RestaurantsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -637,6 +654,7 @@ export interface FileRoutesById {
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
   '/partner/webseiten': typeof PartnerWebseitenRoute
+  '/partners/webseiten': typeof PartnersWebseitenRoute
   '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
@@ -691,6 +709,7 @@ export interface FileRouteTypes {
     | '/instant-order'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/partner'
     | '/partners'
     | '/planner'
     | '/restaurants'
@@ -711,6 +730,7 @@ export interface FileRouteTypes {
     | '/magazin/schnitzel-schmiede'
     | '/magazin/speisely-visits'
     | '/partner/webseiten'
+    | '/partners/webseiten'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -762,6 +782,7 @@ export interface FileRouteTypes {
     | '/instant-order'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/partner'
     | '/partners'
     | '/restaurants'
     | '/sitemap.xml'
@@ -780,6 +801,7 @@ export interface FileRouteTypes {
     | '/festival/schnitzel-schmiede'
     | '/magazin/schnitzel-schmiede'
     | '/partner/webseiten'
+    | '/partners/webseiten'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -833,6 +855,7 @@ export interface FileRouteTypes {
     | '/instant-order'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/partner'
     | '/partners'
     | '/planner'
     | '/restaurants'
@@ -853,6 +876,7 @@ export interface FileRouteTypes {
     | '/magazin/schnitzel-schmiede'
     | '/magazin/speisely-visits'
     | '/partner/webseiten'
+    | '/partners/webseiten'
     | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
@@ -907,7 +931,8 @@ export interface RootRouteChildren {
   InstantOrderRoute: typeof InstantOrderRoute
   LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
-  PartnersRoute: typeof PartnersRoute
+  PartnerRoute: typeof PartnerRouteWithChildren
+  PartnersRoute: typeof PartnersRouteWithChildren
   PlannerRoute: typeof PlannerRouteWithChildren
   RestaurantsRoute: typeof RestaurantsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -919,7 +944,6 @@ export interface RootRouteChildren {
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   MagazinSchnitzelSchmiedeRoute: typeof MagazinSchnitzelSchmiedeRoute
   MagazinSpeiselyVisitsRoute: typeof MagazinSpeiselyVisitsRouteWithChildren
-  PartnerWebseitenRoute: typeof PartnerWebseitenRoute
   RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -992,6 +1016,13 @@ declare module '@tanstack/react-router' {
       path: '/partners'
       fullPath: '/partners'
       preLoaderRoute: typeof PartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/llms.txt': {
@@ -1148,12 +1179,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerCityEventTypeRouteImport
       parentRoute: typeof PlannerRoute
     }
+    '/partners/webseiten': {
+      id: '/partners/webseiten'
+      path: '/webseiten'
+      fullPath: '/partners/webseiten'
+      preLoaderRoute: typeof PartnersWebseitenRouteImport
+      parentRoute: typeof PartnersRoute
+    }
     '/partner/webseiten': {
       id: '/partner/webseiten'
-      path: '/partner/webseiten'
+      path: '/webseiten'
       fullPath: '/partner/webseiten'
       preLoaderRoute: typeof PartnerWebseitenRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof PartnerRoute
     }
     '/magazin/speisely-visits': {
       id: '/magazin/speisely-visits'
@@ -1532,6 +1570,29 @@ const CateringRouteWithChildren = CateringRoute._addFileChildren(
   CateringRouteChildren,
 )
 
+interface PartnerRouteChildren {
+  PartnerWebseitenRoute: typeof PartnerWebseitenRoute
+}
+
+const PartnerRouteChildren: PartnerRouteChildren = {
+  PartnerWebseitenRoute: PartnerWebseitenRoute,
+}
+
+const PartnerRouteWithChildren =
+  PartnerRoute._addFileChildren(PartnerRouteChildren)
+
+interface PartnersRouteChildren {
+  PartnersWebseitenRoute: typeof PartnersWebseitenRoute
+}
+
+const PartnersRouteChildren: PartnersRouteChildren = {
+  PartnersWebseitenRoute: PartnersWebseitenRoute,
+}
+
+const PartnersRouteWithChildren = PartnersRoute._addFileChildren(
+  PartnersRouteChildren,
+)
+
 interface PlannerRouteChildren {
   PlannerCityEventTypeRoute: typeof PlannerCityEventTypeRoute
   PlannerSlugRoute: typeof PlannerSlugRoute
@@ -1594,7 +1655,8 @@ const rootRouteChildren: RootRouteChildren = {
   InstantOrderRoute: InstantOrderRoute,
   LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
-  PartnersRoute: PartnersRoute,
+  PartnerRoute: PartnerRouteWithChildren,
+  PartnersRoute: PartnersRouteWithChildren,
   PlannerRoute: PlannerRouteWithChildren,
   RestaurantsRoute: RestaurantsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -1606,7 +1668,6 @@ const rootRouteChildren: RootRouteChildren = {
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   MagazinSchnitzelSchmiedeRoute: MagazinSchnitzelSchmiedeRoute,
   MagazinSpeiselyVisitsRoute: MagazinSpeiselyVisitsRouteWithChildren,
-  PartnerWebseitenRoute: PartnerWebseitenRoute,
   RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
