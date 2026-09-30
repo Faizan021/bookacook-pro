@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { classifyWithSystem1 } from "@/lib/decision/system1";
 
 export const classifySearchIntent = createServerFn({ method: "POST" })
   .validator((input: { query: string }) =>
@@ -10,15 +11,32 @@ export const classifySearchIntent = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data }) => {
+    // 1. FAST-PATH: System 1 Non-Autoregressive Decision Engine (< 2ms)
+    const system1Result = classifyWithSystem1(data.query);
+
+    // If high confidence, return immediately without invoking expensive generative LLMs
+    if (system1Result.confidence >= 0.70) {
+      return {
+        intent: system1Result.intent,
+        vertical: system1Result.vertical,
+        parameters: system1Result.parameters,
+        engine: system1Result.engine,
+        latencyMs: system1Result.latencyMs,
+      };
+    }
+
+    // 2. SLOW-PATH: System 2 Generative Fallback (for highly ambiguous natural language queries)
     const openaiKey = process.env.OPENAI_API_KEY || process.env.OpenAI_key || process.env.OPENAI_KEY;
     const geminiKey = process.env.GEMINI_API_KEY || process.env.Gemini_API || process.env.GEMINI_KEY;
 
     if (!openaiKey && !geminiKey) {
-      // Fallback in case of missing keys, default to B2C restaurant lookup
+      // Graceful fallback to System 1 result
       return {
-        intent: "B2C" as const,
-        vertical: "restaurants" as const,
-        parameters: {} as Record<string, any>,
+        intent: system1Result.intent,
+        vertical: system1Result.vertical,
+        parameters: system1Result.parameters,
+        engine: system1Result.engine,
+        latencyMs: system1Result.latencyMs,
       };
     }
 
@@ -35,72 +53,74 @@ export const classifySearchIntent = createServerFn({ method: "POST" })
 
     let resultText = "";
 
-    if (openaiKey) {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${openaiKey}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          response_format: { type: "json_object" },
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt },
-          ],
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("OpenAI API call failed");
-      }
-
-      const responseData = await response.json();
-      resultText = responseData.choices?.[0]?.message?.content || "";
-    } else if (geminiKey) {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
-        {
+    try {
+      if (openaiKey) {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${openaiKey}`,
           },
           body: JSON.stringify({
-            contents: [
-              {
-                role: "user",
-                parts: [{ text: `${systemPrompt}\n\nUser request:\n${prompt}` }],
-              },
+            model: "gpt-4o-mini",
+            response_format: { type: "json_object" },
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: prompt },
             ],
-            generationConfig: {
-              responseMimeType: "application/json",
-            },
           }),
-        },
-      );
+        });
 
-      if (!response.ok) {
-        throw new Error("Gemini API call failed");
+        if (response.ok) {
+          const responseData = await response.json();
+          resultText = responseData.choices?.[0]?.message?.content || "";
+        }
+      } else if (geminiKey) {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: `${systemPrompt}\n\nUser request:\n${prompt}` }],
+                },
+              ],
+              generationConfig: {
+                responseMimeType: "application/json",
+              },
+            }),
+          },
+        );
+
+        if (response.ok) {
+          const responseData = await response.json();
+          resultText = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        }
       }
 
-      const responseData = await response.json();
-      resultText = responseData.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      if (resultText) {
+        const parsed = JSON.parse(resultText.trim());
+        return {
+          intent: (parsed.intent || system1Result.intent) as "B2C" | "B2B",
+          vertical: (parsed.vertical || system1Result.vertical) as "restaurants" | "catering" | "events",
+          parameters: (parsed.parameters || system1Result.parameters) as Record<string, any>,
+          engine: "system2_fallback" as const,
+        };
+      }
+    } catch (e) {
+      console.warn("System 2 fallback encountered error, returning System 1 reflex result:", e);
     }
 
-    try {
-      const parsed = JSON.parse(resultText.trim());
-      return {
-        intent: (parsed.intent || "B2C") as "B2C" | "B2B",
-        vertical: (parsed.vertical || "restaurants") as "restaurants" | "catering" | "events",
-        parameters: (parsed.parameters || {}) as Record<string, any>,
-      };
-    } catch (e) {
-      console.error("Failed to parse classification response:", resultText, e);
-      return {
-        intent: "B2C" as const,
-        vertical: "restaurants" as const,
-        parameters: {} as Record<string, any>,
-      };
-    }
+    return {
+      intent: system1Result.intent,
+      vertical: system1Result.vertical,
+      parameters: system1Result.parameters,
+      engine: system1Result.engine,
+      latencyMs: system1Result.latencyMs,
+    };
   });

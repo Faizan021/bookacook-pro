@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { classifySearchIntent } from "@/lib/search/ai.functions";
+import { classifyWithSystem1 } from "@/lib/decision/system1";
 import { trackEvent } from "@/utils/posthog";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import {
@@ -397,42 +398,49 @@ function Home() {
     if (!searchQuery.trim() || searching) return;
     setSearching(true);
     try {
-      const res = await classify({ data: { query: searchQuery.trim() } });
+      // 1. Instant System 1 Reflex Classification (< 2ms)
+      const system1 = classifyWithSystem1(searchQuery.trim());
 
       let toPath: "/instant-order" | "/catering" | "/planner" = "/instant-order";
-      if (res.vertical === "catering") {
+      if (system1.vertical === "catering") {
         toPath = "/catering";
-      } else if (res.vertical === "events") {
+      } else if (system1.vertical === "events") {
         toPath = "/planner";
       }
 
       const searchParams: Record<string, string | number | undefined> = {
         q: searchQuery.trim(),
       };
-      if (res.parameters?.location) {
-        searchParams.location = res.parameters.location;
+      if (system1.parameters?.location) {
+        searchParams.location = system1.parameters.location;
       }
-      if (res.parameters?.guests) {
-        searchParams.guests = res.parameters.guests;
+      if (system1.parameters?.guests) {
+        searchParams.guests = system1.parameters.guests;
       }
-      if (res.parameters?.cuisine) {
-        searchParams.cuisine = res.parameters.cuisine;
+      if (system1.parameters?.cuisine) {
+        searchParams.cuisine = system1.parameters.cuisine;
       }
 
+      // Instant UI Navigation
       navigate({
         to: toPath,
         search: searchParams as Record<string, string>,
       });
 
-      if (res.intent === "B2B") {
-        toast.info(
+      if (system1.intent === "B2B") {
+        toast.success(
           tt(
-            `KI hat B2B-Anfrage erkannt (${res.vertical === "catering" ? "Catering" : "Event-Planer"}). Leite weiter...`,
-            `AI detected B2B query (${res.vertical === "catering" ? "Catering" : "Event Planner"}). Routing...`,
+            `⚡ System 1 Reflex: B2B ${system1.vertical === "catering" ? "Catering" : "Event-Planer"} erkannt (${system1.latencyMs}ms)`,
+            `⚡ System 1 Reflex: B2B ${system1.vertical === "catering" ? "Catering" : "Event Planner"} detected (${system1.latencyMs}ms)`,
           ),
         );
       } else {
-        toast.info(tt("Leite weiter zur Restaurantsuche...", "Routing to restaurant search..."));
+        toast.info(
+          tt(
+            `⚡ System 1 Reflex: Restaurant-Suche (${system1.latencyMs}ms)`,
+            `⚡ System 1 Reflex: Restaurant Search (${system1.latencyMs}ms)`,
+          ),
+        );
       }
     } catch (e: unknown) {
       navigate({ to: current.to, search: { q: searchQuery } as Record<string, string> });
