@@ -143,7 +143,7 @@ function GeoPlannerPage() {
         {/* Cinematic Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/planner-hero.jpg"
+            src="/hero-clean.webp"
             alt="Background"
             className="w-full h-full object-cover object-center scale-105"
             onError={(e) => {

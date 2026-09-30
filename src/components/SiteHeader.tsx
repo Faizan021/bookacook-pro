@@ -235,6 +235,15 @@ export function SiteHeader() {
                   <span>{t("nav.partners.pricing")}</span>
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2">
+                <Link
+                  to="/partner/webseiten"
+                  className="flex items-center w-full text-forest text-xs font-semibold"
+                >
+                  <Globe className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
+                  <span>{isDe ? "Kostenlose Websites" : "Free Gastro Websites"}</span>
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
               <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2">
                 <Link
@@ -489,6 +498,13 @@ export function SiteHeader() {
                   className="block py-1.5 text-xs font-semibold text-forest/80 hover:text-forest"
                 >
                   • {t("nav.partners.pricing")}
+                </Link>
+                <Link
+                  to="/partner/webseiten"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block py-1.5 text-xs font-semibold text-forest/80 hover:text-forest"
+                >
+                  • {isDe ? "Kostenlose Websites" : "Free Gastro Websites"}
                 </Link>
                 <Link
                   to="/auth"

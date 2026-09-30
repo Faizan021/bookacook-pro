@@ -66,6 +66,7 @@ export function SiteFooter() {
           </h4>
           <ul className="space-y-2.5 text-sm">
             <FooterLink to="/partners" label={t("nav.partners")} />
+            <FooterLink to="/partner/webseiten" label={lang === "de" ? "Kostenlose Gastro-Websites" : "Free Gastro Websites"} />
             <FooterLink to="/speisely" label={t("Was ist Speisely?", "What is Speisely?")} />
             <FooterLink to="/about" label={t("nav.about")} />
             <FooterLink to="/magazin" label={t("Presse & Magazin", "Press & Magazine")} />

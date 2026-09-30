@@ -314,6 +314,9 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
       if (finalSlug && finalSlug.startsWith("restaurants/ort/")) {
         finalSlug = finalSlug.replace("restaurants/ort/", "restaurant/ort/");
       }
+      if (finalSlug && finalSlug.startsWith("caterer/ort/")) {
+        finalSlug = finalSlug.replace("caterer/ort/", "catering/ort/");
+      }
       validEntries.push({ path: `/${finalSlug}`, label: locationName });
     }
   }

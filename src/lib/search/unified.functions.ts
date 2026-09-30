@@ -171,7 +171,7 @@ export const searchUnifiedPipeline = createServerFn({ method: "POST" })
             title: "Chicken Krush Prag — Das virale koreanische Crispy Fried Chicken Phänomen",
             slug: "/magazin/community/chicken-krush-prag",
             category: "Community Story",
-            image_url: "/magazin/chicken-krush-prag/chicken-krush-01-hero-close.webp?v=2",
+            image_url: "/magazin/chicken-krush-prag/ck-hd-03-classic-fried.webp?v=2",
             excerpt:
               "Ultra-knuspriges Double-Fried Chicken mit Garlic Butter und Sweet Chilli Glaze.",
             venue_name: "Chicken Krush",
@@ -192,7 +192,7 @@ export const searchUnifiedPipeline = createServerFn({ method: "POST" })
               "Shawarma Albaik Berlin — Authentische arabische Grillspezialitäten & Knoblauchsauce",
             slug: "/magazin/speisely-visits/shawarma-albaik-berlin",
             category: "Speisely Visits",
-            image_url: "/magazin/shawarma-albaik-berlin/hero.webp",
+            image_url: "/magazin/albaik/albaik-shawarma-rice-hero.webp?v=2",
             excerpt:
               "Frisch marinierte Fleischspieße, luftiges Fladenbrot und legendäre Knoblauchcreme.",
             venue_name: "Shawarma Albaik",
@@ -203,7 +203,7 @@ export const searchUnifiedPipeline = createServerFn({ method: "POST" })
             title: "Mandy Restaurant & Café Berlin — Edle orientalische Frühstücks- & Eventkultur",
             slug: "/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln",
             category: "Speisely Visits",
-            image_url: "/magazin/mandy-restaurant/hero.webp",
+            image_url: "/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp?v=2",
             excerpt:
               "Reichhaltige Frühstücksplatten, frisches Gebäck und großzügige Räumlichkeiten für Familien & Feiern.",
             venue_name: "Mandy Restaurant",

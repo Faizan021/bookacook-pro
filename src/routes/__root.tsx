@@ -111,6 +111,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Catering buchen, Essen bei lokalen Restaurants bestellen und Eventplaner in ganz Deutschland finden.",
       },
       { name: "twitter:image", content: "https://speisely.de/hero-cinematic.webp" },
+      {
+        name: "ahrefs-site-verification",
+        content: "362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6",
+      },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -266,24 +270,6 @@ function RootShell({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/manifest.json" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
-        {/* Static Fallback SEO & OpenGraph Meta for Audits & Crawlers */}
-        <meta name="description" content="Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland." />
-        <meta property="og:title" content="Speisely — Marktplatz für Catering, Restaurants & Eventplanung" />
-        <meta property="og:description" content="Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland." />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content="https://speisely.de/hero-cinematic.webp" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Speisely" />
-        <meta property="og:locale" content="de_DE" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Speisely — Marktplatz für Catering, Restaurants & Eventplanung" />
-        <meta name="twitter:description" content="Catering buchen, Essen bei lokalen Restaurants bestellen und Eventplaner in ganz Deutschland finden." />
-        <meta name="twitter:image" content="https://speisely.de/hero-cinematic.webp" />
-        <meta
-          name="ahrefs-site-verification"
-          content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"
-        />
 
         {/* GA4 & Looker Studio AI Referral Attribution Script */}
         <script

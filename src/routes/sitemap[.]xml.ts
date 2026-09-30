@@ -36,7 +36,6 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/speisely", lastmod: today, changefreq: "daily", priority: "0.9" },
           { path: "/partners", lastmod: "2026-06-15", changefreq: "monthly", priority: "0.7" },
           { path: "/partner/webseiten", lastmod: today, changefreq: "weekly", priority: "0.8" },
-          { path: "/api/geo", lastmod: today, changefreq: "weekly", priority: "0.8" },
           { path: "/architecture-simulator", lastmod: today, changefreq: "monthly", priority: "0.6" },
           { path: "/blog", lastmod: today, changefreq: "weekly", priority: "0.8" },
           { path: "/about", lastmod: "2026-06-01", changefreq: "monthly", priority: "0.5" },
@@ -123,24 +122,30 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly",
             priority: "0.8",
           },
-          ...restaurants.map((r) => ({
-            path: `/restaurant/${r.id}`,
-            lastmod: today,
-            changefreq: "weekly" as const,
-            priority: "0.8",
-          })),
-          ...caterers.map((c) => ({
-            path: `/catering/${c.id}`,
-            lastmod: today,
-            changefreq: "weekly" as const,
-            priority: "0.8",
-          })),
-          ...planners.map((p) => ({
-            path: `/planner/${p.id}`,
-            lastmod: today,
-            changefreq: "weekly" as const,
-            priority: "0.7",
-          })),
+          ...restaurants
+            .filter((r) => r.slug || r.id)
+            .map((r) => ({
+              path: `/restaurant/${r.slug || r.id}`,
+              lastmod: today,
+              changefreq: "weekly" as const,
+              priority: "0.8",
+            })),
+          ...caterers
+            .filter((c) => c.slug || c.id)
+            .map((c) => ({
+              path: `/catering/${c.slug || c.id}`,
+              lastmod: today,
+              changefreq: "weekly" as const,
+              priority: "0.8",
+            })),
+          ...planners
+            .filter((p) => p.slug || p.id)
+            .map((p) => ({
+              path: `/planner/${p.slug || p.id}`,
+              lastmod: today,
+              changefreq: "weekly" as const,
+              priority: "0.7",
+            })),
           ...blogPosts.map((b) => ({
             path: `/blog/${b.slug}`,
             lastmod: b.date,
