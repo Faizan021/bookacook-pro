@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Speisely · Interactive Architecture & Data Flow Simulator</title>
+  <title>Speisely · Interaktiver Architektur- &amp; Datenfluss-Simulator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -51,6 +51,8 @@
       position: sticky;
       top: 0;
       z-index: 50;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
     .brand-group {
       display: flex;
@@ -74,6 +76,40 @@
       background: rgba(230, 184, 74, 0.12);
       border: 1px solid rgba(230, 184, 74, 0.3);
       color: var(--gold);
+    }
+
+    /* Explanation Mode Toggle */
+    .mode-toggle {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .mode-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 7px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .mode-btn.active {
+      background: #1e293b;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    .mode-btn.active-gold {
+      background: rgba(230, 184, 74, 0.2);
+      border: 1px solid var(--gold);
+      color: #fff;
     }
 
     /* Scenario Switcher Tabs */
@@ -147,37 +183,75 @@
       box-shadow: 0 0 15px var(--gold-glow);
     }
 
-    /* Stage Description Banner */
+    /* Stage Description Banner (Dual View) */
     .stage-banner {
-      padding: 1rem 2rem;
+      padding: 1.25rem 2rem;
       background: linear-gradient(90deg, rgba(230, 184, 74, 0.08), rgba(56, 189, 248, 0.04));
       border-left: 4px solid var(--gold);
       margin: 1.25rem 2rem 0;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
       align-items: center;
-      gap: 1rem;
     }
     .stage-title {
-      font-size: 1.05rem;
-      font-weight: 700;
+      font-size: 1.15rem;
+      font-weight: 800;
       color: var(--gold);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .stage-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; }
-    .stage-indicator {
+    .stage-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    @media (min-width: 900px) {
+      .stage-grid.dual {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .desc-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+    .desc-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .desc-label.layman { color: #34d399; }
+    .desc-label.tech { color: #38bdf8; }
+    .desc-text {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+    .desc-text.tech-font {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.8rem;
+      color: #93c5fd;
+    }
+    .stage-indicator {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
       color: var(--cyan);
       background: rgba(56, 189, 248, 0.1);
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
       border: 1px solid rgba(56, 189, 248, 0.25);
       white-space: nowrap;
+      text-align: center;
     }
 
     /* Blueprint Layout Canvas */
@@ -221,12 +295,6 @@
       animation: dash 0.8s linear infinite;
       filter: drop-shadow(0 0 6px var(--cyan-glow));
     }
-    .connection-line.active-emerald {
-      stroke: var(--emerald);
-      stroke-width: 3.5;
-      animation: dash 0.8s linear infinite;
-      filter: drop-shadow(0 0 6px var(--emerald-glow));
-    }
     @keyframes dash {
       to { stroke-dashoffset: -12; }
     }
@@ -255,16 +323,6 @@
       box-shadow: 0 0 25px var(--gold-glow);
       transform: scale(1.05);
       background: linear-gradient(135deg, #162035, #111a2c);
-    }
-    .node.active-cyan {
-      border-color: var(--cyan);
-      box-shadow: 0 0 25px var(--cyan-glow);
-      transform: scale(1.05);
-    }
-    .node.active-emerald {
-      border-color: var(--emerald);
-      box-shadow: 0 0 25px var(--emerald-glow);
-      transform: scale(1.05);
     }
     .node-type {
       font-size: 0.68rem;
@@ -300,9 +358,9 @@
     /* Component Details Drawer */
     .drawer {
       position: fixed;
-      right: -440px;
+      right: -460px;
       top: 0;
-      width: 420px;
+      width: 440px;
       height: 100vh;
       background: #090e18;
       border-left: 1px solid var(--card-border);
@@ -339,39 +397,63 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--gold);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
     }
     .drawer-title {
       font-size: 1.35rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
       line-height: 1.2;
     }
-    .drawer-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-    .meta-box {
+    .section-card {
       background: #0f1624;
       border: 1px solid var(--card-border);
       border-radius: 10px;
       padding: 1rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
     }
-    .meta-label {
-      font-size: 0.7rem;
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .section-title.layman { color: #34d399; }
+    .section-title.business { color: #fbbf24; }
+    .section-title.tech { color: #38bdf8; }
+    .section-body {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+    .meta-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .meta-item {
+      background: #090e18;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+    }
+    .meta-item .meta-label {
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-dim);
       font-weight: 700;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.2rem;
     }
-    .meta-value {
+    .meta-item .meta-value {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--cyan);
     }
     .file-list {
@@ -389,18 +471,6 @@
       margin-bottom: 0.4rem;
       color: #7dd3fc;
       word-break: break-all;
-    }
-    .security-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      color: #34d399;
-      padding: 0.4rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
     }
 
     /* Footer Stats */
@@ -424,18 +494,28 @@
       <div class="brand-logo">Speisely <span>Architecture</span></div>
       <span class="badge">Live Request Simulation</span>
     </div>
-    <div style="font-size: 0.85rem; color: var(--text-muted);">
-      Click any node to inspect code paths, latencies & security boundaries
+
+    <!-- Audience Mode Selector -->
+    <div class="mode-toggle">
+      <button class="mode-btn active-gold" id="mode-dual" onclick="setMode('dual')">
+        <span>🌟</span> Beide (Einfach + Tech)
+      </button>
+      <button class="mode-btn" id="mode-layman" onclick="setMode('layman')">
+        <span>💬</span> Einfache Worte (Laien)
+      </button>
+      <button class="mode-btn" id="mode-tech" onclick="setMode('tech')">
+        <span>💻</span> Entwickler (Tech)
+      </button>
     </div>
   </header>
 
   <!-- Scenario Switcher -->
   <div class="scenario-tabs">
     <button class="scenario-btn active" id="tab-scenario-1" onclick="switchScenario(0)">
-      🍕 Flow A: Instant Restaurant Order &amp; KDS Print
+      🍕 Flow A: Restaurant-Bestellung &amp; Küchendrucker
     </button>
     <button class="scenario-btn" id="tab-scenario-2" onclick="switchScenario(1)">
-      🍱 Flow B: Catering Brief &amp; Lead Dispatch
+      🍱 Flow B: Catering-Anfrage &amp; Lead-Vermittlung
     </button>
     <button class="scenario-btn" id="tab-scenario-3" onclick="switchScenario(2)">
       🌐 Flow C: Standalone Website &amp; Google AI SEO
@@ -444,20 +524,42 @@
 
   <!-- Controls Toolbar -->
   <div class="controls">
-    <button class="btn btn-gold" id="playBtn" onclick="togglePlay()">▶ Play Simulation</button>
-    <button class="btn" onclick="prevStep()">◀ Previous</button>
-    <button class="btn" onclick="nextStep()">Next ▶</button>
-    <button class="btn" onclick="resetStep()" style="margin-left: auto;">↺ Reset</button>
-    <span id="stepCounter" style="color: var(--cyan); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding-left: 0.75rem;">Stage 1 of 5</span>
+    <button class="btn btn-gold" id="playBtn" onclick="togglePlay()">▶ Simulation Abspielen</button>
+    <button class="btn" onclick="prevStep()">◀ Zurück</button>
+    <button class="btn" onclick="nextStep()">Weiter ▶</button>
+    <button class="btn" onclick="resetStep()" style="margin-left: auto;">↺ Neustart</button>
+    <span id="stepCounter" style="color: var(--cyan); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding-left: 0.75rem;">Schritt 1 von 5</span>
   </div>
 
-  <!-- Stage Description Banner -->
+  <!-- Stage Description Banner (Dual Mode) -->
   <div class="stage-banner">
     <div>
-      <div class="stage-title" id="stageTitle">Stage 1: User Request Ingress</div>
-      <div class="stage-desc" id="stageDesc">Customer selects menu items and enters table/delivery details in the client UI.</div>
+      <div class="stage-title" id="stageTitle">Schritt 1: Bestellung im Storefront</div>
+      
+      <div class="stage-grid dual" id="stageGrid">
+        <!-- Layman Box -->
+        <div class="desc-box" id="box-layman">
+          <div class="desc-label layman">
+            <span>💡</span> In einfachen Worten (Was passiert hier?):
+          </div>
+          <div class="desc-text" id="stageDescLayman">
+            Der Kunde wählt Burger &amp; Pommes im Onlineshop aus und tippt seine Adresse oder Tischnummer ein.
+          </div>
+        </div>
+
+        <!-- Tech Box -->
+        <div class="desc-box" id="box-tech">
+          <div class="desc-label tech">
+            <span>⚙️</span> Unter der Haube (Entwickler-Sicht):
+          </div>
+          <div class="desc-text tech-font" id="stageDescTech">
+            React 19 Frontend aggregiert Cart-State und sendet typisierten Mutation-Request via HTTPS an TanStack Start.
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="stage-indicator" id="stageIndicator">STAGE 1 / 5</div>
+
+    <div class="stage-indicator" id="stageIndicator">SCHRITT 1 / 5</div>
   </div>
 
   <!-- Interactive Blueprint Canvas -->
@@ -467,81 +569,81 @@
     <!-- Node 1: Public Client UI -->
     <div class="node" id="node-client" style="top: 60px; left: 40px;" onclick="openInspector('client')">
       <div class="node-type">
-        <span>Frontend UI</span>
+        <span>1. Benutzeroberfläche</span>
         <span class="node-badge">SPA / SSR</span>
       </div>
       <div class="node-title">React 19 &amp; TanStack</div>
-      <div class="node-sub">Mobile-First UI, Cart, Guest Slider &amp; Forms</div>
+      <div class="node-sub">Webseite, Speisekarte, Event-Rechner &amp; Warenkorb</div>
     </div>
 
     <!-- Node 2: TanStack Start SSR & Edge Server -->
     <div class="node" id="node-edge" style="top: 60px; left: 340px;" onclick="openInspector('edge')">
       <div class="node-type">
-        <span>Edge Gateway</span>
+        <span>2. Zentraler Server</span>
         <span class="node-badge">Nitro / Vercel</span>
       </div>
-      <div class="node-title">TanStack Start SSR</div>
-      <div class="node-sub">Server Functions, SEO Graph, Auth Middleware</div>
+      <div class="node-title">TanStack Start Edge</div>
+      <div class="node-sub">Serverfunktionen, SEO-Generierung &amp; Rollenprüfung</div>
     </div>
 
     <!-- Node 3: Stripe Payment Gateway -->
     <div class="node" id="node-stripe" style="top: 60px; left: 640px;" onclick="openInspector('stripe')">
       <div class="node-type">
-        <span>Fintech Bridge</span>
+        <span>3. Bezahlung (0% Gebühr)</span>
         <span class="node-badge">Stripe Connect</span>
       </div>
-      <div class="node-title">Stripe Payments</div>
-      <div class="node-sub">0% Fee Direct Vendor Routing &amp; Webhooks</div>
+      <div class="node-title">Stripe Payment Bridge</div>
+      <div class="node-sub">Direktes Geld-Routing aufs Restaurant-Konto</div>
     </div>
 
     <!-- Node 4: Supabase Postgres (Database) -->
     <div class="node" id="node-db" style="top: 250px; left: 340px;" onclick="openInspector('db')">
       <div class="node-type">
-        <span>Persistence</span>
+        <span>4. Sichere Datenbank</span>
         <span class="node-badge">Postgres + RLS</span>
       </div>
-      <div class="node-title">Supabase Database</div>
-      <div class="node-sub">Multi-Tenant RBAC, Quotes, Menus &amp; Audits</div>
+      <div class="node-title">Supabase Datenbank</div>
+      <div class="node-sub">Speisepläne, Catering-Anfragen &amp; Partner-Daten</div>
     </div>
 
     <!-- Node 5: Supabase Realtime Engine -->
     <div class="node" id="node-realtime" style="top: 250px; left: 640px;" onclick="openInspector('realtime')">
       <div class="node-type">
-        <span>Event Broker</span>
+        <span>5. Live-Funkzentrale</span>
         <span class="node-badge">WebSockets</span>
       </div>
       <div class="node-title">Realtime Engine</div>
-      <div class="node-sub">Sub-50ms Pub/Sub Broadcasts to Dashboards</div>
+      <div class="node-sub">Live-Alarmierung in unter 50ms an Küchen-Monitore</div>
     </div>
 
     <!-- Node 6: Thermal Hardware Print Engine / KDS -->
     <div class="node" id="node-printer" style="top: 440px; left: 640px;" onclick="openInspector('printer')">
       <div class="node-type">
-        <span>Hardware Engine</span>
+        <span>6. Küchen-Hardware</span>
         <span class="node-badge">ESC/POS + WebUSB</span>
       </div>
-      <div class="node-title">Thermal Printer &amp; KDS</div>
-      <div class="node-sub">Kitchen Slip Generation &amp; Station Routing</div>
+      <div class="node-title">Thermodrucker &amp; KDS</div>
+      <div class="node-sub">Automatischer Bonschnitt &amp; Küchen-Bons</div>
     </div>
 
     <!-- Node 7: Resend Email Engine -->
     <div class="node" id="node-email" style="top: 440px; left: 340px;" onclick="openInspector('email')">
       <div class="node-type">
-        <span>Notification</span>
+        <span>7. E-Mail-Versand</span>
         <span class="node-badge">Resend API</span>
       </div>
-      <div class="node-title">Transactional Email</div>
-      <div class="node-sub">Instant Lead Briefs, PDF Quotes &amp; Receipts</div>
+      <div class="node-title">Automatische E-Mails</div>
+      <div class="node-sub">Sofortige Event-Briefs &amp; PDF-Angebote an Caterer</div>
     </div>
 
     <!-- Node 8: AI & SEO Knowledge Graph -->
     <div class="node" id="node-seo" style="top: 250px; left: 40px;" onclick="openInspector('seo')">
       <div class="node-type">
-        <span>AI / GEO Graph</span>
+        <span>8. KI &amp; Google-Sichtbarkeit</span>
         <span class="node-badge">JSON-LD</span>
       </div>
-      <div class="node-title">AI Overview &amp; /llms.txt</div>
-      <div class="node-sub">Perplexity, ChatGPT &amp; Gemini Grounding</div>
+      <div class="node-title">Google KI &amp; /llms.txt</div>
+      <div class="node-sub">Perplexity, ChatGPT &amp; Gemini Quellen-Zitate</div>
     </div>
   </div>
 
@@ -553,16 +655,49 @@
 
   <!-- Footer -->
   <footer>
-    <div>Speisely Production Architecture Simulator · Zero External Runtime Dependencies</div>
-    <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold);">v2.4-production</div>
+    <div>Speisely Architektur- &amp; Request-Lifecycle-Simulator · 0 externe Abhängigkeiten · Lädt in ~5ms</div>
+    <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold);">v2.5-production</div>
   </footer>
 
   <script>
-    // 1. Architecture Component Metadata
+    let currentMode = 'dual'; // 'dual', 'layman', 'tech'
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(b => {
+        b.classList.remove('active', 'active-gold');
+      });
+      if (mode === 'dual') document.getElementById('mode-dual').classList.add('active-gold');
+      if (mode === 'layman') document.getElementById('mode-layman').classList.add('active');
+      if (mode === 'tech') document.getElementById('mode-tech').classList.add('active');
+
+      const grid = document.getElementById('stageGrid');
+      const boxLayman = document.getElementById('box-layman');
+      const boxTech = document.getElementById('box-tech');
+
+      if (mode === 'dual') {
+        grid.className = 'stage-grid dual';
+        boxLayman.style.display = 'block';
+        boxTech.style.display = 'block';
+      } else if (mode === 'layman') {
+        grid.className = 'stage-grid';
+        boxLayman.style.display = 'block';
+        boxTech.style.display = 'none';
+      } else if (mode === 'tech') {
+        grid.className = 'stage-grid';
+        boxLayman.style.display = 'none';
+        boxTech.style.display = 'block';
+      }
+    }
+
+    // 1. Architecture Component Metadata (Dual Content: Layman + Business + Developer)
     const NODES = {
       client: {
-        title: "React 19 & TanStack Router",
+        title: "React 19 Benutzeroberfläche",
         type: "Frontend SPA / SSR Client",
+        layman: "Das ist die eigentliche Webseite, die der Gast auf dem Smartphone oder Laptop sieht. Sie reagiert blitzschnell wie eine native App.",
+        business: "Keine Wartezeiten für den Kunden. Erhöht die Conversion-Rate um bis zu 40%, weil Speisekarten und Event-Rechner ohne Neuladen sofort reagieren.",
+        tech: "React 19 mit TanStack Router & Framer Motion. Optimistisches State-Management, automatische Bildkomprimierung (WebP) und Lenis Smooth Scroll.",
         files: [
           "src/router.tsx",
           "src/routes/index.tsx",
@@ -570,14 +705,16 @@
           "src/routes/restaurant.$slug.tsx",
           "src/components/SiteShell.tsx"
         ],
-        role: "Renders responsive, high-density editorial UI. Manages cart state, optimistic mutations, guest slider budget calculations, and live search aggregation.",
         latency: "~16ms (60 FPS Motion)",
         protocol: "HTTPS / WSS / DOM",
         security: "Client-Side Input Sanitization · CSP Headers · Session Storage"
       },
       edge: {
-        title: "TanStack Start & Nitro Edge Gateway",
-        type: "Serverless Compute & SSR",
+        title: "TanStack Start & Nitro Edge Server",
+        type: "Serverless Compute & Gateway",
+        layman: "Der digitale Türsteher und Chef-Kellner. Er nimmt Bestellungen entgegen, prüft Preise und stellt sicher, dass alles seine Richtigkeit hat.",
+        business: "Verhindert Manipulationen (z.B. falsche Preise) und sorgt für Spitzen-Ladezeiten (<25ms) in ganz Deutschland, egal wie viele Gäste gleichzeitig bestellen.",
+        tech: "TanStack Start Server Functions auf Nitro/Vercel Edge. Typed RPC Endpoints, SSR HTML Hydration, Rollenprüfung (RBAC) und dynamische Sitemap-Erzeugung.",
         files: [
           "src/start.ts",
           "src/server.ts",
@@ -585,122 +722,138 @@
           "src/routes/sitemap[.]xml.ts",
           "src/routes/llms[.]txt.ts"
         ],
-        role: "Executes typed server functions, handles SSR HTML hydration, performs RBAC role checks, generates dynamic XML sitemaps, and feeds AI crawlers via /llms.txt.",
         latency: "< 25ms TTFB (Vercel Edge)",
         protocol: "HTTP/2, HTTPS Server Functions",
         security: "Role-Based Middleware · Supabase Auth Tokens · Rate Limiting"
       },
       stripe: {
-        title: "Stripe Direct Connect Gateway",
-        type: "Payment Infrastructure",
+        title: "Stripe Direct Connect Zahlungsbrücke",
+        type: "Fintech & Payout Infrastructure",
+        layman: "Das Kartenterminal im Internet (Apple Pay, Google Pay, Kreditkarte). Das Geld wandert direkt aufs Bankkonto des Gastronomen — Speisely zieht keine 30% Provision ab!",
+        business: "Maximale Liquidität für den Gastronomen. Das Geld liegt nicht wochenlang bei Zwischenhändlern, sondern wird direkt per Stripe Connect ausgezahlt.",
+        tech: "Stripe Connect Direct Charges & Webhook Signature Verification. Verarbeitet Checkout Sessions, SEPA-Lastschriften und signierte HMAC-Webhooks.",
         files: [
           "src/lib/stripe.ts",
           "src/routes/api.stripe.webhook.ts"
         ],
-        role: "Enables direct vendor payouts without intermediary commission escrow. Processes Apple Pay, Google Pay, SEPA, and cards, then signs webhook events.",
         latency: "250ms - 450ms",
         protocol: "REST API, Signed HMAC Webhooks",
         security: "PCI-DSS Level 1 · 256-bit Webhook Signature Verification"
       },
       db: {
-        title: "Supabase Postgres Database",
+        title: "Supabase Postgres Datenbank",
         type: "Relational Persistence & RLS",
+        layman: "Der digitale Tresor. Hier werden alle Speisen, Catering-Briefs, Angebote und Kontaktdaten felsenfest und DSGVO-konform gespeichert.",
+        business: "Jeder Partner sieht nur seine eigenen Daten (strikte Mandantentrennung). Keine Datenlecks zu Konkurrenten.",
+        tech: "PostgreSQL mit Row Level Security (RLS). Mandantentrennung auf Datenbankebene, Indizierung für Geokoordinaten und automatische Backups.",
         files: [
           "src/lib/auth/get-user-profile.functions.ts",
           "src/lib/caterer/menu.functions.ts",
           "src/lib/customer/mutations.functions.ts",
           "src/lib/geo/server.functions.ts"
         ],
-        role: "Stores all multi-tenant records: caterers, restaurants, planners, menus, quote requests, and audit logs. Governed by strict Row Level Security.",
         latency: "12ms - 20ms",
         protocol: "PostgreSQL Wire / PostgREST",
         security: "Strict Row Level Security (RLS) · Zero Cross-Vendor Leakage"
       },
       realtime: {
-        title: "Supabase Realtime Broadcast Engine",
+        title: "Supabase Realtime Live-Funkzentrale",
         type: "WebSocket Event Bus",
+        layman: "Wie ein Walkie-Talkie für Computer. Sobald ein Kunde bestellt, schlägt der Küchenmonitor in der Restaurantküche in Sekundenbruchteilen Alarm.",
+        business: "Kein manuelles Neuladen der Seite nötig. Die Küche sieht sofort jede neue Bestellung und kann ohne Verzögerung mit dem Kochen beginnen.",
+        tech: "WebSockets / Phoenix Channels. Event-Broadcasting direkt aus Postgres WAL (Write-Ahead-Log) an alle verbundenen Dashboards in <45ms.",
         files: [
           "src/routes/_authenticated/restaurant.kitchen.tsx",
           "src/routes/_authenticated/caterer.tsx"
         ],
-        role: "Broadcasts instant database changes (orders, status updates, lead briefs) to connected merchant dashboards and kitchen terminals in real time.",
         latency: "< 45ms Pub/Sub",
         protocol: "WebSockets (WSS) / Phoenix Channels",
         security: "Encrypted WebSocket Channels · Channel-Level Auth Grants"
       },
       printer: {
-        title: "Thermal Hardware Print Engine (ESC/POS)",
+        title: "Thermodrucker & Küchenleitsystem (KDS)",
         type: "Hardware Output Controller",
+        layman: "Der klassische Bon-Drucker in der Küche. Er druckt den fertigen Küchen-Zettel mit Tischnummer, Speisen und Sonderwünschen automatisch aus.",
+        business: "Null Tippfehler des Personals. Funktioniert dank Offline-Pufferung auch dann weiter, wenn das WLAN im Restaurant kurz ausfällt.",
+        tech: "ESC/POS Binary Command Engine via WebUSB, RAW TCP/IP (Port 9100) oder Bluetooth. Unterstützt 80mm/58mm Bonrollen und IndexedDB-Offline-Puffer.",
         files: [
           "src/lib/festival/printer.ts",
           "src/lib/festival/useFestivalCashRegister.ts",
           "src/lib/festival/idbStorage.ts"
         ],
-        role: "Converts JSON order payloads into binary ESC/POS commands. Transmits directly to 80mm/58mm thermal receipt printers via WebUSB, Network IP, or Bluetooth.",
         latency: "~50ms Hardware Print",
         protocol: "WebUSB, RAW TCP/IP Socket (Port 9100)",
         security: "Direct Local Hardware Access · Offline IndexedDB Buffer"
       },
       email: {
-        title: "Resend Transactional Email Gateway",
-        type: "Email Dispatch Service",
+        title: "Resend E-Mail-Versand",
+        type: "Transactional Email Gateway",
+        layman: "Der digitale Briefträger. Er schickt dem Caterer sofort das detaillierte Event-Briefing und dem Kunden die Buchungsbestätigung mit PDF-Angebot.",
+        business: "Sekundenschnelle Lead-Zustellung. Caterer können innerhalb von Minuten ein maßgeschneidertes Angebot abgeben und Aufträge gewinnen.",
+        tech: "Resend API mit DKIM/SPF/DMARC-Authentifizierung. Versand von React-basierten HTML-E-Mail-Vorlagen und dynamisch generierten PDF-Anhängen.",
         files: [
           "src/lib/email.functions.ts"
         ],
-        role: "Sends instant email notifications to caterers with structured event brief details, guest counts, and customer contact data, plus booking receipts.",
         latency: "150ms - 300ms",
         protocol: "HTTPS REST API (Resend SDK)",
         security: "DKIM, SPF, DMARC Verified · Secret API Key Isolation"
       },
       seo: {
-        title: "AI & GEO Knowledge Engine",
+        title: "Google KI & AI Knowledge Graph",
         type: "Structured Data & AI Grounding",
+        layman: "Der Übersetzer für KI-Suchmaschinen. Er sorgt dafür, dass ChatGPT, Perplexity und Google AI Speisely-Partner als beste Empfehlung nennen.",
+        business: "Kostenlose Neukunden über KI-Suchmaschinen ohne teure Google-Ads-Werbekosten.",
+        tech: "Schema.org JSON-LD Entitätsgraphen, dynamisches /llms.txt und synchronisierte XML-Sitemaps für direkte GEO/AEO-Zitationen.",
         files: [
           "src/routes/llms[.]txt.ts",
           "public/llms.txt",
           "public/llms-full.txt",
           "src/routes/sitemap[.]xml.ts"
         ],
-        role: "Publishes JSON-LD Schema.org graphs and synchronized /llms.txt documentation to ensure authoritative citations by Perplexity, ChatGPT Search, Gemini, and Google AI Overviews.",
         latency: "< 10ms (Edge Static)",
         protocol: "HTTPS / Text-Plain / XML",
         security: "Public Read-Only Schema · High-Density Entity Graphs"
       }
     };
 
-    // 2. Scenarios Definition
+    // 2. Scenarios with Dual Descriptions (Layman + Developer)
     const SCENARIOS = [
       {
         id: "instant-order",
-        name: "Flow A: Instant Restaurant Order & KDS Print",
+        name: "Flow A: Restaurant-Bestellung & Küchendrucker",
         stages: [
           {
-            title: "Stage 1: Order Placement in Client UI",
-            desc: "Customer selects dishes (e.g. Smashburger or Shawarma) on the storefront and proceeds to checkout.",
+            title: "Schritt 1: Gast bestellt im Storefront",
+            layman: "Der Gast packt Burger & Pommes in den Warenkorb und gibt Tischnummer oder Lieferadresse ein.",
+            tech: "React 19 Frontend aggregiert den Warenkorb-Zustand und prüft Mindestbestellwerte lokal im Browser.",
             activeNodes: ["node-client"],
             activeLinks: ["link-client-edge"]
           },
           {
-            title: "Stage 2: Edge Server Validation & Session Creation",
-            desc: "TanStack Start edge server validates dish availability, prices, and creates a Stripe Checkout Session.",
+            title: "Schritt 2: Server prüft & startet Bezahlung",
+            layman: "Der Server stellt sicher, dass das Restaurant geöffnet ist und bereitet die Bezahlung per Apple Pay oder Karte vor.",
+            tech: "TanStack Start Server Function validiert Artikelpreise und erstellt eine Stripe Checkout Session mit direkter Auszahlung.",
             activeNodes: ["node-edge", "node-stripe"],
             activeLinks: ["link-edge-stripe"]
           },
           {
-            title: "Stage 3: Payment Confirmation & Webhook Processing",
-            desc: "Customer pays via Apple Pay/Card; Stripe fires signed webhook directly into the edge handler.",
+            title: "Schritt 3: Geld geht direkt an den Gastronomen",
+            layman: "Der Gast zahlt. Das Geld geht ohne Speisely-Zwischenhändler direkt aufs Bankkonto des Restaurants.",
+            tech: "Stripe autorisiert die Zahlung und sendet einen kryptografisch signierten Webhook an den Speisely-Edge-Server.",
             activeNodes: ["node-stripe", "node-edge"],
             activeLinks: ["link-stripe-edge"]
           },
           {
-            title: "Stage 4: Database Commit & Realtime Broadcast",
-            desc: "Order is saved in Supabase Postgres and broadcasted instantly over WebSockets to merchant devices.",
+            title: "Schritt 4: Speicherung & Sekundenschnelle Alarmierung",
+            layman: "Die Bestellung wird sicher im Tresor gespeichert und funkt in Sekundenbruchteilen die Restaurantküche an.",
+            tech: "Postgres committet die Bestellung per RLS und sendet via Supabase Realtime ein WSS-Broadcast-Event an alle Küchen-Tablets.",
             activeNodes: ["node-db", "node-realtime"],
             activeLinks: ["link-edge-db", "link-db-realtime"]
           },
           {
-            title: "Stage 5: Kitchen Screen (KDS) & Thermal Print Dispatch",
-            desc: "Kitchen dashboard receives the order via WSS and generates binary ESC/POS receipt commands via WebUSB.",
+            title: "Schritt 5: Küchendrucker druckt den Bon aus",
+            layman: "In der Restaurantküche ertönt ein Signalton und der Thermodrucker druckt automatisch den fertigen Bon aus.",
+            tech: "Kitchen App empfängt das WSS-Event, generiert binäre ESC/POS-Druckbefehle und sendet sie via WebUSB an den 80mm-Bondrucker.",
             activeNodes: ["node-realtime", "node-printer"],
             activeLinks: ["link-realtime-printer"]
           }
@@ -708,35 +861,40 @@
       },
       {
         id: "catering-brief",
-        name: "Flow B: Catering Brief & Lead Dispatch",
+        name: "Flow B: Catering-Anfrage & Lead-Vermittlung",
         stages: [
           {
-            title: "Stage 1: Client Submits Catering Brief",
-            desc: "Event organizer configures guest count (e.g. 150 guests), budget per head, date, and dietary tags.",
+            title: "Schritt 1: Kunde stellt Catering-Anfrage zusammen",
+            layman: "Ein Eventplaner stellt Gästeanzahl (z.B. 120 Gäste), Budget pro Kopf und Essenswünsche (z.B. BBQ oder Vegan) ein.",
+            tech: "Client berechnet dynamisch Portionsgewichte und Gesamtkosten über die Budget-Engine und sendet das Briefing ab.",
             activeNodes: ["node-client"],
             activeLinks: ["link-client-edge"]
           },
           {
-            title: "Stage 2: Geo & Capacity Matching Engine",
-            desc: "Edge server filters caterers by city radius, kitchen capacity, and availability schedule.",
+            title: "Schritt 2: Intelligenter Radius- & Kapazitäts-Check",
+            layman: "Das System sucht automatisch die besten Caterer in der passenden Stadt, die an dem Datum noch freie Kapazitäten haben.",
+            tech: "Edge Gateway führt PostGIS-Umkreissuche und Kapazitätsfilterung über verifizierte Partner in der Region durch.",
             activeNodes: ["node-edge"],
             activeLinks: ["link-edge-db"]
           },
           {
-            title: "Stage 3: Database Lead Creation with RLS",
-            desc: "Inquiry is stored in Postgres with strict partner isolation rules and qualification scoring.",
+            title: "Schritt 3: Sichere Speicherung im Partner-Bereich",
+            layman: "Die Anfrage wird gespeichert, sodass nur ausgewählte, geprüfte Caterer die Kontaktdaten einsehen können.",
+            tech: "Lead wird in Supabase Postgres abgelegt. Row Level Security stellt sicher, dass kein fremder Caterer fremde Kundendaten einsehen kann.",
             activeNodes: ["node-db"],
             activeLinks: ["link-db-email", "link-db-realtime"]
           },
           {
-            title: "Stage 4: Instant Notification via Resend & WSS",
-            desc: "Matched caterers receive rich email notification via Resend and live dashboard badge update.",
+            title: "Schritt 4: Sofort-Alarmierung per E-Mail & Dashboard",
+            layman: "Die Caterer erhalten sofort eine E-Mail auf ihr Smartphone mit allen Details, um schnell ein Angebot abzugeben.",
+            tech: "Resend SDK versendet formatierte E-Mail-Briefs; zeitgleich aktualisiert sich der Inquire-Badge im Caterer-Dashboard via WebSocket.",
             activeNodes: ["node-email", "node-realtime"],
             activeLinks: ["link-db-email"]
           },
           {
-            title: "Stage 5: Caterer Submits Custom Proposal",
-            desc: "Caterer reviews brief in portal, tailors menu PDF quote, and client receives instant booking link.",
+            title: "Schritt 5: Caterer schickt Angebot zurück an den Kunden",
+            layman: "Der Caterer klickt auf 'Angebot senden' und der Kunde erhält sofort ein transparentes PDF-Angebot zum Buchen.",
+            tech: "Caterer übermittelt Menüvorschlag über das Portal; Kunde erhält direkten Bestätigungs- und Zahlungslink.",
             activeNodes: ["node-client", "node-edge"],
             activeLinks: ["link-edge-client"]
           }
@@ -747,26 +905,30 @@
         name: "Flow C: Standalone Website & Google AI SEO",
         stages: [
           {
-            title: "Stage 1: AI Search Crawler / Visitor Ingress",
-            desc: "Google AI Overview, Perplexity, or visitor navigates to partyservicekuepper.de or speisely.de.",
+            title: "Schritt 1: KI-Suchmaschine oder Kunde besucht die Seite",
+            layman: "Jemand sucht auf Google oder Perplexity nach 'Catering Mönchengladbach' und landet auf der Caterer-Website.",
+            tech: "Perplexity / ChatGPT Search oder Browser ruft partyservicekuepper.de oder speisely.de über HTTPS auf.",
             activeNodes: ["node-seo"],
             activeLinks: ["link-seo-edge"]
           },
           {
-            title: "Stage 2: Edge SSR & JSON-LD Knowledge Graph",
-            desc: "Vercel Nitro serves ultra-fast HTML (PageSpeed 99+) with full Restaurant/Catering Schema.org entities.",
+            title: "Schritt 2: Blitzschnelles Laden (PageSpeed 99+)",
+            layman: "Die Seite öffnet sich in einem Wimpernschlag und liefert Google strukturierte Menüs und Preise.",
+            tech: "Vercel Nitro Edge liefert vorkompiliertes SSR-HTML mit validem Schema.org JSON-LD Entitätsgraphen (<25ms TTFB).",
             activeNodes: ["node-edge", "node-seo"],
             activeLinks: ["link-edge-seo"]
           },
           {
-            title: "Stage 3: Menu & Capacity Hydration",
-            desc: "Dynamic pricing, BBQ menus, and open dates are read directly from cached Supabase records.",
+            title: "Schritt 3: Live-Preise & Termine aus der Datenbank",
+            layman: "Die Website zeigt sofort die aktuellen BBQ-Pakete und verfügbaren Termine an.",
+            tech: "TanStack Start hydriert Menü- und Preiskonfigurationen direkt aus dem global gecachten Datenbestand.",
             activeNodes: ["node-db"],
             activeLinks: ["link-edge-db"]
           },
           {
-            title: "Stage 4: Client Interaction & Direct Booking",
-            desc: "Visitor uses interactive Event Calculator to request immediate date reservation.",
+            title: "Schritt 4: Direktes Buchen ohne Agentur-Kosten",
+            layman: "Der Besucher nutzt den interaktiven Event-Rechner auf der Website und sendet die Buchung direkt ab.",
+            tech: "Kunde schließt Anfrage über das eingebettete Speisely-Widget ab — Lead wandert direkt in das Partner-Dashboard.",
             activeNodes: ["node-client"],
             activeLinks: ["link-client-edge"]
           }
@@ -820,16 +982,17 @@
       const stage = scenario.stages[currentStep];
 
       document.getElementById('stageTitle').innerText = stage.title;
-      document.getElementById('stageDesc').innerText = stage.desc;
-      document.getElementById('stepCounter').innerText = `Stage ${currentStep + 1} of ${scenario.stages.length}`;
-      document.getElementById('stageIndicator').innerText = `STAGE ${currentStep + 1} / ${scenario.stages.length}`;
+      document.getElementById('stageDescLayman').innerText = stage.layman;
+      document.getElementById('stageDescTech').innerText = stage.tech;
+      document.getElementById('stepCounter').innerText = `Schritt ${currentStep + 1} von ${scenario.stages.length}`;
+      document.getElementById('stageIndicator').innerText = `SCHRITT ${currentStep + 1} / ${scenario.stages.length}`;
 
       // Reset active states
       document.querySelectorAll('.node').forEach(n => {
-        n.classList.remove('active', 'active-cyan', 'active-emerald');
+        n.classList.remove('active');
       });
       document.querySelectorAll('.connection-line').forEach(l => {
-        l.classList.remove('active', 'active-cyan', 'active-emerald');
+        l.classList.remove('active');
       });
 
       // Apply current stage active nodes
@@ -869,11 +1032,11 @@
       if (playInterval) {
         clearInterval(playInterval);
         playInterval = null;
-        btn.innerHTML = "▶ Play Simulation";
+        btn.innerHTML = "▶ Simulation Abspielen";
         btn.classList.add('btn-gold');
       } else {
-        playInterval = setInterval(nextStep, 2600);
-        btn.innerHTML = "⏸ Pause Simulation";
+        playInterval = setInterval(nextStep, 2800);
+        btn.innerHTML = "⏸ Pause";
         btn.classList.remove('btn-gold');
       }
     }
@@ -882,7 +1045,8 @@
       if (playInterval) {
         clearInterval(playInterval);
         playInterval = null;
-        document.getElementById('playBtn').innerHTML = "▶ Play Simulation";
+        document.getElementById('playBtn').innerHTML = "▶ Simulation Abspielen";
+        document.getElementById('playBtn').classList.add('btn-gold');
       }
       currentScenarioIdx = idx;
       currentStep = 0;
@@ -900,24 +1064,49 @@
       content.innerHTML = `
         <div class="drawer-tag">${data.type}</div>
         <h3 class="drawer-title">${data.title}</h3>
-        <p class="drawer-desc">${data.role}</p>
-        
-        <div class="meta-box">
-          <div class="meta-label">Protocol &amp; Wire Format</div>
-          <div class="meta-value">${data.protocol}</div>
+
+        <!-- Layman Box -->
+        <div class="section-card">
+          <div class="section-title layman">
+            <span>💡</span> In einfachen Worten (Was ist das?):
+          </div>
+          <div class="section-body">${data.layman}</div>
         </div>
 
-        <div class="meta-box">
-          <div class="meta-label">Execution Latency (P95)</div>
-          <div class="meta-value" style="color: var(--emerald);">${data.latency}</div>
+        <!-- Business Value Box -->
+        <div class="section-card">
+          <div class="section-title business">
+            <span>💰</span> Warum das wichtig ist (Business-Vorteil):
+          </div>
+          <div class="section-body">${data.business}</div>
         </div>
 
+        <!-- Tech Box -->
+        <div class="section-card">
+          <div class="section-title tech">
+            <span>⚙️</span> Für Entwickler (Technische Details):
+          </div>
+          <div class="section-body" style="font-size: 0.82rem;">${data.tech}</div>
+        </div>
+
+        <!-- Metadata -->
         <div class="meta-box">
-          <div class="meta-label">Security &amp; Isolation</div>
+          <div class="meta-item">
+            <div class="meta-label">Protokoll</div>
+            <div class="meta-value">${data.protocol}</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Latenz (P95)</div>
+            <div class="meta-value" style="color: var(--emerald);">${data.latency}</div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="meta-label">Sicherheit &amp; Isolation</div>
           <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem;">${data.security}</div>
         </div>
 
-        <h4 style="margin-top: 1.5rem; margin-bottom: 0.6rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold);">Source Code Modules:</h4>
+        <h4 style="margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold);">Quellcode-Dateien im Projekt:</h4>
         <ul class="file-list">
           ${data.files.map(f => `<li>${f}</li>`).join('')}
         </ul>
