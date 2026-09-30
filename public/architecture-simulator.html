@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speisely · Interactive Architecture & Data Flow Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a11;
+      --panel-bg: #0d131f;
+      --card-bg: #121a2a;
+      --card-border: #1e293b;
+      --gold: #e6b84a;
+      --gold-dim: #b28a3c;
+      --gold-glow: rgba(230, 184, 74, 0.35);
+      --forest: #103324;
+      --forest-light: #1b4d36;
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.4);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.4);
+      --purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Brand Header */
+    header {
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(13, 19, 31, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .brand-logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .brand-logo span { color: var(--gold); }
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      background: rgba(230, 184, 74, 0.12);
+      border: 1px solid rgba(230, 184, 74, 0.3);
+      color: var(--gold);
+    }
+
+    /* Scenario Switcher Tabs */
+    .scenario-tabs {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.75rem 2rem;
+      background: #090e18;
+      border-bottom: 1px solid var(--card-border);
+      overflow-x: auto;
+    }
+    .scenario-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .scenario-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+    }
+    .scenario-btn.active {
+      background: rgba(230, 184, 74, 0.15);
+      border-color: var(--gold);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(230, 184, 74, 0.2);
+    }
+
+    /* Simulation Control Toolbar */
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      padding: 0.85rem 2rem;
+      background: #0c121e;
+      border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn:hover { background: #334155; border-color: var(--cyan); }
+    .btn-gold {
+      background: linear-gradient(135deg, #d4a034, #b28a3c);
+      border-color: var(--gold);
+      color: #070a11;
+      font-weight: 700;
+    }
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #e6b84a, #c49638);
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    /* Stage Description Banner */
+    .stage-banner {
+      padding: 1rem 2rem;
+      background: linear-gradient(90deg, rgba(230, 184, 74, 0.08), rgba(56, 189, 248, 0.04));
+      border-left: 4px solid var(--gold);
+      margin: 1.25rem 2rem 0;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .stage-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .stage-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; }
+    .stage-indicator {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      white-space: nowrap;
+    }
+
+    /* Blueprint Layout Canvas */
+    .canvas-container {
+      flex: 1;
+      margin: 1.25rem 2rem;
+      position: relative;
+      background: radial-gradient(rgba(51, 65, 85, 0.4) 1px, transparent 1px);
+      background-size: 28px 28px;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      min-height: 600px;
+      overflow: hidden;
+      box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.6);
+    }
+
+    /* SVG Connecting Lines */
+    svg.connections {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .connection-line {
+      stroke: #1e293b;
+      stroke-width: 2;
+      stroke-dasharray: 6 6;
+      transition: all 0.4s ease;
+      fill: none;
+    }
+    .connection-line.active {
+      stroke: var(--gold);
+      stroke-width: 3.5;
+      animation: dash 0.8s linear infinite;
+      filter: drop-shadow(0 0 6px var(--gold-glow));
+    }
+    .connection-line.active-cyan {
+      stroke: var(--cyan);
+      stroke-width: 3.5;
+      animation: dash 0.8s linear infinite;
+      filter: drop-shadow(0 0 6px var(--cyan-glow));
+    }
+    .connection-line.active-emerald {
+      stroke: var(--emerald);
+      stroke-width: 3.5;
+      animation: dash 0.8s linear infinite;
+      filter: drop-shadow(0 0 6px var(--emerald-glow));
+    }
+    @keyframes dash {
+      to { stroke-dashoffset: -12; }
+    }
+
+    /* Architecture Nodes */
+    .node {
+      position: absolute;
+      width: 230px;
+      padding: 1.1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      user-select: none;
+    }
+    .node:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 15px rgba(230, 184, 74, 0.2);
+    }
+    .node.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 25px var(--gold-glow);
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #162035, #111a2c);
+    }
+    .node.active-cyan {
+      border-color: var(--cyan);
+      box-shadow: 0 0 25px var(--cyan-glow);
+      transform: scale(1.05);
+    }
+    .node.active-emerald {
+      border-color: var(--emerald);
+      box-shadow: 0 0 25px var(--emerald-glow);
+      transform: scale(1.05);
+    }
+    .node-type {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .node-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+      color: #fff;
+    }
+    .node-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+    .node-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-dim);
+    }
+
+    /* Component Details Drawer */
+    .drawer {
+      position: fixed;
+      right: -440px;
+      top: 0;
+      width: 420px;
+      height: 100vh;
+      background: #090e18;
+      border-left: 1px solid var(--card-border);
+      box-shadow: -15px 0 40px rgba(0, 0, 0, 0.7);
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 2.25rem;
+      z-index: 100;
+      overflow-y: auto;
+    }
+    .drawer.open { right: 0; }
+    .drawer-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .drawer-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    .drawer-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .drawer-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+    .drawer-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .meta-box {
+      background: #0f1624;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .meta-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .meta-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--cyan);
+    }
+    .file-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .file-list li {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      padding: 0.4rem 0.6rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      margin-bottom: 0.4rem;
+      color: #7dd3fc;
+      word-break: break-all;
+    }
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34d399;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Footer Stats */
+    footer {
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #090e18;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="brand-group">
+      <div class="brand-logo">Speisely <span>Architecture</span></div>
+      <span class="badge">Live Request Simulation</span>
+    </div>
+    <div style="font-size: 0.85rem; color: var(--text-muted);">
+      Click any node to inspect code paths, latencies & security boundaries
+    </div>
+  </header>
+
+  <!-- Scenario Switcher -->
+  <div class="scenario-tabs">
+    <button class="scenario-btn active" id="tab-scenario-1" onclick="switchScenario(0)">
+      🍕 Flow A: Instant Restaurant Order &amp; KDS Print
+    </button>
+    <button class="scenario-btn" id="tab-scenario-2" onclick="switchScenario(1)">
+      🍱 Flow B: Catering Brief &amp; Lead Dispatch
+    </button>
+    <button class="scenario-btn" id="tab-scenario-3" onclick="switchScenario(2)">
+      🌐 Flow C: Standalone Website &amp; Google AI SEO
+    </button>
+  </div>
+
+  <!-- Controls Toolbar -->
+  <div class="controls">
+    <button class="btn btn-gold" id="playBtn" onclick="togglePlay()">▶ Play Simulation</button>
+    <button class="btn" onclick="prevStep()">◀ Previous</button>
+    <button class="btn" onclick="nextStep()">Next ▶</button>
+    <button class="btn" onclick="resetStep()" style="margin-left: auto;">↺ Reset</button>
+    <span id="stepCounter" style="color: var(--cyan); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding-left: 0.75rem;">Stage 1 of 5</span>
+  </div>
+
+  <!-- Stage Description Banner -->
+  <div class="stage-banner">
+    <div>
+      <div class="stage-title" id="stageTitle">Stage 1: User Request Ingress</div>
+      <div class="stage-desc" id="stageDesc">Customer selects menu items and enters table/delivery details in the client UI.</div>
+    </div>
+    <div class="stage-indicator" id="stageIndicator">STAGE 1 / 5</div>
+  </div>
+
+  <!-- Interactive Blueprint Canvas -->
+  <div class="canvas-container" id="canvas">
+    <svg class="connections" id="svgCanvas"></svg>
+
+    <!-- Node 1: Public Client UI -->
+    <div class="node" id="node-client" style="top: 60px; left: 40px;" onclick="openInspector('client')">
+      <div class="node-type">
+        <span>Frontend UI</span>
+        <span class="node-badge">SPA / SSR</span>
+      </div>
+      <div class="node-title">React 19 &amp; TanStack</div>
+      <div class="node-sub">Mobile-First UI, Cart, Guest Slider &amp; Forms</div>
+    </div>
+
+    <!-- Node 2: TanStack Start SSR & Edge Server -->
+    <div class="node" id="node-edge" style="top: 60px; left: 340px;" onclick="openInspector('edge')">
+      <div class="node-type">
+        <span>Edge Gateway</span>
+        <span class="node-badge">Nitro / Vercel</span>
+      </div>
+      <div class="node-title">TanStack Start SSR</div>
+      <div class="node-sub">Server Functions, SEO Graph, Auth Middleware</div>
+    </div>
+
+    <!-- Node 3: Stripe Payment Gateway -->
+    <div class="node" id="node-stripe" style="top: 60px; left: 640px;" onclick="openInspector('stripe')">
+      <div class="node-type">
+        <span>Fintech Bridge</span>
+        <span class="node-badge">Stripe Connect</span>
+      </div>
+      <div class="node-title">Stripe Payments</div>
+      <div class="node-sub">0% Fee Direct Vendor Routing &amp; Webhooks</div>
+    </div>
+
+    <!-- Node 4: Supabase Postgres (Database) -->
+    <div class="node" id="node-db" style="top: 250px; left: 340px;" onclick="openInspector('db')">
+      <div class="node-type">
+        <span>Persistence</span>
+        <span class="node-badge">Postgres + RLS</span>
+      </div>
+      <div class="node-title">Supabase Database</div>
+      <div class="node-sub">Multi-Tenant RBAC, Quotes, Menus &amp; Audits</div>
+    </div>
+
+    <!-- Node 5: Supabase Realtime Engine -->
+    <div class="node" id="node-realtime" style="top: 250px; left: 640px;" onclick="openInspector('realtime')">
+      <div class="node-type">
+        <span>Event Broker</span>
+        <span class="node-badge">WebSockets</span>
+      </div>
+      <div class="node-title">Realtime Engine</div>
+      <div class="node-sub">Sub-50ms Pub/Sub Broadcasts to Dashboards</div>
+    </div>
+
+    <!-- Node 6: Thermal Hardware Print Engine / KDS -->
+    <div class="node" id="node-printer" style="top: 440px; left: 640px;" onclick="openInspector('printer')">
+      <div class="node-type">
+        <span>Hardware Engine</span>
+        <span class="node-badge">ESC/POS + WebUSB</span>
+      </div>
+      <div class="node-title">Thermal Printer &amp; KDS</div>
+      <div class="node-sub">Kitchen Slip Generation &amp; Station Routing</div>
+    </div>
+
+    <!-- Node 7: Resend Email Engine -->
+    <div class="node" id="node-email" style="top: 440px; left: 340px;" onclick="openInspector('email')">
+      <div class="node-type">
+        <span>Notification</span>
+        <span class="node-badge">Resend API</span>
+      </div>
+      <div class="node-title">Transactional Email</div>
+      <div class="node-sub">Instant Lead Briefs, PDF Quotes &amp; Receipts</div>
+    </div>
+
+    <!-- Node 8: AI & SEO Knowledge Graph -->
+    <div class="node" id="node-seo" style="top: 250px; left: 40px;" onclick="openInspector('seo')">
+      <div class="node-type">
+        <span>AI / GEO Graph</span>
+        <span class="node-badge">JSON-LD</span>
+      </div>
+      <div class="node-title">AI Overview &amp; /llms.txt</div>
+      <div class="node-sub">Perplexity, ChatGPT &amp; Gemini Grounding</div>
+    </div>
+  </div>
+
+  <!-- Inspector Drawer -->
+  <div class="drawer" id="inspectorDrawer">
+    <button class="drawer-close" onclick="closeInspector()">✕</button>
+    <div id="inspectorContent"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div>Speisely Production Architecture Simulator · Zero External Runtime Dependencies</div>
+    <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold);">v2.4-production</div>
+  </footer>
+
+  <script>
+    // 1. Architecture Component Metadata
+    const NODES = {
+      client: {
+        title: "React 19 & TanStack Router",
+        type: "Frontend SPA / SSR Client",
+        files: [
+          "src/router.tsx",
+          "src/routes/index.tsx",
+          "src/routes/catering.$slug.tsx",
+          "src/routes/restaurant.$slug.tsx",
+          "src/components/SiteShell.tsx"
+        ],
+        role: "Renders responsive, high-density editorial UI. Manages cart state, optimistic mutations, guest slider budget calculations, and live search aggregation.",
+        latency: "~16ms (60 FPS Motion)",
+        protocol: "HTTPS / WSS / DOM",
+        security: "Client-Side Input Sanitization · CSP Headers · Session Storage"
+      },
+      edge: {
+        title: "TanStack Start & Nitro Edge Gateway",
+        type: "Serverless Compute & SSR",
+        files: [
+          "src/start.ts",
+          "src/server.ts",
+          "src/lib/auth/role-middleware.ts",
+          "src/routes/sitemap[.]xml.ts",
+          "src/routes/llms[.]txt.ts"
+        ],
+        role: "Executes typed server functions, handles SSR HTML hydration, performs RBAC role checks, generates dynamic XML sitemaps, and feeds AI crawlers via /llms.txt.",
+        latency: "< 25ms TTFB (Vercel Edge)",
+        protocol: "HTTP/2, HTTPS Server Functions",
+        security: "Role-Based Middleware · Supabase Auth Tokens · Rate Limiting"
+      },
+      stripe: {
+        title: "Stripe Direct Connect Gateway",
+        type: "Payment Infrastructure",
+        files: [
+          "src/lib/stripe.ts",
+          "src/routes/api.stripe.webhook.ts"
+        ],
+        role: "Enables direct vendor payouts without intermediary commission escrow. Processes Apple Pay, Google Pay, SEPA, and cards, then signs webhook events.",
+        latency: "250ms - 450ms",
+        protocol: "REST API, Signed HMAC Webhooks",
+        security: "PCI-DSS Level 1 · 256-bit Webhook Signature Verification"
+      },
+      db: {
+        title: "Supabase Postgres Database",
+        type: "Relational Persistence & RLS",
+        files: [
+          "src/lib/auth/get-user-profile.functions.ts",
+          "src/lib/caterer/menu.functions.ts",
+          "src/lib/customer/mutations.functions.ts",
+          "src/lib/geo/server.functions.ts"
+        ],
+        role: "Stores all multi-tenant records: caterers, restaurants, planners, menus, quote requests, and audit logs. Governed by strict Row Level Security.",
+        latency: "12ms - 20ms",
+        protocol: "PostgreSQL Wire / PostgREST",
+        security: "Strict Row Level Security (RLS) · Zero Cross-Vendor Leakage"
+      },
+      realtime: {
+        title: "Supabase Realtime Broadcast Engine",
+        type: "WebSocket Event Bus",
+        files: [
+          "src/routes/_authenticated/restaurant.kitchen.tsx",
+          "src/routes/_authenticated/caterer.tsx"
+        ],
+        role: "Broadcasts instant database changes (orders, status updates, lead briefs) to connected merchant dashboards and kitchen terminals in real time.",
+        latency: "< 45ms Pub/Sub",
+        protocol: "WebSockets (WSS) / Phoenix Channels",
+        security: "Encrypted WebSocket Channels · Channel-Level Auth Grants"
+      },
+      printer: {
+        title: "Thermal Hardware Print Engine (ESC/POS)",
+        type: "Hardware Output Controller",
+        files: [
+          "src/lib/festival/printer.ts",
+          "src/lib/festival/useFestivalCashRegister.ts",
+          "src/lib/festival/idbStorage.ts"
+        ],
+        role: "Converts JSON order payloads into binary ESC/POS commands. Transmits directly to 80mm/58mm thermal receipt printers via WebUSB, Network IP, or Bluetooth.",
+        latency: "~50ms Hardware Print",
+        protocol: "WebUSB, RAW TCP/IP Socket (Port 9100)",
+        security: "Direct Local Hardware Access · Offline IndexedDB Buffer"
+      },
+      email: {
+        title: "Resend Transactional Email Gateway",
+        type: "Email Dispatch Service",
+        files: [
+          "src/lib/email.functions.ts"
+        ],
+        role: "Sends instant email notifications to caterers with structured event brief details, guest counts, and customer contact data, plus booking receipts.",
+        latency: "150ms - 300ms",
+        protocol: "HTTPS REST API (Resend SDK)",
+        security: "DKIM, SPF, DMARC Verified · Secret API Key Isolation"
+      },
+      seo: {
+        title: "AI & GEO Knowledge Engine",
+        type: "Structured Data & AI Grounding",
+        files: [
+          "src/routes/llms[.]txt.ts",
+          "public/llms.txt",
+          "public/llms-full.txt",
+          "src/routes/sitemap[.]xml.ts"
+        ],
+        role: "Publishes JSON-LD Schema.org graphs and synchronized /llms.txt documentation to ensure authoritative citations by Perplexity, ChatGPT Search, Gemini, and Google AI Overviews.",
+        latency: "< 10ms (Edge Static)",
+        protocol: "HTTPS / Text-Plain / XML",
+        security: "Public Read-Only Schema · High-Density Entity Graphs"
+      }
+    };
+
+    // 2. Scenarios Definition
+    const SCENARIOS = [
+      {
+        id: "instant-order",
+        name: "Flow A: Instant Restaurant Order & KDS Print",
+        stages: [
+          {
+            title: "Stage 1: Order Placement in Client UI",
+            desc: "Customer selects dishes (e.g. Smashburger or Shawarma) on the storefront and proceeds to checkout.",
+            activeNodes: ["node-client"],
+            activeLinks: ["link-client-edge"]
+          },
+          {
+            title: "Stage 2: Edge Server Validation & Session Creation",
+            desc: "TanStack Start edge server validates dish availability, prices, and creates a Stripe Checkout Session.",
+            activeNodes: ["node-edge", "node-stripe"],
+            activeLinks: ["link-edge-stripe"]
+          },
+          {
+            title: "Stage 3: Payment Confirmation & Webhook Processing",
+            desc: "Customer pays via Apple Pay/Card; Stripe fires signed webhook directly into the edge handler.",
+            activeNodes: ["node-stripe", "node-edge"],
+            activeLinks: ["link-stripe-edge"]
+          },
+          {
+            title: "Stage 4: Database Commit & Realtime Broadcast",
+            desc: "Order is saved in Supabase Postgres and broadcasted instantly over WebSockets to merchant devices.",
+            activeNodes: ["node-db", "node-realtime"],
+            activeLinks: ["link-edge-db", "link-db-realtime"]
+          },
+          {
+            title: "Stage 5: Kitchen Screen (KDS) & Thermal Print Dispatch",
+            desc: "Kitchen dashboard receives the order via WSS and generates binary ESC/POS receipt commands via WebUSB.",
+            activeNodes: ["node-realtime", "node-printer"],
+            activeLinks: ["link-realtime-printer"]
+          }
+        ]
+      },
+      {
+        id: "catering-brief",
+        name: "Flow B: Catering Brief & Lead Dispatch",
+        stages: [
+          {
+            title: "Stage 1: Client Submits Catering Brief",
+            desc: "Event organizer configures guest count (e.g. 150 guests), budget per head, date, and dietary tags.",
+            activeNodes: ["node-client"],
+            activeLinks: ["link-client-edge"]
+          },
+          {
+            title: "Stage 2: Geo & Capacity Matching Engine",
+            desc: "Edge server filters caterers by city radius, kitchen capacity, and availability schedule.",
+            activeNodes: ["node-edge"],
+            activeLinks: ["link-edge-db"]
+          },
+          {
+            title: "Stage 3: Database Lead Creation with RLS",
+            desc: "Inquiry is stored in Postgres with strict partner isolation rules and qualification scoring.",
+            activeNodes: ["node-db"],
+            activeLinks: ["link-db-email", "link-db-realtime"]
+          },
+          {
+            title: "Stage 4: Instant Notification via Resend & WSS",
+            desc: "Matched caterers receive rich email notification via Resend and live dashboard badge update.",
+            activeNodes: ["node-email", "node-realtime"],
+            activeLinks: ["link-db-email"]
+          },
+          {
+            title: "Stage 5: Caterer Submits Custom Proposal",
+            desc: "Caterer reviews brief in portal, tailors menu PDF quote, and client receives instant booking link.",
+            activeNodes: ["node-client", "node-edge"],
+            activeLinks: ["link-edge-client"]
+          }
+        ]
+      },
+      {
+        id: "website-seo",
+        name: "Flow C: Standalone Website & Google AI SEO",
+        stages: [
+          {
+            title: "Stage 1: AI Search Crawler / Visitor Ingress",
+            desc: "Google AI Overview, Perplexity, or visitor navigates to partyservicekuepper.de or speisely.de.",
+            activeNodes: ["node-seo"],
+            activeLinks: ["link-seo-edge"]
+          },
+          {
+            title: "Stage 2: Edge SSR & JSON-LD Knowledge Graph",
+            desc: "Vercel Nitro serves ultra-fast HTML (PageSpeed 99+) with full Restaurant/Catering Schema.org entities.",
+            activeNodes: ["node-edge", "node-seo"],
+            activeLinks: ["link-edge-seo"]
+          },
+          {
+            title: "Stage 3: Menu & Capacity Hydration",
+            desc: "Dynamic pricing, BBQ menus, and open dates are read directly from cached Supabase records.",
+            activeNodes: ["node-db"],
+            activeLinks: ["link-edge-db"]
+          },
+          {
+            title: "Stage 4: Client Interaction & Direct Booking",
+            desc: "Visitor uses interactive Event Calculator to request immediate date reservation.",
+            activeNodes: ["node-client"],
+            activeLinks: ["link-client-edge"]
+          }
+        ]
+      }
+    ];
+
+    let currentScenarioIdx = 0;
+    let currentStep = 0;
+    let playInterval = null;
+
+    // 3. Draw SVG Connection Lines
+    function drawConnections() {
+      const svg = document.getElementById('svgCanvas');
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrow-gold" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#e6b84a" />
+          </marker>
+          <marker id="arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8" />
+          </marker>
+        </defs>
+        
+        <!-- Row 1: Client -> Edge -> Stripe -->
+        <path id="link-client-edge" class="connection-line" d="M 270 105 L 340 105" marker-end="url(#arrow-gold)" />
+        <path id="link-edge-client" class="connection-line" d="M 340 125 L 270 125" marker-end="url(#arrow-cyan)" />
+        <path id="link-edge-stripe" class="connection-line" d="M 570 105 L 640 105" marker-end="url(#arrow-gold)" />
+        <path id="link-stripe-edge" class="connection-line" d="M 640 125 L 570 125" marker-end="url(#arrow-gold)" />
+
+        <!-- Vertical: Edge <-> DB -->
+        <path id="link-edge-db" class="connection-line" d="M 455 170 L 455 250" marker-end="url(#arrow-gold)" />
+
+        <!-- Horizontal 2: DB <-> Realtime -->
+        <path id="link-db-realtime" class="connection-line" d="M 570 295 L 640 295" marker-end="url(#arrow-gold)" />
+
+        <!-- Vertical 2: Realtime -> Printer -->
+        <path id="link-realtime-printer" class="connection-line" d="M 755 360 L 755 440" marker-end="url(#arrow-gold)" />
+
+        <!-- Vertical 3: DB -> Email -->
+        <path id="link-db-email" class="connection-line" d="M 455 360 L 455 440" marker-end="url(#arrow-gold)" />
+
+        <!-- Left Column: SEO <-> Edge -->
+        <path id="link-seo-edge" class="connection-line" d="M 270 295 L 340 295" marker-end="url(#arrow-cyan)" />
+        <path id="link-edge-seo" class="connection-line" d="M 340 140 L 160 250" marker-end="url(#arrow-gold)" />
+      `;
+    }
+
+    function updateSimulation() {
+      const scenario = SCENARIOS[currentScenarioIdx];
+      const stage = scenario.stages[currentStep];
+
+      document.getElementById('stageTitle').innerText = stage.title;
+      document.getElementById('stageDesc').innerText = stage.desc;
+      document.getElementById('stepCounter').innerText = `Stage ${currentStep + 1} of ${scenario.stages.length}`;
+      document.getElementById('stageIndicator').innerText = `STAGE ${currentStep + 1} / ${scenario.stages.length}`;
+
+      // Reset active states
+      document.querySelectorAll('.node').forEach(n => {
+        n.classList.remove('active', 'active-cyan', 'active-emerald');
+      });
+      document.querySelectorAll('.connection-line').forEach(l => {
+        l.classList.remove('active', 'active-cyan', 'active-emerald');
+      });
+
+      // Apply current stage active nodes
+      stage.activeNodes.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('active');
+      });
+
+      // Apply current stage active links
+      if (stage.activeLinks) {
+        stage.activeLinks.forEach(id => {
+          const line = document.getElementById(id);
+          if (line) line.classList.add('active');
+        });
+      }
+    }
+
+    function nextStep() {
+      const scenario = SCENARIOS[currentScenarioIdx];
+      currentStep = (currentStep + 1) % scenario.stages.length;
+      updateSimulation();
+    }
+
+    function prevStep() {
+      const scenario = SCENARIOS[currentScenarioIdx];
+      currentStep = (currentStep - 1 + scenario.stages.length) % scenario.stages.length;
+      updateSimulation();
+    }
+
+    function resetStep() {
+      currentStep = 0;
+      updateSimulation();
+    }
+
+    function togglePlay() {
+      const btn = document.getElementById('playBtn');
+      if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+        btn.innerHTML = "▶ Play Simulation";
+        btn.classList.add('btn-gold');
+      } else {
+        playInterval = setInterval(nextStep, 2600);
+        btn.innerHTML = "⏸ Pause Simulation";
+        btn.classList.remove('btn-gold');
+      }
+    }
+
+    function switchScenario(idx) {
+      if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+        document.getElementById('playBtn').innerHTML = "▶ Play Simulation";
+      }
+      currentScenarioIdx = idx;
+      currentStep = 0;
+      document.querySelectorAll('.scenario-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+      });
+      updateSimulation();
+    }
+
+    function openInspector(key) {
+      const data = NODES[key];
+      if (!data) return;
+      const drawer = document.getElementById('inspectorDrawer');
+      const content = document.getElementById('inspectorContent');
+      content.innerHTML = `
+        <div class="drawer-tag">${data.type}</div>
+        <h3 class="drawer-title">${data.title}</h3>
+        <p class="drawer-desc">${data.role}</p>
+        
+        <div class="meta-box">
+          <div class="meta-label">Protocol &amp; Wire Format</div>
+          <div class="meta-value">${data.protocol}</div>
+        </div>
+
+        <div class="meta-box">
+          <div class="meta-label">Execution Latency (P95)</div>
+          <div class="meta-value" style="color: var(--emerald);">${data.latency}</div>
+        </div>
+
+        <div class="meta-box">
+          <div class="meta-label">Security &amp; Isolation</div>
+          <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem;">${data.security}</div>
+        </div>
+
+        <h4 style="margin-top: 1.5rem; margin-bottom: 0.6rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold);">Source Code Modules:</h4>
+        <ul class="file-list">
+          ${data.files.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+      `;
+      drawer.classList.add('open');
+    }
+
+    function closeInspector() {
+      document.getElementById('inspectorDrawer').classList.remove('open');
+    }
+
+    // Initialize
+    drawConnections();
+    updateSimulation();
+  </script>
+</body>
+</html>

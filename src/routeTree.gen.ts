@@ -24,6 +24,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DatenschutzRouteImport } from './routes/datenschutz'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CateringRouteImport } from './routes/catering'
+import { Route as ArchitectureSimulatorRouteImport } from './routes/architecture-simulator'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -153,6 +154,11 @@ const ContactRoute = ContactRouteImport.update({
 const CateringRoute = CateringRouteImport.update({
   id: '/catering',
   path: '/catering',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArchitectureSimulatorRoute = ArchitectureSimulatorRouteImport.update({
+  id: '/architecture-simulator',
+  path: '/architecture-simulator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -459,6 +465,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/architecture-simulator': typeof ArchitectureSimulatorRoute
   '/catering': typeof CateringRouteWithChildren
   '/contact': typeof ContactRoute
   '/datenschutz': typeof DatenschutzRoute
@@ -530,6 +537,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/architecture-simulator': typeof ArchitectureSimulatorRoute
   '/contact': typeof ContactRoute
   '/datenschutz': typeof DatenschutzRoute
   '/faq': typeof FaqRoute
@@ -600,6 +608,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/architecture-simulator': typeof ArchitectureSimulatorRoute
   '/catering': typeof CateringRouteWithChildren
   '/contact': typeof ContactRoute
   '/datenschutz': typeof DatenschutzRoute
@@ -673,6 +682,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/architecture-simulator'
     | '/catering'
     | '/contact'
     | '/datenschutz'
@@ -744,6 +754,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/architecture-simulator'
     | '/contact'
     | '/datenschutz'
     | '/faq'
@@ -813,6 +824,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/about'
     | '/admin'
+    | '/architecture-simulator'
     | '/catering'
     | '/contact'
     | '/datenschutz'
@@ -886,6 +898,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
+  ArchitectureSimulatorRoute: typeof ArchitectureSimulatorRoute
   CateringRoute: typeof CateringRouteWithChildren
   ContactRoute: typeof ContactRoute
   DatenschutzRoute: typeof DatenschutzRoute
@@ -1035,6 +1048,13 @@ declare module '@tanstack/react-router' {
       path: '/catering'
       fullPath: '/catering'
       preLoaderRoute: typeof CateringRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/architecture-simulator': {
+      id: '/architecture-simulator'
+      path: '/architecture-simulator'
+      fullPath: '/architecture-simulator'
+      preLoaderRoute: typeof ArchitectureSimulatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -1565,6 +1585,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
+  ArchitectureSimulatorRoute: ArchitectureSimulatorRoute,
   CateringRoute: CateringRouteWithChildren,
   ContactRoute: ContactRoute,
   DatenschutzRoute: DatenschutzRoute,

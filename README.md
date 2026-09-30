@@ -21,7 +21,7 @@
 <p align="center">
   <a href="#overview"><strong>Overview</strong></a> ·
   <a href="#core-capabilities"><strong>Core Capabilities</strong></a> ·
-  <a href="#search-pipeline"><strong>Search Pipeline</strong></a> ·
+  <a href="#interactive-architecture-simulator"><strong>Interactive Architecture</strong></a> ·
   <a href="#studios--tools"><strong>Studios &amp; Tools</strong></a> ·
   <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
   <a href="#quick-start"><strong>Quick Start</strong></a> ·
@@ -75,25 +75,26 @@ The platform bridges instant high-speed restaurant ordering with full-scale ente
 
 ---
 
-## Search Pipeline (Uber Eats Architecture)
+## Interactive Architecture Simulator
 
-Speisely executes a 4-stage parallel search pipeline to provide sub-30ms discovery across Caterers, Restaurants, and Magazine Stories:
+Speisely features a zero-dependency **Live Request Lifecycle Simulator** to inspect data flows, latency profiles, and security boundaries across services:
 
+👉 **[Launch Architecture Simulator (`public/architecture-simulator.html`)](https://speisely.de/architecture-simulator.html)** or view at `/architecture-simulator`.
+
+```text
+[React 19 Client UI] ──(HTTPS)──► [TanStack Start SSR Edge] ──(Webhook)──► [Stripe Connect]
+         │                                   │                                     │
+         ▼ (GEO / SEO)                       ▼ (SQL + RLS)                         ▼ (0% Payout)
+[AI /llms.txt Engine]              [Supabase Postgres DB]               [Direct Vendor Escrow]
+                                             │
+                                             ▼ (WebSocket Pub/Sub)
+                                   [Realtime Engine & KDS] ──(ESC/POS)──► [Thermal Printers]
 ```
-[User Query / City / Intent]
-             │
-             ▼
-[Stage 1: Geo Candidate Retrieval] ──► PostGIS radius & City cluster lookup
-             │
-             ▼
-[Stage 2: Product & Dish Aggregation] ──► Groups by Concept (Fingerfood, Cheesecake, BBQ)
-             │
-             ▼
-[Stage 3: Parallel Hydration & Reviews] ──► Fetches ratings, minimum orders & pricing
-             │
-             ▼
-[Stage 4: Real-time Budget Engine] ──► Computes total event cost & suggested packages
-```
+
+### Supported Simulation Scenarios:
+1. **Flow A: Instant Restaurant Order & KDS Print** — Client checkout → Nitro Edge validation → Stripe payment → Postgres RLS commit → WebSockets → ESC/POS thermal ticket printer.
+2. **Flow B: Catering Brief & Lead Dispatch** — Headcount slider input → Geo radius filtering → Multi-tenant Postgres brief → Resend transactional email → Caterer portal.
+3. **Flow C: Standalone Website & Google AI SEO** — Edge SSR hydration (PageSpeed 99+) → Multi-entity JSON-LD graphs → Dynamic `/llms.txt` synchronization → Direct client inquiry bridge.
 
 ---
 

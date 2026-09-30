@@ -26,6 +26,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - Event Planner Directory: ${BASE}/planner
 - Partner / Pricing Page: ${BASE}/partners
 - B2B Website-Erstellung (Websites for Caterers & Restaurants): ${BASE}/partner/webseiten
+- Interactive Architecture Simulator: ${BASE}/architecture-simulator
 - Blog: ${BASE}/blog
 - About Us: ${BASE}/about
 

@@ -15,6 +15,7 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - Event Planner Directory: https://speisely.de/planner
 - Partner / Pricing Page: https://speisely.de/partners
 - B2B Website-Erstellung (Custom Websites for Caterers): https://speisely.de/partner/webseiten
+- Interactive Architecture Simulator: https://speisely.de/architecture-simulator
 - Blog: https://speisely.de/blog
 - About Us: https://speisely.de/about
 
