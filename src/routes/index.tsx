@@ -112,50 +112,6 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "Organization",
-              "@id": "https://speisely.de/#organization",
-              name: "Speisely",
-              alternateName: "Speisely Marketplace",
-              url: "https://speisely.de",
-              logo: "https://speisely.de/favicon.svg",
-              description:
-                "Deutschlandweiter Marktplatz für Catering, Restaurants und Eventplanung.",
-              areaServed: {
-                "@type": "Country",
-                name: "Germany",
-              },
-              contactPoint: {
-                "@type": "ContactPoint",
-                contactType: "Customer Support",
-                email: "kontakt@speisely.de",
-                availableLanguage: ["German", "English"],
-              },
-              sameAs: [
-                "https://www.linkedin.com/company/speisely",
-                "https://www.instagram.com/speisely/",
-              ],
-            },
-            {
-              "@type": "WebSite",
-              "@id": "https://speisely.de/#website",
-              url: "https://speisely.de",
-              name: "Speisely",
-              description:
-                "Speisely verbindet Restaurants, Caterer und Event-Planer mit Kunden in ganz Deutschland.",
-              publisher: {
-                "@id": "https://speisely.de/#organization",
-              },
-              inLanguage: ["de-DE", "en-US"],
-              potentialAction: {
-                "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: "https://speisely.de/catering?q={search_term_string}",
-                },
-                "query-input": "required name=search_term_string",
-              },
-            },
-            {
               "@type": "Service",
               "@id": "https://speisely.de/#service-catering",
               name: "Event & Business Catering",
@@ -199,70 +155,6 @@ export const Route = createFileRoute("/")({
               },
               description:
                 "Vermittlung und Koordination professioneller Eventplaner für private und geschäftliche Veranstaltungen.",
-            },
-            {
-              "@type": "Product",
-              "@id": "https://speisely.de/#product-instant-orders",
-              name: "Speisely Restaurant Instant Orders",
-              description:
-                "Direktbestellungen für Restaurants mit 0 % Bestellprovision und sofortiger Auszahlung.",
-              brand: {
-                "@id": "https://speisely.de/#organization",
-              },
-              offers: {
-                "@type": "Offer",
-                price: "34.99",
-                priceCurrency: "EUR",
-                priceValidUntil: "2027-12-31",
-                availability: "https://schema.org/InStock",
-              },
-            },
-            {
-              "@type": "FAQPage",
-              "@id": "https://speisely.de/#faq",
-              name: "Häufig gestellte Fragen zu Speisely",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "Was ist Speisely?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Wir verbinden Kunden direkt mit lokalen Partnern ohne versteckte Gebühren.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Wie kann ich Catering über Speisely anfragen?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Über das Anfrageformular gibst du Anlass, Gästezahl und Datum an. Passende Caterer in deiner Region senden dir innerhalb kürzester Zeit maßgeschneiderte Angebote (ab 18 € bis 75 € pro Person).",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Ist die Nutzung von Speisely für Kunden kostenlos?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Ja, die Suche, der Angebotsvergleich und die Anfrage bei Caterern und Eventplanern sind für Kunden zu 100 % kostenlos.",
-                  },
-                },
-              ],
-            },
-            {
-              "@type": "NewsArticle",
-              "@id": "https://speisely.de/#press-spotlight",
-              headline: "Speisely Gastronomie & Catering Plattform Deutschland",
-              description:
-                "Aktuelle Reportagen, Speisely Visits und Vor-Ort-Analysen der besten Restaurants und Caterer Deutschlands.",
-              publisher: {
-                "@id": "https://speisely.de/#organization",
-              },
-              author: {
-                "@type": "Organization",
-                name: "Speisely Redaktion & TechGlanz Studio",
-              },
-              datePublished: "2026-06-01T00:00:00Z",
-              dateModified: new Date().toISOString(),
             },
             {
               "@type": "BreadcrumbList",

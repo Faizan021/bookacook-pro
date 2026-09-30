@@ -310,6 +310,46 @@ function rule10_SitemapIntegrity() {
 }
 
 // =============================================================================
+// RULE 11 — Meta Title and Description SERP Length Standards
+// =============================================================================
+function rule11_MetaLengthStandards() {
+  const routeFiles = collectFiles(ROUTES_DIR);
+  let lengthErrors = 0;
+  for (const fullPath of routeFiles) {
+    const content = fs.readFileSync(fullPath, 'utf8');
+    const tMatch = content.match(/title:\s*['"`]([^'"`]+)['"`]/);
+    if (tMatch && tMatch[1].length > 58) {
+      fail('11', path.relative('.', fullPath), `Meta title too long (${tMatch[1].length} chars > 58 max): "${tMatch[1]}"`);
+      lengthErrors++;
+    }
+    const dMatches = content.matchAll(/name:\s*['"`]description['"`],\s*content:\s*['"`]([^'"`]+)['"`]/g);
+    for (const dm of dMatches) {
+      if (dm[1].length > 155) {
+        fail('11', path.relative('.', fullPath), `Meta description too long (${dm[1].length} chars > 155 max): "${dm[1]}"`);
+        lengthErrors++;
+      }
+    }
+  }
+  if (lengthErrors === 0) {
+    pass('11', 'All route titles (<= 58) and descriptions (<= 155) comply with SERP standards');
+  }
+}
+
+// =============================================================================
+// RULE 12 — Global JSON-LD Schema Validation
+// =============================================================================
+function rule12_GlobalSchemaValidation() {
+  const rootFile = path.join(ROUTES_DIR, '__root.tsx');
+  if (!fs.existsSync(rootFile)) return;
+  const content = fs.readFileSync(rootFile, 'utf8');
+  if (content.includes('"FAQPage"')) {
+    fail('12', '__root.tsx', 'Global FAQPage schema detected in __root.tsx. FAQPage schema must only exist on /faq route.');
+    return;
+  }
+  pass('12', 'Root JSON-LD schema clean (Organization & WebSite only, no global FAQPage leaks)');
+}
+
+// =============================================================================
 // RUN ALL RULES
 // =============================================================================
 console.log();
@@ -328,6 +368,8 @@ rule7_NoTodoHack();
 rule8_NoHardcodedJSXMeta();
 rule9_PublicAssetIntegrity();
 rule10_SitemapIntegrity();
+rule11_MetaLengthStandards();
+rule12_GlobalSchemaValidation();
 
 console.log();
 console.log('──────────────────────────────────────────────────────');
