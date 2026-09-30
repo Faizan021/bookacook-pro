@@ -330,7 +330,15 @@ function isSubscriptionBlocked(status: string | null): boolean {
   return false;
 }
 
+let cachedRestaurants: { data: Restaurant[]; timestamp: number } | null = null;
+const RESTAURANT_CACHE_TTL_MS = 60 * 1000; // 60 seconds
+
 export async function getRestaurants(): Promise<Restaurant[]> {
+  const now = Date.now();
+  if (cachedRestaurants && now - cachedRestaurants.timestamp < RESTAURANT_CACHE_TTL_MS) {
+    return cachedRestaurants.data;
+  }
+
   const { data, error } = await supabase
     .from("restaurants")
     .select(
@@ -353,17 +361,20 @@ export async function getRestaurants(): Promise<Restaurant[]> {
   const liveRestaurants = validData.map(mapRestaurant);
   const MIN_DISPLAY_COUNT = 6;
 
+  let result: Restaurant[];
   if (liveRestaurants.length >= MIN_DISPLAY_COUNT) {
-    return liveRestaurants;
+    result = liveRestaurants;
+  } else {
+    const needed = MIN_DISPLAY_COUNT - liveRestaurants.length;
+    const showcaseItems = fallbackRestaurants.slice(0, needed).map((r) => ({
+      ...r,
+      isShowcase: true,
+    }));
+    result = [...liveRestaurants, ...showcaseItems];
   }
 
-  const needed = MIN_DISPLAY_COUNT - liveRestaurants.length;
-  const showcaseItems = fallbackRestaurants.slice(0, needed).map((r) => ({
-    ...r,
-    isShowcase: true,
-  }));
-
-  return [...liveRestaurants, ...showcaseItems];
+  cachedRestaurants = { data: result, timestamp: now };
+  return result;
 }
 
 export async function getRestaurant(slugOrId: string): Promise<Restaurant | undefined> {

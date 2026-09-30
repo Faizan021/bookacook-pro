@@ -1597,7 +1597,15 @@ export function mapDbCaterer(c: any): Caterer {
   };
 }
 
+let cachedCaterers: { data: Caterer[]; timestamp: number } | null = null;
+const CATERER_CACHE_TTL_MS = 60 * 1000; // 60 seconds
+
 export async function getCaterers(): Promise<Caterer[]> {
+  const now = Date.now();
+  if (cachedCaterers && now - cachedCaterers.timestamp < CATERER_CACHE_TTL_MS) {
+    return cachedCaterers.data;
+  }
+
   try {
     const list = await getPublicCatererList();
     const liveCaterers = (list || []).map(mapDbCaterer);
@@ -1614,21 +1622,24 @@ export async function getCaterers(): Promise<Caterer[]> {
     }
 
     const MIN_DISPLAY_COUNT = 4;
+    let result: Caterer[];
     if (combined.length >= MIN_DISPLAY_COUNT) {
-      return combined;
+      result = combined;
+    } else {
+      const needed = MIN_DISPLAY_COUNT - combined.length;
+      const existingIds = new Set(combined.map((c) => c.id));
+      const showcaseItems = fallbackCaterers
+        .filter((c) => !existingIds.has(c.id))
+        .slice(0, needed)
+        .map((c) => ({
+          ...c,
+          isShowcase: true,
+        }));
+      result = [...combined, ...showcaseItems];
     }
 
-    const needed = MIN_DISPLAY_COUNT - combined.length;
-    const existingIds = new Set(combined.map((c) => c.id));
-    const showcaseItems = fallbackCaterers
-      .filter((c) => !existingIds.has(c.id))
-      .slice(0, needed)
-      .map((c) => ({
-        ...c,
-        isShowcase: true,
-      }));
-
-    return [...combined, ...showcaseItems];
+    cachedCaterers = { data: result, timestamp: now };
+    return result;
   } catch (err) {
     console.error("Failed to load caterers via server function, using fallbacks:", err);
     return fallbackCaterers.map((c) => ({ ...c, isShowcase: true }));

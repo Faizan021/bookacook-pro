@@ -345,7 +345,15 @@ function mapPlanner(r: any): Planner {
   };
 }
 
+let cachedPlanners: { data: Planner[]; timestamp: number } | null = null;
+const PLANNER_CACHE_TTL_MS = 60 * 1000; // 60 seconds
+
 export async function getPlanners(): Promise<Planner[]> {
+  const now = Date.now();
+  if (cachedPlanners && now - cachedPlanners.timestamp < PLANNER_CACHE_TTL_MS) {
+    return cachedPlanners.data;
+  }
+
   const { data, error } = await supabase
     .from("planner_services")
     .select("id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)")
@@ -359,17 +367,20 @@ export async function getPlanners(): Promise<Planner[]> {
   const livePlanners = approvedPlanners.map(mapPlanner);
   const MIN_DISPLAY_COUNT = fallbackPlanners.length; // Show all mock data if needed
 
+  let result: Planner[];
   if (livePlanners.length >= MIN_DISPLAY_COUNT) {
-    return livePlanners;
+    result = livePlanners;
+  } else {
+    const needed = MIN_DISPLAY_COUNT - livePlanners.length;
+    const showcaseItems = fallbackPlanners.slice(0, needed).map((p) => ({
+      ...p,
+      isShowcase: true,
+    }));
+    result = [...livePlanners, ...showcaseItems];
   }
 
-  const needed = MIN_DISPLAY_COUNT - livePlanners.length;
-  const showcaseItems = fallbackPlanners.slice(0, needed).map((p) => ({
-    ...p,
-    isShowcase: true,
-  }));
-
-  return [...livePlanners, ...showcaseItems];
+  cachedPlanners = { data: result, timestamp: now };
+  return result;
 }
 
 export async function getPlanner(id: string): Promise<Planner | undefined> {

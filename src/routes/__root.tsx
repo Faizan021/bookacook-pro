@@ -555,7 +555,7 @@ function RootComponent() {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
       }
 
-      // 1. Initialize strictly necessary, anonymized error monitoring (Sentry)
+      // 1. Initialize strictly necessary, anonymized error monitoring (Sentry) ONCE on mount
       import("@sentry/react")
         .then((SentryModule) => {
           SentryModule.init({
@@ -588,21 +588,14 @@ function RootComponent() {
               return breadcrumb;
             },
             beforeSend(event) {
-              // Strip all user and IP identifiers
               event.user = undefined;
-
-              // Sanitize sensitive request URLs (paths & parameters)
               if (event.request?.url) {
                 event.request.url = sanitizeSentryUrl(event.request.url);
               }
-
-              // Sanitize sensitive headers
               if (event.request?.headers) {
                 delete event.request.headers["authorization"];
                 delete event.request.headers["cookie"];
               }
-
-              // Drop third-party extension errors
               const frames = event.exception?.values?.[0]?.stacktrace?.frames ?? [];
               const hasOwnFrame = frames.some(
                 (f) => f.filename && f.filename.includes("speisely.de"),
@@ -616,46 +609,15 @@ function RootComponent() {
         })
         .catch(() => {});
 
-      // 2. Gate optional analytics (PostHog, Ahrefs & Vercel Analytics) behind explicit cookie consent
-      const isAllowed = hasAnalyticsConsent();
-      if (isAllowed) {
+      // 2. Check initial analytics consent
+      if (hasAnalyticsConsent()) {
         setHasConsent(true);
       }
 
-      const loadOptionalAnalytics = () => {
-        setHasConsent(true);
-
-        // Idempotently load Ahrefs Analytics dynamically upon consent
-        if (!document.getElementById("ahrefs-analytics-script")) {
-          const ahrefsScript = document.createElement("script");
-          ahrefsScript.id = "ahrefs-analytics-script";
-          ahrefsScript.src = "https://analytics.ahrefs.com/analytics.js";
-          ahrefsScript.setAttribute("data-key", "m0ja41AgfTD2NuyNepW+LA");
-          ahrefsScript.async = true;
-          document.head.appendChild(ahrefsScript);
-        }
-
-        // Initialize PostHog upon consent
-        Promise.all([import("../utils/posthog"), import("posthog-js")])
-          .then(([{ initPostHog }, posthogModule]) => {
-            initPostHog();
-            posthogModule.default.capture("$pageview", {
-              $current_url: window.location.href,
-              $pathname: pathname,
-            });
-          })
-          .catch(() => {});
-      };
-
-      if (isAllowed) {
-        loadOptionalAnalytics();
-      }
-
-      // Listen for consent granted/declined event from CookieBanner / /datenschutz
       const onConsentUpdated = (e: Event) => {
         const customEvent = e as CustomEvent<{ consent: string }>;
         if (customEvent.detail?.consent === "accepted") {
-          loadOptionalAnalytics();
+          setHasConsent(true);
         } else if (customEvent.detail?.consent === "declined") {
           setHasConsent(false);
           clearAnalyticsStorage();
@@ -667,7 +629,31 @@ function RootComponent() {
         window.removeEventListener("speisely-consent-updated", onConsentUpdated);
       };
     }
-  }, [pathname]);
+  }, []);
+
+  // 3. Lightweight route tracking upon navigation
+  useEffect(() => {
+    if (typeof window !== "undefined" && hasConsent) {
+      if (!document.getElementById("ahrefs-analytics-script")) {
+        const ahrefsScript = document.createElement("script");
+        ahrefsScript.id = "ahrefs-analytics-script";
+        ahrefsScript.src = "https://analytics.ahrefs.com/analytics.js";
+        ahrefsScript.setAttribute("data-key", "m0ja41AgfTD2NuyNepW+LA");
+        ahrefsScript.async = true;
+        document.head.appendChild(ahrefsScript);
+      }
+
+      Promise.all([import("../utils/posthog"), import("posthog-js")])
+        .then(([{ initPostHog }, posthogModule]) => {
+          initPostHog();
+          posthogModule.default.capture("$pageview", {
+            $current_url: window.location.href,
+            $pathname: pathname,
+          });
+        })
+        .catch(() => {});
+    }
+  }, [pathname, hasConsent]);
 
   return (
     <QueryClientProvider client={queryClient}>
