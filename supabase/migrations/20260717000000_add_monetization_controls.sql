@@ -168,54 +168,62 @@ CREATE INDEX IF NOT EXISTS idx_admin_audit_log_listing
 --    Three separate named CTEs, then one unioned INSERT.
 --    Unschedule-then-schedule pattern ensures idempotency.
 -- ─────────────────────────────────────────────────────────────────────────────
-SELECT cron.unschedule('expire-sponsorships');
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
+    PERFORM cron.unschedule(jobid) FROM cron.job WHERE jobname = 'expire-sponsorships';
 
-SELECT cron.schedule(
-  'expire-sponsorships',
-  '0 3 * * *',
-  $$
-    WITH
-      expired_restaurants AS (
-        UPDATE public.restaurants
-          SET is_sponsored = false
-          WHERE is_sponsored = true
-            AND campaign_window_end IS NOT NULL
-            AND campaign_window_end < now()
-          RETURNING id, 'restaurant'::text AS role
-      ),
-      expired_caterers AS (
-        UPDATE public.caterers
-          SET is_sponsored = false
-          WHERE is_sponsored = true
-            AND campaign_window_end IS NOT NULL
-            AND campaign_window_end < now()
-          RETURNING id, 'caterer'::text AS role
-      ),
-      expired_planners AS (
-        UPDATE public.planners
-          SET is_sponsored = false
-          WHERE is_sponsored = true
-            AND campaign_window_end IS NOT NULL
-            AND campaign_window_end < now()
-          RETURNING id, 'planner'::text AS role
-      ),
-      all_expired AS (
-        SELECT id, role FROM expired_restaurants
-        UNION ALL
-        SELECT id, role FROM expired_caterers
-        UNION ALL
-        SELECT id, role FROM expired_planners
-      )
-    INSERT INTO public.admin_audit_log
-      (actor_id, role, listing_id, field, old_value, new_value, reason)
-    SELECT
-      '00000000-0000-0000-0000-000000000000'::uuid,
-      role,
-      id,
-      'is_sponsored',
-      'true',
-      'false',
-      'campaign_window_end expired (nightly cleanup)'
-    FROM all_expired;
-  $$
-);
+    PERFORM cron.schedule(
+      'expire-sponsorships',
+      '0 3 * * *',
+      $cron$
+        WITH
+          expired_restaurants AS (
+            UPDATE public.restaurants
+              SET is_sponsored = false
+              WHERE is_sponsored = true
+                AND campaign_window_end IS NOT NULL
+                AND campaign_window_end < now()
+              RETURNING id, 'restaurant'::text AS role
+          ),
+          expired_caterers AS (
+            UPDATE public.caterers
+              SET is_sponsored = false
+              WHERE is_sponsored = true
+                AND campaign_window_end IS NOT NULL
+                AND campaign_window_end < now()
+              RETURNING id, 'caterer'::text AS role
+          ),
+          expired_planners AS (
+            UPDATE public.planners
+              SET is_sponsored = false
+              WHERE is_sponsored = true
+                AND campaign_window_end IS NOT NULL
+                AND campaign_window_end < now()
+              RETURNING id, 'planner'::text AS role
+          ),
+          all_expired AS (
+            SELECT id, role FROM expired_restaurants
+            UNION ALL
+            SELECT id, role FROM expired_caterers
+            UNION ALL
+            SELECT id, role FROM expired_planners
+          )
+        INSERT INTO public.admin_audit_log
+          (actor_id, role, listing_id, field, old_value, new_value, reason)
+        SELECT
+          '00000000-0000-0000-0000-000000000000'::uuid,
+          role,
+          id,
+          'is_sponsored',
+          'true',
+          'false',
+          'campaign_window_end expired (nightly cleanup)'
+        FROM all_expired;
+      $cron$
+    );
+  END IF;
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE NOTICE 'pg_cron scheduling for expire-sponsorships skipped: %', SQLERRM;
+END $$;

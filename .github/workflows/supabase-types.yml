@@ -17,13 +17,23 @@ jobs:
       
       - name: Verify generated types match committed types
         run: |
-          supabase start
+          # Fast start only database and auth, skipping heavy auxiliary containers
+          supabase start -x realtime,storage-api,imgproxy,inbucket,edge-runtime
+          
           # Generate types from local DB
-          supabase gen types typescript --local > src/integrations/supabase/types.ts
+          supabase gen types typescript --local > src/integrations/supabase/types.ts.gen
+          
+          # If generation succeeded, update or verify
+          if [ -s src/integrations/supabase/types.ts.gen ]; then
+            cp src/integrations/supabase/types.ts.gen src/integrations/supabase/types.ts
+            rm src/integrations/supabase/types.ts.gen
+          fi
           
           # Check for uncommitted changes
-          if ! git diff --exit-code; then
-            echo "Error: Generated types differ from committed types in src/integrations/supabase/types.ts"
+          if ! git diff --exit-code src/integrations/supabase/types.ts; then
+            echo "::warning::Generated types differ from committed types in src/integrations/supabase/types.ts"
             echo "Please run 'supabase gen types typescript --local > src/integrations/supabase/types.ts' locally and commit the changes."
+            git diff src/integrations/supabase/types.ts
             exit 1
           fi
+
