@@ -80,23 +80,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Speisely — Marktplatz für Catering, Restaurants & Eventplanung" },
+      { title: "Speisely — Catering, Restaurants & Eventplanung" },
       {
         name: "description",
         content:
-          "Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland.",
+          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung auf einer Plattform in ganz Deutschland.",
       },
       { property: "og:site_name", content: "Speisely" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "de_DE" },
       {
         property: "og:title",
-        content: "Speisely — Marktplatz für Catering, Restaurants & Eventplanung",
+        content: "Speisely — Catering, Restaurants & Eventplanung",
       },
       {
         property: "og:description",
         content:
-          "Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland.",
+          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung auf einer Plattform in ganz Deutschland.",
       },
       { property: "og:url", content: "https://speisely.de" },
       { property: "og:image", content: "https://speisely.de/hero-cinematic.webp" },

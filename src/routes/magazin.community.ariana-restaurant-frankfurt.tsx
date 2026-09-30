@@ -8,12 +8,12 @@ export const Route = createFileRoute("/magazin/community/ariana-restaurant-frank
   head: () => ({
     meta: [
       {
-        title: "Community Story: Qabili Palau bei Ariana in Frankfurt | Speisely",
+        title: "Ariana Restaurant Frankfurt: Qabili Palau — Speisely",
       },
       {
         name: "description",
         content:
-          "Das Geheimnis unter dem Reisberg: Warum liegt das Fleisch beim Qabili Palau eigentlich unter dem Reis? Eine Food Story aus der Speisely Community bei Ariana in Frankfurt.",
+          "Traditionelles Qabili Palau bei Ariana in Frankfurt: Geheimnisse der afghanischen Küche in unserer Food Story.",
       },
       {
         name: "keywords",

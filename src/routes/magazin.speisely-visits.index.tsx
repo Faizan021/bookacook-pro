@@ -8,12 +8,12 @@ export const Route = createFileRoute("/magazin/speisely-visits/")({
   head: () => ({
     meta: [
       {
-        title: "Speisely Visits – Echte Restaurantbesuche und Food Stories | Speisely Magazin",
+        title: "Speisely Visits – Echte Restaurantbesuche",
       },
       {
         name: "description",
         content:
-          "Speisely Visits dokumentiert echte, unabhängig bezahlte Restaurantbesuche. Wir entdecken Restaurants in Berlin und ganz Deutschland persönlich und teilen unsere authentischen Eindrücke.",
+          "Unabhängige Restaurantbesuche und echte Food Stories aus Berlin und ganz Deutschland. Authentisch getestet.",
       },
       {
         name: "keywords",

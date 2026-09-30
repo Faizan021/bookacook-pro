@@ -9,7 +9,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/mandy-restaurant-
   head: () => ({
     meta: [
       {
-        title: "Mandy Restaurant Berlin: Jemenitisches Essen in Neukölln | Speisely",
+        title: "Mandy Restaurant Berlin: Jemenitische Küche",
       },
       {
         name: "description",

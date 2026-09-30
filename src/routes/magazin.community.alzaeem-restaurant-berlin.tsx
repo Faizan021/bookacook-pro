@@ -7,11 +7,11 @@ import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 export const Route = createFileRoute("/magazin/community/alzaeem-restaurant-berlin")({
   head: () => ({
     meta: [
-      { title: "Community Story: Alzaeem Restaurant Berlin-Neukölln | Speisely" },
+      { title: "Alzaeem Restaurant Berlin-Neukölln — Speisely" },
       {
         name: "description",
         content:
-          "Ein Fest aus Holzkohle, Mezze und Grillgenuss. Mix Grill #44, syrische Grillgerichte und ein vielseitiges Kindermenü beim Alzaeem Restaurant an der Sonnenallee in Berlin-Neukölln.",
+          "Syrische Holzkohle-Grillspezialitäten & Mezze bei Alzaeem an der Sonnenallee in Berlin-Neukölln. Echte Food Story.",
       },
       {
         name: "keywords",

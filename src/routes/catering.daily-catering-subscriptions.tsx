@@ -18,11 +18,11 @@ import { PageHero } from "@/components/PageHero";
 export const Route = createFileRoute("/catering/daily-catering-subscriptions")({
   head: () => ({
     meta: [
-      { title: "Flexible Büro-Mittagsverpflegung & Team-Lunch — Speisely" },
+      { title: "Büro-Mittagsverpflegung & Team-Lunch — Speisely" },
       {
         name: "description",
         content:
-          "Unterstütze dein Team mit leckerem, gesundem Mittagessen im Büro. Flexible tägliche oder wöchentliche Pläne, pünktliche Lieferung und konsolidierte monatliche Rechnungsstellung.",
+          "Tägliches oder wöchentliches Büro-Catering für Teams. Frische Menüs, pünktliche Lieferung & Sammelrechnung.",
       },
       { property: "og:title", content: "Daily Office Catering Subscriptions — Speisely" },
       {
@@ -32,7 +32,9 @@ export const Route = createFileRoute("/catering/daily-catering-subscriptions")({
       },
       { property: "og:url", content: "https://speisely.de/catering/daily-catering-subscriptions" },
     ],
-    links: [{ rel: "canonical", href: "https://speisely.de/catering/daily-catering-subscriptions" }],
+    links: [
+      { rel: "canonical", href: "https://speisely.de/catering/daily-catering-subscriptions" },
+    ],
   }),
   component: DailySubscriptions,
 });

@@ -66,7 +66,7 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "Speisely — Marktplatz für Catering, Restaurants & Eventplanung" },
+      { title: "Speisely — Catering, Restaurants & Eventplanung" },
       {
         name: "description",
         content:
@@ -74,7 +74,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Speisely — Marktplatz für Catering, Restaurants & Eventplanung",
+        content: "Speisely — Catering, Restaurants & Eventplanung",
       },
       {
         property: "og:description",
@@ -817,7 +817,10 @@ function Home() {
       {/* ─────────────────────────────────────────────────
           PRESSE & MEDIEN SIGNALE (ON-PAGE PR & EDITORIAL CITATIONS)
       ───────────────────────────────────────────────── */}
-      <section aria-label="Presse und Medienberichte" className="bg-[#fcfaf6] border-b border-[#eadfce]/60 py-6">
+      <section
+        aria-label="Presse und Medienberichte"
+        className="bg-[#fcfaf6] border-b border-[#eadfce]/60 py-6"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2.5 shrink-0">
@@ -827,19 +830,36 @@ function Home() {
               </span>
             </div>
             <div className="flex flex-wrap items-center justify-center md:justify-end gap-5 sm:gap-8 text-xs font-semibold text-forest/60">
-              <Link to="/magazin" className="hover:text-forest transition-colors flex items-center gap-1.5">
+              <Link
+                to="/magazin"
+                className="hover:text-forest transition-colors flex items-center gap-1.5"
+              >
                 <span>📰 Speisely Magazin</span>
               </Link>
-              <Link to="/magazin/speisely-visits" className="hover:text-forest transition-colors flex items-center gap-1.5">
+              <Link
+                to="/magazin/speisely-visits"
+                className="hover:text-forest transition-colors flex items-center gap-1.5"
+              >
                 <span>✨ Speisely Visits</span>
               </Link>
-              <Link to="/magazin/community/san-sebastian-berlin" className="hover:text-forest transition-colors flex items-center gap-1.5">
+              <Link
+                to="/magazin/community/san-sebastian-berlin"
+                className="hover:text-forest transition-colors flex items-center gap-1.5"
+              >
                 <span>🍰 San Sebastian Original®</span>
               </Link>
-              <Link to="/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln" className="hover:text-forest transition-colors flex items-center gap-1.5">
+              <Link
+                to="/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln"
+                className="hover:text-forest transition-colors flex items-center gap-1.5"
+              >
                 <span>📍 Mandy Neukölln</span>
               </Link>
-              <a href="https://techglanz.de" target="_blank" rel="noopener noreferrer" className="hover:text-[#b28a3c] transition-colors flex items-center gap-1.5">
+              <a
+                href="https://techglanz.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#b28a3c] transition-colors flex items-center gap-1.5"
+              >
                 <span>⚡ TechGlanz Digital</span>
               </a>
             </div>
@@ -1074,14 +1094,23 @@ function Home() {
                     Live Case Study
                   </span>
                 </div>
-                <h3 className="font-display text-2xl font-bold text-forest mb-2">Partyservice Küpper</h3>
+                <h3 className="font-display text-2xl font-bold text-forest mb-2">
+                  Partyservice Küpper
+                </h3>
                 <p className="text-xs sm:text-sm text-forest/75 line-clamp-3 leading-relaxed mb-6">
-                  Moderner Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, lokaler Google-KI-SEO-Struktur und direkter Angebotsanfrage.
+                  Moderner Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, lokaler
+                  Google-KI-SEO-Struktur und direkter Angebotsanfrage.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">⚡ PageSpeed 99+</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">🥩 All-Inclusive BBQ</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">📱 100% Mobiloptimiert</span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                    ⚡ PageSpeed 99+
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                    🥩 All-Inclusive BBQ
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                    📱 100% Mobiloptimiert
+                  </span>
                 </div>
               </div>
               <div className="pt-4 border-t border-forest/10 flex items-center justify-between">
@@ -1110,12 +1139,19 @@ function Home() {
                 </div>
                 <h3 className="font-display text-2xl font-bold text-forest mb-2">Haus Späas</h3>
                 <p className="text-xs sm:text-sm text-forest/75 line-clamp-3 leading-relaxed mb-6">
-                  Bildgewaltige Eventlocation-Website für Hochzeiten, Firmenfeiern und Bankette mit modernem Buchungs- und Raumüberblick.
+                  Bildgewaltige Eventlocation-Website für Hochzeiten, Firmenfeiern und Bankette mit
+                  modernem Buchungs- und Raumüberblick.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">🏰 Event Location</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">💍 Hochzeiten &amp; Feiern</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">⚡ Blitzschnell</span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                    🏰 Event Location
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                    💍 Hochzeiten &amp; Feiern
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                    ⚡ Blitzschnell
+                  </span>
                 </div>
               </div>
               <div className="pt-4 border-t border-forest/10 flex items-center justify-between">

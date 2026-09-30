@@ -18,11 +18,11 @@ import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 export const Route = createFileRoute("/magazin/community/san-sebastian-berlin")({
   head: () => ({
     meta: [
-      { title: "Community Story: San Sebastian The Original® Berlin | Speisely" },
+      { title: "San Sebastian Cheesecake Berlin — Speisely Magazin" },
       {
         name: "description",
         content:
-          "Karamellisierte Kruste, schmelzender Kern und warmer Schokofluss: Ein Speisely-Community-Besuch bei San Sebastian The Original® in Berlin-Charlottenburg – baskische Käsekuchenkultur, Pistazienstaub und Lotus Biscoff.",
+          "Baskischer Cheesecake, Pistazien & Schokolade bei San Sebastian The Original® in Berlin-Charlottenburg erleben.",
       },
       {
         name: "keywords",

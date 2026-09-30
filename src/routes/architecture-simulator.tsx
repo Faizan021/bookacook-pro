@@ -7,12 +7,12 @@ export const Route = createFileRoute("/architecture-simulator")({
   head: () => ({
     meta: [
       {
-        title: "Architecture & Data Flow Simulator — Speisely Engineering",
+        title: "Architecture Simulator — Speisely Engineering",
       },
       {
         name: "description",
         content:
-          "Interactive live simulator showing request lifecycles, TanStack Start SSR, Supabase RLS, Stripe Connect payments, ESC/POS thermal printing, and AI SEO graphs in English and German.",
+          "Interactive simulator: TanStack Start SSR, Supabase RLS, Stripe Connect, thermal printing & SEO graphs.",
       },
     ],
   }),
@@ -66,7 +66,9 @@ function ArchitectureSimulatorPage() {
                 <Layers className="h-3.5 w-3.5" /> {isDe ? "Edge Compute" : "Edge Compute"}
               </div>
               <div className="font-bold text-white text-sm sm:text-base">TanStack Start SSR</div>
-              <div className="text-xs text-white/50">{isDe ? "< 25ms Ladezeit in ganz DE" : "< 25ms TTFB Nitro Edge"}</div>
+              <div className="text-xs text-white/50">
+                {isDe ? "< 25ms Ladezeit in ganz DE" : "< 25ms TTFB Nitro Edge"}
+              </div>
             </div>
 
             <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-4">
@@ -74,7 +76,9 @@ function ArchitectureSimulatorPage() {
                 <Database className="h-3.5 w-3.5" /> {isDe ? "Datensicherheit" : "Data Security"}
               </div>
               <div className="font-bold text-white text-sm sm:text-base">Postgres + RLS</div>
-              <div className="text-xs text-white/50">{isDe ? "100% Mandantentrennung" : "Strict Row Level Security"}</div>
+              <div className="text-xs text-white/50">
+                {isDe ? "100% Mandantentrennung" : "Strict Row Level Security"}
+              </div>
             </div>
 
             <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-4">
@@ -82,7 +86,9 @@ function ArchitectureSimulatorPage() {
                 <Play className="h-3.5 w-3.5" /> {isDe ? "Live-Funk" : "Live Event Bus"}
               </div>
               <div className="font-bold text-white text-sm sm:text-base">WebSockets Pub/Sub</div>
-              <div className="text-xs text-white/50">{isDe ? "< 45ms Küchenalarm" : "< 45ms Kitchen Alert"}</div>
+              <div className="text-xs text-white/50">
+                {isDe ? "< 45ms Küchenalarm" : "< 45ms Kitchen Alert"}
+              </div>
             </div>
 
             <div className="rounded-2xl bg-white/[0.03] border border-white/10 p-4">
@@ -90,7 +96,9 @@ function ArchitectureSimulatorPage() {
                 <ShieldCheck className="h-3.5 w-3.5" /> {isDe ? "Bezahlung" : "Payments"}
               </div>
               <div className="font-bold text-white text-sm sm:text-base">Stripe Connect</div>
-              <div className="text-xs text-white/50">{isDe ? "0% Speisely-Provision" : "0% Direct Vendor Payout"}</div>
+              <div className="text-xs text-white/50">
+                {isDe ? "0% Speisely-Provision" : "0% Direct Vendor Payout"}
+              </div>
             </div>
           </div>
 

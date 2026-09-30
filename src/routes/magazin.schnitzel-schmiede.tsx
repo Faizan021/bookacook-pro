@@ -7,11 +7,11 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 export const Route = createFileRoute("/magazin/schnitzel-schmiede")({
   head: () => ({
     meta: [
-      { title: "Schnitzel Schmiede beim EineStadt-Fest 2026 — Speisely Magazin" },
+      { title: "Schnitzel Schmiede beim Fest 2026 — Speisely" },
       {
         name: "description",
         content:
-          "Kulinarische Meile Mönchengladbach: Die Fest-Story der Schnitzel Schmiede beim EineStadt-Fest 2026. 13 Jahre Fest-Tradition und ein vertrauter Platz auf der kulinarischen Meile.",
+          "Die Fest-Story der Schnitzel Schmiede beim EineStadt-Fest 2026 in Mönchengladbach: 13 Jahre Tradition & Genuss.",
       },
       {
         name: "keywords",

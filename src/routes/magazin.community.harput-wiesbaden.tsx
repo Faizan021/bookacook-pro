@@ -19,7 +19,7 @@ export const Route = createFileRoute("/magazin/community/harput-wiesbaden")({
   head: () => ({
     meta: [
       {
-        title: "Community Story: Ein Grillabend bei Harput in Wiesbaden | Speisely",
+        title: "Harput Restaurant Wiesbaden: Grillabend — Speisely",
       },
       {
         name: "description",

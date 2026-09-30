@@ -9,7 +9,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/shawarma-albaik-b
   head: () => ({
     meta: [
       {
-        title: "Shawarma Albaik Berlin: Unser Besuch auf der Sonnenallee | Speisely",
+        title: "Shawarma Albaik Berlin Sonnenallee — Speisely",
       },
       {
         name: "description",

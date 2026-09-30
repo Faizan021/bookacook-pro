@@ -18,11 +18,11 @@ import { PageHero } from "@/components/PageHero";
 export const Route = createFileRoute("/catering/events")({
   head: () => ({
     meta: [
-      { title: "Premium Event-Catering für Hochzeiten & Firmenfeiern — Speisely" },
+      { title: "Event-Catering für Hochzeiten & Firmen — Speisely" },
       {
         name: "description",
         content:
-          "Plane dein perfektes Event mit unseren geprüften Caterern. Von exklusiven Hochzeitsbuffets bis hin zu kreativem Fingerfood für Business-Veranstaltungen und private Feiern.",
+          "Event-Catering für Hochzeiten & Business-Events. Geprüfte Caterer, Buffets & Fingerfood einfach online anfragen.",
       },
       { property: "og:title", content: "Premium Event- & Hochzeits-Catering — Speisely" },
       {

@@ -20,21 +20,21 @@ export const Route = createFileRoute("/community/")({
   head: () => ({
     meta: [
       {
-        title: "Speisely Community – Echte Erlebnisse, Fotos & Food Stories | Speisely",
+        title: "Speisely Community – Echte Food Stories & Fotos",
       },
       {
         name: "description",
         content:
-          "Entdecke echte Restaurantbesuche, Catering-Erlebnisse und Food-Momente aus der Speisely Community. Teile deine eigenen Fotos, Videos und Geschichten mit uns.",
+          "Entdecke echte Restaurantbesuche, Catering-Erlebnisse und Food Stories aus der Community. Teile deine Momente.",
       },
       {
         property: "og:title",
-        content: "Speisely Community – Echte Erlebnisse, Fotos & Food Stories",
+        content: "Speisely Community – Echte Food Stories & Fotos",
       },
       {
         property: "og:description",
         content:
-          "Entdecke echte Restaurantbesuche, Catering-Erlebnisse und Food-Momente aus der Speisely Community. Teile deine eigenen Fotos, Videos und Geschichten mit uns.",
+          "Entdecke echte Restaurantbesuche, Catering-Erlebnisse und Food Stories aus der Community. Teile deine Momente.",
       },
       {
         property: "og:url",

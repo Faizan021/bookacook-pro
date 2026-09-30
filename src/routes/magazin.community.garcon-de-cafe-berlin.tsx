@@ -20,11 +20,11 @@ import { trackEvent } from "@/utils/posthog";
 export const Route = createFileRoute("/magazin/community/garcon-de-cafe-berlin")({
   head: () => ({
     meta: [
-      { title: "Community Story: Garçon de Café Berlin | Speisely" },
+      { title: "Garçon de Café Berlin — Speisely Community" },
       {
         name: "description",
         content:
-          "Eine Pause aus Holz, Licht und drei Espressoshots: Ein Speisely-Community-Besuch bei Garçon de Café im EDGE-Gebäude nahe Berlin Hauptbahnhof – Specialty Coffee, detaillierte Latte Art und mobiles Kaffeecatering.",
+          "Specialty Coffee & mobiles Kaffeecatering bei Garçon de Café am Berliner Hauptbahnhof. Echte Food Story.",
       },
       {
         name: "keywords",

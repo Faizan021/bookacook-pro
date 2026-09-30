@@ -9,12 +9,12 @@ export const Route = createFileRoute("/magazin/")({
   head: () => ({
     meta: [
       {
-        title: "Speisely Magazin — Partner-Stories, Speisely Visits & Kulinarische Einblicke",
+        title: "Speisely Magazin — Food Stories & Einblicke",
       },
       {
         name: "description",
         content:
-          "Das offizielle Speisely Magazin: Echte Restaurantbesuche (Speisely Visits), Partner-Stories und kulinarische Einblicke aus Berlin, Mönchengladbach und ganz Deutschland.",
+          "Das Speisely Magazin: Echte Restaurantbesuche, Partner-Stories und kulinarische Empfehlungen aus ganz Deutschland.",
       },
       {
         name: "keywords",

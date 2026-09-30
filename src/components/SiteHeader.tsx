@@ -29,6 +29,7 @@ import {
   Mail,
   Menu,
   X,
+  Globe,
 } from "lucide-react";
 
 export function SiteHeader() {

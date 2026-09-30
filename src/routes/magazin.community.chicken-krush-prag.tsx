@@ -8,11 +8,11 @@ import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 export const Route = createFileRoute("/magazin/community/chicken-krush-prag")({
   head: () => ({
     meta: [
-      { title: "Community Story: Chicken Krush Prag | Speisely" },
+      { title: "Chicken Krush Prag — Speisely Community" },
       {
         name: "description",
         content:
-          "Knuspriges Korean Fried Chicken, Snow Flake Seasoning, Yangnyeom Glaze und Rose Tteokbokki in Prag: Ein Community-Erlebnis bei Chicken Krush in Prag-Nové Město.",
+          "Korean Fried Chicken, Snow Flake & Tteokbokki in Prag: Unser Community-Erlebnis bei Chicken Krush in Nové Město.",
       },
       {
         name: "keywords",
@@ -238,7 +238,9 @@ I will attach my own photos or videos to this email.`;
                 ) : (
                   <>
                     <Share2 className="h-3.5 w-3.5 text-[#A85C36]" aria-hidden="true" />
-                    <span className="hidden sm:inline">{isDe ? "Story teilen" : "Share Story"}</span>
+                    <span className="hidden sm:inline">
+                      {isDe ? "Story teilen" : "Share Story"}
+                    </span>
                   </>
                 )}
               </button>
@@ -318,7 +320,6 @@ I will attach my own photos or videos to this email.`;
         {/* Article Body */}
         <article className="mx-auto max-w-4xl px-4 sm:px-6 pb-20">
           <div className="prose prose-lg max-w-none text-forest/85 space-y-8 leading-relaxed font-normal">
-            
             {/* Photo 1 — Iconic Neon Logo (Compact Luxury Passe-Partout Card) */}
             <figure className="my-8 max-w-xl mx-auto">
               <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
@@ -392,7 +393,9 @@ I will attach my own photos or videos to this email.`;
             </figure>
 
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest pt-4">
-              {isDe ? "Der erste Crunch am Tisch: Slow-Fried Perfektion" : "The First Crunch at the Table: Slow-Fried Perfection"}
+              {isDe
+                ? "Der erste Crunch am Tisch: Slow-Fried Perfektion"
+                : "The First Crunch at the Table: Slow-Fried Perfection"}
             </h2>
 
             <p>

@@ -32,16 +32,16 @@ export const Route = createFileRoute("/partner/webseiten")({
   head: () => ({
     meta: [
       {
-        title: "Website-Erstellung & Kostenloser Website-Audit für Caterer & Gastronomie — Speisely x TechGlanz",
+        title: "Websites & Audits für Gastronomie — Speisely",
       },
       {
         name: "description",
         content:
-          "Kostenloser Website-Audit & High-End Website-Erstellung für Caterer & Restaurants: PageSpeed 99+, Speisely-Buchungsengine, Google-KI-SEO & TechGlanz-Engineering.",
+          "Kostenloser Website-Audit & Web-Erstellung für Caterer & Gastronomie: PageSpeed 99+, Buchungsengine & SEO-Setup.",
       },
       {
         property: "og:title",
-        content: "Website-Erstellung & Kostenloser Website-Audit für Caterer & Gastronomie — Speisely x TechGlanz",
+        content: "Websites & Audits für Caterer & Gastronomie — Speisely",
       },
       {
         property: "og:description",
@@ -64,7 +64,12 @@ const SHOWCASE_PROJECTS = [
     badge: "Live · Catering & BBQ",
     description:
       "Kompletter Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, regionaler Google-KI-SEO-Struktur und nahtloser Angebotsanfrage.",
-    highlights: ["PageSpeed 99/100", "Google AI Overview Schema", "All-Inclusive BBQ Menüs", "100% Mobiloptimiert"],
+    highlights: [
+      "PageSpeed 99/100",
+      "Google AI Overview Schema",
+      "All-Inclusive BBQ Menüs",
+      "100% Mobiloptimiert",
+    ],
   },
   {
     title: "Haus Späas",
@@ -74,7 +79,12 @@ const SHOWCASE_PROJECTS = [
     badge: "Live · Event Location",
     description:
       "Elegante, bildgewaltige Eventlocation-Website für Hochzeiten, Firmenfeiern und Bankette mit modernem Buchungs- und Raumüberblick.",
-    highlights: ["Cinematic Hero Layout", "Event-Pakete & Raumplaner", "Direkte Terminanfrage", "Ultra-schnelle Ladezeiten"],
+    highlights: [
+      "Cinematic Hero Layout",
+      "Event-Pakete & Raumplaner",
+      "Direkte Terminanfrage",
+      "Ultra-schnelle Ladezeiten",
+    ],
   },
 ];
 
@@ -117,7 +127,10 @@ function WebsiteCreationPage() {
       return;
     }
 
-    let cleanDomain = auditUrl.replace(/https?:\/\//i, "").replace(/\/.*$/, "").trim();
+    const cleanDomain = auditUrl
+      .replace(/https?:\/\//i, "")
+      .replace(/\/.*$/, "")
+      .trim();
     setIsAuditing(true);
     setAuditResult(null);
     setAuditStep(1);
@@ -173,7 +186,11 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
       setSubmitting(false);
       setSubmitted(true);
       window.location.href = `mailto:info@speisely.de?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-      toast.success(isDe ? "Vielen Dank! Dein E-Mail-Programm öffnet sich jetzt." : "Thank you! Opening your email client.");
+      toast.success(
+        isDe
+          ? "Vielen Dank! Dein E-Mail-Programm öffnet sich jetzt."
+          : "Thank you! Opening your email client.",
+      );
     }, 600);
   };
 
@@ -185,7 +202,7 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
         ───────────────────────────────────────────────── */}
         <section className="relative bg-forest text-[#FAF7F0] pt-24 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1e5242] via-forest to-[#0a1f1a] opacity-90" />
-          
+
           <div className="relative max-w-5xl mx-auto text-center space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#E6B84A] backdrop-blur-md border border-white/15">
               <Sparkles className="h-4 w-4" />
@@ -209,15 +226,17 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
             <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed font-medium">
               {isDe ? (
                 <>
-                  Schluss mit veralteten WordPress-Seiten und teuren 5.000 € Agenturen. Wir bauen deinen blitzschnellen,
-                  mobilen Online-Auftritt mit <strong>integrierter Speisely-Buchungsengine</strong>, Google-KI-SEO und
+                  Schluss mit veralteten WordPress-Seiten und teuren 5.000 € Agenturen. Wir bauen
+                  deinen blitzschnellen, mobilen Online-Auftritt mit{" "}
+                  <strong>integrierter Speisely-Buchungsengine</strong>, Google-KI-SEO und
                   maßgeschneidertem <strong>TechGlanz-Engineering</strong>.
                 </>
               ) : (
                 <>
-                  Say goodbye to slow legacy WordPress sites and expensive €5,000 agencies. We craft ultra-fast,
-                  mobile-optimized digital storefronts with <strong>integrated Speisely booking engines</strong>, Google AI SEO, and
-                  bespoke <strong>TechGlanz engineering</strong>.
+                  Say goodbye to slow legacy WordPress sites and expensive €5,000 agencies. We craft
+                  ultra-fast, mobile-optimized digital storefronts with{" "}
+                  <strong>integrated Speisely booking engines</strong>, Google AI SEO, and bespoke{" "}
+                  <strong>TechGlanz engineering</strong>.
                 </>
               )}
             </p>
@@ -257,7 +276,10 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
         {/* ─────────────────────────────────────────────────
             INTERACTIVE FREE WEBSITE AUDIT TOOL (LEAD MAGNET)
         ───────────────────────────────────────────────── */}
-        <section id="audit-tool" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-30">
+        <section
+          id="audit-tool"
+          className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-30"
+        >
           <div className="rounded-3xl bg-white p-6 sm:p-10 border-2 border-forest/15 shadow-2xl">
             <div className="text-center max-w-2xl mx-auto mb-8">
               <span className="text-[11px] font-black uppercase tracking-widest text-[#A85C36] block mb-2">
@@ -274,7 +296,10 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
             </div>
 
             {/* Audit Input Form */}
-            <form onSubmit={handleRunAudit} className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3">
+            <form
+              onSubmit={handleRunAudit}
+              className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3"
+            >
               <div className="relative flex-1">
                 <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-forest/40" />
                 <input
@@ -310,10 +335,22 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                 <div className="flex items-center justify-between text-xs font-bold text-forest">
                   <span className="flex items-center gap-2">
                     <Activity className="h-4 w-4 animate-pulse text-emerald-600" />
-                    {auditStep === 1 && (isDe ? "1/4: Prüfe PageSpeed & Mobile Ladezeit..." : "1/4: Checking PageSpeed & Mobile TTFB...")}
-                    {auditStep === 2 && (isDe ? "2/4: Prüfe Google AI Overview & Schema.org..." : "2/4: Checking Google AI Overview & Schema.org...")}
-                    {auditStep === 3 && (isDe ? "3/4: Scanne Speisekarten & PDF-Hürden..." : "3/4: Scanning digital menu presentation...")}
-                    {auditStep === 4 && (isDe ? "4/4: Berechne Conversion-Verlust & Potenzial..." : "4/4: Calculating booking conversion loss...")}
+                    {auditStep === 1 &&
+                      (isDe
+                        ? "1/4: Prüfe PageSpeed & Mobile Ladezeit..."
+                        : "1/4: Checking PageSpeed & Mobile TTFB...")}
+                    {auditStep === 2 &&
+                      (isDe
+                        ? "2/4: Prüfe Google AI Overview & Schema.org..."
+                        : "2/4: Checking Google AI Overview & Schema.org...")}
+                    {auditStep === 3 &&
+                      (isDe
+                        ? "3/4: Scanne Speisekarten & PDF-Hürden..."
+                        : "3/4: Scanning digital menu presentation...")}
+                    {auditStep === 4 &&
+                      (isDe
+                        ? "4/4: Berechne Conversion-Verlust & Potenzial..."
+                        : "4/4: Calculating booking conversion loss...")}
                   </span>
                   <span className="font-mono">{auditStep * 25}%</span>
                 </div>
@@ -335,7 +372,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                       Audit-Ergebnis für: {auditResult.domain}
                     </span>
                     <h3 className="font-display text-2xl font-bold">
-                      Website-Health-Score: <span className="text-amber-400">{auditResult.overallScore} / 100</span>
+                      Website-Health-Score:{" "}
+                      <span className="text-amber-400">{auditResult.overallScore} / 100</span>
                     </h3>
                     <p className="text-xs text-white/70 mt-1">
                       {isDe
@@ -347,7 +385,9 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                     href="#anfrage"
                     className="inline-flex items-center gap-2 rounded-2xl bg-[#E6B84A] text-forest px-6 py-3.5 text-xs sm:text-sm font-black shadow-lg hover:bg-white transition whitespace-nowrap"
                   >
-                    <span>{isDe ? "Kostenloses Redesign anfragen" : "Request Redesign Concept"}</span>
+                    <span>
+                      {isDe ? "Kostenloses Redesign anfragen" : "Request Redesign Concept"}
+                    </span>
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
@@ -365,8 +405,11 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                       </span>
                     </div>
                     <p className="text-xs text-forest/75 leading-relaxed">
-                      🚨 Gemessene Ladezeit: ~3.4s auf Smartphones. Über 50% der hungrigen Kunden brechen bei &gt;3s Ladezeit ab.
-                      <strong className="block mt-1 text-emerald-800">Speisely x TechGlanz Standard: &lt; 0.5 Sekunden (Score 99+).</strong>
+                      🚨 Gemessene Ladezeit: ~3.4s auf Smartphones. Über 50% der hungrigen Kunden
+                      brechen bei &gt;3s Ladezeit ab.
+                      <strong className="block mt-1 text-emerald-800">
+                        Speisely x TechGlanz Standard: &lt; 0.5 Sekunden (Score 99+).
+                      </strong>
                     </p>
                   </div>
 
@@ -382,7 +425,9 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                       </span>
                     </div>
                     <p className="text-xs text-forest/75 leading-relaxed">
-                      ⚠️ Keine strukturierten Schema.org JSON-LD Menü- &amp; Catering-Daten. ChatGPT, Perplexity und Google AI Overviews können deine Angebote nicht direkt zitieren.
+                      ⚠️ Keine strukturierten Schema.org JSON-LD Menü- &amp; Catering-Daten.
+                      ChatGPT, Perplexity und Google AI Overviews können deine Angebote nicht direkt
+                      zitieren.
                     </p>
                   </div>
 
@@ -398,7 +443,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                       </span>
                     </div>
                     <p className="text-xs text-forest/75 leading-relaxed">
-                      📱 Veraltete PDF-Speisekarten oder starre Tabellen sind auf Handys schwer lesbar und verlangen lästiges Zoomen.
+                      📱 Veraltete PDF-Speisekarten oder starre Tabellen sind auf Handys schwer
+                      lesbar und verlangen lästiges Zoomen.
                     </p>
                   </div>
 
@@ -414,7 +460,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                       </span>
                     </div>
                     <p className="text-xs text-forest/75 leading-relaxed">
-                      ❌ Kein interaktiver Event-Rechner. Kunden müssen ein manuelles Kontaktformular tippen und auf Antwort warten.
+                      ❌ Kein interaktiver Event-Rechner. Kunden müssen ein manuelles
+                      Kontaktformular tippen und auf Antwort warten.
                     </p>
                   </div>
                 </div>
@@ -441,7 +488,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
               <Zap className="h-7 w-7 text-[#E6B84A] mb-3" />
               <h3 className="font-bold text-base text-forest mb-1">PageSpeed 99+</h3>
               <p className="text-xs text-forest/70 leading-relaxed">
-                Ladezeiten unter 0.5 Sekunden. Keine Ladebalken, keine Abbrüche – maximale Conversion auf jedem Handy.
+                Ladezeiten unter 0.5 Sekunden. Keine Ladebalken, keine Abbrüche – maximale
+                Conversion auf jedem Handy.
               </p>
             </div>
 
@@ -449,7 +497,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
               <Search className="h-7 w-7 text-emerald-700 mb-3" />
               <h3 className="font-bold text-base text-forest mb-1">Google &amp; KI-SEO ready</h3>
               <p className="text-xs text-forest/70 leading-relaxed">
-                Strukturierte Schema.org-Daten für Google AI Overviews, Bing und Perplexity – damit Kunden dich lokal sofort finden.
+                Strukturierte Schema.org-Daten für Google AI Overviews, Bing und Perplexity – damit
+                Kunden dich lokal sofort finden.
               </p>
             </div>
 
@@ -457,7 +506,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
               <Smartphone className="h-7 w-7 text-[#A85C36] mb-3" />
               <h3 className="font-bold text-base text-forest mb-1">Integrierte Buchung</h3>
               <p className="text-xs text-forest/70 leading-relaxed">
-                Kunden können direkt Menüs zusammenstellen, Gästezahlen kalkulieren und verbindliche Event-Anfragen senden.
+                Kunden können direkt Menüs zusammenstellen, Gästezahlen kalkulieren und verbindliche
+                Event-Anfragen senden.
               </p>
             </div>
 
@@ -465,7 +515,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
               <ShieldCheck className="h-7 w-7 text-forest mb-3" />
               <h3 className="font-bold text-base text-forest mb-1">TechGlanz Engineering</h3>
               <p className="text-xs text-forest/70 leading-relaxed">
-                Eigene Domain, Hosting, Wartung, Marktplatz-Reichweite und Speisely-Kassensystem in einem Komplettpaket.
+                Eigene Domain, Hosting, Wartung, Marktplatz-Reichweite und Speisely-Kassensystem in
+                einem Komplettpaket.
               </p>
             </div>
           </div>
@@ -510,7 +561,10 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
 
                   <div className="grid grid-cols-2 gap-2 mb-6">
                     {proj.highlights.map((hl, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs font-semibold text-forest/85">
+                      <div
+                        key={i}
+                        className="flex items-center gap-2 text-xs font-semibold text-forest/85"
+                      >
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                         <span>{hl}</span>
                       </div>
@@ -519,7 +573,9 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                 </div>
 
                 <div className="pt-4 border-t border-forest/10 flex items-center justify-between">
-                  <span className="text-xs text-forest/60 font-medium">Domain: {new URL(proj.url).hostname}</span>
+                  <span className="text-xs text-forest/60 font-medium">
+                    Domain: {new URL(proj.url).hostname}
+                  </span>
                   <a
                     href={proj.url}
                     target="_blank"
@@ -548,8 +604,8 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                 Lass uns deine neue Website bauen
               </h2>
               <p className="mt-3 text-white/75 text-sm sm:text-base">
-                Fülle kurz das Formular aus. Wir melden uns innerhalb von 24 Stunden mit einer kostenlosen
-                Ersteinschätzung und einem Designkonzept.
+                Fülle kurz das Formular aus. Wir melden uns innerhalb von 24 Stunden mit einer
+                kostenlosen Ersteinschätzung und einem Designkonzept.
               </p>
             </div>
 

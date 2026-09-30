@@ -10,7 +10,7 @@ import { Sparkles } from "lucide-react";
 export const Route = createFileRoute("/partners")({
   head: () => ({
     meta: [
-      { title: "Für Partner — Restaurants, Caterer & Event-Planer · Speisely" },
+      { title: "Partner werden — Gastronomie & Events · Speisely" },
       {
         name: "description",
         content:

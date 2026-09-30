@@ -18,11 +18,11 @@ import { trackEvent } from "@/utils/posthog";
 export const Route = createFileRoute("/magazin/community/thronburger-berlin")({
   head: () => ({
     meta: [
-      { title: "Community Story: Thronburger Berlin | Speisely" },
+      { title: "Thronburger Berlin — Speisely Community" },
       {
         name: "description",
         content:
-          "Ein Burger, viele Berliner Straßen: Halal Beef Burger im dunklen Sesam-Brioche, Süßkartoffel-Pommes und ein Speisekarten-Konzept mit Berliner Straßen-Namen bei Thronburger in Berlin-Friedrichshain.",
+          "Halal Beef Burger im Sesam-Brioche & Fries bei Thronburger in Berlin-Friedrichshain. Unsere Community-Story.",
       },
       {
         name: "keywords",

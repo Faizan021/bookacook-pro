@@ -17,11 +17,11 @@ import { PageHero } from "@/components/PageHero";
 export const Route = createFileRoute("/catering/institutional-catering")({
   head: () => ({
     meta: [
-      { title: "Gesunde Großverpflegung für Kitas, Schulen & Kliniken — Speisely" },
+      { title: "Großverpflegung für Kitas, Schulen & Kliniken — Speisely" },
       {
         name: "description",
         content:
-          "Zuverlässige, nährstoffreiche Großverpflegung nach höchsten Qualitäts- und Hygienestandards. DGE-konforme Menüpläne für Kitas, Schulen, Kliniken und Pflegeeinrichtungen.",
+          "Zuverlässige Großverpflegung nach DGE-Standards für Kitas, Schulen, Kliniken und Heime. Jetzt Angebot anfragen.",
       },
       {
         property: "og:title",
@@ -34,9 +34,7 @@ export const Route = createFileRoute("/catering/institutional-catering")({
       },
       { property: "og:url", content: "https://speisely.de/catering/institutional-catering" },
     ],
-    links: [
-      { rel: "canonical", href: "https://speisely.de/catering/institutional-catering" },
-    ],
+    links: [{ rel: "canonical", href: "https://speisely.de/catering/institutional-catering" }],
   }),
   component: InstitutionalCatering,
 });
