@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Speisely · Interaktiver Architektur- &amp; Datenfluss-Simulator</title>
+  <title>Speisely · Architecture &amp; Data Flow Simulator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
 
     /* Top Brand Header */
     header {
-      padding: 1.25rem 2rem;
+      padding: 1rem 2rem;
       border-bottom: 1px solid var(--card-border);
       display: flex;
       justify-content: space-between;
@@ -78,8 +78,15 @@
       color: var(--gold);
     }
 
-    /* Explanation Mode Toggle */
-    .mode-toggle {
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    /* Language & Mode Switcher Pills */
+    .pill-group {
       display: flex;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
@@ -87,11 +94,11 @@
       padding: 3px;
       gap: 3px;
     }
-    .mode-btn {
+    .pill-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 0.4rem 0.85rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 7px;
       font-size: 0.8rem;
       font-weight: 600;
@@ -99,14 +106,15 @@
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
     }
-    .mode-btn.active {
+    .pill-btn:hover { color: #fff; }
+    .pill-btn.active {
       background: #1e293b;
       color: #fff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
-    .mode-btn.active-gold {
+    .pill-btn.active-gold {
       background: rgba(230, 184, 74, 0.2);
       border: 1px solid var(--gold);
       color: #fff;
@@ -288,12 +296,6 @@
       stroke-width: 3.5;
       animation: dash 0.8s linear infinite;
       filter: drop-shadow(0 0 6px var(--gold-glow));
-    }
-    .connection-line.active-cyan {
-      stroke: var(--cyan);
-      stroke-width: 3.5;
-      animation: dash 0.8s linear infinite;
-      filter: drop-shadow(0 0 6px var(--cyan-glow));
     }
     @keyframes dash {
       to { stroke-dashoffset: -12; }
@@ -483,6 +485,8 @@
       background: #090e18;
       font-size: 0.8rem;
       color: var(--text-dim);
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
   </style>
 </head>
@@ -492,32 +496,44 @@
   <header>
     <div class="brand-group">
       <div class="brand-logo">Speisely <span>Architecture</span></div>
-      <span class="badge">Live Request Simulation</span>
+      <span class="badge" id="lbl-live-badge">Live Request Simulation</span>
     </div>
 
-    <!-- Audience Mode Selector -->
-    <div class="mode-toggle">
-      <button class="mode-btn active-gold" id="mode-dual" onclick="setMode('dual')">
-        <span>🌟</span> Beide (Einfach + Tech)
-      </button>
-      <button class="mode-btn" id="mode-layman" onclick="setMode('layman')">
-        <span>💬</span> Einfache Worte (Laien)
-      </button>
-      <button class="mode-btn" id="mode-tech" onclick="setMode('tech')">
-        <span>💻</span> Entwickler (Tech)
-      </button>
+    <div class="header-actions">
+      <!-- Language Switcher -->
+      <div class="pill-group">
+        <button class="pill-btn active-gold" id="lang-de" onclick="setLang('de')">
+          <span>🇩🇪</span> DE
+        </button>
+        <button class="pill-btn" id="lang-en" onclick="setLang('en')">
+          <span>🇬🇧</span> EN
+        </button>
+      </div>
+
+      <!-- Audience Mode Selector -->
+      <div class="pill-group">
+        <button class="pill-btn active-gold" id="mode-dual" onclick="setMode('dual')">
+          <span>🌟</span> <span id="lbl-mode-dual">Dual (Einfach + Tech)</span>
+        </button>
+        <button class="pill-btn" id="mode-layman" onclick="setMode('layman')">
+          <span>💬</span> <span id="lbl-mode-layman">Einfach (Laien)</span>
+        </button>
+        <button class="pill-btn" id="mode-tech" onclick="setMode('tech')">
+          <span>💻</span> <span id="lbl-mode-tech">Entwickler</span>
+        </button>
+      </div>
     </div>
   </header>
 
   <!-- Scenario Switcher -->
-  <div class="scenario-tabs">
-    <button class="scenario-btn active" id="tab-scenario-1" onclick="switchScenario(0)">
+  <div class="scenario-tabs" id="scenarioTabs">
+    <button class="scenario-btn active" id="tab-scenario-0" onclick="switchScenario(0)">
       🍕 Flow A: Restaurant-Bestellung &amp; Küchendrucker
     </button>
-    <button class="scenario-btn" id="tab-scenario-2" onclick="switchScenario(1)">
+    <button class="scenario-btn" id="tab-scenario-1" onclick="switchScenario(1)">
       🍱 Flow B: Catering-Anfrage &amp; Lead-Vermittlung
     </button>
-    <button class="scenario-btn" id="tab-scenario-3" onclick="switchScenario(2)">
+    <button class="scenario-btn" id="tab-scenario-2" onclick="switchScenario(2)">
       🌐 Flow C: Standalone Website &amp; Google AI SEO
     </button>
   </div>
@@ -525,13 +541,13 @@
   <!-- Controls Toolbar -->
   <div class="controls">
     <button class="btn btn-gold" id="playBtn" onclick="togglePlay()">▶ Simulation Abspielen</button>
-    <button class="btn" onclick="prevStep()">◀ Zurück</button>
-    <button class="btn" onclick="nextStep()">Weiter ▶</button>
-    <button class="btn" onclick="resetStep()" style="margin-left: auto;">↺ Neustart</button>
+    <button class="btn" id="prevBtn" onclick="prevStep()">◀ Zurück</button>
+    <button class="btn" id="nextBtn" onclick="nextStep()">Weiter ▶</button>
+    <button class="btn" id="resetBtn" onclick="resetStep()" style="margin-left: auto;">↺ Neustart</button>
     <span id="stepCounter" style="color: var(--cyan); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding-left: 0.75rem;">Schritt 1 von 5</span>
   </div>
 
-  <!-- Stage Description Banner (Dual Mode) -->
+  <!-- Stage Description Banner (Dual View) -->
   <div class="stage-banner">
     <div>
       <div class="stage-title" id="stageTitle">Schritt 1: Bestellung im Storefront</div>
@@ -540,7 +556,7 @@
         <!-- Layman Box -->
         <div class="desc-box" id="box-layman">
           <div class="desc-label layman">
-            <span>💡</span> In einfachen Worten (Was passiert hier?):
+            <span>💡</span> <span id="lbl-layman-box">In einfachen Worten (Was passiert hier?):</span>
           </div>
           <div class="desc-text" id="stageDescLayman">
             Der Kunde wählt Burger &amp; Pommes im Onlineshop aus und tippt seine Adresse oder Tischnummer ein.
@@ -550,7 +566,7 @@
         <!-- Tech Box -->
         <div class="desc-box" id="box-tech">
           <div class="desc-label tech">
-            <span>⚙️</span> Unter der Haube (Entwickler-Sicht):
+            <span>⚙️</span> <span id="lbl-tech-box">Unter der Haube (Entwickler-Sicht):</span>
           </div>
           <div class="desc-text tech-font" id="stageDescTech">
             React 19 Frontend aggregiert Cart-State und sendet typisierten Mutation-Request via HTTPS an TanStack Start.
@@ -569,81 +585,81 @@
     <!-- Node 1: Public Client UI -->
     <div class="node" id="node-client" style="top: 60px; left: 40px;" onclick="openInspector('client')">
       <div class="node-type">
-        <span>1. Benutzeroberfläche</span>
+        <span id="node-type-client">1. Benutzeroberfläche</span>
         <span class="node-badge">SPA / SSR</span>
       </div>
-      <div class="node-title">React 19 &amp; TanStack</div>
-      <div class="node-sub">Webseite, Speisekarte, Event-Rechner &amp; Warenkorb</div>
+      <div class="node-title" id="node-title-client">React 19 &amp; TanStack</div>
+      <div class="node-sub" id="node-sub-client">Webseite, Speisekarte, Event-Rechner &amp; Warenkorb</div>
     </div>
 
     <!-- Node 2: TanStack Start SSR & Edge Server -->
     <div class="node" id="node-edge" style="top: 60px; left: 340px;" onclick="openInspector('edge')">
       <div class="node-type">
-        <span>2. Zentraler Server</span>
+        <span id="node-type-edge">2. Zentraler Server</span>
         <span class="node-badge">Nitro / Vercel</span>
       </div>
-      <div class="node-title">TanStack Start Edge</div>
-      <div class="node-sub">Serverfunktionen, SEO-Generierung &amp; Rollenprüfung</div>
+      <div class="node-title" id="node-title-edge">TanStack Start Edge</div>
+      <div class="node-sub" id="node-sub-edge">Serverfunktionen, SEO-Generierung &amp; Rollenprüfung</div>
     </div>
 
     <!-- Node 3: Stripe Payment Gateway -->
     <div class="node" id="node-stripe" style="top: 60px; left: 640px;" onclick="openInspector('stripe')">
       <div class="node-type">
-        <span>3. Bezahlung (0% Gebühr)</span>
+        <span id="node-type-stripe">3. Bezahlung (0% Gebühr)</span>
         <span class="node-badge">Stripe Connect</span>
       </div>
-      <div class="node-title">Stripe Payment Bridge</div>
-      <div class="node-sub">Direktes Geld-Routing aufs Restaurant-Konto</div>
+      <div class="node-title" id="node-title-stripe">Stripe Payment Bridge</div>
+      <div class="node-sub" id="node-sub-stripe">Direktes Geld-Routing aufs Restaurant-Konto</div>
     </div>
 
     <!-- Node 4: Supabase Postgres (Database) -->
     <div class="node" id="node-db" style="top: 250px; left: 340px;" onclick="openInspector('db')">
       <div class="node-type">
-        <span>4. Sichere Datenbank</span>
+        <span id="node-type-db">4. Sichere Datenbank</span>
         <span class="node-badge">Postgres + RLS</span>
       </div>
-      <div class="node-title">Supabase Datenbank</div>
-      <div class="node-sub">Speisepläne, Catering-Anfragen &amp; Partner-Daten</div>
+      <div class="node-title" id="node-title-db">Supabase Datenbank</div>
+      <div class="node-sub" id="node-sub-db">Speisepläne, Catering-Anfragen &amp; Partner-Daten</div>
     </div>
 
     <!-- Node 5: Supabase Realtime Engine -->
     <div class="node" id="node-realtime" style="top: 250px; left: 640px;" onclick="openInspector('realtime')">
       <div class="node-type">
-        <span>5. Live-Funkzentrale</span>
+        <span id="node-type-realtime">5. Live-Funkzentrale</span>
         <span class="node-badge">WebSockets</span>
       </div>
-      <div class="node-title">Realtime Engine</div>
-      <div class="node-sub">Live-Alarmierung in unter 50ms an Küchen-Monitore</div>
+      <div class="node-title" id="node-title-realtime">Realtime Engine</div>
+      <div class="node-sub" id="node-sub-realtime">Live-Alarmierung in unter 50ms an Küchen-Monitore</div>
     </div>
 
     <!-- Node 6: Thermal Hardware Print Engine / KDS -->
     <div class="node" id="node-printer" style="top: 440px; left: 640px;" onclick="openInspector('printer')">
       <div class="node-type">
-        <span>6. Küchen-Hardware</span>
+        <span id="node-type-printer">6. Küchen-Hardware</span>
         <span class="node-badge">ESC/POS + WebUSB</span>
       </div>
-      <div class="node-title">Thermodrucker &amp; KDS</div>
-      <div class="node-sub">Automatischer Bonschnitt &amp; Küchen-Bons</div>
+      <div class="node-title" id="node-title-printer">Thermodrucker &amp; KDS</div>
+      <div class="node-sub" id="node-sub-printer">Automatischer Bonschnitt &amp; Küchen-Bons</div>
     </div>
 
     <!-- Node 7: Resend Email Engine -->
     <div class="node" id="node-email" style="top: 440px; left: 340px;" onclick="openInspector('email')">
       <div class="node-type">
-        <span>7. E-Mail-Versand</span>
+        <span id="node-type-email">7. E-Mail-Versand</span>
         <span class="node-badge">Resend API</span>
       </div>
-      <div class="node-title">Automatische E-Mails</div>
-      <div class="node-sub">Sofortige Event-Briefs &amp; PDF-Angebote an Caterer</div>
+      <div class="node-title" id="node-title-email">Automatische E-Mails</div>
+      <div class="node-sub" id="node-sub-email">Sofortige Event-Briefs &amp; PDF-Angebote an Caterer</div>
     </div>
 
     <!-- Node 8: AI & SEO Knowledge Graph -->
     <div class="node" id="node-seo" style="top: 250px; left: 40px;" onclick="openInspector('seo')">
       <div class="node-type">
-        <span>8. KI &amp; Google-Sichtbarkeit</span>
+        <span id="node-type-seo">8. KI &amp; Google-Sichtbarkeit</span>
         <span class="node-badge">JSON-LD</span>
       </div>
-      <div class="node-title">Google KI &amp; /llms.txt</div>
-      <div class="node-sub">Perplexity, ChatGPT &amp; Gemini Quellen-Zitate</div>
+      <div class="node-title" id="node-title-seo">Google KI &amp; /llms.txt</div>
+      <div class="node-sub" id="node-sub-seo">Perplexity, ChatGPT &amp; Gemini Quellen-Zitate</div>
     </div>
   </div>
 
@@ -655,16 +671,582 @@
 
   <!-- Footer -->
   <footer>
-    <div>Speisely Architektur- &amp; Request-Lifecycle-Simulator · 0 externe Abhängigkeiten · Lädt in ~5ms</div>
-    <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold);">v2.5-production</div>
+    <div id="lbl-footer">Speisely Architektur- &amp; Request-Lifecycle-Simulator · 0 externe Abhängigkeiten · Lädt in ~5ms</div>
+    <div style="font-family: 'JetBrains Mono', monospace; color: var(--gold);">v2.5-bilingual</div>
   </footer>
 
   <script>
+    let currentLang = 'de'; // 'de' or 'en'
     let currentMode = 'dual'; // 'dual', 'layman', 'tech'
+    let currentActiveNodeKey = null;
+
+    // UI Dictionary
+    const UI = {
+      de: {
+        liveBadge: "Live Request Simulation",
+        modeDual: "Dual (Einfach + Tech)",
+        modeLayman: "Einfach (Laien)",
+        modeTech: "Entwickler",
+        play: "▶ Simulation Abspielen",
+        pause: "⏸ Pause",
+        prev: "◀ Zurück",
+        next: "Weiter ▶",
+        reset: "↺ Neustart",
+        stepOf: (cur, tot) => `Schritt ${cur} von ${tot}`,
+        stepInd: (cur, tot) => `SCHRITT ${cur} / ${tot}`,
+        boxLayman: "In einfachen Worten (Was passiert hier?):",
+        boxTech: "Unter der Haube (Entwickler-Sicht):",
+        footer: "Speisely Architektur- & Request-Lifecycle-Simulator · 0 externe Abhängigkeiten · Lädt in ~5ms",
+        drawerLayman: "In einfachen Worten (Was ist das?):",
+        drawerBusiness: "Warum das wichtig ist (Business-Vorteil):",
+        drawerTech: "Für Entwickler (Technische Details):",
+        drawerProtocol: "Protokoll",
+        drawerLatency: "Latenz (P95)",
+        drawerSecurity: "Sicherheit & Isolation",
+        drawerSource: "Quellcode-Dateien im Projekt:"
+      },
+      en: {
+        liveBadge: "Live Request Simulation",
+        modeDual: "Dual (Simple + Tech)",
+        modeLayman: "Plain English (Layman)",
+        modeTech: "Developer (Tech)",
+        play: "▶ Play Simulation",
+        pause: "⏸ Pause",
+        prev: "◀ Previous",
+        next: "Next ▶",
+        reset: "↺ Reset",
+        stepOf: (cur, tot) => `Stage ${cur} of ${tot}`,
+        stepInd: (cur, tot) => `STAGE ${cur} / ${tot}`,
+        boxLayman: "In Simple Words (What is happening here?):",
+        boxTech: "Under The Hood (Developer View):",
+        footer: "Speisely Architecture & Request Lifecycle Simulator · Zero External Dependencies · ~5ms Load",
+        drawerLayman: "In Simple Words (What is this?):",
+        drawerBusiness: "Why This Matters (Business Value):",
+        drawerTech: "For Developers (Technical Specs):",
+        drawerProtocol: "Protocol",
+        drawerLatency: "Latency (P95)",
+        drawerSecurity: "Security & Isolation",
+        drawerSource: "Project Source Code Modules:"
+      }
+    };
+
+    // 1. Architecture Component Metadata (Bilingual)
+    const NODES = {
+      client: {
+        de: {
+          title: "React 19 Benutzeroberfläche",
+          type: "Frontend SPA / SSR Client",
+          sub: "Webseite, Speisekarte, Event-Rechner & Warenkorb",
+          layman: "Das ist die eigentliche Webseite, die der Gast auf dem Smartphone oder Laptop sieht. Sie reagiert blitzschnell wie eine native App.",
+          business: "Keine Wartezeiten für den Kunden. Erhöht die Conversion-Rate um bis zu 40%, weil Speisekarten und Event-Rechner ohne Neuladen sofort reagieren.",
+          tech: "React 19 mit TanStack Router & Framer Motion. Optimistisches State-Management, automatische Bildkomprimierung (WebP) und Lenis Smooth Scroll.",
+          security: "Client-Side Input Sanitization · CSP Headers · Session Storage"
+        },
+        en: {
+          title: "React 19 Client UI",
+          type: "Frontend SPA / SSR Client",
+          sub: "Website, menus, event calculator & checkout cart",
+          layman: "This is the interactive website the customer sees on their phone or laptop. It responds instantly like a native mobile app.",
+          business: "Zero loading friction for customers. Boosts conversions by up to 40% as menus and event budget sliders react in real time without page reloads.",
+          tech: "React 19 with TanStack Router & Framer Motion. Optimistic cart mutations, automatic WebP image compression, and Lenis smooth scrolling.",
+          security: "Client-Side Input Sanitization · CSP Headers · Session Storage"
+        },
+        files: [
+          "src/router.tsx",
+          "src/routes/index.tsx",
+          "src/routes/catering.$slug.tsx",
+          "src/routes/restaurant.$slug.tsx",
+          "src/components/SiteShell.tsx"
+        ],
+        latency: "~16ms (60 FPS Motion)",
+        protocol: "HTTPS / WSS / DOM"
+      },
+      edge: {
+        de: {
+          title: "TanStack Start & Nitro Edge Server",
+          type: "Serverless Compute & Gateway",
+          sub: "Serverfunktionen, SEO-Generierung & Rollenprüfung",
+          layman: "Der digitale Türsteher und Chef-Kellner. Er nimmt Bestellungen entgegen, prüft Preise und stellt sicher, dass alles seine Richtigkeit hat.",
+          business: "Verhindert Manipulationen (z.B. falsche Preise) und sorgt für Spitzen-Ladezeiten (<25ms) in ganz Deutschland, egal wie viele Gäste gleichzeitig bestellen.",
+          tech: "TanStack Start Server Functions auf Nitro/Vercel Edge. Typed RPC Endpoints, SSR HTML Hydration, Rollenprüfung (RBAC) und dynamische Sitemap-Erzeugung.",
+          security: "Role-Based Middleware · Supabase Auth Tokens · Rate Limiting"
+        },
+        en: {
+          title: "TanStack Start & Nitro Edge Server",
+          type: "Serverless Compute & Gateway",
+          sub: "Server functions, SEO graphs & role authorization",
+          layman: "The digital gatekeeper and head waiter. It receives incoming orders, validates pricing, and ensures total request integrity.",
+          business: "Prevents price manipulation and delivers ultra-fast response times (<25ms TTFB) across Germany, scaling automatically during peak dinner rushes.",
+          tech: "TanStack Start Server Functions deployed to Vercel/Nitro Edge. Type-safe RPC endpoints, SSR HTML hydration, RBAC middleware, and dynamic XML sitemaps.",
+          security: "Role-Based Middleware · Supabase Auth Tokens · Rate Limiting"
+        },
+        files: [
+          "src/start.ts",
+          "src/server.ts",
+          "src/lib/auth/role-middleware.ts",
+          "src/routes/sitemap[.]xml.ts",
+          "src/routes/llms[.]txt.ts"
+        ],
+        latency: "< 25ms TTFB (Vercel Edge)",
+        protocol: "HTTP/2, HTTPS Server Functions"
+      },
+      stripe: {
+        de: {
+          title: "Stripe Direct Connect Zahlungsbrücke",
+          type: "Fintech & Payout Infrastructure",
+          sub: "Direktes Geld-Routing aufs Restaurant-Konto",
+          layman: "Das Kartenterminal im Internet (Apple Pay, Google Pay, Kreditkarte). Das Geld wandert direkt aufs Bankkonto des Gastronomen — Speisely zieht keine 30% Provision ab!",
+          business: "Maximale Liquidität für den Gastronomen. Das Geld liegt nicht wochenlang bei Zwischenhändlern, sondern wird direkt per Stripe Connect ausgezahlt.",
+          tech: "Stripe Connect Direct Charges & Webhook Signature Verification. Verarbeitet Checkout Sessions, SEPA-Lastschriften und signierte HMAC-Webhooks.",
+          security: "PCI-DSS Level 1 · 256-bit Webhook Signature Verification"
+        },
+        en: {
+          title: "Stripe Direct Connect Gateway",
+          type: "Fintech & Payout Infrastructure",
+          sub: "Direct payment routing to restaurant bank accounts",
+          layman: "The online card terminal (Apple Pay, Google Pay, credit cards). Money flows directly into the restaurant's bank account with 0% platform commission cut!",
+          business: "Maximum cash flow for merchants. Funds are paid out directly to vendor bank accounts via Stripe Connect rather than being trapped in escrow.",
+          tech: "Stripe Connect Direct Charges & Webhook Signature Verification. Handles Checkout Sessions, SEPA direct debit, and HMAC-signed webhook dispatches.",
+          security: "PCI-DSS Level 1 · 256-bit Webhook Signature Verification"
+        },
+        files: [
+          "src/lib/stripe.ts",
+          "src/routes/api.stripe.webhook.ts"
+        ],
+        latency: "250ms - 450ms",
+        protocol: "REST API, Signed HMAC Webhooks"
+      },
+      db: {
+        de: {
+          title: "Supabase Postgres Datenbank",
+          type: "Relational Persistence & RLS",
+          sub: "Speisepläne, Catering-Anfragen & Partner-Daten",
+          layman: "Der digitale Tresor. Hier werden alle Speisen, Catering-Briefs, Angebote und Kontaktdaten felsenfest und DSGVO-konform gespeichert.",
+          business: "Jeder Partner sieht nur seine eigenen Daten (strikte Mandantentrennung). Keine Datenlecks zu Konkurrenten.",
+          tech: "PostgreSQL mit Row Level Security (RLS). Mandantentrennung auf Datenbankebene, Indizierung für Geokoordinaten und automatische Backups.",
+          security: "Strict Row Level Security (RLS) · Zero Cross-Vendor Leakage"
+        },
+        en: {
+          title: "Supabase Postgres Database",
+          type: "Relational Persistence & RLS",
+          sub: "Menu records, catering briefs & vendor directories",
+          layman: "The secure vault. All dishes, catering inquiry briefs, proposals, and customer details are stored safely in compliance with GDPR.",
+          business: "Each vendor can only view their own records (strict multi-tenant isolation). Zero risk of data leaking to competing caterers.",
+          tech: "PostgreSQL governed by Row Level Security (RLS). Database-level multi-tenancy, PostGIS geo-indexing, and automated point-in-time recovery.",
+          security: "Strict Row Level Security (RLS) · Zero Cross-Vendor Leakage"
+        },
+        files: [
+          "src/lib/auth/get-user-profile.functions.ts",
+          "src/lib/caterer/menu.functions.ts",
+          "src/lib/customer/mutations.functions.ts",
+          "src/lib/geo/server.functions.ts"
+        ],
+        latency: "12ms - 20ms",
+        protocol: "PostgreSQL Wire / PostgREST"
+      },
+      realtime: {
+        de: {
+          title: "Supabase Realtime Live-Funkzentrale",
+          type: "WebSocket Event Bus",
+          sub: "Live-Alarmierung in unter 50ms an Küchen-Monitore",
+          layman: "Wie ein Walkie-Talkie für Computer. Sobald ein Kunde bestellt, schlägt der Küchenmonitor in der Restaurantküche in Sekundenbruchteilen Alarm.",
+          business: "Kein manuelles Neuladen der Seite nötig. Die Küche sieht sofort jede neue Bestellung und kann ohne Verzögerung mit dem Kochen beginnen.",
+          tech: "WebSockets / Phoenix Channels. Event-Broadcasting direkt aus Postgres WAL (Write-Ahead-Log) an alle verbundenen Dashboards in <45ms.",
+          security: "Encrypted WebSocket Channels · Channel-Level Auth Grants"
+        },
+        en: {
+          title: "Supabase Realtime Event Bus",
+          type: "WebSocket Event Bus",
+          sub: "Sub-50ms live broadcast alerts to kitchen terminals",
+          layman: "Like a digital walkie-talkie. The moment a customer pays, the kitchen tablet in the restaurant kitchen chimes and alerts the chefs in milliseconds.",
+          business: "Zero manual page refreshing. Chefs and managers see incoming orders immediately, eliminating order prep delays.",
+          tech: "WebSockets / Phoenix Channels. Subscribes directly to Postgres Write-Ahead Logs (WAL) to broadcast mutation events to connected clients in <45ms.",
+          security: "Encrypted WebSocket Channels · Channel-Level Auth Grants"
+        },
+        files: [
+          "src/routes/_authenticated/restaurant.kitchen.tsx",
+          "src/routes/_authenticated/caterer.tsx"
+        ],
+        latency: "< 45ms Pub/Sub",
+        protocol: "WebSockets (WSS) / Phoenix Channels"
+      },
+      printer: {
+        de: {
+          title: "Thermodrucker & Küchenleitsystem (KDS)",
+          type: "Hardware Output Controller",
+          sub: "Automatischer Bonschnitt & Küchen-Bons",
+          layman: "Der klassische Bon-Drucker in der Küche. Er druckt den fertigen Küchen-Zettel mit Tischnummer, Speisen und Sonderwünschen automatisch aus.",
+          business: "Null Tippfehler des Personals. Funktioniert dank Offline-Pufferung auch dann weiter, wenn das WLAN im Restaurant kurz ausfällt.",
+          tech: "ESC/POS Binary Command Engine via WebUSB, RAW TCP/IP (Port 9100) oder Bluetooth. Unterstützt 80mm/58mm Bonrollen und IndexedDB-Offline-Puffer.",
+          security: "Direct Local Hardware Access · Offline IndexedDB Buffer"
+        },
+        en: {
+          title: "Thermal Hardware Printer & KDS",
+          type: "Hardware Output Controller",
+          sub: "Automated ESC/POS receipt generation & station slips",
+          layman: "The thermal receipt printer in the kitchen. It automatically prints the kitchen order slip with table numbers, dish choices, and dietary notes.",
+          business: "Eliminates staff miscommunication errors. Thanks to offline IndexedDB buffering, orders still print even during temporary restaurant Wi-Fi dropouts.",
+          tech: "ESC/POS binary command engine transmitting via WebUSB, RAW TCP/IP socket (port 9100), or Bluetooth. Formatted for 80mm/58mm continuous paper rolls.",
+          security: "Direct Local Hardware Access · Offline IndexedDB Buffer"
+        },
+        files: [
+          "src/lib/festival/printer.ts",
+          "src/lib/festival/useFestivalCashRegister.ts",
+          "src/lib/festival/idbStorage.ts"
+        ],
+        latency: "~50ms Hardware Print",
+        protocol: "WebUSB, RAW TCP/IP Socket (Port 9100)"
+      },
+      email: {
+        de: {
+          title: "Resend E-Mail-Versand",
+          type: "Transactional Email Gateway",
+          sub: "Sofortige Event-Briefs & PDF-Angebote an Caterer",
+          layman: "Der digitale Briefträger. Er schickt dem Caterer sofort das detaillierte Event-Briefing und dem Kunden die Buchungsbestätigung mit PDF-Angebot.",
+          business: "Sekundenschnelle Lead-Zustellung. Caterer können innerhalb von Minuten ein maßgeschneidertes Angebot abgeben und Aufträge gewinnen.",
+          tech: "Resend API mit DKIM/SPF/DMARC-Authentifizierung. Versand von React-basierten HTML-E-Mail-Vorlagen und dynamisch generierten PDF-Anhängen.",
+          security: "DKIM, SPF, DMARC Verified · Secret API Key Isolation"
+        },
+        en: {
+          title: "Resend Transactional Email Engine",
+          type: "Transactional Email Gateway",
+          sub: "Instant catering brief notifications & PDF quote dispatch",
+          layman: "The digital postman. It instantly delivers event brief details to caterers and sends booking confirmations with PDF quote attachments to clients.",
+          business: "Instant lead delivery. Caterers can respond within minutes with custom proposals, closing high-value corporate deals before competitors.",
+          tech: "Resend API with full DKIM, SPF, and DMARC verification. Delivers React-templated HTML emails with dynamically generated PDF quote attachments.",
+          security: "DKIM, SPF, DMARC Verified · Secret API Key Isolation"
+        },
+        files: [
+          "src/lib/email.functions.ts"
+        ],
+        latency: "150ms - 300ms",
+        protocol: "HTTPS REST API (Resend SDK)"
+      },
+      seo: {
+        de: {
+          title: "Google KI & AI Knowledge Graph",
+          type: "Structured Data & AI Grounding",
+          sub: "Perplexity, ChatGPT & Gemini Quellen-Zitate",
+          layman: "Der Übersetzer für KI-Suchmaschinen. Er sorgt dafür, dass ChatGPT, Perplexity und Google AI Speisely-Partner als beste Empfehlung nennen.",
+          business: "Kostenlose Neukunden über KI-Suchmaschinen ohne teure Google-Ads-Werbekosten.",
+          tech: "Schema.org JSON-LD Entitätsgraphen, dynamisches /llms.txt und synchronisierte XML-Sitemaps für direkte GEO/AEO-Zitationen.",
+          security: "Public Read-Only Schema · High-Density Entity Graphs"
+        },
+        en: {
+          title: "Google AI & LLM Knowledge Graph",
+          type: "Structured Data & AI Grounding",
+          sub: "Perplexity, ChatGPT Search & Gemini citations",
+          layman: "The translator for AI search engines. It ensures ChatGPT, Perplexity, and Google AI cite Speisely partners as the top recommendation.",
+          business: "Acquires high-intent catering and restaurant customers for free through generative AI search without spending on expensive Google Ads.",
+          tech: "Schema.org JSON-LD multi-entity graphs, dynamic /llms.txt endpoints, and synchronized XML sitemaps powering Generative Engine Optimization (GEO).",
+          security: "Public Read-Only Schema · High-Density Entity Graphs"
+        },
+        files: [
+          "src/routes/llms[.]txt.ts",
+          "public/llms.txt",
+          "public/llms-full.txt",
+          "src/routes/sitemap[.]xml.ts"
+        ],
+        latency: "< 10ms (Edge Static)",
+        protocol: "HTTPS / Text-Plain / XML"
+      }
+    };
+
+    // 2. Bilingual Scenarios
+    const SCENARIOS = [
+      {
+        id: "instant-order",
+        de: {
+          name: "🍕 Flow A: Restaurant-Bestellung & Küchendrucker",
+          stages: [
+            {
+              title: "Schritt 1: Gast bestellt im Storefront",
+              layman: "Der Gast packt Burger & Pommes in den Warenkorb und gibt Tischnummer oder Lieferadresse ein.",
+              tech: "React 19 Frontend aggregiert den Warenkorb-Zustand und prüft Mindestbestellwerte lokal im Browser.",
+              activeNodes: ["node-client"],
+              activeLinks: ["link-client-edge"]
+            },
+            {
+              title: "Schritt 2: Server prüft & startet Bezahlung",
+              layman: "Der Server stellt sicher, dass das Restaurant geöffnet ist und bereitet die Bezahlung per Apple Pay oder Karte vor.",
+              tech: "TanStack Start Server Function validiert Artikelpreise und erstellt eine Stripe Checkout Session mit direkter Auszahlung.",
+              activeNodes: ["node-edge", "node-stripe"],
+              activeLinks: ["link-edge-stripe"]
+            },
+            {
+              title: "Schritt 3: Geld geht direkt an den Gastronomen",
+              layman: "Der Gast zahlt. Das Geld geht ohne Speisely-Zwischenhändler direkt aufs Bankkonto des Restaurants.",
+              tech: "Stripe autorisiert die Zahlung und sendet einen kryptografisch signierten Webhook an den Speisely-Edge-Server.",
+              activeNodes: ["node-stripe", "node-edge"],
+              activeLinks: ["link-stripe-edge"]
+            },
+            {
+              title: "Schritt 4: Speicherung & Sekundenschnelle Alarmierung",
+              layman: "Die Bestellung wird sicher im Tresor gespeichert und funkt in Sekundenbruchteilen die Restaurantküche an.",
+              tech: "Postgres committet die Bestellung per RLS und sendet via Supabase Realtime ein WSS-Broadcast-Event an alle Küchen-Tablets.",
+              activeNodes: ["node-db", "node-realtime"],
+              activeLinks: ["link-edge-db", "link-db-realtime"]
+            },
+            {
+              title: "Schritt 5: Küchendrucker druckt den Bon aus",
+              layman: "In der Restaurantküche ertönt ein Signalton und der Thermodrucker druckt automatisch den fertigen Bon aus.",
+              tech: "Kitchen App empfängt das WSS-Event, generiert binäre ESC/POS-Druckbefehle und sendet sie via WebUSB an den 80mm-Bondrucker.",
+              activeNodes: ["node-realtime", "node-printer"],
+              activeLinks: ["link-realtime-printer"]
+            }
+          ]
+        },
+        en: {
+          name: "🍕 Flow A: Instant Restaurant Order & KDS Print",
+          stages: [
+            {
+              title: "Stage 1: Guest Places Order in Storefront",
+              layman: "The customer chooses burgers & fries in the online menu and enters table number or delivery address.",
+              tech: "React 19 client aggregates cart state and validates minimum order values optimistically in the browser.",
+              activeNodes: ["node-client"],
+              activeLinks: ["link-client-edge"]
+            },
+            {
+              title: "Stage 2: Edge Server Validates & Prepares Payment",
+              layman: "The edge server confirms the kitchen is open and initializes Apple Pay / card checkout.",
+              tech: "TanStack Start server function validates menu prices and creates a Stripe Checkout Session with direct payout.",
+              activeNodes: ["node-edge", "node-stripe"],
+              activeLinks: ["link-edge-stripe"]
+            },
+            {
+              title: "Stage 3: Money Flows Directly to Restaurant",
+              layman: "Customer pays. Funds go directly into the restaurant's bank account with 0% platform commission!",
+              tech: "Stripe authorizes the transaction and fires a cryptographically signed HMAC webhook to the edge gateway.",
+              activeNodes: ["node-stripe", "node-edge"],
+              activeLinks: ["link-stripe-edge"]
+            },
+            {
+              title: "Stage 4: Database Save & Sub-Second Broadcast",
+              layman: "The order is safely saved in the vault and radios the kitchen screen in less than a second.",
+              tech: "Postgres commits the order with RLS and broadcasts a WebSocket (WSS) event to all kitchen tablets in <45ms.",
+              activeNodes: ["node-db", "node-realtime"],
+              activeLinks: ["link-edge-db", "link-db-realtime"]
+            },
+            {
+              title: "Stage 5: Thermal Printer Prints Kitchen Ticket",
+              layman: "A kitchen chime sounds and the thermal receipt printer automatically spits out the paper order ticket.",
+              tech: "Kitchen app catches the WSS event, renders binary ESC/POS commands, and dispatches them via WebUSB to the 80mm printer.",
+              activeNodes: ["node-realtime", "node-printer"],
+              activeLinks: ["link-realtime-printer"]
+            }
+          ]
+        }
+      },
+      {
+        id: "catering-brief",
+        de: {
+          name: "🍱 Flow B: Catering-Anfrage & Lead-Vermittlung",
+          stages: [
+            {
+              title: "Schritt 1: Kunde stellt Catering-Anfrage zusammen",
+              layman: "Ein Eventplaner stellt Gästeanzahl (z.B. 120 Gäste), Budget pro Kopf und Essenswünsche (z.B. BBQ oder Vegan) ein.",
+              tech: "Client berechnet dynamisch Portionsgewichte und Gesamtkosten über die Budget-Engine und sendet das Briefing ab.",
+              activeNodes: ["node-client"],
+              activeLinks: ["link-client-edge"]
+            },
+            {
+              title: "Schritt 2: Intelligenter Radius- & Kapazitäts-Check",
+              layman: "Das System sucht automatisch die besten Caterer in der passenden Stadt, die an dem Datum noch freie Kapazitäten haben.",
+              tech: "Edge Gateway führt PostGIS-Umkreissuche und Kapazitätsfilterung über verifizierte Partner in der Region durch.",
+              activeNodes: ["node-edge"],
+              activeLinks: ["link-edge-db"]
+            },
+            {
+              title: "Schritt 3: Sichere Speicherung im Partner-Bereich",
+              layman: "Die Anfrage wird gespeichert, sodass nur ausgewählte, geprüfte Caterer die Kontaktdaten einsehen können.",
+              tech: "Lead wird in Supabase Postgres abgelegt. Row Level Security stellt sicher, dass kein fremder Caterer fremde Kundendaten einsehen kann.",
+              activeNodes: ["node-db"],
+              activeLinks: ["link-db-email", "link-db-realtime"]
+            },
+            {
+              title: "Schritt 4: Sofort-Alarmierung per E-Mail & Dashboard",
+              layman: "Die Caterer erhalten sofort eine E-Mail auf ihr Smartphone mit allen Details, um schnell ein Angebot abzugeben.",
+              tech: "Resend SDK versendet formatierte E-Mail-Briefs; zeitgleich aktualisiert sich der Inquire-Badge im Caterer-Dashboard via WebSocket.",
+              activeNodes: ["node-email", "node-realtime"],
+              activeLinks: ["link-db-email"]
+            },
+            {
+              title: "Schritt 5: Caterer schickt Angebot zurück an den Kunden",
+              layman: "Der Caterer klickt auf 'Angebot senden' und der Kunde erhält sofort ein transparentes PDF-Angebot zum Buchen.",
+              tech: "Caterer übermittelt Menüvorschlag über das Portal; Kunde erhält direkten Bestätigungs- und Zahlungslink.",
+              activeNodes: ["node-client", "node-edge"],
+              activeLinks: ["link-edge-client"]
+            }
+          ]
+        },
+        en: {
+          name: "🍱 Flow B: Catering Brief & Lead Matching",
+          stages: [
+            {
+              title: "Stage 1: Organizer Configures Event Brief",
+              layman: "A corporate planner adjusts guest count (e.g. 120 guests), budget per head (€35), and dietary tags (BBQ / Vegan).",
+              tech: "Client computes portion weights and dynamic pricing tiers via budget engine, submitting the qualified brief payload.",
+              activeNodes: ["node-client"],
+              activeLinks: ["link-client-edge"]
+            },
+            {
+              title: "Stage 2: Smart Geo Radius & Capacity Matching",
+              layman: "Speisely automatically filters top caterers in the client's city with open kitchen slots on that date.",
+              tech: "Edge server executes PostGIS radius queries and matches capacity thresholds across verified regional partners.",
+              activeNodes: ["node-edge"],
+              activeLinks: ["link-edge-db"]
+            },
+            {
+              title: "Stage 3: Secure Lead Commit with RLS",
+              layman: "The inquiry is saved in the vault so only authorized, vetted caterers can view private client contact info.",
+              tech: "Stored in Supabase Postgres under strict RLS policies, preventing competitor data leakage.",
+              activeNodes: ["node-db"],
+              activeLinks: ["link-db-email", "link-db-realtime"]
+            },
+            {
+              title: "Stage 4: Instant Notification via Email & WSS",
+              layman: "Caterers get an immediate notification on their phone with all brief details to respond within minutes.",
+              tech: "Resend SDK sends rich HTML brief emails; merchant dashboard badge increments in real time via WebSockets.",
+              activeNodes: ["node-email", "node-realtime"],
+              activeLinks: ["link-db-email"]
+            },
+            {
+              title: "Stage 5: Proposal Delivered to Organizer",
+              layman: "The caterer clicks 'Send Quote' and the organizer gets an instant, transparent PDF proposal to book online.",
+              tech: "Caterer submits tailored menu through portal; client receives proposal view with deposit payment bridge.",
+              activeNodes: ["node-client", "node-edge"],
+              activeLinks: ["link-edge-client"]
+            }
+          ]
+        }
+      },
+      {
+        id: "website-seo",
+        de: {
+          name: "🌐 Flow C: Standalone Website & Google AI SEO",
+          stages: [
+            {
+              title: "Schritt 1: KI-Suchmaschine oder Kunde besucht die Seite",
+              layman: "Jemand sucht auf Google oder Perplexity nach 'Catering Mönchengladbach' und landet auf der Caterer-Website.",
+              tech: "Perplexity / ChatGPT Search oder Browser ruft partyservicekuepper.de oder speisely.de über HTTPS auf.",
+              activeNodes: ["node-seo"],
+              activeLinks: ["link-seo-edge"]
+            },
+            {
+              title: "Schritt 2: Blitzschnelles Laden (PageSpeed 99+)",
+              layman: "Die Seite öffnet sich in einem Wimpernschlag und liefert Google strukturierte Menüs und Preise.",
+              tech: "Vercel Nitro Edge liefert vorkompiliertes SSR-HTML mit validem Schema.org JSON-LD Entitätsgraphen (<25ms TTFB).",
+              activeNodes: ["node-edge", "node-seo"],
+              activeLinks: ["link-edge-seo"]
+            },
+            {
+              title: "Schritt 3: Live-Preise & Termine aus der Datenbank",
+              layman: "Die Website zeigt sofort die aktuellen BBQ-Pakete und verfügbaren Termine an.",
+              tech: "TanStack Start hydriert Menü- und Preiskonfigurationen direkt aus dem global gecachten Datenbestand.",
+              activeNodes: ["node-db"],
+              activeLinks: ["link-edge-db"]
+            },
+            {
+              title: "Schritt 4: Direktes Buchen ohne Agentur-Kosten",
+              layman: "Der Besucher nutzt den interaktiven Event-Rechner auf der Website und sendet die Buchung direkt ab.",
+              tech: "Kunde schließt Anfrage über das eingebettete Speisely-Widget ab — Lead wandert direkt in das Partner-Dashboard.",
+              activeNodes: ["node-client"],
+              activeLinks: ["link-client-edge"]
+            }
+          ]
+        },
+        en: {
+          name: "🌐 Flow C: Standalone Website & Google AI SEO",
+          stages: [
+            {
+              title: "Stage 1: AI Search Crawler / Visitor Ingress",
+              layman: "A user or AI search engine (Perplexity, ChatGPT, Google AI) searches for catering and lands on the site.",
+              tech: "Perplexity / ChatGPT Search crawler or browser initiates HTTPS request to partyservicekuepper.de or speisely.de.",
+              activeNodes: ["node-seo"],
+              activeLinks: ["link-seo-edge"]
+            },
+            {
+              title: "Stage 2: Ultra-Fast Edge SSR (PageSpeed 99+)",
+              layman: "The website loads in a fraction of a second, feeding structured menus and pricing straight to AI engines.",
+              tech: "Nitro Edge delivers pre-rendered SSR HTML with full Schema.org JSON-LD structured graph data (<25ms TTFB).",
+              activeNodes: ["node-edge", "node-seo"],
+              activeLinks: ["link-edge-seo"]
+            },
+            {
+              title: "Stage 3: Live Menus & Dynamic Capacity",
+              layman: "The site automatically displays active BBQ packages and open calendar dates without expensive web agencies.",
+              tech: "TanStack Start hydrates menu configurations directly from cached Supabase database records.",
+              activeNodes: ["node-db"],
+              activeLinks: ["link-edge-db"]
+            },
+            {
+              title: "Stage 4: Automated Inquiries & Direct Bookings",
+              layman: "The visitor configures their event using the built-in calculator and books directly with zero commission.",
+              tech: "Customer submits inquiry via embedded Speisely bridge widget, routing directly into the vendor CRM dashboard.",
+              activeNodes: ["node-client"],
+              activeLinks: ["link-client-edge"]
+            }
+          ]
+        }
+      }
+    ];
+
+    let currentScenarioIdx = 0;
+    let currentStep = 0;
+    let playInterval = null;
+
+    // Language switcher
+    function setLang(lang) {
+      currentLang = lang;
+      document.getElementById('lang-de').classList.toggle('active-gold', lang === 'de');
+      document.getElementById('lang-de').classList.toggle('active', false);
+      document.getElementById('lang-en').classList.toggle('active-gold', lang === 'en');
+      document.getElementById('lang-en').classList.toggle('active', false);
+
+      const ui = UI[lang];
+      document.getElementById('lbl-live-badge').innerText = ui.liveBadge;
+      document.getElementById('lbl-mode-dual').innerText = ui.modeDual;
+      document.getElementById('lbl-mode-layman').innerText = ui.modeLayman;
+      document.getElementById('lbl-mode-tech').innerText = ui.modeTech;
+      document.getElementById('prevBtn').innerText = ui.prev;
+      document.getElementById('nextBtn').innerText = ui.next;
+      document.getElementById('resetBtn').innerText = ui.reset;
+      document.getElementById('lbl-layman-box').innerText = ui.boxLayman;
+      document.getElementById('lbl-tech-box').innerText = ui.boxTech;
+      document.getElementById('lbl-footer').innerText = ui.footer;
+      
+      const playBtn = document.getElementById('playBtn');
+      if (playInterval) {
+        playBtn.innerText = ui.pause;
+      } else {
+        playBtn.innerText = ui.play;
+      }
+
+      // Update Scenario Tab Buttons
+      SCENARIOS.forEach((sc, i) => {
+        const tab = document.getElementById(`tab-scenario-${i}`);
+        if (tab) tab.innerText = sc[lang].name;
+      });
+
+      // Update Node Cards on Canvas
+      for (const [key, val] of Object.entries(NODES)) {
+        const langData = val[lang];
+        const typeEl = document.getElementById(`node-type-${key}`);
+        const titleEl = document.getElementById(`node-title-${key}`);
+        const subEl = document.getElementById(`node-sub-${key}`);
+        if (typeEl) typeEl.innerText = langData.type;
+        if (titleEl) titleEl.innerText = langData.title;
+        if (subEl) subEl.innerText = langData.sub;
+      }
+
+      // Update Simulation & Inspector
+      updateSimulation();
+      if (currentActiveNodeKey) openInspector(currentActiveNodeKey);
+    }
 
     function setMode(mode) {
       currentMode = mode;
-      document.querySelectorAll('.mode-btn').forEach(b => {
+      document.querySelectorAll('.mode-toggle .pill-btn').forEach(b => {
         b.classList.remove('active', 'active-gold');
       });
       if (mode === 'dual') document.getElementById('mode-dual').classList.add('active-gold');
@@ -689,256 +1271,6 @@
         boxTech.style.display = 'block';
       }
     }
-
-    // 1. Architecture Component Metadata (Dual Content: Layman + Business + Developer)
-    const NODES = {
-      client: {
-        title: "React 19 Benutzeroberfläche",
-        type: "Frontend SPA / SSR Client",
-        layman: "Das ist die eigentliche Webseite, die der Gast auf dem Smartphone oder Laptop sieht. Sie reagiert blitzschnell wie eine native App.",
-        business: "Keine Wartezeiten für den Kunden. Erhöht die Conversion-Rate um bis zu 40%, weil Speisekarten und Event-Rechner ohne Neuladen sofort reagieren.",
-        tech: "React 19 mit TanStack Router & Framer Motion. Optimistisches State-Management, automatische Bildkomprimierung (WebP) und Lenis Smooth Scroll.",
-        files: [
-          "src/router.tsx",
-          "src/routes/index.tsx",
-          "src/routes/catering.$slug.tsx",
-          "src/routes/restaurant.$slug.tsx",
-          "src/components/SiteShell.tsx"
-        ],
-        latency: "~16ms (60 FPS Motion)",
-        protocol: "HTTPS / WSS / DOM",
-        security: "Client-Side Input Sanitization · CSP Headers · Session Storage"
-      },
-      edge: {
-        title: "TanStack Start & Nitro Edge Server",
-        type: "Serverless Compute & Gateway",
-        layman: "Der digitale Türsteher und Chef-Kellner. Er nimmt Bestellungen entgegen, prüft Preise und stellt sicher, dass alles seine Richtigkeit hat.",
-        business: "Verhindert Manipulationen (z.B. falsche Preise) und sorgt für Spitzen-Ladezeiten (<25ms) in ganz Deutschland, egal wie viele Gäste gleichzeitig bestellen.",
-        tech: "TanStack Start Server Functions auf Nitro/Vercel Edge. Typed RPC Endpoints, SSR HTML Hydration, Rollenprüfung (RBAC) und dynamische Sitemap-Erzeugung.",
-        files: [
-          "src/start.ts",
-          "src/server.ts",
-          "src/lib/auth/role-middleware.ts",
-          "src/routes/sitemap[.]xml.ts",
-          "src/routes/llms[.]txt.ts"
-        ],
-        latency: "< 25ms TTFB (Vercel Edge)",
-        protocol: "HTTP/2, HTTPS Server Functions",
-        security: "Role-Based Middleware · Supabase Auth Tokens · Rate Limiting"
-      },
-      stripe: {
-        title: "Stripe Direct Connect Zahlungsbrücke",
-        type: "Fintech & Payout Infrastructure",
-        layman: "Das Kartenterminal im Internet (Apple Pay, Google Pay, Kreditkarte). Das Geld wandert direkt aufs Bankkonto des Gastronomen — Speisely zieht keine 30% Provision ab!",
-        business: "Maximale Liquidität für den Gastronomen. Das Geld liegt nicht wochenlang bei Zwischenhändlern, sondern wird direkt per Stripe Connect ausgezahlt.",
-        tech: "Stripe Connect Direct Charges & Webhook Signature Verification. Verarbeitet Checkout Sessions, SEPA-Lastschriften und signierte HMAC-Webhooks.",
-        files: [
-          "src/lib/stripe.ts",
-          "src/routes/api.stripe.webhook.ts"
-        ],
-        latency: "250ms - 450ms",
-        protocol: "REST API, Signed HMAC Webhooks",
-        security: "PCI-DSS Level 1 · 256-bit Webhook Signature Verification"
-      },
-      db: {
-        title: "Supabase Postgres Datenbank",
-        type: "Relational Persistence & RLS",
-        layman: "Der digitale Tresor. Hier werden alle Speisen, Catering-Briefs, Angebote und Kontaktdaten felsenfest und DSGVO-konform gespeichert.",
-        business: "Jeder Partner sieht nur seine eigenen Daten (strikte Mandantentrennung). Keine Datenlecks zu Konkurrenten.",
-        tech: "PostgreSQL mit Row Level Security (RLS). Mandantentrennung auf Datenbankebene, Indizierung für Geokoordinaten und automatische Backups.",
-        files: [
-          "src/lib/auth/get-user-profile.functions.ts",
-          "src/lib/caterer/menu.functions.ts",
-          "src/lib/customer/mutations.functions.ts",
-          "src/lib/geo/server.functions.ts"
-        ],
-        latency: "12ms - 20ms",
-        protocol: "PostgreSQL Wire / PostgREST",
-        security: "Strict Row Level Security (RLS) · Zero Cross-Vendor Leakage"
-      },
-      realtime: {
-        title: "Supabase Realtime Live-Funkzentrale",
-        type: "WebSocket Event Bus",
-        layman: "Wie ein Walkie-Talkie für Computer. Sobald ein Kunde bestellt, schlägt der Küchenmonitor in der Restaurantküche in Sekundenbruchteilen Alarm.",
-        business: "Kein manuelles Neuladen der Seite nötig. Die Küche sieht sofort jede neue Bestellung und kann ohne Verzögerung mit dem Kochen beginnen.",
-        tech: "WebSockets / Phoenix Channels. Event-Broadcasting direkt aus Postgres WAL (Write-Ahead-Log) an alle verbundenen Dashboards in <45ms.",
-        files: [
-          "src/routes/_authenticated/restaurant.kitchen.tsx",
-          "src/routes/_authenticated/caterer.tsx"
-        ],
-        latency: "< 45ms Pub/Sub",
-        protocol: "WebSockets (WSS) / Phoenix Channels",
-        security: "Encrypted WebSocket Channels · Channel-Level Auth Grants"
-      },
-      printer: {
-        title: "Thermodrucker & Küchenleitsystem (KDS)",
-        type: "Hardware Output Controller",
-        layman: "Der klassische Bon-Drucker in der Küche. Er druckt den fertigen Küchen-Zettel mit Tischnummer, Speisen und Sonderwünschen automatisch aus.",
-        business: "Null Tippfehler des Personals. Funktioniert dank Offline-Pufferung auch dann weiter, wenn das WLAN im Restaurant kurz ausfällt.",
-        tech: "ESC/POS Binary Command Engine via WebUSB, RAW TCP/IP (Port 9100) oder Bluetooth. Unterstützt 80mm/58mm Bonrollen und IndexedDB-Offline-Puffer.",
-        files: [
-          "src/lib/festival/printer.ts",
-          "src/lib/festival/useFestivalCashRegister.ts",
-          "src/lib/festival/idbStorage.ts"
-        ],
-        latency: "~50ms Hardware Print",
-        protocol: "WebUSB, RAW TCP/IP Socket (Port 9100)",
-        security: "Direct Local Hardware Access · Offline IndexedDB Buffer"
-      },
-      email: {
-        title: "Resend E-Mail-Versand",
-        type: "Transactional Email Gateway",
-        layman: "Der digitale Briefträger. Er schickt dem Caterer sofort das detaillierte Event-Briefing und dem Kunden die Buchungsbestätigung mit PDF-Angebot.",
-        business: "Sekundenschnelle Lead-Zustellung. Caterer können innerhalb von Minuten ein maßgeschneidertes Angebot abgeben und Aufträge gewinnen.",
-        tech: "Resend API mit DKIM/SPF/DMARC-Authentifizierung. Versand von React-basierten HTML-E-Mail-Vorlagen und dynamisch generierten PDF-Anhängen.",
-        files: [
-          "src/lib/email.functions.ts"
-        ],
-        latency: "150ms - 300ms",
-        protocol: "HTTPS REST API (Resend SDK)",
-        security: "DKIM, SPF, DMARC Verified · Secret API Key Isolation"
-      },
-      seo: {
-        title: "Google KI & AI Knowledge Graph",
-        type: "Structured Data & AI Grounding",
-        layman: "Der Übersetzer für KI-Suchmaschinen. Er sorgt dafür, dass ChatGPT, Perplexity und Google AI Speisely-Partner als beste Empfehlung nennen.",
-        business: "Kostenlose Neukunden über KI-Suchmaschinen ohne teure Google-Ads-Werbekosten.",
-        tech: "Schema.org JSON-LD Entitätsgraphen, dynamisches /llms.txt und synchronisierte XML-Sitemaps für direkte GEO/AEO-Zitationen.",
-        files: [
-          "src/routes/llms[.]txt.ts",
-          "public/llms.txt",
-          "public/llms-full.txt",
-          "src/routes/sitemap[.]xml.ts"
-        ],
-        latency: "< 10ms (Edge Static)",
-        protocol: "HTTPS / Text-Plain / XML",
-        security: "Public Read-Only Schema · High-Density Entity Graphs"
-      }
-    };
-
-    // 2. Scenarios with Dual Descriptions (Layman + Developer)
-    const SCENARIOS = [
-      {
-        id: "instant-order",
-        name: "Flow A: Restaurant-Bestellung & Küchendrucker",
-        stages: [
-          {
-            title: "Schritt 1: Gast bestellt im Storefront",
-            layman: "Der Gast packt Burger & Pommes in den Warenkorb und gibt Tischnummer oder Lieferadresse ein.",
-            tech: "React 19 Frontend aggregiert den Warenkorb-Zustand und prüft Mindestbestellwerte lokal im Browser.",
-            activeNodes: ["node-client"],
-            activeLinks: ["link-client-edge"]
-          },
-          {
-            title: "Schritt 2: Server prüft & startet Bezahlung",
-            layman: "Der Server stellt sicher, dass das Restaurant geöffnet ist und bereitet die Bezahlung per Apple Pay oder Karte vor.",
-            tech: "TanStack Start Server Function validiert Artikelpreise und erstellt eine Stripe Checkout Session mit direkter Auszahlung.",
-            activeNodes: ["node-edge", "node-stripe"],
-            activeLinks: ["link-edge-stripe"]
-          },
-          {
-            title: "Schritt 3: Geld geht direkt an den Gastronomen",
-            layman: "Der Gast zahlt. Das Geld geht ohne Speisely-Zwischenhändler direkt aufs Bankkonto des Restaurants.",
-            tech: "Stripe autorisiert die Zahlung und sendet einen kryptografisch signierten Webhook an den Speisely-Edge-Server.",
-            activeNodes: ["node-stripe", "node-edge"],
-            activeLinks: ["link-stripe-edge"]
-          },
-          {
-            title: "Schritt 4: Speicherung & Sekundenschnelle Alarmierung",
-            layman: "Die Bestellung wird sicher im Tresor gespeichert und funkt in Sekundenbruchteilen die Restaurantküche an.",
-            tech: "Postgres committet die Bestellung per RLS und sendet via Supabase Realtime ein WSS-Broadcast-Event an alle Küchen-Tablets.",
-            activeNodes: ["node-db", "node-realtime"],
-            activeLinks: ["link-edge-db", "link-db-realtime"]
-          },
-          {
-            title: "Schritt 5: Küchendrucker druckt den Bon aus",
-            layman: "In der Restaurantküche ertönt ein Signalton und der Thermodrucker druckt automatisch den fertigen Bon aus.",
-            tech: "Kitchen App empfängt das WSS-Event, generiert binäre ESC/POS-Druckbefehle und sendet sie via WebUSB an den 80mm-Bondrucker.",
-            activeNodes: ["node-realtime", "node-printer"],
-            activeLinks: ["link-realtime-printer"]
-          }
-        ]
-      },
-      {
-        id: "catering-brief",
-        name: "Flow B: Catering-Anfrage & Lead-Vermittlung",
-        stages: [
-          {
-            title: "Schritt 1: Kunde stellt Catering-Anfrage zusammen",
-            layman: "Ein Eventplaner stellt Gästeanzahl (z.B. 120 Gäste), Budget pro Kopf und Essenswünsche (z.B. BBQ oder Vegan) ein.",
-            tech: "Client berechnet dynamisch Portionsgewichte und Gesamtkosten über die Budget-Engine und sendet das Briefing ab.",
-            activeNodes: ["node-client"],
-            activeLinks: ["link-client-edge"]
-          },
-          {
-            title: "Schritt 2: Intelligenter Radius- & Kapazitäts-Check",
-            layman: "Das System sucht automatisch die besten Caterer in der passenden Stadt, die an dem Datum noch freie Kapazitäten haben.",
-            tech: "Edge Gateway führt PostGIS-Umkreissuche und Kapazitätsfilterung über verifizierte Partner in der Region durch.",
-            activeNodes: ["node-edge"],
-            activeLinks: ["link-edge-db"]
-          },
-          {
-            title: "Schritt 3: Sichere Speicherung im Partner-Bereich",
-            layman: "Die Anfrage wird gespeichert, sodass nur ausgewählte, geprüfte Caterer die Kontaktdaten einsehen können.",
-            tech: "Lead wird in Supabase Postgres abgelegt. Row Level Security stellt sicher, dass kein fremder Caterer fremde Kundendaten einsehen kann.",
-            activeNodes: ["node-db"],
-            activeLinks: ["link-db-email", "link-db-realtime"]
-          },
-          {
-            title: "Schritt 4: Sofort-Alarmierung per E-Mail & Dashboard",
-            layman: "Die Caterer erhalten sofort eine E-Mail auf ihr Smartphone mit allen Details, um schnell ein Angebot abzugeben.",
-            tech: "Resend SDK versendet formatierte E-Mail-Briefs; zeitgleich aktualisiert sich der Inquire-Badge im Caterer-Dashboard via WebSocket.",
-            activeNodes: ["node-email", "node-realtime"],
-            activeLinks: ["link-db-email"]
-          },
-          {
-            title: "Schritt 5: Caterer schickt Angebot zurück an den Kunden",
-            layman: "Der Caterer klickt auf 'Angebot senden' und der Kunde erhält sofort ein transparentes PDF-Angebot zum Buchen.",
-            tech: "Caterer übermittelt Menüvorschlag über das Portal; Kunde erhält direkten Bestätigungs- und Zahlungslink.",
-            activeNodes: ["node-client", "node-edge"],
-            activeLinks: ["link-edge-client"]
-          }
-        ]
-      },
-      {
-        id: "website-seo",
-        name: "Flow C: Standalone Website & Google AI SEO",
-        stages: [
-          {
-            title: "Schritt 1: KI-Suchmaschine oder Kunde besucht die Seite",
-            layman: "Jemand sucht auf Google oder Perplexity nach 'Catering Mönchengladbach' und landet auf der Caterer-Website.",
-            tech: "Perplexity / ChatGPT Search oder Browser ruft partyservicekuepper.de oder speisely.de über HTTPS auf.",
-            activeNodes: ["node-seo"],
-            activeLinks: ["link-seo-edge"]
-          },
-          {
-            title: "Schritt 2: Blitzschnelles Laden (PageSpeed 99+)",
-            layman: "Die Seite öffnet sich in einem Wimpernschlag und liefert Google strukturierte Menüs und Preise.",
-            tech: "Vercel Nitro Edge liefert vorkompiliertes SSR-HTML mit validem Schema.org JSON-LD Entitätsgraphen (<25ms TTFB).",
-            activeNodes: ["node-edge", "node-seo"],
-            activeLinks: ["link-edge-seo"]
-          },
-          {
-            title: "Schritt 3: Live-Preise & Termine aus der Datenbank",
-            layman: "Die Website zeigt sofort die aktuellen BBQ-Pakete und verfügbaren Termine an.",
-            tech: "TanStack Start hydriert Menü- und Preiskonfigurationen direkt aus dem global gecachten Datenbestand.",
-            activeNodes: ["node-db"],
-            activeLinks: ["link-edge-db"]
-          },
-          {
-            title: "Schritt 4: Direktes Buchen ohne Agentur-Kosten",
-            layman: "Der Besucher nutzt den interaktiven Event-Rechner auf der Website und sendet die Buchung direkt ab.",
-            tech: "Kunde schließt Anfrage über das eingebettete Speisely-Widget ab — Lead wandert direkt in das Partner-Dashboard.",
-            activeNodes: ["node-client"],
-            activeLinks: ["link-client-edge"]
-          }
-        ]
-      }
-    ];
-
-    let currentScenarioIdx = 0;
-    let currentStep = 0;
-    let playInterval = null;
 
     // 3. Draw SVG Connection Lines
     function drawConnections() {
@@ -979,13 +1311,15 @@
 
     function updateSimulation() {
       const scenario = SCENARIOS[currentScenarioIdx];
-      const stage = scenario.stages[currentStep];
+      const langScenario = scenario[currentLang];
+      const stage = langScenario.stages[currentStep];
+      const ui = UI[currentLang];
 
       document.getElementById('stageTitle').innerText = stage.title;
       document.getElementById('stageDescLayman').innerText = stage.layman;
       document.getElementById('stageDescTech').innerText = stage.tech;
-      document.getElementById('stepCounter').innerText = `Schritt ${currentStep + 1} von ${scenario.stages.length}`;
-      document.getElementById('stageIndicator').innerText = `SCHRITT ${currentStep + 1} / ${scenario.stages.length}`;
+      document.getElementById('stepCounter').innerText = ui.stepOf(currentStep + 1, langScenario.stages.length);
+      document.getElementById('stageIndicator').innerText = ui.stepInd(currentStep + 1, langScenario.stages.length);
 
       // Reset active states
       document.querySelectorAll('.node').forEach(n => {
@@ -1011,13 +1345,13 @@
     }
 
     function nextStep() {
-      const scenario = SCENARIOS[currentScenarioIdx];
+      const scenario = SCENARIOS[currentScenarioIdx][currentLang];
       currentStep = (currentStep + 1) % scenario.stages.length;
       updateSimulation();
     }
 
     function prevStep() {
-      const scenario = SCENARIOS[currentScenarioIdx];
+      const scenario = SCENARIOS[currentScenarioIdx][currentLang];
       currentStep = (currentStep - 1 + scenario.stages.length) % scenario.stages.length;
       updateSimulation();
     }
@@ -1029,14 +1363,15 @@
 
     function togglePlay() {
       const btn = document.getElementById('playBtn');
+      const ui = UI[currentLang];
       if (playInterval) {
         clearInterval(playInterval);
         playInterval = null;
-        btn.innerHTML = "▶ Simulation Abspielen";
+        btn.innerHTML = ui.play;
         btn.classList.add('btn-gold');
       } else {
         playInterval = setInterval(nextStep, 2800);
-        btn.innerHTML = "⏸ Pause";
+        btn.innerHTML = ui.pause;
         btn.classList.remove('btn-gold');
       }
     }
@@ -1045,8 +1380,9 @@
       if (playInterval) {
         clearInterval(playInterval);
         playInterval = null;
-        document.getElementById('playBtn').innerHTML = "▶ Simulation Abspielen";
-        document.getElementById('playBtn').classList.add('btn-gold');
+        const playBtn = document.getElementById('playBtn');
+        playBtn.innerHTML = UI[currentLang].play;
+        playBtn.classList.add('btn-gold');
       }
       currentScenarioIdx = idx;
       currentStep = 0;
@@ -1057,8 +1393,11 @@
     }
 
     function openInspector(key) {
-      const data = NODES[key];
-      if (!data) return;
+      currentActiveNodeKey = key;
+      const nodeObj = NODES[key];
+      if (!nodeObj) return;
+      const data = nodeObj[currentLang];
+      const ui = UI[currentLang];
       const drawer = document.getElementById('inspectorDrawer');
       const content = document.getElementById('inspectorContent');
       content.innerHTML = `
@@ -1068,7 +1407,7 @@
         <!-- Layman Box -->
         <div class="section-card">
           <div class="section-title layman">
-            <span>💡</span> In einfachen Worten (Was ist das?):
+            <span>💡</span> ${ui.drawerLayman}
           </div>
           <div class="section-body">${data.layman}</div>
         </div>
@@ -1076,7 +1415,7 @@
         <!-- Business Value Box -->
         <div class="section-card">
           <div class="section-title business">
-            <span>💰</span> Warum das wichtig ist (Business-Vorteil):
+            <span>💰</span> ${ui.drawerBusiness}
           </div>
           <div class="section-body">${data.business}</div>
         </div>
@@ -1084,7 +1423,7 @@
         <!-- Tech Box -->
         <div class="section-card">
           <div class="section-title tech">
-            <span>⚙️</span> Für Entwickler (Technische Details):
+            <span>⚙️</span> ${ui.drawerTech}
           </div>
           <div class="section-body" style="font-size: 0.82rem;">${data.tech}</div>
         </div>
@@ -1092,35 +1431,36 @@
         <!-- Metadata -->
         <div class="meta-box">
           <div class="meta-item">
-            <div class="meta-label">Protokoll</div>
-            <div class="meta-value">${data.protocol}</div>
+            <div class="meta-label">${ui.drawerProtocol}</div>
+            <div class="meta-value">${nodeObj.protocol}</div>
           </div>
           <div class="meta-item">
-            <div class="meta-label">Latenz (P95)</div>
-            <div class="meta-value" style="color: var(--emerald);">${data.latency}</div>
+            <div class="meta-label">${ui.drawerLatency}</div>
+            <div class="meta-value" style="color: var(--emerald);">${nodeObj.latency}</div>
           </div>
         </div>
 
         <div class="section-card">
-          <div class="meta-label">Sicherheit &amp; Isolation</div>
+          <div class="meta-label">${ui.drawerSecurity}</div>
           <div style="font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem;">${data.security}</div>
         </div>
 
-        <h4 style="margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold);">Quellcode-Dateien im Projekt:</h4>
+        <h4 style="margin-top: 1.25rem; margin-bottom: 0.5rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold);">${ui.drawerSource}</h4>
         <ul class="file-list">
-          ${data.files.map(f => `<li>${f}</li>`).join('')}
+          ${nodeObj.files.map(f => `<li>${f}</li>`).join('')}
         </ul>
       `;
       drawer.classList.add('open');
     }
 
     function closeInspector() {
+      currentActiveNodeKey = null;
       document.getElementById('inspectorDrawer').classList.remove('open');
     }
 
     // Initialize
     drawConnections();
-    updateSimulation();
+    setLang('de');
   </script>
 </body>
 </html>
