@@ -15,6 +15,8 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - Partner / Pricing Page: https://speisely.de/partners
 - B2B Website-Erstellung (Custom Websites for Caterers): https://speisely.de/partner/webseiten
 - Interactive Architecture Simulator: https://speisely.de/architecture-simulator
+- Enterprise GEO API: https://speisely.de/api/geo
+- GeoJSON Registry: https://speisely.de/geo.json
 - Blog: https://speisely.de/blog
 - About Us: https://speisely.de/about
 

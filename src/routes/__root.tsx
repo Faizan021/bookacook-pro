@@ -262,13 +262,37 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <link rel="canonical" href={canonicalUrl} />
+        <link rel="sitemap" type="application/xml" href="https://speisely.de/sitemap.xml" />
         <link rel="manifest" href="/manifest.json" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Static Fallback SEO & OpenGraph Meta for Audits & Crawlers */}
+        <meta name="description" content="Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland." />
+        <meta property="og:title" content="Speisely — Marktplatz für Catering, Restaurants & Eventplanung" />
+        <meta property="og:description" content="Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland." />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content="https://speisely.de/hero-cinematic.webp" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Speisely" />
+        <meta property="og:locale" content="de_DE" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Speisely — Marktplatz für Catering, Restaurants & Eventplanung" />
+        <meta name="twitter:description" content="Catering buchen, Essen bei lokalen Restaurants bestellen und Eventplaner in ganz Deutschland finden." />
+        <meta name="twitter:image" content="https://speisely.de/hero-cinematic.webp" />
         <meta
           name="ahrefs-site-verification"
           content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"
-        ></meta>
+        />
 
-        {/* Global Schema.org JSON-LD Graph for AI Crawlers & GlanzAI Detection */}
+        {/* GA4 & Looker Studio AI Referral Attribution Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var r=(document.referrer||'').toLowerCase();var aiSources=[{match:'chatgpt.com',source:'chatgpt'},{match:'openai.com',source:'chatgpt'},{match:'perplexity.ai',source:'perplexity'},{match:'claude.ai',source:'claude'},{match:'anthropic.com',source:'claude'},{match:'gemini.google.com',source:'gemini'},{match:'copilot.microsoft.com',source:'bing_copilot'},{match:'bing.com',source:'bing_ai'},{match:'you.com',source:'you_ai'}];var matched=aiSources.find(function(s){return r.indexOf(s.match)!==-1;});if(matched){window.__speisely_ai_referrer=matched.source;window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'ai_referral',ai_engine:matched.source,traffic_type:'generative_ai_search',referring_url:r});}}catch(e){}})();`,
+          }}
+        />
+
+        {/* Global Multi-Node Schema.org JSON-LD Graph for AI Crawlers & GlanzAI Detection */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -363,6 +387,91 @@ function RootShell({ children }: { children: ReactNode }) {
                     priceValidUntil: "2027-12-31",
                     availability: "https://schema.org/InStock",
                   },
+                },
+                {
+                  "@type": "FAQPage",
+                  "@id": "https://speisely.de/#faq",
+                  name: "Häufig gestellte Fragen zu Speisely Catering & Restaurants",
+                  mainEntity: [
+                    {
+                      "@type": "Question",
+                      name: "Was ist Speisely?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: "Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Wir verbinden Kunden direkt mit lokalen Partnern ohne versteckte Gebühren.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: "Was kostet Catering über Speisely?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: "Die Anfrage über Speisely ist für Kunden und Unternehmen zu 100 % kostenlos. Caterer erstellen individuelle, transparente Angebote je nach Personenzahl und Menüauswahl (ab 18 € bis 75 € pro Person).",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: "Wie funktioniert die Buchung von Event-Catering?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: "Kunden geben Anlass, Gästezahl und Datum ein. Verifizierte regionale Caterer senden maßgeschneiderte Angebote. Nach Auswahl wird der Termin per Anzahlung sicher reserviert.",
+                      },
+                    },
+                    {
+                      "@type": "Question",
+                      name: "In welchen Städten ist Speisely aktiv?",
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: "Speisely ist bundesweit aktiv, u.a. in Berlin, München, Hamburg, Frankfurt, Köln, Düsseldorf, Stuttgart, Leipzig, Dresden und Mönchengladbach.",
+                      },
+                    },
+                  ],
+                },
+                {
+                  "@type": "NewsArticle",
+                  "@id": "https://speisely.de/#press-spotlight",
+                  headline: "Speisely Gastronomie & Catering Plattform Deutschland",
+                  description:
+                    "Aktuelle Reportagen, Speisely Visits und Vor-Ort-Analysen der besten Restaurants und Caterer Deutschlands.",
+                  publisher: {
+                    "@id": "https://speisely.de/#organization",
+                  },
+                  author: {
+                    "@type": "Organization",
+                    name: "Speisely Redaktion & TechGlanz Studio",
+                  },
+                  datePublished: "2026-06-01T00:00:00Z",
+                  dateModified: new Date().toISOString(),
+                },
+                {
+                  "@type": "BreadcrumbList",
+                  "@id": "https://speisely.de/#breadcrumbs",
+                  itemListElement: [
+                    {
+                      "@type": "ListItem",
+                      position: 1,
+                      name: "Home",
+                      item: "https://speisely.de",
+                    },
+                    {
+                      "@type": "ListItem",
+                      position: 2,
+                      name: "Catering",
+                      item: "https://speisely.de/catering",
+                    },
+                    {
+                      "@type": "ListItem",
+                      position: 3,
+                      name: "Restaurants",
+                      item: "https://speisely.de/instant-order",
+                    },
+                    {
+                      "@type": "ListItem",
+                      position: 4,
+                      name: "Event-Planung",
+                      item: "https://speisely.de/planner",
+                    },
+                  ],
                 },
               ],
             }),

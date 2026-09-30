@@ -200,8 +200,26 @@ export const Route = createFileRoute("/")({
                 "Vermittlung und Koordination professioneller Eventplaner für private und geschäftliche Veranstaltungen.",
             },
             {
+              "@type": "Product",
+              "@id": "https://speisely.de/#product-instant-orders",
+              name: "Speisely Restaurant Instant Orders",
+              description:
+                "Direktbestellungen für Restaurants mit 0 % Bestellprovision und sofortiger Auszahlung.",
+              brand: {
+                "@id": "https://speisely.de/#organization",
+              },
+              offers: {
+                "@type": "Offer",
+                price: "34.99",
+                priceCurrency: "EUR",
+                priceValidUntil: "2027-12-31",
+                availability: "https://schema.org/InStock",
+              },
+            },
+            {
               "@type": "FAQPage",
               "@id": "https://speisely.de/#faq",
+              name: "Häufig gestellte Fragen zu Speisely",
               mainEntity: [
                 {
                   "@type": "Question",
@@ -216,7 +234,7 @@ export const Route = createFileRoute("/")({
                   name: "Wie kann ich Catering über Speisely anfragen?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Über das Anfrageformular gibst du Anlass, Gästezahl und Datum an. Passende Caterer in deiner Region senden dir innerhalb kürzester Zeit Angebote.",
+                    text: "Über das Anfrageformular gibst du Anlass, Gästezahl und Datum an. Passende Caterer in deiner Region senden dir innerhalb kürzester Zeit maßgeschneiderte Angebote (ab 18 € bis 75 € pro Person).",
                   },
                 },
                 {
@@ -226,6 +244,52 @@ export const Route = createFileRoute("/")({
                     "@type": "Answer",
                     text: "Ja, die Suche, der Angebotsvergleich und die Anfrage bei Caterern und Eventplanern sind für Kunden zu 100 % kostenlos.",
                   },
+                },
+              ],
+            },
+            {
+              "@type": "NewsArticle",
+              "@id": "https://speisely.de/#press-spotlight",
+              headline: "Speisely Gastronomie & Catering Plattform Deutschland",
+              description:
+                "Aktuelle Reportagen, Speisely Visits und Vor-Ort-Analysen der besten Restaurants und Caterer Deutschlands.",
+              publisher: {
+                "@id": "https://speisely.de/#organization",
+              },
+              author: {
+                "@type": "Organization",
+                name: "Speisely Redaktion & TechGlanz Studio",
+              },
+              datePublished: "2026-06-01T00:00:00Z",
+              dateModified: new Date().toISOString(),
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://speisely.de/#breadcrumbs",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://speisely.de",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Catering",
+                  item: "https://speisely.de/catering",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: "Restaurants",
+                  item: "https://speisely.de/instant-order",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 4,
+                  name: "Event-Planung",
+                  item: "https://speisely.de/planner",
                 },
               ],
             },
@@ -738,6 +802,39 @@ function Home() {
                 <div className="mt-1 text-xs text-forest/55 font-medium">{s.label}</div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────
+          PRESSE & MEDIEN SIGNALE (ON-PAGE PR & EDITORIAL CITATIONS)
+      ───────────────────────────────────────────────── */}
+      <section aria-label="Presse und Medienberichte" className="bg-[#fcfaf6] border-b border-[#eadfce]/60 py-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5 shrink-0">
+              <span className="inline-flex h-2 w-2 rounded-full bg-[#b28a3c] animate-pulse" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest/70">
+                {tt("Bekannt aus & Reportagen", "As seen in & Field Reports")}
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center justify-center md:justify-end gap-5 sm:gap-8 text-xs font-semibold text-forest/60">
+              <Link to="/magazin" className="hover:text-forest transition-colors flex items-center gap-1.5">
+                <span>📰 Speisely Magazin</span>
+              </Link>
+              <Link to="/magazin/speisely-visits" className="hover:text-forest transition-colors flex items-center gap-1.5">
+                <span>✨ Speisely Visits</span>
+              </Link>
+              <Link to="/magazin/community/san-sebastian-berlin" className="hover:text-forest transition-colors flex items-center gap-1.5">
+                <span>🍰 San Sebastian Original®</span>
+              </Link>
+              <Link to="/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln" className="hover:text-forest transition-colors flex items-center gap-1.5">
+                <span>📍 Mandy Neukölln</span>
+              </Link>
+              <a href="https://techglanz.de" target="_blank" rel="noopener noreferrer" className="hover:text-[#b28a3c] transition-colors flex items-center gap-1.5">
+                <span>⚡ TechGlanz Digital</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

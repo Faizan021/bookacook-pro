@@ -50,6 +50,7 @@ import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes
 import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-password'
+import { Route as ApiGeoRouteImport } from './routes/api.geo'
 import { Route as AuthenticatedRestaurantRouteImport } from './routes/_authenticated/restaurant'
 import { Route as AuthenticatedCustomerRouteImport } from './routes/_authenticated/customer'
 import { Route as AuthenticatedCatererRouteImport } from './routes/_authenticated/caterer'
@@ -291,6 +292,11 @@ const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
   path: '/auth/update-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiGeoRoute = ApiGeoRouteImport.update({
+  id: '/api/geo',
+  path: '/api/geo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRestaurantRoute = AuthenticatedRestaurantRouteImport.update({
   id: '/restaurant',
   path: '/restaurant',
@@ -497,6 +503,7 @@ export interface FileRoutesByFullPath {
   '/caterer': typeof AuthenticatedCatererRouteWithChildren
   '/customer': typeof AuthenticatedCustomerRoute
   '/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
+  '/api/geo': typeof ApiGeoRoute
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catering/$slug': typeof CateringSlugRoute
@@ -569,6 +576,7 @@ export interface FileRoutesByTo {
   '/caterer': typeof AuthenticatedCatererRouteWithChildren
   '/customer': typeof AuthenticatedCustomerRoute
   '/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
+  '/api/geo': typeof ApiGeoRoute
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catering/$slug': typeof CateringSlugRoute
@@ -644,6 +652,7 @@ export interface FileRoutesById {
   '/_authenticated/caterer': typeof AuthenticatedCatererRouteWithChildren
   '/_authenticated/customer': typeof AuthenticatedCustomerRoute
   '/_authenticated/restaurant': typeof AuthenticatedRestaurantRouteWithChildren
+  '/api/geo': typeof ApiGeoRoute
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/catering/$slug': typeof CateringSlugRoute
@@ -720,6 +729,7 @@ export interface FileRouteTypes {
     | '/caterer'
     | '/customer'
     | '/restaurant'
+    | '/api/geo'
     | '/auth/update-password'
     | '/blog/$slug'
     | '/catering/$slug'
@@ -792,6 +802,7 @@ export interface FileRouteTypes {
     | '/caterer'
     | '/customer'
     | '/restaurant'
+    | '/api/geo'
     | '/auth/update-password'
     | '/blog/$slug'
     | '/catering/$slug'
@@ -866,6 +877,7 @@ export interface FileRouteTypes {
     | '/_authenticated/caterer'
     | '/_authenticated/customer'
     | '/_authenticated/restaurant'
+    | '/api/geo'
     | '/auth/update-password'
     | '/blog/$slug'
     | '/catering/$slug'
@@ -939,6 +951,7 @@ export interface RootRouteChildren {
   SpeiselyRoute: typeof SpeiselyRoute
   UeberUnsRoute: typeof UeberUnsRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  ApiGeoRoute: typeof ApiGeoRoute
   AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
@@ -1254,6 +1267,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/update-password'
       fullPath: '/auth/update-password'
       preLoaderRoute: typeof AuthUpdatePasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/geo': {
+      id: '/api/geo'
+      path: '/api/geo'
+      fullPath: '/api/geo'
+      preLoaderRoute: typeof ApiGeoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/restaurant': {
@@ -1663,6 +1683,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpeiselyRoute: SpeiselyRoute,
   UeberUnsRoute: UeberUnsRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  ApiGeoRoute: ApiGeoRoute,
   AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,

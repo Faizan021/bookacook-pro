@@ -27,6 +27,8 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - Partner / Pricing Page: ${BASE}/partners
 - B2B Website-Erstellung (Websites for Caterers & Restaurants): ${BASE}/partner/webseiten
 - Interactive Architecture Simulator: ${BASE}/architecture-simulator
+- Enterprise GEO API: ${BASE}/api/geo
+- GeoJSON Registry: ${BASE}/geo.json
 - Blog: ${BASE}/blog
 - About Us: ${BASE}/about
 
@@ -151,7 +153,7 @@ Last updated: ${new Date().toISOString().split("T")[0]}
         return new Response(text, {
           headers: {
             "Content-Type": "text/plain; charset=utf-8",
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
             "Last-Modified": new Date().toUTCString(),
           },
         });
