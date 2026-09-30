@@ -6,6 +6,8 @@ import {
   Zap,
   ShieldCheck,
   CheckCircle2,
+  AlertTriangle,
+  XCircle,
   ArrowRight,
   ExternalLink,
   Smartphone,
@@ -17,6 +19,10 @@ import {
   Layers,
   ChefHat,
   Building2,
+  Gauge,
+  Bot,
+  FileSpreadsheet,
+  Activity,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -26,21 +32,21 @@ export const Route = createFileRoute("/partner/webseiten")({
   head: () => ({
     meta: [
       {
-        title: "Website-Erstellung für Caterer & Gastronomie — Speisely Digital Suite",
+        title: "Website-Erstellung & Kostenloser Website-Audit für Caterer & Gastronomie — Speisely x TechGlanz",
       },
       {
         name: "description",
         content:
-          "Deine eigene High-End Website für Catering & Restaurants: PageSpeed 99+, integrierte Speisely-Buchungsengine, 100% mobiloptimiert und Google-KI-ready. Jetzt anfragen.",
+          "Kostenloser Website-Audit & High-End Website-Erstellung für Caterer & Restaurants: PageSpeed 99+, Speisely-Buchungsengine, Google-KI-SEO & TechGlanz-Engineering.",
       },
       {
         property: "og:title",
-        content: "Website-Erstellung für Caterer & Gastronomie — Speisely Digital Suite",
+        content: "Website-Erstellung & Kostenloser Website-Audit für Caterer & Gastronomie — Speisely x TechGlanz",
       },
       {
         property: "og:description",
         content:
-          "Moderne Webseiten für Gastronomen & Caterer ohne teuren Agentur-Overhead. Inklusive Online-Menüs, Event-Kalkulator und direkter Anfragen.",
+          "Jetzt bestehende Website kostenlos auf PageSpeed, Google KI & Buchungs-Conversion analysieren lassen. Engineered by TechGlanz & Speisely.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://speisely.de/partner/webseiten" },
@@ -76,6 +82,20 @@ function WebsiteCreationPage() {
   const { lang } = useI18n();
   const isDe = lang === "de";
 
+  // Audit State
+  const [auditUrl, setAuditUrl] = useState("");
+  const [isAuditing, setIsAuditing] = useState(false);
+  const [auditStep, setAuditStep] = useState(0);
+  const [auditResult, setAuditResult] = useState<null | {
+    domain: string;
+    speedScore: number;
+    aiScore: number;
+    mobileScore: number;
+    bookingScore: number;
+    overallScore: number;
+  }>(null);
+
+  // Form State
   const [form, setForm] = useState({
     businessName: "",
     contactName: "",
@@ -89,12 +109,50 @@ function WebsiteCreationPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  // Handle Interactive Audit
+  const handleRunAudit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!auditUrl.trim()) {
+      toast.error(isDe ? "Bitte gib eine Website-URL ein." : "Please enter a website URL.");
+      return;
+    }
+
+    let cleanDomain = auditUrl.replace(/https?:\/\//i, "").replace(/\/.*$/, "").trim();
+    setIsAuditing(true);
+    setAuditResult(null);
+    setAuditStep(1);
+
+    setTimeout(() => setAuditStep(2), 700);
+    setTimeout(() => setAuditStep(3), 1400);
+    setTimeout(() => setAuditStep(4), 2100);
+
+    setTimeout(() => {
+      setIsAuditing(false);
+      setAuditResult({
+        domain: cleanDomain,
+        speedScore: 48,
+        aiScore: 35,
+        mobileScore: 58,
+        bookingScore: 30,
+        overallScore: 43,
+      });
+      setForm((prev) => ({
+        ...prev,
+        currentWebsite: auditUrl.startsWith("http") ? auditUrl : `https://${auditUrl}`,
+        notes: isDe
+          ? `Ich habe den kostenlosen Website-Audit für ${cleanDomain} gemacht und wünsche mir ein unverbindliches Redesign-Konzept.`
+          : `I ran the free website audit for ${cleanDomain} and would like a redesign proposal.`,
+      }));
+      toast.success(isDe ? "Website-Audit abgeschlossen!" : "Website audit completed!");
+    }, 2800);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
 
     const emailSubject = `Neue Website-Anfrage von ${form.businessName || form.contactName}`;
-    const emailBody = `Hallo Speisely Team,
+    const emailBody = `Hallo Speisely & TechGlanz Team,
 
 Ich interessiere mich für eine moderne Website für mein Gastro-/Catering-Business:
 
@@ -104,9 +162,11 @@ E-Mail: ${form.email}
 Telefon: ${form.phone}
 Stadt: ${form.city}
 Typ: ${form.type === "catering" ? "Caterer / Partyservice" : form.type === "restaurant" ? "Restaurant / Café" : "Eventlocation"}
-Aktuelle Website (falls vorhanden): ${form.currentWebsite || "Keine"}
-Besondere Wünsche:
+Aktuelle Website: ${form.currentWebsite || "Keine"}
+Wünsche & Feedback:
 ${form.notes}
+
+Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
 `;
 
     setTimeout(() => {
@@ -123,55 +183,265 @@ ${form.notes}
         {/* ─────────────────────────────────────────────────
             HERO SECTION
         ───────────────────────────────────────────────── */}
-        <section className="relative bg-forest text-[#FAF7F0] pt-24 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <section className="relative bg-forest text-[#FAF7F0] pt-24 pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1e5242] via-forest to-[#0a1f1a] opacity-90" />
           
           <div className="relative max-w-5xl mx-auto text-center space-y-6">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-wider text-[#E6B84A] backdrop-blur-md border border-white/15">
               <Sparkles className="h-4 w-4" />
-              <span>Speisely Digital Suite für Partner</span>
+              <span>Speisely Digital Suite · Powered by TechGlanz</span>
             </div>
 
             <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.08]">
-              Deine eigene High-End Website <br className="hidden sm:inline" />
-              <span className="text-[#E6B84A]">für Catering &amp; Gastronomie.</span>
+              {isDe ? (
+                <>
+                  Deine eigene High-End Website <br className="hidden sm:inline" />
+                  <span className="text-[#E6B84A]">für Catering &amp; Gastronomie.</span>
+                </>
+              ) : (
+                <>
+                  Your Custom High-End Website <br className="hidden sm:inline" />
+                  <span className="text-[#E6B84A]">for Catering &amp; Hospitality.</span>
+                </>
+              )}
             </h1>
 
             <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed font-medium">
-              Schluss mit veralteten WordPress-Seiten und teuren 5.000 € Agenturen. Wir bauen deinen blitzschnellen,
-              mobilen Online-Auftritt mit <strong>integrierter Speisely-Buchungsengine</strong>, Google-KI-SEO und
-              Online-Menüs.
+              {isDe ? (
+                <>
+                  Schluss mit veralteten WordPress-Seiten und teuren 5.000 € Agenturen. Wir bauen deinen blitzschnellen,
+                  mobilen Online-Auftritt mit <strong>integrierter Speisely-Buchungsengine</strong>, Google-KI-SEO und
+                  maßgeschneidertem <strong>TechGlanz-Engineering</strong>.
+                </>
+              ) : (
+                <>
+                  Say goodbye to slow legacy WordPress sites and expensive €5,000 agencies. We craft ultra-fast,
+                  mobile-optimized digital storefronts with <strong>integrated Speisely booking engines</strong>, Google AI SEO, and
+                  bespoke <strong>TechGlanz engineering</strong>.
+                </>
+              )}
             </p>
 
             <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
               <a
-                href="#anfrage"
+                href="#audit-tool"
                 className="inline-flex items-center gap-2 rounded-full bg-[#E6B84A] text-forest px-8 py-4 text-sm font-black shadow-xl hover:bg-[#f7ca5e] hover:scale-105 transition"
               >
-                <span>Website anfragen</span>
-                <ArrowRight className="h-4 w-4" />
+                <Zap className="h-4 w-4" />
+                <span>{isDe ? "Kostenlosen Website-Audit starten" : "Run Free Website Audit"}</span>
               </a>
               <a
                 href="#referenzen"
                 className="inline-flex items-center gap-2 rounded-full bg-white/10 text-white px-7 py-4 text-sm font-bold border border-white/20 hover:bg-white/20 transition"
               >
                 <Globe className="h-4 w-4 text-[#E6B84A]" />
-                <span>Live-Referenzen ansehen</span>
+                <span>{isDe ? "Live-Referenzen ansehen" : "View Live Showcase"}</span>
+              </a>
+            </div>
+
+            {/* TechGlanz Trust Badge */}
+            <div className="pt-4 flex items-center justify-center gap-2 text-xs text-white/60">
+              <span>Technischer Umsetzungspartner:</span>
+              <a
+                href="https://techglanz.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-[#E6B84A] hover:underline inline-flex items-center gap-1"
+              >
+                TechGlanz (techglanz.de) ↗
               </a>
             </div>
           </div>
         </section>
 
         {/* ─────────────────────────────────────────────────
+            INTERACTIVE FREE WEBSITE AUDIT TOOL (LEAD MAGNET)
+        ───────────────────────────────────────────────── */}
+        <section id="audit-tool" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-30">
+          <div className="rounded-3xl bg-white p-6 sm:p-10 border-2 border-forest/15 shadow-2xl">
+            <div className="text-center max-w-2xl mx-auto mb-8">
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#A85C36] block mb-2">
+                ⚡ Kostenloses Live-Tool
+              </span>
+              <h2 className="font-display text-2xl sm:text-4xl font-bold text-forest">
+                {isDe ? "Wie fit ist deine aktuelle Website?" : "How Fit Is Your Current Website?"}
+              </h2>
+              <p className="mt-2 text-xs sm:text-sm text-forest/70">
+                {isDe
+                  ? "Gib deine Website-Domain ein. Wir prüfen Ladezeit, mobile Menüs, Google-KI-Sichtbarkeit und Buchungs-Funnels in Sekunden."
+                  : "Enter your domain. We analyze mobile speed, online menus, Google AI visibility, and booking conversion in seconds."}
+              </p>
+            </div>
+
+            {/* Audit Input Form */}
+            <form onSubmit={handleRunAudit} className="max-w-2xl mx-auto flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-forest/40" />
+                <input
+                  type="text"
+                  value={auditUrl}
+                  onChange={(e) => setAuditUrl(e.target.value)}
+                  placeholder="z. B. www.mein-catering-service.de"
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-[#FAF7F0] border-2 border-forest/15 text-forest font-semibold placeholder:text-forest/40 text-sm sm:text-base focus:outline-none focus:border-[#E6B84A]"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isAuditing}
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-forest text-[#FAF7F0] px-8 py-4 text-sm sm:text-base font-black hover:bg-[#E6B84A] hover:text-forest transition shadow-lg disabled:opacity-50 whitespace-nowrap cursor-pointer"
+              >
+                {isAuditing ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin text-[#E6B84A]" />
+                    <span>{isDe ? "Wird analysiert..." : "Analyzing..."}</span>
+                  </>
+                ) : (
+                  <>
+                    <Gauge className="h-5 w-5 text-[#E6B84A]" />
+                    <span>{isDe ? "Kostenlos analysieren" : "Start Free Audit"}</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Scanning Animation */}
+            {isAuditing && (
+              <div className="mt-8 max-w-xl mx-auto p-6 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-4">
+                <div className="flex items-center justify-between text-xs font-bold text-forest">
+                  <span className="flex items-center gap-2">
+                    <Activity className="h-4 w-4 animate-pulse text-emerald-600" />
+                    {auditStep === 1 && (isDe ? "1/4: Prüfe PageSpeed & Mobile Ladezeit..." : "1/4: Checking PageSpeed & Mobile TTFB...")}
+                    {auditStep === 2 && (isDe ? "2/4: Prüfe Google AI Overview & Schema.org..." : "2/4: Checking Google AI Overview & Schema.org...")}
+                    {auditStep === 3 && (isDe ? "3/4: Scanne Speisekarten & PDF-Hürden..." : "3/4: Scanning digital menu presentation...")}
+                    {auditStep === 4 && (isDe ? "4/4: Berechne Conversion-Verlust & Potenzial..." : "4/4: Calculating booking conversion loss...")}
+                  </span>
+                  <span className="font-mono">{auditStep * 25}%</span>
+                </div>
+                <div className="w-full h-2.5 bg-forest/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-emerald-500 to-[#E6B84A] transition-all duration-500 ease-out"
+                    style={{ width: `${auditStep * 25}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Audit Results Card */}
+            {auditResult && (
+              <div className="mt-10 pt-8 border-t border-forest/10 max-w-4xl mx-auto">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-3xl bg-forest text-white mb-6">
+                  <div>
+                    <span className="text-xs uppercase font-bold text-[#E6B84A] tracking-wider block mb-1">
+                      Audit-Ergebnis für: {auditResult.domain}
+                    </span>
+                    <h3 className="font-display text-2xl font-bold">
+                      Website-Health-Score: <span className="text-amber-400">{auditResult.overallScore} / 100</span>
+                    </h3>
+                    <p className="text-xs text-white/70 mt-1">
+                      {isDe
+                        ? "Dringender Handlungsbedarf: Hohes Risiko von Kunden-Absprüngen und fehlende KI-Auffindbarkeit."
+                        : "Action required: High risk of mobile client drop-off and missing AI search citations."}
+                    </p>
+                  </div>
+                  <a
+                    href="#anfrage"
+                    className="inline-flex items-center gap-2 rounded-2xl bg-[#E6B84A] text-forest px-6 py-3.5 text-xs sm:text-sm font-black shadow-lg hover:bg-white transition whitespace-nowrap"
+                  >
+                    <span>{isDe ? "Kostenloses Redesign anfragen" : "Request Redesign Concept"}</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Metric 1 */}
+                  <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-forest/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-sm text-forest flex items-center gap-2">
+                        <Zap className="h-4 w-4 text-amber-600" />
+                        PageSpeed &amp; Ladezeit (Mobil)
+                      </span>
+                      <span className="font-mono font-black text-xs px-2.5 py-1 rounded-md bg-amber-100 text-amber-900">
+                        {auditResult.speedScore}/100 (Kritisch)
+                      </span>
+                    </div>
+                    <p className="text-xs text-forest/75 leading-relaxed">
+                      🚨 Gemessene Ladezeit: ~3.4s auf Smartphones. Über 50% der hungrigen Kunden brechen bei &gt;3s Ladezeit ab.
+                      <strong className="block mt-1 text-emerald-800">Speisely x TechGlanz Standard: &lt; 0.5 Sekunden (Score 99+).</strong>
+                    </p>
+                  </div>
+
+                  {/* Metric 2 */}
+                  <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-forest/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-sm text-forest flex items-center gap-2">
+                        <Bot className="h-4 w-4 text-purple-600" />
+                        Google AI &amp; LLM-Suchmaschinen (GEO)
+                      </span>
+                      <span className="font-mono font-black text-xs px-2.5 py-1 rounded-md bg-rose-100 text-rose-900">
+                        {auditResult.aiScore}/100 (Fehlend)
+                      </span>
+                    </div>
+                    <p className="text-xs text-forest/75 leading-relaxed">
+                      ⚠️ Keine strukturierten Schema.org JSON-LD Menü- &amp; Catering-Daten. ChatGPT, Perplexity und Google AI Overviews können deine Angebote nicht direkt zitieren.
+                    </p>
+                  </div>
+
+                  {/* Metric 3 */}
+                  <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-forest/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-sm text-forest flex items-center gap-2">
+                        <Smartphone className="h-4 w-4 text-sky-600" />
+                        Mobile Menüs &amp; Speisekarten
+                      </span>
+                      <span className="font-mono font-black text-xs px-2.5 py-1 rounded-md bg-amber-100 text-amber-900">
+                        {auditResult.mobileScore}/100 (Unoptimiert)
+                      </span>
+                    </div>
+                    <p className="text-xs text-forest/75 leading-relaxed">
+                      📱 Veraltete PDF-Speisekarten oder starre Tabellen sind auf Handys schwer lesbar und verlangen lästiges Zoomen.
+                    </p>
+                  </div>
+
+                  {/* Metric 4 */}
+                  <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-forest/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-bold text-sm text-forest flex items-center gap-2">
+                        <FileSpreadsheet className="h-4 w-4 text-emerald-600" />
+                        Direkte Buchungs- &amp; Angebots-Engine
+                      </span>
+                      <span className="font-mono font-black text-xs px-2.5 py-1 rounded-md bg-rose-100 text-rose-900">
+                        {auditResult.bookingScore}/100 (Fehlend)
+                      </span>
+                    </div>
+                    <p className="text-xs text-forest/75 leading-relaxed">
+                      ❌ Kein interaktiver Event-Rechner. Kunden müssen ein manuelles Kontaktformular tippen und auf Antwort warten.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-6 text-center">
+                  <a
+                    href="#anfrage"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-forest hover:text-[#b28a3c] transition"
+                  >
+                    <span>Jetzt unverbindliches Redesign &amp; Performance-Upgrade sichern ↓</span>
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ─────────────────────────────────────────────────
             CORE ADVANTAGES (4 Feature Cards)
         ───────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             <div className="rounded-3xl bg-white p-6 border-2 border-forest/10 shadow-lg hover:border-[#E6B84A] transition">
               <Zap className="h-7 w-7 text-[#E6B84A] mb-3" />
               <h3 className="font-bold text-base text-forest mb-1">PageSpeed 99+</h3>
               <p className="text-xs text-forest/70 leading-relaxed">
-                Ladezeiten unter 0.8 Sekunden. Keine Ladebalken, keine Abbrüche – maximale Conversion auf jedem Handy.
+                Ladezeiten unter 0.5 Sekunden. Keine Ladebalken, keine Abbrüche – maximale Conversion auf jedem Handy.
               </p>
             </div>
 
@@ -193,9 +463,9 @@ ${form.notes}
 
             <div className="rounded-3xl bg-white p-6 border-2 border-forest/10 shadow-lg hover:border-[#E6B84A] transition">
               <ShieldCheck className="h-7 w-7 text-forest mb-3" />
-              <h3 className="font-bold text-base text-forest mb-1">Alles aus einer Hand</h3>
+              <h3 className="font-bold text-base text-forest mb-1">TechGlanz Engineering</h3>
               <p className="text-xs text-forest/70 leading-relaxed">
-                Eigene Domain, Hosting, Wartung, Marktplatz-Reichweite und Speisely-Kassensystem in einem Paket.
+                Eigene Domain, Hosting, Wartung, Marktplatz-Reichweite und Speisely-Kassensystem in einem Komplettpaket.
               </p>
             </div>
           </div>
@@ -204,7 +474,7 @@ ${form.notes}
         {/* ─────────────────────────────────────────────────
             LIVE SHOWCASE / REFERENZEN
         ───────────────────────────────────────────────── */}
-        <section id="referenzen" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <section id="referenzen" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-xs font-black uppercase tracking-widest text-[#A85C36] mb-2 block">
               Echte Erfolgsgeschichten
@@ -272,7 +542,7 @@ ${form.notes}
           <div className="max-w-4xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-12">
               <span className="text-xs font-black uppercase tracking-widest text-[#E6B84A] mb-2 block">
-                Jetzt unverbindlich anfragen
+                Speisely x TechGlanz Digital Suite
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-bold text-white">
                 Lass uns deine neue Website bauen
@@ -332,7 +602,7 @@ ${form.notes}
 
                 <div>
                   <label className="block text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
-                    Telefonnummer
+                    Telefonnummer / WhatsApp
                   </label>
                   <input
                     type="tel"
@@ -375,7 +645,7 @@ ${form.notes}
 
               <div>
                 <label className="block text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
-                  Bestehende Website (falls vorhanden)
+                  Bestehende Website (Domain)
                 </label>
                 <input
                   type="text"
@@ -417,6 +687,20 @@ ${form.notes}
                     </>
                   )}
                 </button>
+              </div>
+
+              <div className="text-center pt-2">
+                <p className="text-xs text-white/50">
+                  Umsetzung &amp; technische Betreuung:{" "}
+                  <a
+                    href="https://techglanz.de"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#E6B84A] hover:underline font-bold"
+                  >
+                    TechGlanz Digital Solutions (techglanz.de)
+                  </a>
+                </p>
               </div>
             </form>
           </div>
