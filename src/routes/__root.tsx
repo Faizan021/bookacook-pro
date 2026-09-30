@@ -267,6 +267,107 @@ function RootShell({ children }: { children: ReactNode }) {
           name="ahrefs-site-verification"
           content="362cae8e8dd342e0ce0b9a43f7722ae70ab03598a54ef96dd42c673b4cb8e7f6"
         ></meta>
+
+        {/* Global Schema.org JSON-LD Graph for AI Crawlers & GlanzAI Detection */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://speisely.de/#organization",
+                  name: "Speisely",
+                  alternateName: "Speisely Marketplace",
+                  url: "https://speisely.de",
+                  logo: {
+                    "@type": "ImageObject",
+                    url: "https://speisely.de/favicon.svg",
+                  },
+                  description:
+                    "Speisely ist der führende deutsche Marktplatz für Event-Catering, Sofortbestellungen bei Restaurants und professionelle Eventplanung.",
+                  foundingDate: "2026",
+                  areaServed: {
+                    "@type": "Country",
+                    name: "Germany",
+                  },
+                  contactPoint: {
+                    "@type": "ContactPoint",
+                    contactType: "customer service",
+                    email: "kontakt@speisely.de",
+                    availableLanguage: ["German", "English"],
+                  },
+                  sameAs: [
+                    "https://www.linkedin.com/company/speisely",
+                    "https://www.instagram.com/speisely/",
+                  ],
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://speisely.de/#website",
+                  name: "Speisely",
+                  url: "https://speisely.de",
+                  publisher: {
+                    "@id": "https://speisely.de/#organization",
+                  },
+                  potentialAction: {
+                    "@type": "SearchAction",
+                    target: "https://speisely.de/catering?q={search_term_string}",
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+                {
+                  "@type": "Service",
+                  "@id": "https://speisely.de/#service-catering",
+                  name: "Speisely Event Catering Marketplace",
+                  provider: {
+                    "@id": "https://speisely.de/#organization",
+                  },
+                  serviceType: "Catering Service & Event Booking",
+                  areaServed: "Germany",
+                  description:
+                    "Vermittlung von handverlesenen Caterern, BBQ-Stationen, Hochzeits- und Business-Buffets mit transparentem Live-Budgetrechner.",
+                  offers: {
+                    "@type": "Offer",
+                    price: "0",
+                    priceCurrency: "EUR",
+                    description: "Kostenlose Anfrage und Angebotserstellung für Kunden",
+                  },
+                },
+                {
+                  "@type": "Service",
+                  "@id": "https://speisely.de/#service-webseiten",
+                  name: "Speisely Digital Suite by TechGlanz",
+                  provider: {
+                    "@id": "https://speisely.de/#organization",
+                  },
+                  serviceType: "B2B Website Development & AI SEO",
+                  areaServed: "Germany",
+                  description:
+                    "High-End Website-Erstellung für Caterer und Gastronomen mit PageSpeed 99+, Google AI Overviews Schema und integrierter Speisely-Buchungsengine.",
+                },
+                {
+                  "@type": "Product",
+                  "@id": "https://speisely.de/#product-instant-orders",
+                  name: "Speisely Restaurant Instant Orders",
+                  description:
+                    "Direktbestellungen für Restaurants mit 0 % Bestellprovision und sofortiger Auszahlung.",
+                  brand: {
+                    "@id": "https://speisely.de/#organization",
+                  },
+                  offers: {
+                    "@type": "Offer",
+                    price: "34.99",
+                    priceCurrency: "EUR",
+                    priceValidUntil: "2027-12-31",
+                    availability: "https://schema.org/InStock",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
       </head>
       <body>
         {children}
