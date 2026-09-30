@@ -50,6 +50,60 @@ export const Route = createFileRoute("/restaurant/ort/$city")({
         },
       ],
       links: [{ rel: "canonical", href: canonicalUrl }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://speisely.de",
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Restaurants",
+                    "item": "https://speisely.de/restaurants",
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": `Restaurants in ${location.name}`,
+                    "item": canonicalUrl,
+                  },
+                ],
+              },
+              {
+                "@type": "ItemList",
+                "name": `Top Restaurants in ${location.name}`,
+                "description": seoData?.meta_description || `Geprüfte Restaurants in ${location.name}`,
+                "url": canonicalUrl,
+                "numberOfItems": loaderData?.vendors?.length ?? 0,
+                "itemListElement": (loaderData?.vendors ?? []).map((v: any, i: number) => ({
+                  "@type": "ListItem",
+                  "position": i + 1,
+                  "item": {
+                    "@type": "Restaurant",
+                    "name": v.business_name || v.name,
+                    "url": `https://speisely.de/restaurant/${v.slug || v.id}`,
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressLocality": location.name,
+                      "addressCountry": "DE",
+                    },
+                  },
+                })),
+              },
+            ],
+          }),
+        },
+      ],
     };
   },
   component: GeoRestaurantsPage,

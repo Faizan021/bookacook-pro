@@ -1,0 +1,34 @@
+# CodeRabbit Configuration for Speisely (BookACook Pro)
+# https://coderabbit.ai
+
+language: "de-DE"
+tone_instructions: "Sei präzise, konstruktiv und professionell. Achte besonders auf Type-Safety, TanStack Start SSR-Stabilität und Zero-Performance-Regressionen."
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "main"
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  learnings:
+    enabled: true
+
+rules:
+  - id: "ssr-safety"
+    description: "Stelle sicher, dass kein window- oder document-Zugriff ohne typeof window !== 'undefined' Guard auf Server-Komponenten ausgeführt wird."
+  - id: "lightweight-architecture"
+    description: "Verhindere das unbedachte Hinzufügen schwerer Third-Party Libraries. Bevorzuge bestehende Utilities."
+  - id: "ai-seo-sync"
+    description: "Achte bei neuen Public-Routes auf die Aktualisierung von sitemap.xml und llms.txt."

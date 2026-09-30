@@ -43,6 +43,60 @@ export const Route = createFileRoute("/catering/ort/$city")({
         },
       ],
       links: [{ rel: "canonical", href: canonicalUrl }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://speisely.de",
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Catering",
+                    "item": "https://speisely.de/catering",
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": `Catering in ${location.name}`,
+                    "item": canonicalUrl,
+                  },
+                ],
+              },
+              {
+                "@type": "ItemList",
+                "name": `Top Caterer in ${location.name}`,
+                "description": seoData?.meta_description || `Geprüfte Catering-Anbieter und Partyservices in ${location.name}`,
+                "url": canonicalUrl,
+                "numberOfItems": loaderData?.vendors?.length ?? 0,
+                "itemListElement": (loaderData?.vendors ?? []).map((v: any, i: number) => ({
+                  "@type": "ListItem",
+                  "position": i + 1,
+                  "item": {
+                    "@type": "FoodEstablishment",
+                    "name": v.business_name || v.name,
+                    "url": `https://speisely.de/catering/${v.slug || v.id}`,
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressLocality": location.name,
+                      "addressCountry": "DE",
+                    },
+                  },
+                })),
+              },
+            ],
+          }),
+        },
+      ],
     };
   },
   component: GeoCateringPage,
