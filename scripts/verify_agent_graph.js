@@ -243,6 +243,73 @@ function rule7_NoTodoHack() {
 }
 
 // =============================================================================
+// RULE 8 — No hardcoded / duplicate meta tags in JSX `<head>`
+// =============================================================================
+function rule8_NoHardcodedJSXMeta() {
+  const rootFile = path.join(ROUTES_DIR, '__root.tsx');
+  if (!fs.existsSync(rootFile)) return;
+  const content = fs.readFileSync(rootFile, 'utf8');
+  
+  // Look for <meta name="description" or <meta property="og: inside JSX return
+  const jsxHeadMatch = content.match(/<head>([\s\S]*?)<\/head>/);
+  if (jsxHeadMatch) {
+    const headContent = jsxHeadMatch[1];
+    if (/<meta\s+name=["']description["']/i.test(headContent)) {
+      fail('8', '__root.tsx', 'Hardcoded <meta name="description"> in JSX <head> detected. Use Route.head.meta instead to prevent duplicates.');
+      return;
+    }
+    if (/<meta\s+property=["']og:title["']/i.test(headContent)) {
+      fail('8', '__root.tsx', 'Hardcoded <meta property="og:title"> in JSX <head> detected. Use Route.head.meta instead.');
+      return;
+    }
+  }
+  pass('8', 'No duplicate / hardcoded meta tags in JSX <head>');
+}
+
+// =============================================================================
+// RULE 9 — Public Asset & Image Integrity (Zero Broken Images)
+// =============================================================================
+function rule9_PublicAssetIntegrity() {
+  const srcFiles = collectFiles(SRC_DIR);
+  let missingCount = 0;
+  for (const fullPath of srcFiles) {
+    const content = fs.readFileSync(fullPath, 'utf8');
+    const matches = content.matchAll(/["'](\/(?:magazin|images|icons|assets|branding)?[a-zA-Z0-9_\-\.\/]+\.(?:webp|jpg|jpeg|png|svg|gif))(?:\?[^"']*)?["']/g);
+    for (const m of matches) {
+      const assetPath = m[1];
+      if (assetPath.startsWith('/api') || assetPath.includes('schema.org')) continue;
+      const onDisk = path.join('public', assetPath.replace(/^\//, ''));
+      if (!fs.existsSync(onDisk)) {
+        fail('9', `${path.relative('.', fullPath)}`, `Broken public asset reference: "${assetPath}" does not exist in public/`);
+        missingCount++;
+      }
+    }
+  }
+  if (missingCount === 0) {
+    pass('9', 'All referenced public assets and images exist on disk (zero broken images)');
+  }
+}
+
+// =============================================================================
+// RULE 10 — Sitemap & Canonical URL Integrity
+// =============================================================================
+function rule10_SitemapIntegrity() {
+  const sitemapFile = path.join(ROUTES_DIR, 'sitemap[.]xml.ts');
+  if (!fs.existsSync(sitemapFile)) return;
+  const content = fs.readFileSync(sitemapFile, 'utf8');
+  
+  if (content.includes('path: "/api/')) {
+    fail('10', 'sitemap[.]xml.ts', 'API routes (e.g. /api/...) must never be listed in sitemap XML.');
+    return;
+  }
+  if (content.includes('/caterer/ort/')) {
+    fail('10', 'sitemap[.]xml.ts', 'Found "/caterer/ort/" instead of canonical "/catering/ort/" in sitemap.');
+    return;
+  }
+  pass('10', 'Sitemap clean: no API paths and canonical URLs enforced');
+}
+
+// =============================================================================
 // RUN ALL RULES
 // =============================================================================
 console.log();
@@ -258,6 +325,9 @@ rule4_NoConsoleLogs();
 rule5_PrintBoundary();
 rule6_SmokeTestCoverage();
 rule7_NoTodoHack();
+rule8_NoHardcodedJSXMeta();
+rule9_PublicAssetIntegrity();
+rule10_SitemapIntegrity();
 
 console.log();
 console.log('──────────────────────────────────────────────────────');

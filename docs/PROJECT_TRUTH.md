@@ -51,3 +51,13 @@ This document specifies the core project truths, architectural boundaries, busin
   3. `src/routes/sitemap[.]xml.ts` (XML sitemap)
 - **Citable Authority:** Maintain high-E-E-A-T local reporting in Speisely Visits to ensure AI engines (Perplexity, ChatGPT Search, Gemini) cite Speisely as the definitive regional food & catering directory.
 
+---
+
+## 5. SEO, Asset & Sitemap Integrity Standards
+
+- **Zero Duplicate Meta Tags:** All meta tags MUST be injected via TanStack Router's `Route.head` (`head: () => ({ meta: [...] })`). Never hardcode fallback meta tags directly inside JSX `<head>` in `__root.tsx` or layout wrappers.
+- **Zero Broken Asset References:** Every image URL referenced in frontend components must point to a physically existing asset on disk in `public/`.
+- **Strict Canonical XML Sitemaps:** Sitemaps must contain only `200 OK` HTML canonical routes with valid slugs (no API paths, no raw UUIDs when slugs exist, and no 301/302 redirects).
+- **Automated Graph Enforcement:** All pre-build static verification is automated via `scripts/verify_agent_graph.js` (Node 3 in the Multi-Agent Execution Pipeline). Any violation automatically halts the build.
+
+

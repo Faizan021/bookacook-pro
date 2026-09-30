@@ -216,4 +216,32 @@ Whenever ANY new article, Community Story, or Speisely Visit is published, modif
    - Include floating frosted-glass food badges (`🍫 Signature...`, `🔥 Slow Fried...`) on the top-left of figures.
    - Always append cache-busting query strings (`?v=2`) to image paths so client browsers never display stale or unsharpened assets.
 
+---
+
+## 11. Mandatory SEO Integrity & Ahrefs Zero-Error Standard
+
+Whenever modifying routes, layouts, meta tags, sitemaps, or static public assets, you MUST adhere to the following 5 strict rules:
+
+1. **Zero Duplicate Meta Tags:**
+   - NEVER place hardcoded `<meta name="description">`, `<meta property="og:title">`, or `<meta name="twitter:...">` tags directly in JSX `<head>` in `__root.tsx` or layout wrappers.
+   - All metadata MUST be declared strictly via TanStack Router's `Route.head` (`head: () => ({ meta: [...] })`) so that child routes can cleanly overwrite or complement root metadata without producing duplicate tags.
+
+2. **Zero Broken Image References:**
+   - Every image URL referenced in code (`/images/...`, `/magazin/...`, `/hero...`) MUST exist on disk in `public/`.
+   - Never reference speculative filenames. Run `npm run verify:graph` to validate all image paths before committing.
+
+3. **Strict Canonical Sitemaps (No 4XX, No 3XX, No API Routes):**
+   - `src/routes/sitemap[.]xml.ts` MUST contain only direct canonical `200 OK` HTML route URLs.
+   - Never include internal API routes (e.g. `/api/...`).
+   - Dynamic entries (caterers, restaurants, planners) MUST use URL slugs (`${item.slug || item.id}`) to avoid 301 redirects and 404 lookups.
+   - Geo landing URLs MUST strictly match declared route patterns (e.g. `/catering/ort/$city`, `/restaurant/ort/$city`, `/planner/ort/$city`).
+
+4. **Zero Orphan Public Pages:**
+   - Every indexable public page MUST have incoming navigational links in the main navigation (`SiteHeader.tsx`), dropdown menus, and/or footer (`SiteFooter.tsx`).
+
+5. **Pure Read-Only Database Queries:**
+   - Public route loaders and read functions (`getRestaurants`, `getCaterers`, `getPlanners`, `getGeoPageData`) must NEVER execute destructive `DELETE` or `UPDATE` mutations on read requests.
+   - All public catalog queries must implement lightweight in-memory TTL caching (60s SWR) to maintain fast TTFB (<25ms).
+
+
 
