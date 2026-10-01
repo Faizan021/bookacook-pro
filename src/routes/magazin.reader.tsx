@@ -58,7 +58,7 @@ function MagazineReaderPage() {
 
             <div className="flex items-center gap-3">
               <a
-                href="/speisely-magazin-edition.html"
+                href="/speisely-magazin-edition.html?v=community-edition-04"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 rounded-xl bg-[#E6B84A] text-black px-4 py-2 text-xs font-bold shadow-md shadow-[#E6B84A]/20 hover:bg-[#c49638] transition"
@@ -72,7 +72,7 @@ function MagazineReaderPage() {
           {/* Embedded Flipbook Frame */}
           <div className="rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-[#0d1217] relative">
             <iframe
-              src="/speisely-magazin-edition.html"
+              src="/speisely-magazin-edition.html?v=community-edition-04"
               title="Speisely Magazin Digital Edition"
               className="w-full h-[780px] sm:h-[860px] border-0"
               allow="fullscreen"

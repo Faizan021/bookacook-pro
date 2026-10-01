@@ -170,7 +170,7 @@ function MagazinIndexPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <a
-                href="/speisely-magazin-edition.html"
+                href="/speisely-magazin-edition.html?v=community-edition-04"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition px-3 py-2"
@@ -182,7 +182,9 @@ function MagazinIndexPage() {
 
           <div
             className="relative z-10 w-full md:w-64 h-36 rounded-2xl overflow-hidden border border-white/20 shadow-xl flex-shrink-0 bg-black/40 flex items-center justify-center group cursor-pointer"
-            onClick={() => window.open("/speisely-magazin-edition.html", "_blank")}
+            onClick={() =>
+              window.open("/speisely-magazin-edition.html?v=community-edition-04", "_blank")
+            }
           >
             <img
               src="/hero-cinematic.webp"
