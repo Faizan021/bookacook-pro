@@ -64,9 +64,13 @@ async function runVisualQA() {
     await pageLaptop.screenshot({ path: path.join(OUTPUT_DIR, '03_laptop_pages_02_03_en.png') });
     console.log('  ✓ Saved: 03_laptop_pages_02_03_en.png');
 
-    // Flip to Pages 6-7 (The Critical Reportage Spread)
+    // Flip to Pages 4-5 (Enterprise Feature & Table of Contents)
     await pageLaptop.click('#btn-next');
-    await pageLaptop.waitForTimeout(700);
+    await pageLaptop.waitForTimeout(1000);
+    await pageLaptop.screenshot({ path: path.join(OUTPUT_DIR, '03b_laptop_pages_04_05.png') });
+    console.log('  ✓ Saved: 03b_laptop_pages_04_05.png');
+
+    // Flip to Pages 6-7 (The Critical Reportage Spread)
     await pageLaptop.click('#btn-next');
     await pageLaptop.waitForTimeout(1000);
 
