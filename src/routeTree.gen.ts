@@ -9,171 +9,90 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VerifyEmailRouteImport } from './routes/verify-email'
-import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
-import { Route as SpeiselyRouteImport } from './routes/speisely'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as RestaurantsRouteImport } from './routes/restaurants'
-import { Route as PlannerRouteImport } from './routes/planner'
-import { Route as PartnersRouteImport } from './routes/partners'
-import { Route as PartnerRouteImport } from './routes/partner'
-import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
-import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
-import { Route as InstantOrderRouteImport } from './routes/instant-order'
-import { Route as ImpressumRouteImport } from './routes/impressum'
-import { Route as FaqRouteImport } from './routes/faq'
-import { Route as DatenschutzRouteImport } from './routes/datenschutz'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CateringRouteImport } from './routes/catering'
-import { Route as ArchitectureSimulatorRouteImport } from './routes/architecture-simulator'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PlannerIndexRouteImport } from './routes/planner.index'
-import { Route as MagazinIndexRouteImport } from './routes/magazin.index'
-import { Route as CommunityIndexRouteImport } from './routes/community.index'
-import { Route as CateringIndexRouteImport } from './routes/catering.index'
-import { Route as BlogIndexRouteImport } from './routes/blog.index'
-import { Route as AuthIndexRouteImport } from './routes/auth.index'
-import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
-import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
-import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
-import { Route as PartnersWebseitenRouteImport } from './routes/partners.webseiten'
-import { Route as PartnerWebseitenRouteImport } from './routes/partner.webseiten'
-import { Route as MagazinSpeiselyVisitsRouteImport } from './routes/magazin.speisely-visits'
-import { Route as MagazinSchnitzelSchmiedeRouteImport } from './routes/magazin.schnitzel-schmiede'
-import { Route as MagazinReaderRouteImport } from './routes/magazin.reader'
-import { Route as MagazinEditionDothtmlRouteImport } from './routes/magazin.edition[.]html'
-import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
-import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
-import { Route as CateringEventsRouteImport } from './routes/catering.events'
-import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
-import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
-import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-password'
-import { Route as ApiGeoRouteImport } from './routes/api.geo'
-import { Route as AuthenticatedRestaurantRouteImport } from './routes/_authenticated/restaurant'
-import { Route as AuthenticatedCustomerRouteImport } from './routes/_authenticated/customer'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ArchitectureSimulatorRouteImport } from './routes/architecture-simulator'
+import { Route as CateringRouteImport } from './routes/catering'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DatenschutzRouteImport } from './routes/datenschutz'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ImpressumRouteImport } from './routes/impressum'
+import { Route as InstantOrderRouteImport } from './routes/instant-order'
+import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as PartnerRouteImport } from './routes/partner'
+import { Route as PartnersRouteImport } from './routes/partners'
+import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as RestaurantsRouteImport } from './routes/restaurants'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SpeiselyRouteImport } from './routes/speisely'
+import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AuthenticatedCatererRouteImport } from './routes/_authenticated/caterer'
-import { Route as MagazinSpeiselyVisitsIndexRouteImport } from './routes/magazin.speisely-visits.index'
-import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
-import { Route as ReviewIntakeTokenRouteImport } from './routes/review.intake.$token'
-import { Route as RestaurantOrtCityRouteImport } from './routes/restaurant.ort.$city'
-import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$slug.links'
-import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
-import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
-import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
-import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
-import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
-import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
-import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
-import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes/magazin.community.garcon-de-cafe-berlin'
-import { Route as MagazinCommunityChickenKrushPragRouteImport } from './routes/magazin.community.chicken-krush-prag'
-import { Route as MagazinCommunityArianaRestaurantFrankfurtRouteImport } from './routes/magazin.community.ariana-restaurant-frankfurt'
-import { Route as MagazinCommunityAlzaeemRestaurantBerlinRouteImport } from './routes/magazin.community.alzaeem-restaurant-berlin'
-import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
-import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
-import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
-import { Route as ApiPrintStarRouteImport } from './routes/api.print.star'
-import { Route as AuthenticatedRestaurantReviewsRouteImport } from './routes/_authenticated/restaurant.reviews'
-import { Route as AuthenticatedRestaurantKitchenRouteImport } from './routes/_authenticated/restaurant.kitchen'
-import { Route as AuthenticatedRestaurantFestivalRouteImport } from './routes/_authenticated/restaurant.festival'
-import { Route as AuthenticatedDashboardPlannerRouteImport } from './routes/_authenticated/dashboard/planner'
+import { Route as AuthenticatedCustomerRouteImport } from './routes/_authenticated/customer'
+import { Route as AuthenticatedRestaurantRouteImport } from './routes/_authenticated/restaurant'
+import { Route as ApiGeoRouteImport } from './routes/api.geo'
+import { Route as AuthIndexRouteImport } from './routes/auth.index'
+import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-password'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CateringIndexRouteImport } from './routes/catering.index'
+import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
+import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
+import { Route as CateringEventsRouteImport } from './routes/catering.events'
+import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
+import { Route as CommunityIndexRouteImport } from './routes/community.index'
+import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
+import { Route as MagazinIndexRouteImport } from './routes/magazin.index'
+import { Route as MagazinEditionDothtmlRouteImport } from './routes/magazin.edition[.]html'
+import { Route as MagazinReaderRouteImport } from './routes/magazin.reader'
+import { Route as MagazinSchnitzelSchmiedeRouteImport } from './routes/magazin.schnitzel-schmiede'
+import { Route as MagazinSpeiselyVisitsRouteImport } from './routes/magazin.speisely-visits'
+import { Route as PartnerWebseitenRouteImport } from './routes/partner.webseiten'
+import { Route as PartnersWebseitenRouteImport } from './routes/partners.webseiten'
+import { Route as PlannerIndexRouteImport } from './routes/planner.index'
+import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
+import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
+import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as AuthenticatedCatererReviewsRouteImport } from './routes/_authenticated/caterer.reviews'
-import { Route as EmbedPlannerSlugInquiryRouteImport } from './routes/embed.planner.$slug.inquiry'
-import { Route as EmbedCateringSlugBriefIntakeRouteImport } from './routes/embed.catering.$slug.brief-intake'
-import { Route as ApiStripeConnectCallbackRouteImport } from './routes/api.stripe.connect.callback'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
+import { Route as AuthenticatedDashboardPlannerRouteImport } from './routes/_authenticated/dashboard/planner'
+import { Route as AuthenticatedRestaurantFestivalRouteImport } from './routes/_authenticated/restaurant.festival'
+import { Route as AuthenticatedRestaurantKitchenRouteImport } from './routes/_authenticated/restaurant.kitchen'
+import { Route as AuthenticatedRestaurantReviewsRouteImport } from './routes/_authenticated/restaurant.reviews'
+import { Route as ApiPrintStarRouteImport } from './routes/api.print.star'
+import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
+import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
+import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
+import { Route as MagazinCommunityAlzaeemRestaurantBerlinRouteImport } from './routes/magazin.community.alzaeem-restaurant-berlin'
+import { Route as MagazinCommunityArianaRestaurantFrankfurtRouteImport } from './routes/magazin.community.ariana-restaurant-frankfurt'
+import { Route as MagazinCommunityChickenKrushPragRouteImport } from './routes/magazin.community.chicken-krush-prag'
+import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes/magazin.community.garcon-de-cafe-berlin'
+import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
+import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
+import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
+import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
+import { Route as MagazinSpeiselyVisitsIndexRouteImport } from './routes/magazin.speisely-visits.index'
+import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
+import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
+import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
+import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$slug.links'
+import { Route as RestaurantOrtCityRouteImport } from './routes/restaurant.ort.$city'
+import { Route as ReviewIntakeTokenRouteImport } from './routes/review.intake.$token'
 import { Route as AuthenticatedDashboardPlannerReviewsRouteImport } from './routes/_authenticated/dashboard.planner.reviews'
+import { Route as ApiStripeConnectCallbackRouteImport } from './routes/api.stripe.connect.callback'
+import { Route as EmbedCateringSlugBriefIntakeRouteImport } from './routes/embed.catering.$slug.brief-intake'
+import { Route as EmbedPlannerSlugInquiryRouteImport } from './routes/embed.planner.$slug.inquiry'
 
-const VerifyEmailRoute = VerifyEmailRouteImport.update({
-  id: '/verify-email',
-  path: '/verify-email',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UeberUnsRoute = UeberUnsRouteImport.update({
-  id: '/ueber-uns',
-  path: '/ueber-uns',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SpeiselyRoute = SpeiselyRouteImport.update({
-  id: '/speisely',
-  path: '/speisely',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RestaurantsRoute = RestaurantsRouteImport.update({
-  id: '/restaurants',
-  path: '/restaurants',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlannerRoute = PlannerRouteImport.update({
-  id: '/planner',
-  path: '/planner',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartnersRoute = PartnersRouteImport.update({
-  id: '/partners',
-  path: '/partners',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartnerRoute = PartnerRouteImport.update({
-  id: '/partner',
-  path: '/partner',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
-  id: '/llms.txt',
-  path: '/llms.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
-  id: '/llms-full.txt',
-  path: '/llms-full.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InstantOrderRoute = InstantOrderRouteImport.update({
-  id: '/instant-order',
-  path: '/instant-order',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImpressumRoute = ImpressumRouteImport.update({
-  id: '/impressum',
-  path: '/impressum',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DatenschutzRoute = DatenschutzRouteImport.update({
-  id: '/datenschutz',
-  path: '/datenschutz',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CateringRoute = CateringRouteImport.update({
-  id: '/catering',
-  path: '/catering',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ArchitectureSimulatorRoute = ArchitectureSimulatorRouteImport.update({
-  id: '/architecture-simulator',
-  path: '/architecture-simulator',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -181,38 +100,114 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ArchitectureSimulatorRoute = ArchitectureSimulatorRouteImport.update({
+  id: '/architecture-simulator',
+  path: '/architecture-simulator',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlannerIndexRoute = PlannerIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PlannerRoute,
-} as any)
-const MagazinIndexRoute = MagazinIndexRouteImport.update({
-  id: '/magazin/',
-  path: '/magazin/',
+const CateringRoute = CateringRouteImport.update({
+  id: '/catering',
+  path: '/catering',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CommunityIndexRoute = CommunityIndexRouteImport.update({
-  id: '/community/',
-  path: '/community/',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CateringIndexRoute = CateringIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => CateringRoute,
+const DatenschutzRoute = DatenschutzRouteImport.update({
+  id: '/datenschutz',
+  path: '/datenschutz',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const BlogIndexRoute = BlogIndexRouteImport.update({
-  id: '/blog/',
-  path: '/blog/',
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpressumRoute = ImpressumRouteImport.update({
+  id: '/impressum',
+  path: '/impressum',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstantOrderRoute = InstantOrderRouteImport.update({
+  id: '/instant-order',
+  path: '/instant-order',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
+  id: '/llms-full.txt',
+  path: '/llms-full.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerRoute = PartnerRouteImport.update({
+  id: '/partner',
+  path: '/partner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RestaurantsRoute = RestaurantsRouteImport.update({
+  id: '/restaurants',
+  path: '/restaurants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SpeiselyRoute = SpeiselyRouteImport.update({
+  id: '/speisely',
+  path: '/speisely',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UeberUnsRoute = UeberUnsRouteImport.update({
+  id: '/ueber-uns',
+  path: '/ueber-uns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCatererRoute = AuthenticatedCatererRouteImport.update({
+  id: '/caterer',
+  path: '/caterer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCustomerRoute = AuthenticatedCustomerRouteImport.update({
+  id: '/customer',
+  path: '/customer',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRestaurantRoute = AuthenticatedRestaurantRouteImport.update({
+  id: '/restaurant',
+  path: '/restaurant',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiGeoRoute = ApiGeoRouteImport.update({
+  id: '/api/geo',
+  path: '/api/geo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
@@ -220,67 +215,29 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RestaurantSlugRoute = RestaurantSlugRouteImport.update({
-  id: '/restaurant/$slug',
-  path: '/restaurant/$slug',
+const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
+  id: '/auth/update-password',
+  path: '/auth/update-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlannerSlugRoute = PlannerSlugRouteImport.update({
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CateringIndexRoute = CateringIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CateringRoute,
+} as any)
+const CateringSlugRoute = CateringSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
-  getParentRoute: () => PlannerRoute,
-} as any)
-const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
-  id: '/$city-$eventType',
-  path: '/$city-$eventType',
-  getParentRoute: () => PlannerRoute,
-} as any)
-const PartnersWebseitenRoute = PartnersWebseitenRouteImport.update({
-  id: '/webseiten',
-  path: '/webseiten',
-  getParentRoute: () => PartnersRoute,
-} as any)
-const PartnerWebseitenRoute = PartnerWebseitenRouteImport.update({
-  id: '/webseiten',
-  path: '/webseiten',
-  getParentRoute: () => PartnerRoute,
-} as any)
-const MagazinSpeiselyVisitsRoute = MagazinSpeiselyVisitsRouteImport.update({
-  id: '/magazin/speisely-visits',
-  path: '/magazin/speisely-visits',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MagazinSchnitzelSchmiedeRoute =
-  MagazinSchnitzelSchmiedeRouteImport.update({
-    id: '/magazin/schnitzel-schmiede',
-    path: '/magazin/schnitzel-schmiede',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinReaderRoute = MagazinReaderRouteImport.update({
-  id: '/magazin/reader',
-  path: '/magazin/reader',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MagazinEditionDothtmlRoute = MagazinEditionDothtmlRouteImport.update({
-  id: '/magazin/edition.html',
-  path: '/magazin/edition.html',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FestivalSchnitzelSchmiedeRoute =
-  FestivalSchnitzelSchmiedeRouteImport.update({
-    id: '/festival/schnitzel-schmiede',
-    path: '/festival/schnitzel-schmiede',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const CateringInstitutionalCateringRoute =
-  CateringInstitutionalCateringRouteImport.update({
-    id: '/institutional-catering',
-    path: '/institutional-catering',
-    getParentRoute: () => CateringRoute,
-  } as any)
-const CateringEventsRoute = CateringEventsRouteImport.update({
-  id: '/events',
-  path: '/events',
   getParentRoute: () => CateringRoute,
 } as any)
 const CateringDailyCateringSubscriptionsRoute =
@@ -289,46 +246,89 @@ const CateringDailyCateringSubscriptionsRoute =
     path: '/daily-catering-subscriptions',
     getParentRoute: () => CateringRoute,
   } as any)
-const CateringSlugRoute = CateringSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
+const CateringEventsRoute = CateringEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => CateringRoute,
 } as any)
-const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/blog/$slug',
-  path: '/blog/$slug',
+const CateringInstitutionalCateringRoute =
+  CateringInstitutionalCateringRouteImport.update({
+    id: '/institutional-catering',
+    path: '/institutional-catering',
+    getParentRoute: () => CateringRoute,
+  } as any)
+const CommunityIndexRoute = CommunityIndexRouteImport.update({
+  id: '/community/',
+  path: '/community/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthUpdatePasswordRoute = AuthUpdatePasswordRouteImport.update({
-  id: '/auth/update-password',
-  path: '/auth/update-password',
+const FestivalSchnitzelSchmiedeRoute =
+  FestivalSchnitzelSchmiedeRouteImport.update({
+    id: '/festival/schnitzel-schmiede',
+    path: '/festival/schnitzel-schmiede',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinIndexRoute = MagazinIndexRouteImport.update({
+  id: '/magazin/',
+  path: '/magazin/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiGeoRoute = ApiGeoRouteImport.update({
-  id: '/api/geo',
-  path: '/api/geo',
+const MagazinEditionDothtmlRoute = MagazinEditionDothtmlRouteImport.update({
+  id: '/magazin/edition.html',
+  path: '/magazin/edition.html',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRestaurantRoute = AuthenticatedRestaurantRouteImport.update({
-  id: '/restaurant',
-  path: '/restaurant',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const MagazinReaderRoute = MagazinReaderRouteImport.update({
+  id: '/magazin/reader',
+  path: '/magazin/reader',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedCustomerRoute = AuthenticatedCustomerRouteImport.update({
-  id: '/customer',
-  path: '/customer',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const MagazinSchnitzelSchmiedeRoute =
+  MagazinSchnitzelSchmiedeRouteImport.update({
+    id: '/magazin/schnitzel-schmiede',
+    path: '/magazin/schnitzel-schmiede',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinSpeiselyVisitsRoute = MagazinSpeiselyVisitsRouteImport.update({
+  id: '/magazin/speisely-visits',
+  path: '/magazin/speisely-visits',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedCatererRoute = AuthenticatedCatererRouteImport.update({
-  id: '/caterer',
-  path: '/caterer',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const PartnerWebseitenRoute = PartnerWebseitenRouteImport.update({
+  id: '/webseiten',
+  path: '/webseiten',
+  getParentRoute: () => PartnerRoute,
 } as any)
-const MagazinSpeiselyVisitsIndexRoute =
-  MagazinSpeiselyVisitsIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+const PartnersWebseitenRoute = PartnersWebseitenRouteImport.update({
+  id: '/webseiten',
+  path: '/webseiten',
+  getParentRoute: () => PartnersRoute,
+} as any)
+const PlannerIndexRoute = PlannerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlannerRoute,
+} as any)
+const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
+  id: '/$city-$eventType',
+  path: '/$city-$eventType',
+  getParentRoute: () => PlannerRoute,
+} as any)
+const PlannerSlugRoute = PlannerSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PlannerRoute,
+} as any)
+const RestaurantSlugRoute = RestaurantSlugRouteImport.update({
+  id: '/restaurant/$slug',
+  path: '/restaurant/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCatererReviewsRoute =
+  AuthenticatedCatererReviewsRouteImport.update({
+    id: '/reviews',
+    path: '/reviews',
+    getParentRoute: () => AuthenticatedCatererRoute,
   } as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
@@ -336,111 +336,16 @@ const AuthenticatedDashboardIndexRoute =
     path: '/dashboard/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const ReviewIntakeTokenRoute = ReviewIntakeTokenRouteImport.update({
-  id: '/review/intake/$token',
-  path: '/review/intake/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RestaurantOrtCityRoute = RestaurantOrtCityRouteImport.update({
-  id: '/restaurant/ort/$city',
-  path: '/restaurant/ort/$city',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RestaurantSlugLinksRoute = RestaurantSlugLinksRouteImport.update({
-  id: '/links',
-  path: '/links',
-  getParentRoute: () => RestaurantSlugRoute,
-} as any)
-const PlannerOrtCityRoute = PlannerOrtCityRouteImport.update({
-  id: '/ort/$city',
-  path: '/ort/$city',
-  getParentRoute: () => PlannerRoute,
-} as any)
-const MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute =
-  MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport.update({
-    id: '/shawarma-albaik-berlin',
-    path: '/shawarma-albaik-berlin',
-    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+const AuthenticatedDashboardPlannerRoute =
+  AuthenticatedDashboardPlannerRouteImport.update({
+    id: '/dashboard/planner',
+    path: '/dashboard/planner',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute =
-  MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport.update({
-    id: '/mandy-restaurant-berlin-neukoelln',
-    path: '/mandy-restaurant-berlin-neukoelln',
-    getParentRoute: () => MagazinSpeiselyVisitsRoute,
-  } as any)
-const MagazinCommunityThronburgerBerlinRoute =
-  MagazinCommunityThronburgerBerlinRouteImport.update({
-    id: '/magazin/community/thronburger-berlin',
-    path: '/magazin/community/thronburger-berlin',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinCommunitySanSebastianBerlinRoute =
-  MagazinCommunitySanSebastianBerlinRouteImport.update({
-    id: '/magazin/community/san-sebastian-berlin',
-    path: '/magazin/community/san-sebastian-berlin',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinCommunityKokioBerlinRoute =
-  MagazinCommunityKokioBerlinRouteImport.update({
-    id: '/magazin/community/kokio-berlin',
-    path: '/magazin/community/kokio-berlin',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinCommunityHarputWiesbadenRoute =
-  MagazinCommunityHarputWiesbadenRouteImport.update({
-    id: '/magazin/community/harput-wiesbaden',
-    path: '/magazin/community/harput-wiesbaden',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinCommunityGarconDeCafeBerlinRoute =
-  MagazinCommunityGarconDeCafeBerlinRouteImport.update({
-    id: '/magazin/community/garcon-de-cafe-berlin',
-    path: '/magazin/community/garcon-de-cafe-berlin',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinCommunityChickenKrushPragRoute =
-  MagazinCommunityChickenKrushPragRouteImport.update({
-    id: '/magazin/community/chicken-krush-prag',
-    path: '/magazin/community/chicken-krush-prag',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinCommunityArianaRestaurantFrankfurtRoute =
-  MagazinCommunityArianaRestaurantFrankfurtRouteImport.update({
-    id: '/magazin/community/ariana-restaurant-frankfurt',
-    path: '/magazin/community/ariana-restaurant-frankfurt',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const MagazinCommunityAlzaeemRestaurantBerlinRoute =
-  MagazinCommunityAlzaeemRestaurantBerlinRouteImport.update({
-    id: '/magazin/community/alzaeem-restaurant-berlin',
-    path: '/magazin/community/alzaeem-restaurant-berlin',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const CheckoutDepositBookingIdRoute =
-  CheckoutDepositBookingIdRouteImport.update({
-    id: '/checkout/deposit/$bookingId',
-    path: '/checkout/deposit/$bookingId',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const CateringOrtCityRoute = CateringOrtCityRouteImport.update({
-  id: '/ort/$city',
-  path: '/ort/$city',
-  getParentRoute: () => CateringRoute,
-} as any)
-const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
-  id: '/api/webhooks/stripe',
-  path: '/api/webhooks/stripe',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPrintStarRoute = ApiPrintStarRouteImport.update({
-  id: '/api/print/star',
-  path: '/api/print/star',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRestaurantReviewsRoute =
-  AuthenticatedRestaurantReviewsRouteImport.update({
-    id: '/reviews',
-    path: '/reviews',
+const AuthenticatedRestaurantFestivalRoute =
+  AuthenticatedRestaurantFestivalRouteImport.update({
+    id: '/festival',
+    path: '/festival',
     getParentRoute: () => AuthenticatedRestaurantRoute,
   } as any)
 const AuthenticatedRestaurantKitchenRoute =
@@ -449,34 +354,124 @@ const AuthenticatedRestaurantKitchenRoute =
     path: '/kitchen',
     getParentRoute: () => AuthenticatedRestaurantRoute,
   } as any)
-const AuthenticatedRestaurantFestivalRoute =
-  AuthenticatedRestaurantFestivalRouteImport.update({
-    id: '/festival',
-    path: '/festival',
-    getParentRoute: () => AuthenticatedRestaurantRoute,
-  } as any)
-const AuthenticatedDashboardPlannerRoute =
-  AuthenticatedDashboardPlannerRouteImport.update({
-    id: '/dashboard/planner',
-    path: '/dashboard/planner',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-const AuthenticatedCatererReviewsRoute =
-  AuthenticatedCatererReviewsRouteImport.update({
+const AuthenticatedRestaurantReviewsRoute =
+  AuthenticatedRestaurantReviewsRouteImport.update({
     id: '/reviews',
     path: '/reviews',
-    getParentRoute: () => AuthenticatedCatererRoute,
+    getParentRoute: () => AuthenticatedRestaurantRoute,
   } as any)
-const EmbedPlannerSlugInquiryRoute = EmbedPlannerSlugInquiryRouteImport.update({
-  id: '/embed/planner/$slug/inquiry',
-  path: '/embed/planner/$slug/inquiry',
+const ApiPrintStarRoute = ApiPrintStarRouteImport.update({
+  id: '/api/print/star',
+  path: '/api/print/star',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmbedCateringSlugBriefIntakeRoute =
-  EmbedCateringSlugBriefIntakeRouteImport.update({
-    id: '/embed/catering/$slug/brief-intake',
-    path: '/embed/catering/$slug/brief-intake',
+const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
+  id: '/api/webhooks/stripe',
+  path: '/api/webhooks/stripe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CateringOrtCityRoute = CateringOrtCityRouteImport.update({
+  id: '/ort/$city',
+  path: '/ort/$city',
+  getParentRoute: () => CateringRoute,
+} as any)
+const CheckoutDepositBookingIdRoute =
+  CheckoutDepositBookingIdRouteImport.update({
+    id: '/checkout/deposit/$bookingId',
+    path: '/checkout/deposit/$bookingId',
     getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunityAlzaeemRestaurantBerlinRoute =
+  MagazinCommunityAlzaeemRestaurantBerlinRouteImport.update({
+    id: '/magazin/community/alzaeem-restaurant-berlin',
+    path: '/magazin/community/alzaeem-restaurant-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunityArianaRestaurantFrankfurtRoute =
+  MagazinCommunityArianaRestaurantFrankfurtRouteImport.update({
+    id: '/magazin/community/ariana-restaurant-frankfurt',
+    path: '/magazin/community/ariana-restaurant-frankfurt',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunityChickenKrushPragRoute =
+  MagazinCommunityChickenKrushPragRouteImport.update({
+    id: '/magazin/community/chicken-krush-prag',
+    path: '/magazin/community/chicken-krush-prag',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunityGarconDeCafeBerlinRoute =
+  MagazinCommunityGarconDeCafeBerlinRouteImport.update({
+    id: '/magazin/community/garcon-de-cafe-berlin',
+    path: '/magazin/community/garcon-de-cafe-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunityHarputWiesbadenRoute =
+  MagazinCommunityHarputWiesbadenRouteImport.update({
+    id: '/magazin/community/harput-wiesbaden',
+    path: '/magazin/community/harput-wiesbaden',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunityKokioBerlinRoute =
+  MagazinCommunityKokioBerlinRouteImport.update({
+    id: '/magazin/community/kokio-berlin',
+    path: '/magazin/community/kokio-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunitySanSebastianBerlinRoute =
+  MagazinCommunitySanSebastianBerlinRouteImport.update({
+    id: '/magazin/community/san-sebastian-berlin',
+    path: '/magazin/community/san-sebastian-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinCommunityThronburgerBerlinRoute =
+  MagazinCommunityThronburgerBerlinRouteImport.update({
+    id: '/magazin/community/thronburger-berlin',
+    path: '/magazin/community/thronburger-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MagazinSpeiselyVisitsIndexRoute =
+  MagazinSpeiselyVisitsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+  } as any)
+const MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute =
+  MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport.update({
+    id: '/mandy-restaurant-berlin-neukoelln',
+    path: '/mandy-restaurant-berlin-neukoelln',
+    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+  } as any)
+const MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute =
+  MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport.update({
+    id: '/shawarma-albaik-berlin',
+    path: '/shawarma-albaik-berlin',
+    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+  } as any)
+const PlannerOrtCityRoute = PlannerOrtCityRouteImport.update({
+  id: '/ort/$city',
+  path: '/ort/$city',
+  getParentRoute: () => PlannerRoute,
+} as any)
+const RestaurantSlugLinksRoute = RestaurantSlugLinksRouteImport.update({
+  id: '/links',
+  path: '/links',
+  getParentRoute: () => RestaurantSlugRoute,
+} as any)
+const RestaurantOrtCityRoute = RestaurantOrtCityRouteImport.update({
+  id: '/restaurant/ort/$city',
+  path: '/restaurant/ort/$city',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewIntakeTokenRoute = ReviewIntakeTokenRouteImport.update({
+  id: '/review/intake/$token',
+  path: '/review/intake/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardPlannerReviewsRoute =
+  AuthenticatedDashboardPlannerReviewsRouteImport.update({
+    id: '/reviews',
+    path: '/reviews',
+    getParentRoute: () => AuthenticatedDashboardPlannerRoute,
   } as any)
 const ApiStripeConnectCallbackRoute =
   ApiStripeConnectCallbackRouteImport.update({
@@ -484,12 +479,17 @@ const ApiStripeConnectCallbackRoute =
     path: '/api/stripe/connect/callback',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AuthenticatedDashboardPlannerReviewsRoute =
-  AuthenticatedDashboardPlannerReviewsRouteImport.update({
-    id: '/reviews',
-    path: '/reviews',
-    getParentRoute: () => AuthenticatedDashboardPlannerRoute,
+const EmbedCateringSlugBriefIntakeRoute =
+  EmbedCateringSlugBriefIntakeRouteImport.update({
+    id: '/embed/catering/$slug/brief-intake',
+    path: '/embed/catering/$slug/brief-intake',
+    getParentRoute: () => rootRouteImport,
   } as any)
+const EmbedPlannerSlugInquiryRoute = EmbedPlannerSlugInquiryRouteImport.update({
+  id: '/embed/planner/$slug/inquiry',
+  path: '/embed/planner/$slug/inquiry',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -1008,137 +1008,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/verify-email': {
-      id: '/verify-email'
-      path: '/verify-email'
-      fullPath: '/verify-email'
-      preLoaderRoute: typeof VerifyEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ueber-uns': {
-      id: '/ueber-uns'
-      path: '/ueber-uns'
-      fullPath: '/ueber-uns'
-      preLoaderRoute: typeof UeberUnsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/speisely': {
-      id: '/speisely'
-      path: '/speisely'
-      fullPath: '/speisely'
-      preLoaderRoute: typeof SpeiselyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/restaurants': {
-      id: '/restaurants'
-      path: '/restaurants'
-      fullPath: '/restaurants'
-      preLoaderRoute: typeof RestaurantsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/planner': {
-      id: '/planner'
-      path: '/planner'
-      fullPath: '/planner'
-      preLoaderRoute: typeof PlannerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/partners': {
-      id: '/partners'
-      path: '/partners'
-      fullPath: '/partners'
-      preLoaderRoute: typeof PartnersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/partner': {
-      id: '/partner'
-      path: '/partner'
-      fullPath: '/partner'
-      preLoaderRoute: typeof PartnerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/llms.txt': {
-      id: '/llms.txt'
-      path: '/llms.txt'
-      fullPath: '/llms.txt'
-      preLoaderRoute: typeof LlmsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/llms-full.txt': {
-      id: '/llms-full.txt'
-      path: '/llms-full.txt'
-      fullPath: '/llms-full.txt'
-      preLoaderRoute: typeof LlmsFullDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/instant-order': {
-      id: '/instant-order'
-      path: '/instant-order'
-      fullPath: '/instant-order'
-      preLoaderRoute: typeof InstantOrderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/impressum': {
-      id: '/impressum'
-      path: '/impressum'
-      fullPath: '/impressum'
-      preLoaderRoute: typeof ImpressumRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/datenschutz': {
-      id: '/datenschutz'
-      path: '/datenschutz'
-      fullPath: '/datenschutz'
-      preLoaderRoute: typeof DatenschutzRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/catering': {
-      id: '/catering'
-      path: '/catering'
-      fullPath: '/catering'
-      preLoaderRoute: typeof CateringRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/architecture-simulator': {
-      id: '/architecture-simulator'
-      path: '/architecture-simulator'
-      fullPath: '/architecture-simulator'
-      preLoaderRoute: typeof ArchitectureSimulatorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -1148,179 +1022,144 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/planner/': {
-      id: '/planner/'
-      path: '/'
-      fullPath: '/planner/'
-      preLoaderRoute: typeof PlannerIndexRouteImport
-      parentRoute: typeof PlannerRoute
-    }
-    '/magazin/': {
-      id: '/magazin/'
-      path: '/magazin'
-      fullPath: '/magazin/'
-      preLoaderRoute: typeof MagazinIndexRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/community/': {
-      id: '/community/'
-      path: '/community'
-      fullPath: '/community/'
-      preLoaderRoute: typeof CommunityIndexRouteImport
+    '/architecture-simulator': {
+      id: '/architecture-simulator'
+      path: '/architecture-simulator'
+      fullPath: '/architecture-simulator'
+      preLoaderRoute: typeof ArchitectureSimulatorRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/catering/': {
-      id: '/catering/'
-      path: '/'
-      fullPath: '/catering/'
-      preLoaderRoute: typeof CateringIndexRouteImport
-      parentRoute: typeof CateringRoute
-    }
-    '/blog/': {
-      id: '/blog/'
-      path: '/blog'
-      fullPath: '/blog/'
-      preLoaderRoute: typeof BlogIndexRouteImport
+    '/catering': {
+      id: '/catering'
+      path: '/catering'
+      fullPath: '/catering'
+      preLoaderRoute: typeof CateringRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/': {
-      id: '/auth/'
-      path: '/auth'
-      fullPath: '/auth/'
-      preLoaderRoute: typeof AuthIndexRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/restaurant/$slug': {
-      id: '/restaurant/$slug'
-      path: '/restaurant/$slug'
-      fullPath: '/restaurant/$slug'
-      preLoaderRoute: typeof RestaurantSlugRouteImport
+    '/datenschutz': {
+      id: '/datenschutz'
+      path: '/datenschutz'
+      fullPath: '/datenschutz'
+      preLoaderRoute: typeof DatenschutzRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/planner/$slug': {
-      id: '/planner/$slug'
-      path: '/$slug'
-      fullPath: '/planner/$slug'
-      preLoaderRoute: typeof PlannerSlugRouteImport
-      parentRoute: typeof PlannerRoute
-    }
-    '/planner/$city-$eventType': {
-      id: '/planner/$city-$eventType'
-      path: '/$city-$eventType'
-      fullPath: '/planner/$city-$eventType'
-      preLoaderRoute: typeof PlannerCityEventTypeRouteImport
-      parentRoute: typeof PlannerRoute
-    }
-    '/partners/webseiten': {
-      id: '/partners/webseiten'
-      path: '/webseiten'
-      fullPath: '/partners/webseiten'
-      preLoaderRoute: typeof PartnersWebseitenRouteImport
-      parentRoute: typeof PartnersRoute
-    }
-    '/partner/webseiten': {
-      id: '/partner/webseiten'
-      path: '/webseiten'
-      fullPath: '/partner/webseiten'
-      preLoaderRoute: typeof PartnerWebseitenRouteImport
-      parentRoute: typeof PartnerRoute
-    }
-    '/magazin/speisely-visits': {
-      id: '/magazin/speisely-visits'
-      path: '/magazin/speisely-visits'
-      fullPath: '/magazin/speisely-visits'
-      preLoaderRoute: typeof MagazinSpeiselyVisitsRouteImport
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/magazin/schnitzel-schmiede': {
-      id: '/magazin/schnitzel-schmiede'
-      path: '/magazin/schnitzel-schmiede'
-      fullPath: '/magazin/schnitzel-schmiede'
-      preLoaderRoute: typeof MagazinSchnitzelSchmiedeRouteImport
+    '/impressum': {
+      id: '/impressum'
+      path: '/impressum'
+      fullPath: '/impressum'
+      preLoaderRoute: typeof ImpressumRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/magazin/reader': {
-      id: '/magazin/reader'
-      path: '/magazin/reader'
-      fullPath: '/magazin/reader'
-      preLoaderRoute: typeof MagazinReaderRouteImport
+    '/instant-order': {
+      id: '/instant-order'
+      path: '/instant-order'
+      fullPath: '/instant-order'
+      preLoaderRoute: typeof InstantOrderRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/magazin/edition.html': {
-      id: '/magazin/edition.html'
-      path: '/magazin/edition.html'
-      fullPath: '/magazin/edition.html'
-      preLoaderRoute: typeof MagazinEditionDothtmlRouteImport
+    '/llms-full.txt': {
+      id: '/llms-full.txt'
+      path: '/llms-full.txt'
+      fullPath: '/llms-full.txt'
+      preLoaderRoute: typeof LlmsFullDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/festival/schnitzel-schmiede': {
-      id: '/festival/schnitzel-schmiede'
-      path: '/festival/schnitzel-schmiede'
-      fullPath: '/festival/schnitzel-schmiede'
-      preLoaderRoute: typeof FestivalSchnitzelSchmiedeRouteImport
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/catering/institutional-catering': {
-      id: '/catering/institutional-catering'
-      path: '/institutional-catering'
-      fullPath: '/catering/institutional-catering'
-      preLoaderRoute: typeof CateringInstitutionalCateringRouteImport
-      parentRoute: typeof CateringRoute
-    }
-    '/catering/events': {
-      id: '/catering/events'
-      path: '/events'
-      fullPath: '/catering/events'
-      preLoaderRoute: typeof CateringEventsRouteImport
-      parentRoute: typeof CateringRoute
-    }
-    '/catering/daily-catering-subscriptions': {
-      id: '/catering/daily-catering-subscriptions'
-      path: '/daily-catering-subscriptions'
-      fullPath: '/catering/daily-catering-subscriptions'
-      preLoaderRoute: typeof CateringDailyCateringSubscriptionsRouteImport
-      parentRoute: typeof CateringRoute
-    }
-    '/catering/$slug': {
-      id: '/catering/$slug'
-      path: '/$slug'
-      fullPath: '/catering/$slug'
-      preLoaderRoute: typeof CateringSlugRouteImport
-      parentRoute: typeof CateringRoute
-    }
-    '/blog/$slug': {
-      id: '/blog/$slug'
-      path: '/blog/$slug'
-      fullPath: '/blog/$slug'
-      preLoaderRoute: typeof BlogSlugRouteImport
+    '/partner': {
+      id: '/partner'
+      path: '/partner'
+      fullPath: '/partner'
+      preLoaderRoute: typeof PartnerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/update-password': {
-      id: '/auth/update-password'
-      path: '/auth/update-password'
-      fullPath: '/auth/update-password'
-      preLoaderRoute: typeof AuthUpdatePasswordRouteImport
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/geo': {
-      id: '/api/geo'
-      path: '/api/geo'
-      fullPath: '/api/geo'
-      preLoaderRoute: typeof ApiGeoRouteImport
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/restaurant': {
-      id: '/_authenticated/restaurant'
-      path: '/restaurant'
-      fullPath: '/restaurant'
-      preLoaderRoute: typeof AuthenticatedRestaurantRouteImport
+    '/restaurants': {
+      id: '/restaurants'
+      path: '/restaurants'
+      fullPath: '/restaurants'
+      preLoaderRoute: typeof RestaurantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/speisely': {
+      id: '/speisely'
+      path: '/speisely'
+      fullPath: '/speisely'
+      preLoaderRoute: typeof SpeiselyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ueber-uns': {
+      id: '/ueber-uns'
+      path: '/ueber-uns'
+      fullPath: '/ueber-uns'
+      preLoaderRoute: typeof UeberUnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/caterer': {
+      id: '/_authenticated/caterer'
+      path: '/caterer'
+      fullPath: '/caterer'
+      preLoaderRoute: typeof AuthenticatedCatererRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/customer': {
@@ -1330,19 +1169,180 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCustomerRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/caterer': {
-      id: '/_authenticated/caterer'
-      path: '/caterer'
-      fullPath: '/caterer'
-      preLoaderRoute: typeof AuthenticatedCatererRouteImport
+    '/_authenticated/restaurant': {
+      id: '/_authenticated/restaurant'
+      path: '/restaurant'
+      fullPath: '/restaurant'
+      preLoaderRoute: typeof AuthenticatedRestaurantRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/magazin/speisely-visits/': {
-      id: '/magazin/speisely-visits/'
+    '/api/geo': {
+      id: '/api/geo'
+      path: '/api/geo'
+      fullPath: '/api/geo'
+      preLoaderRoute: typeof ApiGeoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/update-password': {
+      id: '/auth/update-password'
+      path: '/auth/update-password'
+      fullPath: '/auth/update-password'
+      preLoaderRoute: typeof AuthUpdatePasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catering/': {
+      id: '/catering/'
       path: '/'
-      fullPath: '/magazin/speisely-visits/'
-      preLoaderRoute: typeof MagazinSpeiselyVisitsIndexRouteImport
-      parentRoute: typeof MagazinSpeiselyVisitsRoute
+      fullPath: '/catering/'
+      preLoaderRoute: typeof CateringIndexRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/catering/$slug': {
+      id: '/catering/$slug'
+      path: '/$slug'
+      fullPath: '/catering/$slug'
+      preLoaderRoute: typeof CateringSlugRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/catering/daily-catering-subscriptions': {
+      id: '/catering/daily-catering-subscriptions'
+      path: '/daily-catering-subscriptions'
+      fullPath: '/catering/daily-catering-subscriptions'
+      preLoaderRoute: typeof CateringDailyCateringSubscriptionsRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/catering/events': {
+      id: '/catering/events'
+      path: '/events'
+      fullPath: '/catering/events'
+      preLoaderRoute: typeof CateringEventsRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/catering/institutional-catering': {
+      id: '/catering/institutional-catering'
+      path: '/institutional-catering'
+      fullPath: '/catering/institutional-catering'
+      preLoaderRoute: typeof CateringInstitutionalCateringRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/community/': {
+      id: '/community/'
+      path: '/community'
+      fullPath: '/community/'
+      preLoaderRoute: typeof CommunityIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/festival/schnitzel-schmiede': {
+      id: '/festival/schnitzel-schmiede'
+      path: '/festival/schnitzel-schmiede'
+      fullPath: '/festival/schnitzel-schmiede'
+      preLoaderRoute: typeof FestivalSchnitzelSchmiedeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/': {
+      id: '/magazin/'
+      path: '/magazin'
+      fullPath: '/magazin/'
+      preLoaderRoute: typeof MagazinIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/edition.html': {
+      id: '/magazin/edition.html'
+      path: '/magazin/edition.html'
+      fullPath: '/magazin/edition.html'
+      preLoaderRoute: typeof MagazinEditionDothtmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/reader': {
+      id: '/magazin/reader'
+      path: '/magazin/reader'
+      fullPath: '/magazin/reader'
+      preLoaderRoute: typeof MagazinReaderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/schnitzel-schmiede': {
+      id: '/magazin/schnitzel-schmiede'
+      path: '/magazin/schnitzel-schmiede'
+      fullPath: '/magazin/schnitzel-schmiede'
+      preLoaderRoute: typeof MagazinSchnitzelSchmiedeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/speisely-visits': {
+      id: '/magazin/speisely-visits'
+      path: '/magazin/speisely-visits'
+      fullPath: '/magazin/speisely-visits'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner/webseiten': {
+      id: '/partner/webseiten'
+      path: '/webseiten'
+      fullPath: '/partner/webseiten'
+      preLoaderRoute: typeof PartnerWebseitenRouteImport
+      parentRoute: typeof PartnerRoute
+    }
+    '/partners/webseiten': {
+      id: '/partners/webseiten'
+      path: '/webseiten'
+      fullPath: '/partners/webseiten'
+      preLoaderRoute: typeof PartnersWebseitenRouteImport
+      parentRoute: typeof PartnersRoute
+    }
+    '/planner/': {
+      id: '/planner/'
+      path: '/'
+      fullPath: '/planner/'
+      preLoaderRoute: typeof PlannerIndexRouteImport
+      parentRoute: typeof PlannerRoute
+    }
+    '/planner/$city-$eventType': {
+      id: '/planner/$city-$eventType'
+      path: '/$city-$eventType'
+      fullPath: '/planner/$city-$eventType'
+      preLoaderRoute: typeof PlannerCityEventTypeRouteImport
+      parentRoute: typeof PlannerRoute
+    }
+    '/planner/$slug': {
+      id: '/planner/$slug'
+      path: '/$slug'
+      fullPath: '/planner/$slug'
+      preLoaderRoute: typeof PlannerSlugRouteImport
+      parentRoute: typeof PlannerRoute
+    }
+    '/restaurant/$slug': {
+      id: '/restaurant/$slug'
+      path: '/restaurant/$slug'
+      fullPath: '/restaurant/$slug'
+      preLoaderRoute: typeof RestaurantSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/caterer/reviews': {
+      id: '/_authenticated/caterer/reviews'
+      path: '/reviews'
+      fullPath: '/caterer/reviews'
+      preLoaderRoute: typeof AuthenticatedCatererReviewsRouteImport
+      parentRoute: typeof AuthenticatedCatererRoute
     }
     '/_authenticated/dashboard/': {
       id: '/_authenticated/dashboard/'
@@ -1351,137 +1351,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/review/intake/$token': {
-      id: '/review/intake/$token'
-      path: '/review/intake/$token'
-      fullPath: '/review/intake/$token'
-      preLoaderRoute: typeof ReviewIntakeTokenRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/dashboard/planner': {
+      id: '/_authenticated/dashboard/planner'
+      path: '/dashboard/planner'
+      fullPath: '/dashboard/planner'
+      preLoaderRoute: typeof AuthenticatedDashboardPlannerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/restaurant/ort/$city': {
-      id: '/restaurant/ort/$city'
-      path: '/restaurant/ort/$city'
-      fullPath: '/restaurant/ort/$city'
-      preLoaderRoute: typeof RestaurantOrtCityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/restaurant/$slug/links': {
-      id: '/restaurant/$slug/links'
-      path: '/links'
-      fullPath: '/restaurant/$slug/links'
-      preLoaderRoute: typeof RestaurantSlugLinksRouteImport
-      parentRoute: typeof RestaurantSlugRoute
-    }
-    '/planner/ort/$city': {
-      id: '/planner/ort/$city'
-      path: '/ort/$city'
-      fullPath: '/planner/ort/$city'
-      preLoaderRoute: typeof PlannerOrtCityRouteImport
-      parentRoute: typeof PlannerRoute
-    }
-    '/magazin/speisely-visits/shawarma-albaik-berlin': {
-      id: '/magazin/speisely-visits/shawarma-albaik-berlin'
-      path: '/shawarma-albaik-berlin'
-      fullPath: '/magazin/speisely-visits/shawarma-albaik-berlin'
-      preLoaderRoute: typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport
-      parentRoute: typeof MagazinSpeiselyVisitsRoute
-    }
-    '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': {
-      id: '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
-      path: '/mandy-restaurant-berlin-neukoelln'
-      fullPath: '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
-      preLoaderRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport
-      parentRoute: typeof MagazinSpeiselyVisitsRoute
-    }
-    '/magazin/community/thronburger-berlin': {
-      id: '/magazin/community/thronburger-berlin'
-      path: '/magazin/community/thronburger-berlin'
-      fullPath: '/magazin/community/thronburger-berlin'
-      preLoaderRoute: typeof MagazinCommunityThronburgerBerlinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/magazin/community/san-sebastian-berlin': {
-      id: '/magazin/community/san-sebastian-berlin'
-      path: '/magazin/community/san-sebastian-berlin'
-      fullPath: '/magazin/community/san-sebastian-berlin'
-      preLoaderRoute: typeof MagazinCommunitySanSebastianBerlinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/magazin/community/kokio-berlin': {
-      id: '/magazin/community/kokio-berlin'
-      path: '/magazin/community/kokio-berlin'
-      fullPath: '/magazin/community/kokio-berlin'
-      preLoaderRoute: typeof MagazinCommunityKokioBerlinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/magazin/community/harput-wiesbaden': {
-      id: '/magazin/community/harput-wiesbaden'
-      path: '/magazin/community/harput-wiesbaden'
-      fullPath: '/magazin/community/harput-wiesbaden'
-      preLoaderRoute: typeof MagazinCommunityHarputWiesbadenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/magazin/community/garcon-de-cafe-berlin': {
-      id: '/magazin/community/garcon-de-cafe-berlin'
-      path: '/magazin/community/garcon-de-cafe-berlin'
-      fullPath: '/magazin/community/garcon-de-cafe-berlin'
-      preLoaderRoute: typeof MagazinCommunityGarconDeCafeBerlinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/magazin/community/chicken-krush-prag': {
-      id: '/magazin/community/chicken-krush-prag'
-      path: '/magazin/community/chicken-krush-prag'
-      fullPath: '/magazin/community/chicken-krush-prag'
-      preLoaderRoute: typeof MagazinCommunityChickenKrushPragRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/magazin/community/ariana-restaurant-frankfurt': {
-      id: '/magazin/community/ariana-restaurant-frankfurt'
-      path: '/magazin/community/ariana-restaurant-frankfurt'
-      fullPath: '/magazin/community/ariana-restaurant-frankfurt'
-      preLoaderRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/magazin/community/alzaeem-restaurant-berlin': {
-      id: '/magazin/community/alzaeem-restaurant-berlin'
-      path: '/magazin/community/alzaeem-restaurant-berlin'
-      fullPath: '/magazin/community/alzaeem-restaurant-berlin'
-      preLoaderRoute: typeof MagazinCommunityAlzaeemRestaurantBerlinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout/deposit/$bookingId': {
-      id: '/checkout/deposit/$bookingId'
-      path: '/checkout/deposit/$bookingId'
-      fullPath: '/checkout/deposit/$bookingId'
-      preLoaderRoute: typeof CheckoutDepositBookingIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/catering/ort/$city': {
-      id: '/catering/ort/$city'
-      path: '/ort/$city'
-      fullPath: '/catering/ort/$city'
-      preLoaderRoute: typeof CateringOrtCityRouteImport
-      parentRoute: typeof CateringRoute
-    }
-    '/api/webhooks/stripe': {
-      id: '/api/webhooks/stripe'
-      path: '/api/webhooks/stripe'
-      fullPath: '/api/webhooks/stripe'
-      preLoaderRoute: typeof ApiWebhooksStripeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/print/star': {
-      id: '/api/print/star'
-      path: '/api/print/star'
-      fullPath: '/api/print/star'
-      preLoaderRoute: typeof ApiPrintStarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/restaurant/reviews': {
-      id: '/_authenticated/restaurant/reviews'
-      path: '/reviews'
-      fullPath: '/restaurant/reviews'
-      preLoaderRoute: typeof AuthenticatedRestaurantReviewsRouteImport
+    '/_authenticated/restaurant/festival': {
+      id: '/_authenticated/restaurant/festival'
+      path: '/festival'
+      fullPath: '/restaurant/festival'
+      preLoaderRoute: typeof AuthenticatedRestaurantFestivalRouteImport
       parentRoute: typeof AuthenticatedRestaurantRoute
     }
     '/_authenticated/restaurant/kitchen': {
@@ -1491,32 +1372,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRestaurantKitchenRouteImport
       parentRoute: typeof AuthenticatedRestaurantRoute
     }
-    '/_authenticated/restaurant/festival': {
-      id: '/_authenticated/restaurant/festival'
-      path: '/festival'
-      fullPath: '/restaurant/festival'
-      preLoaderRoute: typeof AuthenticatedRestaurantFestivalRouteImport
+    '/_authenticated/restaurant/reviews': {
+      id: '/_authenticated/restaurant/reviews'
+      path: '/reviews'
+      fullPath: '/restaurant/reviews'
+      preLoaderRoute: typeof AuthenticatedRestaurantReviewsRouteImport
       parentRoute: typeof AuthenticatedRestaurantRoute
     }
-    '/_authenticated/dashboard/planner': {
-      id: '/_authenticated/dashboard/planner'
-      path: '/dashboard/planner'
-      fullPath: '/dashboard/planner'
-      preLoaderRoute: typeof AuthenticatedDashboardPlannerRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/api/print/star': {
+      id: '/api/print/star'
+      path: '/api/print/star'
+      fullPath: '/api/print/star'
+      preLoaderRoute: typeof ApiPrintStarRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/caterer/reviews': {
-      id: '/_authenticated/caterer/reviews'
+    '/api/webhooks/stripe': {
+      id: '/api/webhooks/stripe'
+      path: '/api/webhooks/stripe'
+      fullPath: '/api/webhooks/stripe'
+      preLoaderRoute: typeof ApiWebhooksStripeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catering/ort/$city': {
+      id: '/catering/ort/$city'
+      path: '/ort/$city'
+      fullPath: '/catering/ort/$city'
+      preLoaderRoute: typeof CateringOrtCityRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/checkout/deposit/$bookingId': {
+      id: '/checkout/deposit/$bookingId'
+      path: '/checkout/deposit/$bookingId'
+      fullPath: '/checkout/deposit/$bookingId'
+      preLoaderRoute: typeof CheckoutDepositBookingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/alzaeem-restaurant-berlin': {
+      id: '/magazin/community/alzaeem-restaurant-berlin'
+      path: '/magazin/community/alzaeem-restaurant-berlin'
+      fullPath: '/magazin/community/alzaeem-restaurant-berlin'
+      preLoaderRoute: typeof MagazinCommunityAlzaeemRestaurantBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/ariana-restaurant-frankfurt': {
+      id: '/magazin/community/ariana-restaurant-frankfurt'
+      path: '/magazin/community/ariana-restaurant-frankfurt'
+      fullPath: '/magazin/community/ariana-restaurant-frankfurt'
+      preLoaderRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/chicken-krush-prag': {
+      id: '/magazin/community/chicken-krush-prag'
+      path: '/magazin/community/chicken-krush-prag'
+      fullPath: '/magazin/community/chicken-krush-prag'
+      preLoaderRoute: typeof MagazinCommunityChickenKrushPragRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/garcon-de-cafe-berlin': {
+      id: '/magazin/community/garcon-de-cafe-berlin'
+      path: '/magazin/community/garcon-de-cafe-berlin'
+      fullPath: '/magazin/community/garcon-de-cafe-berlin'
+      preLoaderRoute: typeof MagazinCommunityGarconDeCafeBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/harput-wiesbaden': {
+      id: '/magazin/community/harput-wiesbaden'
+      path: '/magazin/community/harput-wiesbaden'
+      fullPath: '/magazin/community/harput-wiesbaden'
+      preLoaderRoute: typeof MagazinCommunityHarputWiesbadenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/kokio-berlin': {
+      id: '/magazin/community/kokio-berlin'
+      path: '/magazin/community/kokio-berlin'
+      fullPath: '/magazin/community/kokio-berlin'
+      preLoaderRoute: typeof MagazinCommunityKokioBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/san-sebastian-berlin': {
+      id: '/magazin/community/san-sebastian-berlin'
+      path: '/magazin/community/san-sebastian-berlin'
+      fullPath: '/magazin/community/san-sebastian-berlin'
+      preLoaderRoute: typeof MagazinCommunitySanSebastianBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/community/thronburger-berlin': {
+      id: '/magazin/community/thronburger-berlin'
+      path: '/magazin/community/thronburger-berlin'
+      fullPath: '/magazin/community/thronburger-berlin'
+      preLoaderRoute: typeof MagazinCommunityThronburgerBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/speisely-visits/': {
+      id: '/magazin/speisely-visits/'
+      path: '/'
+      fullPath: '/magazin/speisely-visits/'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsIndexRouteImport
+      parentRoute: typeof MagazinSpeiselyVisitsRoute
+    }
+    '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': {
+      id: '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
+      path: '/mandy-restaurant-berlin-neukoelln'
+      fullPath: '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport
+      parentRoute: typeof MagazinSpeiselyVisitsRoute
+    }
+    '/magazin/speisely-visits/shawarma-albaik-berlin': {
+      id: '/magazin/speisely-visits/shawarma-albaik-berlin'
+      path: '/shawarma-albaik-berlin'
+      fullPath: '/magazin/speisely-visits/shawarma-albaik-berlin'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport
+      parentRoute: typeof MagazinSpeiselyVisitsRoute
+    }
+    '/planner/ort/$city': {
+      id: '/planner/ort/$city'
+      path: '/ort/$city'
+      fullPath: '/planner/ort/$city'
+      preLoaderRoute: typeof PlannerOrtCityRouteImport
+      parentRoute: typeof PlannerRoute
+    }
+    '/restaurant/$slug/links': {
+      id: '/restaurant/$slug/links'
+      path: '/links'
+      fullPath: '/restaurant/$slug/links'
+      preLoaderRoute: typeof RestaurantSlugLinksRouteImport
+      parentRoute: typeof RestaurantSlugRoute
+    }
+    '/restaurant/ort/$city': {
+      id: '/restaurant/ort/$city'
+      path: '/restaurant/ort/$city'
+      fullPath: '/restaurant/ort/$city'
+      preLoaderRoute: typeof RestaurantOrtCityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review/intake/$token': {
+      id: '/review/intake/$token'
+      path: '/review/intake/$token'
+      fullPath: '/review/intake/$token'
+      preLoaderRoute: typeof ReviewIntakeTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard/planner/reviews': {
+      id: '/_authenticated/dashboard/planner/reviews'
       path: '/reviews'
-      fullPath: '/caterer/reviews'
-      preLoaderRoute: typeof AuthenticatedCatererReviewsRouteImport
-      parentRoute: typeof AuthenticatedCatererRoute
+      fullPath: '/dashboard/planner/reviews'
+      preLoaderRoute: typeof AuthenticatedDashboardPlannerReviewsRouteImport
+      parentRoute: typeof AuthenticatedDashboardPlannerRoute
     }
-    '/embed/planner/$slug/inquiry': {
-      id: '/embed/planner/$slug/inquiry'
-      path: '/embed/planner/$slug/inquiry'
-      fullPath: '/embed/planner/$slug/inquiry'
-      preLoaderRoute: typeof EmbedPlannerSlugInquiryRouteImport
+    '/api/stripe/connect/callback': {
+      id: '/api/stripe/connect/callback'
+      path: '/api/stripe/connect/callback'
+      fullPath: '/api/stripe/connect/callback'
+      preLoaderRoute: typeof ApiStripeConnectCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/embed/catering/$slug/brief-intake': {
@@ -1526,19 +1533,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmbedCateringSlugBriefIntakeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/stripe/connect/callback': {
-      id: '/api/stripe/connect/callback'
-      path: '/api/stripe/connect/callback'
-      fullPath: '/api/stripe/connect/callback'
-      preLoaderRoute: typeof ApiStripeConnectCallbackRouteImport
+    '/embed/planner/$slug/inquiry': {
+      id: '/embed/planner/$slug/inquiry'
+      path: '/embed/planner/$slug/inquiry'
+      fullPath: '/embed/planner/$slug/inquiry'
+      preLoaderRoute: typeof EmbedPlannerSlugInquiryRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/dashboard/planner/reviews': {
-      id: '/_authenticated/dashboard/planner/reviews'
-      path: '/reviews'
-      fullPath: '/dashboard/planner/reviews'
-      preLoaderRoute: typeof AuthenticatedDashboardPlannerReviewsRouteImport
-      parentRoute: typeof AuthenticatedDashboardPlannerRoute
     }
   }
 }

@@ -51,6 +51,15 @@
       ]
     },
     {
+      "source": "/magazin/edition.html",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
       "source": "/api/(.*)",
       "headers": [
         {
