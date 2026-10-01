@@ -121,7 +121,7 @@ function MagazinIndexPage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-24 pt-8">
         {/* Navigation / Filter Tabs */}
         <div
-          className="flex items-center gap-2 pb-8 border-b border-[#173C32]/10 mb-10 overflow-x-auto no-scrollbar"
+          className="flex items-center gap-2 pb-8 border-b border-[#173C32]/10 mb-8 overflow-x-auto no-scrollbar"
           role="tablist"
           aria-label="Artikel-Kategorien filtern"
         >
@@ -142,6 +142,59 @@ function MagazinIndexPage() {
               {label}
             </button>
           ))}
+        </div>
+
+        {/* 3D Flip Magazine Feature Banner */}
+        <div className="mb-10 rounded-3xl overflow-hidden bg-gradient-to-r from-[#0d1813] via-[#14281D] to-[#1c3829] border-2 border-[#E6B84A]/30 p-6 sm:p-8 text-white shadow-2xl relative flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="relative z-10 max-w-xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#E6B84A]/10 border border-[#E6B84A]/30 px-3 py-1 text-[11px] font-bold text-[#E6B84A] uppercase tracking-wider mb-3">
+              <Sparkles className="h-3.5 w-3.5" />
+              {isDe ? "Neu: Interaktives E-Paper" : "New: Interactive E-Paper"}
+            </div>
+            <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
+              {isDe
+                ? "Speisely Magazin — Digital Flip Edition"
+                : "Speisely Magazine — Digital Flip Edition"}
+            </h3>
+            <p className="text-white/70 text-xs sm:text-sm leading-relaxed mb-4">
+              {isDe
+                ? "Erlebe unsere Reportagen im luxuriösen 3D-Doppelseiten-Layout mit realistischem Blättern, Audio-Feedback und Q&A-Interviews."
+                : "Experience our reports in luxury dual-page 3D flipbook layout with realistic page curl, audio feedback, and Q&A interviews."}
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                to="/magazin/reader"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#E6B84A] text-black px-5 py-2.5 text-xs font-bold shadow-lg shadow-[#E6B84A]/20 hover:bg-[#c49638] transition"
+              >
+                <span>{isDe ? "Digital Edition öffnen 📖" : "Open Digital Edition 📖"}</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <a
+                href="/speisely-magazin-edition.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition px-3 py-2"
+              >
+                <span>{isDe ? "Vollbildmodus ↗" : "Fullscreen ↗"}</span>
+              </a>
+            </div>
+          </div>
+
+          <div
+            className="relative z-10 w-full md:w-64 h-36 rounded-2xl overflow-hidden border border-white/20 shadow-xl flex-shrink-0 bg-black/40 flex items-center justify-center group cursor-pointer"
+            onClick={() => window.open("/speisely-magazin-edition.html", "_blank")}
+          >
+            <img
+              src="/hero-cinematic.webp"
+              alt="Digital Edition Preview"
+              className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition duration-500"
+            />
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+              <span className="p-3 rounded-full bg-[#E6B84A] text-black shadow-xl group-hover:scale-110 transition">
+                <ArrowRight className="h-5 w-5" />
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Stories Grid */}
