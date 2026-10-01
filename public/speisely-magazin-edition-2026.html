@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speisely Magazin — Digital Flip Edition (ISJ / Assa Abloy Style)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fraunces (Luxury Editorial Serif), Inter & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,600&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,400;1,600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <!-- StPageFlip (HTML5 Realistic 3D Page Turning Engine) -->
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              DEFAULT: '#14281D',
+              dark: '#0A150F',
+              light: '#1B3B2B',
+              muted: '#244735'
+            },
+            gold: {
+              DEFAULT: '#E6B84A',
+              dark: '#B28A3C',
+              light: '#F5D380',
+              shine: '#FFDF88'
+            },
+            sand: '#F7F5F0',
+            charcoal: '#1A1D20',
+          },
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            editorial: ['Playfair Display', 'serif'],
+            signature: ['Caveat', 'cursive'],
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #090e14;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Fixed Coordinate Canvas for Flipbook Engine */
+    #magazine-viewport {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .page {
+      background-color: #ffffff;
+      width: 520px;
+      height: 740px;
+      overflow: hidden;
+      position: relative;
+      box-sizing: border-box;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      backface-visibility: hidden;
+    }
+
+    .page-left {
+      border-right: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .page-right {
+      border-left: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Magazine Subtle Spine Shadow */
+    .page-left::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 30px;
+      background: linear-gradient(to left, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.02) 60%, transparent 100%);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .page-right::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 30px;
+      background: linear-gradient(to right, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.02) 60%, transparent 100%);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    /* Drop-cap for editorial elegance */
+    .drop-cap > p:first-of-type::first-letter {
+      float: left;
+      font-family: 'Fraunces', serif;
+      font-size: 3.2rem;
+      line-height: 0.8;
+      padding-top: 4px;
+      padding-right: 8px;
+      padding-bottom: 2px;
+      color: #14281D;
+      font-weight: 800;
+    }
+
+    .drop-cap-gold > p:first-of-type::first-letter {
+      float: left;
+      font-family: 'Fraunces', serif;
+      font-size: 3.2rem;
+      line-height: 0.8;
+      padding-top: 4px;
+      padding-right: 8px;
+      padding-bottom: 2px;
+      color: #E6B84A;
+      font-weight: 800;
+    }
+
+    /* Hide scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #E6B84A;
+    }
+
+    /* Custom Ticker animation */
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .animate-ticker {
+      display: inline-flex;
+      white-space: nowrap;
+      animation: ticker 35s linear infinite;
+    }
+    .animate-ticker:hover {
+      animation-play-state: paused;
+    }
+  </style>
+</head>
+
+<body class="flex flex-col h-screen w-screen select-none">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP TOOLBAR (Matching International Security Journal / Assa Abloy)    -->
+  <!-- ========================================================================= -->
+  <header class="h-14 bg-[#0f1722] border-b border-white/10 px-4 flex items-center justify-between z-50 text-xs text-gray-300 flex-shrink-0">
+    
+    <!-- Left: Branding with Speisely Official Logo -->
+    <div class="flex items-center space-x-3">
+      <a href="https://speisely.de" class="flex items-center gap-2.5 hover:opacity-90 transition">
+        <img src="/images/speisely-square-logo.jpg" alt="Speisely Logo" class="w-8 h-8 rounded-lg object-cover border border-gold/40 shadow">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 font-display text-sm font-bold tracking-wider text-white">
+            SPEISELY <span class="text-gold font-light tracking-widest text-[10px] uppercase px-1.5 py-0.5 rounded bg-gold/10 border border-gold/30">DIGITAL EDITION</span>
+          </div>
+          <span class="text-[10px] text-gray-400 font-medium">Das B2B-Leitmedium für Gastronomie, Catering & Food-Kultur</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Center: Page Navigation & Zoom Slider -->
+    <div class="flex items-center space-x-4">
+      
+      <!-- Page Navigation Controls -->
+      <div class="flex items-center bg-[#182332] rounded-lg border border-white/10 px-1 py-0.5 shadow-inner">
+        <button id="btn-first" title="Erste Seite" class="p-1.5 hover:bg-white/10 hover:text-white rounded transition">
+          <i data-lucide="chevrons-left" class="w-4 h-4"></i>
+        </button>
+        <button id="btn-prev" title="Vorherige Seite" class="p-1.5 hover:bg-white/10 hover:text-white rounded transition">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        </button>
+        
+        <div class="px-3 py-1 font-mono text-xs font-semibold text-white tracking-wider flex items-center gap-1.5 min-w-[75px] justify-center">
+          <span id="page-display">1 / 10</span>
+        </div>
+
+        <button id="btn-next" title="Nächste Seite" class="p-1.5 hover:bg-white/10 hover:text-white rounded transition">
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+        <button id="btn-last" title="Letzte Seite" class="p-1.5 hover:bg-white/10 hover:text-white rounded transition">
+          <i data-lucide="chevrons-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Zoom Slider Bar (ISJ / Assa Abloy Feature) -->
+      <div class="hidden md:flex items-center space-x-2 bg-[#182332] rounded-lg border border-white/10 px-3 py-1.5 shadow-inner">
+        <button id="btn-zoom-out" title="Verkleinern" class="hover:text-white transition">
+          <i data-lucide="zoom-out" class="w-3.5 h-3.5"></i>
+        </button>
+        <input 
+          type="range" 
+          id="zoom-slider" 
+          min="0.7" 
+          max="1.5" 
+          step="0.05" 
+          value="1" 
+          class="w-20 sm:w-28 accent-gold h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+        >
+        <button id="btn-zoom-in" title="Vergrößern" class="hover:text-white transition">
+          <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
+        </button>
+        <span id="zoom-value" class="font-mono text-[11px] text-gold w-10 text-right font-bold">100%</span>
+      </div>
+
+    </div>
+
+    <!-- Right: Sound, TOC & Fullscreen -->
+    <div class="flex items-center space-x-2">
+      <!-- Audio Toggle -->
+      <button id="btn-audio" title="Blätter-Sound an/aus" class="p-2 rounded-lg bg-[#182332] hover:bg-gold/20 hover:text-gold border border-white/10 text-gold transition">
+        <i data-lucide="volume-2" class="w-4 h-4" id="audio-icon"></i>
+      </button>
+
+      <!-- Thumbnails Drawer Button -->
+      <button id="btn-thumbnails" title="Seitenübersicht" class="p-2 rounded-lg bg-[#182332] hover:bg-white/10 hover:text-white border border-white/10 transition flex items-center gap-1.5">
+        <i data-lucide="layout-grid" class="w-4 h-4"></i>
+        <span class="hidden sm:inline text-[11px] font-semibold">Seiten</span>
+      </button>
+
+      <!-- Table of Contents Modal Button -->
+      <button id="btn-toc" title="Inhaltsverzeichnis" class="p-2 rounded-lg bg-[#182332] hover:bg-white/10 hover:text-white border border-white/10 transition">
+        <i data-lucide="list" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button id="btn-fullscreen" title="Vollbildmodus" class="p-2 rounded-lg bg-gold text-forest-dark font-bold hover:bg-gold-light transition shadow-lg shadow-gold/10">
+        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN FLIPBOOK STAGE (Fully Populated, Zero Dead Space)                 -->
+  <!-- ========================================================================= -->
+  <main class="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#17222e] via-[#0c1219] to-[#06090d]">
+    
+    <!-- Previous Page Arrow -->
+    <button id="arrow-left" class="absolute left-3 sm:left-6 z-40 p-3.5 rounded-full bg-black/65 hover:bg-gold hover:text-forest-dark border border-white/20 text-white backdrop-blur-md shadow-2xl transition transform hover:scale-110 active:scale-95">
+      <i data-lucide="chevron-left" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Next Page Arrow -->
+    <button id="arrow-right" class="absolute right-3 sm:right-6 z-40 p-3.5 rounded-full bg-black/65 hover:bg-gold hover:text-forest-dark border border-white/20 text-white backdrop-blur-md shadow-2xl transition transform hover:scale-110 active:scale-95">
+      <i data-lucide="chevron-right" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Scaled Viewport Wrapper -->
+    <div id="magazine-viewport">
+      
+      <!-- Flipbook Container -->
+      <div id="flipbook" class="shadow-[0_30px_70px_-15px_rgba(0,0,0,0.95)] rounded-sm">
+        
+        <!-- ================================================================= -->
+        <!-- PAGE 1: COVER (FRONT) — Authentic ISJ Master Layout               -->
+        <!-- ================================================================= -->
+        <div class="page page-right bg-[#080e16] text-white flex flex-col justify-between p-6 relative overflow-hidden border-2 border-gold/40">
+          
+          <!-- Subtle vignette overlay -->
+          <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/95 pointer-events-none z-10"></div>
+
+          <!-- TOP MASTHEAD (Exact ISJ Style) -->
+          <div class="relative z-20">
+            <!-- Masthead Bar -->
+            <div class="flex items-center justify-between border-b-2 border-white/20 pb-2">
+              <div class="flex items-center gap-3">
+                <img src="/images/speisely-square-logo.jpg" alt="Speisely Logo" class="w-12 h-12 rounded-xl object-cover border-2 border-gold shadow-lg">
+                <div>
+                  <div class="flex items-baseline gap-1.5">
+                    <span class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-none">SPEISELY</span>
+                    <span class="font-display text-2xl sm:text-3xl font-light tracking-wider text-gold leading-none">JOURNAL</span>
+                  </div>
+                  <div class="text-[9.5px] font-mono tracking-widest text-gray-300 uppercase mt-0.5">
+                    GASTRONOMIE, HOSPITALITY & COMMUNITY
+                  </div>
+                </div>
+              </div>
+
+              <!-- Issue Meta -->
+              <div class="text-right font-mono text-[9px] text-gray-400">
+                <p class="text-gold font-bold">Issue 04 | Herbst 2026</p>
+                <p>speisely.de/magazin</p>
+              </div>
+            </div>
+
+            <!-- Sub-Masthead Yellow/Gold Highlight Bar -->
+            <div class="bg-[#E6B84A] text-black px-2.5 py-1 text-[9px] font-bold tracking-wide flex justify-between items-center shadow-sm">
+              <span>Information, Analysen & Gastro-Insights für Gastronomen, Event-Caterer und die Food-Community</span>
+              <span class="font-mono text-[8px] bg-black/15 px-1 py-0.5 rounded">B2B & COMMUNITY</span>
+            </div>
+          </div>
+
+          <!-- LEFT TEASER BOX (Special Report) -->
+          <div class="relative z-20 mt-3 max-w-[220px]">
+            <div class="p-2.5 bg-black/80 backdrop-blur-md rounded-xl border-l-4 border-gold border-y border-r border-white/10 shadow-xl">
+              <span class="text-gold text-[8.5px] font-mono uppercase font-bold tracking-wider block">Special Report</span>
+              <h3 class="font-display font-extrabold text-sm text-white uppercase tracking-tight leading-tight mt-0.5">
+                B2B CATERING & CLOUD-POS
+              </h3>
+              <p class="text-[9px] text-gray-300 mt-1">
+                Produziert in Kooperation mit TechGlanz Studio
+              </p>
+            </div>
+          </div>
+
+          <!-- HERO PHOTO BACKGROUND -->
+          <div class="absolute inset-0 z-0">
+            <img src="/hero-cinematic.webp" alt="Speisely Journal Cover Hero" class="w-full h-full object-cover object-center opacity-75">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#080e16] via-[#080e16]/30 to-transparent"></div>
+          </div>
+
+          <!-- BOTTOM SECTION: HEADLINE & TEASERS (Exact ISJ Style) -->
+          <div class="relative z-20 mt-auto pt-4">
+            
+            <div class="flex items-end justify-between gap-4">
+              
+              <!-- Left: Big Bold Headline & Exclusive Tag -->
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="bg-red-600 text-white font-mono text-[9px] font-black uppercase px-2 py-0.5 rounded shadow">
+                    SPEISELY EXKLUSIV
+                  </span>
+                  <span class="text-gold text-[10px] font-mono font-bold tracking-wider">
+                    HEAD TO HEAD
+                  </span>
+                </div>
+
+                <h2 class="font-display text-3xl sm:text-4xl font-black text-white leading-[0.95] tracking-tight uppercase">
+                  DIE ZUKUNFT <br>
+                  <span class="text-gold italic font-editorial font-normal lowercase text-2xl sm:text-3xl">des modernen</span> <br>
+                  B2B-CATERINGS
+                </h2>
+
+                <p class="text-gray-300 text-[10.5px] mt-2 leading-snug line-clamp-2 max-w-sm">
+                  Wie provisionsfreie Direktangebote, mobile Live-Stationen und Community-Stories die Gastronomie 2026 stärken.
+                </p>
+              </div>
+
+              <!-- Right: "PLUS" Box Teasers -->
+              <div class="w-38 bg-black/85 backdrop-blur-md p-2.5 rounded-xl border border-white/15 shadow-2xl flex-shrink-0">
+                <span class="bg-gold text-black font-mono font-black text-[9px] uppercase px-1.5 py-0.5 rounded inline-block mb-1">
+                  PLUS
+                </span>
+                <ul class="text-[9.5px] space-y-1.5 text-gray-200 font-medium">
+                  <li class="border-b border-white/10 pb-1">✦ 13J. Schnitzel Schmiede</li>
+                  <li class="border-b border-white/10 pb-1">✦ Alzaeem Charcoal Grill</li>
+                  <li class="border-b border-white/10 pb-1">✦ Community Stories (Prag/Berlin)</li>
+                  <li>✦ San Sebastian Cheesecake</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <!-- Bottom Folio Bar -->
+            <div class="flex justify-between items-center text-[9px] font-mono text-gray-400 border-t border-white/15 pt-2 mt-3">
+              <span>speisely.de/magazin</span>
+              <div class="flex items-center gap-2">
+                <span>ISSN 2940-1234</span>
+                <div class="h-2.5 w-12 bg-white/20 rounded-sm"></div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 2: FULL-PAGE AD (INSIDE FRONT COVER — Altronix Replica)      -->
+        <!-- ================================================================= -->
+        <div class="page page-left bg-[#070d1a] text-white p-7 flex flex-col justify-between border-r border-black/10 relative overflow-hidden">
+          
+          <!-- Background Glow Elements -->
+          <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/15 blur-3xl pointer-events-none rounded-full"></div>
+
+          <!-- 1. Top Logo Header -->
+          <div class="relative z-10 flex items-center justify-center gap-3 pt-1">
+            <img src="/images/speisely-square-logo.jpg" alt="Speisely Logo" class="w-9 h-9 rounded-full object-cover border-2 border-cyan-400 shadow-lg">
+            <h3 class="font-display text-2xl font-bold tracking-wider text-white">
+              SPEISELY <span class="text-cyan-400 font-sans font-light">PRO</span><span class="text-xs text-cyan-300 align-top">®</span>
+            </h3>
+          </div>
+
+          <!-- 2. Middle: 3 High-Tech Hardware / Cloud Units -->
+          <div class="relative z-10 my-3 grid grid-cols-3 gap-2.5">
+            
+            <!-- Box 1 -->
+            <div class="bg-gradient-to-b from-cyan-950/40 to-slate-900 border border-cyan-500/40 rounded-xl p-2 flex flex-col items-center justify-between h-36 shadow-lg relative overflow-hidden group">
+              <div class="absolute inset-0 bg-cyan-400/5 group-hover:bg-cyan-400/15 transition"></div>
+              <div class="w-full h-20 rounded-lg overflow-hidden border border-white/10 bg-black/60 relative flex items-center justify-center">
+                <img src="/magazin/chicken-krush-prag/ck-new-02.webp" alt="Kitchen Engine" class="w-full h-full object-cover opacity-85">
+                <div class="absolute inset-0 bg-cyan-950/40 flex items-center justify-center">
+                  <i data-lucide="server" class="w-7 h-7 text-cyan-300"></i>
+                </div>
+              </div>
+              <span class="font-mono text-[8px] font-bold text-cyan-300 uppercase tracking-wider text-center mt-1">
+                SMART ORDER ENGINE
+              </span>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="bg-gradient-to-b from-blue-950/40 to-slate-900 border border-blue-400/50 rounded-xl p-2 flex flex-col items-center justify-between h-36 shadow-lg relative overflow-hidden group">
+              <div class="absolute inset-0 bg-blue-400/5 group-hover:bg-blue-400/15 transition"></div>
+              <div class="w-full h-20 rounded-lg overflow-hidden border border-white/10 bg-black/60 relative flex items-center justify-center">
+                <img src="/magazin/alzaeem-berlin/grill-hero-clean.webp" alt="Outdoor POS" class="w-full h-full object-cover opacity-85">
+                <div class="absolute inset-0 bg-blue-950/40 flex items-center justify-center">
+                  <i data-lucide="tablet" class="w-7 h-7 text-blue-300"></i>
+                </div>
+              </div>
+              <span class="font-mono text-[8px] font-bold text-blue-300 uppercase tracking-wider text-center mt-1">
+                HARDENED OUTDOOR POS
+              </span>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="bg-gradient-to-b from-indigo-950/40 to-slate-900 border border-indigo-400/50 rounded-xl p-2 flex flex-col items-center justify-between h-36 shadow-lg relative overflow-hidden group">
+              <div class="absolute inset-0 bg-indigo-400/5 group-hover:bg-indigo-400/15 transition"></div>
+              <div class="w-full h-20 rounded-lg overflow-hidden border border-white/10 bg-black/60 relative flex items-center justify-center">
+                <img src="/magazin/garcon-de-cafe-berlin/garcon-02.webp" alt="Wall Display" class="w-full h-full object-cover opacity-85">
+                <div class="absolute inset-0 bg-indigo-950/40 flex items-center justify-center">
+                  <i data-lucide="monitor" class="w-7 h-7 text-indigo-300"></i>
+                </div>
+              </div>
+              <span class="font-mono text-[8px] font-bold text-indigo-300 uppercase tracking-wider text-center mt-1">
+                WALL MOUNT KDS
+              </span>
+            </div>
+
+          </div>
+
+          <!-- 3. Big Bold Ad Headline (Exact Altronix Style) -->
+          <div class="relative z-10">
+            <h2 class="font-sans text-xl font-black tracking-tight text-white uppercase leading-tight">
+              ACCESS & CATERING INTEGRATION... <br>
+              <span class="text-cyan-400">... ENDLESS POSSIBILITIES</span>
+            </h2>
+
+            <p class="text-[11px] text-gray-300 mt-2 leading-relaxed">
+              <strong class="text-white">SPEISELY PRO™</strong> lets you design and deploy your direct B2B corporate catering with automated workflows in virtually any kitchen environment.
+            </p>
+
+            <!-- 4. Bullet Points -->
+            <ul class="text-[10px] text-gray-300 space-y-1.5 mt-2.5 font-medium">
+              <li class="flex items-start gap-1.5">
+                <span class="text-cyan-400 font-bold">•</span>
+                <span>Simplifies inquiry management & automatic quote generation</span>
+              </li>
+              <li class="flex items-start gap-1.5">
+                <span class="text-cyan-400 font-bold">•</span>
+                <span>Reduces booking time & administrative cost by up to 70%</span>
+              </li>
+              <li class="flex items-start gap-1.5">
+                <span class="text-cyan-400 font-bold">•</span>
+                <span>Scalable for single boutique kitchens and nationwide catering fleets</span>
+              </li>
+              <li class="flex items-start gap-1.5">
+                <span class="text-cyan-400 font-bold">•</span>
+                <span>Available as pre-configured and cloud-synced kits with DATEV & Stripe</span>
+              </li>
+            </ul>
+
+            <p class="text-[10.5px] text-cyan-200 mt-2 font-medium">
+              Streamline your hospitality operations with <strong>SPEISELY PRO™</strong>. Only from Speisely.
+            </p>
+          </div>
+
+          <!-- 5. Tagline & Footer -->
+          <div class="relative z-10 pt-2 border-t border-white/10 flex flex-col items-center text-center">
+            <div class="font-signature text-2xl text-cyan-300 tracking-wide mb-1">
+              Grow With It™
+            </div>
+            <div class="text-[8.5px] font-mono text-gray-400">
+              © 2026 Speisely Corporation — <a href="https://speisely.de/partner" class="text-cyan-400 hover:underline">speisely.de/partner</a>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 3: MASTHEAD IMPRESSUM & EDITOR'S NOTE (Exact ISJ Page 3)     -->
+        <!-- ================================================================= -->
+        <div class="page page-right bg-[#fbfbf9] text-charcoal p-6 flex flex-col justify-between border-l border-black/10">
+          
+          <div class="flex-1 flex gap-5">
+            
+            <!-- LEFT COLUMN: Masthead Directory & Publisher Impressum (~34% width) -->
+            <div class="w-[34%] bg-[#f0f3f6] p-2.5 rounded-xl border border-gray-200 flex flex-col justify-between text-[8.5px] text-gray-700 leading-tight">
+              
+              <div class="space-y-2">
+                <!-- Small Header Logo -->
+                <div class="flex items-center gap-1.5 border-b border-gray-300 pb-1.5">
+                  <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-6 h-6 rounded-md object-cover border border-forest/30">
+                  <div>
+                    <span class="font-display font-black text-forest text-[11px] block leading-none">SPEISELY</span>
+                    <span class="font-mono text-[7px] text-gray-500 uppercase">JOURNAL</span>
+                  </div>
+                </div>
+
+                <!-- Editorial Team Directory -->
+                <div>
+                  <p class="font-bold text-forest">Ahmad F.</p>
+                  <p class="text-gray-500 text-[8px]">Managing Editor</p>
+                  <a href="mailto:ahmad@speisely.de" class="text-red-600 hover:underline font-mono text-[7.5px]">ahmad@speisely.de</a>
+                </div>
+
+                <div>
+                  <p class="font-bold text-forest">Faizan A.</p>
+                  <p class="text-gray-500 text-[8px]">Editorial Director</p>
+                  <a href="mailto:faizan@speisely.de" class="text-red-600 hover:underline font-mono text-[7.5px]">faizan@speisely.de</a>
+                </div>
+
+                <div>
+                  <p class="font-bold text-forest">Sarah Lindner</p>
+                  <p class="text-gray-500 text-[8px]">Commercial Director</p>
+                  <a href="mailto:partner@speisely.de" class="text-red-600 hover:underline font-mono text-[7.5px]">partner@speisely.de</a>
+                </div>
+
+                <div>
+                  <p class="font-bold text-forest">David Weber</p>
+                  <p class="text-gray-500 text-[8px]">Art & Design Director</p>
+                  <a href="mailto:design@speisely.de" class="text-red-600 hover:underline font-mono text-[7.5px]">design@speisely.de</a>
+                </div>
+
+                <div>
+                  <p class="font-bold text-forest">Marc Küster</p>
+                  <p class="text-gray-500 text-[8px]">Production Manager</p>
+                  <a href="mailto:tech@speisely.de" class="text-red-600 hover:underline font-mono text-[7.5px]">tech@speisely.de</a>
+                </div>
+
+                <div>
+                  <p class="font-bold text-forest">Subscriptions & B2B</p>
+                  <a href="mailto:abo@speisely.de" class="text-red-600 hover:underline font-mono text-[7.5px]">abo@speisely.de</a>
+                </div>
+              </div>
+
+              <!-- Publisher / Legal Imprint Block -->
+              <div class="border-t border-gray-300 pt-2 space-y-1 text-[8px] text-gray-500">
+                <p>
+                  <strong class="text-gray-700">Speisely Journal</strong> is published by Speisely Technologies GmbH, Friedrichstraße, Berlin.
+                </p>
+                <p>ISSN: 2940-1234</p>
+                <p class="text-red-700 font-bold font-mono">speisely.de/magazin</p>
+                
+                <div class="pt-1 flex items-center gap-2">
+                  <span class="font-bold text-[8px] text-forest border border-forest/30 px-1 rounded">DEHOGA</span>
+                  <span class="font-bold text-[8px] text-emerald-800 border border-emerald-800/30 px-1 rounded">BIO</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Editor's Note & Partners (~66% width) -->
+            <div class="w-[66%] flex flex-col justify-between">
+              
+              <!-- Editor Header & Portrait -->
+              <div>
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <h2 class="font-editorial text-3xl font-bold text-forest leading-none">
+                      Editor's note
+                    </h2>
+                    <p class="text-xs font-semibold text-gold-dark italic mt-1">
+                      By Ahmad F., Managing Editor
+                    </p>
+                  </div>
+
+                  <!-- Editor Portrait Photo -->
+                  <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-gold shadow-md bg-forest flex-shrink-0">
+                    <img src="/hero-cinematic.webp" alt="Editor Portrait" class="w-full h-full object-cover">
+                  </div>
+                </div>
+
+                <!-- Editorial Copy with Highlighted First Line (ISJ Style) -->
+                <div class="text-[10.5px] leading-relaxed text-charcoal/90 space-y-2">
+                  <p>
+                    <span class="bg-[#E6B84A] text-black font-bold px-1 py-0.5 rounded-sm">Welcome to the Herbst 2026</span> 
+                    <strong>edition of Speisely Journal.</strong>
+                  </p>
+                  <p>
+                    Where does the time go? In einer dynamischen Hospitality-Landschaft halten wir an dem fest, was wirklich zählt: handwerkliche Perfektion, kulinarische Leidenschaft und transparente Plattformen.
+                  </p>
+                  <p>
+                    In dieser Ausgabe blicken wir hinter die Kulissen: vom 13-jährigen Festmeilen-Erfolg der <em>Schnitzel Schmiede</em> über das rauchige Holzkohlefeuer von <em>Alzaeem</em> bis hin zu den viralen Community-Entdeckungen bei <em>Chicken Krush</em> in Prag und <em>Garçon de Café</em> in Berlin.
+                  </p>
+                  <p>
+                    Wir wünschen Ihnen inspirierende Einblicke und genussvolle Momente.
+                  </p>
+                  <p class="pt-0.5">
+                    Herzlichst,
+                  </p>
+                </div>
+
+                <!-- Signature Graphic -->
+                <div class="flex justify-end pt-1">
+                  <div class="font-signature text-3xl text-forest -rotate-3">
+                    Ahmad F.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom Partner Strip (ISJ "Proud to Partner With") -->
+              <div class="border-t border-forest/15 pt-2 mt-2">
+                <p class="text-[8.5px] font-mono font-bold uppercase tracking-wider text-forest/70 mb-1.5">
+                  PROUD TO PARTNER WITH
+                </p>
+
+                <!-- Partner Badges Grid -->
+                <div class="grid grid-cols-4 gap-1.5 text-center text-[7.5px] font-bold font-mono">
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-forest">DEHOGA</span>
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-emerald-800">BIO-SIEGEL</span>
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-red-700">SLOW FOOD</span>
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-blue-800">RATIONAL</span>
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-amber-800">METRO PRO</span>
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-cyan-800">STRIPE B2B</span>
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-purple-800">DATEV CLOUD</span>
+                  <span class="p-1 bg-gray-100 border border-gray-300 rounded text-black">TECHGLANZ</span>
+                </div>
+
+                <!-- Fine Print Legal -->
+                <p class="text-[7px] text-gray-400 mt-2 leading-tight">
+                  © 2026 Speisely Technologies GmbH. No part of this publication may be reproduced without prior written permission.
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Bottom Folio -->
+          <div class="text-[9px] font-mono text-forest/40 border-t border-forest/10 pt-1.5 flex justify-between mt-2">
+            <span>Speisely Journal · Herbst 2026</span>
+            <span>3</span>
+          </div>
+
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 4: FULL-PAGE ADVERTORIAL SPREAD (Dallas SIA / Assa Style)    -->
+        <!-- ================================================================= -->
+        <div class="page page-left bg-[#080d14] text-white p-7 flex flex-col justify-between border-r border-black/10 relative overflow-hidden">
+          
+          <!-- Top Ad Eyebrow Banner (Like ISJ SIA Dallas Ad) -->
+          <div class="relative z-10 flex justify-between items-center border-b border-white/15 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 bg-red-500 rounded-sm"></span>
+              <span class="text-[10px] font-mono font-bold tracking-widest text-white uppercase">SPEISELY ENTERPRISE</span>
+            </div>
+            <span class="bg-gradient-to-r from-red-600 to-red-500 text-white font-mono text-[9px] font-extrabold uppercase px-2 py-0.5 rounded shadow">
+              B2B LAUNCH 2026
+            </span>
+          </div>
+
+          <!-- Hero Image & Big Bold Headline -->
+          <div class="relative z-10 my-2 flex-1 flex flex-col justify-between">
+            <div class="relative rounded-2xl overflow-hidden border border-white/20 h-44 bg-black shadow-2xl">
+              <img src="/magazin/alzaeem-berlin/table-spread-pro.webp" alt="Speisely Enterprise Catering Feast" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-[#080d14] via-transparent to-black/30"></div>
+              
+              <!-- Floating Overlay Logo -->
+              <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md border border-white/20 px-3 py-1 rounded-lg">
+                <span class="font-display font-bold text-xs text-gold tracking-wider">SPEISELY BUSINESS</span>
+              </div>
+            </div>
+
+            <!-- Big Impact Headline -->
+            <div class="mt-2">
+              <h2 class="font-display text-2xl font-extrabold text-white leading-tight tracking-tight">
+                Where gastronomy excellence, corporate catering & event logistics <span class="text-gold">converge.</span>
+              </h2>
+              <p class="text-xs text-white/70 mt-1 leading-relaxed line-clamp-2">
+                Deutschlands führendes B2B-Netzwerk für Firmenfeiern, Messe-Catering und Großveranstaltungen. Direkt buchen mit 100% Preis-Transparenz.
+              </p>
+            </div>
+
+            <!-- Red / Purple Chevron Accent Bar -->
+            <div class="my-2 py-1.5 px-3 bg-gradient-to-r from-red-700 via-[#14281D] to-gold rounded-lg flex items-center justify-between text-[10px] font-mono font-bold text-white uppercase tracking-wider">
+              <span>BERLIN</span> • <span>NRW</span> • <span>MÜNCHEN</span> • <span>FRANKFURT</span> • <span>HAMBURG</span>
+            </div>
+
+            <!-- Event / Booking Details Card -->
+            <div class="bg-white/5 border border-white/10 rounded-xl p-3 flex items-center justify-between gap-3">
+              <div>
+                <p class="text-[10px] text-gold font-mono uppercase font-bold">Enterprise Catering Portal</p>
+                <h4 class="text-xs font-bold text-white leading-snug">Firmen-Catering ab 18€ / Person</h4>
+                <p class="text-[10px] text-white/60">Über 47 verifizierte Spitzen-Caterer.</p>
+              </div>
+
+              <!-- QR Code Mock -->
+              <div class="w-12 h-12 bg-white p-1 rounded-lg flex-shrink-0 flex items-center justify-center shadow">
+                <div class="w-full h-full border border-black border-dashed flex items-center justify-center text-black font-mono text-[7px] font-bold text-center leading-none">
+                  SCAN<br>TO BOOK
+                </div>
+              </div>
+            </div>
+
+            <!-- Action CTA Button -->
+            <a href="https://speisely.de/catering/events" target="_blank" class="mt-2 block w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-bold text-xs uppercase tracking-wider text-center shadow-lg transition transform hover:scale-[1.01]">
+              JETZT EVENT-CATERING ANFRAGEN &nbsp;❯
+            </a>
+          </div>
+
+          <!-- Bottom Ad Footer -->
+          <div class="relative z-10 text-[9px] font-mono text-white/40 border-t border-white/10 pt-2 flex justify-between items-center">
+            <span>SPEISELY ENTERPRISE IS A FREE B2B SERVICE</span>
+            <span>POWERED BY TECHGLANZ</span>
+          </div>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 5: TABLE OF CONTENTS (INHALTSVERZEICHNIS)                     -->
+        <!-- ================================================================= -->
+        <div class="page page-right bg-sand p-7 flex flex-col justify-between border-l border-black/10">
+          <div class="flex-1 flex flex-col justify-between">
+            <!-- Header Folio -->
+            <div class="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-forest/60 border-b border-forest/15 pb-2 mb-2">
+              <span>INHALTSVERZEICHNIS</span>
+              <span>HERBST 2026</span>
+            </div>
+
+            <div>
+              <h2 class="font-display text-2xl font-extrabold text-forest mb-1 tracking-tight">
+                In dieser Ausgabe
+              </h2>
+              <p class="text-[11px] text-charcoal/70 mb-3">Die Top-Themen für Gastronomen, Caterer & Hospitality-Leader.</p>
+            </div>
+
+            <div class="space-y-2.5 flex-1 flex flex-col justify-between">
+              <!-- Item 1: Partner Story 1 -->
+              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-white border border-forest/10 hover:border-gold transition cursor-pointer shadow-sm" onclick="flipbook.flip(5)">
+                <span class="font-display text-2xl font-bold text-gold-dark w-8">06</span>
+                <div class="flex-1">
+                  <span class="bg-forest/10 text-forest text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded font-mono">Fest-Reportage</span>
+                  <h4 class="font-bold text-forest text-xs leading-snug mt-0.5">13 JAHRE SCHNITZEL SCHMIEDE</h4>
+                  <p class="text-[10px] text-charcoal/70">Mönchengladbach: Meisterklasse des Panierens.</p>
+                </div>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-forest/40"></i>
+              </div>
+
+              <!-- Item 2: Partner Story 2 -->
+              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-white border border-forest/10 hover:border-gold transition cursor-pointer shadow-sm" onclick="flipbook.flip(6)">
+                <span class="font-display text-2xl font-bold text-gold-dark w-8">07</span>
+                <div class="flex-1">
+                  <span class="bg-[#38bdf8]/10 text-[#0369a1] text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded font-mono">Grillmeister Q&A</span>
+                  <h4 class="font-bold text-forest text-xs leading-snug mt-0.5">ALZAEEM HOLZKOHLEGRILL BERLIN</h4>
+                  <p class="text-[10px] text-charcoal/70">Sonnenallee: Mix Grill #44 & syrische Mezze-Kultur.</p>
+                </div>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-forest/40"></i>
+              </div>
+
+              <!-- Item 3: Community Stories Showcase -->
+              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-white border border-forest/10 hover:border-gold transition cursor-pointer shadow-sm" onclick="flipbook.flip(7)">
+                <span class="font-display text-2xl font-bold text-gold-dark w-8">08</span>
+                <div class="flex-1">
+                  <span class="bg-amber-100 text-amber-900 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded font-mono">Community Stories</span>
+                  <h4 class="font-bold text-forest text-xs leading-snug mt-0.5">CHICKEN KRUSH & GARÇON DE CAFÉ</h4>
+                  <p class="text-[10px] text-charcoal/70">Prag, Berlin-Mitte & Friedrichshain im Community-Test.</p>
+                </div>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-forest/40"></i>
+              </div>
+
+              <!-- Item 4: Dessert & Technology -->
+              <div class="flex items-center gap-3 p-2.5 rounded-xl bg-white border border-forest/10 hover:border-gold transition cursor-pointer shadow-sm" onclick="flipbook.flip(8)">
+                <span class="font-display text-2xl font-bold text-gold-dark w-8">09</span>
+                <div class="flex-1">
+                  <span class="bg-purple-100 text-purple-900 text-[8.5px] font-bold uppercase px-1.5 py-0.5 rounded font-mono">Dessert & Tech</span>
+                  <h4 class="font-bold text-forest text-xs leading-snug mt-0.5">SAN SEBASTIAN & SIMULATOR</h4>
+                  <p class="text-[10px] text-charcoal/70">Baskischer Cheesecake & TechGlanz Simulator.</p>
+                </div>
+                <i data-lucide="arrow-right" class="w-4 h-4 text-forest/40"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page Number -->
+          <div class="text-[10px] font-mono text-forest/50 border-t border-forest/10 pt-2 flex justify-between mt-2">
+            <span>speisely.de/magazin</span>
+            <span>5</span>
+          </div>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 6: EDITORIAL REPORTAGE — SCHNITZEL SCHMIEDE                   -->
+        <!-- ================================================================= -->
+        <div class="page page-left bg-white p-7 flex flex-col justify-between border-r border-black/10">
+          <div class="flex-1 flex flex-col justify-between">
+            
+            <!-- 1. Header Section -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="bg-[#E6B84A] text-black font-mono text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded shadow-sm">
+                  Market Analysis
+                </span>
+                <span class="text-[10px] font-mono text-forest/50 font-bold uppercase">MÖNCHENGLADBACH</span>
+              </div>
+
+              <h2 class="font-display text-2xl font-extrabold text-forest leading-tight mb-1 tracking-tight">
+                13 Jahre <span class="text-gold-dark">SCHNITZEL SCHMIEDE:</span> Tradition & Meilenkultur
+              </h2>
+
+              <p class="text-xs font-semibold text-charcoal/80 mb-2 leading-relaxed">
+                Beim EineStadt-Fest in Mönchengladbach strömen zehntausende Feinschmecker zur Bismarckstraße. Was macht das Geheimnis aus?
+              </p>
+            </div>
+
+            <!-- 2. Featured Image Box -->
+            <div class="relative rounded-2xl overflow-hidden border border-forest/15 shadow-md h-36 bg-gray-100 my-1">
+              <img src="/magazin/albaik/albaik-shawarma-rice-hero.webp" alt="Schnitzel Schmiede Fest" class="w-full h-full object-cover">
+              <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded text-[9.5px] font-bold text-gold uppercase font-mono">
+                🏆 NRW Fest-Meilen Benchmark
+              </div>
+            </div>
+
+            <!-- 3. 2-Column Balanced Editorial Text -->
+            <div class="grid grid-cols-2 gap-3 text-[11px] leading-relaxed text-charcoal/90">
+              <div class="drop-cap">
+                <p class="mb-1.5">
+                  Kompromisslose Frische ist das oberste Gesetz. Wenn zur Stoßzeit hunderte Portionen pro Stunde ausgegeben werden, entscheidet jeder Handgriff über die Panade.
+                </p>
+                <p>
+                  Das Fleisch wird täglich frisch vorbereitet, in Butterschmalz souffliert und mit hausgemachten Beilagen veredelt.
+                </p>
+              </div>
+
+              <div>
+                <div class="p-2 bg-sand rounded-xl border border-forest/10 mb-1.5 shadow-sm">
+                  <p class="font-bold text-forest text-[9.5px] uppercase font-mono text-gold-dark">Speisely Fest-Notiz:</p>
+                  <p class="text-[10px] italic text-charcoal/80 mt-0.5">
+                    „Ein vertrauter Platz auf der kulinarischen Meile seit 2013.“
+                  </p>
+                </div>
+                <p>
+                  Für 2026 baut die Schmiede ihr mobiles Firmen-Catering mit Live-Cooking-Stationen in ganz NRW weiter aus.
+                </p>
+              </div>
+            </div>
+
+            <!-- 4. BOTTOM STRIP BANNER AD (RED BOX) -->
+            <div class="mt-2 p-3 bg-gradient-to-r from-[#8b1515] to-[#b91c1c] text-white rounded-xl shadow-lg border border-red-400/30 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center font-display font-bold text-gold text-lg flex-shrink-0">
+                  ⚡
+                </div>
+                <div>
+                  <p class="font-bold text-xs text-white leading-tight">Direkt-Bestellungen für dein Restaurant</p>
+                  <p class="text-[10px] text-white/80 line-clamp-1">0% Bestellprovision & Cloud-Küchendrucker. Sofort startklar.</p>
+                </div>
+              </div>
+              <a href="https://speisely.de/partner/webseiten" target="_blank" class="flex-shrink-0 px-3 py-1.5 bg-white text-red-700 font-bold text-[10px] uppercase rounded-lg shadow hover:bg-gray-100 transition">
+                Speisely ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottom Folio -->
+          <div class="text-[9.5px] font-mono text-forest/40 border-t border-forest/10 pt-1.5 flex justify-between mt-2">
+            <span>6 &nbsp; Herbst 2026</span>
+            <span>speisely.de/magazin</span>
+          </div>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 7: EDITORIAL REPORTAGE — ALZAEEM NEUKÖLLN                     -->
+        <!-- ================================================================= -->
+        <div class="page page-right bg-[#0a131b] text-white p-7 flex flex-col justify-between border-l border-black/10">
+          <div class="flex-1 flex flex-col justify-between">
+            
+            <!-- 1. Header Section -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <span class="bg-[#38bdf8] text-black font-mono text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded shadow-sm">
+                  Spotlight Feature
+                </span>
+                <span class="text-[10px] font-mono text-[#38bdf8]/60 font-bold uppercase">BERLIN-NEUKÖLLN</span>
+              </div>
+
+              <h2 class="font-display text-2xl font-extrabold text-white leading-tight mb-1 tracking-tight">
+                ALZAEEM: <span class="text-[#38bdf8]">Holzkohle-Kultur</span> auf der Sonnenallee
+              </h2>
+
+              <p class="text-xs font-semibold text-white/80 mb-2 leading-relaxed">
+                Ein Fest aus Feuer, Gewürzen und Gastfreundschaft: Wie Mix Grill #44 zum Neuköllner Benchmark wurde.
+              </p>
+            </div>
+
+            <!-- 2. Featured Image Box (Real Mix Grill Photo!) -->
+            <div class="relative rounded-2xl overflow-hidden border border-white/20 shadow-md h-36 bg-gray-900 my-1">
+              <img src="/magazin/alzaeem-berlin/mix-grill-close.webp" alt="Alzaeem Holzkohlegrill" class="w-full h-full object-cover">
+              <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded text-[9.5px] font-bold text-[#38bdf8] uppercase font-mono">
+                🔥 Buchen-Holzkohle Tradition
+              </div>
+            </div>
+
+            <!-- 3. 2-Column Balanced Text -->
+            <div class="grid grid-cols-2 gap-3 text-[11px] leading-relaxed text-white/80">
+              <div>
+                <p class="mb-1.5">
+                  Der Duft von gegrilltem Shish Tawook und Kebab Halabi zieht bereits hunderte Meter vor dem Restaurant durch die Sonnenallee.
+                </p>
+                <p>
+                  Über 24 Stunden marinierte Fleischspieße treffen auf glühende Buchen-Holzkohle für maximale Röstaromen.
+                </p>
+              </div>
+
+              <div>
+                <div class="p-2 bg-white/5 rounded-xl border border-[#38bdf8]/30 mb-1.5 shadow-sm">
+                  <p class="font-bold text-[#38bdf8] text-[9.5px] uppercase font-mono">Tasting Profile:</p>
+                  <p class="text-[10px] text-white/90 mt-0.5">
+                    Knoblauch-Toum, frisches Fladenbrot & Granatapfel-Mezze.
+                  </p>
+                </div>
+                <p>
+                  Ab sofort auch als exklusives Firmen-Catering über Speisely für Großveranstaltungen bis 500 Personen buchbar.
+                </p>
+              </div>
+            </div>
+
+            <!-- 4. BOTTOM STRIP BANNER AD (BLUE BOX) -->
+            <div class="mt-2 p-3 bg-gradient-to-r from-[#0369a1] to-[#0284c7] text-white rounded-xl shadow-lg border border-sky-400/30 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center font-display font-bold text-white text-lg flex-shrink-0">
+                  🌐
+                </div>
+                <div>
+                  <p class="font-bold text-xs text-white leading-tight">High-End Websites für Caterer & Gastro</p>
+                  <p class="text-[10px] text-white/80 line-clamp-1">PageSpeed 99+, KI-SEO & Buchungs-Engine by TechGlanz.</p>
+                </div>
+              </div>
+              <a href="https://speisely.de/partner/webseiten" target="_blank" class="flex-shrink-0 px-3 py-1.5 bg-white text-sky-800 font-bold text-[10px] uppercase rounded-lg shadow hover:bg-gray-100 transition">
+                Kostenlos testen ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottom Folio -->
+          <div class="text-[9.5px] font-mono text-white/40 border-t border-white/10 pt-1.5 flex justify-between mt-2">
+            <span>speisely.de/magazin</span>
+            <span>Herbst 2026 &nbsp; 7</span>
+          </div>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 8: SPEISELY COMMUNITY ARTICLE (PRAG, BERLIN-MITTE & F'HAIN)  -->
+        <!-- ================================================================= -->
+        <div class="page page-left bg-white p-7 flex flex-col justify-between border-r border-black/10">
+          <div class="flex-1 flex flex-col justify-between">
+            
+            <!-- Header Section -->
+            <div>
+              <div class="flex justify-between items-center border-b-2 border-forest pb-1.5 mb-2">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-forest font-mono">COMMUNITY REPORT</span>
+                <span class="text-[10px] font-mono text-forest/50">PRAG · BERLIN-MITTE · FRIEDRICHSHAIN</span>
+              </div>
+
+              <h3 class="font-display text-2xl font-bold text-forest leading-tight mb-1">
+                Community Stories: <span class="text-gold-dark">Authentische Restaurantbesuche</span>
+              </h3>
+
+              <p class="text-[11px] text-charcoal/80 mb-2 leading-snug">
+                Echte Einsendungen aus der Speisely Community: Von koreanischem Crunch in Prag bis zu Specialty Coffee im Berliner EDGE Atrium.
+              </p>
+            </div>
+
+            <!-- Top Community Feature: Chicken Krush Prag (Real Photo!) -->
+            <div class="p-2.5 rounded-2xl bg-sand border border-forest/10 shadow-sm flex items-center gap-3">
+              <div class="w-24 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-forest/15 relative">
+                <img src="/magazin/chicken-krush-prag/chicken-krush-real-01.webp" alt="Chicken Krush Prag" class="w-full h-full object-cover">
+                <span class="absolute top-1 left-1 bg-gold text-forest-dark text-[7.5px] font-bold px-1 rounded font-mono">PRAG</span>
+              </div>
+              <div class="flex-1">
+                <h4 class="font-display font-bold text-xs text-forest leading-tight">
+                  Chicken Krush: Yangnyeom & Snow Flake
+                </h4>
+                <p class="text-[10px] text-charcoal/80 mt-0.5 leading-tight">
+                  Doppelt frittiertes Korean Chicken, Rose Tteokbokki und kontaktlose QR-Bestellung am Tisch in Prag-Nové Město.
+                </p>
+              </div>
+            </div>
+
+            <!-- 2-Grid Lower Community Stories: Garçon de Café & Thronburger -->
+            <div class="grid grid-cols-2 gap-2.5 my-1">
+              
+              <!-- Story 2: Garçon de Café (Real Photo!) -->
+              <div class="p-2 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
+                <div class="h-16 rounded-lg overflow-hidden mb-1.5 relative border border-gray-300">
+                  <img src="/magazin/garcon-de-cafe-berlin/garcon-01.webp" alt="Garçon de Café" class="w-full h-full object-cover">
+                  <span class="absolute top-1 left-1 bg-forest text-white text-[7px] font-bold px-1 rounded">BERLIN-MITTE</span>
+                </div>
+                <h5 class="font-bold text-[10.5px] text-forest leading-tight">Garçon de Café</h5>
+                <p class="text-[9px] text-charcoal/70 mt-0.5 leading-snug">
+                  Specialty Coffee & Atrium-Atmosphäre im EDGE Grand Central.
+                </p>
+              </div>
+
+              <!-- Story 3: Thronburger (Real Photo!) -->
+              <div class="p-2 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between">
+                <div class="h-16 rounded-lg overflow-hidden mb-1.5 relative border border-gray-300">
+                  <img src="/magazin/thronburger-berlin/thronburger-01.webp?v=2" alt="Thronburger" class="w-full h-full object-cover">
+                  <span class="absolute top-1 left-1 bg-red-800 text-white text-[7px] font-bold px-1 rounded">F'HAIN</span>
+                </div>
+                <h5 class="font-bold text-[10.5px] text-forest leading-tight">Thronburger</h5>
+                <p class="text-[9px] text-charcoal/70 mt-0.5 leading-snug">
+                  Halal Beef Burger im dunklen Sesam-Brioche & Berliner Straßennamen.
+                </p>
+              </div>
+
+            </div>
+
+            <!-- Community CTA Box -->
+            <div class="p-2.5 bg-forest/5 rounded-xl border border-forest/15 flex items-center justify-between">
+              <span class="text-[10px] text-forest font-medium">Teile dein Gastro-Erlebnis: <strong>info@speisely.de</strong></span>
+              <a href="https://speisely.de/community" target="_blank" class="text-[9px] font-bold text-gold-dark hover:underline font-mono">
+                speisely.de/community ↗
+              </a>
+            </div>
+          </div>
+
+          <div class="text-[10px] font-mono text-forest/40 border-t border-forest/10 pt-1.5 flex justify-between mt-2">
+            <span>8</span>
+            <span>Speisely Magazin · Ausgabe 04 / 2026</span>
+          </div>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 9: DESSERT & B2B FOODTECH ARCHITECTURE (RIGHT)               -->
+        <!-- ================================================================= -->
+        <div class="page page-right bg-[#14281D] text-white p-7 flex flex-col justify-between border-l border-black/10">
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-gold border-b border-gold/30 pb-1.5 mb-2">
+                <span>DESSERT & FOODTECH</span>
+                <span>ENGINEERING</span>
+              </div>
+
+              <!-- Top: San Sebastian Cheesecake Feature (Real Waterfall Photo!) -->
+              <div class="p-3 bg-white/5 border border-white/10 rounded-2xl mb-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-20 h-16 rounded-xl overflow-hidden border border-gold/30 flex-shrink-0">
+                    <img src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp" alt="San Sebastian Cheesecake" class="w-full h-full object-cover">
+                  </div>
+                  <div>
+                    <span class="bg-gold text-forest-dark text-[8px] font-bold px-1.5 py-0.5 rounded font-mono uppercase">Berlin-Charlottenburg</span>
+                    <h4 class="font-display font-bold text-xs text-white leading-tight mt-1">
+                      San Sebastian The Original®
+                    </h4>
+                    <p class="text-[9.5px] text-white/80 leading-snug mt-0.5">
+                      Baskischer Schmelzkern-Cheesecake mit warmer flüssiger Schokolade & Pistazienstaub.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom: TechGlanz Architecture Simulator -->
+              <div>
+                <span class="bg-gold text-forest-dark font-mono text-[9px] font-bold uppercase px-2 py-0.5 rounded">TechGlanz Deep Dive</span>
+                <h3 class="font-display text-xl font-bold text-white mt-1 leading-tight">
+                  Die Technologie hinter Deutschlands modernster Gastronomie-Suite
+                </h3>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5 my-2 text-[10px] font-mono">
+                <div class="p-2.5 bg-white/5 rounded-xl border border-gold/20">
+                  <span class="text-gold font-bold block text-xs">&lt; 25ms</span>
+                  TanStack Start SSR Edge
+                </div>
+                <div class="p-2.5 bg-white/5 rounded-xl border border-gold/20">
+                  <span class="text-gold font-bold block text-xs">&lt; 45ms</span>
+                  Küchenbon Live-Funk
+                </div>
+              </div>
+
+              <div class="p-3 bg-white/5 border border-gold/30 rounded-2xl backdrop-blur-sm shadow-lg">
+                <h4 class="text-xs font-bold text-gold uppercase tracking-wider mb-0.5 font-mono">Interaktiver Architecture Simulator</h4>
+                <p class="text-[10px] text-white/80 leading-relaxed mb-2">
+                  Erlebe Datenströme, Sicherheitsgrenzen und Serverless Edge Gateways live im Simulator.
+                </p>
+                <a href="https://speisely.de/architecture-simulator" target="_blank" class="inline-block bg-gold text-forest-dark font-bold text-[9px] uppercase tracking-wider px-3.5 py-1.5 rounded-lg hover:bg-gold-light transition shadow">
+                  Simulator öffnen ↗
+                </a>
+              </div>
+            </div>
+
+            <div class="p-2 bg-white/[0.03] rounded-xl border border-white/10 text-[9.5px] text-white/60 font-mono">
+              🛡️ ISO-27001 & DSGVO-Konforme Datenhaltung in Frankfurt am Main.
+            </div>
+          </div>
+
+          <div class="text-[10px] font-mono text-gold/60 border-t border-white/10 pt-1.5 flex justify-between mt-2">
+            <span>speisely.de/architecture-simulator</span>
+            <span>9</span>
+          </div>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- PAGE 10: BACK COVER (FULL-PAGE AD & IMPRINT)                      -->
+        <!-- ================================================================= -->
+        <div class="page page-left bg-[#08100c] text-white flex flex-col justify-between p-7 relative overflow-hidden border-2 border-gold/40 text-center">
+          
+          <div class="relative z-10 pt-2">
+            <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-14 h-14 rounded-2xl object-cover border-2 border-gold mx-auto mb-2 shadow-xl">
+            <h2 class="font-display text-3xl font-extrabold text-white tracking-tight">
+              SPEISELY
+            </h2>
+            <p class="text-xs text-gold font-editorial italic mt-0.5">Der Marktplatz für Gastronomie, Catering & Events</p>
+          </div>
+
+          <!-- Back Cover CTA Card -->
+          <div class="relative z-10 p-5 rounded-2xl bg-white/5 border border-white/10 max-w-sm mx-auto my-3 backdrop-blur-md flex-1 flex flex-col justify-between shadow-2xl">
+            <div>
+              <h3 class="font-bold text-base text-white mb-1.5">Catering für dein nächstes Event?</h3>
+              <p class="text-xs text-white/70 leading-relaxed">
+                Finde handverlesene Caterer in Berlin, NRW, Hessen und ganz Deutschland. 100% kostenlos & transparent vergleichen.
+              </p>
+            </div>
+
+            <div class="w-24 h-24 bg-white p-2 rounded-2xl mx-auto my-2 flex items-center justify-center shadow-lg">
+              <div class="w-full h-full border-2 border-dashed border-black flex items-center justify-center text-black font-mono text-[9px] font-bold leading-tight">
+                SCAN<br>TO BOOK
+              </div>
+            </div>
+
+            <a href="https://speisely.de/catering" target="_blank" class="inline-block bg-gold text-forest-dark font-bold text-xs uppercase px-4 py-2.5 rounded-xl hover:bg-gold-light transition shadow-lg shadow-gold/20">
+              Caterer vergleichen ↗
+            </a>
+          </div>
+
+          <!-- Imprint Footer -->
+          <div class="relative z-10 text-[9.5px] text-white/40 font-mono border-t border-white/10 pt-2.5 flex flex-col gap-0.5">
+            <p>© 2026 Speisely Technologies GmbH · Alle Rechte vorbehalten.</p>
+            <p>Redaktion: Speisely Studio · Tech & Layout: TechGlanz Engineering</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ========================================================================= -->
+  <!-- 3. BOTTOM TICKER & DRAWER BAR                                             -->
+  <!-- ========================================================================= -->
+  <footer class="h-10 bg-[#0c1219] border-t border-white/10 px-4 flex items-center justify-between z-50 text-[11px] overflow-hidden flex-shrink-0">
+    
+    <!-- Left: Thumbnails Toggle Button -->
+    <button id="drawer-toggle" class="flex items-center gap-1.5 text-gray-400 hover:text-gold transition font-medium mr-4">
+      <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+      <span class="hidden sm:inline">Thumbnails</span>
+    </button>
+
+    <!-- Center: Live Gastronomy News Ticker -->
+    <div class="flex-1 overflow-hidden relative">
+      <div class="animate-ticker text-gray-400 font-mono text-[11px]">
+        <span class="text-gold font-bold mr-2">🔥 HIGHLIGHTS:</span>
+        <span class="mr-8">Schnitzel Schmiede feiert 13 Jahre Fest-Tradition in Mönchengladbach</span>
+        <span class="text-gold mr-8">✦</span>
+        <span class="mr-8">Alzaeem Sonnenallee: Meisterklasse am syrischen Holzkohlegrill</span>
+        <span class="text-gold mr-8">✦</span>
+        <span class="mr-8">Community Stories: Chicken Krush Prag, Garçon de Café & Thronburger Berlin</span>
+        <span class="text-gold mr-8">✦</span>
+        <span class="mr-8">San Sebastian Berlin: Baskischer Schmelzkern & warmer Schokofluss</span>
+        <span class="text-gold mr-8">✦</span>
+        <span class="mr-8">Speisely Digital Suite: 0% Bestellprovision & PageSpeed 99+ für Gastro-Partner</span>
+      </div>
+    </div>
+
+    <!-- Right: Page Indicator -->
+    <div class="text-gray-400 font-mono text-[10px] ml-4 flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+      <span class="hidden md:inline">3D Flip Active</span>
+    </div>
+  </footer>
+
+
+  <!-- ========================================================================= -->
+  <!-- 4. THUMBNAILS DRAWER                                                      -->
+  <!-- ========================================================================= -->
+  <div id="thumbnails-drawer" class="fixed bottom-10 left-0 right-0 h-36 bg-[#0f1722]/95 backdrop-blur-xl border-t border-white/15 p-4 z-40 transform translate-y-full transition-transform duration-300 ease-out flex items-center gap-4 overflow-x-auto shadow-2xl">
+    
+    <div class="flex items-center gap-4 px-2">
+      <!-- 1: Cover -->
+      <div onclick="flipbook.flip(0); toggleThumbnails();" class="thumb-item flex-shrink-0 w-20 h-28 bg-[#080e16] border-2 border-gold rounded cursor-pointer hover:scale-105 transition flex flex-col justify-between p-1.5 shadow-lg">
+        <span class="text-[9px] font-bold text-gold font-mono">P. 1</span>
+        <span class="text-[8px] text-white/70 text-center font-bold">COVER</span>
+        <span class="text-[7px] text-gold/60 text-right">Ausgabe 04</span>
+      </div>
+
+      <!-- 2-3: Speisely Pro Ad & Editor's Note -->
+      <div onclick="flipbook.flip(1); toggleThumbnails();" class="thumb-item flex-shrink-0 w-36 h-28 bg-[#070d1a] border border-cyan-400/50 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 shadow-lg text-white">
+        <span class="text-[9px] font-bold font-mono text-cyan-300">P. 2-3</span>
+        <span class="text-[8px] text-white font-bold text-center">Speisely Pro Ad & Editor Note</span>
+        <span class="text-[7px] text-cyan-300/70 text-right">ISJ Format</span>
+      </div>
+
+      <!-- 4-5: Full-Page Enterprise Ad & TOC -->
+      <div onclick="flipbook.flip(3); toggleThumbnails();" class="thumb-item flex-shrink-0 w-36 h-28 bg-[#080d14] border-2 border-red-500 rounded cursor-pointer hover:scale-105 transition flex flex-col justify-between p-1.5 shadow-lg text-white">
+        <span class="text-[9px] font-bold font-mono text-red-400">P. 4-5</span>
+        <span class="text-[8px] text-white font-bold text-center">Enterprise Ad & Inhalt</span>
+        <span class="text-[7px] text-red-400/80 text-right">B2B Ad</span>
+      </div>
+
+      <!-- 6-7: Schnitzel Schmiede + Alzaeem with Banner Ads -->
+      <div onclick="flipbook.flip(5); toggleThumbnails();" class="thumb-item flex-shrink-0 w-36 h-28 bg-white border border-white/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 shadow-lg text-forest">
+        <span class="text-[9px] font-bold font-mono text-gold-dark">P. 6-7</span>
+        <span class="text-[8px] text-forest font-bold text-center">Features + Banner Ads</span>
+        <span class="text-[7px] text-forest/50 text-right">ISJ Style</span>
+      </div>
+
+      <!-- 8-9: Community Stories & Tech -->
+      <div onclick="flipbook.flip(7); toggleThumbnails();" class="thumb-item flex-shrink-0 w-36 h-28 bg-white border border-white/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 shadow-lg text-forest">
+        <span class="text-[9px] font-bold font-mono text-gold-dark">P. 8-9</span>
+        <span class="text-[8px] text-forest font-bold text-center">Community Stories & Tech</span>
+        <span class="text-[7px] text-forest/50 text-right">Community</span>
+      </div>
+
+      <!-- 10: Back Cover -->
+      <div onclick="flipbook.flip(9); toggleThumbnails();" class="thumb-item flex-shrink-0 w-20 h-28 bg-[#08100c] border border-white/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 shadow-lg text-white">
+        <span class="text-[9px] font-bold text-gold font-mono">P. 10</span>
+        <span class="text-[8px] text-white/70 text-center font-bold">BACK</span>
+        <span class="text-[7px] text-gold/60 text-right">Imprint</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- 5. TABLE OF CONTENTS MODAL                                                -->
+  <!-- ========================================================================= -->
+  <div id="toc-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#111822] border border-white/20 rounded-2xl max-w-lg w-full p-6 text-white shadow-2xl relative">
+      <button onclick="toggleTocModal()" class="absolute top-4 right-4 text-white/50 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-2 text-gold text-xs font-mono font-bold uppercase mb-2">
+        <i data-lucide="book-open" class="w-4 h-4"></i> Inhaltsverzeichnis
+      </div>
+      <h3 class="font-display text-2xl font-bold mb-4">Speisely Journal — Ausgabe 04</h3>
+
+      <div class="space-y-3">
+        <div onclick="flipbook.flip(0); toggleTocModal();" class="p-3 rounded-xl bg-white/5 hover:bg-gold/10 border border-white/10 hover:border-gold/30 cursor-pointer flex justify-between items-center transition">
+          <span class="font-bold text-sm">Cover: Die Zukunft des B2B-Caterings</span>
+          <span class="font-mono text-xs text-gold">Seite 1</span>
+        </div>
+        <div onclick="flipbook.flip(1); toggleTocModal();" class="p-3 rounded-xl bg-blue-950/40 hover:bg-blue-900/50 border border-cyan-500/40 cursor-pointer flex justify-between items-center transition">
+          <span class="font-bold text-sm text-cyan-200">Speisely Pro Full Ad & Editor's Note</span>
+          <span class="font-mono text-xs text-cyan-400 font-bold">Seite 2-3</span>
+        </div>
+        <div onclick="flipbook.flip(3); toggleTocModal();" class="p-3 rounded-xl bg-red-950/40 hover:bg-red-900/50 border border-red-500/40 cursor-pointer flex justify-between items-center transition">
+          <span class="font-bold text-sm text-red-200">Full-Page Enterprise Ad & Inhaltsverzeichnis</span>
+          <span class="font-mono text-xs text-red-400 font-bold">Seite 4-5</span>
+        </div>
+        <div onclick="flipbook.flip(5); toggleTocModal();" class="p-3 rounded-xl bg-white/5 hover:bg-gold/10 border border-white/10 hover:border-gold/30 cursor-pointer flex justify-between items-center transition">
+          <span class="font-bold text-sm">Schnitzel Schmiede & Alzaeem + Banner Ads</span>
+          <span class="font-mono text-xs text-gold">Seite 6-7</span>
+        </div>
+        <div onclick="flipbook.flip(7); toggleTocModal();" class="p-3 rounded-xl bg-white/5 hover:bg-gold/10 border border-white/10 hover:border-gold/30 cursor-pointer flex justify-between items-center transition">
+          <span class="font-bold text-sm">Community Stories (Prag/Berlin) & TechGlanz Simulator</span>
+          <span class="font-mono text-xs text-gold">Seite 8-9</span>
+        </div>
+        <div onclick="flipbook.flip(9); toggleTocModal();" class="p-3 rounded-xl bg-white/5 hover:bg-gold/10 border border-white/10 hover:border-gold/30 cursor-pointer flex justify-between items-center transition">
+          <span class="font-bold text-sm">Back Cover: Catering-Guide & Impressum</span>
+          <span class="font-mono text-xs text-gold">Seite 10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- 6. JAVASCRIPT LOGIC & 3D PAGEFLIP ENGINE                                 -->
+  <!-- ========================================================================= -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Sound Synthesis (Realistic Paper Turning Audio)
+    let audioEnabled = true;
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playPageFlipSound() {
+      if (!audioEnabled || !audioCtx) return;
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const bufferSize = audioCtx.sampleRate * 0.12;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.035));
+      }
+
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1400;
+      filter.Q.value = 1.6;
+
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0.28, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      noise.start();
+    }
+
+    // Flipbook Sizing Constants (Canonical 520x740 coordinate system)
+    const PAGE_WIDTH = 520;
+    const PAGE_HEIGHT = 740;
+    let flipbook = null;
+    let userZoom = 1.0;
+    let baseScale = 1.0;
+
+    // Viewport Auto-Fit & Scale Engine
+    function updateViewportTransform() {
+      const stage = document.querySelector('main');
+      if (!stage) return;
+
+      const availableW = stage.clientWidth - 40;
+      const availableH = stage.clientHeight - 30;
+
+      // In 2-page landscape spread, total width is 2 * 520 = 1040px
+      const isMobile = window.innerWidth < 768;
+      const targetCanvasW = isMobile ? PAGE_WIDTH : PAGE_WIDTH * 2;
+      const targetCanvasH = PAGE_HEIGHT;
+
+      const scaleX = availableW / targetCanvasW;
+      const scaleY = availableH / targetCanvasH;
+      baseScale = Math.min(scaleX, scaleY, 1.05);
+
+      const finalScale = baseScale * userZoom;
+      const viewport = document.getElementById('magazine-viewport');
+      if (viewport) {
+        viewport.style.transform = `scale(${finalScale})`;
+      }
+    }
+
+    // Initialize StPageFlip
+    document.addEventListener('DOMContentLoaded', () => {
+      const flipContainer = document.getElementById('flipbook');
+      if (!flipContainer) return;
+
+      flipbook = new St.PageFlip(flipContainer, {
+        width: PAGE_WIDTH,
+        height: PAGE_HEIGHT,
+        size: 'fixed',
+        minWidth: 320,
+        maxWidth: 600,
+        minHeight: 460,
+        maxHeight: 850,
+        maxShadowOpacity: 0.6,
+        showCover: true,
+        mobileScrollSupport: false,
+        useMouseEvents: true,
+        swipeDistance: 30,
+        clickEventForward: true,
+        usePortrait: true,
+        startPage: 0,
+        drawShadow: true,
+        flippingTime: 700
+      });
+
+      // Load all .page elements
+      flipbook.loadFromHTML(document.querySelectorAll('.page'));
+
+      // Page Change Listener
+      flipbook.on('flip', (e) => {
+        playPageFlipSound();
+        updatePageDisplay(e.data);
+      });
+
+      // Recalculate layout
+      window.addEventListener('resize', updateViewportTransform);
+      updateViewportTransform();
+      updatePageDisplay(0);
+    });
+
+    // Page Display Updater
+    function updatePageDisplay(pageIndex) {
+      const display = document.getElementById('page-display');
+      if (!display) return;
+      const totalPages = 10;
+      
+      if (pageIndex === 0) {
+        display.textContent = `1 / ${totalPages}`;
+      } else if (pageIndex === totalPages - 1) {
+        display.textContent = `${totalPages} / ${totalPages}`;
+      } else {
+        const leftPage = pageIndex % 2 === 1 ? pageIndex + 1 : pageIndex;
+        const rightPage = leftPage + 1;
+        if (rightPage <= totalPages) {
+          display.textContent = `${leftPage}-${rightPage} / ${totalPages}`;
+        } else {
+          display.textContent = `${leftPage} / ${totalPages}`;
+        }
+      }
+    }
+
+    // UI Buttons & Event Handlers
+    document.getElementById('btn-first')?.addEventListener('click', () => {
+      if (flipbook) flipbook.flip(0);
+    });
+    document.getElementById('btn-prev')?.addEventListener('click', () => {
+      if (flipbook) flipbook.flipPrev();
+    });
+    document.getElementById('arrow-left')?.addEventListener('click', () => {
+      if (flipbook) flipbook.flipPrev();
+    });
+    document.getElementById('btn-next')?.addEventListener('click', () => {
+      if (flipbook) flipbook.flipNext();
+    });
+    document.getElementById('arrow-right')?.addEventListener('click', () => {
+      if (flipbook) flipbook.flipNext();
+    });
+    document.getElementById('btn-last')?.addEventListener('click', () => {
+      if (flipbook) flipbook.flip(9);
+    });
+
+    // Audio Toggle
+    document.getElementById('btn-audio')?.addEventListener('click', () => {
+      audioEnabled = !audioEnabled;
+      const icon = document.getElementById('audio-icon');
+      if (icon) {
+        icon.setAttribute('data-lucide', audioEnabled ? 'volume-2' : 'volume-x');
+        lucide.createIcons();
+      }
+    });
+
+    // Zoom Controls
+    const zoomSlider = document.getElementById('zoom-slider');
+    const zoomValue = document.getElementById('zoom-value');
+
+    function applyZoom(newZoom) {
+      userZoom = Math.min(Math.max(newZoom, 0.7), 1.5);
+      if (zoomSlider) zoomSlider.value = userZoom;
+      if (zoomValue) zoomValue.textContent = `${Math.round(userZoom * 100)}%`;
+      updateViewportTransform();
+    }
+
+    zoomSlider?.addEventListener('input', (e) => {
+      applyZoom(parseFloat(e.target.value));
+    });
+    document.getElementById('btn-zoom-in')?.addEventListener('click', () => {
+      applyZoom(userZoom + 0.1);
+    });
+    document.getElementById('btn-zoom-out')?.addEventListener('click', () => {
+      applyZoom(userZoom - 0.1);
+    });
+
+    // Fullscreen Toggle
+    document.getElementById('btn-fullscreen')?.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        document.exitFullscreen().catch(err => console.log(err));
+      }
+    });
+
+    // Thumbnails Drawer Toggle
+    function toggleThumbnails() {
+      const drawer = document.getElementById('thumbnails-drawer');
+      if (!drawer) return;
+      const isClosed = drawer.classList.contains('translate-y-full');
+      if (isClosed) {
+        drawer.classList.remove('translate-y-full');
+      } else {
+        drawer.classList.add('translate-y-full');
+      }
+    }
+    document.getElementById('btn-thumbnails')?.addEventListener('click', toggleThumbnails);
+    document.getElementById('drawer-toggle')?.addEventListener('click', toggleThumbnails);
+
+    // Table of Contents Modal Toggle
+    function toggleTocModal() {
+      const modal = document.getElementById('toc-modal');
+      if (!modal) return;
+      modal.classList.toggle('hidden');
+    }
+    document.getElementById('btn-toc')?.addEventListener('click', toggleTocModal);
+
+    // Keyboard Shortcuts (Arrow keys for navigation)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        if (flipbook) flipbook.flipNext();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        if (flipbook) flipbook.flipPrev();
+      } else if (e.key === 'Home') {
+        if (flipbook) flipbook.flip(0);
+      } else if (e.key === 'End') {
+        if (flipbook) flipbook.flip(9);
+      } else if (e.key === 'Escape') {
+        const modal = document.getElementById('toc-modal');
+        if (modal && !modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+        }
+        const drawer = document.getElementById('thumbnails-drawer');
+        if (drawer && !drawer.classList.contains('translate-y-full')) {
+          drawer.classList.add('translate-y-full');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
