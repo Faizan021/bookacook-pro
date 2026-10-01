@@ -170,7 +170,7 @@ function MagazinIndexPage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <a
-                href="/speisely-magazin-edition-2026.html"
+                href="/magazin/edition.html"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition px-3 py-2"
