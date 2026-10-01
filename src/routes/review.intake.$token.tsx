@@ -11,11 +11,12 @@ export const Route = createFileRoute("/review/intake/$token")({
     return getReviewIntakeData({ data: { token: params.token } });
   },
   errorComponent: ({ error }) => {
+    const err = error instanceof Error ? error : new Error(String(error));
     let message = "An error occurred while loading this review link.";
-    if (error.message.includes("invalid_token"))
+    if (err.message.includes("invalid_token"))
       message = "This review link is invalid or malformed.";
-    if (error.message.includes("expired")) message = "This review link has expired.";
-    if (error.message.includes("already_consumed"))
+    if (err.message.includes("expired")) message = "This review link has expired.";
+    if (err.message.includes("already_consumed"))
       message = "This review link has already been used.";
 
     return (
@@ -91,7 +92,7 @@ function ReviewIntakeForm() {
     }
 
     try {
-      const payload: any = { token, overallRating, comment };
+      const payload: Record<string, unknown> = { token, overallRating, comment };
 
       if (data.role === "restaurant") {
         payload.foodQualityRating = foodQualityRating;
@@ -108,15 +109,17 @@ function ReviewIntakeForm() {
         payload.valueRating = valueRating;
       }
 
-      await submitFn({ data: payload });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await submitFn({ data: payload as any });
       setSuccess(true);
-    } catch (err: any) {
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
       let msg = "An unexpected error occurred.";
-      if (err.message.includes("blocked_self_review")) msg = "You cannot review your own business.";
-      else if (err.message.includes("duplicate_review"))
+      if (errMsg.includes("blocked_self_review")) msg = "You cannot review your own business.";
+      else if (errMsg.includes("duplicate_review"))
         msg = "A review has already been submitted for this order.";
-      else if (err.message.includes("expired")) msg = "This invite has expired.";
-      else if (err.message.includes("already_consumed")) msg = "This invite has already been used.";
+      else if (errMsg.includes("expired")) msg = "This invite has expired.";
+      else if (errMsg.includes("already_consumed")) msg = "This invite has already been used.";
       setError(msg);
     } finally {
       setIsSubmitting(false);
