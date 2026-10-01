@@ -101,6 +101,15 @@
       backface-visibility: hidden;
     }
 
+    .page-content {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-sizing: border-box;
+    }
+
     .page-left {
       border-right: 1px solid rgba(20, 40, 29, 0.08);
     }
@@ -278,600 +287,636 @@
         <!-- ================================================================= -->
         <!-- PAGE 1: COVER (FRONT)                                             -->
         <!-- ================================================================= -->
-        <div class="page page-right bg-[#0C1510] text-white flex flex-col justify-between px-8 py-6 relative overflow-hidden">
-          
-          <!-- Top Masthead Block -->
-          <div class="relative z-20">
-            <div class="flex items-center justify-between border-b border-gold/40 pb-2.5">
-              <div class="flex items-center gap-3">
-                <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-9 h-9 rounded-md object-cover border border-gold/60 shadow">
-                <div>
-                  <h1 class="font-serif text-3xl font-extrabold tracking-tight text-white leading-none">
-                    SPEISELY <span class="font-serif text-2xl font-light italic text-gold">Journal</span>
-                  </h1>
-                  <p class="text-[9px] font-sans tracking-[0.18em] text-gray-300 uppercase mt-0.5">
-                    <span class="lang-de">B2B Gastronomie · Catering · Hospitality</span>
-                    <span class="lang-en">B2B Culinary · Corporate Catering · Hospitality</span>
-                  </p>
+        <div class="page page-right bg-[#0C1510] text-white px-8 py-6 relative overflow-hidden">
+          <div class="page-content">
+            <!-- Top Masthead Block -->
+            <div class="relative z-20">
+              <div class="flex items-center justify-between border-b border-gold/40 pb-2.5">
+                <div class="flex items-center gap-3">
+                  <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-9 h-9 rounded-md object-cover border border-gold/60 shadow">
+                  <div>
+                    <h1 class="font-serif text-3xl font-extrabold tracking-tight text-white leading-none">
+                      SPEISELY <span class="font-serif text-2xl font-light italic text-gold">Journal</span>
+                    </h1>
+                    <p class="text-[9px] font-sans tracking-[0.18em] text-gray-300 uppercase mt-0.5">
+                      <span class="lang-de">B2B Gastronomie · Catering · Hospitality</span>
+                      <span class="lang-en">B2B Culinary · Corporate Catering · Hospitality</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="text-right text-[9px] font-mono text-gray-400">
+                  <span class="text-gold font-semibold block">
+                    <span class="lang-de">Ausgabe 04 · Herbst 2026</span>
+                    <span class="lang-en">Issue 04 · Autumn 2026</span>
+                  </span>
+                  <span>speisely.de/magazin</span>
                 </div>
               </div>
 
-              <div class="text-right text-[9px] font-mono text-gray-400">
-                <span class="text-gold font-semibold block">
-                  <span class="lang-de">Ausgabe 04 · Herbst 2026</span>
-                  <span class="lang-en">Issue 04 · Autumn 2026</span>
+              <div class="flex justify-between items-center py-1.5 text-[8.5px] font-sans tracking-wider text-gray-300 uppercase border-b border-white/10">
+                <span>
+                  <span class="lang-de">Das Fachmagazin für moderne B2B-Küche & Events</span>
+                  <span class="lang-en">The Industry Journal for Corporate Culinary & Events</span>
                 </span>
-                <span>speisely.de/magazin</span>
+                <span class="text-gold">
+                  <span class="lang-de">Deutschlandweite Ausgabe</span>
+                  <span class="lang-en">National Edition</span>
+                </span>
               </div>
             </div>
 
-            <div class="flex justify-between items-center py-1.5 text-[8.5px] font-sans tracking-wider text-gray-300 uppercase border-b border-white/10">
-              <span>
-                <span class="lang-de">Das Fachmagazin für moderne B2B-Küche & Events</span>
-                <span class="lang-en">The Industry Journal for Corporate Culinary & Events</span>
-              </span>
-              <span class="text-gold">
-                <span class="lang-de">Deutschlandweite Ausgabe</span>
-                <span class="lang-en">National Edition</span>
-              </span>
-            </div>
-          </div>
-
-          <!-- Hero Image -->
-          <div class="relative z-10 my-3 h-[270px] rounded-sm overflow-hidden border border-white/15 shadow-2xl">
-            <img src="/hero-cinematic.webp" alt="Speisely Journal Cover Hero" class="w-full h-full object-cover object-center">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
-            
-            <div class="absolute bottom-3 left-4">
-              <span class="text-[9px] font-sans font-semibold uppercase tracking-[0.2em] text-gold">
-                <span class="lang-de">Titelgeschichte · Marktbericht 2026</span>
-                <span class="lang-en">Cover Story · Market Intelligence 2026</span>
-              </span>
-            </div>
-          </div>
-
-          <!-- Cover Typography -->
-          <div class="relative z-20">
-            <h2 class="font-serif text-[26px] font-bold text-white leading-[1.08] tracking-tight">
-              <span class="lang-de">Die Zukunft des modernen <br><span class="italic font-light text-gold">B2B-Caterings</span></span>
-              <span class="lang-en">The Future of Corporate <br><span class="italic font-light text-gold">B2B Catering</span></span>
-            </h2>
-
-            <p class="text-[10px] font-sans text-gray-300 mt-1.5 leading-relaxed max-w-md">
-              <span class="lang-de">Wie provisionsfreie Direktangebote, mobile Live-Stationen und handwerkliche Spitzenküche den deutschen Catering-Markt nachhaltig stärken.</span>
-              <span class="lang-en">How commission-free direct booking, mobile live-cooking stations, and artisanal craft redefine Germany's catering industry.</span>
-            </p>
-
-            <!-- 3 Clean Teasers -->
-            <div class="grid grid-cols-3 gap-3 border-t border-white/15 pt-2.5 mt-3 text-[9px]">
-              <div class="border-r border-white/10 pr-2">
-                <span class="text-gold font-mono text-[8px] block mb-0.5">06 · REPORTAGE</span>
-                <span class="text-gray-200 font-medium leading-snug block">
-                  <span class="lang-de">13 Jahre Schnitzel Schmiede</span>
-                  <span class="lang-en">13 Yrs Schnitzel Schmiede</span>
+            <!-- Hero Image -->
+            <div class="relative z-10 my-2.5 h-[255px] rounded-sm overflow-hidden border border-white/15 shadow-2xl">
+              <img src="/hero-cinematic.webp" alt="Speisely Journal Cover Hero" class="w-full h-full object-cover object-center">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20"></div>
+              
+              <div class="absolute bottom-3 left-4">
+                <span class="text-[9px] font-sans font-semibold uppercase tracking-[0.2em] text-gold">
+                  <span class="lang-de">Titelgeschichte · Marktbericht 2026</span>
+                  <span class="lang-en">Cover Story · Market Intelligence 2026</span>
                 </span>
               </div>
-              <div class="border-r border-white/10 pr-2">
-                <span class="text-gold font-mono text-[8px] block mb-0.5">07 · SPOTLIGHT</span>
-                <span class="text-gray-200 font-medium leading-snug block">
-                  <span class="lang-de">Alzaeem Holzkohlegrill</span>
-                  <span class="lang-en">Alzaeem Charcoal Grill</span>
-                </span>
-              </div>
-              <div>
-                <span class="text-gold font-mono text-[8px] block mb-0.5">08 · COMMUNITY</span>
-                <span class="text-gray-200 font-medium leading-snug block">
-                  <span class="lang-de">Prag & Berlin Entdeckungen</span>
-                  <span class="lang-en">Prague & Berlin Stories</span>
-                </span>
+            </div>
+
+            <!-- Cover Typography & Teasers -->
+            <div class="relative z-20">
+              <h2 class="font-serif text-[25px] font-bold text-white leading-[1.08] tracking-tight">
+                <span class="lang-de">Die Zukunft des modernen <br><span class="italic font-light text-gold">B2B-Caterings</span></span>
+                <span class="lang-en">The Future of Corporate <br><span class="italic font-light text-gold">B2B Catering</span></span>
+              </h2>
+
+              <p class="text-[9.5px] font-sans text-gray-300 mt-1 leading-relaxed max-w-md">
+                <span class="lang-de">Wie provisionsfreie Direktangebote, mobile Live-Stationen und handwerkliche Spitzenküche den deutschen Catering-Markt nachhaltig stärken.</span>
+                <span class="lang-en">How commission-free direct booking, mobile live-cooking stations, and artisanal craft redefine Germany's catering industry.</span>
+              </p>
+
+              <!-- 3 Clean Teasers -->
+              <div class="grid grid-cols-3 gap-3 border-t border-white/15 pt-2 mt-2 text-[9px]">
+                <div class="border-r border-white/10 pr-2">
+                  <span class="text-gold font-mono text-[8px] block mb-0.5">06 · REPORTAGE</span>
+                  <span class="text-gray-200 font-medium leading-snug block">
+                    <span class="lang-de">13 Jahre Schnitzel Schmiede</span>
+                    <span class="lang-en">13 Yrs Schnitzel Schmiede</span>
+                  </span>
+                </div>
+                <div class="border-r border-white/10 pr-2">
+                  <span class="text-gold font-mono text-[8px] block mb-0.5">07 · SPOTLIGHT</span>
+                  <span class="text-gray-200 font-medium leading-snug block">
+                    <span class="lang-de">Alzaeem Holzkohlegrill</span>
+                    <span class="lang-en">Alzaeem Charcoal Grill</span>
+                  </span>
+                </div>
+                <div>
+                  <span class="text-gold font-mono text-[8px] block mb-0.5">08 · COMMUNITY</span>
+                  <span class="text-gray-200 font-medium leading-snug block">
+                    <span class="lang-de">Prag & Berlin Entdeckungen</span>
+                    <span class="lang-en">Prague & Berlin Stories</span>
+                  </span>
+                </div>
               </div>
             </div>
 
             <!-- Bottom Folio Bar -->
-            <div class="flex justify-between items-center text-[8px] font-mono text-gray-400 border-t border-white/10 pt-2 mt-2.5">
+            <div class="flex justify-between items-center text-[8px] font-mono text-gray-400 border-t border-white/10 pt-1.5">
               <span>SPEISELY JOURNAL · ISSUE 04</span>
               <span>ISSN 2940-1234 · 8,50 €</span>
             </div>
           </div>
-
         </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 2: FULL-PAGE AD (INSIDE FRONT COVER — SPEISELY PRO®)         -->
         <!-- ================================================================= -->
-        <div class="page page-left bg-[#0B121A] text-white px-8 py-6 flex flex-col justify-between border-r border-black/10 relative overflow-hidden">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center border-b border-white/15 pb-1.5 text-[8px] font-mono text-gray-400 tracking-wider">
-            <span>
-              <span class="lang-de">B2B ENTERPRISE ADVERTORIAL</span>
-              <span class="lang-en">B2B ENTERPRISE ADVERTORIAL</span>
-            </span>
-            <span>speisely.de/partner</span>
-          </div>
-
-          <!-- Brand Header -->
-          <div class="pt-1 text-center">
-            <div class="inline-flex items-center justify-center gap-2 mb-1">
-              <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-7 h-7 rounded object-cover border border-white/20">
-              <h3 class="font-serif text-2xl font-bold tracking-wider text-white">
-                SPEISELY <span class="text-cyan-400 font-light">PRO</span><span class="text-xs text-cyan-300 align-top">®</span>
-              </h3>
-            </div>
-            <p class="font-sans text-[10px] tracking-wide text-gray-300 uppercase">
-              <span class="lang-de">Das Betriebssystem für modernes Firmen- und Event-Catering</span>
-              <span class="lang-en">The Operating System for Modern Corporate & Event Catering</span>
-            </p>
-          </div>
-
-          <!-- 3 Architectural Pillars -->
-          <div class="grid grid-cols-3 gap-3 my-2.5">
-            
-            <div class="border border-white/15 bg-white/[0.03] p-2 rounded-sm flex flex-col justify-between h-36">
-              <div class="h-18 overflow-hidden rounded-sm bg-black/40 border border-white/10 mb-1.5">
-                <img src="/magazin/chicken-krush-prag/ck-new-02.webp" alt="Order Engine" class="w-full h-full object-cover">
-              </div>
-              <div>
-                <span class="font-mono text-[7.5px] text-cyan-300 uppercase block font-semibold">MODULE 01</span>
-                <h4 class="font-serif text-xs font-bold text-white mt-0.5">Order Engine</h4>
-                <p class="text-[8px] text-gray-300 mt-0.5 leading-snug">
-                  <span class="lang-de">Automatisierte Angebots- und Rechnungsstellung.</span>
-                  <span class="lang-en">Automated corporate quoting & invoicing.</span>
-                </p>
-              </div>
+        <div class="page page-left bg-[#0B121A] text-white px-8 py-6 border-r border-black/10 relative overflow-hidden">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center border-b border-white/15 pb-1.5 text-[8px] font-mono text-gray-400 tracking-wider">
+              <span>
+                <span class="lang-de">B2B ENTERPRISE ADVERTORIAL</span>
+                <span class="lang-en">B2B ENTERPRISE ADVERTORIAL</span>
+              </span>
+              <span>speisely.de/partner</span>
             </div>
 
-            <div class="border border-white/15 bg-white/[0.03] p-2 rounded-sm flex flex-col justify-between h-36">
-              <div class="h-18 overflow-hidden rounded-sm bg-black/40 border border-white/10 mb-1.5">
-                <img src="/magazin/alzaeem-berlin/grill-hero-clean.webp" alt="Outdoor POS" class="w-full h-full object-cover">
+            <!-- Brand Header -->
+            <div class="pt-1 text-center">
+              <div class="inline-flex items-center justify-center gap-2 mb-1">
+                <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-7 h-7 rounded object-cover border border-white/20">
+                <h3 class="font-serif text-2xl font-bold tracking-wider text-white">
+                  SPEISELY <span class="text-cyan-400 font-light">PRO</span><span class="text-xs text-cyan-300 align-top">®</span>
+                </h3>
               </div>
-              <div>
-                <span class="font-mono text-[7.5px] text-cyan-300 uppercase block font-semibold">MODULE 02</span>
-                <h4 class="font-serif text-xs font-bold text-white mt-0.5">Outdoor POS</h4>
-                <p class="text-[8px] text-gray-300 mt-0.5 leading-snug">
-                  <span class="lang-de">Mobile Kassen für Festivals, Messen & Pop-ups.</span>
-                  <span class="lang-en">Mobile cloud POS for events & pop-ups.</span>
-                </p>
-              </div>
+              <p class="font-sans text-[10px] tracking-wide text-gray-300 uppercase">
+                <span class="lang-de">Das Betriebssystem für modernes Firmen- und Event-Catering</span>
+                <span class="lang-en">The Operating System for Modern Corporate & Event Catering</span>
+              </p>
             </div>
 
-            <div class="border border-white/15 bg-white/[0.03] p-2 rounded-sm flex flex-col justify-between h-36">
-              <div class="h-18 overflow-hidden rounded-sm bg-black/40 border border-white/10 mb-1.5">
-                <img src="/magazin/garcon-de-cafe-berlin/garcon-02.webp" alt="Wall KDS" class="w-full h-full object-cover">
+            <!-- 3 Architectural Pillars -->
+            <div class="grid grid-cols-3 gap-3 my-2">
+              
+              <div class="border border-white/15 bg-white/[0.03] p-2 rounded-sm flex flex-col justify-between h-40">
+                <div class="h-20 overflow-hidden rounded-sm bg-black/40 border border-white/10 mb-1.5 relative">
+                  <img src="/magazin/chicken-krush-prag/ck-new-02.webp" alt="Order Engine" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <span class="font-mono text-[7.5px] text-cyan-300 uppercase block font-semibold">MODULE 01</span>
+                  <h4 class="font-serif text-xs font-bold text-white mt-0.5">Order Engine</h4>
+                  <p class="text-[8px] text-gray-300 mt-0.5 leading-snug">
+                    <span class="lang-de">Automatisierte Angebots- und Rechnungsstellung.</span>
+                    <span class="lang-en">Automated corporate quoting & invoicing.</span>
+                  </p>
+                </div>
               </div>
-              <div>
-                <span class="font-mono text-[7.5px] text-cyan-300 uppercase block font-semibold">MODULE 03</span>
-                <h4 class="font-serif text-xs font-bold text-white mt-0.5">Cloud KDS</h4>
-                <p class="text-[8px] text-gray-300 mt-0.5 leading-snug">
-                  <span class="lang-de">Echtzeit-Küchenmonitor mit Bon-Drucker-Sync.</span>
-                  <span class="lang-en">Real-time KDS kitchen order sync.</span>
-                </p>
+
+              <div class="border border-white/15 bg-white/[0.03] p-2 rounded-sm flex flex-col justify-between h-40">
+                <div class="h-20 overflow-hidden rounded-sm bg-black/40 border border-white/10 mb-1.5 relative">
+                  <img src="/magazin/alzaeem-berlin/grill-hero-clean.webp" alt="Outdoor POS" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <span class="font-mono text-[7.5px] text-cyan-300 uppercase block font-semibold">MODULE 02</span>
+                  <h4 class="font-serif text-xs font-bold text-white mt-0.5">Outdoor POS</h4>
+                  <p class="text-[8px] text-gray-300 mt-0.5 leading-snug">
+                    <span class="lang-de">Mobile Kassen für Festivals, Messen & Pop-ups.</span>
+                    <span class="lang-en">Mobile cloud POS for events & pop-ups.</span>
+                  </p>
+                </div>
               </div>
+
+              <div class="border border-white/15 bg-white/[0.03] p-2 rounded-sm flex flex-col justify-between h-40">
+                <div class="h-20 overflow-hidden rounded-sm bg-black/40 border border-white/10 mb-1.5 relative">
+                  <img src="/magazin/garcon-de-cafe-berlin/garcon-02.webp" alt="Wall KDS" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <span class="font-mono text-[7.5px] text-cyan-300 uppercase block font-semibold">MODULE 03</span>
+                  <h4 class="font-serif text-xs font-bold text-white mt-0.5">Cloud KDS</h4>
+                  <p class="text-[8px] text-gray-300 mt-0.5 leading-snug">
+                    <span class="lang-de">Echtzeit-Küchenmonitor mit Bon-Drucker-Sync.</span>
+                    <span class="lang-en">Real-time KDS kitchen order sync.</span>
+                  </p>
+                </div>
+              </div>
+
             </div>
 
-          </div>
+            <!-- Feature Proposition -->
+            <div class="border-t border-b border-white/15 py-2.5">
+              <h4 class="font-serif text-sm font-bold text-white leading-snug">
+                <span class="lang-de">0% Vermittlungsprovision. Volle Kontrolle über Ihre Firmenkunden.</span>
+                <span class="lang-en">0% Commission. Full Control Over Your Corporate Client Base.</span>
+              </h4>
+              <p class="text-[9.5px] text-gray-300 mt-1 leading-relaxed">
+                <span class="lang-de">Speisely Pro vereint digitale Kundenbriefings, DATEV-Export und Stripe B2B-Abrechnung in einer Plattform — entwickelt für handwerkliche Catering-Unternehmen und anspruchsvolle Eventgastronomie.</span>
+                <span class="lang-en">Speisely Pro unites automated client briefs, DATEV export, and Stripe B2B settlements in one unified suite — engineered for quality caterers and event chefs.</span>
+              </p>
 
-          <!-- Feature Proposition -->
-          <div class="border-t border-b border-white/15 py-2.5">
-            <h4 class="font-serif text-sm font-bold text-white leading-snug">
-              <span class="lang-de">0% Vermittlungsprovision. Volle Kontrolle über Ihre Firmenkunden.</span>
-              <span class="lang-en">0% Commission. Full Control Over Your Corporate Client Base.</span>
-            </h4>
-            <p class="text-[9.5px] text-gray-300 mt-1 leading-relaxed">
-              <span class="lang-de">Speisely Pro vereint digitale Kundenbriefings, DATEV-Export und Stripe B2B-Abrechnung in einer Plattform — entwickelt für handwerkliche Catering-Unternehmen und anspruchsvolle Eventgastronomie.</span>
-              <span class="lang-en">Speisely Pro unites automated client briefs, DATEV export, and Stripe B2B settlements in one unified suite — engineered for quality caterers and event chefs.</span>
-            </p>
+              <ul class="text-[9px] text-gray-300 space-y-1 mt-1.5 font-medium">
+                <li class="flex items-center gap-2">
+                  <span class="text-cyan-400">✦</span> 
+                  <span class="lang-de">Bis zu 70% weniger administrativer Zeitaufwand je Briefing</span>
+                  <span class="lang-en">Save up to 70% administrative time per corporate inquiry</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="text-cyan-400">✦</span> 
+                  <span class="lang-de">Direkter Kundenkontakt ohne zwischengeschaltete Callcenter</span>
+                  <span class="lang-en">Direct chef-to-client dialog with zero intermediary interference</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <span class="text-cyan-400">✦</span> 
+                  <span class="lang-de">Vorkonfigurierte Hardware-Kits einsatzbereit in 48 Stunden</span>
+                  <span class="lang-en">Pre-configured cloud hardware kits deployed in 48 hours</span>
+                </li>
+              </ul>
+            </div>
 
-            <ul class="text-[9px] text-gray-300 space-y-1 mt-1.5 font-medium">
-              <li class="flex items-center gap-2">
-                <span class="text-cyan-400">✦</span> 
-                <span class="lang-de">Bis zu 70% weniger administrativer Zeitaufwand je Briefing</span>
-                <span class="lang-en">Save up to 70% administrative time per corporate inquiry</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-cyan-400">✦</span> 
-                <span class="lang-de">Direkter Kundenkontakt ohne zwischengeschaltete Callcenter</span>
-                <span class="lang-en">Direct chef-to-client dialog with zero intermediary interference</span>
-              </li>
-              <li class="flex items-center gap-2">
-                <span class="text-cyan-400">✦</span> 
-                <span class="lang-de">Vorkonfigurierte Hardware-Kits einsatzbereit in 48 Stunden</span>
-                <span class="lang-en">Pre-configured cloud hardware kits deployed in 48 hours</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Sign-Off & Link -->
-          <div class="pt-1.5 flex items-center justify-between">
-            <span class="font-script text-2xl text-cyan-300 -rotate-2">Grow With It™</span>
-            <div class="text-right">
-              <a href="https://speisely.de/partner" target="_blank" class="inline-block text-[9.5px] font-sans font-bold uppercase tracking-wider text-cyan-400 hover:underline">
-                speisely.de/partner ↗
-              </a>
-              <span class="block text-[7.5px] text-gray-500 font-mono">© 2026 Speisely Technologies GmbH</span>
+            <!-- Sign-Off & Link -->
+            <div class="pt-1.5 flex items-center justify-between">
+              <span class="font-script text-2xl text-cyan-300 -rotate-2">Grow With It™</span>
+              <div class="text-right">
+                <a href="https://speisely.de/partner" target="_blank" class="inline-block text-[9.5px] font-sans font-bold uppercase tracking-wider text-cyan-400 hover:underline">
+                  speisely.de/partner ↗
+                </a>
+                <span class="block text-[7.5px] text-gray-500 font-mono">© 2026 Speisely Technologies GmbH</span>
+              </div>
             </div>
           </div>
-
         </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 3: MASTHEAD IMPRESSUM & EDITOR'S NOTE (WARM CREAM PAPER)     -->
         <!-- ================================================================= -->
-        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-l border-forest/10">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
-            <span>
-              <span class="lang-de">EDITORIAL & IMPRESSUM</span>
-              <span class="lang-en">EDITORIAL & MASTHEAD</span>
-            </span>
-            <span>
-              <span class="lang-de">SPEISELY JOURNAL · HERBST 2026</span>
-              <span class="lang-en">SPEISELY JOURNAL · AUTUMN 2026</span>
-            </span>
-          </div>
-
-          <!-- 2-Column Classic Layout (32% / 68%) -->
-          <div class="flex-1 flex gap-5 my-2.5">
-            
-            <!-- Left Column: Masthead & Publisher -->
-            <div class="w-[34%] border-r border-forest/10 pr-3 flex flex-col justify-between text-[8px] text-charcoal leading-snug">
-              
-              <div class="space-y-2">
-                <div class="border-b border-forest/15 pb-1.5">
-                  <span class="font-serif font-bold text-forest text-xs block">SPEISELY</span>
-                  <span class="font-mono text-[7px] text-forest/60 uppercase">JOURNAL BERLIN</span>
-                </div>
-
-                <div>
-                  <span class="font-semibold text-forest block">Ahmad F.</span>
-                  <span class="text-charcoal-muted text-[7.5px]">Managing Editor</span>
-                </div>
-
-                <div>
-                  <span class="font-semibold text-forest block">Faizan A.</span>
-                  <span class="text-charcoal-muted text-[7.5px]">Editorial Director</span>
-                </div>
-
-                <div>
-                  <span class="font-semibold text-forest block">Sarah Lindner</span>
-                  <span class="text-charcoal-muted text-[7.5px]">Commercial Director</span>
-                </div>
-
-                <div>
-                  <span class="font-semibold text-forest block">David Weber</span>
-                  <span class="text-charcoal-muted text-[7.5px]">Art & Design</span>
-                </div>
-
-                <div>
-                  <span class="font-semibold text-forest block">Marc Küster</span>
-                  <span class="text-charcoal-muted text-[7.5px]">Production</span>
-                </div>
-
-                <div class="pt-1 border-t border-forest/10 text-[7.5px]">
-                  <span class="font-semibold text-forest block">
-                    <span class="lang-de">Abonnements & B2B:</span>
-                    <span class="lang-en">Subscriptions & B2B:</span>
-                  </span>
-                  <span class="text-forest underline font-mono text-[7px]">abo@speisely.de</span>
-                </div>
-              </div>
-
-              <!-- Colophon -->
-              <div class="border-t border-forest/15 pt-1.5 text-[7px] text-charcoal-muted space-y-0.5">
-                <p>
-                  <span class="lang-de"><strong>Speisely Journal</strong> wird herausgegeben von Speisely Technologies GmbH, Friedrichstraße, Berlin.</span>
-                  <span class="lang-en"><strong>Speisely Journal</strong> is published by Speisely Technologies GmbH, Friedrichstraße, Berlin.</span>
-                </p>
-                <p>ISSN 2940-1234 · <span class="lang-de">Alle Rechte vorbehalten.</span><span class="lang-en">All rights reserved.</span></p>
-                <p class="font-mono text-forest font-semibold">speisely.de/magazin</p>
-              </div>
-
+        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 border-l border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
+              <span>
+                <span class="lang-de">EDITORIAL & IMPRESSUM</span>
+                <span class="lang-en">EDITORIAL & MASTHEAD</span>
+              </span>
+              <span>
+                <span class="lang-de">SPEISELY JOURNAL · HERBST 2026</span>
+                <span class="lang-en">SPEISELY JOURNAL · AUTUMN 2026</span>
+              </span>
             </div>
 
-            <!-- Right Column: Editor's Letter -->
-            <div class="w-[66%] flex flex-col justify-between">
+            <!-- 2-Column Classic Layout (32% / 68%) -->
+            <div class="flex-1 flex gap-5 my-2.5">
               
-              <div>
-                <div class="flex items-start justify-between mb-2.5 border-b border-forest/10 pb-2">
+              <!-- Left Column: Masthead & Publisher -->
+              <div class="w-[34%] border-r border-forest/10 pr-3 flex flex-col justify-between text-[8px] text-charcoal leading-snug">
+                
+                <div class="space-y-2">
+                  <div class="border-b border-forest/15 pb-1.5">
+                    <span class="font-serif font-bold text-forest text-xs block">SPEISELY</span>
+                    <span class="font-mono text-[7px] text-forest/60 uppercase">JOURNAL BERLIN</span>
+                  </div>
+
                   <div>
-                    <h2 class="font-serif text-xl font-bold text-forest leading-tight">
-                      Editor's Note
-                    </h2>
-                    <p class="text-[9.5px] font-sans text-gold-dark italic mt-0.5">
-                      <span class="lang-de">Von Ahmad F., Managing Editor</span>
-                      <span class="lang-en">By Ahmad F., Managing Editor</span>
+                    <span class="font-semibold text-forest block">Ahmad F.</span>
+                    <span class="text-charcoal-muted text-[7.5px]">Managing Editor</span>
+                  </div>
+
+                  <div>
+                    <span class="font-semibold text-forest block">Faizan A.</span>
+                    <span class="text-charcoal-muted text-[7.5px]">Editorial Director</span>
+                  </div>
+
+                  <div>
+                    <span class="font-semibold text-forest block">Sarah Lindner</span>
+                    <span class="text-charcoal-muted text-[7.5px]">Commercial Director</span>
+                  </div>
+
+                  <div>
+                    <span class="font-semibold text-forest block">David Weber</span>
+                    <span class="text-charcoal-muted text-[7.5px]">Art & Design</span>
+                  </div>
+
+                  <div>
+                    <span class="font-semibold text-forest block">Marc Küster</span>
+                    <span class="text-charcoal-muted text-[7.5px]">Production</span>
+                  </div>
+
+                  <div class="pt-1 border-t border-forest/10 text-[7.5px]">
+                    <span class="font-semibold text-forest block">
+                      <span class="lang-de">Abonnements & B2B:</span>
+                      <span class="lang-en">Subscriptions & B2B:</span>
+                    </span>
+                    <span class="text-forest underline font-mono text-[7px]">abo@speisely.de</span>
+                  </div>
+                </div>
+
+                <!-- Colophon -->
+                <div class="border-t border-forest/15 pt-1.5 text-[7px] text-charcoal-muted space-y-0.5">
+                  <p>
+                    <span class="lang-de"><strong>Speisely Journal</strong> wird herausgegeben von Speisely Technologies GmbH, Friedrichstraße, Berlin.</span>
+                    <span class="lang-en"><strong>Speisely Journal</strong> is published by Speisely Technologies GmbH, Friedrichstraße, Berlin.</span>
+                  </p>
+                  <p>ISSN 2940-1234 · <span class="lang-de">Alle Rechte vorbehalten.</span><span class="lang-en">All rights reserved.</span></p>
+                  <p class="font-mono text-forest font-semibold">speisely.de/magazin</p>
+                </div>
+
+              </div>
+
+              <!-- Right Column: Editor's Letter -->
+              <div class="w-[66%] flex flex-col justify-between">
+                
+                <div>
+                  <div class="flex items-start justify-between mb-2.5 border-b border-forest/10 pb-2">
+                    <div>
+                      <h2 class="font-serif text-xl font-bold text-forest leading-tight">
+                        Editor's Note
+                      </h2>
+                      <p class="text-[9.5px] font-sans text-gold-dark italic mt-0.5">
+                        <span class="lang-de">Von Ahmad F., Managing Editor</span>
+                        <span class="lang-en">By Ahmad F., Managing Editor</span>
+                      </p>
+                    </div>
+                    <div class="w-11 h-11 rounded overflow-hidden border border-forest/20 shadow-sm flex-shrink-0">
+                      <img src="/hero-cinematic.webp" alt="Editor Portrait" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+
+                  <!-- Editorial Copy -->
+                  <div class="text-[9.5px] font-sans text-charcoal leading-relaxed space-y-2">
+                    <p class="drop-cap">
+                      <span class="lang-de">Willkommen zur Herbstausgabe des Speisely Journal. In einer von schnellen Trends geprägten Gastronomiewelt besinnen wir uns auf das, was Bestand hat: authentisches Handwerk, kompromisslose Produktqualität und faire, transparente Marktstrukturen.</span>
+                      <span class="lang-en">Welcome to the Autumn edition of Speisely Journal. In a hospitality landscape driven by fast-moving trends, we celebrate what endures: authentic craft, uncompromising ingredient quality, and transparent market standards.</span>
+                    </p>
+                    <p>
+                      <span class="lang-de">In dieser Ausgabe führen uns unsere Recherchen von der 13-jährigen Festmeilen-Tradition der <em>Schnitzel Schmiede</em> in Mönchengladbach über das meisterhafte Holzkohlefeuer von <em>Alzaeem</em> in Berlin-Neukölln bis hin zu spannenden Community-Entdeckungen bei <em>Chicken Krush</em> in Prag und <em>Garçon de Café</em> in Berlin-Mitte.</span>
+                      <span class="lang-en">In this issue, our reporting takes us from the 13-year street festival mastery of <em>Schnitzel Schmiede</em> in Mönchengladbach, to the charcoal flames of <em>Alzaeem</em> on Berlin’s Sonnenallee, and viral community discoveries like <em>Chicken Krush</em> in Prague and <em>Garçon de Café</em> in Berlin-Mitte.</span>
+                    </p>
+                    <p>
+                      <span class="lang-de">Gastronomie lebt von menschlicher Begegnung. Wir wünschen Ihnen eine anregende Lektüre und genussvolle Einblicke.</span>
+                      <span class="lang-en">Gastronomy thrives on human connection. We wish you an inspiring read and delicious insights behind the pass.</span>
                     </p>
                   </div>
-                  <div class="w-11 h-11 rounded overflow-hidden border border-forest/20 shadow-sm flex-shrink-0">
-                    <img src="/hero-cinematic.webp" alt="Editor Portrait" class="w-full h-full object-cover">
+
+                  <!-- Signature -->
+                  <div class="flex justify-end pt-1">
+                    <div class="font-script text-2xl text-forest -rotate-2">
+                      Ahmad F.
+                    </div>
                   </div>
                 </div>
 
-                <!-- Editorial Copy -->
-                <div class="text-[9.5px] font-sans text-charcoal leading-relaxed space-y-2">
-                  <p class="drop-cap">
-                    <span class="lang-de">Willkommen zur Herbstausgabe des Speisely Journal. In einer von schnellen Trends geprägten Gastronomiewelt besinnen wir uns auf das, was Bestand hat: authentisches Handwerk, kompromisslose Produktqualität und faire, transparente Marktstrukturen.</span>
-                    <span class="lang-en">Welcome to the Autumn edition of Speisely Journal. In a hospitality landscape driven by fast-moving trends, we celebrate what endures: authentic craft, uncompromising ingredient quality, and transparent market standards.</span>
-                  </p>
-                  <p>
-                    <span class="lang-de">In dieser Ausgabe führen uns unsere Recherchen von der 13-jährigen Festmeilen-Tradition der <em>Schnitzel Schmiede</em> in Mönchengladbach über das meisterhafte Holzkohlefeuer von <em>Alzaeem</em> in Berlin-Neukölln bis hin zu spannenden Community-Entdeckungen bei <em>Chicken Krush</em> in Prag und <em>Garçon de Café</em> in Berlin-Mitte.</span>
-                    <span class="lang-en">In this issue, our reporting takes us from the 13-year street festival mastery of <em>Schnitzel Schmiede</em> in Mönchengladbach, to the charcoal flames of <em>Alzaeem</em> on Berlin’s Sonnenallee, and viral community discoveries like <em>Chicken Krush</em> in Prague and <em>Garçon de Café</em> in Berlin-Mitte.</span>
-                  </p>
-                  <p>
-                    <span class="lang-de">Gastronomie lebt von menschlicher Begegnung. Wir wünschen Ihnen eine anregende Lektüre und genussvolle Einblicke.</span>
-                    <span class="lang-en">Gastronomy thrives on human connection. We wish you an inspiring read and delicious insights behind the pass.</span>
+                <!-- Partner Bar -->
+                <div class="border-t border-forest/15 pt-1.5 mt-1">
+                  <span class="text-[7.5px] font-mono font-semibold tracking-wider text-forest/70 uppercase block mb-0.5">
+                    <span class="lang-de">Branchen-Partner & Netzwerke:</span>
+                    <span class="lang-en">Industry Partners & Networks:</span>
+                  </span>
+                  <p class="text-[7.5px] text-charcoal-muted leading-tight">
+                    DEHOGA · Bio-Siegel · Slow Food · Rational · Metro Pro · Stripe B2B · Datev Cloud · TechGlanz
                   </p>
                 </div>
 
-                <!-- Signature -->
-                <div class="flex justify-end pt-1">
-                  <div class="font-script text-2xl text-forest -rotate-2">
-                    Ahmad F.
-                  </div>
-                </div>
-              </div>
-
-              <!-- Partner Bar -->
-              <div class="border-t border-forest/15 pt-1.5 mt-1">
-                <span class="text-[7.5px] font-mono font-semibold tracking-wider text-forest/70 uppercase block mb-0.5">
-                  <span class="lang-de">Branchen-Partner & Netzwerke:</span>
-                  <span class="lang-en">Industry Partners & Networks:</span>
-                </span>
-                <p class="text-[7.5px] text-charcoal-muted leading-tight">
-                  DEHOGA · Bio-Siegel · Slow Food · Rational · Metro Pro · Stripe B2B · Datev Cloud · TechGlanz
-                </p>
               </div>
 
             </div>
 
+            <!-- Bottom Folio -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
+              <span>03</span>
+              <span>
+                <span class="lang-de">Speisely Journal · Herbst 2026</span>
+                <span class="lang-en">Speisely Journal · Autumn 2026</span>
+              </span>
+            </div>
           </div>
-
-          <!-- Bottom Folio -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
-            <span>03</span>
-            <span>
-              <span class="lang-de">Speisely Journal · Herbst 2026</span>
-              <span class="lang-en">Speisely Journal · Autumn 2026</span>
-            </span>
-          </div>
-
         </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 4: ADVERTORIAL / B2B FEATURE (SPEISELY ENTERPRISE)           -->
         <!-- ================================================================= -->
-        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-r border-forest/10">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
-            <span>
-              <span class="lang-de">B2B SPECIAL REPORT · FIRMEN-CATERING</span>
-              <span class="lang-en">B2B SPECIAL REPORT · CORPORATE CATERING</span>
-            </span>
-            <span>SEITE 04 / P. 04</span>
-          </div>
-
-          <!-- Hero Image -->
-          <div class="my-2">
-            <div class="h-40 rounded-sm overflow-hidden border border-forest/15 shadow-md relative">
-              <img src="/magazin/alzaeem-berlin/table-spread-pro.webp" alt="Speisely Enterprise Catering Feast" class="w-full h-full object-cover">
-            </div>
-            <span class="text-[7.5px] font-sans italic text-charcoal-muted mt-1 block">
-              <span class="lang-de">Foto: Handverlesene Buffets für Firmenfeiern und Konferenzen bundesweit.</span>
-              <span class="lang-en">Photo: Handcrafted culinary banquets for corporate conferences nationwide.</span>
-            </span>
-          </div>
-
-          <!-- Editorial Headline & Deck -->
-          <div>
-            <span class="text-[8px] font-sans font-semibold text-gold-dark uppercase tracking-widest block">
-              <span class="lang-de">Marktbericht Deutschland 2026</span>
-              <span class="lang-en">Germany Market Intelligence 2026</span>
-            </span>
-            <h2 class="font-serif text-lg font-bold text-forest leading-snug mt-0.5">
-              <span class="lang-de">Wo Spitzenküche auf Corporate-Logistik trifft</span>
-              <span class="lang-en">Where High Gastronomy Meets Corporate Logistics</span>
-            </h2>
-            <p class="text-[9.5px] font-sans text-charcoal-muted leading-relaxed mt-0.5">
-              <span class="lang-de">Firmen-Catering ab 18 € pro Person: Wie Speisely Enterprise Großunternehmen, Agenturen und Kongresse mit über 47 Spitzen-Caterern verbindet.</span>
-              <span class="lang-en">Corporate catering starting at €18/head: How Speisely Enterprise connects corporations and agencies with over 47 verified caterers.</span>
-            </p>
-          </div>
-
-          <!-- 2-Column Body Text -->
-          <div class="grid grid-cols-2 gap-3.5 text-[9px] font-sans text-charcoal leading-relaxed border-t border-b border-forest/10 py-2.5 my-1.5">
-            <div>
-              <p class="mb-1.5">
-                <span class="lang-de">Traditionelle Catering-Vermittler verlangen häufig bis zu 25% Provision — Kosten, die letztlich zulasten von Portionsgrößen oder Zutatenqualität gehen.</span>
-                <span class="lang-en">Traditional catering agencies charge up to 25% commission — a surcharge that directly degrades portion sizing and fresh ingredient sourcing.</span>
-              </p>
-              <p>
-                <span class="lang-de">Speisely Enterprise setzt auf das provisionsfreie Direktmodell: Unternehmen verhandeln direkt mit zertifizierten Küchenchefs und erhalten transparente Netto-Angebote.</span>
-                <span class="lang-en">Speisely Enterprise champions the 0% commission direct framework: clients deal directly with certified head chefs with full net-price transparency.</span>
-              </p>
-            </div>
-            <div>
-              <p class="mb-1.5">
-                <span class="lang-de">Von Fingerfood-Empfängen in Berlin und NRW bis zu Messegroßaufträgen in München, Frankfurt und Hamburg: Jeder Partner wird vor Ort auf Hygiene und Frische auditiert.</span>
-                <span class="lang-en">From executive fingerfood receptions in Berlin and NRW to expo catering in Munich, Frankfurt, and Hamburg: every culinary partner is vetted on-site.</span>
-              </p>
-              <p>
-                <span class="lang-de">Inklusive zentraler Sammelrechnung, Allergen-Deklaration und persönlicher Event-Betreuung.</span>
-                <span class="lang-en">Includes unified corporate consolidated billing, automated allergen labeling, and dedicated event management.</span>
-              </p>
-            </div>
-          </div>
-
-          <!-- Inquiry Box -->
-          <div class="flex items-center justify-between py-1.5 px-3 border border-forest/20 bg-forest/5 rounded-sm">
-            <div>
-              <span class="text-[9px] font-serif font-bold text-forest block">
-                <span class="lang-de">Firmen-Catering anfragen</span>
-                <span class="lang-en">Inquire Corporate Catering</span>
+        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 border-r border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
+              <span>
+                <span class="lang-de">B2B SPECIAL REPORT · FIRMEN-CATERING</span>
+                <span class="lang-en">B2B SPECIAL REPORT · CORPORATE CATERING</span>
               </span>
-              <span class="text-[8px] text-charcoal-muted">
-                <span class="lang-de">Kostenlose Menüvorschläge innerhalb von 24 Stunden.</span>
-                <span class="lang-en">Receive bespoke culinary proposals within 24 hours.</span>
+              <span>SEITE 04 / P. 04</span>
+            </div>
+
+            <!-- Hero Image -->
+            <div class="my-2">
+              <div class="h-36 rounded-sm overflow-hidden border border-forest/15 shadow-md relative">
+                <img src="/magazin/alzaeem-berlin/table-spread-pro.webp" alt="Speisely Enterprise Catering Feast" class="w-full h-full object-cover">
+              </div>
+              <span class="text-[7.5px] font-sans italic text-charcoal-muted mt-1 block">
+                <span class="lang-de">Foto: Handverlesene Buffets für Firmenfeiern und Konferenzen bundesweit.</span>
+                <span class="lang-en">Photo: Handcrafted culinary banquets for corporate conferences nationwide.</span>
               </span>
             </div>
-            <a href="https://speisely.de/catering/events" target="_blank" class="text-[8.5px] font-mono font-bold uppercase text-forest border border-forest px-2.5 py-0.5 hover:bg-forest hover:text-white transition">
-              speisely.de/catering/events ↗
-            </a>
-          </div>
 
-          <!-- Bottom Folio -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
-            <span>
-              <span class="lang-de">Speisely Journal · Ausgabe 04</span>
-              <span class="lang-en">Speisely Journal · Issue 04</span>
-            </span>
-            <span>04</span>
-          </div>
+            <!-- Editorial Headline & Deck -->
+            <div>
+              <span class="text-[8px] font-sans font-semibold text-gold-dark uppercase tracking-widest block">
+                <span class="lang-de">Marktbericht Deutschland 2026</span>
+                <span class="lang-en">Germany Market Intelligence 2026</span>
+              </span>
+              <h2 class="font-serif text-lg font-bold text-forest leading-snug mt-0.5">
+                <span class="lang-de">Wo Spitzenküche auf Corporate-Logistik trifft</span>
+                <span class="lang-en">Where High Gastronomy Meets Corporate Logistics</span>
+              </h2>
+              <p class="text-[9.5px] font-sans text-charcoal-muted leading-relaxed mt-0.5">
+                <span class="lang-de">Firmen-Catering ab 18 € pro Person: Wie Speisely Enterprise Großunternehmen, Agenturen und Kongresse mit über 47 Spitzen-Caterern verbindet.</span>
+                <span class="lang-en">Corporate catering starting at €18/head: How Speisely Enterprise connects corporations and agencies with over 47 verified caterers.</span>
+              </p>
+            </div>
 
+            <!-- 2-Column Body Text -->
+            <div class="grid grid-cols-2 gap-3.5 text-[9px] font-sans text-charcoal leading-relaxed border-t border-b border-forest/10 py-2 my-1">
+              <div>
+                <p class="mb-1.5">
+                  <span class="lang-de">Traditionelle Catering-Vermittler verlangen häufig bis zu 25% Provision — Kosten, die letztlich zulasten von Portionsgrößen oder Zutatenqualität gehen.</span>
+                  <span class="lang-en">Traditional catering agencies charge up to 25% commission — a surcharge that directly degrades portion sizing and fresh ingredient sourcing.</span>
+                </p>
+                <p>
+                  <span class="lang-de">Speisely Enterprise setzt auf das provisionsfreie Direktmodell: Unternehmen verhandeln direkt mit zertifizierten Küchenchefs und erhalten transparente Netto-Angebote.</span>
+                  <span class="lang-en">Speisely Enterprise champions the 0% commission direct framework: clients deal directly with certified head chefs with full net-price transparency.</span>
+                </p>
+              </div>
+              <div>
+                <p class="mb-1.5">
+                  <span class="lang-de">Von Fingerfood-Empfängen in Berlin und NRW bis zu Messegroßaufträgen in München, Frankfurt und Hamburg: Jeder Partner wird vor Ort auf Hygiene und Frische auditiert.</span>
+                  <span class="lang-en">From executive fingerfood receptions in Berlin and NRW to expo catering in Munich, Frankfurt, and Hamburg: every culinary partner is vetted on-site.</span>
+                </p>
+                <p>
+                  <span class="lang-de">Inklusive zentraler Sammelrechnung, Allergen-Deklaration und persönlicher Event-Betreuung.</span>
+                  <span class="lang-en">Includes unified corporate consolidated billing, automated allergen labeling, and dedicated event management.</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Inquiry Box -->
+            <div class="flex items-center justify-between py-1.5 px-3 border border-forest/20 bg-forest/5 rounded-sm">
+              <div>
+                <span class="text-[9px] font-serif font-bold text-forest block">
+                  <span class="lang-de">Firmen-Catering anfragen</span>
+                  <span class="lang-en">Inquire Corporate Catering</span>
+                </span>
+                <span class="text-[8px] text-charcoal-muted">
+                  <span class="lang-de">Kostenlose Menüvorschläge innerhalb von 24 Stunden.</span>
+                  <span class="lang-en">Receive bespoke culinary proposals within 24 hours.</span>
+                </span>
+              </div>
+              <a href="https://speisely.de/catering/events" target="_blank" class="text-[8.5px] font-mono font-bold uppercase text-forest border border-forest px-2.5 py-0.5 hover:bg-forest hover:text-white transition">
+                speisely.de/catering/events ↗
+              </a>
+            </div>
+
+            <!-- Bottom Folio -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
+              <span>
+                <span class="lang-de">Speisely Journal · Ausgabe 04</span>
+                <span class="lang-en">Speisely Journal · Issue 04</span>
+              </span>
+              <span>04</span>
+            </div>
+          </div>
         </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 5: TABLE OF CONTENTS (INHALTSVERZEICHNIS)                     -->
         <!-- ================================================================= -->
-        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-l border-forest/10">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
-            <span>
-              <span class="lang-de">INHALTSVERZEICHNIS</span>
-              <span class="lang-en">TABLE OF CONTENTS</span>
-            </span>
-            <span>HERBST 2026 / AUTUMN 2026</span>
+        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 border-l border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
+              <span>
+                <span class="lang-de">INHALTSVERZEICHNIS</span>
+                <span class="lang-en">TABLE OF CONTENTS</span>
+              </span>
+              <span>HERBST 2026 / AUTUMN 2026</span>
+            </div>
+
+            <!-- Title Block -->
+            <div class="my-1">
+              <h2 class="font-serif text-2xl font-extrabold text-forest tracking-tight">
+                <span class="lang-de">In dieser Ausgabe</span>
+                <span class="lang-en">In This Issue</span>
+              </h2>
+              <p class="text-[9.5px] font-sans text-charcoal-muted mt-0.5">
+                <span class="lang-de">Schwerpunkte, Porträts und Berichte aus der Gastronomie-Landschaft.</span>
+                <span class="lang-en">Key features, profiles, and dispatches from the culinary landscape.</span>
+              </p>
+            </div>
+
+            <!-- Structured Editorial TOC List -->
+            <div class="space-y-2.5 my-1">
+              
+              <div class="border-b border-forest/10 pb-1.5 flex items-start gap-3.5">
+                <span class="font-serif text-xl font-bold text-gold-dark w-7">06</span>
+                <div class="flex-1">
+                  <span class="text-[7px] font-mono uppercase tracking-widest text-forest-muted block">
+                    <span class="lang-de">Fest-Reportage · Mönchengladbach</span>
+                    <span class="lang-en">Festival Feature · Mönchengladbach</span>
+                  </span>
+                  <h4 class="font-serif text-xs font-bold text-forest">
+                    <span class="lang-de">13 Jahre Schnitzel Schmiede: Tradition & Meilenkultur</span>
+                    <span class="lang-en">13 Years of Schnitzel Schmiede: Festival Mastery</span>
+                  </h4>
+                  <p class="text-[8.5px] text-charcoal-muted mt-0.5">
+                    <span class="lang-de">Wie Butterschmalz-Soufflieren zum kulinarischen Wahrzeichen an der Bismarckstraße wurde.</span>
+                    <span class="lang-en">How clarified butter pan-frying became a culinary landmark on Bismarckstraße.</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="border-b border-forest/10 pb-1.5 flex items-start gap-3.5">
+                <span class="font-serif text-xl font-bold text-gold-dark w-7">07</span>
+                <div class="flex-1">
+                  <span class="text-[7px] font-mono uppercase tracking-widest text-forest-muted block">
+                    <span class="lang-de">Grillmeister Q&A · Berlin-Neukölln</span>
+                    <span class="lang-en">Grill Master Q&A · Berlin-Neukölln</span>
+                  </span>
+                  <h4 class="font-serif text-xs font-bold text-forest">
+                    <span class="lang-de">Alzaeem: Holzkohle-Kultur auf der Sonnenallee</span>
+                    <span class="lang-en">Alzaeem: Charcoal Culture on Sonnenallee</span>
+                  </h4>
+                  <p class="text-[8.5px] text-charcoal-muted mt-0.5">
+                    <span class="lang-de">Syrische Mezze-Tradition, Mix Grill #44 und die Expansion ins mobile Event-Catering.</span>
+                    <span class="lang-en">Syrian mezze craft, Mix Grill #44, and corporate live-catering expansion.</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="border-b border-forest/10 pb-1.5 flex items-start gap-3.5">
+                <span class="font-serif text-xl font-bold text-gold-dark w-7">08</span>
+                <div class="flex-1">
+                  <span class="text-[7px] font-mono uppercase tracking-widest text-forest-muted block">
+                    <span class="lang-de">Community Report · Prag, Berlin & Frankfurt</span>
+                    <span class="lang-en">Community Field Dispatches · Prague, Berlin & Frankfurt</span>
+                  </span>
+                  <h4 class="font-serif text-xs font-bold text-forest">
+                    <span class="lang-de">Authentische Restaurantbesuche der Speisely Community</span>
+                    <span class="lang-en">Authentic Food Discoveries from the Speisely Community</span>
+                  </h4>
+                  <p class="text-[8.5px] text-charcoal-muted mt-0.5">
+                    <span class="lang-de">Korean Crunch bei Chicken Krush, Specialty Coffee im EDGE Atrium und Halal Burger in Friedrichshain.</span>
+                    <span class="lang-en">Korean crunch at Chicken Krush, specialty coffee in EDGE Atrium, and halal burgers in Friedrichshain.</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="border-b border-forest/10 pb-1.5 flex items-start gap-3.5">
+                <span class="font-serif text-xl font-bold text-gold-dark w-7">09</span>
+                <div class="flex-1">
+                  <span class="text-[7px] font-mono uppercase tracking-widest text-forest-muted block">
+                    <span class="lang-de">Dessert & Foodtech Architecture</span>
+                    <span class="lang-en">Dessert Art & Foodtech Architecture</span>
+                  </span>
+                  <h4 class="font-serif text-xs font-bold text-forest">
+                    <span class="lang-de">San Sebastian Cheesecake & Cloud-Infrastruktur</span>
+                    <span class="lang-en">San Sebastian Cheesecake & Cloud Infrastructure</span>
+                  </h4>
+                  <p class="text-[8.5px] text-charcoal-muted mt-0.5">
+                    <span class="lang-de">Baskischer Schmelzkern-Kult trifft auf TanStack Start Edge Gateways und Kassen-Synchronisation.</span>
+                    <span class="lang-en">Basque molten-center cult meets TanStack Start serverless edge speed.</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3.5 pb-1">
+                <span class="font-serif text-xl font-bold text-gold-dark w-7">10</span>
+                <div class="flex-1">
+                  <span class="text-[7px] font-mono uppercase tracking-widest text-forest-muted block">
+                    <span class="lang-de">Marktvergleich & Abschluss</span>
+                    <span class="lang-en">Market Comparison & Colophon</span>
+                  </span>
+                  <h4 class="font-serif text-xs font-bold text-forest">
+                    <span class="lang-de">B2B Catering: Traditionelle Vermittler vs. Speisely Direkt</span>
+                    <span class="lang-en">B2B Catering: Traditional Brokers vs. Speisely Direct</span>
+                  </h4>
+                  <p class="text-[8.5px] text-charcoal-muted mt-0.5">
+                    <span class="lang-de">Der transparente Konditionen-Vergleich für deutsche Caterer und Firmenbesteller.</span>
+                    <span class="lang-en">Transparent fee and margin comparisons for corporate event buyers.</span>
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Editorial Highlights & Focus Box -->
+            <div class="border border-forest/15 rounded-sm p-2.5 bg-forest/[0.03] my-1">
+              <span class="text-[7.5px] font-mono uppercase tracking-widest text-gold-dark font-semibold block mb-1">
+                <span class="lang-de">Schwerpunkte & Redaktionsfokus</span>
+                <span class="lang-en">Editorial Focus & Highlights</span>
+              </span>
+              <div class="grid grid-cols-2 gap-2 text-[8px] text-charcoal">
+                <div class="border-r border-forest/10 pr-2">
+                  <strong class="text-forest block font-serif">B2B Markt-Transparenz</strong>
+                  <span class="text-charcoal-muted leading-tight block mt-0.5">
+                    <span class="lang-de">0% Vermittlungsaufschlag und direkte Küchenchef-Absprachen im Bundesvergleich (S. 04 &amp; 10).</span>
+                    <span class="lang-en">0% broker surcharge and direct head chef dialog nationwide (p. 04 &amp; 10).</span>
+                  </span>
+                </div>
+                <div>
+                  <strong class="text-forest block font-serif">Handwerk & Kiez</strong>
+                  <span class="text-charcoal-muted leading-tight block mt-0.5">
+                    <span class="lang-de">Authentische Porträts traditionsreicher Gastronomen von Mönchengladbach bis Berlin (S. 06–08).</span>
+                    <span class="lang-en">Authentic culinary portraits from Mönchengladbach to Berlin (p. 06–08).</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Issue Metadata Strip -->
+            <div class="border-t border-forest/10 pt-1 text-[7px] font-mono text-forest-muted flex justify-between items-center">
+              <span>
+                <span class="lang-de">Ausgabe 04 · Quartalsausgabe · ISSN 2940-1234</span>
+                <span class="lang-en">Issue 04 · Quarterly Edition · ISSN 2940-1234</span>
+              </span>
+              <span>
+                <span class="lang-de">Geprüfte Speisely Qualität</span>
+                <span class="lang-en">Vetted Speisely Standards</span>
+              </span>
+            </div>
+
+            <!-- Bottom Folio -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
+              <span>05</span>
+              <span>speisely.de/magazin</span>
+            </div>
           </div>
-
-          <!-- Title Block -->
-          <div class="my-1.5">
-            <h2 class="font-serif text-2xl font-extrabold text-forest tracking-tight">
-              <span class="lang-de">In dieser Ausgabe</span>
-              <span class="lang-en">In This Issue</span>
-            </h2>
-            <p class="text-[10px] font-sans text-charcoal-muted mt-0.5">
-              <span class="lang-de">Schwerpunkte, Porträts und Berichte aus der Gastronomie-Landschaft.</span>
-              <span class="lang-en">Key features, profiles, and dispatches from the culinary landscape.</span>
-            </p>
-          </div>
-
-          <!-- Structured Editorial TOC List -->
-          <div class="space-y-3.5 my-auto">
-            
-            <div class="border-b border-forest/10 pb-2.5 flex items-start gap-4">
-              <span class="font-serif text-2xl font-bold text-gold-dark w-9">06</span>
-              <div class="flex-1">
-                <span class="text-[7.5px] font-mono uppercase tracking-widest text-forest-muted block">
-                  <span class="lang-de">Fest-Reportage · Mönchengladbach</span>
-                  <span class="lang-en">Festival Feature · Mönchengladbach</span>
-                </span>
-                <h4 class="font-serif text-xs font-bold text-forest">
-                  <span class="lang-de">13 Jahre Schnitzel Schmiede: Tradition & Meilenkultur</span>
-                  <span class="lang-en">13 Years of Schnitzel Schmiede: Festival Mastery</span>
-                </h4>
-                <p class="text-[9px] text-charcoal-muted mt-0.5">
-                  <span class="lang-de">Wie Butterschmalz-Soufflieren zum kulinarischen Wahrzeichen an der Bismarckstraße wurde.</span>
-                  <span class="lang-en">How clarified butter pan-frying became a culinary landmark on Bismarckstraße.</span>
-                </p>
-              </div>
-            </div>
-
-            <div class="border-b border-forest/10 pb-2.5 flex items-start gap-4">
-              <span class="font-serif text-2xl font-bold text-gold-dark w-9">07</span>
-              <div class="flex-1">
-                <span class="text-[7.5px] font-mono uppercase tracking-widest text-forest-muted block">
-                  <span class="lang-de">Grillmeister Q&A · Berlin-Neukölln</span>
-                  <span class="lang-en">Grill Master Q&A · Berlin-Neukölln</span>
-                </span>
-                <h4 class="font-serif text-xs font-bold text-forest">
-                  <span class="lang-de">Alzaeem: Holzkohle-Kultur auf der Sonnenallee</span>
-                  <span class="lang-en">Alzaeem: Charcoal Culture on Sonnenallee</span>
-                </h4>
-                <p class="text-[9px] text-charcoal-muted mt-0.5">
-                  <span class="lang-de">Syrische Mezze-Tradition, Mix Grill #44 und die Expansion ins mobile Event-Catering.</span>
-                  <span class="lang-en">Syrian mezze craft, Mix Grill #44, and corporate live-catering expansion.</span>
-                </p>
-              </div>
-            </div>
-
-            <div class="border-b border-forest/10 pb-2.5 flex items-start gap-4">
-              <span class="font-serif text-2xl font-bold text-gold-dark w-9">08</span>
-              <div class="flex-1">
-                <span class="text-[7.5px] font-mono uppercase tracking-widest text-forest-muted block">
-                  <span class="lang-de">Community Report · Prag & Berlin</span>
-                  <span class="lang-en">Community Field Dispatches · Prague & Berlin</span>
-                </span>
-                <h4 class="font-serif text-xs font-bold text-forest">
-                  <span class="lang-de">Authentische Restaurantbesuche der Speisely Community</span>
-                  <span class="lang-en">Authentic Food Discoveries from the Speisely Community</span>
-                </h4>
-                <p class="text-[9px] text-charcoal-muted mt-0.5">
-                  <span class="lang-de">Korean Crunch bei Chicken Krush, Specialty Coffee im EDGE Atrium und Halal Burger in Friedrichshain.</span>
-                  <span class="lang-en">Korean crunch at Chicken Krush, specialty coffee in EDGE Atrium, and halal burgers in Friedrichshain.</span>
-                </p>
-              </div>
-            </div>
-
-            <div class="border-b border-forest/10 pb-2.5 flex items-start gap-4">
-              <span class="font-serif text-2xl font-bold text-gold-dark w-9">09</span>
-              <div class="flex-1">
-                <span class="text-[7.5px] font-mono uppercase tracking-widest text-forest-muted block">
-                  <span class="lang-de">Dessert & Foodtech Architecture</span>
-                  <span class="lang-en">Dessert Art & Foodtech Architecture</span>
-                </span>
-                <h4 class="font-serif text-xs font-bold text-forest">
-                  <span class="lang-de">San Sebastian Cheesecake & Cloud-Infrastruktur</span>
-                  <span class="lang-en">San Sebastian Cheesecake & Cloud Infrastructure</span>
-                </h4>
-                <p class="text-[9px] text-charcoal-muted mt-0.5">
-                  <span class="lang-de">Baskischer Schmelzkern-Kult trifft auf TanStack Start Edge Gateways und Kassen-Synchronisation.</span>
-                  <span class="lang-en">Basque molten-center cult meets TanStack Start serverless edge speed.</span>
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-4">
-              <span class="font-serif text-2xl font-bold text-gold-dark w-9">10</span>
-              <div class="flex-1">
-                <span class="text-[7.5px] font-mono uppercase tracking-widest text-forest-muted block">
-                  <span class="lang-de">Marktvergleich & Impressum</span>
-                  <span class="lang-en">Market Comparison & Imprint</span>
-                </span>
-                <h4 class="font-serif text-xs font-bold text-forest">
-                  <span class="lang-de">B2B Catering: Traditionelle Vermittler vs. Speisely Direkt</span>
-                  <span class="lang-en">B2B Catering: Traditional Brokers vs. Speisely Direct</span>
-                </h4>
-                <p class="text-[9px] text-charcoal-muted mt-0.5">
-                  <span class="lang-de">Der transparente Konditionen-Vergleich für deutsche Caterer und Firmenbesteller.</span>
-                  <span class="lang-en">Transparent fee and margin comparisons for corporate event buyers.</span>
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom Folio -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
-            <span>05</span>
-            <span>speisely.de/magazin</span>
-          </div>
-
         </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 6: REPORTAGE — SCHNITZEL SCHMIEDE MÖNCHENGLADBACH            -->
         <!-- ================================================================= -->
-        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-r border-forest/10">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
+        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 border-r border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
             <span>
               <span class="lang-de">FEST-REPORTAGE · TRADITIONSGASTRONOMIE</span>
               <span class="lang-en">FESTIVAL REPORTAGE · CULINARY TRADITION</span>
@@ -1058,16 +1103,16 @@
             </span>
             <span>06</span>
           </div>
-
         </div>
+      </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 7: SPOTLIGHT — ALZAEEM BERLIN-NEUKÖLLN                       -->
         <!-- ================================================================= -->
-        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-l border-forest/10">
-          
-          <!-- Running Header -->
+        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 border-l border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
           <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
             <span>
               <span class="lang-de">PORTRAIT · BERLINER KULINARIK</span>
@@ -1249,349 +1294,408 @@
               <span class="lang-en">Speisely Journal · Autumn 2026</span>
             </span>
           </div>
-
         </div>
+      </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 8: COMMUNITY DISPATCHES (PRAG, MITTE, FRIEDRICHSHAIN)        -->
         <!-- ================================================================= -->
-        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-r border-forest/10">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
-            <span>
-              <span class="lang-de">COMMUNITY · FIELD DISPATCHES</span>
-              <span class="lang-en">COMMUNITY · FIELD DISPATCHES</span>
-            </span>
-            <span>SEITE 08 / P. 08</span>
-          </div>
+        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 border-r border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
+              <span>
+                <span class="lang-de">COMMUNITY · FIELD DISPATCHES</span>
+                <span class="lang-en">COMMUNITY · FIELD DISPATCHES</span>
+              </span>
+              <span>SEITE 08 / P. 08</span>
+            </div>
 
-          <!-- Title Block -->
-          <div class="my-1.5">
-            <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
-              <span class="lang-de">Echte Einsendungen vor Ort getestet</span>
-              <span class="lang-en">Authentic Community Recommendations</span>
-            </span>
-            <h2 class="font-serif text-xl font-bold text-forest leading-tight mt-0.5">
-              <span class="lang-de">Geschichten aus der Food-Community</span>
-              <span class="lang-en">Dispatches from the Food Community</span>
-            </h2>
-            <p class="text-[9.5px] font-sans text-charcoal-muted mt-0.5 leading-snug">
-              <span class="lang-de">Drei unabhängige Restaurantkonzepte im redaktionellen Community-Fokus.</span>
-              <span class="lang-en">Three independent gastronomy concepts spotlighted by our editorial collective.</span>
-            </p>
-          </div>
+            <!-- Title Block -->
+            <div class="my-1">
+              <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
+                <span class="lang-de">Echte Einsendungen vor Ort getestet</span>
+                <span class="lang-en">Authentic Community Recommendations</span>
+              </span>
+              <h2 class="font-serif text-xl font-bold text-forest leading-tight mt-0.5">
+                <span class="lang-de">Geschichten aus der Food-Community</span>
+                <span class="lang-en">Dispatches from the Food Community</span>
+              </h2>
+              <p class="text-[9px] font-sans text-charcoal-muted mt-0.5 leading-snug">
+                <span class="lang-de">Vier unabhängige Restaurantkonzepte im redaktionellen Community-Fokus.</span>
+                <span class="lang-en">Four independent gastronomy concepts spotlighted by our editorial collective.</span>
+              </p>
+            </div>
 
-          <!-- Lead Story: Chicken Krush Prag -->
-          <div class="border-t border-b border-forest/10 py-2.5 my-1">
-            <div class="flex items-center gap-3">
-              <div class="w-22 h-18 rounded-sm overflow-hidden border border-forest/15 flex-shrink-0 shadow-sm">
-                <img src="/magazin/chicken-krush-prag/chicken-krush-real-01.webp" alt="Chicken Krush Prag" class="w-full h-full object-cover">
+            <!-- Lead Story 1: Chicken Krush Prag -->
+            <div class="border-t border-b border-forest/10 py-1.5 my-0.5">
+              <div class="flex items-center gap-3">
+                <div class="w-24 h-20 rounded-sm overflow-hidden border border-forest/15 flex-shrink-0 shadow-sm relative">
+                  <img src="/magazin/chicken-krush-prag/chicken-krush-real-01.webp" alt="Chicken Krush Prag" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                  <span class="text-[7.5px] font-mono uppercase tracking-wider text-gold-dark block">Prag-Nové Město · Korean Comfort</span>
+                  <h4 class="font-serif text-xs font-bold text-forest leading-tight mt-0.5">Chicken Krush: Yangnyeom &amp; Snow Flake</h4>
+                  <p class="text-[8.5px] font-sans text-charcoal-muted mt-0.5 leading-snug">
+                    <span class="lang-de">Doppelt frittiertes Korean Fried Chicken mit Rose Tteokbokki und kontaktloser QR-Bestellung direkt am Tisch. Knusprig, saftig, authentisch.</span>
+                    <span class="lang-en">Double-fried Korean chicken with Rose Tteokbokki and seamless table-side QR ordering. Ultra-crispy, succulent, authentic.</span>
+                  </p>
+                </div>
               </div>
-              <div class="flex-1">
-                <span class="text-[7.5px] font-mono uppercase tracking-wider text-gold-dark block">Prag-Nové Město · Korean Comfort</span>
-                <h4 class="font-serif text-xs font-bold text-forest leading-tight mt-0.5">Chicken Krush: Yangnyeom & Snow Flake</h4>
-                <p class="text-[9px] font-sans text-charcoal-muted mt-0.5 leading-snug">
-                  <span class="lang-de">Doppelt frittiertes Korean Fried Chicken mit Rose Tteokbokki und kontaktloser QR-Bestellung direkt am Tisch. Knusprig, saftig, authentisch.</span>
-                  <span class="lang-en">Double-fried Korean chicken with Rose Tteokbokki and seamless table-side QR ordering. Ultra-crispy, succulent, authentic.</span>
+            </div>
+
+            <!-- 2 Middle Stories: Garçon de Café & Thronburger -->
+            <div class="grid grid-cols-2 gap-3 my-0.5">
+              
+              <!-- Story 2 -->
+              <div class="border-r border-forest/10 pr-2">
+                <div class="h-20 rounded-sm overflow-hidden border border-forest/15 mb-1 shadow-sm relative">
+                  <img src="/magazin/garcon-de-cafe-berlin/garcon-01.webp" alt="Garçon de Café Berlin" class="w-full h-full object-cover">
+                </div>
+                <span class="text-[7px] font-mono uppercase tracking-wider text-forest-muted block">Berlin-Mitte · EDGE Grand Central</span>
+                <h5 class="font-serif text-[11px] font-bold text-forest mt-0.5">Garçon de Café</h5>
+                <p class="text-[8px] font-sans text-charcoal-muted mt-0.5 leading-snug">
+                  <span class="lang-de">Specialty Coffee, feine Pâtisserie und moderne Atrium-Atmosphäre direkt am Hauptbahnhof.</span>
+                  <span class="lang-en">Specialty single-origin coffees, delicate pastries, and glass atrium architecture.</span>
                 </p>
               </div>
-            </div>
-          </div>
 
-          <!-- 2 Secondary Stories: Garçon de Café & Thronburger -->
-          <div class="grid grid-cols-2 gap-3.5 my-1">
-            
-            <!-- Story 2 -->
-            <div class="border-r border-forest/10 pr-2">
-              <div class="h-18 rounded-sm overflow-hidden border border-forest/15 mb-1 shadow-sm">
-                <img src="/magazin/garcon-de-cafe-berlin/garcon-01.webp" alt="Garçon de Café Berlin" class="w-full h-full object-cover">
+              <!-- Story 3 -->
+              <div>
+                <div class="h-20 rounded-sm overflow-hidden border border-forest/15 mb-1 shadow-sm relative">
+                  <img src="/magazin/thronburger-berlin/thronburger-01.webp" alt="Thronburger Berlin" class="w-full h-full object-cover">
+                </div>
+                <span class="text-[7px] font-mono uppercase tracking-wider text-forest-muted block">Berlin-Friedrichshain · Boxhagener Kiez</span>
+                <h5 class="font-serif text-[11px] font-bold text-forest mt-0.5">Thronburger</h5>
+                <p class="text-[8px] font-sans text-charcoal-muted mt-0.5 leading-snug">
+                  <span class="lang-de">100% Halal Black Angus Beef Burger im dunklen Sesam-Brioche mit Berliner Straßennamen.</span>
+                  <span class="lang-en">100% halal Black Angus smash patties on dark sesame brioche buns.</span>
+                </p>
               </div>
-              <span class="text-[7px] font-mono uppercase tracking-wider text-forest-muted block">Berlin-Mitte · EDGE Grand Central</span>
-              <h5 class="font-serif text-[11px] font-bold text-forest mt-0.5">Garçon de Café</h5>
-              <p class="text-[8.5px] font-sans text-charcoal-muted mt-0.5 leading-snug">
-                <span class="lang-de">Specialty Coffee, feine Pâtisserie und moderne Atrium-Atmosphäre direkt am Hauptbahnhof.</span>
-                <span class="lang-en">Specialty single-origin coffees, delicate pastries, and glass atrium architecture.</span>
-              </p>
+
             </div>
 
-            <!-- Story 3 -->
-            <div>
-              <div class="h-18 rounded-sm overflow-hidden border border-forest/15 mb-1 shadow-sm">
-                <img src="/magazin/thronburger-berlin/thronburger-01.webp" alt="Thronburger Berlin" class="w-full h-full object-cover">
+            <!-- Story 4: Ariana Restaurant Frankfurt -->
+            <div class="border-t border-b border-forest/10 py-1.5 my-0.5">
+              <div class="flex items-center gap-3">
+                <div class="w-24 h-20 rounded-sm overflow-hidden border border-forest/15 flex-shrink-0 shadow-sm relative">
+                  <img src="/magazin/ariana-frankfurt/qabili-palau.webp" alt="Ariana Restaurant Frankfurt" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                  <span class="text-[7.5px] font-mono uppercase tracking-wider text-gold-dark block">Frankfurt am Main · Weserstraße</span>
+                  <h4 class="font-serif text-xs font-bold text-forest leading-tight mt-0.5">Ariana: Traditionelle afghanische Küche</h4>
+                  <p class="text-[8.5px] font-sans text-charcoal-muted mt-0.5 leading-snug">
+                    <span class="lang-de">Langsam geschmorte Lammkeule auf duftendem Safran-Basmatireis mit karamellisierten Karottenstreifen, Rosinen und hausgebackenem Fladenbrot.</span>
+                    <span class="lang-en">Slow-braised tender lamb shank on aromatic saffron basmati rice with candied carrots, raisins, and warm flatbread.</span>
+                  </p>
+                </div>
               </div>
-              <span class="text-[7px] font-mono uppercase tracking-wider text-forest-muted block">Berlin-Friedrichshain · Boxhagener Kiez</span>
-              <h5 class="font-serif text-[11px] font-bold text-forest mt-0.5">Thronburger</h5>
-              <p class="text-[8.5px] font-sans text-charcoal-muted mt-0.5 leading-snug">
-                <span class="lang-de">100% Halal Black Angus Beef Burger im dunklen Sesam-Brioche mit Berliner Straßennamen.</span>
-                <span class="lang-en">100% halal Black Angus smash patties on dark sesame brioche buns.</span>
-              </p>
             </div>
 
-          </div>
+            <!-- Community Call-to-Action Bar -->
+            <div class="border-t border-forest/10 pt-1 flex items-center justify-between text-[8px] font-sans text-charcoal-muted">
+              <span>
+                <span class="lang-de">Teile dein Gastro-Erlebnis: <strong class="text-forest">info@speisely.de</strong></span>
+                <span class="lang-en">Share your culinary story: <strong class="text-forest">info@speisely.de</strong></span>
+              </span>
+              <a href="https://speisely.de/community" target="_blank" class="font-mono text-gold-dark font-semibold hover:underline">
+                speisely.de/community ↗
+              </a>
+            </div>
 
-          <!-- Community Call-to-Action Bar -->
-          <div class="border-t border-forest/10 pt-1.5 flex items-center justify-between text-[8px] font-sans text-charcoal-muted">
-            <span>
-              <span class="lang-de">Teile dein Gastro-Erlebnis: <strong class="text-forest">info@speisely.de</strong></span>
-              <span class="lang-en">Share your culinary story: <strong class="text-forest">info@speisely.de</strong></span>
-            </span>
-            <a href="https://speisely.de/community" target="_blank" class="font-mono text-gold-dark font-semibold hover:underline">
-              speisely.de/community ↗
-            </a>
+            <!-- Bottom Folio -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
+              <span>
+                <span class="lang-de">Speisely Journal · Herbst 2026</span>
+                <span class="lang-en">Speisely Journal · Autumn 2026</span>
+              </span>
+              <span>08</span>
+            </div>
           </div>
-
-          <!-- Bottom Folio -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
-            <span>
-              <span class="lang-de">Speisely Journal · Herbst 2026</span>
-              <span class="lang-en">Speisely Journal · Autumn 2026</span>
-            </span>
-            <span>08</span>
-          </div>
-
         </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 9: DESSERT ART & FOODTECH ARCHITECTURE                       -->
         <!-- ================================================================= -->
-        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-l border-forest/10">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
-            <span>
-              <span class="lang-de">PATISSERIE & FOODTECH-ARCHITEKTUR</span>
-              <span class="lang-en">DESSERT ART & FOODTECH ARCHITECTURE</span>
-            </span>
-            <span>SEITE 09 / P. 09</span>
-          </div>
+        <div class="page page-right bg-[#FAF8F5] text-charcoal px-8 py-6 border-l border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
+              <span>
+                <span class="lang-de">PATISSERIE & FOODTECH-ARCHITEKTUR</span>
+                <span class="lang-en">DESSERT ART & FOODTECH ARCHITECTURE</span>
+              </span>
+              <span>SEITE 09 / P. 09</span>
+            </div>
 
-          <!-- Top Half: San Sebastian Cheesecake Cult -->
-          <div class="my-1.5">
-            <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
-              <span class="lang-de">Kult-Patisserie · Berlin-Charlottenburg</span>
-              <span class="lang-en">Artisanal Patisserie · Berlin-Charlottenburg</span>
-            </span>
-            <h3 class="font-serif text-lg font-bold text-forest leading-tight mt-0.5">
-              <span class="lang-de">San Sebastian: Die flüssige Schmelzkern-Revolution</span>
-              <span class="lang-en">San Sebastian: The Molten-Center Revolution</span>
-            </h3>
+            <!-- Top Half: San Sebastian Cheesecake Cult -->
+            <div class="my-1.5">
+              <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
+                <span class="lang-de">Kult-Patisserie · Berlin-Charlottenburg</span>
+                <span class="lang-en">Artisanal Patisserie · Berlin-Charlottenburg</span>
+              </span>
+              <h3 class="font-serif text-lg font-bold text-forest leading-tight mt-0.5">
+                <span class="lang-de">San Sebastian: Die flüssige Schmelzkern-Revolution</span>
+                <span class="lang-en">San Sebastian: The Molten-Center Revolution</span>
+              </h3>
 
-            <div class="flex items-center gap-3 mt-1.5">
-              <div class="w-22 h-18 rounded-sm overflow-hidden border border-forest/15 flex-shrink-0 shadow-sm">
-                <img src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp" alt="San Sebastian Cheesecake" class="w-full h-full object-cover">
+              <div class="flex items-center gap-3 mt-1.5">
+                <div class="w-28 h-24 rounded-sm overflow-hidden border border-forest/15 flex-shrink-0 shadow-sm relative">
+                  <img src="/magazin/san-sebastian-berlin/san-sebastian-hd-01-choc-waterfall.webp" alt="San Sebastian Cheesecake" class="w-full h-full object-cover">
+                </div>
+                <p class="text-[9px] font-sans text-charcoal leading-relaxed">
+                  <span class="lang-de">Baskischer Cheesecake nach traditioneller Rezeptur mit karamellisierter Kruste und zartem Kern. Serviert mit einer heißen belgischen Schokoladen-Cascade und Pistazienstaub an der Kantstraße.</span>
+                  <span class="lang-en">Basque cheesecake baked to caramelized exterior perfection with a decadent molten core. Bathed in cascading warm Belgian milk chocolate and dusted with roasted Iranian pistachios on Kantstraße.</span>
+                </p>
               </div>
-              <p class="text-[9px] font-sans text-charcoal leading-relaxed">
-                <span class="lang-de">Baskischer Cheesecake nach traditioneller Rezeptur mit karamellisierter Kruste und zartem Kern. Serviert mit einer heißen belgischen Schokoladen-Cascade und Pistazienstaub an der Kantstraße.</span>
-                <span class="lang-en">Basque cheesecake baked to caramelized exterior perfection with a decadent molten core. Bathed in cascading warm Belgian milk chocolate and dusted with roasted Iranian pistachios on Kantstraße.</span>
+            </div>
+
+            <!-- Fine Hairline Divider -->
+            <div class="border-t border-forest/15 my-1.5"></div>
+
+            <!-- Bottom Half: TechGlanz Architecture Deep Dive -->
+            <div>
+              <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
+                <span class="lang-de">TechGlanz Studio Studie · Infrastruktur 2026</span>
+                <span class="lang-en">TechGlanz Engineering · Cloud Infrastructure</span>
+              </span>
+              <h3 class="font-serif text-base font-bold text-forest leading-snug mt-0.5">
+                <span class="lang-de">Die Technologie hinter Deutschlands modernster Gastronomie-Plattform</span>
+                <span class="lang-en">The Engineering Powering Germany's Leading Foodtech Suite</span>
+              </h3>
+
+              <p class="text-[9px] font-sans text-charcoal-muted mt-0.5 leading-relaxed">
+                <span class="lang-de">Speisely setzt auf modernste serverless Edge-Architektur, um Ladezeiten für Caterer und Kunden zu minimieren.</span>
+                <span class="lang-en">Speisely harnesses serverless edge execution to eliminate latency for corporate catering and kitchen order dispatch.</span>
               </p>
-            </div>
-          </div>
 
-          <!-- Fine Hairline Divider -->
-          <div class="border-t border-forest/15 my-1.5"></div>
-
-          <!-- Bottom Half: TechGlanz Architecture Deep Dive -->
-          <div>
-            <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
-              <span class="lang-de">TechGlanz Studio Studie · Infrastruktur 2026</span>
-              <span class="lang-en">TechGlanz Engineering · Cloud Infrastructure</span>
-            </span>
-            <h3 class="font-serif text-base font-bold text-forest leading-snug mt-0.5">
-              <span class="lang-de">Die Technologie hinter Deutschlands modernster Gastronomie-Plattform</span>
-              <span class="lang-en">The Engineering Powering Germany's Leading Foodtech Suite</span>
-            </h3>
-
-            <p class="text-[9px] font-sans text-charcoal-muted mt-0.5 leading-relaxed">
-              <span class="lang-de">Speisely setzt auf modernste serverless Edge-Architektur, um Ladezeiten für Caterer und Kunden zu minimieren.</span>
-              <span class="lang-en">Speisely harnesses serverless edge execution to eliminate latency for corporate catering and kitchen order dispatch.</span>
-            </p>
-
-            <!-- 3 Clean Metric Columns -->
-            <div class="grid grid-cols-3 gap-3 border-t border-b border-forest/10 py-2 my-1.5 text-center">
-              <div>
-                <span class="font-serif text-base font-bold text-forest block">&lt; 25ms</span>
-                <span class="text-[7.5px] font-mono text-charcoal-muted uppercase">Edge TTFB</span>
+              <!-- 3 Clean Metric Columns -->
+              <div class="grid grid-cols-3 gap-3 border-t border-b border-forest/10 py-2 my-1.5 text-center">
+                <div>
+                  <span class="font-serif text-base font-bold text-forest block">&lt; 25ms</span>
+                  <span class="text-[7.5px] font-mono text-charcoal-muted uppercase">Edge TTFB</span>
+                </div>
+                <div class="border-x border-forest/10">
+                  <span class="font-serif text-base font-bold text-forest block">&lt; 45ms</span>
+                  <span class="text-[7.5px] font-mono text-charcoal-muted uppercase">
+                    <span class="lang-de">Bon-Druck Sync</span>
+                    <span class="lang-en">Print Sync</span>
+                  </span>
+                </div>
+                <div>
+                  <span class="font-serif text-base font-bold text-forest block">99.98%</span>
+                  <span class="text-[7.5px] font-mono text-charcoal-muted uppercase">
+                    <span class="lang-de">Verfügbarkeit</span>
+                    <span class="lang-en">Uptime</span>
+                  </span>
+                </div>
               </div>
-              <div class="border-x border-forest/10">
-                <span class="font-serif text-base font-bold text-forest block">&lt; 45ms</span>
-                <span class="text-[7.5px] font-mono text-charcoal-muted uppercase">
-                  <span class="lang-de">Bon-Druck Sync</span>
-                  <span class="lang-en">Print Sync</span>
-                </span>
-              </div>
-              <div>
-                <span class="font-serif text-base font-bold text-forest block">99.98%</span>
-                <span class="text-[7.5px] font-mono text-charcoal-muted uppercase">
-                  <span class="lang-de">Verfügbarkeit</span>
-                  <span class="lang-en">Uptime</span>
-                </span>
+
+              <!-- Architecture Simulator Link Box -->
+              <div class="flex items-center justify-between p-2 bg-forest/5 border border-forest/15 rounded-sm">
+                <div>
+                  <span class="text-[8.5px] font-serif font-bold text-forest block">
+                    <span class="lang-de">Interaktiver Architecture Simulator</span>
+                    <span class="lang-en">Interactive Architecture Simulator</span>
+                  </span>
+                  <span class="text-[7.5px] text-charcoal-muted">
+                    <span class="lang-de">Erlebe Datenströme und Serverless Gateways live.</span>
+                    <span class="lang-en">Simulate edge data routes and zero-trust security live.</span>
+                  </span>
+                </div>
+                <a href="https://speisely.de/architecture-simulator" target="_blank" class="text-[8px] font-mono font-bold uppercase text-forest border border-forest px-2 py-0.5 hover:bg-forest hover:text-white transition">
+                  <span class="lang-de">Simulator öffnen ↗</span>
+                  <span class="lang-en">Open Simulator ↗</span>
+                </a>
               </div>
             </div>
 
-            <!-- Architecture Simulator Link Box -->
-            <div class="flex items-center justify-between p-2 bg-forest/5 border border-forest/15 rounded-sm">
-              <div>
-                <span class="text-[8.5px] font-serif font-bold text-forest block">
-                  <span class="lang-de">Interaktiver Architecture Simulator</span>
-                  <span class="lang-en">Interactive Architecture Simulator</span>
-                </span>
-                <span class="text-[7.5px] text-charcoal-muted">
-                  <span class="lang-de">Erlebe Datenströme und Serverless Gateways live.</span>
-                  <span class="lang-en">Simulate edge data routes and zero-trust security live.</span>
-                </span>
-              </div>
-              <a href="https://speisely.de/architecture-simulator" target="_blank" class="text-[8px] font-mono font-bold uppercase text-forest border border-forest px-2 py-0.5 hover:bg-forest hover:text-white transition">
-                <span class="lang-de">Simulator öffnen ↗</span>
-                <span class="lang-en">Open Simulator ↗</span>
-              </a>
+            <!-- Bottom Folio -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
+              <span>09</span>
+              <span>speisely.de/architecture-simulator</span>
             </div>
           </div>
-
-          <!-- Bottom Folio -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono text-forest/50 border-t border-forest/10 pt-1.5">
-            <span>09</span>
-            <span>speisely.de/architecture-simulator</span>
-          </div>
-
         </div>
 
 
         <!-- ================================================================= -->
         <!-- PAGE 10: BACK COVER — B2B DIRECTORY, TABLE & IMPRINT              -->
         <!-- ================================================================= -->
-        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 flex flex-col justify-between border-r border-forest/10">
-          
-          <!-- Running Header -->
-          <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
-            <span>
-              <span class="lang-de">MARKTVERGLEICH & ABSCHLUSS</span>
-              <span class="lang-en">MARKET BENCHMARK & COLOPHON</span>
-            </span>
-            <span>SEITE 10 / P. 10</span>
-          </div>
-
-          <!-- Header -->
-          <div class="my-1.5">
-            <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
-              <span class="lang-de">B2B-Catering im Wandel</span>
-              <span class="lang-en">Corporate Catering Evolution</span>
-            </span>
-            <h2 class="font-serif text-lg font-bold text-forest leading-snug mt-0.5">
-              <span class="lang-de">Traditionelle Vermittler vs. Speisely Direkt</span>
-              <span class="lang-en">Traditional Brokers vs. Speisely Direct</span>
-            </h2>
-            <p class="text-[9.5px] font-sans text-charcoal-muted mt-0.5 leading-relaxed">
-              <span class="lang-de">Warum moderne Firmen und Event-Veranstalter 2026 auf provisionsfreie Buchungen umsteigen.</span>
-              <span class="lang-en">Why corporations and event planners are transitioning to commission-free booking in 2026.</span>
-            </p>
-          </div>
-
-          <!-- Clean Editorial Comparison Table -->
-          <div class="my-1.5 border border-forest/20 rounded-sm overflow-hidden text-[8.5px] font-sans">
-            <div class="grid grid-cols-3 bg-forest text-white font-serif font-bold p-1.5 text-center text-[9px]">
-              <span class="text-left">
-                <span class="lang-de">Kriterium</span>
-                <span class="lang-en">Metric</span>
-              </span>
+        <div class="page page-left bg-[#FAF8F5] text-charcoal px-8 py-6 border-r border-forest/10">
+          <div class="page-content">
+            <!-- Running Header -->
+            <div class="flex justify-between items-center text-[8.5px] font-mono tracking-widest text-forest-muted uppercase border-b border-forest/15 pb-1.5">
               <span>
-                <span class="lang-de">Klassische Agenturen</span>
-                <span class="lang-en">Legacy Brokers</span>
+                <span class="lang-de">MARKTVERGLEICH & ABSCHLUSS</span>
+                <span class="lang-en">MARKET BENCHMARK & COLOPHON</span>
               </span>
-              <span class="text-gold">
-                <span class="lang-de">Speisely Direkt</span>
-                <span class="lang-en">Speisely Direct</span>
-              </span>
+              <span>SEITE 10 / P. 10</span>
             </div>
-            <div class="grid grid-cols-3 p-1.5 border-b border-forest/10 bg-white">
-              <span class="font-medium text-forest">
-                <span class="lang-de">Vermittlungsgebühr</span>
-                <span class="lang-en">Agency Commission</span>
-              </span>
-              <span class="text-center text-charcoal-muted">15% – 25%</span>
-              <span class="text-center font-bold text-forest">
-                <span class="lang-de">0% Direktabrechnung</span>
-                <span class="lang-en">0% Direct Settlement</span>
-              </span>
-            </div>
-            <div class="grid grid-cols-3 p-1.5 border-b border-forest/10 bg-paper">
-              <span class="font-medium text-forest">
-                <span class="lang-de">Menü-Transparenz</span>
-                <span class="lang-en">Price Transparency</span>
-              </span>
-              <span class="text-center text-charcoal-muted">
-                <span class="lang-de">Oft intransparent</span>
-                <span class="lang-en">Marked up / opaque</span>
-              </span>
-              <span class="text-center font-bold text-forest">
-                <span class="lang-de">100% Originalpreise</span>
-                <span class="lang-en">100% Original Chef Prices</span>
-              </span>
-            </div>
-            <div class="grid grid-cols-3 p-1.5 border-b border-forest/10 bg-white">
-              <span class="font-medium text-forest">
-                <span class="lang-de">Kommunikation</span>
-                <span class="lang-en">Communication</span>
-              </span>
-              <span class="text-center text-charcoal-muted">
-                <span class="lang-de">Über Agentur gefiltert</span>
-                <span class="lang-en">Filtered via broker</span>
-              </span>
-              <span class="text-center font-bold text-forest">
-                <span class="lang-de">Direkt zum Küchenchef</span>
-                <span class="lang-en">Direct to Head Chef</span>
-              </span>
-            </div>
-            <div class="grid grid-cols-3 p-1.5 bg-paper">
-              <span class="font-medium text-forest">
-                <span class="lang-de">Abrechnung</span>
-                <span class="lang-en">Accounting Export</span>
-              </span>
-              <span class="text-center text-charcoal-muted">
-                <span class="lang-de">Komplexe Einzelbelege</span>
-                <span class="lang-en">Manual disparate bills</span>
-              </span>
-              <span class="text-center font-bold text-forest">
-                <span class="lang-de">Zentraler DATEV-Export</span>
-                <span class="lang-en">Consolidated DATEV & Stripe</span>
-              </span>
-            </div>
-          </div>
 
-          <!-- Bottom Section: QR Code & Call to Action -->
-          <div class="border-t border-forest/15 pt-2 my-1.5 flex items-center justify-between gap-3">
-            <div class="flex-1">
-              <h4 class="font-serif text-xs font-bold text-forest leading-snug">
-                <span class="lang-de">Catering für Ihr nächstes Firmen-Event?</span>
-                <span class="lang-en">Inquire Catering for Your Next Event?</span>
-              </h4>
-              <p class="text-[9px] font-sans text-charcoal-muted mt-0.5 leading-relaxed">
-                <span class="lang-de">Vergleichen Sie geprüfte Caterer in Berlin, NRW, München, Frankfurt und ganz Deutschland.</span>
-                <span class="lang-en">Discover certified artisanal caterers in Berlin, NRW, Munich, Frankfurt, and nationwide.</span>
+            <!-- Header -->
+            <div class="my-1">
+              <span class="text-[8px] font-mono font-semibold uppercase tracking-widest text-gold-dark block">
+                <span class="lang-de">B2B-Catering im Wandel</span>
+                <span class="lang-en">Corporate Catering Evolution</span>
+              </span>
+              <h2 class="font-serif text-lg font-bold text-forest leading-snug mt-0.5">
+                <span class="lang-de">Traditionelle Vermittler vs. Speisely Direkt</span>
+                <span class="lang-en">Traditional Brokers vs. Speisely Direct</span>
+              </h2>
+              <p class="text-[9.5px] font-sans text-charcoal-muted mt-0.5 leading-relaxed">
+                <span class="lang-de">Warum moderne Firmen und Event-Veranstalter 2026 auf provisionsfreie Buchungen umsteigen.</span>
+                <span class="lang-en">Why corporations and event planners are transitioning to commission-free booking in 2026.</span>
               </p>
-              <a href="https://speisely.de/catering" target="_blank" class="inline-block mt-1.5 text-[8.5px] font-mono font-bold uppercase text-forest border border-forest px-2.5 py-0.5 hover:bg-forest hover:text-white transition">
-                <span class="lang-de">Caterer vergleichen ↗</span>
-                <span class="lang-en">Browse Caterers ↗</span>
-              </a>
             </div>
 
-            <!-- QR Block -->
-            <div class="w-18 h-18 border border-forest/30 p-1 flex flex-col items-center justify-center bg-white flex-shrink-0 shadow-sm">
-              <div class="w-full h-full border border-dashed border-forest/40 flex flex-col items-center justify-center text-center font-mono text-[7.5px] text-forest font-bold leading-tight">
-                <span>SCAN</span>
-                <span class="text-[6px] font-normal text-charcoal-muted mt-0.5">speisely.de</span>
+            <!-- Clean Editorial Comparison Table -->
+            <div class="my-1 border border-forest/20 rounded-sm overflow-hidden text-[8.5px] font-sans">
+              <div class="grid grid-cols-3 bg-forest text-white font-serif font-bold p-1.5 text-center text-[9px]">
+                <span class="text-left">
+                  <span class="lang-de">Kriterium</span>
+                  <span class="lang-en">Metric</span>
+                </span>
+                <span>
+                  <span class="lang-de">Klassische Agenturen</span>
+                  <span class="lang-en">Legacy Brokers</span>
+                </span>
+                <span class="text-gold">
+                  <span class="lang-de">Speisely Direkt</span>
+                  <span class="lang-en">Speisely Direct</span>
+                </span>
+              </div>
+              <div class="grid grid-cols-3 p-1.5 border-b border-forest/10 bg-white">
+                <span class="font-medium text-forest">
+                  <span class="lang-de">Vermittlungsgebühr</span>
+                  <span class="lang-en">Agency Commission</span>
+                </span>
+                <span class="text-center text-charcoal-muted">15% – 25%</span>
+                <span class="text-center font-bold text-forest">
+                  <span class="lang-de">0% Direktabrechnung</span>
+                  <span class="lang-en">0% Direct Settlement</span>
+                </span>
+              </div>
+              <div class="grid grid-cols-3 p-1.5 border-b border-forest/10 bg-paper">
+                <span class="font-medium text-forest">
+                  <span class="lang-de">Menü-Transparenz</span>
+                  <span class="lang-en">Price Transparency</span>
+                </span>
+                <span class="text-center text-charcoal-muted">
+                  <span class="lang-de">Oft intransparent</span>
+                  <span class="lang-en">Marked up / opaque</span>
+                </span>
+                <span class="text-center font-bold text-forest">
+                  <span class="lang-de">100% Originalpreise</span>
+                  <span class="lang-en">100% Original Chef Prices</span>
+                </span>
+              </div>
+              <div class="grid grid-cols-3 p-1.5 border-b border-forest/10 bg-white">
+                <span class="font-medium text-forest">
+                  <span class="lang-de">Kommunikation</span>
+                  <span class="lang-en">Communication</span>
+                </span>
+                <span class="text-center text-charcoal-muted">
+                  <span class="lang-de">Über Agentur gefiltert</span>
+                  <span class="lang-en">Filtered via broker</span>
+                </span>
+                <span class="text-center font-bold text-forest">
+                  <span class="lang-de">Direkt zum Küchenchef</span>
+                  <span class="lang-en">Direct to Head Chef</span>
+                </span>
+              </div>
+              <div class="grid grid-cols-3 p-1.5 bg-paper">
+                <span class="font-medium text-forest">
+                  <span class="lang-de">Abrechnung</span>
+                  <span class="lang-en">Accounting Export</span>
+                </span>
+                <span class="text-center text-charcoal-muted">
+                  <span class="lang-de">Komplexe Einzelbelege</span>
+                  <span class="lang-en">Manual disparate bills</span>
+                </span>
+                <span class="text-center font-bold text-forest">
+                  <span class="lang-de">Zentraler DATEV-Export</span>
+                  <span class="lang-en">Consolidated DATEV & Stripe</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Middle Section: Inquiry & QR Box -->
+            <div class="border-t border-forest/15 pt-1.5 my-1 flex items-center justify-between gap-3">
+              <div class="flex-1">
+                <h4 class="font-serif text-xs font-bold text-forest leading-snug">
+                  <span class="lang-de">Catering für Ihr nächstes Firmen-Event?</span>
+                  <span class="lang-en">Inquire Catering for Your Next Event?</span>
+                </h4>
+                <p class="text-[8.5px] font-sans text-charcoal-muted mt-0.5 leading-relaxed">
+                  <span class="lang-de">Vergleichen Sie geprüfte Caterer in Berlin, NRW, München, Frankfurt und ganz Deutschland.</span>
+                  <span class="lang-en">Discover certified artisanal caterers in Berlin, NRW, Munich, Frankfurt, and nationwide.</span>
+                </p>
+                <a href="https://speisely.de/catering" target="_blank" class="inline-block mt-1 text-[8.5px] font-mono font-bold uppercase text-forest border border-forest px-2.5 py-0.5 hover:bg-forest hover:text-white transition">
+                  <span class="lang-de">Caterer vergleichen ↗</span>
+                  <span class="lang-en">Browse Caterers ↗</span>
+                </a>
+              </div>
+
+              <!-- QR Block -->
+              <div class="w-20 h-20 border border-forest/30 p-1 flex flex-col items-center justify-center bg-white flex-shrink-0 shadow-sm">
+                <div class="w-full h-full border border-dashed border-forest/40 flex flex-col items-center justify-center text-center font-mono text-[7.5px] text-forest font-bold leading-tight">
+                  <span>SCAN</span>
+                  <span class="text-[6.5px] font-normal text-charcoal-muted mt-0.5">speisely.de</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quality Standards & Verified Networks Panel -->
+            <div class="border border-forest/15 rounded-sm p-2 bg-forest/[0.03] my-1 text-[8px]">
+              <div class="flex justify-between items-center border-b border-forest/10 pb-0.5 mb-1">
+                <span class="font-mono text-[7px] font-semibold uppercase tracking-wider text-gold-dark">
+                  <span class="lang-de">Speisely Zertifizierungs-Standard</span>
+                  <span class="lang-en">Speisely Certification Standards</span>
+                </span>
+                <span class="font-mono text-[7px] text-forest font-semibold">100% Geprüfte Betriebe</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-charcoal">
+                <div class="space-y-0.5">
+                  <span class="font-medium text-forest block">✦ Transparente Kalkulation:</span>
+                  <p class="text-[7.5px] text-charcoal-muted leading-tight">
+                    <span class="lang-de">Verbindliche Nettopreise direkt vom Küchenchef ohne versteckte Vermittlungsaufschläge.</span>
+                    <span class="lang-en">Firm net rates directly from head chefs with zero hidden agent margins.</span>
+                  </p>
+                </div>
+                <div class="space-y-0.5">
+                  <span class="font-medium text-forest block">✦ Vor-Ort-Auditierung:</span>
+                  <p class="text-[7.5px] text-charcoal-muted leading-tight">
+                    <span class="lang-de">Jeder Partnerbetrieb erfüllt strenge Qualitäts-, Hygiene- und Frische-Kriterien.</span>
+                    <span class="lang-en">Every culinary partner satisfies strict hygiene, freshness, and punctuality criteria.</span>
+                  </p>
+                </div>
+              </div>
+              <div class="border-t border-forest/10 pt-1 mt-1 flex justify-between text-[6.5px] font-mono text-forest/60">
+                <span>DEHOGA Bundesverband</span>
+                <span>Bio-Siegel &amp; Slow Food</span>
+                <span>Metro Pro Partner</span>
+                <span>DATEV Cloud &amp; Stripe</span>
+              </div>
+            </div>
+
+            <!-- Publisher Colophon & Legal Notice -->
+            <div class="border-t border-forest/15 pt-1 text-[7px] font-mono text-charcoal-muted">
+              <div class="flex justify-between items-center mb-0.5">
+                <span>Speisely Technologies GmbH · Friedrichstraße 171, 10117 Berlin · HRB 248910 B</span>
+                <span>ISSN 2940-1234</span>
+              </div>
+              <div class="flex justify-between items-center text-forest/70">
+                <span>
+                  <span class="lang-de">Herausgeber: Ahmad F. · Speisely Digital Edition Ausgabe 04</span>
+                  <span class="lang-en">Publisher: Ahmad F. · Speisely Digital Edition Issue 04</span>
+                </span>
+                <span class="font-semibold text-forest">10 · speisely.de</span>
               </div>
             </div>
           </div>
-
-          <!-- Colophon & Imprint -->
-          <div class="border-t border-forest/10 pt-1.5 text-[7px] font-mono text-charcoal-muted flex justify-between items-center">
-            <span>© 2026 Speisely Technologies GmbH · Friedrichstraße, Berlin</span>
-            <span>10 · speisely.de</span>
-          </div>
-
         </div>
 
       </div>
