@@ -89,7 +89,7 @@ If these exist, the task is NOT complete.
 
 ### 3.1 Enforced Graph-Style Execution Pipeline (Multi-Agent Architecture)
 
-Every code change must execute through this 5-node graph pipeline:
+Every code change must execute through this 6-node graph pipeline:
 
 ```
 [Node 1: Planner] -> [Node 2: Worker Code] -> [Node 3: Static Scope Reviewer] -> [Node 4: Build & Smoke Verifier]
@@ -97,22 +97,33 @@ Every code change must execute through this 5-node graph pipeline:
                                                     v (If Scope / Build Error)               v
                                                     +------------------<----------------------+
                                                                         |
-                                                                (Feedback Loop back to Node 2)
+                                                                        v
+                                                   [Node 4.5: Visual QA Judge (Playwright + Multimodal Vision)]
+                                                                        |
+                                                                        v (If Visual / Layout Flaw Detected)
+                                                                        +------> (Feedback Loop back to Node 2)
 ```
 
 - **Node 1 (Planner):** Map component boundaries and dependencies before touching code.
 - **Node 2 (Worker):** Implement the smallest safe, low-risk change.
 - **Node 3 (Static Scope Reviewer):** Execute `npm run verify:graph` to audit component function scoping (`t is not defined`, missing hooks, broken links) before building.
 - **Node 4 (Verifier):** Execute `npm run build` AND `npm run smoke:test` to confirm 100% compilation and zero production crash markers.
-- **Node 5 (Feedback Loop):** If Node 3 or Node 4 returns ANY error, automatically loop back to Node 2 to correct the root cause *before* presenting results to the user.
+- **Node 4.5 (Visual QA Judge):** Execute `npm run qa:visual` to capture real headless Chromium screenshots across Desktop (1440x900), Laptop (1280x800), and Mobile/Embedded viewports. The agent MUST inspect the resulting images using `view_file` and grade them against the **5-Point Human-Eye Rubric**:
+  1. *Clipping & Cropping Check:* Ensure no header, title, or folio is clipped or hidden behind navigation/toolbars.
+  2. *Whitespace Balance Check:* Ensure no accidental blank voids (>20% of vertical canvas) remain unutilized.
+  3. *Typography Collision Check:* Ensure no overlapping text, broken line wraps, or unreadable contrasts.
+  4. *Asset Health Check:* Ensure all images are loaded, crisp, and aspect-ratio locked (no naturalWidth === 0).
+  5. *State & Translation Check:* Ensure interactive controls (like DE/EN toggle) switch copy cleanly with zero reload.
+- **Node 5 (Feedback Loop):** If Node 3, Node 4, or Node 4.5 fails ANY check, automatically loop back to Node 2 to correct the root cause *before* presenting results to the user. Never ask the user to visually QA uninspected layouts.
 
 #### E. Report like a reviewer
 Before closing the task, return:
 1. what changed,
 2. what was tested,
 3. what passed,
-4. remaining risk,
-5. whether it is safe for production or needs more review.
+4. multimodal visual inspection findings (from Node 4.5),
+5. remaining risk,
+6. whether it is safe for production or needs more review.
 
 ---
 

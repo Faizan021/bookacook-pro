@@ -13,6 +13,7 @@
     "verify:graph": "node scripts/verify_agent_graph.js",
     "smoke:test": "node scripts/smoke_test.js",
     "smoke:full": "node scripts/smoke-test.mjs",
+    "qa:visual": "node scripts/visual_qa_judge.cjs",
     "verify:deploy": "node scripts/smoke-test.mjs",
     "check": "node scripts/verify_agent_graph.js && tsc --noEmit && vite build && node scripts/smoke_test.js",
     "prepare": "husky"
