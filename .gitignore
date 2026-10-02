@@ -36,3 +36,10 @@ dist-ssr
 playwright-report/
 test-results/
 lighthouse-*.json
+
+# ── Dev / QA scratch artefacts ──────────────────────────────────────────────
+# Playwright QA scripts, screenshots, and one-off debug tools — never commit
+scratch/
+# Stray QA PNGs dumped into public/ root (not into public/magazin/ subfolders)
+/public/*.png
+/public/*.jpg
