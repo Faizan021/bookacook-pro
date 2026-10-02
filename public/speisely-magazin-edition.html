@@ -1339,81 +1339,142 @@
         <!-- ================================================================= -->
         <!-- PAGE 7: SPEISELY COMMUNITY — INTRO GATEWAY                        -->
         <!-- ================================================================= -->
-        <div class="page page-right bg-[#0C1510] text-white px-8 py-6 relative overflow-hidden">
+        <div class="page page-right bg-[#0B0F14] text-white px-8 py-6 relative overflow-hidden">
           <div class="page-content flex flex-col justify-between h-full">
-            <!-- Subtle texture overlay -->
-            <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M0 40L40 0H20L0 20M40 40V20L20 40\'/%3E%3C/g%3E%3C/svg%3E'); background-size: 40px 40px;"></div>
 
             <!-- Running Header -->
-            <div class="relative flex justify-between items-center text-[8.5px] font-mono tracking-widest uppercase border-b border-white/15 pb-1.5 text-white/50">
-              <span>SPEISELY COMMUNITY · KULINARISCHE STADTPORTRÄTS</span>
-              <span>SEITE 07 / P. 07</span>
+            <div class="flex justify-between items-center border-b border-white/15 pb-1.5 text-[8.5px] font-mono text-gray-400 tracking-wider whitespace-nowrap">
+              <span>
+                <span class="lang-de">SPEISELY COMMUNITY · KULINARISCHE STADTPORTRÄTS</span>
+                <span class="lang-en">SPEISELY COMMUNITY · CULINARY CITY PORTRAITS</span>
+              </span>
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-400 font-semibold font-mono">speisely.de/community</span>
+                <span class="text-gray-500">·</span>
+                <span class="text-gray-400 font-mono">SEITE 07 / P. 07</span>
+              </div>
             </div>
 
-            <!-- Main Content -->
-            <div class="relative flex flex-col items-center justify-center flex-1 py-6">
-              <!-- Gold ornament -->
-              <div class="flex items-center gap-3 mb-4">
-                <div class="h-px w-12 bg-gold/60"></div>
-                <span class="font-mono text-[8px] text-gold tracking-[0.3em] uppercase">Ausgabe 01 · Herbst 2026</span>
-                <div class="h-px w-12 bg-gold/60"></div>
+            <!-- Brand Header with Speisely Logo -->
+            <div class="pt-1.5 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <img src="/images/speisely-square-logo.jpg" alt="Speisely Community" class="w-8 h-8 rounded object-cover border border-emerald-400/40 shadow-sm shrink-0">
+                <div>
+                  <h3 class="font-serif text-[22px] font-bold tracking-wider text-white leading-none">
+                    SPEISELY <span class="text-emerald-400 font-light">COMMUNITY</span><span class="text-xs text-emerald-300 align-top">®</span>
+                  </h3>
+                  <p class="font-sans text-[8.2px] tracking-wide text-gray-300 uppercase mt-0.5 whitespace-nowrap">
+                    <span class="lang-de">Echte Gastronomie · Kiez-Porträts · Berliner Adressen</span>
+                    <span class="lang-en">Authentic Food Culture · Neighborhood Profiles · Berlin Venues</span>
+                  </p>
+                </div>
+              </div>
+              <div class="bg-emerald-950/80 border border-emerald-400/40 px-2 py-0.5 rounded text-[8px] font-mono font-semibold text-emerald-300 uppercase tracking-wider">
+                <span class="lang-de">Kiez-Fokus</span>
+                <span class="lang-en">City Focus</span>
+              </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex flex-col items-center justify-center flex-1 py-2">
+              <!-- Issue Ribbon -->
+              <div class="flex items-center gap-3 my-2">
+                <div class="h-px w-10 bg-gold/50"></div>
+                <span class="font-mono text-[8px] text-gold tracking-[0.25em] uppercase">
+                  <span class="lang-de">Ausgabe 01 · Herbst 2026</span>
+                  <span class="lang-en">Issue 01 · Autumn 2026</span>
+                </span>
+                <div class="h-px w-10 bg-gold/50"></div>
               </div>
 
-              <!-- Main Label -->
-              <span class="font-mono text-[9px] font-semibold uppercase tracking-widest text-gold/80 mb-2 block text-center">
-                <span class="lang-de">Speisely Community</span>
-                <span class="lang-en">Speisely Community</span>
-              </span>
-
-              <!-- Big headline -->
-              <h2 class="font-serif text-[2rem] font-bold leading-tight text-white text-center mb-3" style="letter-spacing: -0.01em;">
-                <span class="lang-de">Restaurants,<br>die man kennen<br><em class="text-gold not-italic">muss.</em></span>
-                <span class="lang-en">Restaurants<br>Worth<br><em class="text-gold not-italic">Knowing.</em></span>
+              <!-- Main Headline -->
+              <h2 class="font-serif text-[2.05rem] font-bold leading-tight text-white text-center mb-1.5" style="letter-spacing: -0.01em;">
+                <span class="lang-de">Restaurants,<br>die man kennen <em class="text-gold not-italic">muss.</em></span>
+                <span class="lang-en">Restaurants<br>Worth <em class="text-gold not-italic">Knowing.</em></span>
               </h2>
 
               <!-- Divider -->
-              <div class="flex items-center gap-3 my-3">
+              <div class="flex items-center justify-center gap-3 my-1.5">
                 <div class="h-px w-8 bg-white/20"></div>
-                <span class="text-white/30 text-[10px]">✦</span>
+                <span class="text-emerald-400 text-[10px]">✦</span>
                 <div class="h-px w-8 bg-white/20"></div>
               </div>
 
-              <!-- Body copy -->
-              <p class="text-[9px] text-white/65 font-sans leading-relaxed text-center max-w-[320px] mx-auto mb-5">
+              <!-- Body Copy -->
+              <p class="text-[9.2px] text-gray-300 font-sans leading-relaxed text-center max-w-[340px] mx-auto mb-3">
                 <span class="lang-de">In dieser Ausgabe porträtieren wir drei Adressen aus Berlin, die für Handwerk, Authentizität und Leidenschaft stehen. Kein Marketing — nur echter Geschmack.</span>
                 <span class="lang-en">In this edition we profile three Berlin addresses that stand for craft, authenticity, and passion. No marketing speak — just genuine flavour.</span>
               </p>
 
-              <!-- 3 restaurant cards -->
-              <div class="grid grid-cols-3 gap-2 w-full">
-                <div class="border border-white/15 rounded-sm p-2 text-center bg-white/[0.03] hover:bg-white/[0.06] transition">
-                  <div class="text-gold text-[14px] mb-1">🍔</div>
-                  <div class="font-serif text-[8px] font-bold text-white leading-snug">Thronburger</div>
-                  <div class="text-[7px] text-white/40 font-mono mt-0.5">Friedrichshain</div>
-                  <div class="text-[6.5px] text-gold/60 font-mono mt-1">P. 08–09</div>
+              <!-- 3 Curated Restaurant Cards with Preview Images -->
+              <div class="grid grid-cols-3 gap-2 w-full my-1">
+                <!-- Card 1: Thronburger -->
+                <div class="bg-white/[0.04] border border-white/10 hover:border-emerald-400/40 rounded p-1.5 text-center transition flex flex-col justify-between">
+                  <div>
+                    <div class="h-14 w-full rounded overflow-hidden mb-1 border border-white/10 bg-black/40">
+                      <img src="/magazin/thronburger-berlin/thronburger-classic.png" alt="Thronburger" class="w-full h-full object-cover object-center">
+                    </div>
+                    <div class="font-serif text-[9.5px] font-bold text-white leading-snug">Thronburger</div>
+                    <div class="text-[7px] text-gray-400 font-mono mt-0.5">Friedrichshain</div>
+                  </div>
+                  <div class="mt-1 pt-1 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-[6.5px] text-emerald-400 font-mono uppercase">Brioche</span>
+                    <span class="text-[7px] text-gold font-mono font-bold">P. 08–09</span>
+                  </div>
                 </div>
-                <div class="border border-white/15 rounded-sm p-2 text-center bg-white/[0.03] hover:bg-white/[0.06] transition">
-                  <div class="text-gold text-[14px] mb-1">🔥</div>
-                  <div class="font-serif text-[8px] font-bold text-white leading-snug">Alzaeem</div>
-                  <div class="text-[7px] text-white/40 font-mono mt-0.5">Sonnenallee</div>
-                  <div class="text-[6.5px] text-gold/60 font-mono mt-1">P. 10–11</div>
+
+                <!-- Card 2: Alzaeem -->
+                <div class="bg-white/[0.04] border border-white/10 hover:border-emerald-400/40 rounded p-1.5 text-center transition flex flex-col justify-between">
+                  <div>
+                    <div class="h-14 w-full rounded overflow-hidden mb-1 border border-white/10 bg-black/40">
+                      <img src="/magazin/alzaeem-berlin/alzaeem-grill-insta.webp" alt="Alzaeem" class="w-full h-full object-cover object-center">
+                    </div>
+                    <div class="font-serif text-[9.5px] font-bold text-white leading-snug">Alzaeem</div>
+                    <div class="text-[7px] text-gray-400 font-mono mt-0.5">Sonnenallee</div>
+                  </div>
+                  <div class="mt-1 pt-1 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-[6.5px] text-emerald-400 font-mono uppercase">Holzkohle</span>
+                    <span class="text-[7px] text-gold font-mono font-bold">P. 10–11</span>
+                  </div>
                 </div>
-                <div class="border border-white/15 rounded-sm p-2 text-center bg-white/[0.03] hover:bg-white/[0.06] transition">
-                  <div class="text-gold text-[14px] mb-1">🍖</div>
-                  <div class="font-serif text-[8px] font-bold text-white leading-snug">Restaurant Mandy</div>
-                  <div class="text-[7px] text-white/40 font-mono mt-0.5">Neukölln</div>
-                  <div class="text-[6.5px] text-gold/60 font-mono mt-1">P. 12–13</div>
+
+                <!-- Card 3: Restaurant Mandy -->
+                <div class="bg-white/[0.04] border border-white/10 hover:border-emerald-400/40 rounded p-1.5 text-center transition flex flex-col justify-between">
+                  <div>
+                    <div class="h-14 w-full rounded overflow-hidden mb-1 border border-white/10 bg-black/40">
+                      <img src="/magazin/mandy/mandy-reisplatte-lamm-fuer-zwei.webp" alt="Restaurant Mandy" class="w-full h-full object-cover object-center">
+                    </div>
+                    <div class="font-serif text-[9.5px] font-bold text-white leading-snug">Restaurant Mandy</div>
+                    <div class="text-[7px] text-gray-400 font-mono mt-0.5">Neukölln</div>
+                  </div>
+                  <div class="mt-1 pt-1 border-t border-white/10 flex items-center justify-between">
+                    <span class="text-[6.5px] text-emerald-400 font-mono uppercase">Mandi</span>
+                    <span class="text-[7px] text-gold font-mono font-bold">P. 12–13</span>
+                  </div>
                 </div>
+              </div>
+
+              <!-- Community Invitation Callout -->
+              <div class="bg-white/[0.03] border border-white/10 rounded p-1.5 text-center mt-2 w-full">
+                <div class="flex items-center justify-center gap-1.5 text-emerald-400 font-mono text-[7.5px] uppercase tracking-wider mb-0.5">
+                  <span>✦</span>
+                  <span class="lang-de">Speisely Community Storys</span>
+                  <span class="lang-en">Speisely Community Stories</span>
+                </div>
+                <p class="text-[7.8px] text-gray-300 font-sans leading-snug">
+                  <span class="lang-de">Empfehle dein Lieblingslokal oder teile deine eigene Food-Story: <strong class="text-emerald-400">speisely.de/community</strong></span>
+                  <span class="lang-en">Recommend your favorite eatery or share your food story: <strong class="text-emerald-400">speisely.de/community</strong></span>
+                </p>
               </div>
             </div>
 
-            <!-- Bottom brand line -->
-            <div class="relative border-t border-white/10 pt-2 flex justify-between items-center">
-              <span class="font-mono text-[7px] text-white/30 uppercase tracking-widest">
+            <!-- Bottom Folio Bar -->
+            <div class="relative border-t border-white/10 pt-1.5 flex justify-between items-center text-[7.5px] font-mono text-gray-400">
+              <span class="uppercase tracking-widest">
                 <span class="lang-de">Speisely Journal · Herbst 2026</span>
                 <span class="lang-en">Speisely Journal · Autumn 2026</span>
               </span>
-              <span class="font-mono text-[7px] text-white/30">07</span>
+              <span>07</span>
             </div>
           </div>
         </div>
