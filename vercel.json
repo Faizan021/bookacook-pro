@@ -3,7 +3,7 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "redirects": [
-    { "source": "/pro", "destination": "/partner/webseiten", "permanent": true },
+    { "source": "/pro", "destination": "/partners", "permanent": true },
     { "source": "/digital", "destination": "/partner/webseiten", "permanent": true },
     { "source": "/catering/ort/:city", "destination": "/catering/:city", "permanent": true },
     { "source": "/planner/ort/:city", "destination": "/planner/:city", "permanent": true },
