@@ -401,8 +401,8 @@
         <!-- ================================================================= -->
         <!-- PAGE 2: FULL-PAGE AD (INSIDE FRONT COVER — SPEISELY PRO®)         -->
         <!-- ================================================================= -->
-        <div class="page page-left bg-[#0B121A] text-white px-7 py-5.5 border-r border-black/10 relative overflow-hidden">
-          <div class="page-content flex flex-col justify-between h-full">
+        <div class="page page-left bg-[#0B121A] text-white px-8 py-6 border-r border-black/10 relative overflow-hidden">
+          <div class="page-content">
             
             <!-- Running Header -->
             <div class="flex justify-between items-center border-b border-white/15 pb-1.5 text-[8.5px] font-mono text-gray-400 tracking-wider whitespace-nowrap">
@@ -432,43 +432,48 @@
               </div>
             </div>
 
-            <!-- Visual Showcase: Real Client Web & Mobile Live Mockups -->
+            <!-- Visual Showcase: Dual Live Browser Window Comparison (50% / 50%) -->
             <div class="my-1.5 p-2 rounded-lg bg-white/[0.03] border border-white/15 shadow-2xl relative overflow-hidden">
-              <div class="flex gap-2.5 items-center justify-between">
+              <div class="grid grid-cols-2 gap-2.5 items-center">
                 
-                <!-- Desktop Browser Mockup (Partyservice Küpper) -->
-                <div class="w-[66%] bg-[#151D24] rounded-md border border-white/20 shadow-xl overflow-hidden">
-                  <!-- Browser Navigation Bar -->
+                <!-- Left Browser: Partyservice Küpper (Catering & BBQ Flagship) -->
+                <div class="bg-[#151D24] rounded-md border border-white/20 shadow-xl overflow-hidden flex flex-col">
+                  <!-- Browser Bar -->
                   <div class="bg-[#1C262F] px-2 py-1 flex items-center gap-1.5 border-b border-white/10 text-[7px] text-gray-400 font-mono">
-                    <div class="flex gap-1">
+                    <div class="flex gap-1 shrink-0">
                       <span class="w-1.5 h-1.5 rounded-full bg-red-400/80 inline-block"></span>
                       <span class="w-1.5 h-1.5 rounded-full bg-yellow-400/80 inline-block"></span>
                       <span class="w-1.5 h-1.5 rounded-full bg-green-400/80 inline-block"></span>
                     </div>
-                    <span class="bg-black/50 rounded px-2 py-0.2 text-[6.8px] text-gray-300 flex-1 truncate">https://partyservicekuepper.de</span>
-                    <span class="text-cyan-400 font-bold tracking-wider">⚡ 99 SPEED</span>
+                    <span class="bg-black/50 rounded px-1.5 py-0.2 text-[6.5px] text-gray-300 flex-1 truncate">https://partyservicekuepper.de</span>
+                    <span class="text-cyan-400 font-bold tracking-wider shrink-0 text-[6.5px]">⚡ 99 SPEED</span>
                   </div>
-                  <!-- Browser Viewport with Live Screenshot -->
-                  <div class="h-[126px] overflow-hidden relative bg-black/60">
+                  <!-- Viewport -->
+                  <div class="h-[128px] overflow-hidden relative bg-black/60">
                     <img src="/kuepper_web_preview.png" alt="Partyservice Küpper Live Website" class="w-full h-full object-cover object-top">
-                    <div class="absolute bottom-1 left-1.5 bg-black/85 backdrop-blur-sm rounded px-1.5 py-0.5 border border-white/20 text-[7.5px] font-sans font-bold text-white shadow">
-                      Partyservice Küpper · Catering &amp; BBQ Engine
+                    <div class="absolute bottom-1 left-1.5 bg-black/85 backdrop-blur-sm rounded px-1.5 py-0.5 border border-white/20 text-[7px] font-sans font-bold text-white shadow">
+                      Partyservice Küpper · Catering &amp; BBQ
                     </div>
                   </div>
                 </div>
 
-                <!-- Mobile Smartphone Mockup (Haus Späas) -->
-                <div class="w-[31%] bg-[#151D24] rounded-lg border-2 border-white/25 shadow-xl overflow-hidden">
-                  <!-- Smartphone Top Notch -->
-                  <div class="bg-[#1C262F] py-0.5 flex justify-center items-center border-b border-white/10">
-                    <span class="w-5 h-1 rounded-full bg-white/30"></span>
+                <!-- Right Browser: Haus Spaas (Restaurant & WhatsApp Table Booking) -->
+                <div class="bg-[#151D24] rounded-md border border-white/20 shadow-xl overflow-hidden flex flex-col">
+                  <!-- Browser Bar -->
+                  <div class="bg-[#1C262F] px-2 py-1 flex items-center gap-1.5 border-b border-white/10 text-[7px] text-gray-400 font-mono">
+                    <div class="flex gap-1 shrink-0">
+                      <span class="w-1.5 h-1.5 rounded-full bg-red-400/80 inline-block"></span>
+                      <span class="w-1.5 h-1.5 rounded-full bg-yellow-400/80 inline-block"></span>
+                      <span class="w-1.5 h-1.5 rounded-full bg-green-400/80 inline-block"></span>
+                    </div>
+                    <span class="bg-black/50 rounded px-1.5 py-0.2 text-[6.5px] text-gray-300 flex-1 truncate">https://haus-spaas.de</span>
+                    <span class="text-emerald-400 font-bold tracking-wider shrink-0 text-[6.5px]">💬 WHATSAPP</span>
                   </div>
-                  <!-- Smartphone Screen with Live Screenshot -->
-                  <div class="h-[126px] overflow-hidden relative bg-black/60">
-                    <img src="/spaas_mobile_preview.png" alt="Haus Späas Live Mobile Booking" class="w-full h-full object-cover object-top">
-                    <!-- WhatsApp Badge Overlay -->
-                    <div class="absolute bottom-1 inset-x-1 bg-[#075E54]/95 text-white text-[7px] font-sans font-bold px-1 py-0.5 rounded shadow text-center flex items-center justify-center gap-1 border border-white/20">
-                      <span>💬 WhatsApp-Sync</span>
+                  <!-- Viewport -->
+                  <div class="h-[128px] overflow-hidden relative bg-black/60">
+                    <img src="/haus_spaas_desktop_hero.png" alt="Haus Spaas Live Restaurant Website" class="w-full h-full object-cover object-top">
+                    <div class="absolute bottom-1 left-1.5 bg-black/85 backdrop-blur-sm rounded px-1.5 py-0.5 border border-white/20 text-[7px] font-sans font-bold text-white shadow">
+                      Haus Spaas · Tischbuchung &amp; WhatsApp
                     </div>
                   </div>
                 </div>
