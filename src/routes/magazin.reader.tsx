@@ -37,44 +37,50 @@ function MagazineReaderPage() {
 
   return (
     <SiteShell>
-      <div className="bg-[#0b0f15] min-h-screen text-white pt-20 pb-12 px-2 sm:px-4 lg:px-6">
+      <div className="bg-[#0b0f15] min-h-screen text-white pt-16 sm:pt-20 pb-8 sm:pb-12 px-2 sm:px-4 lg:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb & Navigation */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-white/10">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/10">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 to="/magazin"
                 className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/60 hover:text-[#E6B84A] transition"
               >
-                <ArrowLeft className="h-4 w-4" />
-                <span>{isDe ? "Zurück zur Übersicht" : "Back to Magazine"}</span>
+                <ArrowLeft className="h-4 w-4 shrink-0" />
+                <span className="hidden sm:inline">
+                  {isDe ? "Zurück zur Übersicht" : "Back to Magazine"}
+                </span>
+                <span className="sm:hidden">{isDe ? "Übersicht" : "Back"}</span>
               </Link>
               <span className="text-white/20">|</span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#E6B84A] uppercase tracking-wider">
-                <Sparkles className="h-3.5 w-3.5" />
-                {isDe ? "Interaktive 3D-Ausgabe" : "Interactive 3D Edition"}
+              <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-[#E6B84A] uppercase tracking-wider">
+                <Sparkles className="h-3.5 w-3.5 shrink-0" />
+                <span>{isDe ? "Ausgabe 01" : "Issue 01"}</span>
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <a
                 href="/magazin/edition.html"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#E6B84A] text-black px-4 py-2 text-xs font-bold shadow-md shadow-[#E6B84A]/20 hover:bg-[#c49638] transition"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#E6B84A] text-black px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-bold shadow-md shadow-[#E6B84A]/20 hover:bg-[#c49638] transition shrink-0"
               >
-                <span>{isDe ? "Vollbild-Viewer öffnen ↗" : "Open Fullscreen Viewer ↗"}</span>
+                <span className="hidden sm:inline">
+                  {isDe ? "Vollbild-Viewer öffnen ↗" : "Open Fullscreen Viewer ↗"}
+                </span>
+                <span className="sm:hidden">{isDe ? "Vollbild ↗" : "Fullscreen ↗"}</span>
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>
             </div>
           </div>
 
           {/* Embedded Flipbook Frame */}
-          <div className="rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-[#0d1217] relative">
+          <div className="rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-[#0d1217] relative">
             <iframe
               src="/magazin/edition.html"
               title="Speisely Magazin Digital Edition"
-              className="w-full h-[780px] sm:h-[860px] border-0"
+              className="w-full h-[76vh] min-h-[560px] sm:h-[860px] border-0"
               allow="fullscreen"
               loading="lazy"
             />
