@@ -34,11 +34,18 @@ self.addEventListener("activate", (event) => {
 
 // Fetch Event — Network First with Offline Cache Fallback for Static Assets
 self.addEventListener("fetch", (event) => {
+  // Guard against non-http schemes (e.g. chrome-extension://, moz-extension://)
+  if (!event.request.url.startsWith("http://") && !event.request.url.startsWith("https://")) {
+    return;
+  }
+
   const url = new URL(event.request.url);
 
-  // Exclude API, Supabase, and non-GET requests from SW cache
+  // Strictly restrict festival cash register worker to same-origin festival routes
   if (
     event.request.method !== "GET" ||
+    url.origin !== self.location.origin ||
+    (!url.pathname.startsWith("/festival") && !STATIC_ASSETS.includes(url.pathname)) ||
     url.pathname.startsWith("/api") ||
     url.hostname.includes("supabase")
   ) {
@@ -51,8 +58,8 @@ self.addEventListener("fetch", (event) => {
         if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
+            cache.put(event.request, responseToCache).catch(() => {});
+          }).catch(() => {});
         }
         return networkResponse;
       })
