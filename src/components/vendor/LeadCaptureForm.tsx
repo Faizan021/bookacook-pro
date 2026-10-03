@@ -75,11 +75,18 @@ export function LeadCaptureForm({ defaultCity = "", defaultEventType = "", sourc
       setIsSubmitting(true);
       setServerError("");
       
+      type CustomWindow = Window & { __speisely_ai_referrer?: string };
+      const aiSource =
+        (typeof window !== "undefined" &&
+          ((window as CustomWindow).__speisely_ai_referrer ||
+            sessionStorage.getItem("speisely_ai_source"))) ||
+        null;
+
       const result = await submitLeadCapture({
         data: {
           ...data,
           sourceRoute,
-          sourceChannel: "organic_geo", // Can be read from URL params if SEA
+          sourceChannel: aiSource ? `ai_${aiSource}` : "organic_geo",
         }
       });
 
@@ -90,7 +97,8 @@ export function LeadCaptureForm({ defaultCity = "", defaultEventType = "", sourc
           eventType: data.eventType, 
           guest_count: data.guestCount,
           budget_range: data.budgetRange,
-          source_route: sourceRoute 
+          source_route: sourceRoute,
+          ...(aiSource ? { ai_source: aiSource, is_ai_traffic: true } : {})
         });
       }
     } catch (err: any) {

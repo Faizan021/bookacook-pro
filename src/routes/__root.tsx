@@ -218,10 +218,10 @@ function RootShell({ children }: { children: ReactNode }) {
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
-        {/* GA4 & Looker Studio AI Referral Attribution Script */}
+        {/* Generative AI Attribution & UTM Tracking Script (GA4, Looker Studio, PostHog) */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var r=(document.referrer||'').toLowerCase();var aiSources=[{match:'chatgpt.com',source:'chatgpt'},{match:'openai.com',source:'chatgpt'},{match:'perplexity.ai',source:'perplexity'},{match:'claude.ai',source:'claude'},{match:'anthropic.com',source:'claude'},{match:'gemini.google.com',source:'gemini'},{match:'copilot.microsoft.com',source:'bing_copilot'},{match:'bing.com',source:'bing_ai'},{match:'you.com',source:'you_ai'}];var matched=aiSources.find(function(s){return r.indexOf(s.match)!==-1;});if(matched){window.__speisely_ai_referrer=matched.source;window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'ai_referral',ai_engine:matched.source,traffic_type:'generative_ai_search',referring_url:r});}}catch(e){}})();`,
+            __html: `(function(){try{var r=(document.referrer||'').toLowerCase();var q=(window.location.search||'').toLowerCase();var p=new URLSearchParams(q);var src=p.get('utm_source')||'';var med=p.get('utm_medium')||'';var st=p.get('st_source')||'';var engine=null;var method='';if(src.indexOf('chatgpt')!==-1||r.indexOf('chatgpt.com')!==-1||r.indexOf('openai.com')!==-1){engine='chatgpt';}else if(src.indexOf('gemini')!==-1||src.indexOf('bard')!==-1||r.indexOf('gemini.google.com')!==-1||r.indexOf('apps.bard')!==-1){engine='gemini';}else if(src.indexOf('perplexity')!==-1||r.indexOf('perplexity.ai')!==-1){engine='perplexity';}else if(src.indexOf('claude')!==-1||r.indexOf('claude.ai')!==-1||r.indexOf('anthropic.com')!==-1){engine='claude';}else if(src.indexOf('copilot')!==-1||r.indexOf('copilot.microsoft.com')!==-1){engine='copilot';}else if(st==='ai_overview'||med==='ai_overview'){engine='google_ai_overview';}else if(src.indexOf('deepseek')!==-1||r.indexOf('deepseek.com')!==-1){engine='deepseek';}else if(src.indexOf('grok')!==-1||r.indexOf('grok.com')!==-1||r.indexOf('x.ai')!==-1){engine='grok';}else if(['ai','chat','llm','generative_search'].indexOf(med)!==-1){engine=src||'generic_ai';}if(engine){method=src||st?'utm_parameters':'referrer';window.__speisely_ai_referrer=engine;try{sessionStorage.setItem('speisely_ai_source',engine);}catch(e){}window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'ai_referral',ai_engine:engine,traffic_type:'generative_ai_search',detection_method:method,referring_url:r,search_params:q});}}catch(e){}})();`,
           }}
         />
       </head>
@@ -393,9 +393,24 @@ function RootComponent() {
       Promise.all([import("../utils/posthog"), import("posthog-js")])
         .then(([{ initPostHog }, posthogModule]) => {
           initPostHog();
+          type CustomWindow = Window & { __speisely_ai_referrer?: string };
+          const aiSource =
+            (typeof window !== "undefined" &&
+              ((window as CustomWindow).__speisely_ai_referrer ||
+                sessionStorage.getItem("speisely_ai_source"))) ||
+            undefined;
+
+          if (aiSource) {
+            posthogModule.default.register({
+              ai_source: aiSource,
+              is_ai_traffic: true,
+            });
+          }
+
           posthogModule.default.capture("$pageview", {
             $current_url: window.location.href,
             $pathname: pathname,
+            ...(aiSource ? { ai_referral_source: aiSource, is_ai_traffic: true } : {}),
           });
         })
         .catch(() => {});
