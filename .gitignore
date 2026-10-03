@@ -40,6 +40,27 @@ lighthouse-*.json
 # ── Dev / QA scratch artefacts ──────────────────────────────────────────────
 # Playwright QA scripts, screenshots, and one-off debug tools — never commit
 scratch/
-# Stray QA PNGs dumped into public/ root (not into public/magazin/ subfolders)
-/public/*.png
-/public/*.jpg
+# QA screenshots dumped into public root
+/public/*_spread_*.png
+/public/*_verified.png
+/public/page*.png
+/public/spread_*.png
+/public/local_*.png
+/public/pub01_*.png
+/public/*_live*.png
+/public/*_preview.png
+/public/showcase-*.png
+
+# Public root production assets (whitelist against inadvertent exclusion)
+!/public/speisely_logo.png
+!/public/speisely_official_logo.png
+!/public/speisely-logo.jpg
+!/public/oktoberfest_hendl_feast.jpg
+!/public/kuepper_web_preview.png
+!/public/haus_spaas_desktop_hero.png
+!/public/slide1_schnitzel_hero.jpg
+!/public/slide3_german_festival.jpg
+!/public/catering-clean.png
+!/public/planner-clean.png
+!/public/hero-clean.png
+!/public/hero-cinematic.png
