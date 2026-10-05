@@ -39,6 +39,7 @@ import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-pas
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CaseStudyHausSpaasRouteImport } from './routes/case-study.haus-spaas'
+import { Route as CaseStudyPartyserviceKuepperRouteImport } from './routes/case-study.partyservice-kuepper'
 import { Route as CateringIndexRouteImport } from './routes/catering.index'
 import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
 import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
@@ -236,6 +237,12 @@ const CaseStudyHausSpaasRoute = CaseStudyHausSpaasRouteImport.update({
   path: '/case-study/haus-spaas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaseStudyPartyserviceKuepperRoute =
+  CaseStudyPartyserviceKuepperRouteImport.update({
+    id: '/case-study/partyservice-kuepper',
+    path: '/case-study/partyservice-kuepper',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CateringIndexRoute = CateringIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -525,6 +532,7 @@ export interface FileRoutesByFullPath {
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
+  '/case-study/partyservice-kuepper': typeof CaseStudyPartyserviceKuepperRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -601,6 +609,7 @@ export interface FileRoutesByTo {
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
+  '/case-study/partyservice-kuepper': typeof CaseStudyPartyserviceKuepperRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -680,6 +689,7 @@ export interface FileRoutesById {
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
+  '/case-study/partyservice-kuepper': typeof CaseStudyPartyserviceKuepperRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -760,6 +770,7 @@ export interface FileRouteTypes {
     | '/auth/update-password'
     | '/blog/$slug'
     | '/case-study/haus-spaas'
+    | '/case-study/partyservice-kuepper'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -836,6 +847,7 @@ export interface FileRouteTypes {
     | '/auth/update-password'
     | '/blog/$slug'
     | '/case-study/haus-spaas'
+    | '/case-study/partyservice-kuepper'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -914,6 +926,7 @@ export interface FileRouteTypes {
     | '/auth/update-password'
     | '/blog/$slug'
     | '/case-study/haus-spaas'
+    | '/case-study/partyservice-kuepper'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -991,6 +1004,7 @@ export interface RootRouteChildren {
   AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CaseStudyHausSpaasRoute: typeof CaseStudyHausSpaasRoute
+  CaseStudyPartyserviceKuepperRoute: typeof CaseStudyPartyserviceKuepperRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   MagazinEditionDothtmlRoute: typeof MagazinEditionDothtmlRoute
   MagazinReaderRoute: typeof MagazinReaderRoute
@@ -1229,6 +1243,13 @@ declare module '@tanstack/react-router' {
       path: '/case-study/haus-spaas'
       fullPath: '/case-study/haus-spaas'
       preLoaderRoute: typeof CaseStudyHausSpaasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-study/partyservice-kuepper': {
+      id: '/case-study/partyservice-kuepper'
+      path: '/case-study/partyservice-kuepper'
+      fullPath: '/case-study/partyservice-kuepper'
+      preLoaderRoute: typeof CaseStudyPartyserviceKuepperRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering/': {
@@ -1747,6 +1768,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
   CaseStudyHausSpaasRoute: CaseStudyHausSpaasRoute,
+  CaseStudyPartyserviceKuepperRoute: CaseStudyPartyserviceKuepperRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   MagazinEditionDothtmlRoute: MagazinEditionDothtmlRoute,
   MagazinReaderRoute: MagazinReaderRoute,

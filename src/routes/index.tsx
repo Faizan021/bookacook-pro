@@ -976,19 +976,27 @@ function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Case 1: Partyservice Küpper */}
-            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between">
+            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider">
                     BBQ &amp; Event-Catering NRW
                   </span>
-                  <span className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5">
-                    Live Case Study
-                  </span>
+                  <Link
+                    to="/case-study/partyservice-kuepper"
+                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition"
+                  >
+                    Live Case Study ⭐
+                  </Link>
                 </div>
-                <h3 className="font-display text-2xl font-bold text-forest mb-2">
-                  Partyservice Küpper
-                </h3>
+                <Link
+                  to="/case-study/partyservice-kuepper"
+                  className="block group-hover:text-[#A85C36] transition"
+                >
+                  <h3 className="font-display text-2xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
+                    Partyservice Küpper
+                  </h3>
+                </Link>
                 <p className="text-xs sm:text-sm text-forest/75 line-clamp-3 leading-relaxed mb-6">
                   Moderner Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, lokaler
                   Google-KI-SEO-Struktur und direkter Angebotsanfrage.
@@ -1007,55 +1015,83 @@ function Home() {
               </div>
               <div className="pt-4 border-t border-forest/10 flex items-center justify-between">
                 <span className="text-xs text-forest/50 font-mono">partyservicekuepper.de</span>
-                <a
-                  href="https://partyservicekuepper.de/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-[#E6B84A] transition"
-                >
-                  <span>Live ansehen ↗</span>
-                </a>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/case-study/partyservice-kuepper"
+                    className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3.5 py-1.5 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
+                  >
+                    <span>Case Study</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                  <a
+                    href="https://partyservicekuepper.de/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition"
+                  >
+                    <span>Live ↗</span>
+                  </a>
+                </div>
               </div>
             </div>
 
-            {/* Case 2: Haus Späas */}
-            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between">
+            {/* Case 2: Haus Spaas */}
+            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider">
-                    Boutique Event Location
+                    Traditions-Gastronomie &amp; Eventlokal
                   </span>
-                  <span className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5">
-                    Live Case Study
-                  </span>
+                  <Link
+                    to="/case-study/haus-spaas"
+                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition"
+                  >
+                    Live Case Study ⭐
+                  </Link>
                 </div>
-                <h3 className="font-display text-2xl font-bold text-forest mb-2">Haus Späas</h3>
+                <Link
+                  to="/case-study/haus-spaas"
+                  className="block group-hover:text-[#A85C36] transition"
+                >
+                  <h3 className="font-display text-2xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
+                    Haus Spaas
+                  </h3>
+                </Link>
                 <p className="text-xs sm:text-sm text-forest/75 line-clamp-3 leading-relaxed mb-6">
-                  Bildgewaltige Eventlocation-Website für Hochzeiten, Firmenfeiern und Bankette mit
-                  modernem Buchungs- und Raumüberblick.
+                  Vom statischen PDF zum vollen Gastraum: Duales Menü-System, 1-Klick WhatsApp
+                  Reservierung &amp; 44 Besucher in den ersten 24 Stunden.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
-                    🏰 Event Location
+                    📈 +44 Gäste in 24h
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
-                    💍 Hochzeiten &amp; Feiern
+                    🥨 Duale Speisekarte
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
-                    ⚡ Blitzschnell
+                    ⚡ 0.48s Ladezeit
                   </span>
                 </div>
               </div>
               <div className="pt-4 border-t border-forest/10 flex items-center justify-between">
-                <span className="text-xs text-forest/50 font-mono">haus-spaas.vercel.app</span>
-                <a
-                  href="https://haus-spaas.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-[#E6B84A] transition"
-                >
-                  <span>Live ansehen ↗</span>
-                </a>
+                <span className="text-xs text-forest/50 font-mono">haus-spaas.de</span>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/case-study/haus-spaas"
+                    className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3.5 py-1.5 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
+                  >
+                    <span>Case Study</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                  <a
+                    href="https://haus-spaas.de"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition"
+                  >
+                    <span>Live ↗</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

@@ -27,6 +27,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - Partner / Pricing Page: ${BASE}/partners
 - B2B Website-Erstellung (Websites for Caterers & Restaurants): ${BASE}/partner/webseiten
 - Flagship Case Study Haus Spaas (Web Digitalization): ${BASE}/case-study/haus-spaas
+- Flagship Case Study Partyservice Küpper (BBQ & Catering): ${BASE}/case-study/partyservice-kuepper
 - Interactive Architecture Simulator: ${BASE}/architecture-simulator
 - Enterprise GEO API: ${BASE}/api/geo
 - GeoJSON Registry: ${BASE}/geo.json

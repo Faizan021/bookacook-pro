@@ -77,8 +77,8 @@ const SHOWCASE_PROJECTS = [
     category: "BBQ & Event-Catering NRW",
     location: "Mönchengladbach & NRW",
     url: "https://partyservicekuepper.de/",
-    caseStudyUrl: undefined,
-    badge: "Live · Catering & BBQ",
+    caseStudyUrl: "/case-study/partyservice-kuepper",
+    badge: "Flagship Case Study ⭐",
     description:
       "Kompletter Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, regionaler Google-KI-SEO-Struktur und nahtloser Angebotsanfrage.",
     highlights: [

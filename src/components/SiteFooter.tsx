@@ -74,6 +74,10 @@ export function SiteFooter() {
               to="/case-study/haus-spaas"
               label={lang === "de" ? "Case Study: Haus Spaas" : "Case Study: Haus Spaas"}
             />
+            <FooterLink
+              to="/case-study/partyservice-kuepper"
+              label={lang === "de" ? "Case Study: Partyservice Küpper" : "Case Study: Küpper BBQ"}
+            />
             <FooterLink to="/speisely" label={t("Was ist Speisely?", "What is Speisely?")} />
             <FooterLink to="/about" label={t("nav.about")} />
             <FooterLink to="/magazin" label={t("Presse & Magazin", "Press & Magazine")} />
