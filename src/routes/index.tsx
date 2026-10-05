@@ -22,7 +22,7 @@ import {
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { toast } from "sonner";
-import { motion, LayoutGroup, useReducedMotion } from "framer-motion";
+import { motion, LayoutGroup, useReducedMotion, AnimatePresence } from "framer-motion";
 import { AiConciergeModal } from "@/components/search/AiConciergeModal";
 
 export const Route = createFileRoute("/")({
@@ -236,27 +236,33 @@ function Home() {
     return () => clearInterval(interval);
   }, [rotatingPlaceholders.length]);
 
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowFloatingButton(window.scrollY > 380);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const scenarioChips = useMemo(
     () => [
       {
-        label: tt("🏢 Office Teamevent (30 Pers.)", "🏢 Office Team Event (30 pax)"),
+        label: tt("🏢 Office Teamevent", "🏢 Office Team Event"),
         query: tt("Office Teamevent für 30 Personen", "Office team event for 30 guests"),
       },
       {
-        label: tt("🍢 Fingerfood & Buffet", "🍢 Finger Food & Buffet"),
+        label: tt("🍢 Fingerfood Buffet", "🍢 Finger Food Buffet"),
         query: tt("Fingerfood Buffet für Firmenfeier", "Finger food buffet for corporate event"),
       },
       {
-        label: tt("💍 Hochzeit & Jubiläum", "💍 Wedding & Anniversary"),
+        label: tt("💍 Hochzeit & Feier", "💍 Wedding & Gala"),
         query: tt("Hochzeitscatering für 70 Gäste", "Wedding catering for 70 guests"),
       },
       {
         label: tt("🌱 100% Vegan & Bio", "🌱 100% Vegan & Organic"),
         query: tt("Veganes Bio Catering Buffet", "Vegan organic catering buffet"),
-      },
-      {
-        label: tt("🥩 Halal Catering", "🥩 Halal Catering"),
-        query: tt("Halal Catering mit Live Grillstation", "Halal catering with live grill station"),
       },
     ],
     [tt],
@@ -571,7 +577,7 @@ function Home() {
               )}
             </motion.p>
 
-            {/* AI Search & Concierge Bar */}
+            {/* Category Intent Selector (Above Search Bar) */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
@@ -581,7 +587,55 @@ function Home() {
                   transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
                 },
               }}
-              className="mt-10 relative max-w-2xl"
+              className="mt-8 mb-4"
+            >
+              <LayoutGroup id="heroTabs">
+                <div className="flex flex-wrap gap-2 relative">
+                  {verticals.map((v) => (
+                    <button
+                      key={v.key}
+                      id={`hero-tab-${v.key}`}
+                      type="button"
+                      onClick={() => setActiveVertical(v.key)}
+                      className={`relative flex items-center gap-2 rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
+                        activeVertical === v.key
+                          ? "text-forest border-transparent"
+                          : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
+                      }`}
+                    >
+                      {activeVertical === v.key && (
+                        <motion.div
+                          layoutId="activeTabPill"
+                          className="absolute inset-0 bg-white rounded-full -z-10 shadow-md"
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <span className="relative z-10 flex items-center gap-2">
+                        {v.icon}
+                        <span>{v.label}</span>
+                        {activeVertical !== v.key && (
+                          <span className="hidden sm:block text-[10px] text-white/50 font-medium">
+                            {v.sublabel}
+                          </span>
+                        )}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </LayoutGroup>
+            </motion.div>
+
+            {/* AI Search & Omnibar */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                },
+              }}
+              className="relative max-w-2xl"
             >
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
@@ -601,46 +655,51 @@ function Home() {
                     }
                   }}
                   disabled={searching}
-                  className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-52 sm:pr-60 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
-                  placeholder={rotatingPlaceholders[placeholderIndex]}
+                  className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-44 sm:pr-48 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
+                  placeholder={
+                    activeVertical === "restaurant"
+                      ? tt(
+                          "z.B. Neapolitanische Pizza, Sushi oder Tagesmenü...",
+                          "e.g. Neapolitan Pizza, Sushi or lunch specials...",
+                        )
+                      : activeVertical === "planner"
+                        ? tt(
+                            "z.B. Hochzeitsplanung für 80 Gäste mit Location...",
+                            "e.g. Wedding planning for 80 guests with venue...",
+                          )
+                        : rotatingPlaceholders[placeholderIndex]
+                  }
                 />
 
-                {/* Dual Action Buttons */}
-                <div className="absolute inset-y-2 right-2 flex items-center gap-1.5">
+                {/* Single High-End Radiant Action Button */}
+                <div className="absolute inset-y-2 right-2 flex items-center">
                   <button
                     type="button"
-                    onClick={handleAISearch}
-                    disabled={searching || !searchQuery.trim()}
-                    className="bg-forest text-white rounded-full px-3 sm:px-4 py-2 font-bold text-xs sm:text-sm shadow-md hover:bg-forest/90 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
-                    title={tt("Schnellsuche starten", "Start quick search")}
+                    onClick={() => {
+                      if (searchQuery.trim()) {
+                        handleAISearch();
+                      } else {
+                        setIsConciergeOpen(true);
+                      }
+                    }}
+                    disabled={searching}
+                    className="bg-gradient-to-r from-[#b28a3c] via-[#c69a45] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.02] active:scale-[0.98]"
+                    title={tt("Finden & KI-Berater starten", "Find & start AI advisor")}
                   >
                     {searching ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin text-forest" />
                     ) : (
-                      <Search className="h-3.5 w-3.5" />
+                      <Sparkles className="h-4 w-4 text-forest" />
                     )}
-                    <span className="hidden sm:inline">{tt("Suchen", "Search")}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsConciergeOpen(true)}
-                    className="bg-gradient-to-r from-[#b28a3c] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-3.5 sm:px-4 py-2 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-1.5 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.03]"
-                    title={tt(
-                      "Google Gemini KI Event-Berater öffnen",
-                      "Open Google Gemini AI Event Advisor",
-                    )}
-                  >
-                    <Sparkles className="h-3.5 w-3.5 text-forest" />
-                    <span>{tt("KI-Berater", "AI Advisor")}</span>
+                    <span>{tt("Finden & Beraten", "Find & Consult")}</span>
                   </button>
                 </div>
               </div>
 
-              {/* Quick Scenario Chips */}
-              <div className="mt-3 flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-none">
+              {/* Vorschläge Chips (Balanced, perfectly wrapped, no clipping) */}
+              <div className="mt-3.5 flex flex-wrap items-center gap-2">
                 <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
-                  {tt("Vorschläge:", "Suggestions:")}
+                  {tt("Beliebt:", "Popular:")}
                 </span>
                 {scenarioChips.map((chip, i) => (
                   <button
@@ -650,83 +709,35 @@ function Home() {
                       setSearchQuery(chip.query);
                       setIsConciergeOpen(true);
                     }}
-                    className="shrink-0 rounded-full bg-white/[0.08] hover:bg-[#b28a3c] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition cursor-pointer backdrop-blur-sm shadow-sm"
+                    className="rounded-full bg-white/[0.08] hover:bg-[#b28a3c] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition cursor-pointer backdrop-blur-sm shadow-sm"
                   >
                     {chip.label}
                   </button>
                 ))}
               </div>
-            </motion.div>
 
-            {/* Vertical selector + CTA */}
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
-                },
-              }}
-              className="mt-8"
-            >
-              {/* Tab pills */}
-              <LayoutGroup id="heroTabs">
-                <div className="flex flex-wrap gap-2 relative">
-                  {verticals.map((v) => (
-                    <button
-                      key={v.key}
-                      id={`hero-tab-${v.key}`}
-                      type="button"
-                      onClick={() => setActiveVertical(v.key)}
-                      className={`relative flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
-                        activeVertical === v.key
-                          ? "text-forest border-transparent"
-                          : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
-                      }`}
-                    >
-                      {activeVertical === v.key && (
-                        <motion.div
-                          layoutId="activeTabPill"
-                          className="absolute inset-0 bg-white rounded-full -z-10"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                        />
-                      )}
-                      <span className="relative z-10 flex items-center gap-2.5">
-                        {v.icon}
-                        <span>{v.label}</span>
-                        {activeVertical !== v.key && (
-                          <span className="hidden sm:block text-[10px] text-white/50 font-medium">
-                            {v.sublabel}
-                          </span>
-                        )}
-                      </span>
-                    </button>
-                  ))}
+              {/* Social Proof & Trust Strip (Replaces clutter with proof) */}
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-white/75 text-xs sm:text-sm">
+                <div className="flex items-center gap-1.5 font-medium">
+                  <CheckCircle2 className="h-4 w-4 text-[#b28a3c]" />
+                  <span>{tt("47+ Geprüfte Partner", "47+ Vetted Partners")}</span>
                 </div>
-              </LayoutGroup>
-
-              {/* Primary + secondary CTAs */}
-              <div className="mt-5 flex items-center gap-4">
+                <span className="text-white/20 hidden sm:inline">•</span>
+                <div className="flex items-center gap-1.5 font-medium">
+                  <Star className="h-4 w-4 text-[#b28a3c] fill-[#b28a3c]" />
+                  <span>{tt("4.9/5 Bewertung", "4.9/5 Rating")}</span>
+                </div>
+                <span className="text-white/20 hidden sm:inline">•</span>
+                <div className="flex items-center gap-1.5 font-medium text-white/90">
+                  <span className="text-[#f4d58d] font-bold">0 €</span>
+                  <span>{tt("Kostenlos für dich", "100% Free")}</span>
+                </div>
+                <span className="text-white/20 hidden sm:inline">•</span>
                 <Link
-                  id="hero-primary-cta"
-                  to={current.to}
-                  onClick={() => trackEvent(current.trackKey, { location: "homepage_hero" })}
-                  className="inline-flex items-center gap-2.5 rounded-full bg-[#b28a3c] text-white px-7 py-4 text-base font-bold shadow-xl shadow-[#b28a3c]/25 hover:bg-[#9a7633] hover:shadow-[#9a7633]/30 transition-all duration-200 hover:-translate-y-0.5"
-                >
-                  {current.cta}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  id="hero-partner-cta"
                   to="/partners"
-                  onClick={() =>
-                    trackEvent("partner_cta_clicked", { location: "homepage_hero_secondary" })
-                  }
-                  className="text-sm font-semibold text-white/65 hover:text-white transition-colors inline-flex items-center gap-1.5"
+                  className="text-[#f4d58d] hover:text-white transition-colors font-semibold inline-flex items-center gap-1 text-xs sm:text-sm"
                 >
-                  {tt("Partner werden", "Become a partner")}
-                  <ChevronRight className="h-4 w-4" />
+                  <span>{tt("Partner werden →", "Become a Partner →")}</span>
                 </Link>
               </div>
             </motion.div>
@@ -1197,25 +1208,30 @@ function Home() {
         </Link>
       </section>
 
-      {/* Floating AI Concierge Launcher */}
-      <motion.button
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsConciergeOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-forest via-[#1a382c] to-[#b28a3c] text-white px-5 py-3 shadow-2xl border border-white/20 hover:border-[#b28a3c] transition-all cursor-pointer group backdrop-blur-md"
-        title={tt("KI Event-Berater öffnen", "Open AI Event Concierge")}
-      >
-        <span className="flex h-2.5 w-2.5 relative">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#f4d58d] opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#f4d58d]" />
-        </span>
-        <Sparkles className="w-4 h-4 text-[#f4d58d] group-hover:rotate-12 transition-transform" />
-        <span className="text-xs sm:text-sm font-bold tracking-tight">
-          {tt("✨ KI Event-Berater", "✨ AI Event Concierge")}
-        </span>
-      </motion.button>
+      {/* Floating AI Concierge Launcher (Only visible after scrolling past hero) */}
+      <AnimatePresence>
+        {showFloatingButton && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsConciergeOpen(true)}
+            className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-forest via-[#1a382c] to-[#b28a3c] text-white px-5 py-3 shadow-2xl border border-white/20 hover:border-[#b28a3c] transition-all cursor-pointer group backdrop-blur-md"
+            title={tt("KI Event-Berater öffnen", "Open AI Event Concierge")}
+          >
+            <span className="flex h-2.5 w-2.5 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#f4d58d] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#f4d58d]" />
+            </span>
+            <Sparkles className="w-4 h-4 text-[#f4d58d] group-hover:rotate-12 transition-transform" />
+            <span className="text-xs sm:text-sm font-bold tracking-tight">
+              {tt("✨ KI Event-Berater", "✨ AI Event Concierge")}
+            </span>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Google Gemini AI Concierge Modal */}
       <AiConciergeModal
