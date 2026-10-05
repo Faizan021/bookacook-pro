@@ -55,7 +55,6 @@ import { Route as MagazinSpeiselyVisitsRouteImport } from './routes/magazin.spei
 import { Route as PartnerWebseitenRouteImport } from './routes/partner.webseiten'
 import { Route as PartnersWebseitenRouteImport } from './routes/partners.webseiten'
 import { Route as PlannerIndexRouteImport } from './routes/planner.index'
-import { Route as PlannerCityEventTypeRouteImport } from './routes/planner.$city-$eventType'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as AuthenticatedCatererReviewsRouteImport } from './routes/_authenticated/caterer.reviews'
@@ -322,11 +321,6 @@ const PlannerIndexRoute = PlannerIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PlannerRoute,
 } as any)
-const PlannerCityEventTypeRoute = PlannerCityEventTypeRouteImport.update({
-  id: '/$city-$eventType',
-  path: '/$city-$eventType',
-  getParentRoute: () => PlannerRoute,
-} as any)
 const PlannerSlugRoute = PlannerSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -544,7 +538,6 @@ export interface FileRoutesByFullPath {
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
   '/partner/webseiten': typeof PartnerWebseitenRoute
   '/partners/webseiten': typeof PartnersWebseitenRoute
-  '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
@@ -620,7 +613,6 @@ export interface FileRoutesByTo {
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/partner/webseiten': typeof PartnerWebseitenRoute
   '/partners/webseiten': typeof PartnersWebseitenRoute
-  '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth': typeof AuthIndexRoute
@@ -701,7 +693,6 @@ export interface FileRoutesById {
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
   '/partner/webseiten': typeof PartnerWebseitenRoute
   '/partners/webseiten': typeof PartnersWebseitenRoute
-  '/planner/$city-$eventType': typeof PlannerCityEventTypeRoute
   '/planner/$slug': typeof PlannerSlugRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
@@ -782,7 +773,6 @@ export interface FileRouteTypes {
     | '/magazin/speisely-visits'
     | '/partner/webseiten'
     | '/partners/webseiten'
-    | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
     | '/auth/'
@@ -858,7 +848,6 @@ export interface FileRouteTypes {
     | '/magazin/schnitzel-schmiede'
     | '/partner/webseiten'
     | '/partners/webseiten'
-    | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
     | '/auth'
@@ -938,7 +927,6 @@ export interface FileRouteTypes {
     | '/magazin/speisely-visits'
     | '/partner/webseiten'
     | '/partners/webseiten'
-    | '/planner/$city-$eventType'
     | '/planner/$slug'
     | '/restaurant/$slug'
     | '/auth/'
@@ -1357,13 +1345,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerIndexRouteImport
       parentRoute: typeof PlannerRoute
     }
-    '/planner/$city-$eventType': {
-      id: '/planner/$city-$eventType'
-      path: '/$city-$eventType'
-      fullPath: '/planner/$city-$eventType'
-      preLoaderRoute: typeof PlannerCityEventTypeRouteImport
-      parentRoute: typeof PlannerRoute
-    }
     '/planner/$slug': {
       id: '/planner/$slug'
       path: '/$slug'
@@ -1695,14 +1676,12 @@ const PartnersRouteWithChildren = PartnersRoute._addFileChildren(
 )
 
 interface PlannerRouteChildren {
-  PlannerCityEventTypeRoute: typeof PlannerCityEventTypeRoute
   PlannerSlugRoute: typeof PlannerSlugRoute
   PlannerIndexRoute: typeof PlannerIndexRoute
   PlannerOrtCityRoute: typeof PlannerOrtCityRoute
 }
 
 const PlannerRouteChildren: PlannerRouteChildren = {
-  PlannerCityEventTypeRoute: PlannerCityEventTypeRoute,
   PlannerSlugRoute: PlannerSlugRoute,
   PlannerIndexRoute: PlannerIndexRoute,
   PlannerOrtCityRoute: PlannerOrtCityRoute,
