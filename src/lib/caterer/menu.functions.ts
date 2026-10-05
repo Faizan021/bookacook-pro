@@ -166,125 +166,137 @@ export const resolveSubdomainVendor = createServerFn({ method: "GET" })
 export const getPublicCatererProfile = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
+    const cleanSlug = data.slug.toLowerCase().trim();
     try {
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const cleanSlug = data.slug.toLowerCase().trim();
+      const fetchPromise = (async () => {
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-        cleanSlug,
-      );
-      const query = supabaseAdmin
-        .from("caterers")
-        .select(
-          "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text, approval_status",
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          cleanSlug,
         );
-
-      const catererRes = await (isUuid
-        ? query.or(`slug.eq.${cleanSlug},id.eq.${cleanSlug}`).maybeSingle()
-        : query.ilike("slug", cleanSlug).maybeSingle());
-
-      let caterer = catererRes?.data;
-      if (!caterer) {
-        // Fallback search by name or custom domain
-        const { data: fallbackCaterer } = await query
-          .or(`name.ilike.%${cleanSlug}%,custom_domain.ilike.%${cleanSlug}%`)
-          .maybeSingle();
-        caterer = fallbackCaterer;
-      }
-
-      if (!caterer) {
-        // Fallback: Query storefront_settings directly
-        const { data: sf } = await supabaseAdmin
-          .from("storefront_settings")
-          .select("*")
-          .ilike("slug", cleanSlug)
-          .maybeSingle();
-
-        if (sf) {
-          caterer = {
-            id: sf.caterer_id || sf.id,
-            owner_id: sf.caterer_id,
-            name: sf.slug
-              ? sf.slug
-                  .split("-")
-                  .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-                  .join(" ")
-              : "Caterer Profile",
-            slug: sf.slug || cleanSlug,
-            custom_domain: null,
-            certifications: null,
-            description: sf.description || "",
-            logo_url: null,
-            banner_image_url: sf.banner_image_url || null,
-            phone: "",
-            business_address: "",
-            service_areas: "",
-            min_delivery_cents: (sf.min_order_amount || 0) * 100,
-            delivery_fee_cents: (sf.delivery_fee || 0) * 100,
-            announcement_active: false,
-            announcement_bg_color: null,
-            announcement_text: null,
-            approval_status: "approved",
-          };
-        }
-      }
-
-      if (!caterer) return null;
-
-      let menu: any[] = [];
-      try {
-        const { data: menuData } = await supabaseAdmin
-          .from("caterer_menu_items")
+        const query = supabaseAdmin
+          .from("caterers")
           .select(
-            "id, category, name, description, price_cents, unit, serves, image_url, is_available",
-          )
-          .eq("caterer_id", caterer.id)
-          .eq("is_available", true)
-          .order("created_at", { ascending: true });
-
-        if (menuData) {
-          menu = await Promise.all(
-            menuData.map(async (m: any) => {
-              if (!m.image_url) return { ...m, image_signed_url: null as string | null };
-              if (/^https?:\/\//i.test(m.image_url)) return { ...m, image_signed_url: m.image_url };
-              try {
-                const { data: signed } = await supabaseAdmin.storage
-                  .from("caterer-menu")
-                  .createSignedUrl(m.image_url, 60 * 60);
-                return { ...m, image_signed_url: signed?.signedUrl ?? null };
-              } catch (e) {
-                return { ...m, image_signed_url: null };
-              }
-            }),
+            "id, owner_id, name, slug, custom_domain, certifications, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text, approval_status",
           );
-        }
-      } catch (mErr) {
-        console.error("Error fetching menu items for public caterer profile:", mErr);
-      }
 
-      let promoCodes: any[] = [];
-      if (
-        caterer.owner_id &&
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(caterer.owner_id)
-      ) {
-        try {
-          const now = new Date().toISOString();
-          const { data: promos } = await supabaseAdmin
-            .from("promo_codes")
+        const catererRes = await (isUuid
+          ? query.or(`slug.eq.${cleanSlug},id.eq.${cleanSlug}`).maybeSingle()
+          : query.ilike("slug", cleanSlug).maybeSingle());
+
+        let caterer = catererRes?.data;
+        if (!caterer) {
+          // Fallback search by name or custom domain
+          const { data: fallbackCaterer } = await query
+            .or(`name.ilike.%${cleanSlug}%,custom_domain.ilike.%${cleanSlug}%`)
+            .maybeSingle();
+          caterer = fallbackCaterer;
+        }
+
+        if (!caterer) {
+          // Fallback: Query storefront_settings directly
+          const { data: sf } = await supabaseAdmin
+            .from("storefront_settings")
             .select("*")
-            .eq("owner_id", caterer.owner_id)
-            .eq("is_active", true)
-            .or(`starts_at.is.null,starts_at.lte.${now}`)
-            .or(`ends_at.is.null,ends_at.gte.${now}`);
-          if (promos) {
-            promoCodes = promos;
-          }
-        } catch (pErr) {
-          console.error("Error fetching promo codes for public caterer profile:", pErr);
-        }
-      }
+            .ilike("slug", cleanSlug)
+            .maybeSingle();
 
-      return { ...caterer, menu, promoCodes };
+          if (sf) {
+            caterer = {
+              id: sf.caterer_id || sf.id,
+              owner_id: sf.caterer_id,
+              name: sf.slug
+                ? sf.slug
+                    .split("-")
+                    .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+                    .join(" ")
+                : "Caterer Profile",
+              slug: sf.slug || cleanSlug,
+              custom_domain: null,
+              certifications: null,
+              description: sf.description || "",
+              logo_url: null,
+              banner_image_url: sf.banner_image_url || null,
+              phone: "",
+              business_address: "",
+              service_areas: "",
+              min_delivery_cents: (sf.min_order_amount || 0) * 100,
+              delivery_fee_cents: (sf.delivery_fee || 0) * 100,
+              announcement_active: false,
+              announcement_bg_color: null,
+              announcement_text: null,
+              approval_status: "approved",
+            };
+          }
+        }
+
+        if (!caterer) return null;
+
+        let menu: any[] = [];
+        try {
+          const { data: menuData } = await supabaseAdmin
+            .from("caterer_menu_items")
+            .select(
+              "id, category, name, description, price_cents, unit, serves, image_url, is_available",
+            )
+            .eq("caterer_id", caterer.id)
+            .eq("is_available", true)
+            .order("created_at", { ascending: true });
+
+          if (menuData) {
+            menu = await Promise.all(
+              menuData.map(async (m: any) => {
+                if (!m.image_url) return { ...m, image_signed_url: null as string | null };
+                if (/^https?:\/\//i.test(m.image_url))
+                  return { ...m, image_signed_url: m.image_url };
+                try {
+                  const { data: signed } = await supabaseAdmin.storage
+                    .from("caterer-menu")
+                    .createSignedUrl(m.image_url, 60 * 60);
+                  return { ...m, image_signed_url: signed?.signedUrl ?? null };
+                } catch (e) {
+                  return { ...m, image_signed_url: null };
+                }
+              }),
+            );
+          }
+        } catch (mErr) {
+          console.error("Error fetching menu items for public caterer profile:", mErr);
+        }
+
+        let promoCodes: any[] = [];
+        if (
+          caterer.owner_id &&
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(caterer.owner_id)
+        ) {
+          try {
+            const now = new Date().toISOString();
+            const { data: promos } = await supabaseAdmin
+              .from("promo_codes")
+              .select("*")
+              .eq("owner_id", caterer.owner_id)
+              .eq("is_active", true)
+              .or(`starts_at.is.null,starts_at.lte.${now}`)
+              .or(`ends_at.is.null,ends_at.gte.${now}`);
+            if (promos) {
+              promoCodes = promos;
+            }
+          } catch (pErr) {
+            console.error("Error fetching promo codes for public caterer profile:", pErr);
+          }
+        }
+
+        return { ...caterer, menu, promoCodes };
+      })();
+
+      const timeoutPromise = new Promise<null>((resolve) =>
+        setTimeout(() => {
+          console.warn(`[getPublicCatererProfile] Timeout fetching slug: ${cleanSlug}`);
+          resolve(null);
+        }, 2500),
+      );
+
+      return await Promise.race([fetchPromise, timeoutPromise]);
     } catch (err) {
       console.error("Global error in getPublicCatererProfile:", err);
       return null;
@@ -342,7 +354,10 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
         .object({
           catererId: z.string().min(1),
           eventType: z.string().default("Event / Feier"),
-          eventDate: z.string().optional().default(() => new Date().toISOString().split("T")[0]),
+          eventDate: z
+            .string()
+            .optional()
+            .default(() => new Date().toISOString().split("T")[0]),
           guestCount: z.number().min(1).default(10),
           budgetCents: z.number().min(0).default(0),
           location: z.string().default("Berlin"),
@@ -397,9 +412,10 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
     let validDbCatererId: string | null = null;
 
     if (data.catererId) {
-      const isUuidCandidate = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.catererId);
+      const isUuidCandidate =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.catererId);
       const query = supabaseAdmin.from("caterers").select("id");
-      
+
       const { data: dbCat } = isUuidCandidate
         ? await query.eq("id", data.catererId).maybeSingle()
         : await query.eq("slug", data.catererId).maybeSingle();
@@ -462,11 +478,12 @@ export const submitCateringBrief = createServerFn({ method: "POST" })
         }
       }
 
-      let parsedDate = new Date(data.eventDate);
+      const parsedDate = new Date(data.eventDate);
       const eventDateStr = !isNaN(parsedDate.getTime())
         ? parsedDate.toLocaleDateString("de-DE")
         : data.eventDate || "Auf Anfrage";
-      const budgetStr = data.budgetCents > 0 ? `€${(data.budgetCents / 100).toFixed(2)}` : "Auf Anfrage";
+      const budgetStr =
+        data.budgetCents > 0 ? `€${(data.budgetCents / 100).toFixed(2)}` : "Auf Anfrage";
 
       const catererName =
         caterer?.name ||
@@ -609,7 +626,7 @@ export const submitB2bBriefFromLanding = createServerFn({ method: "POST" })
         }
       }
 
-      let parsedDate = new Date(data.startDate);
+      const parsedDate = new Date(data.startDate);
       const startDateStr = !isNaN(parsedDate.getTime())
         ? parsedDate.toLocaleDateString("de-DE")
         : data.startDate || "Auf Anfrage";

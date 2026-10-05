@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
 import { trackEvent } from "@/utils/posthog";
@@ -22,7 +23,7 @@ import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
 import { CategoryNav } from "@/components/ui/CategoryNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useI18n } from "@/i18n/I18nProvider";
-import { getPlanner, mockPromoCodes, PromoCode, Planner } from "@/data/planners";
+import { getPlanner, mockPromoCodes, PromoCode, Planner, fallbackPlanners } from "@/data/planners";
 import { useServerFn, createServerFn } from "@tanstack/react-start";
 import { recordPageView } from "@/lib/vendor/analytics.functions";
 import {
@@ -40,40 +41,44 @@ import { getPublicPlannerReviews } from "@/lib/reviews/public.functions";
 export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
   .inputValidator((input: { slug: string }) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.slug);
-    const query = supabaseAdmin
-      .from("planners")
-      .select("*");
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        data.slug,
+      );
+      const query = supabaseAdmin.from("planners").select("*");
 
-    const { data: planner, error: pErr } = await (isUuid
-      ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`)
-      : query.eq("slug", data.slug)
-    ).maybeSingle();
+      const { data: planner, error: pErr } = await (
+        isUuid ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`) : query.eq("slug", data.slug)
+      ).maybeSingle();
 
-    if (pErr || !planner) return null;
+      if (pErr || !planner) return null;
 
-    // Fetch services
-    const { data: services, error: sErr } = await supabaseAdmin
-      .from("planner_services")
-      .select("id, title, description, starting_price_cents, image_url, is_available")
-      .eq("planner_id", planner.id)
-      .eq("is_available", true);
+      // Fetch services
+      const { data: services } = await supabaseAdmin
+        .from("planner_services")
+        .select("id, title, description, starting_price_cents, image_url, is_available")
+        .eq("planner_id", planner.id)
+        .eq("is_available", true);
 
-    let promoCodes: any[] = [];
-    const now = new Date().toISOString();
-    const { data: promos } = await supabaseAdmin
-      .from("promo_codes")
-      .select("*")
-      .eq("owner_id", planner.owner_id)
-      .eq("is_active", true)
-      .or(`starts_at.is.null,starts_at.lte.${now}`)
-      .or(`ends_at.is.null,ends_at.gte.${now}`);
-    if (promos) {
-      promoCodes = promos;
+      let promoCodes: any[] = [];
+      const now = new Date().toISOString();
+      const { data: promos } = await supabaseAdmin
+        .from("promo_codes")
+        .select("*")
+        .eq("owner_id", planner.owner_id)
+        .eq("is_active", true)
+        .or(`starts_at.is.null,starts_at.lte.${now}`)
+        .or(`ends_at.is.null,ends_at.gte.${now}`);
+      if (promos) {
+        promoCodes = promos;
+      }
+
+      return { ...planner, services: services || [], promoCodes };
+    } catch (e) {
+      console.error("Error in getPublicPlannerProfileFn:", e);
+      return null;
     }
-
-    return { ...planner, services: services || [], promoCodes };
   });
 
 import { isValidPlannerCity } from "@/data/geo/taxonomy";
@@ -81,23 +86,94 @@ import { isValidPlannerCity } from "@/data/geo/taxonomy";
 const plannerQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: ["plannerProfile", slug],
-    queryFn: () => getPublicPlannerProfileFn({ data: { slug } }),
+    queryFn: async () => {
+      const cleanSlug = (slug || "").toLowerCase().trim();
+      const fallback = fallbackPlanners.find(
+        (p) =>
+          (p.slug && p.slug.toLowerCase() === cleanSlug) ||
+          (p.id && p.id.toLowerCase() === cleanSlug),
+      );
+      if (fallback) {
+        return {
+          ...fallback,
+          custom_domain: null,
+          services: (fallback as any).services || [],
+          promoCodes: [],
+        } as any;
+      }
+      try {
+        const timeoutPromise = new Promise<null>((res) => setTimeout(() => res(null), 2500));
+        const res = await Promise.race([
+          getPublicPlannerProfileFn({ data: { slug } }),
+          timeoutPromise,
+        ]);
+        return res ?? null;
+      } catch (e) {
+        console.error("Error fetching planner profile:", e);
+        return null;
+      }
+    },
   });
 
 export const Route = createFileRoute("/planner/$slug")({
   loader: async ({ params, context }) => {
-    const profile = await context.queryClient.ensureQueryData(plannerQueryOptions(params.slug));
-    const fullPlanner = await getPlanner(params.slug);
+    const cleanSlug = (params.slug || "").toLowerCase().trim();
+    const fallback = fallbackPlanners.find(
+      (p) =>
+        (p.slug && p.slug.toLowerCase() === cleanSlug) ||
+        (p.id && p.id.toLowerCase() === cleanSlug),
+    );
+
+    if (fallback) {
+      const fullPlanner = { ...fallback, isShowcase: true };
+      const profile = {
+        ...fallback,
+        custom_domain: null,
+        services: (fallback as any).services || [],
+        promoCodes: [],
+      } as any;
+      return { fullPlanner, reviewsData: null, profile };
+    }
+
+    let profile = null;
+    let fullPlanner: Planner | undefined = undefined;
+    try {
+      const timeoutPromise = new Promise<null>((res) => setTimeout(() => res(null), 2500));
+      const [fetchedProfile, fetchedPlanner] = await Promise.race([
+        Promise.all([
+          context.queryClient.ensureQueryData(plannerQueryOptions(params.slug)).catch(() => null),
+          getPlanner(params.slug).catch(() => undefined),
+        ]),
+        timeoutPromise.then(() => [null, undefined] as const),
+      ]);
+      profile = fetchedProfile;
+      fullPlanner = fetchedPlanner;
+    } catch (err) {
+      console.error("Planner loader error:", err);
+    }
+
+    if (!fullPlanner) {
+      fullPlanner = await getPlanner(params.slug);
+    }
     if (!fullPlanner) {
       throw new Error("Planner not found");
     }
+
     let reviewsData = null;
     if (profile?.id) {
-      reviewsData = await getPublicPlannerReviews({ data: { plannerId: profile.id } });
+      try {
+        const timeoutPromise = new Promise<null>((res) => setTimeout(() => res(null), 1500));
+        reviewsData = await Promise.race([
+          getPublicPlannerReviews({ data: { plannerId: profile.id } }),
+          timeoutPromise,
+        ]);
+      } catch (e) {}
     }
-    if (profile?.custom_domain) {
-      throw redirect({ href: `https://${profile.custom_domain}`, statusCode: 301 });
+
+    if ((profile as any)?.custom_domain) {
+      throw redirect({ href: `https://${(profile as any).custom_domain}`, statusCode: 301 });
     }
+
     return { fullPlanner, reviewsData, profile };
   },
   head: ({ loaderData, params }) => {
@@ -110,7 +186,9 @@ export const Route = createFileRoute("/planner/$slug")({
     const description = rawDesc.length > 160 ? rawDesc.slice(0, 157) + "..." : rawDesc;
     const title = p ? `${p.name} – Eventplanung in ${city} | Speisely` : "Event Planer – Speisely";
     const ogImage = p && p.img ? p.img : "https://speisely.de/og-default.jpg";
-    const canonicalUrl = profile?.custom_domain ? `https://${profile.custom_domain}` : `https://speisely.de/planner/${params.slug}`;
+    const canonicalUrl = (profile as any)?.custom_domain
+      ? `https://${(profile as any).custom_domain}`
+      : `https://speisely.de/planner/${params.slug}`;
     return {
       meta: [
         { title },
@@ -132,9 +210,21 @@ export const Route = createFileRoute("/planner/$slug")({
                 name: p.name,
                 image: p.img,
                 address: { "@type": "PostalAddress", addressLocality: city },
-                areaServed: (profile as any)?.seo_service_areas?.length ? (profile as any).seo_service_areas : city,
-                ...((profile as any)?.seo_venue_expertise?.length || (profile as any)?.seo_vendor_specialties?.length ? { knowsAbout: [...((profile as any)?.seo_venue_expertise || []), ...((profile as any)?.seo_vendor_specialties || [])] } : {}),
-                ...((profile as any)?.seo_planning_scope?.length ? { serviceType: (profile as any).seo_planning_scope } : {}),
+                areaServed: (profile as any)?.seo_service_areas?.length
+                  ? (profile as any).seo_service_areas
+                  : city,
+                ...((profile as any)?.seo_venue_expertise?.length ||
+                (profile as any)?.seo_vendor_specialties?.length
+                  ? {
+                      knowsAbout: [
+                        ...((profile as any)?.seo_venue_expertise || []),
+                        ...((profile as any)?.seo_vendor_specialties || []),
+                      ],
+                    }
+                  : {}),
+                ...((profile as any)?.seo_planning_scope?.length
+                  ? { serviceType: (profile as any).seo_planning_scope }
+                  : {}),
                 ...(loaderData?.reviewsData?.aggregates?.count &&
                 loaderData.reviewsData.aggregates.count > 0
                   ? {
@@ -538,7 +628,10 @@ function PlannerStorefront() {
               {profile?.seo_venue_expertise && profile.seo_venue_expertise.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {profile.seo_venue_expertise.map((exp: string, i: number) => (
-                    <span key={i} className="text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white">
+                    <span
+                      key={i}
+                      className="text-xs font-semibold bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/30 text-white"
+                    >
                       {exp}
                     </span>
                   ))}
@@ -606,7 +699,9 @@ function PlannerStorefront() {
               </dt>
               <dd className="text-sm font-semibold text-forest flex items-center gap-1 m-0">
                 <MapPin className="h-4 w-4 text-forest/40" />{" "}
-                <span className="truncate max-w-[200px]">{profile?.seo_service_areas?.join(", ") || planner.address}</span>
+                <span className="truncate max-w-[200px]">
+                  {profile?.seo_service_areas?.join(", ") || planner.address}
+                </span>
               </dd>
             </div>
           </dl>
@@ -630,18 +725,28 @@ function PlannerStorefront() {
             </p>
             {profile?.seo_nearby_landmarks && profile.seo_nearby_landmarks.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="text-sm font-semibold text-forest/70">{t("In der Nähe:", "Nearby:")}</span>
+                <span className="text-sm font-semibold text-forest/70">
+                  {t("In der Nähe:", "Nearby:")}
+                </span>
                 {profile.seo_nearby_landmarks.map((lm: string, i: number) => (
-                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1"><MapPin className="h-3 w-3" />{lm}</span>
+                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {lm}
+                  </span>
                 ))}
               </div>
             )}
             {profile?.seo_vendor_specialties && profile.seo_vendor_specialties.length > 0 && (
               <div className="mt-6">
-                <h4 className="font-semibold text-forest text-sm mb-2">{t("Netzwerk & Spezialisierung", "Network & Specialization")}</h4>
+                <h4 className="font-semibold text-forest text-sm mb-2">
+                  {t("Netzwerk & Spezialisierung", "Network & Specialization")}
+                </h4>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {profile.seo_vendor_specialties.map((spec: string, i: number) => (
-                    <span key={i} className="text-xs font-semibold bg-forest/5 text-forest px-2.5 py-1 rounded-full border border-forest/10">
+                    <span
+                      key={i}
+                      className="text-xs font-semibold bg-forest/5 text-forest px-2.5 py-1 rounded-full border border-forest/10"
+                    >
                       {spec}
                     </span>
                   ))}

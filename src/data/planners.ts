@@ -411,30 +411,53 @@ export async function getPlanners(): Promise<Planner[]> {
 }
 
 export async function getPlanner(id: string): Promise<Planner | undefined> {
-  const { data, error } = await supabase
-    .from("planner_services")
-    .select(
-      "id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, owner_id, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)",
-    )
-    .eq("planner_id", id)
-    .maybeSingle();
-
-  if (!error && data) {
-    const parentPlanner = (data as any).planners;
-    if (parentPlanner?.approval_status !== "approved") {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user?.id !== parentPlanner?.owner_id) {
-        return undefined;
-      }
-    }
-    return mapPlanner(data);
-  }
-
-  const fallback = fallbackPlanners.find((p) => p.id === id);
+  const clean = (id || "").toLowerCase().trim();
+  const fallback = fallbackPlanners.find(
+    (p) => (p.id && p.id.toLowerCase() === clean) || (p.slug && p.slug.toLowerCase() === clean),
+  );
   if (fallback) {
     return { ...fallback, isShowcase: true };
+  }
+
+  try {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clean);
+    const query = supabase
+      .from("planner_services")
+      .select(
+        "id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, owner_id, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)",
+      );
+
+    const fetchPromise = (
+      isUuid ? query.eq("planner_id", clean) : query.eq("planners.slug", clean)
+    ).maybeSingle();
+
+    const timeoutPromise = new Promise<{ data: null; error: null }>((resolve) =>
+      setTimeout(() => resolve({ data: null, error: null }), 2500),
+    );
+
+    const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+
+    if (!error && data) {
+      const parentPlanner = (data as any).planners;
+      if (parentPlanner?.approval_status !== "approved") {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user?.id !== parentPlanner?.owner_id) {
+          return undefined;
+        }
+      }
+      return mapPlanner(data);
+    }
+  } catch (e) {
+    console.error("Error in getPlanner:", e);
+  }
+
+  const fallbackAfter = fallbackPlanners.find(
+    (p) => (p.id && p.id.toLowerCase() === clean) || (p.slug && p.slug.toLowerCase() === clean),
+  );
+  if (fallbackAfter) {
+    return { ...fallbackAfter, isShowcase: true };
   }
   return undefined;
 }

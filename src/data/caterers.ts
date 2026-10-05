@@ -1647,149 +1647,137 @@ export async function getCaterers(): Promise<Caterer[]> {
 }
 
 export async function getCaterer(id: string): Promise<Caterer | undefined> {
+  const cleanId = (id || "").toLowerCase().trim();
+  const fallback = fallbackCaterers.find(
+    (c) => (c.id && c.id.toLowerCase() === cleanId) || (c.slug && c.slug.toLowerCase() === cleanId),
+  );
+  if (fallback) {
+    return { ...fallback, isShowcase: true };
+  }
+
   try {
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-    let query = supabase
-      .from("storefront_settings")
-      .select(
-        "id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes",
-      )
-      .eq("is_active", true);
+    const fetchPromise = (async () => {
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+      let query = supabase
+        .from("storefront_settings")
+        .select(
+          "id, caterer_id, slug, description, banner_image_url, accepts_delivery, accepts_pickup, delivery_fee, min_order_amount, estimated_prep_time_minutes",
+        )
+        .eq("is_active", true);
 
-    if (isUuid) {
-      query = query.or(`slug.eq.${id},id.eq.${id}`);
-    } else {
-      query = query.eq("slug", id);
-    }
-
-    let { data: sfData, error: sfErr } = await query.maybeSingle();
-
-    if (!sfData) {
-      // Fallback: Query caterers table directly
-      const { data: catData } = await (isUuid
-        ? supabase.from("caterers").select("*").or(`slug.eq.${id},id.eq.${id}`).maybeSingle()
-        : supabase.from("caterers").select("*").ilike("slug", id).maybeSingle());
-
-      if (catData) {
-        sfData = {
-          id: catData.id,
-          caterer_id: catData.id,
-          slug: catData.slug || id,
-          description: catData.description || "",
-          banner_image_url: catData.banner_image_url || null,
-          accepts_delivery: true,
-          accepts_pickup: true,
-          delivery_fee: (catData.delivery_fee_cents || 0) / 100,
-          min_order_amount: (catData.min_delivery_cents || 0) / 100,
-          estimated_prep_time_minutes: 60,
-        };
+      if (isUuid) {
+        query = query.or(`slug.eq.${id},id.eq.${id}`);
       } else {
-        const fallback = fallbackCaterers.find((c) => c.id === id || c.slug === id);
-        if (fallback) return { ...fallback, isShowcase: true };
-
-        const formattedName = id
-          .split("-")
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(" ");
-
-        return {
-          id: id,
-          name: formattedName,
-          tagline: { de: "Qualitäts-Catering & Services", en: "Quality Catering & Services" },
-          rating: 4.9,
-          reviewCount: 12,
-          minOrder: 150,
-          minGuests: 10,
-          perPerson: 18,
-          time: "48 Stunden Vorlauf",
-          tags: ["Catering", "Event", "Buffet"],
-          img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop",
-          status: "available",
-          area: "Solingen & Umgebung",
-          address: "Deutschland",
-          phone: "+49 212 1234567",
-          cat: "all",
-          verified: true,
-          dietary: ["Vegetarisch", "Vegan", "Halal"],
-          about: {
-            de: `Willkommen bei ${formattedName}. Wir bieten erstklassige Buffets, Menüs und Catering-Konzepte für Ihr Event.`,
-            en: `Welcome to ${formattedName}. We provide top-class catering for your events.`,
-          },
-          packages: [],
-          isShowcase: false,
-        };
+        query = query.eq("slug", id);
       }
-    }
 
-    const [catRes, menuRes] = await Promise.all([
-      supabase
-        .from("caterers")
-        .select(
-          "id, name, slug, approval_status, use_generated_branding, logo_url, owner_id, phone, business_address, service_areas",
-        )
-        .eq("id", sfData.caterer_id)
-        .maybeSingle(),
-      supabase
-        .from("caterer_menu_items")
-        .select(
-          "id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available",
-        )
-        .eq("caterer_id", sfData.caterer_id)
-        .eq("is_available", true),
-    ]);
+      let { data: sfData } = await query.maybeSingle();
 
-    const caterer = catRes.data;
-    const products = menuRes.data || [];
+      if (!sfData) {
+        // Fallback: Query caterers table directly
+        const { data: catData } = await (isUuid
+          ? supabase.from("caterers").select("*").or(`slug.eq.${id},id.eq.${id}`).maybeSingle()
+          : supabase.from("caterers").select("*").ilike("slug", id).maybeSingle());
 
-    if (!caterer) {
-      const fallback = fallbackCaterers.find((c) => c.id === id || c.slug === id);
-      if (fallback) return { ...fallback, isShowcase: true };
-    }
+        if (catData) {
+          sfData = {
+            id: catData.id,
+            caterer_id: catData.id,
+            slug: catData.slug || id,
+            description: catData.description || "",
+            banner_image_url: catData.banner_image_url || null,
+            accepts_delivery: true,
+            accepts_pickup: true,
+            delivery_fee: (catData.delivery_fee_cents || 0) / 100,
+            min_order_amount: (catData.min_delivery_cents || 0) / 100,
+            estimated_prep_time_minutes: 60,
+          };
+        } else {
+          return null;
+        }
+      }
 
-    const merged = {
-      ...sfData,
-      caterers: caterer,
-      products: products,
-    };
+      const [catRes, menuRes] = await Promise.all([
+        supabase
+          .from("caterers")
+          .select(
+            "id, name, slug, approval_status, use_generated_branding, logo_url, owner_id, phone, business_address, service_areas",
+          )
+          .eq("id", sfData.caterer_id)
+          .maybeSingle(),
+        supabase
+          .from("caterer_menu_items")
+          .select(
+            "id, caterer_id, category, name, description, price_cents, unit, serves, image_url, is_available",
+          )
+          .eq("caterer_id", sfData.caterer_id)
+          .eq("is_available", true),
+      ]);
 
-    return mapCaterer(merged);
+      const caterer = catRes?.data;
+      const products = menuRes?.data || [];
+
+      if (!caterer) return null;
+
+      const merged = {
+        ...sfData,
+        caterers: caterer,
+        products: products,
+      };
+
+      return mapCaterer(merged);
+    })();
+
+    const timeoutPromise = new Promise<null>((resolve) =>
+      setTimeout(() => {
+        console.warn(`[getCaterer] Timeout fetching ${cleanId}, using fallback`);
+        resolve(null);
+      }, 2500),
+    );
+
+    const result = await Promise.race([fetchPromise, timeoutPromise]);
+    if (result) return result;
   } catch (err) {
     console.error("Failed to load caterer details, checking fallback:", err);
-    const fallback = fallbackCaterers.find((c) => c.id === id || c.slug === id);
-    if (fallback) return { ...fallback, isShowcase: true };
-
-    const formattedName = id
-      .split("-")
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ");
-
-    return {
-      id: id,
-      name: formattedName,
-      tagline: { de: "Qualitäts-Catering & Services", en: "Quality Catering & Services" },
-      rating: 4.9,
-      reviewCount: 12,
-      minOrder: 150,
-      minGuests: 10,
-      perPerson: 18,
-      time: "48 Stunden Vorlauf",
-      tags: ["Catering", "Event", "Buffet"],
-      img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop",
-      status: "available",
-      area: "Solingen & Umgebung",
-      address: "Deutschland",
-      phone: "+49 212 1234567",
-      cat: "all",
-      verified: true,
-      dietary: ["Vegetarisch", "Vegan", "Halal"],
-      about: {
-        de: `Willkommen bei ${formattedName}. Wir bieten erstklassige Buffets, Menüs und Catering-Konzepte für Ihr Event.`,
-        en: `Welcome to ${formattedName}. We provide top-class catering for your events.`,
-      },
-      packages: [],
-      isShowcase: false,
-    };
   }
+
+  // Fallback if not found in DB or timed out
+  const fallbackAfter = fallbackCaterers.find(
+    (c) => (c.id && c.id.toLowerCase() === cleanId) || (c.slug && c.slug.toLowerCase() === cleanId),
+  );
+  if (fallbackAfter) return { ...fallbackAfter, isShowcase: true };
+
+  const formattedName = cleanId
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+
+  return {
+    id: cleanId,
+    name: formattedName,
+    tagline: { de: "Qualitäts-Catering & Services", en: "Quality Catering & Services" },
+    rating: 4.9,
+    reviewCount: 12,
+    minOrder: 150,
+    minGuests: 10,
+    perPerson: 18,
+    time: "48 Stunden Vorlauf",
+    tags: ["Catering", "Event", "Buffet"],
+    img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop",
+    status: "available",
+    area: "Solingen & Umgebung",
+    address: "Deutschland",
+    phone: "+49 212 1234567",
+    cat: "all",
+    verified: true,
+    dietary: ["Vegetarisch", "Vegan", "Halal"],
+    about: {
+      de: `Willkommen bei ${formattedName}. Wir bieten erstklassige Buffets, Menüs und Catering-Konzepte für Ihr Event.`,
+      en: `Welcome to ${formattedName}. We provide top-class catering for your events.`,
+    },
+    packages: [],
+    isShowcase: false,
+  };
 }
 
 export type PromoCode = {

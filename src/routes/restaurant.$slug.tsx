@@ -26,7 +26,7 @@ import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
 import { CategoryNav } from "@/components/ui/CategoryNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useI18n } from "@/i18n/I18nProvider";
-import { getRestaurant } from "@/data/restaurants";
+import { getRestaurant, fallbackRestaurants } from "@/data/restaurants";
 import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
 import { StorefrontPromoTeaser } from "@/components/StorefrontPromoTeaser";
 import { upsertConsentRecord } from "@/lib/consent.functions";
@@ -201,13 +201,36 @@ const TIME_SLOTS = [
 export const Route = createFileRoute("/restaurant/$slug")({
   validateSearch: (search) => searchSchema.parse(search),
   loader: async ({ params }) => {
+    const cleanSlug = (params.slug || "").toLowerCase().trim();
+    const fallback = fallbackRestaurants.find(
+      (r) =>
+        (r.slug && r.slug.toLowerCase() === cleanSlug) ||
+        (r.id && r.id.toLowerCase() === cleanSlug),
+    );
+
+    if (fallback) {
+      return {
+        dbRestaurant: null,
+        fullRestaurant: { ...fallback, isShowcase: true },
+        reviewsData: null,
+      };
+    }
+
     let dbRestaurant = null;
     let reviewsData = null;
     try {
-      const res = await getRestaurantBySlug({ data: { slug: params.slug } });
-      dbRestaurant = res.restaurant;
+      const timeoutPromise = new Promise<null>((res) => setTimeout(() => res(null), 2500));
+      const res = await Promise.race([
+        getRestaurantBySlug({ data: { slug: params.slug } }),
+        timeoutPromise,
+      ]);
+      dbRestaurant = res?.restaurant ?? null;
       if (dbRestaurant) {
-        reviewsData = await getPublicRestaurantReviews({ data: { restaurantId: dbRestaurant.id } });
+        const revTimeout = new Promise<null>((res) => setTimeout(() => res(null), 1500));
+        reviewsData = await Promise.race([
+          getPublicRestaurantReviews({ data: { restaurantId: dbRestaurant.id } }),
+          revTimeout,
+        ]);
       }
     } catch (e) {
       console.error("Error loading restaurant db record", e);
@@ -215,21 +238,6 @@ export const Route = createFileRoute("/restaurant/$slug")({
     const fullRestaurant = await getRestaurant(params.slug);
     if (!fullRestaurant) {
       throw notFound();
-    }
-
-    // Redirect to custom domain if it exists to prevent duplicate indexing
-    if (dbRestaurant?.custom_domain) {
-      // We only redirect if we are not already on the custom domain.
-      // Wait, in a typical TanStack Start app, the loader runs on both server and client.
-      // But we can check `window.location.hostname`? No, loader is server-first.
-      // If we redirect to https://customdomain, and they are already on it, we might loop.
-      // Actually, if they are already on the custom domain, the request hostname matches.
-      // I need to be careful with redirects to avoid loops.
-      // Let's pass the host in context? No, we don't have access to the request object directly here unless using server fns.
-      // Since it's a static site/SPA, maybe we shouldn't redirect from the loader without knowing the current host.
-      // Let's use `window.location` in a `useEffect` if we are on the client, or just rely on canonicals if server redirects aren't safe here.
-      // The contract says "Where technically feasible, Speisely-hosted duplicate partner URLs should 301 redirect to the approved custom-domain URL."
-      // Since I can't easily read `req.host` in a basic TanStack Router loader (unless passed via context), I'll stick to canonical tags. I'll just return it for now.
     }
 
     return { dbRestaurant, fullRestaurant, reviewsData };

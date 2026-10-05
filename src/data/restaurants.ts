@@ -241,11 +241,11 @@ export const fallbackRestaurants: Restaurant[] = [
 function mapRestaurant(r: any): Restaurant {
   const isGeneratedLogo =
     r.logo_url === "GENERATED_MONOGRAM" ||
-    (!r.logo_url && (BRANDING_ASSISTANT_ENABLED && r.use_generated_branding));
+    (!r.logo_url && BRANDING_ASSISTANT_ENABLED && r.use_generated_branding);
 
   const isGeneratedBanner =
     r.banner_image_url === "GENERATED_GRADIENT" ||
-    (!r.banner_image_url && (BRANDING_ASSISTANT_ENABLED && r.use_generated_branding));
+    (!r.banner_image_url && BRANDING_ASSISTANT_ENABLED && r.use_generated_branding);
 
   let resolvedLogo = generateSvgLogo(
     r.name || r.business_name || "Restaurant",
@@ -260,8 +260,8 @@ function mapRestaurant(r: any): Restaurant {
     ) {
       resolvedLogo = r.logo_url;
     } else {
-      resolvedLogo = supabase.storage.from("storefront-assets").getPublicUrl(r.logo_url).data
-        .publicUrl;
+      resolvedLogo = supabase.storage.from("storefront-assets").getPublicUrl(r.logo_url)
+        .data.publicUrl;
     }
   }
 
@@ -378,36 +378,55 @@ export async function getRestaurants(): Promise<Restaurant[]> {
 }
 
 export async function getRestaurant(slugOrId: string): Promise<Restaurant | undefined> {
-  // Try by slug first (URL-based lookup), fallback to id
-  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);
-  const query = supabase
-    .from("restaurants")
-    .select(
-      "id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*), approval_status, owner_id, business_address, use_generated_branding",
-    );
-
-  const { data, error } = await (
-    isUuid ? query.or(`slug.eq.${slugOrId},id.eq.${slugOrId}`) : query.eq("slug", slugOrId)
-  ).maybeSingle();
-
-  if (!error && data) {
-    if (isSubscriptionBlocked(data.subscription_status)) {
-      return undefined;
-    }
-    if (data.approval_status !== "approved") {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user?.id !== data.owner_id) {
-        return undefined;
-      }
-    }
-    return mapRestaurant(data);
-  }
-
-  const fallback = fallbackRestaurants.find((r) => r.id === slugOrId);
+  const clean = (slugOrId || "").toLowerCase().trim();
+  const fallback = fallbackRestaurants.find(
+    (r) => (r.id && r.id.toLowerCase() === clean) || (r.slug && r.slug.toLowerCase() === clean),
+  );
   if (fallback) {
     return { ...fallback, isShowcase: true };
+  }
+
+  try {
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);
+    const query = supabase
+      .from("restaurants")
+      .select(
+        "id, name, slug, description, logo_url, banner_image_url, city, cuisine_type, service_areas, custom_domain, announcement_active, announcement_text, announcement_bg_color, is_published, accepts_cash, accepts_paypal, stripe_connect_status, accepts_delivery, accepts_pickup, certifications, delivery_fee, delivery_radius_km, min_order_amount, operating_hours, seat_capacity, subscription_status, subscriptions(current_period_end), restaurant_products(*), approval_status, owner_id, business_address, use_generated_branding",
+      );
+
+    const fetchPromise = (
+      isUuid ? query.or(`slug.eq.${slugOrId},id.eq.${slugOrId}`) : query.eq("slug", slugOrId)
+    ).maybeSingle();
+
+    const timeoutPromise = new Promise<{ data: null; error: null }>((resolve) =>
+      setTimeout(() => resolve({ data: null, error: null }), 2500),
+    );
+
+    const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+
+    if (!error && data) {
+      if (isSubscriptionBlocked(data.subscription_status)) {
+        return undefined;
+      }
+      if (data.approval_status !== "approved") {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user?.id !== data.owner_id) {
+          return undefined;
+        }
+      }
+      return mapRestaurant(data);
+    }
+  } catch (e) {
+    console.error("Error in getRestaurant:", e);
+  }
+
+  const fallbackAfter = fallbackRestaurants.find(
+    (r) => (r.id && r.id.toLowerCase() === clean) || (r.slug && r.slug.toLowerCase() === clean),
+  );
+  if (fallbackAfter) {
+    return { ...fallbackAfter, isShowcase: true };
   }
   return undefined;
 }

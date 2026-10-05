@@ -237,27 +237,23 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
     );
 
     // 2. Fetch targeted locations and vendor cities in parallel bulk queries
+    const safeQuery = async (p: PromiseLike<any>) => {
+      try {
+        return await p;
+      } catch {
+        return { data: [] };
+      }
+    };
+
     const [locsRes, restRes, catRes, planRes] = await Promise.all([
       targetCityNames.length > 0
-        ? supabaseAdmin
-            .from("german_locations")
-            .select("name")
-            .in("name", targetCityNames)
-            .catch(() => ({ data: [] }))
+        ? safeQuery(
+            supabaseAdmin.from("german_locations").select("name").in("name", targetCityNames),
+          )
         : Promise.resolve({ data: [] }),
-      supabaseAdmin
-        .from("restaurants")
-        .select("city")
-        .eq("is_published", true)
-        .catch(() => ({ data: [] })),
-      supabaseAdmin
-        .from("caterers")
-        .select("city")
-        .catch(() => ({ data: [] })),
-      supabaseAdmin
-        .from("planners")
-        .select("city")
-        .catch(() => ({ data: [] })),
+      safeQuery(supabaseAdmin.from("restaurants").select("city").eq("is_published", true)),
+      safeQuery(supabaseAdmin.from("caterers").select("city")),
+      safeQuery(supabaseAdmin.from("planners").select("city")),
     ]);
 
     const locationNameMap = new Map<string, string>();

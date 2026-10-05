@@ -25,7 +25,7 @@ import { CategoryNav } from "@/components/ui/CategoryNav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useI18n } from "@/i18n/I18nProvider";
 import { toast } from "sonner";
-import { getCaterer, mockPromoCodes, PromoCode } from "@/data/caterers";
+import { getCaterer, mockPromoCodes, PromoCode, fallbackCaterers } from "@/data/caterers";
 import { getPublicCatererProfile, submitCateringBrief } from "@/lib/caterer/menu.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -55,12 +55,62 @@ import { supabase } from "@/integrations/supabase/client";
 
 import { isValidCateringCity } from "@/data/geo/taxonomy";
 
+function buildShowcaseProfile(fallback: any, cleanSlug: string) {
+  return {
+    id: fallback.id,
+    owner_id: fallback.id,
+    name: fallback.name,
+    slug: fallback.slug || cleanSlug,
+    custom_domain: null,
+    certifications: fallback.certifications || null,
+    description: fallback.about?.de || fallback.tagline?.de || "",
+    logo_url: fallback.logo || null,
+    banner_image_url: fallback.img || null,
+    phone: fallback.phone || "",
+    business_address: fallback.address || "",
+    service_areas: fallback.area || "",
+    min_delivery_cents: (fallback.minOrder || 0) * 100,
+    delivery_fee_cents: 0,
+    announcement_active: fallback.announcement_active || false,
+    announcement_bg_color: fallback.announcement_bg_color || null,
+    announcement_text: fallback.announcement_text || null,
+    approval_status: "approved",
+    menu: (fallback.menu || []).map((m: any) => ({
+      id: m.id || String(Math.random()),
+      category: m.category || "Menü",
+      name: m.name,
+      description: typeof m.desc === "object" ? m.desc?.de : m.desc || "",
+      price_cents: m.price_cents || 0,
+      unit: typeof m.unit === "object" ? m.unit?.de : m.unit || "Portion",
+      serves: m.serves || 1,
+      image_url: m.image_url || null,
+      image_signed_url: m.image_url || null,
+      is_available: true,
+    })),
+    packages: fallback.packages || [],
+    promoCodes: [],
+  };
+}
+
 const catererQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: ["catererProfile", slug],
     queryFn: async () => {
+      const cleanSlug = (slug || "").toLowerCase().trim();
+      const fallback = fallbackCaterers.find(
+        (c) =>
+          (c.slug && c.slug.toLowerCase() === cleanSlug) ||
+          (c.id && c.id.toLowerCase() === cleanSlug),
+      );
+      if (fallback) {
+        return buildShowcaseProfile(fallback, cleanSlug);
+      }
       try {
-        const res = await getPublicCatererProfile({ data: { slug } });
+        const timeoutPromise = new Promise<null>((res) => setTimeout(() => res(null), 2500));
+        const res = await Promise.race([
+          getPublicCatererProfile({ data: { slug } }),
+          timeoutPromise,
+        ]);
         if (res) return res;
       } catch (e) {
         console.error("Error in getPublicCatererProfile:", e);
@@ -70,17 +120,48 @@ const catererQueryOptions = (slug: string) =>
   });
 export const Route = createFileRoute("/catering/$slug")({
   loader: async ({ params, context }) => {
+    const cleanSlug = (params.slug || "").toLowerCase().trim();
+    const fallback = fallbackCaterers.find(
+      (c) =>
+        (c.slug && c.slug.toLowerCase() === cleanSlug) ||
+        (c.id && c.id.toLowerCase() === cleanSlug),
+    );
+
+    if (fallback) {
+      const fullCaterer = { ...fallback, isShowcase: true };
+      const profile = buildShowcaseProfile(fallback, cleanSlug);
+      return { fullCaterer, reviewsData: null, profile };
+    }
+
     let profile = null;
+    let fullCaterer: any = undefined;
     try {
-      profile = await context.queryClient.ensureQueryData(catererQueryOptions(params.slug));
+      const timeoutPromise = new Promise<null>((res) => setTimeout(() => res(null), 2500));
+      const [fetchedProfile, fetchedCaterer] = await Promise.race([
+        Promise.all([
+          context.queryClient.ensureQueryData(catererQueryOptions(params.slug)).catch(() => null),
+          getCaterer(params.slug).catch(() => undefined),
+        ]),
+        timeoutPromise.then(() => [null, undefined] as const),
+      ]);
+      profile = fetchedProfile;
+      fullCaterer = fetchedCaterer;
     } catch (err) {
       console.error("Loader query error:", err);
     }
-    const fullCaterer = await getCaterer(params.slug);
+
+    if (!fullCaterer) {
+      fullCaterer = await getCaterer(params.slug);
+    }
+
     let reviewsData = null;
     if (profile?.id) {
       try {
-        reviewsData = await getPublicCatererReviews({ data: { catererId: profile.id } });
+        const timeoutPromise = new Promise<null>((res) => setTimeout(() => res(null), 1500));
+        reviewsData = await Promise.race([
+          getPublicCatererReviews({ data: { catererId: profile.id } }),
+          timeoutPromise,
+        ]);
       } catch (e) {}
     }
     if (profile?.custom_domain) {
@@ -1553,7 +1634,11 @@ function CatererPage() {
           <form
             onSubmit={async (e) => {
               e.preventDefault();
-              if (!inquiryForm.customerEmail || !inquiryForm.customerName || !inquiryForm.customerPhone) {
+              if (
+                !inquiryForm.customerEmail ||
+                !inquiryForm.customerName ||
+                !inquiryForm.customerPhone
+              ) {
                 toast.error(
                   t(
                     "Bitte geben Sie Ihren Namen, Ihre E-Mail-Adresse und Ihre Telefonnummer an.",
@@ -1579,7 +1664,9 @@ function CatererPage() {
                 const totalStr = "Preis auf Anfrage";
                 const notes = `[ONLINE STOREFRONT ENQUIRY]\nCustomer Name: ${inquiryForm.customerName}\nCustomer Email: ${inquiryForm.customerEmail}\nCustomer Phone: ${inquiryForm.customerPhone || "N/A"}\nEvent Type: ${inquiryForm.eventType}\nDelivery Location: ${inquiryForm.postalCodeCity}\nSelected Items:\n${itemsText}\n\nNotes:\n${inquiryForm.notes || "None"}\n\nPreis: ${totalStr}`;
 
-                let formattedDate = inquiryForm.eventDate || new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
+                let formattedDate =
+                  inquiryForm.eventDate ||
+                  new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
                 if (formattedDate) {
                   const parts = formattedDate.split(/[\/\.-]/);
                   if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
@@ -1685,7 +1772,10 @@ function CatererPage() {
                 </div>
                 <div className="space-y-1 sm:col-span-2">
                   <Label className="text-xs font-bold text-forest">
-                    {t("Telefonnummer (für Rückfragen & WhatsApp) *", "Phone Number (for SMS & WhatsApp) *")}
+                    {t(
+                      "Telefonnummer (für Rückfragen & WhatsApp) *",
+                      "Phone Number (for SMS & WhatsApp) *",
+                    )}
                   </Label>
                   <Input
                     type="tel"
@@ -1746,7 +1836,8 @@ function CatererPage() {
                     const rawVal = e.target.value;
                     setInquiryForm({
                       ...inquiryForm,
-                      guestCount: rawVal === "" ? ("" as any) : Math.max(1, parseInt(rawVal, 10) || 1),
+                      guestCount:
+                        rawVal === "" ? ("" as any) : Math.max(1, parseInt(rawVal, 10) || 1),
                     });
                   }}
                   className="bg-white border-[#eadfce] text-xs h-10"
