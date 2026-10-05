@@ -38,6 +38,7 @@ import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as AuthUpdatePasswordRouteImport } from './routes/auth.update-password'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CaseStudyHausSpaasRouteImport } from './routes/case-study.haus-spaas'
 import { Route as CateringIndexRouteImport } from './routes/catering.index'
 import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
 import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
@@ -228,6 +229,11 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog/$slug',
   path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaseStudyHausSpaasRoute = CaseStudyHausSpaasRouteImport.update({
+  id: '/case-study/haus-spaas',
+  path: '/case-study/haus-spaas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CateringIndexRoute = CateringIndexRouteImport.update({
@@ -518,6 +524,7 @@ export interface FileRoutesByFullPath {
   '/api/geo': typeof ApiGeoRoute
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -593,6 +600,7 @@ export interface FileRoutesByTo {
   '/api/geo': typeof ApiGeoRoute
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -671,6 +679,7 @@ export interface FileRoutesById {
   '/api/geo': typeof ApiGeoRoute
   '/auth/update-password': typeof AuthUpdatePasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -750,6 +759,7 @@ export interface FileRouteTypes {
     | '/api/geo'
     | '/auth/update-password'
     | '/blog/$slug'
+    | '/case-study/haus-spaas'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -825,6 +835,7 @@ export interface FileRouteTypes {
     | '/api/geo'
     | '/auth/update-password'
     | '/blog/$slug'
+    | '/case-study/haus-spaas'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -902,6 +913,7 @@ export interface FileRouteTypes {
     | '/api/geo'
     | '/auth/update-password'
     | '/blog/$slug'
+    | '/case-study/haus-spaas'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -978,6 +990,7 @@ export interface RootRouteChildren {
   ApiGeoRoute: typeof ApiGeoRoute
   AuthUpdatePasswordRoute: typeof AuthUpdatePasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  CaseStudyHausSpaasRoute: typeof CaseStudyHausSpaasRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   MagazinEditionDothtmlRoute: typeof MagazinEditionDothtmlRoute
   MagazinReaderRoute: typeof MagazinReaderRoute
@@ -1209,6 +1222,13 @@ declare module '@tanstack/react-router' {
       path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-study/haus-spaas': {
+      id: '/case-study/haus-spaas'
+      path: '/case-study/haus-spaas'
+      fullPath: '/case-study/haus-spaas'
+      preLoaderRoute: typeof CaseStudyHausSpaasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering/': {
@@ -1726,6 +1746,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiGeoRoute: ApiGeoRoute,
   AuthUpdatePasswordRoute: AuthUpdatePasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
+  CaseStudyHausSpaasRoute: CaseStudyHausSpaasRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   MagazinEditionDothtmlRoute: MagazinEditionDothtmlRoute,
   MagazinReaderRoute: MagazinReaderRoute,

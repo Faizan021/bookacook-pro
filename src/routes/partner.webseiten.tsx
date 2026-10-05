@@ -57,10 +57,27 @@ export const Route = createFileRoute("/partner/webseiten")({
 
 const SHOWCASE_PROJECTS = [
   {
+    title: "Haus Spaas",
+    category: "Traditions-Gastronomie & Eventlokal",
+    location: "Mönchengladbach & NRW",
+    url: "https://haus-spaas.de",
+    caseStudyUrl: "/case-study/haus-spaas",
+    badge: "Flagship Case Study ⭐",
+    description:
+      "Von statischer PDF-Speisekarte zum vollen Gastraum: Dual-Menü (Oktoberfest & Klassik), 1-Klick WhatsApp Reservierung & Top-Performance.",
+    highlights: [
+      "+44 Besucher in 24h",
+      "0.48s Ladezeit (99/100)",
+      "Duale Speisekarte",
+      "1-Klick WhatsApp Buchung",
+    ],
+  },
+  {
     title: "Partyservice Küpper",
     category: "BBQ & Event-Catering NRW",
     location: "Mönchengladbach & NRW",
     url: "https://partyservicekuepper.de/",
+    caseStudyUrl: undefined,
     badge: "Live · Catering & BBQ",
     description:
       "Kompletter Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, regionaler Google-KI-SEO-Struktur und nahtloser Angebotsanfrage.",
@@ -69,21 +86,6 @@ const SHOWCASE_PROJECTS = [
       "Google AI Overview Schema",
       "All-Inclusive BBQ Menüs",
       "100% Mobiloptimiert",
-    ],
-  },
-  {
-    title: "Haus Späas",
-    category: "Boutique Event Location & Gastronomie",
-    location: "Deutschland",
-    url: "https://haus-spaas.vercel.app/",
-    badge: "Live · Event Location",
-    description:
-      "Elegante, bildgewaltige Eventlocation-Website für Hochzeiten, Firmenfeiern und Bankette mit modernem Buchungs- und Raumüberblick.",
-    highlights: [
-      "Cinematic Hero Layout",
-      "Event-Pakete & Raumplaner",
-      "Direkte Terminanfrage",
-      "Ultra-schnelle Ladezeiten",
     ],
   },
 ];
@@ -572,19 +574,30 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-forest/10 flex items-center justify-between">
+                <div className="pt-4 border-t border-forest/10 flex flex-wrap items-center justify-between gap-3">
                   <span className="text-xs text-forest/60 font-medium">
                     Domain: {new URL(proj.url).hostname}
                   </span>
-                  <a
-                    href={proj.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-forest text-[#FAF7F0] px-5 py-2.5 text-xs font-bold hover:bg-[#E6B84A] hover:text-forest transition"
-                  >
-                    <span>Website öffnen</span>
-                    <ExternalLink className="h-3.5 w-3.5" />
-                  </a>
+                  <div className="flex items-center gap-2">
+                    {proj.caseStudyUrl && (
+                      <Link
+                        to={proj.caseStudyUrl}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[#E6B84A] text-forest px-4 py-2 text-xs font-bold hover:bg-[#d6a538] transition shadow-sm"
+                      >
+                        <span>Case Study lesen</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    )}
+                    <a
+                      href={proj.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-forest text-[#FAF7F0] px-4 py-2 text-xs font-bold hover:bg-forest/80 transition"
+                    >
+                      <span>Website öffnen</span>
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}

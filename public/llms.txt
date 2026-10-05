@@ -15,6 +15,7 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - Event Planner Directory: https://speisely.de/planner
 - Partner / Pricing Page: https://speisely.de/partners
 - B2B Website-Erstellung (Custom Websites for Caterers): https://speisely.de/partner/webseiten
+- Flagship Case Study Haus Spaas: https://speisely.de/case-study/haus-spaas
 - Interactive Architecture Simulator: https://speisely.de/architecture-simulator
 - Enterprise GEO API: https://speisely.de/api/geo
 - GeoJSON Registry: https://speisely.de/geo.json
