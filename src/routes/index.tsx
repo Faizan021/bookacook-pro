@@ -17,11 +17,13 @@ import {
   UtensilsCrossed,
   GlassWater,
   PartyPopper,
+  Search,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { toast } from "sonner";
 import { motion, LayoutGroup, useReducedMotion } from "framer-motion";
+import { AiConciergeModal } from "@/components/search/AiConciergeModal";
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -204,6 +206,61 @@ function Home() {
     "catering",
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [isConciergeOpen, setIsConciergeOpen] = useState(false);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  const rotatingPlaceholders = useMemo(
+    () =>
+      lang === "de"
+        ? [
+            "Sommerfest 40 Personen München mit veganem Fingerfood...",
+            "Fingerfood Buffet für 30 Gäste ohne Schweinefleisch...",
+            "Hochzeitscatering für 80 Personen in Köln...",
+            "Business Lunch für 15 Personen morgen in Hamburg...",
+            "Live BBQ Station für 50 Gäste in Berlin...",
+          ]
+        : [
+            "Summer party 40 guests in Munich with vegan finger food...",
+            "Finger food buffet for 30 people, pork-free...",
+            "Wedding catering for 80 guests in Cologne...",
+            "Business lunch for 15 colleagues tomorrow in Hamburg...",
+            "Live BBQ station for 50 guests in Berlin...",
+          ],
+    [lang],
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((prev) => (prev + 1) % rotatingPlaceholders.length);
+    }, 3800);
+    return () => clearInterval(interval);
+  }, [rotatingPlaceholders.length]);
+
+  const scenarioChips = useMemo(
+    () => [
+      {
+        label: tt("🏢 Office Teamevent (30 Pers.)", "🏢 Office Team Event (30 pax)"),
+        query: tt("Office Teamevent für 30 Personen", "Office team event for 30 guests"),
+      },
+      {
+        label: tt("🍢 Fingerfood & Buffet", "🍢 Finger Food & Buffet"),
+        query: tt("Fingerfood Buffet für Firmenfeier", "Finger food buffet for corporate event"),
+      },
+      {
+        label: tt("💍 Hochzeit & Jubiläum", "💍 Wedding & Anniversary"),
+        query: tt("Hochzeitscatering für 70 Gäste", "Wedding catering for 70 guests"),
+      },
+      {
+        label: tt("🌱 100% Vegan & Bio", "🌱 100% Vegan & Organic"),
+        query: tt("Veganes Bio Catering Buffet", "Vegan organic catering buffet"),
+      },
+      {
+        label: tt("🥩 Halal Catering", "🥩 Halal Catering"),
+        query: tt("Halal Catering mit Live Grillstation", "Halal catering with live grill station"),
+      },
+    ],
+    [tt],
+  );
 
   useEffect(() => {
     setMounted(true);
@@ -514,7 +571,7 @@ function Home() {
               )}
             </motion.p>
 
-            {/* AI Search Bar */}
+            {/* AI Search & Concierge Bar */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
@@ -544,26 +601,60 @@ function Home() {
                     }
                   }}
                   disabled={searching}
-                  className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-36 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/50 disabled:opacity-80"
-                  placeholder={tt(
-                    "Was suchst du? z.B. 'Vegan Catering Berlin'",
-                    "What are you looking for? e.g. 'Vegan Catering Berlin'",
-                  )}
+                  className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-52 sm:pr-60 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
+                  placeholder={rotatingPlaceholders[placeholderIndex]}
                 />
-                <button
-                  onClick={handleAISearch}
-                  disabled={searching || !searchQuery.trim()}
-                  className="absolute inset-y-2 right-2 bg-forest text-white rounded-full px-5 sm:px-6 font-bold text-sm sm:text-base shadow-md hover:bg-forest/90 transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50"
-                >
-                  {searching ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      {tt("Sucht...", "Searching...")}
-                    </>
-                  ) : (
-                    tt("KI Suche", "AI Search")
-                  )}
-                </button>
+
+                {/* Dual Action Buttons */}
+                <div className="absolute inset-y-2 right-2 flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={handleAISearch}
+                    disabled={searching || !searchQuery.trim()}
+                    className="bg-forest text-white rounded-full px-3 sm:px-4 py-2 font-bold text-xs sm:text-sm shadow-md hover:bg-forest/90 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
+                    title={tt("Schnellsuche starten", "Start quick search")}
+                  >
+                    {searching ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Search className="h-3.5 w-3.5" />
+                    )}
+                    <span className="hidden sm:inline">{tt("Suchen", "Search")}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsConciergeOpen(true)}
+                    className="bg-gradient-to-r from-[#b28a3c] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-3.5 sm:px-4 py-2 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-1.5 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.03]"
+                    title={tt(
+                      "Google Gemini KI Event-Berater öffnen",
+                      "Open Google Gemini AI Event Advisor",
+                    )}
+                  >
+                    <Sparkles className="h-3.5 w-3.5 text-forest" />
+                    <span>{tt("KI-Berater", "AI Advisor")}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick Scenario Chips */}
+              <div className="mt-3 flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-none">
+                <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
+                  {tt("Vorschläge:", "Suggestions:")}
+                </span>
+                {scenarioChips.map((chip, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery(chip.query);
+                      setIsConciergeOpen(true);
+                    }}
+                    className="shrink-0 rounded-full bg-white/[0.08] hover:bg-[#b28a3c] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition cursor-pointer backdrop-blur-sm shadow-sm"
+                  >
+                    {chip.label}
+                  </button>
+                ))}
               </div>
             </motion.div>
 
@@ -1105,6 +1196,33 @@ function Home() {
           </div>
         </Link>
       </section>
+
+      {/* Floating AI Concierge Launcher */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setIsConciergeOpen(true)}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-forest via-[#1a382c] to-[#b28a3c] text-white px-5 py-3 shadow-2xl border border-white/20 hover:border-[#b28a3c] transition-all cursor-pointer group backdrop-blur-md"
+        title={tt("KI Event-Berater öffnen", "Open AI Event Concierge")}
+      >
+        <span className="flex h-2.5 w-2.5 relative">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#f4d58d] opacity-75" />
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#f4d58d]" />
+        </span>
+        <Sparkles className="w-4 h-4 text-[#f4d58d] group-hover:rotate-12 transition-transform" />
+        <span className="text-xs sm:text-sm font-bold tracking-tight">
+          {tt("✨ KI Event-Berater", "✨ AI Event Concierge")}
+        </span>
+      </motion.button>
+
+      {/* Google Gemini AI Concierge Modal */}
+      <AiConciergeModal
+        isOpen={isConciergeOpen}
+        onClose={() => setIsConciergeOpen(false)}
+        initialQuery={searchQuery}
+      />
     </SiteShell>
   );
 }
