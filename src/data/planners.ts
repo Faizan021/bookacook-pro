@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabase } from "@/integrations/supabase/client";
 import { BRANDING_ASSISTANT_ENABLED } from "@/utils/featureFlags";
 import { generateSvgLogo, generateSvgBanner } from "@/utils/brandingGenerator";
@@ -307,17 +308,28 @@ function mapPlanner(r: any): Planner {
   const isBannerMissing = !pData.banner_image_url;
   const isLogoMissing = !pData.logo_url;
 
-  const resolvedBanner = (isGenerated || isBannerMissing)
-    ? generateSvgBanner(pData.business_name || r.title || "Event Planner", pData.category || "Event Services")
-    : (pData.banner_image_url.startsWith("http")
+  const resolvedBanner =
+    isGenerated || isBannerMissing
+      ? generateSvgBanner(
+          pData.business_name || r.title || "Event Planner",
+          pData.category || "Event Services",
+        )
+      : pData.banner_image_url.startsWith("http")
         ? pData.banner_image_url
-        : supabase.storage.from("storefront-assets").getPublicUrl(pData.banner_image_url).data.publicUrl);
+        : supabase.storage.from("storefront-assets").getPublicUrl(pData.banner_image_url).data
+            .publicUrl;
 
-  const resolvedLogo = (isGenerated || isLogoMissing)
-    ? generateSvgLogo(pData.business_name || r.title || "Event Planner", pData.category || "Event Services")
-    : (pData.logo_url && pData.logo_url.startsWith("http")
+  const resolvedLogo =
+    isGenerated || isLogoMissing
+      ? generateSvgLogo(
+          pData.business_name || r.title || "Event Planner",
+          pData.category || "Event Services",
+        )
+      : pData.logo_url && pData.logo_url.startsWith("http")
         ? pData.logo_url
-        : (pData.logo_url ? supabase.storage.from("storefront-assets").getPublicUrl(pData.logo_url).data.publicUrl : undefined));
+        : pData.logo_url
+          ? supabase.storage.from("storefront-assets").getPublicUrl(pData.logo_url).data.publicUrl
+          : undefined;
 
   return {
     id: r.planner_id || r.id,
@@ -354,46 +366,65 @@ export async function getPlanners(): Promise<Planner[]> {
     return cachedPlanners.data;
   }
 
-  const { data, error } = await supabase
-    .from("planner_services")
-    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)")
-    .order("created_at", { ascending: false });
+  try {
+    const fetchPromise = supabase
+      .from("planner_services")
+      .select(
+        "id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)",
+      )
+      .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error fetching planners:", error);
+    const timeoutPromise = new Promise<{ data: any; error: any }>((resolve) =>
+      setTimeout(() => resolve({ data: null, error: new Error("Planner fetch timeout") }), 3000),
+    );
+
+    const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+
+    if (error) {
+      console.error("Error fetching planners:", error);
+    }
+
+    const approvedPlanners = (data || []).filter(
+      (r: any) => r.planners?.approval_status === "approved",
+    );
+    const livePlanners = approvedPlanners.map(mapPlanner);
+    const MIN_DISPLAY_COUNT = fallbackPlanners.length; // Show all mock data if needed
+
+    let result: Planner[];
+    if (livePlanners.length >= MIN_DISPLAY_COUNT) {
+      result = livePlanners;
+    } else {
+      const needed = MIN_DISPLAY_COUNT - livePlanners.length;
+      const showcaseItems = fallbackPlanners.slice(0, needed).map((p) => ({
+        ...p,
+        isShowcase: true,
+      }));
+      result = [...livePlanners, ...showcaseItems];
+    }
+
+    cachedPlanners = { data: result, timestamp: now };
+    return result;
+  } catch (err) {
+    console.error("Planner load failed, returning fallback:", err);
+    return fallbackPlanners;
   }
-
-  const approvedPlanners = (data || []).filter((r: any) => r.planners?.approval_status === "approved");
-  const livePlanners = approvedPlanners.map(mapPlanner);
-  const MIN_DISPLAY_COUNT = fallbackPlanners.length; // Show all mock data if needed
-
-  let result: Planner[];
-  if (livePlanners.length >= MIN_DISPLAY_COUNT) {
-    result = livePlanners;
-  } else {
-    const needed = MIN_DISPLAY_COUNT - livePlanners.length;
-    const showcaseItems = fallbackPlanners.slice(0, needed).map((p) => ({
-      ...p,
-      isShowcase: true,
-    }));
-    result = [...livePlanners, ...showcaseItems];
-  }
-
-  cachedPlanners = { data: result, timestamp: now };
-  return result;
 }
 
 export async function getPlanner(id: string): Promise<Planner | undefined> {
   const { data, error } = await supabase
     .from("planner_services")
-    .select("id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, owner_id, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)")
+    .select(
+      "id, planner_id, title, description, image_url, starting_price_cents, is_available, planners(approval_status, owner_id, use_generated_branding, logo_url, banner_image_url, business_name, category, slug)",
+    )
     .eq("planner_id", id)
     .maybeSingle();
 
   if (!error && data) {
     const parentPlanner = (data as any).planners;
     if (parentPlanner?.approval_status !== "approved") {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user?.id !== parentPlanner?.owner_id) {
         return undefined;
       }

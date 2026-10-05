@@ -21,11 +21,18 @@ import { useI18n } from "@/i18n/I18nProvider";
 export const Route = createFileRoute("/restaurants")({
   component: RestaurantsDirectory,
   loader: async () => {
-    const [marketplaceData, validGeoLocations] = await Promise.all([
-      getMarketplaceRestaurants(),
-      getValidGeoLocations(),
-    ]);
-    return { ...marketplaceData, validGeoLocations };
+    try {
+      const [marketplaceData, validGeoLocations] = await Promise.all([
+        getMarketplaceRestaurants().catch(() => ({ restaurants: [] })),
+        getValidGeoLocations().catch(() => []),
+      ]);
+      return {
+        restaurants: marketplaceData?.restaurants || [],
+        validGeoLocations: validGeoLocations || [],
+      };
+    } catch {
+      return { restaurants: [], validGeoLocations: [] };
+    }
   },
   head: () => ({
     meta: [
@@ -65,7 +72,15 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 function RestaurantsDirectory() {
-  const { restaurants, validGeoLocations } = Route.useLoaderData() as any;
+  const loaderData = Route.useLoaderData() as any;
+  const restaurants = useMemo(
+    () => (Array.isArray(loaderData?.restaurants) ? loaderData.restaurants : []),
+    [loaderData],
+  );
+  const validGeoLocations = useMemo(
+    () => (Array.isArray(loaderData?.validGeoLocations) ? loaderData.validGeoLocations : []),
+    [loaderData],
+  );
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
   const [cityOpen, setCityOpen] = useState(false);

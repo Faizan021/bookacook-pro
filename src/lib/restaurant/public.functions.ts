@@ -199,35 +199,53 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
     return marketplaceRestaurantsCache.data;
   }
 
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-  // Fetch restaurants that are published and opted into the marketplace
-  // Selecting fields needed for the directory cards.
-  const { data: restaurants, error } = await supabaseAdmin
-    .from("restaurants")
-    // @ts-ignore - show_in_marketplace is added via recent migration, might not be in types.ts
-    .select(
-      "id, name, slug, custom_domain, is_published, show_in_marketplace, logo_url, banner_image_url, city, cuisine_type, delivery_fee, min_order_amount, use_generated_branding, approval_status",
-    )
-    .eq("is_published", true)
-    .eq("show_in_marketplace", true);
-
-  const cities = Array.from(new Set((restaurants || []).map((r: any) => r.city).filter(Boolean)));
+  let restaurants: any[] = [];
   const cityCoordsMap: Record<string, { lat: number; lng: number }> = {};
+  let supabaseAdmin: any = null;
 
-  if (cities.length > 0) {
-    const { data: locs, error: locErr } = await supabaseAdmin
-      .from("german_locations")
-      .select("name, lat, lng")
-      .in("name", cities);
+  try {
+    const imported = await import("@/integrations/supabase/client.server");
+    supabaseAdmin = imported.supabaseAdmin;
 
-    if (!locErr && locs) {
-      locs.forEach((l: any) => {
-        if (l.name && l.lat != null && l.lng != null) {
-          cityCoordsMap[l.name.toLowerCase()] = { lat: Number(l.lat), lng: Number(l.lng) };
-        }
-      });
+    // Fetch restaurants that are published and opted into the marketplace with a 3s timeout
+    const fetchPromise = supabaseAdmin
+      .from("restaurants")
+      // @ts-ignore - show_in_marketplace is added via recent migration, might not be in types.ts
+      .select(
+        "id, name, slug, custom_domain, is_published, show_in_marketplace, logo_url, banner_image_url, city, cuisine_type, delivery_fee, min_order_amount, use_generated_branding, approval_status",
+      )
+      .eq("is_published", true)
+      .eq("show_in_marketplace", true);
+
+    const timeoutPromise = new Promise<{ data: any[] | null; error: any }>((resolve) =>
+      setTimeout(
+        () => resolve({ data: null, error: new Error("Restaurants query timeout") }),
+        3000,
+      ),
+    );
+
+    const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+    if (!error && data) {
+      restaurants = data;
     }
+
+    const cities = Array.from(new Set((restaurants || []).map((r: any) => r.city).filter(Boolean)));
+    if (cities.length > 0) {
+      const { data: locs, error: locErr } = await supabaseAdmin
+        .from("german_locations")
+        .select("name, lat, lng")
+        .in("name", cities);
+
+      if (!locErr && locs) {
+        locs.forEach((l: any) => {
+          if (l.name && l.lat != null && l.lng != null) {
+            cityCoordsMap[l.name.toLowerCase()] = { lat: Number(l.lat), lng: Number(l.lng) };
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching live restaurants:", err);
   }
 
   const mappedRestaurants = (restaurants || []).map((r: any) => {
