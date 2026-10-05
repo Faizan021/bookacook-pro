@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import * as React from "react";
 import { useMemo, useState } from "react";
@@ -23,7 +24,7 @@ import {
   UtensilsCrossed,
   ChevronDown,
 } from "lucide-react";
-import { getPlanners, type Planner } from "@/data/planners";
+import { getPlanners, fallbackPlanners, type Planner } from "@/data/planners";
 import { useI18n } from "@/i18n/I18nProvider";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { TrustSection } from "@/components/TrustSection";
@@ -57,7 +58,16 @@ export const Route = createFileRoute("/planner/")({
   validateSearch: z.object({
     q: z.string().optional(),
   }),
-  loader: async () => await getPlanners(),
+  loader: async () => {
+    try {
+      const timeoutPromise = new Promise<Planner[]>((res) =>
+        setTimeout(() => res(fallbackPlanners.map((p) => ({ ...p, isShowcase: true }))), 2500),
+      );
+      return await Promise.race([getPlanners(), timeoutPromise]);
+    } catch {
+      return fallbackPlanners.map((p) => ({ ...p, isShowcase: true }));
+    }
+  },
   component: PlannerPage,
 });
 
@@ -317,7 +327,6 @@ function PlannerPage() {
       case "review":
         return tt("Überprüfe dein Event-Briefing", "Review your event brief");
       default:
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (STEPS as any[])[step]?.label || "";
     }
   };

@@ -24,7 +24,7 @@ import {
 import { SiteShell } from "@/components/SiteShell";
 import { UnifiedMarketplaceTabs } from "@/components/UnifiedMarketplaceTabs";
 import { useI18n } from "@/i18n/I18nProvider";
-import { getCaterers, type Caterer } from "@/data/caterers";
+import { getCaterers, fallbackCaterers, type Caterer } from "@/data/caterers";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
 import { trackEvent } from "@/utils/posthog";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
@@ -64,7 +64,16 @@ export const Route = createFileRoute("/catering/")({
   validateSearch: z.object({
     q: z.string().optional(),
   }),
-  loader: async () => await getCaterers(),
+  loader: async () => {
+    try {
+      const timeoutPromise = new Promise<Caterer[]>((res) =>
+        setTimeout(() => res(fallbackCaterers.map((c) => ({ ...c, isShowcase: true }))), 2500),
+      );
+      return await Promise.race([getCaterers(), timeoutPromise]);
+    } catch {
+      return fallbackCaterers.map((c) => ({ ...c, isShowcase: true }));
+    }
+  },
   component: Catering,
 });
 

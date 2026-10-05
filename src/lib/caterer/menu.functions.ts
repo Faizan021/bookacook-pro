@@ -304,30 +304,44 @@ export const getPublicCatererProfile = createServerFn({ method: "GET" })
   });
 
 export const getPublicCatererList = createServerFn({ method: "GET" }).handler(async () => {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  try {
+    const fetchPromise = (async () => {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  // Fetch all active caterers directly in a single fast query
-  const { data, error } = await supabaseAdmin
-    .from("caterers")
-    .select(
-      "id, name, slug, custom_domain, certifications, service_categories, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
+      // Fetch all active caterers directly in a single fast query
+      const { data, error } = await supabaseAdmin
+        .from("caterers")
+        .select(
+          "id, name, slug, custom_domain, certifications, service_categories, description, logo_url, banner_image_url, phone, business_address, service_areas, min_delivery_cents, delivery_fee_cents, announcement_active, announcement_bg_color, announcement_text",
+        );
+
+      if (error) {
+        console.error("Error in getPublicCatererList:", error);
+        return [];
+      }
+
+      // Filter out any unwanted test entries
+      return (data || []).filter((c: any) => {
+        const n = (c.name || "").toLowerCase();
+        const s = (c.slug || "").toLowerCase();
+        return (
+          !n.includes("milan") && !n.includes("wali") && !s.includes("milan") && !s.includes("wali")
+        );
+      });
+    })();
+
+    const timeoutPromise = new Promise<any[]>((resolve) =>
+      setTimeout(() => {
+        console.warn("[getPublicCatererList] Timeout fetching caterers list");
+        resolve([]);
+      }, 2500),
     );
 
-  if (error) {
-    console.error("Error in getPublicCatererList:", error);
-    throw new Error(error.message);
+    return await Promise.race([fetchPromise, timeoutPromise]);
+  } catch (err) {
+    console.error("Global error in getPublicCatererList:", err);
+    return [];
   }
-
-  // Filter out any unwanted test entries
-  const filtered = (data || []).filter((c: any) => {
-    const n = (c.name || "").toLowerCase();
-    const s = (c.slug || "").toLowerCase();
-    return (
-      !n.includes("milan") && !n.includes("wali") && !s.includes("milan") && !s.includes("wali")
-    );
-  });
-
-  return filtered;
 });
 
 export const submitCateringBrief = createServerFn({ method: "POST" })

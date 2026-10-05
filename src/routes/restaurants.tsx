@@ -22,14 +22,17 @@ export const Route = createFileRoute("/restaurants")({
   component: RestaurantsDirectory,
   loader: async () => {
     try {
-      const [marketplaceData, validGeoLocations] = await Promise.all([
+      const timeoutPromise = new Promise<{ restaurants: any[]; validGeoLocations: any[] }>((res) =>
+        setTimeout(() => res({ restaurants: [], validGeoLocations: [] }), 2500),
+      );
+      const fetchPromise = Promise.all([
         getMarketplaceRestaurants().catch(() => ({ restaurants: [] })),
         getValidGeoLocations().catch(() => []),
-      ]);
-      return {
+      ]).then(([marketplaceData, validGeoLocations]) => ({
         restaurants: marketplaceData?.restaurants || [],
         validGeoLocations: validGeoLocations || [],
-      };
+      }));
+      return await Promise.race([fetchPromise, timeoutPromise]);
     } catch {
       return { restaurants: [], validGeoLocations: [] };
     }

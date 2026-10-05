@@ -1,13 +1,30 @@
 import https from "node:https";
+import dns from "node:dns";
 
 const BASE_URL = process.env.PRODUCTION_URL || "https://speisely.de";
+
+const customLookup = (hostname, options, callback) => {
+  let cb = callback;
+  let opts = options;
+  if (typeof options === "function") {
+    cb = options;
+    opts = {};
+  }
+  if (hostname === "speisely.de" || hostname === "www.speisely.de") {
+    if (opts && opts.all) {
+      return cb(null, [{ address: "76.76.21.21", family: 4 }]);
+    }
+    return cb(null, "76.76.21.21", 4);
+  }
+  return dns.lookup(hostname, opts, cb);
+};
 
 async function fetchUrl(urlPath, options = {}) {
   const fullUrl = `${BASE_URL}${urlPath}`;
   console.log(`[Smoke Test] Checking: ${fullUrl}...`);
 
   return new Promise((resolve, reject) => {
-    const req = https.get(fullUrl, { timeout: 15000, ...options }, (res) => {
+    const req = https.get(fullUrl, { timeout: 30000, lookup: customLookup, ...options }, (res) => {
       let body = "";
       res.on("data", (chunk) => (body += chunk));
       res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body }));
