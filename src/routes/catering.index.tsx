@@ -627,7 +627,20 @@ function Catering() {
                       ))}
                     </div>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-[#eadfce]/30 flex items-center justify-between text-xs text-forest/60">
+
+                  <div className="mt-4 pt-3 border-t border-[#eadfce]/30 flex items-center justify-between text-xs text-forest/60">
+                    <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                      <UtensilsCrossed className="h-3 w-3" />
+                      {lang === "de" ? "Catering & Buffets" : "Catering & Buffets"}
+                    </span>
+                    <span className="font-semibold text-forest">
+                      {lang === "de"
+                        ? `ab ${c.minGuests || 15} Pers.`
+                        : `from ${c.minGuests || 15} guests`}
+                    </span>
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-[#eadfce]/30 flex items-center justify-between text-xs text-forest/60">
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5 text-forest" /> {c.area}
                     </span>
@@ -637,6 +650,13 @@ function Catering() {
                       </div>
                       <div className="text-sm text-forest font-bold">€{c.minOrder}</div>
                     </div>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-[#eadfce]/40 flex items-center justify-between text-xs font-bold text-forest group-hover:text-[#A85C36] transition-colors">
+                    <span>
+                      {lang === "de" ? "Catering-Pakete anfragen" : "Request Catering Packages"}
+                    </span>
+                    <ArrowRight className="h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </Link>

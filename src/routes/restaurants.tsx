@@ -574,19 +574,19 @@ function RestaurantsDirectory() {
 
                         {/* Specs */}
                         <div className="flex items-center gap-3 text-xs font-semibold text-forest/70 border-t border-forest/10 pt-3">
-                          <span>
-                            {tt("Mind.", "Min.")} €{rest.min_order_amount ?? 10}
+                          <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold text-[#A85C36] bg-[#FAF7F0] px-2 py-0.5 rounded border border-forest/10">
+                            <Utensils className="h-3 w-3" />
+                            {tt("Restaurant", "Restaurant")}
                           </span>
                           <span className="text-forest/30">•</span>
                           <span>
-                            {tt("Lieferung:", "Delivery:")} €
-                            {Number(rest.delivery_fee || 0).toFixed(2)}
+                            {tt("Mind.", "Min.")} €{rest.min_order_amount ?? 10}
                           </span>
                         </div>
                       </div>
 
                       <div className="mt-4 pt-3 border-t border-forest/10 flex items-center justify-between text-forest font-semibold text-xs group-hover:text-[#b28a3c] transition-colors">
-                        <span>{tt("Direkt bestellen", "Order Direct")}</span>
+                        <span>{tt("Speisekarte & Tisch ➔", "Menu & Table ➔")}</span>
                         <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>

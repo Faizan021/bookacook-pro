@@ -1289,6 +1289,17 @@ function PlannerDirectory({
                       </div>
                     </div>
                   </div>
+
+                  <div className="mt-3 pt-3 border-t border-[#eadfce]/30 flex items-center justify-between text-xs font-bold text-forest group-hover:text-brand-orange transition-colors">
+                    <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold text-forest/80 bg-[#16372f]/10 px-2 py-0.5 rounded">
+                      <Briefcase className="h-3 w-3 text-forest" />
+                      {tt("Full-Service Agentur", "Full-Service Agency")}
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-xs">
+                      {tt("Event anfragen", "Inquire Event")}
+                      <ArrowRight className="h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
                 </div>
               </Link>
             ))}

@@ -265,7 +265,79 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
     };
   });
 
-  const result = { restaurants: mappedRestaurants };
+  // Graceful showcase fallback: if fewer than 4 live opted-in restaurants, enrich with verified dining showcases
+  const MIN_RESTAURANT_COUNT = 4;
+  const finalRestaurants = [...mappedRestaurants];
+  if (finalRestaurants.length < MIN_RESTAURANT_COUNT) {
+    const existingSlugs = new Set(finalRestaurants.map((r: any) => r.slug || r.id));
+    const fallbackList = [
+      {
+        id: "haus-spaas",
+        slug: "haus-spaas",
+        name: "Haus Spaas",
+        cuisine_type: "Traditionelle deutsche Küche & Saisonales",
+        city: "Mönchengladbach",
+        min_order_amount: 15,
+        delivery_fee: 0,
+        banner_image_url: "/haus_spaas_desktop_hero.png",
+        logo_url: "/spaas_mobile_preview.png",
+        approval_status: "approved",
+        custom_domain: "haus-spaas.de",
+        is_showcase: true,
+      },
+      {
+        id: "verde-grain",
+        slug: "verde-grain",
+        name: "Verde & Grain",
+        cuisine_type: "Healthy Bowls & Fresh Salads",
+        city: "Berlin",
+        min_order_amount: 15,
+        delivery_fee: 1.49,
+        banner_image_url:
+          "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&h=900&fit=crop",
+        logo_url: null,
+        approval_status: "approved",
+        is_showcase: true,
+      },
+      {
+        id: "miso-social",
+        slug: "miso-social",
+        name: "Miso Social",
+        cuisine_type: "Japanese Ramen & Izakaya",
+        city: "Berlin",
+        min_order_amount: 12,
+        delivery_fee: 0.99,
+        banner_image_url:
+          "https://images.unsplash.com/photo-1591814468924-caf88d1232e1?w=1200&h=900&fit=crop",
+        logo_url: null,
+        approval_status: "approved",
+        is_showcase: true,
+      },
+      {
+        id: "osteria-del-sole",
+        slug: "osteria-del-sole",
+        name: "Osteria del Sole",
+        cuisine_type: "Italienische Küche & Steinofen-Pizza",
+        city: "Köln",
+        min_order_amount: 18,
+        delivery_fee: 1.99,
+        banner_image_url:
+          "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&h=900&fit=crop",
+        logo_url: null,
+        approval_status: "approved",
+        is_showcase: true,
+      },
+    ];
+
+    for (const item of fallbackList) {
+      if (finalRestaurants.length >= MIN_RESTAURANT_COUNT) break;
+      if (!existingSlugs.has(item.slug) && !existingSlugs.has(item.id)) {
+        finalRestaurants.push(item);
+      }
+    }
+  }
+
+  const result = { restaurants: finalRestaurants };
   marketplaceRestaurantsCache = { data: result, timestamp: now };
   return result;
 });
