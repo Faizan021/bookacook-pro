@@ -707,59 +707,6 @@ function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────
-          PRESSE & MEDIEN SIGNALE (ON-PAGE PR & EDITORIAL CITATIONS)
-      ───────────────────────────────────────────────── */}
-      <section
-        aria-label="Presse und Medienberichte"
-        className="bg-[#fcfaf6] border-b border-[#eadfce]/60 py-6"
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5 shrink-0">
-              <span className="inline-flex h-2 w-2 rounded-full bg-[#b28a3c] animate-pulse" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest/70">
-                {tt("Bekannt aus & Reportagen", "As seen in & Field Reports")}
-              </span>
-            </div>
-            <div className="flex flex-wrap items-center justify-center md:justify-end gap-5 sm:gap-8 text-xs font-semibold text-forest/60">
-              <Link
-                to="/magazin"
-                className="hover:text-forest transition-colors flex items-center gap-1.5"
-              >
-                <span>📰 Speisely Magazin</span>
-              </Link>
-              <Link
-                to="/magazin/speisely-visits"
-                className="hover:text-forest transition-colors flex items-center gap-1.5"
-              >
-                <span>✨ Speisely Visits</span>
-              </Link>
-              <Link
-                to="/magazin/community/san-sebastian-berlin"
-                className="hover:text-forest transition-colors flex items-center gap-1.5"
-              >
-                <span>🍰 San Sebastian Original®</span>
-              </Link>
-              <Link
-                to="/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln"
-                className="hover:text-forest transition-colors flex items-center gap-1.5"
-              >
-                <span>📍 Mandy Neukölln</span>
-              </Link>
-              <a
-                href="https://techglanz.de"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#b28a3c] transition-colors flex items-center gap-1.5"
-              >
-                <span>⚡ TechGlanz Digital</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────
           THREE VERTICALS — Editorial asymmetric grid
       ───────────────────────────────────────────────── */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
