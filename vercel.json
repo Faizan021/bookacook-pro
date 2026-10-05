@@ -1,5 +1,6 @@
 {
   "framework": "vite",
+  "regions": ["fra1"],
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "redirects": [
@@ -80,7 +81,7 @@
       ]
     },
     {
-      "source": "/(about|faq|impressum|datenschutz|agb|partners|catering|planner|restaurants|magazin.*)",
+      "source": "/(about|faq|impressum|datenschutz|agb|partners|partner/.*|catering.*|planner.*|restaurants.*|case-study/.*|magazin.*|blog.*)",
       "headers": [
         {
           "key": "Cache-Control",
