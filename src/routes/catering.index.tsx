@@ -22,6 +22,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
+import { UnifiedMarketplaceTabs } from "@/components/UnifiedMarketplaceTabs";
 import { useI18n } from "@/i18n/I18nProvider";
 import { getCaterers, type Caterer } from "@/data/caterers";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
@@ -391,6 +392,10 @@ function Catering() {
         id="listings-section"
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-16 pb-6 scroll-mt-6 relative z-10"
       >
+        <div className="mb-8">
+          <UnifiedMarketplaceTabs active="catering" />
+        </div>
+
         <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-forest mb-3">
           {t("cat.eyebrow")}
         </div>

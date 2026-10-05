@@ -49,7 +49,6 @@ export function SiteFooter() {
               label: lang === "de" ? "Lokale Restaurants" : "Local Restaurants",
               to: "/restaurants",
             },
-            { label: t("nav.instant"), to: "/instant-order" },
             { label: t("nav.catering"), to: "/catering" },
             { label: t("Event-Planer", "Event Planner"), to: "/planner" },
             { label: "Magazin", to: "/magazin" },

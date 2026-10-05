@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
+import { UnifiedMarketplaceTabs } from "@/components/UnifiedMarketplaceTabs";
 import { useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -347,7 +348,12 @@ function RestaurantsDirectory() {
           )}
 
           {/* Discovery Filter Controls */}
-          <section className="mx-auto max-w-7xl px-6 mt-6 relative z-20">
+          <section className="mx-auto max-w-7xl px-6 mt-8 relative z-20">
+            {/* Category Navigation Switcher */}
+            <div className="mb-4">
+              <UnifiedMarketplaceTabs active="restaurants" />
+            </div>
+
             <div className="bg-white border border-[#e2e8e4] p-4 rounded-3xl shadow-xl flex flex-col md:flex-row gap-4 items-center">
               <div className="flex items-center gap-3 px-4 py-3 bg-cream/30 rounded-2xl w-full md:flex-1 border border-[#eadfce]/20">
                 <Search className="h-5 w-5 text-forest/60 shrink-0" />

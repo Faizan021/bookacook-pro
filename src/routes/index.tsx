@@ -178,7 +178,7 @@ export const Route = createFileRoute("/")({
                   "@type": "ListItem",
                   position: 3,
                   name: "Restaurants",
-                  item: "https://speisely.de/instant-order",
+                  item: "https://speisely.de/restaurants",
                 },
                 {
                   "@type": "ListItem",
@@ -315,7 +315,7 @@ function Home() {
         icon: <UtensilsCrossed className="h-4 w-4" />,
         label: tt("Restaurants", "Restaurants"),
         sublabel: tt("Sofort bestellen", "Order now"),
-        to: "/instant-order" as const,
+        to: "/restaurants" as const,
         trackKey: "instant_order_cta_clicked",
         cta: tt("Restaurants entdecken", "Discover restaurants"),
       },
@@ -356,7 +356,7 @@ function Home() {
       // 1. Instant System 1 Reflex Classification (< 2ms)
       const system1 = classifyWithSystem1(searchQuery.trim());
 
-      let toPath: "/instant-order" | "/catering" | "/planner" = "/instant-order";
+      let toPath: "/restaurants" | "/catering" | "/planner" = "/restaurants";
       if (system1.vertical === "catering") {
         toPath = "/catering";
       } else if (system1.vertical === "events") {
@@ -592,10 +592,11 @@ function Home() {
               <LayoutGroup id="heroTabs">
                 <div className="flex flex-wrap gap-2 relative">
                   {verticals.map((v) => (
-                    <button
+                    <Link
                       key={v.key}
                       id={`hero-tab-${v.key}`}
-                      type="button"
+                      to={v.to}
+                      onMouseEnter={() => setActiveVertical(v.key)}
                       onClick={() => setActiveVertical(v.key)}
                       className={`relative flex items-center gap-2 rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
                         activeVertical === v.key
@@ -619,7 +620,7 @@ function Home() {
                           </span>
                         )}
                       </span>
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </LayoutGroup>
@@ -831,7 +832,7 @@ function Home() {
           {/* Instant Food Order — flagship format */}
           <Link
             id="vertical-restaurants"
-            to="/instant-order"
+            to="/restaurants"
             onClick={() =>
               trackEvent("instant_order_cta_clicked", { location: "homepage_verticals" })
             }

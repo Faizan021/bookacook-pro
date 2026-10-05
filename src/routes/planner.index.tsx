@@ -28,6 +28,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { MarketplacePromiseCTA } from "@/components/MarketplacePromiseCTA";
 import { TrustSection } from "@/components/TrustSection";
 import { SiteShell } from "@/components/SiteShell";
+import { UnifiedMarketplaceTabs } from "@/components/UnifiedMarketplaceTabs";
 
 import { z } from "zod";
 
@@ -389,6 +390,9 @@ function PlannerPage() {
 
       {/* Main Directory & Discovery Workspace */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 pb-8 relative z-10">
+        <div className="mb-8">
+          <UnifiedMarketplaceTabs active="planner" />
+        </div>
         <PlannerDirectory lang={lang} tt={tt} planners={planners} />
       </section>
 
