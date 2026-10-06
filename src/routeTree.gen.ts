@@ -72,6 +72,7 @@ import { Route as MagazinCommunityArianaRestaurantFrankfurtRouteImport } from '.
 import { Route as MagazinCommunityChickenKrushPragRouteImport } from './routes/magazin.community.chicken-krush-prag'
 import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes/magazin.community.garcon-de-cafe-berlin'
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
+import { Route as MagazinCommunityKingTutRestaurantBerlinRouteImport } from './routes/magazin.community.king-tut-restaurant-berlin'
 import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
 import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
 import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
@@ -418,6 +419,12 @@ const MagazinCommunityHarputWiesbadenRoute =
     path: '/magazin/community/harput-wiesbaden',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityKingTutRestaurantBerlinRoute =
+  MagazinCommunityKingTutRestaurantBerlinRouteImport.update({
+    id: '/magazin/community/king-tut-restaurant-berlin',
+    path: '/magazin/community/king-tut-restaurant-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunityKokioBerlinRoute =
   MagazinCommunityKokioBerlinRouteImport.update({
     id: '/magazin/community/kokio-berlin',
@@ -560,6 +567,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -635,6 +643,7 @@ export interface FileRoutesByTo {
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -715,6 +724,7 @@ export interface FileRoutesById {
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -795,6 +805,7 @@ export interface FileRouteTypes {
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
@@ -870,6 +881,7 @@ export interface FileRouteTypes {
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
@@ -949,6 +961,7 @@ export interface FileRouteTypes {
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
@@ -1011,6 +1024,7 @@ export interface RootRouteChildren {
   MagazinCommunityChickenKrushPragRoute: typeof MagazinCommunityChickenKrushPragRoute
   MagazinCommunityGarconDeCafeBerlinRoute: typeof MagazinCommunityGarconDeCafeBerlinRoute
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
+  MagazinCommunityKingTutRestaurantBerlinRoute: typeof MagazinCommunityKingTutRestaurantBerlinRoute
   MagazinCommunityKokioBerlinRoute: typeof MagazinCommunityKokioBerlinRoute
   MagazinCommunitySanSebastianBerlinRoute: typeof MagazinCommunitySanSebastianBerlinRoute
   MagazinCommunityThronburgerBerlinRoute: typeof MagazinCommunityThronburgerBerlinRoute
@@ -1464,6 +1478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityHarputWiesbadenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/king-tut-restaurant-berlin': {
+      id: '/magazin/community/king-tut-restaurant-berlin'
+      path: '/magazin/community/king-tut-restaurant-berlin'
+      fullPath: '/magazin/community/king-tut-restaurant-berlin'
+      preLoaderRoute: typeof MagazinCommunityKingTutRestaurantBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/kokio-berlin': {
       id: '/magazin/community/kokio-berlin'
       path: '/magazin/community/kokio-berlin'
@@ -1769,6 +1790,8 @@ const rootRouteChildren: RootRouteChildren = {
   MagazinCommunityGarconDeCafeBerlinRoute:
     MagazinCommunityGarconDeCafeBerlinRoute,
   MagazinCommunityHarputWiesbadenRoute: MagazinCommunityHarputWiesbadenRoute,
+  MagazinCommunityKingTutRestaurantBerlinRoute:
+    MagazinCommunityKingTutRestaurantBerlinRoute,
   MagazinCommunityKokioBerlinRoute: MagazinCommunityKokioBerlinRoute,
   MagazinCommunitySanSebastianBerlinRoute:
     MagazinCommunitySanSebastianBerlinRoute,

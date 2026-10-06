@@ -1,0 +1,72 @@
+{
+  "name": "King Tut Restaurant & Café",
+  "native_name": "Ägyptisches Restaurant & Café",
+  "website": "https://kingtutrestaurant.de/",
+  "about_url": "https://kingtutrestaurant.de/about-us/",
+  "instagram": "king_tut_berlin",
+  "instagram_url": "https://www.instagram.com/king_tut_berlin/",
+  "followers": "8,873",
+  "posts_count": 460,
+  "google_maps": {
+    "query": "King tut Restaurant café, Hohenzollerndamm 11, 10717 Berlin, Germany",
+    "ftid": "0x47a8517144edc3fd:0x135c761d47397f00",
+    "url": "https://www.google.com/maps?q=King+tut+Restaurant+caf%C3%A9,+Hohenzollerndamm+11,+10717+Berlin,+Germany&ftid=0x47a8517144edc3fd:0x135c761d47397f00"
+  },
+  "contact": {
+    "phone": "+49 176 1483 7601",
+    "email_general": "info@kingtutrestaurant.de",
+    "email_reservations": "reservation@kingtutrestaurant.de",
+    "email_catering": "catering@kingtutrestaurant.de"
+  },
+  "address": {
+    "street": "Hohenzollerndamm 11",
+    "city": "Berlin",
+    "postal_code": "10717",
+    "district": "Wilmersdorf",
+    "cross_street": "Düsseldorfer Straße",
+    "country": "Germany"
+  },
+  "opening_hours": {
+    "monday": "12:00 – 22:30",
+    "tuesday": "12:00 – 22:30",
+    "wednesday": "12:00 – 23:00",
+    "thursday": "12:00 – 22:30",
+    "friday": "13:00 – 23:30",
+    "saturday": "12:00 – 00:00",
+    "sunday": "15:00 – 22:30"
+  },
+  "categories": [
+    "Egyptian Restaurant",
+    "Halal Restaurant",
+    "Oriental Café",
+    "Catering & Event Service"
+  ],
+  "features": [
+    "100% Halal Certified",
+    "Outdoor Seating",
+    "Catering & Private Event Hosting",
+    "Live Music Evenings",
+    "Traditional Egyptian Desserts & Patisserie"
+  ],
+  "specialties": [
+    "Ägyptischer Hawawshi (Knusprig gebackenes Fladenbrot mit würzigem Hackfleisch)",
+    "Klassische Grüne Molokhia Suppe mit Knoblauch-Koriander Teshah",
+    "Große Holzkohle Mixed Grill Silberplatte (Lammkoteletts, Shish Tawook & Kofta)",
+    "Ägyptische Fleisch- & Kartoffel-Tajine im Tontopf",
+    "Klassische Fattah (Reis, zartes Fleisch, Knoblauch-Tomatensauce)",
+    "Ruz me'shariyeh (Ägyptischer Reis mit Fadennudeln)",
+    "Seidige Tahina & frische Knoblauch-Toum Creme",
+    "Umm Ali (Klassischer ägyptischer Brotpudding im Tontopf)",
+    "Roz Bel Laban, Basbousa & knusprige Kunafa"
+  ],
+  "assets": {
+    "live_visit_dir": "/magazin/king-tut-berlin/",
+    "hero_influencer_hd": "/magazin/king-tut-berlin/10_king_tut_influencer_hero_hd.jpg",
+    "hawawshi_molokhia_hd": "/magazin/king-tut-berlin/16_king_tut_hawawshi_molokhia_hd.jpg",
+    "silver_grill_platter_hd": "/magazin/king-tut-berlin/17_king_tut_silver_grill_hd.jpg",
+    "website_assets_dir": "/magazin/king-tut-berlin/website/",
+    "website_logo": "/magazin/king-tut-berlin/website/web_king_tut_logo.png",
+    "website_hero": "/magazin/king-tut-berlin/website/web_hero_food_platter.jpg"
+  },
+  "community_article_route": "/magazin/community/king-tut-restaurant-berlin"
+}
