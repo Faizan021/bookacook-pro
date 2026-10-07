@@ -23,6 +23,8 @@ import {
   Sparkles,
   Camera,
   X,
+  HelpCircle,
+  ChevronDown,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
@@ -1066,17 +1068,7 @@ function CatererPage() {
               </p>
             )}
 
-            {storefrontUrl && (
-              <a
-                href={storefrontUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-mint hover:text-white transition-colors font-semibold drop-shadow-sm"
-              >
-                <Globe className="h-3.5 w-3.5" />
-                {t("Direkt-Storefront öffnen ↗", "Open Direct Storefront ↗")}
-              </a>
-            )}
+            {/* Direct inquiry focus */}
 
             {/* Mobile Only Clean Action Buttons Bar */}
             <div className="grid grid-cols-2 gap-2 md:hidden pt-3 border-t border-white/15 w-full max-w-md mx-auto">
@@ -1295,14 +1287,22 @@ function CatererPage() {
                 </span>
               </div>
             </div>
-            <a
-              href="/caterers/kampala-rolex-muenchen/pdf_p1_img1.jpeg"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-forest hover:bg-forest/90 text-white text-xs font-bold transition shadow-sm"
+            <button
+              onClick={() => {
+                setInquiryForm((prev) => ({
+                  ...prev,
+                  eventType: "Catering-Broschüre & Konditionen",
+                  notes: "[ANFRAGE: Catering-Broschüre, Menü & Konditionen anfordern]\n\n",
+                }));
+                setInquiryModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-forest hover:bg-forest/90 text-white text-xs font-bold transition shadow-sm cursor-pointer"
             >
-              <span>{t("Broschüre ansehen ↗", "View Brochure ↗")}</span>
-            </a>
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#E6B84A]" />
+              <span>
+                {t("Konditionen über Speisely anfordern", "Request Details via Speisely")}
+              </span>
+            </button>
           </div>
         )}
 
@@ -1349,12 +1349,18 @@ function CatererPage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Left Column: Story & Highlights */}
               <div className="lg:col-span-7 flex flex-col gap-4">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E6B84A]/20 border border-[#E6B84A]/40 text-[#E6B84A] text-xs font-bold uppercase tracking-wider w-fit">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {t(
-                    "Das Signature Live-Cooking Highlight",
-                    "The Signature Live-Cooking Highlight",
-                  )}
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E6B84A]/20 border border-[#E6B84A]/40 text-[#E6B84A] text-xs font-bold uppercase tracking-wider w-fit">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    {t(
+                      "Das Signature Live-Cooking Highlight",
+                      "The Signature Live-Cooking Highlight",
+                    )}
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/25 text-white text-xs font-semibold backdrop-blur-sm">
+                    <Users className="h-3.5 w-3.5 text-[#E6B84A]" />
+                    {t("Ab 20 Personen · Inkl. Koch vor Ort", "From 20 pax · Live Chef included")}
+                  </span>
                 </div>
 
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white leading-tight">
@@ -1390,12 +1396,12 @@ function CatererPage() {
                   </div>
 
                   <div className="rounded-xl bg-white/10 backdrop-blur-md p-3.5 border border-white/15">
-                    <div className="text-xl mb-1">🌿</div>
+                    <div className="text-xl mb-1">✨</div>
                     <div className="text-xs font-bold text-white">
-                      {t("100% Halal & Veggie", "100% Halal & Veggie")}
+                      {t("Frisch & Authentisch", "Fresh & Authentic")}
                     </div>
                     <div className="text-[11px] text-white/70">
-                      {t("Optionen für alle Gäste", "Options for every guest")}
+                      {t("Wünsche flexibel anpassbar", "Customizable on request")}
                     </div>
                   </div>
                 </div>
@@ -1414,7 +1420,9 @@ function CatererPage() {
                     className="rounded-full bg-[#10b981] hover:bg-[#10b981]/90 text-white px-6 py-3 text-xs sm:text-sm font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"
                   >
                     <CheckCircle2 className="h-4 w-4" />
-                    <span>{t("Live-Station bei Speisely anfragen", "Inquire Live Station via Speisely")}</span>
+                    <span>
+                      {t("Live-Station bei Speisely anfragen", "Inquire Live Station via Speisely")}
+                    </span>
                     <ChevronRight className="h-4 w-4" />
                   </button>
 
@@ -1686,8 +1694,13 @@ function CatererPage() {
                   className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                  <p className="text-white text-xs font-medium leading-snug drop-shadow-sm">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-between p-3">
+                  <div className="flex justify-end">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-black/50 backdrop-blur-md px-2 py-0.5 text-[10px] font-bold text-white border border-white/30">
+                      🔍 {t("Vergrößern", "Zoom")}
+                    </span>
+                  </div>
+                  <p className="text-white text-xs font-semibold leading-snug drop-shadow-md">
                     {imgItem.caption?.[lang] || imgItem.caption?.de || ""}
                   </p>
                 </div>
@@ -2081,6 +2094,135 @@ function CatererPage() {
             </p>
           </div>
         )}
+      </section>
+
+      {/* FAQ Accordion Section */}
+      <section id="faq" className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-10 mt-16 mb-12">
+        <div className="text-center mb-10">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/5 px-3 py-1 text-xs font-semibold text-forest/80 uppercase tracking-wider mb-2 border border-forest/10">
+            <HelpCircle className="w-3.5 h-3.5 text-[#E6B84A]" />
+            {t("Häufig gestellte Fragen", "Frequently Asked Questions")}
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl text-forest tracking-tight">
+            {t(
+              `FAQ & Buchungsablauf mit ${catererProfile?.name}`,
+              `FAQ & Booking Process with ${catererProfile?.name}`,
+            )}
+          </h2>
+          <p className="mt-2 text-sm text-forest/70 max-w-2xl mx-auto">
+            {t(
+              "Wichtige Informationen zu Equipment, Zubereitung vor Ort und der sicheren Buchungsabwicklung über Speisely.",
+              "Key information regarding equipment, on-site catering prep, and secure booking management via Speisely.",
+            )}
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {(catererProfile?.slug === "kampala-rolex-germany"
+            ? [
+                {
+                  q: t(
+                    "Wie viel Platz und welche Anschlüsse benötigt die Live-Rolex-Station vor Ort?",
+                    "How much space and power connections does the Live Rolex Station require on-site?",
+                  ),
+                  a: t(
+                    "Für die mobile Live-Cooking-Station wird eine ebene Stellfläche von ca. 2×2 Metern sowie ein gewöhnlicher 230V-Haushaltsstromanschluss benötigt. Kampala Rolex Germany bringt die traditionelle Chapati-Grillplatte (Tawa), Vorbereitungstische und professionelle Chafing Dishes direkt mit. Für Outdoor-Events oder Feiern ohne feste Kücheninfrastruktur kann das Catering alternativ auch autark über den Foodtruck realisiert werden.",
+                    "For the mobile live cooking station, an even surface of approx. 2x2 meters and a standard 230V domestic power outlet are required. Kampala Rolex Germany brings the traditional chapati griddle (Tawa), prep tables, and professional chafing dishes directly to your location. For outdoor events or venues without kitchen facilities, catering can alternatively operate fully self-sufficiently from the food truck.",
+                  ),
+                },
+                {
+                  q: t(
+                    "Welche Ernährungsformen (z.B. vegetarisch) können flexibel berücksichtigt werden?",
+                    "Which dietary preferences (e.g. vegetarian) can be accommodated?",
+                  ),
+                  a: t(
+                    "Auf Wunsch bereitet das Team frische vegetarische Rolex-Variationen mit verquirltem Ei, feingehacktem Gemüsekohl, Tomaten und roten Zwiebeln sowie rein pflanzliche Beilagen zu. Geben Sie besondere Ernährungswünsche oder Unverträglichkeiten einfach bei Ihrer unverbindlichen Speisely-Anfrage an – die Menüauswahl wird vor der finalen Bestätigung individuell abgestimmt.",
+                    "Upon request, the team prepares freshly rolled vegetarian Rolex variations with eggs, shredded cabbage, tomatoes, and red onions, alongside plant-based sides. Simply specify any dietary requirements or allergies in your non-binding Speisely inquiry – the menu will be customized before final confirmation.",
+                  ),
+                },
+                {
+                  q: t(
+                    "Bringt der Caterer Warmhaltebehälter & Equipment für das Buffet mit?",
+                    "Does the caterer bring chafing dishes and equipment for the buffet?",
+                  ),
+                  a: t(
+                    "Ja! Professionelle Chafing Dishes für den Warmhalteservice sowie passendes Vorlegebesteck sind bei den Buffet-Paketen inklusive. Speisen wie aromatisches Beef Stew, würziger Pilau-Reis und knusprige Samosas bleiben so über die gesamte Veranstaltungsdauer heiß, saftig und ansprechend präsentiert.",
+                    "Yes! Professional chafing dishes for hot holding service as well as serving cutlery are included in the buffet packages. Dishes such as flavorful beef stew, spiced pilau rice, and crisp samosas stay hot, tender, and appetizing throughout your entire event.",
+                  ),
+                },
+                {
+                  q: t(
+                    "Wie läuft die Buchung und Abstimmung über Speisely ab?",
+                    "How does the booking and coordination process work via Speisely?",
+                  ),
+                  a: t(
+                    "1. Unverbindliche Anfrage stellen (Datum, Gästezahl & Wunschpaket angeben).\n2. Das Speisely-Catering-Team prüft die Terminkapazität direkt mit Kampala Rolex Germany und klärt alle Details.\n3. Sie erhalten ein maßgeschneidertes Angebot mit verbindlichen Konditionen und Speisely-Käuferschutz.\n4. Nach Ihrer Freigabe ist Ihr Wunschtermin fest reserviert.",
+                    "1. Submit a non-binding inquiry (enter date, guest count & preferred package).\n2. The Speisely concierge team verifies availability directly with Kampala Rolex Germany and aligns all details.\n3. You receive a tailored proposal with clear terms and Speisely buyer protection.\n4. Once confirmed, your event slot is securely locked in.",
+                  ),
+                },
+              ]
+            : [
+                {
+                  q: t(
+                    "Wie läuft die Buchung und Abstimmung über Speisely ab?",
+                    "How does the booking and coordination process work via Speisely?",
+                  ),
+                  a: t(
+                    "Über Speisely stellen Sie Ihre Anfrage kostenfrei und unverbindlich. Unser Concierge-Team prüft die Verfügbarkeit beim Caterer, stimmt Menüwünsche und Logistik ab und übermittelt Ihnen ein transparentes Komplettangebot.",
+                    "Submit your request through Speisely completely free and without obligation. Our concierge team confirms vendor availability, aligns logistics and dietary requests, and presents a transparent turnkey proposal.",
+                  ),
+                },
+                {
+                  q: t(
+                    "Wie kurzfristig kann ich ein Catering anfragen?",
+                    "How far in advance should I request catering?",
+                  ),
+                  a: t(
+                    "Für größere Veranstaltungen und Live-Stationen empfehlen wir eine Vorlaufzeit von mindestens 7 bis 14 Tagen. Kurzfristige Anfragen prüfen wir nach individueller Kapazität gern im Express-Verfahren.",
+                    "For larger events and live cooking setups, we recommend a lead time of at least 7 to 14 days. Express short-notice requests can also be accommodated depending on date availability.",
+                  ),
+                },
+                {
+                  q: t(
+                    "Können Allergien und individuelle Sonderwünsche berücksichtigt werden?",
+                    "Can allergies and customized requests be accommodated?",
+                  ),
+                  a: t(
+                    "Selbstverständlich. Vermerken Sie Lebensmittelallergien, vegetarische oder vegane Anteile einfach im Notizfeld Ihrer Anfrage. Der Caterer passt die Menüs entsprechend an.",
+                    "Absolutely. Simply note food allergies, vegetarian, or vegan guest portions in the inquiry notes. The caterer adjusts ingredients and portions accordingly.",
+                  ),
+                },
+                {
+                  q: t(
+                    "Welche Sicherheit bietet die Buchung über Speisely?",
+                    "What protection does booking through Speisely offer?",
+                  ),
+                  a: t(
+                    "Mit Speisely genießen Sie volle Preistransparenz ohne versteckte Aufschläge, verbindliche Leistungszusagen und eine persönliche Ansprechperson im Kundensupport bis zum erfolgreichen Abschluss Ihres Events.",
+                    "With Speisely you receive 100% price transparency with zero hidden markups, binding service assurances, and dedicated concierge support right through the conclusion of your event.",
+                  ),
+                },
+              ]
+          ).map((item, idx) => (
+            <details
+              key={idx}
+              className="group rounded-2xl border border-[#eadfce] bg-white p-5 transition-all duration-200 hover:border-[#183B29]/30 open:border-[#183B29]/40 open:shadow-sm"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold text-forest text-base sm:text-lg select-none">
+                <span className="flex items-center gap-3 text-left">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#fdfaf5] text-xs font-bold text-forest/70 border border-[#eadfce]">
+                    {idx + 1}
+                  </span>
+                  <span>{item.q}</span>
+                </span>
+                <ChevronDown className="h-5 w-5 shrink-0 text-forest/50 transition-transform duration-200 group-open:rotate-180 ml-2" />
+              </summary>
+              <div className="mt-3 pt-3 border-t border-[#eadfce]/50 text-sm text-forest/80 leading-relaxed pl-10 whitespace-pre-line">
+                {item.a}
+              </div>
+            </details>
+          ))}
+        </div>
       </section>
 
       {/* Inquiry Details Modal (Asks for Contact Info, Event Date & Delivery Location/Postal Code) */}

@@ -1344,7 +1344,7 @@ export const fallbackCaterers: Caterer[] = [
       "Live-Cooking Station",
       "Ostafrikanisches Buffet",
       "Firmenfeiern & Hochzeiten",
-      "Halal-friendly",
+      "Individuelle Menüs",
     ],
     serviceCategories: ["events", "wedding", "private", "corporate", "christmas"],
     img: "/caterers/kampala-rolex-muenchen/06_buffet_event_guests.jpg",
@@ -1355,7 +1355,7 @@ export const fallbackCaterers: Caterer[] = [
     phone: "+49 152 14438923",
     cat: "all",
     verified: true,
-    dietary: ["Halal-Optionen", "Vegetarisch", "Glutenfrei-Optionen", "Ostafrika-Klassiker"],
+    dietary: ["Vegetarische Varianten auf Anfrage", "Ostafrika-Klassiker"],
     about: {
       de: "Bringen Sie den echten Geschmack Ugandas zu Ihrer nächsten Veranstaltung! Kampala Rolex Germany bietet authentisches ostafrikanisches Catering mit großzügigem Buffetservice, ansprechender Präsentation und einem unverwechselbaren kulinarischen Erlebnis. Unser Herzstück: Die interaktive Live-Ugandan-Rolex-Station, bei der traditionelle Rolex-Wraps (frisch gebackenes Chapati, gerollt mit fluffigem Omelett, feinem Gemüse und mariniertem Fleisch) frisch vor den Augen Ihrer Gäste zubereitet werden. Dazu servieren wir duftenden Pilau-Gewürzreis, zarte geschmorte Fleisch- und Hähnchengerichte, Matooke, handgemachte Samosas und frisches Kachumbari. Ob Firmenfeier, Weihnachtsfeier, Hochzeit oder privates Jubiläum – wir machen Essen zum unvergesslichen Event-Highlight.",
       en: "Bring the vibrant taste of Uganda and East Africa to your next event! Kampala Rolex Germany offers authentic catering with generous buffet service in chafing dishes, stunning presentation, and a truly memorable culinary journey. Our showstopper is the interactive Live Ugandan Rolex Station, where signature Rolex wraps (warm, flaky chapatis rolled with seasoned omelette, fresh vegetables, and tender meat) are prepared fresh right in front of your guests. Complemented by aromatic Pilau rice, slow-simmered beef & chicken stews, Matooke, golden samosas, and crisp Kachumbari salad.",

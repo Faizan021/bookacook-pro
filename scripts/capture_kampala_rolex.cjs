@@ -63,6 +63,20 @@ if (!fs.existsSync(OUTPUT_DIR)) {
     console.log('✓ Captured 04_desktop_menu.png');
   }
 
+  // Scroll to FAQ
+  const faqEl = await page.$('#faq');
+  if (faqEl) {
+    await faqEl.scrollIntoViewIfNeeded();
+    // Open first FAQ item to inspect expansion
+    const firstDetails = await page.$('#faq details');
+    if (firstDetails) {
+      await firstDetails.click();
+    }
+    await page.waitForTimeout(1000);
+    await page.screenshot({ path: path.join(OUTPUT_DIR, '04b_desktop_faq.png') });
+    console.log('✓ Captured 04b_desktop_faq.png');
+  }
+
   // 2. Mobile Viewport (390x844 iPhone 13)
   const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
   try {
@@ -80,6 +94,18 @@ if (!fs.existsSync(OUTPUT_DIR)) {
     await mobilePage.waitForTimeout(1000);
     await mobilePage.screenshot({ path: path.join(OUTPUT_DIR, '06_mobile_packages.png') });
     console.log('✓ Captured 06_mobile_packages.png');
+  }
+
+  const mobileFaq = await mobilePage.$('#faq');
+  if (mobileFaq) {
+    await mobileFaq.scrollIntoViewIfNeeded();
+    const firstMobileDetails = await mobilePage.$('#faq details');
+    if (firstMobileDetails) {
+      await firstMobileDetails.click();
+    }
+    await mobilePage.waitForTimeout(1000);
+    await mobilePage.screenshot({ path: path.join(OUTPUT_DIR, '07_mobile_faq.png') });
+    console.log('✓ Captured 07_mobile_faq.png');
   }
 
   await browser.close();
