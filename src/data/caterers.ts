@@ -14,6 +14,7 @@ export type Caterer = {
   minGuests: number;
   perPerson: number;
   time: string;
+  leadTimeDays?: number;
   tags: string[];
   img: string;
   logo?: string;
@@ -1337,6 +1338,7 @@ export const fallbackCaterers: Caterer[] = [
     minGuests: 15,
     perPerson: 19,
     time: "48 Stunden Vorlauf",
+    leadTimeDays: 2,
     tags: [
       "Ugandisches Catering",
       "Live-Cooking Station",
@@ -1406,6 +1408,13 @@ export const fallbackCaterers: Caterer[] = [
         },
       },
       {
+        url: "/caterers/kampala-rolex-muenchen/07_meat_and_pilau_heatlamp.png",
+        caption: {
+          de: "Heißer Chafing-Dish Buffet-Service unter Wärmelampen",
+          en: "Hot Chafing Dish Buffet Service under heat lamps",
+        },
+      },
+      {
         url: "/caterers/kampala-rolex-muenchen/06_buffet_event_guests.jpg",
         caption: {
           de: "Begeisterte Gäste am ostafrikanischen Buffet",
@@ -1420,6 +1429,9 @@ export const fallbackCaterers: Caterer[] = [
         price_amount: 19,
         price_type: "per_person",
         min_guests: 20,
+        badge: "🔥 BELIEBTESTES EVENT-PAKET",
+        is_bestseller: true,
+        image_url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg",
         short_summary:
           "Live vor Ort zubereitete ugandische Rolex-Wraps (Classic Veggie & Chicken), Samosas & frisches Kachumbari",
         description:
@@ -1439,6 +1451,8 @@ export const fallbackCaterers: Caterer[] = [
         price_amount: 29,
         price_type: "per_person",
         min_guests: 25,
+        badge: "FESTTAGS-WARMBUFFET",
+        image_url: "/caterers/kampala-rolex-muenchen/05_beef_meat_stew_chafing.jpg",
         short_summary:
           "Aromatischer Pilau-Reis, geschmorter Rindfleischeintopf, zartes Hähnchen, Chapati, Matooke & Saucen",
         description:
@@ -1460,6 +1474,8 @@ export const fallbackCaterers: Caterer[] = [
         price_amount: 22,
         price_type: "per_person",
         min_guests: 15,
+        badge: "FLYING FINGERFOOD",
+        image_url: "/caterers/kampala-rolex-muenchen/08_chapati_potatoes_sauce.png",
         short_summary:
           "Mini-Rolex-Bites, handgefaltete Samosas, Mandazi-Swahili-Gebäck & pikante Dips",
         description:
@@ -1479,6 +1495,8 @@ export const fallbackCaterers: Caterer[] = [
         price_amount: 38,
         price_type: "per_person",
         min_guests: 30,
+        badge: "👑 VIP ALL-INCLUSIVE",
+        image_url: "/caterers/kampala-rolex-muenchen/01_live_station_foodtruck.jpg",
         short_summary:
           "Vollständiges warmes Chafing-Buffet PLUS Live-Cooking-Rolex-Station & Dessert",
         description:

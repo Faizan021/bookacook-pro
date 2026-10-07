@@ -22,6 +22,7 @@ import {
   MessageSquare,
   Sparkles,
   Camera,
+  X,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
@@ -289,6 +290,7 @@ function CatererPage() {
 
   const [userSession, setUserSession] = useState<any>(null);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
+  const [lightboxImg, setLightboxImg] = useState<{ url: string; caption?: string } | null>(null);
   const [inquiryForm, setInquiryForm] = useState({
     customerName: "",
     customerEmail: "",
@@ -442,6 +444,7 @@ function CatererPage() {
         ? dbCaterer.min_delivery_cents / 100
         : staticCaterer?.minOrder || 0,
       leadTimeDays: staticCaterer?.leadTimeDays || 7,
+      time: staticCaterer?.time || "",
       minGuests: staticCaterer?.minGuests || 10,
       verified: staticCaterer?.verified ?? true,
       img:
@@ -493,6 +496,7 @@ function CatererPage() {
   } else if (staticCaterer) {
     catererProfile = {
       ...staticCaterer,
+      time: staticCaterer.time || "",
       minBudget: staticCaterer.minOrder || 0,
       certifications: (staticCaterer as any).certifications || "",
       menu: (staticCaterer.menu || []).map((m: any) => ({
@@ -1247,8 +1251,10 @@ function CatererPage() {
                 {t("Vorlaufzeit", "Lead Time")}
               </dt>
               <dd className="text-xs sm:text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Clock className="h-4 w-4 text-forest/40 shrink-0" /> {catererProfile.leadTimeDays}{" "}
-                {t("Tage", "Days")}
+                <Clock className="h-4 w-4 text-forest/40 shrink-0" />{" "}
+                {catererProfile.time
+                  ? catererProfile.time
+                  : `${catererProfile.leadTimeDays} ${t("Tage", "Days")}`}
               </dd>
             </div>
 
@@ -1288,6 +1294,39 @@ function CatererPage() {
           )}
         </div>
 
+        {/* Catering Brochure Quick Banner if available */}
+        {catererProfile.slug === "kampala-rolex-germany" && (
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 p-4 bg-gradient-to-r from-[#fdfaf5] to-emerald-50/60 rounded-xl border border-[#eadfce] shadow-sm">
+            <div className="flex items-center gap-3 text-xs sm:text-sm text-forest">
+              <span className="text-xl">📄</span>
+              <div>
+                <span className="font-bold">
+                  {t(
+                    "Offizielle Catering-Broschüre von Kampala Rolex Germany",
+                    "Official Kampala Rolex Germany Catering Brochure",
+                  )}
+                </span>
+                <span className="text-forest/70 block sm:inline sm:ml-2 text-xs">
+                  (
+                  {t(
+                    "Menü, Live-Station & Event-Konditionen als PDF",
+                    "Menu, Live Station & Event Terms PDF",
+                  )}
+                  )
+                </span>
+              </div>
+            </div>
+            <a
+              href="/caterers/kampala-rolex-muenchen/pdf_p1_img1.jpeg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-forest hover:bg-forest/90 text-white text-xs font-bold transition shadow-sm"
+            >
+              <span>{t("Broschüre ansehen ↗", "View Brochure ↗")}</span>
+            </a>
+          </div>
+        )}
+
         {/* About Text */}
         {(dbCaterer?.seo_local_intro || (catererProfile.about && catererProfile.about[lang])) && (
           <div className="mt-10">
@@ -1324,11 +1363,126 @@ function CatererPage() {
         )}
       </section>
 
+      {/* Signature Live Rolex Station Spotlight Banner (Exclusive for Kampala Rolex) */}
+      {catererProfile.slug === "kampala-rolex-germany" && (
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#083822] via-[#0d4a2f] to-[#083822] p-6 sm:p-8 md:p-10 text-white shadow-xl border border-[#E6B84A]/30">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column: Story & Highlights */}
+              <div className="lg:col-span-7 flex flex-col gap-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E6B84A]/20 border border-[#E6B84A]/40 text-[#E6B84A] text-xs font-bold uppercase tracking-wider w-fit">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  {t(
+                    "Das Signature Live-Cooking Highlight",
+                    "The Signature Live-Cooking Highlight",
+                  )}
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white leading-tight">
+                  {t("Die Interaktive Live-Rolex-Station", "The Interactive Live Rolex Station")}
+                </h2>
+
+                <p className="text-sm sm:text-base text-cream/90 leading-relaxed">
+                  {t(
+                    "Unsere Köche bereiten die berühmten ugandischen Rolex-Wraps frisch vor den Augen Ihrer Gäste auf der heißen Platte zu. Frisch gebackenes, luftiges Chapati wird mit einem saftigen Omelett aus Eiern, Tomaten, Zwiebeln und feinem marinierten Fleisch gerollt. Ein multisensorisches Live-Erlebnis für Firmenevents, Sommerfeste und Hochzeiten!",
+                    "Our chefs prepare the famous Ugandan Rolex wraps live right before your guests on the hot griddle. Freshly baked, flaky chapati rolled with a savory vegetable omelette, fresh tomatoes, onions, and tender marinated chicken. A multi-sensory culinary show for corporate events, festivals, and weddings!",
+                  )}
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-2">
+                  <div className="rounded-xl bg-white/10 backdrop-blur-md p-3.5 border border-white/15">
+                    <div className="text-xl mb-1">👨‍🍳</div>
+                    <div className="text-xs font-bold text-white">
+                      {t("Live gerollt vor Ort", "Rolled Live On-Site")}
+                    </div>
+                    <div className="text-[11px] text-white/70">
+                      {t("Warm & duftend in Sekunden", "Hot & fragrant in seconds")}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-white/10 backdrop-blur-md p-3.5 border border-white/15">
+                    <div className="text-xl mb-1">🚚</div>
+                    <div className="text-xs font-bold text-white">
+                      {t("Indoor & Foodtruck", "Indoor & Food Truck")}
+                    </div>
+                    <div className="text-[11px] text-white/70">
+                      {t("Mit DJ-Setup & mobiler Küche", "With DJ setup & mobile kitchen")}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-white/10 backdrop-blur-md p-3.5 border border-white/15">
+                    <div className="text-xl mb-1">🌿</div>
+                    <div className="text-xs font-bold text-white">
+                      {t("100% Halal & Veggie", "100% Halal & Veggie")}
+                    </div>
+                    <div className="text-[11px] text-white/70">
+                      {t("Optionen für alle Gäste", "Options for every guest")}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <button
+                    onClick={() => {
+                      setInquiryForm((prev) => ({
+                        ...prev,
+                        eventType: "Live Ugandan Rolex Experience",
+                        notes: "[ANFRAGE: Interaktive Live-Rolex-Station vor Ort]\n\n",
+                        guestCount: Math.max(prev.guestCount, 20),
+                      }));
+                      setInquiryModalOpen(true);
+                    }}
+                    className="rounded-full bg-[#10b981] hover:bg-[#10b981]/90 text-white px-6 py-3 text-xs sm:text-sm font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"
+                  >
+                    <span>{t("Live-Station jetzt anfragen", "Inquire Live Station Now")}</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+
+                  {catererProfile.phone && (
+                    <a
+                      href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich habe eine Frage zur Live-Rolex-Station von ${catererProfile.name} auf Speisely.`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white px-5 py-3 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer flex items-center gap-2"
+                    >
+                      <MessageSquare className="h-4 w-4" />
+                      <span>WhatsApp Beratung</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column: Hero Visual Framing */}
+              <div className="lg:col-span-5 relative">
+                <div className="relative overflow-hidden rounded-2xl border-2 border-[#E6B84A]/40 bg-white/10 shadow-2xl p-2 aspect-[4/3] group">
+                  <img
+                    src="/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg"
+                    alt="Ugandan Rolex Signature Wrap"
+                    className="h-full w-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-black/75 backdrop-blur-md p-3 border border-white/20 text-white">
+                    <div className="text-xs font-bold text-[#E6B84A]">
+                      {t("Original Ugandan Rolex Wrap", "Original Ugandan Rolex Wrap")}
+                    </div>
+                    <div className="text-[11px] text-white/80">
+                      {t(
+                        "Frisch gebackenes Chapati & saftiges Omelett",
+                        "Freshly baked chapati & savory omelette",
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Packages Section */}
       {catererProfile.packages && catererProfile.packages.length > 0 && (
         <section
           id="packages"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 scroll-mt-24"
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-14 scroll-mt-24"
         >
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
@@ -1360,86 +1514,154 @@ function CatererPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {catererProfile.packages.map((pkg: any) => (
-              <div
-                key={pkg.id || pkg.title}
-                className="group relative flex flex-col justify-between rounded-2xl bg-white border border-[#eadfce] p-6 shadow-sm hover:shadow-xl hover:border-forest/40 transition-all duration-300"
-              >
-                <div>
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fdfaf5] border border-[#eadfce] text-[11px] font-bold uppercase tracking-wide text-forest/80">
-                      <ChefHat className="h-3.5 w-3.5 text-[#10b981]" />
-                      {pkg.min_guests
-                        ? t(`Ab ${pkg.min_guests} Personen`, `Min. ${pkg.min_guests} guests`)
-                        : t("Event-Paket", "Event Package")}
-                    </span>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold font-display text-forest">
-                        {pkg.price_amount > 0
-                          ? `€${pkg.price_amount}`
-                          : t("Auf Anfrage", "On Request")}
+            {catererProfile.packages.map((pkg: any) => {
+              const isBestseller = pkg.is_bestseller || false;
+              return (
+                <div
+                  key={pkg.id || pkg.title}
+                  className={`group relative flex flex-col justify-between rounded-2xl bg-white border ${
+                    isBestseller
+                      ? "border-[#E6B84A] shadow-lg ring-2 ring-[#E6B84A]/30"
+                      : "border-[#eadfce] shadow-sm"
+                  } overflow-hidden hover:shadow-xl hover:border-forest/40 transition-all duration-300`}
+                >
+                  {/* Package Image Header if available */}
+                  {pkg.image_url && (
+                    <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-forest/5">
+                      <img
+                        src={pkg.image_url}
+                        alt={pkg.title}
+                        className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+
+                      {/* Floating Badge on Top Left of Image */}
+                      <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                        {isBestseller ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-forest shadow-md">
+                            <Sparkles className="h-3 w-3" />
+                            {t("🔥 Bestseller", "🔥 Best Seller")}
+                          </span>
+                        ) : pkg.badge ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-md px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white border border-white/20">
+                            {pkg.badge}
+                          </span>
+                        ) : null}
                       </div>
-                      <div className="text-[11px] text-forest/60 font-medium">
-                        {pkg.price_type === "per_person"
-                          ? t("pro Gast", "per guest")
-                          : t("Pauschal", "flat rate")}
+
+                      {/* Guest Count Pill on Top Right */}
+                      {pkg.min_guests && (
+                        <div className="absolute top-3 right-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-[11px] font-bold text-forest shadow-sm">
+                          {t(`Ab ${pkg.min_guests} Personen`, `Min. ${pkg.min_guests} guests`)}
+                        </div>
+                      )}
+
+                      {/* Price Tag Overlay on Bottom Right of Image */}
+                      <div className="absolute bottom-3 right-3 text-right text-white">
+                        <div className="text-2xl font-bold font-display drop-shadow-md">
+                          {pkg.price_amount > 0
+                            ? `€${pkg.price_amount}`
+                            : t("Auf Anfrage", "On Request")}
+                        </div>
+                        <div className="text-[11px] text-white/90 font-medium drop-shadow-sm">
+                          {pkg.price_type === "per_person"
+                            ? t("pro Gast", "per guest")
+                            : t("Pauschal", "flat rate")}
+                        </div>
                       </div>
+                    </div>
+                  )}
+
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      {!pkg.image_url && (
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fdfaf5] border border-[#eadfce] text-[11px] font-bold uppercase tracking-wide text-forest/80">
+                            <ChefHat className="h-3.5 w-3.5 text-[#10b981]" />
+                            {pkg.min_guests
+                              ? t(`Ab ${pkg.min_guests} Personen`, `Min. ${pkg.min_guests} guests`)
+                              : t("Event-Paket", "Event Package")}
+                          </span>
+                          <div className="text-right">
+                            <div className="text-2xl font-bold font-display text-forest">
+                              {pkg.price_amount > 0
+                                ? `€${pkg.price_amount}`
+                                : t("Auf Anfrage", "On Request")}
+                            </div>
+                            <div className="text-[11px] text-forest/60 font-medium">
+                              {pkg.price_type === "per_person"
+                                ? t("pro Gast", "per guest")
+                                : t("Pauschal", "flat rate")}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      <h3 className="text-xl font-display font-bold text-forest group-hover:text-emerald-800 transition-colors">
+                        {pkg.title}
+                      </h3>
+
+                      {pkg.short_summary && (
+                        <p className="mt-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50/80 rounded-lg px-2.5 py-1.5 border border-emerald-100">
+                          {pkg.short_summary}
+                        </p>
+                      )}
+
+                      <p className="mt-3 text-sm text-forest/80 leading-relaxed">
+                        {pkg.description}
+                      </p>
+
+                      {pkg.included_items && pkg.included_items.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-[#eadfce]/60">
+                          <div className="text-xs font-bold text-forest/60 uppercase tracking-wider mb-2">
+                            {t("Im Paket enthalten:", "Included in package:")}
+                          </div>
+                          <ul className="space-y-1.5">
+                            {pkg.included_items.map((item: string, idx: number) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-2 text-xs text-forest/80"
+                              >
+                                <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0 mt-0.5" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-[#eadfce]/60">
+                      <button
+                        onClick={() => {
+                          setInquiryForm((prev) => ({
+                            ...prev,
+                            eventType: pkg.title,
+                            notes: `[INTERESSE AN PAKET: ${pkg.title} (${pkg.price_amount > 0 ? `€${pkg.price_amount}/P` : "Auf Anfrage"})]\n\n`,
+                            guestCount: Math.max(prev.guestCount, pkg.min_guests || 20),
+                          }));
+                          setInquiryModalOpen(true);
+                        }}
+                        className={`w-full flex items-center justify-center gap-2 rounded-full ${
+                          isBestseller
+                            ? "bg-[#083822] hover:bg-[#083822]/90 ring-2 ring-[#E6B84A]"
+                            : "bg-forest hover:bg-forest/90"
+                        } text-white py-3 px-4 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer`}
+                      >
+                        <span>{t("Dieses Paket anfragen", "Inquire this package")}</span>
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
-
-                  <h3 className="text-xl font-display font-bold text-forest group-hover:text-emerald-800 transition-colors">
-                    {pkg.title}
-                  </h3>
-
-                  {pkg.short_summary && (
-                    <p className="mt-1 text-xs font-semibold text-emerald-800 bg-emerald-50/70 rounded-lg px-2.5 py-1 border border-emerald-100">
-                      {pkg.short_summary}
-                    </p>
-                  )}
-
-                  <p className="mt-3 text-sm text-forest/80 leading-relaxed">{pkg.description}</p>
-
-                  {pkg.included_items && pkg.included_items.length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-[#eadfce]/60">
-                      <div className="text-xs font-bold text-forest/60 uppercase tracking-wider mb-2">
-                        {t("Im Paket enthalten:", "Included in package:")}
-                      </div>
-                      <ul className="space-y-1.5">
-                        {pkg.included_items.map((item: string, idx: number) => (
-                          <li key={idx} className="flex items-start gap-2 text-xs text-forest/80">
-                            <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0 mt-0.5" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </div>
-
-                <div className="mt-6 pt-4 border-t border-[#eadfce]/60 flex items-center justify-between gap-3">
-                  <button
-                    onClick={() => {
-                      setInquiryForm((prev) => ({
-                        ...prev,
-                        eventType: pkg.title,
-                        notes: `[INTERESSE AN PAKET: ${pkg.title} (${pkg.price_amount > 0 ? `€${pkg.price_amount}/P` : "Auf Anfrage"})]\n\n`,
-                        guestCount: Math.max(prev.guestCount, pkg.min_guests || 20),
-                      }));
-                      setInquiryModalOpen(true);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 rounded-full bg-forest hover:bg-forest/90 text-white py-2.5 px-4 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer"
-                  >
-                    <span>{t("Dieses Paket anfragen", "Inquire this package")}</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
 
-      {/* Gallery Section */}
+      {/* Gallery Section with Lightbox */}
       {catererProfile.gallery && catererProfile.gallery.length > 0 && (
         <section id="gallery" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-14">
           <div className="mb-6">
@@ -1452,17 +1674,23 @@ function CatererPage() {
             </h2>
             <p className="mt-1 text-sm text-forest/70">
               {t(
-                "Authentische Einblicke in unsere Live-Cooking-Stationen, warmen Buffets und Event-Momente.",
-                "Authentic insights into our live cooking stations, warm buffets, and event moments.",
+                "Authentische Einblicke in unsere Live-Cooking-Stationen, warmen Buffets und Event-Momente. Klicken zum Vergrößern.",
+                "Authentic insights into our live cooking stations, warm buffets, and event moments. Click to enlarge.",
               )}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {catererProfile.gallery.map((imgItem: any, idx: number) => (
               <div
                 key={idx}
-                className="group relative overflow-hidden rounded-2xl border border-[#eadfce] bg-white shadow-sm hover:shadow-lg transition-all duration-300 aspect-[4/3]"
+                onClick={() =>
+                  setLightboxImg({
+                    url: imgItem.url,
+                    caption: imgItem.caption?.[lang] || imgItem.caption?.de || "",
+                  })
+                }
+                className="group relative overflow-hidden rounded-2xl border border-[#eadfce] bg-white shadow-sm hover:shadow-lg transition-all duration-300 aspect-[4/3] cursor-pointer"
               >
                 <img
                   src={imgItem.url}
@@ -1478,6 +1706,28 @@ function CatererPage() {
               </div>
             ))}
           </div>
+
+          {/* Lightbox Modal */}
+          <Dialog open={!!lightboxImg} onOpenChange={(open) => !open && setLightboxImg(null)}>
+            <DialogContent className="max-w-4xl p-2 bg-black/95 border-none text-white overflow-hidden rounded-2xl">
+              <div className="relative flex flex-col items-center">
+                {lightboxImg && (
+                  <>
+                    <img
+                      src={lightboxImg.url}
+                      alt={lightboxImg.caption || "Catering Impression"}
+                      className="max-h-[80vh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
+                    />
+                    {lightboxImg.caption && (
+                      <p className="mt-3 text-center text-sm font-medium text-cream/90 px-4 py-1">
+                        {lightboxImg.caption}
+                      </p>
+                    )}
+                  </>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
         </section>
       )}
 
