@@ -1034,31 +1034,31 @@ function CatererPage() {
           </div>
 
           {/* Bottom Info & Text Overlay */}
-          <div className="relative z-20 text-white flex flex-col gap-2 sm:gap-2.5 mt-4 sm:mt-8">
-            <div className="flex items-start gap-3 sm:gap-4">
-              {catererProfile.logo && (
+          <div className="relative z-20 text-white flex flex-col items-center text-center gap-2 sm:gap-3 mt-4 sm:mt-6 mx-auto max-w-4xl px-2">
+            {catererProfile.logo && (
+              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-3 sm:border-4 border-white shadow-2xl bg-white p-2 sm:p-2.5 flex items-center justify-center flex-shrink-0 mx-auto transition-transform hover:scale-105 duration-300">
                 <img
                   src={catererProfile.logo}
-                  alt="Logo"
-                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full border-2 border-white shadow-md bg-white object-cover flex-shrink-0"
+                  alt={catererProfile.name}
+                  className="w-full h-full object-contain"
                 />
-              )}
-              <div className="flex flex-col gap-1 text-left min-w-0">
-                <h1 className="text-xl sm:text-3xl md:text-5xl font-display font-bold leading-tight drop-shadow-md break-words">
-                  {catererProfile.name}
-                </h1>
-                {catererProfile?.seo_event_types_target &&
-                  catererProfile.seo_event_types_target.length > 0 && (
-                    <p className="text-xs sm:text-base md:text-lg font-medium drop-shadow-md text-white/90">
-                      {catererProfile.seo_event_types_target.join(" · ")}
-                    </p>
-                  )}
               </div>
+            )}
+            <div className="flex flex-col items-center gap-1 min-w-0">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold leading-tight drop-shadow-md break-words">
+                {catererProfile.name}
+              </h1>
+              {catererProfile?.seo_event_types_target &&
+                catererProfile.seo_event_types_target.length > 0 && (
+                  <p className="text-xs sm:text-base md:text-lg font-medium drop-shadow-md text-white/90">
+                    {catererProfile.seo_event_types_target.join(" · ")}
+                  </p>
+                )}
             </div>
 
             {catererProfile?.seo_catering_styles &&
               catererProfile.seo_catering_styles.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-1">
+                <div className="flex flex-wrap justify-center gap-1.5 mt-0.5">
                   {catererProfile.seo_catering_styles.map((style: string, i: number) => (
                     <span
                       key={i}
@@ -1071,7 +1071,7 @@ function CatererPage() {
               )}
 
             {catererProfile.tagline && catererProfile.tagline[lang] && (
-              <p className="text-xs sm:text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md leading-relaxed line-clamp-3 md:line-clamp-none">
+              <p className="text-xs sm:text-sm md:text-base text-mint font-semibold font-sans drop-shadow-md leading-relaxed max-w-2xl">
                 {catererProfile.tagline[lang]}
               </p>
             )}
@@ -1081,7 +1081,7 @@ function CatererPage() {
                 href={storefrontUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-mint hover:text-white transition-colors font-semibold drop-shadow-sm w-fit"
+                className="inline-flex items-center gap-1.5 text-xs text-mint hover:text-white transition-colors font-semibold drop-shadow-sm"
               >
                 <Globe className="h-3.5 w-3.5" />
                 {t("Direkt-Storefront öffnen ↗", "Open Direct Storefront ↗")}
