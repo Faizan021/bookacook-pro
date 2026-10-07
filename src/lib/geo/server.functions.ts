@@ -88,6 +88,28 @@ export const getGeoPageData = createServerFn({ method: "GET" })
           .ilike("city", `%${locationObj!.name}%`);
         vendors = res || [];
 
+        // Ensure Kampala Rolex Germany is present for Munich & surrounding region
+        const isMuenchen =
+          /m[üu]nchen/i.test(locationObj!.name) ||
+          (data.citySlug && /m[üu]nchen/i.test(data.citySlug));
+        if (
+          isMuenchen &&
+          !vendors.some((v) => (v.slug || v.id || "").toLowerCase() === "kampala-rolex-germany")
+        ) {
+          vendors.unshift({
+            id: "kampala-rolex-germany",
+            name: "Kampala Rolex Germany",
+            slug: "kampala-rolex-germany",
+            logo_url: "/caterers/kampala-rolex-muenchen/logo.png",
+            banner_image_url: "/caterers/kampala-rolex-muenchen/06_buffet_event_guests.jpg",
+            min_delivery_cents: 25000,
+            delivery_fee_cents: 0,
+            city: "München",
+            description:
+              "Authentisches ugandisches & ostafrikanisches Catering mit Live-Rolex-Station & Buffet-Kultur in München.",
+          });
+        }
+
         if (vendors.length === 0) {
           const { data: allCat } = await supabaseAdmin
             .from("caterers")

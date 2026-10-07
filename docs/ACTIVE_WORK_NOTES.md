@@ -10,6 +10,24 @@ _This document serves as the active working memory for ongoing tasks, context up
   - *Layout Architecture:* Strictly mirrors King Tut Berlin standard (Breadcrumb bar, 3-column quick facts, 4:3 double-border hero feast, 6 official scraped menu classics, authentic K-food streetfood section with Rosé Tteokbokki and Bulgogi Mandu, Chicken-Mu palate cleanser feature, combined Insider Ordering Guide & Görli Picnic Vibe, official factsheet and community mailto box).
   - *Instagram Carousel Standard (Rule 12 & 13):* 7 slides generated in 1080×1350 portrait format (both clean and with_text overlay versions with circular Speisely brand seal) in `public/magazin/bbq-chicken-berlin/instagram/` along with high-engagement SEO caption (`caption.txt`).
   - *Sitemaps & GEO Synchronization (Rule 9 & 11):* Synced across `src/routes/sitemap[.]xml.ts`, `src/routes/llms[.]txt.ts`, `public/llms.txt`, and featured in `src/routes/community.index.tsx`.
+- **New Caterer Partner Onboarding: Kampala Rolex Germany (München) (In Progress):**
+  - *Partner Name:* Kampala Rolex Germany
+  - *Cuisine & Niche:* Authentisches ugandisches & ostafrikanisches Catering (Ugandan & East African)
+  - *Location:* München & Umgebung (Munich & surrounding region)
+  - *Contact / Socials:* WhatsApp: `+49 152 14438923`, Instagram / TikTok: `@kampala.rolex1`
+  - *Signature Live Station:* Live-Ugandan-Rolex-Station (Freshly rolled Chapati with seasoned vegetable/egg omelette, spiced chicken/beef options)
+  - *Core Menu Selection:* Pilau (aromatic spiced rice), White Rice, Chicken Stew, Beef Stew, Matooke (steamed cooking bananas), Chapati, Samosas, Mandazi (Swahili pastries), Kachumbari (fresh East African tomato-onion-chili salad), traditional sauces
+  - *Service Formats:* Warmservice with Chafing-Dishes (Buffet), Live-Food-Station, Foodtruck & Festival setups (Private parties, corporate events, Christmas parties, weddings)
+  - *Assets Stored (12 HD Photos + Transparent Logo + Brochure):* `public/caterers/kampala-rolex-muenchen/`
+    - `logo.png` (Official transparent Gorilla Chef logo)
+    - `01_live_station_foodtruck.jpg` (Live cooking & DJ foodtruck station)
+    - `02_ugandan_rolex_signature.jpg` & `03_ugandan_rolex_closeup.jpg` (Signature Ugandan Rolex street food wrap)
+    - `04_pilau_rice_buffet.png` & `09_pilau_and_white_rice.png` (Spiced Pilau & Basmati rice in chafing dishes)
+    - `05_beef_meat_stew_chafing.jpg`, `07_meat_and_pilau_heatlamp.png`, `10_beef_stew_portrait_heatlamp.png` (Slow-cooked rich beef stew under heat lamps)
+    - `06_buffet_event_guests.jpg` (Atmospheric catering event scene with guests at buffet)
+    - `08_chapati_potatoes_sauce.png` & `11_chapati_close_up.png` (Flaky East African Chapati, roasted potatoes & traditional sauce)
+    - `12_hanging_grill_crisp_chicken.jpg` (Hanging carousel grill piled with golden crispy chicken)
+    - `pdf_p1_img1.jpeg` - `pdf_p4_img1.jpeg` (4-page official catering brochure)
 - **Speisely Journal (Ausgabe 04): Page-by-Page Editorial Content Review** (Ongoing)
 
 **Completed Sprint Task (2026-10-02):**

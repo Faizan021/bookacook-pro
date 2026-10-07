@@ -34,8 +34,9 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - Blog: ${BASE}/blog
 - About Us: ${BASE}/about
 
-## Specialized Catering Services
+## Specialized Catering Services & Featured Partners
 
+- Kampala Rolex Germany (Authentic Ugandan & East African Catering München): ${BASE}/catering/kampala-rolex-germany
 - Daily Catering Subscriptions: ${BASE}/catering/daily-catering-subscriptions
 - Institutional Catering: ${BASE}/catering/institutional-catering
 - Events Catering: ${BASE}/catering/events

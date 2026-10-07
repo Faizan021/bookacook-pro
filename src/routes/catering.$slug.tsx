@@ -18,6 +18,10 @@ import {
   CheckCircle2,
   ChevronRight,
   Loader2,
+  ChefHat,
+  MessageSquare,
+  Sparkles,
+  Camera,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { AnnouncementBanner } from "@/components/ui/AnnouncementBanner";
@@ -88,6 +92,9 @@ function buildShowcaseProfile(fallback: any, cleanSlug: string) {
       is_available: true,
     })),
     packages: fallback.packages || [],
+    gallery: fallback.gallery || [],
+    tags: fallback.tags || [],
+    dietary: fallback.dietary || [],
     promoCodes: [],
   };
 }
@@ -392,7 +399,7 @@ function CatererPage() {
   };
 
   useEffect(() => {
-    if (dbCaterer?.id) {
+    if (dbCaterer?.id && typeof window !== "undefined") {
       recordView({
         data: { vendorId: dbCaterer.id, vendorType: "caterer", url: window.location.pathname },
       }).catch((e) => console.error("Tracking error", e));
@@ -401,7 +408,10 @@ function CatererPage() {
 
   let dbImg = null;
   if (dbCaterer?.banner_image_url) {
-    if (dbCaterer.banner_image_url.startsWith("http")) {
+    if (
+      dbCaterer.banner_image_url.startsWith("http") ||
+      dbCaterer.banner_image_url.startsWith("/")
+    ) {
       dbImg = dbCaterer.banner_image_url;
     } else {
       const supabaseUrl =
@@ -418,44 +428,87 @@ function CatererPage() {
       id: dbCaterer.id,
       name: dbCaterer.name,
       slug: dbCaterer.slug,
-      tagline: {
+      tagline: staticCaterer?.tagline || {
         de: dbCaterer.description || "Individuelle Catering-Erlebnisse",
         en: dbCaterer.description || "Custom catering experiences",
       },
-      rating: 5.0,
-      minOrder: dbCaterer.min_delivery_cents ? dbCaterer.min_delivery_cents / 100 : 0,
-      minBudget: dbCaterer.min_delivery_cents ? dbCaterer.min_delivery_cents / 100 : 0,
-      leadTimeDays: 7,
-      minGuests: 10,
+      logo: dbCaterer.logo_url || staticCaterer?.logo || null,
+      rating: staticCaterer?.rating || 5.0,
+      reviewCount: staticCaterer?.reviewCount || 0,
+      minOrder: dbCaterer.min_delivery_cents
+        ? dbCaterer.min_delivery_cents / 100
+        : staticCaterer?.minOrder || 0,
+      minBudget: dbCaterer.min_delivery_cents
+        ? dbCaterer.min_delivery_cents / 100
+        : staticCaterer?.minOrder || 0,
+      leadTimeDays: staticCaterer?.leadTimeDays || 7,
+      minGuests: staticCaterer?.minGuests || 10,
+      verified: staticCaterer?.verified ?? true,
       img:
-        dbImg || "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop",
-      area: dbCaterer.service_areas || "Berlin",
-      address: dbCaterer.business_address || "",
-      phone: dbCaterer.phone || "",
-      about: {
+        dbImg ||
+        staticCaterer?.img ||
+        "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&h=900&fit=crop",
+      area: dbCaterer.service_areas || staticCaterer?.area || "Berlin",
+      address: dbCaterer.business_address || staticCaterer?.address || "",
+      phone: dbCaterer.phone || staticCaterer?.phone || "",
+      about: staticCaterer?.about || {
         de: dbCaterer.description || "",
         en: dbCaterer.description || "",
       },
-      menu: (dbCaterer.menu || []).map((m: any) => ({
-        name: m.name,
-        category: m.category,
-        desc: { de: m.description || "", en: m.description || "" },
-        price: m.price_cents / 100,
-        unit: { de: m.unit, en: m.unit },
-        serves: m.serves,
-        image_signed_url: m.image_signed_url,
-      })),
-      announcement_active: dbCaterer.announcement_active,
-      announcement_text: dbCaterer.announcement_text,
-      announcement_bg_color: dbCaterer.announcement_bg_color,
-      certifications: dbCaterer.certifications || "",
+      menu: staticCaterer?.menu
+        ? staticCaterer.menu.map((m: any) => ({
+            name: m.name,
+            category: m.category || "Menü",
+            desc: typeof m.desc === "object" ? m.desc : { de: m.desc || "", en: m.desc || "" },
+            price: (m.price_cents || 0) / 100,
+            unit:
+              typeof m.unit === "object"
+                ? m.unit
+                : { de: m.unit || "Portion", en: m.unit || "Portion" },
+            serves: m.serves || 1,
+            image_signed_url: m.image_url || null,
+          }))
+        : (dbCaterer.menu || []).map((m: any) => ({
+            name: m.name,
+            category: m.category,
+            desc: { de: m.description || "", en: m.description || "" },
+            price: m.price_cents / 100,
+            unit:
+              typeof m.unit === "object"
+                ? m.unit
+                : { de: m.unit || "Portion", en: m.unit || "Portion" },
+            serves: m.serves,
+            image_signed_url: m.image_signed_url,
+          })),
+      packages: dbCaterer.packages || staticCaterer?.packages || [],
+      gallery: staticCaterer?.gallery || [],
+      dietary: staticCaterer?.dietary || [],
+      tags: staticCaterer?.tags || [],
+      announcement_active: dbCaterer.announcement_active ?? staticCaterer?.announcement_active,
+      announcement_text: dbCaterer.announcement_text ?? staticCaterer?.announcement_text,
+      announcement_bg_color:
+        dbCaterer.announcement_bg_color ?? staticCaterer?.announcement_bg_color,
+      certifications: dbCaterer.certifications || (staticCaterer as any)?.certifications || "",
     };
   } else if (staticCaterer) {
     catererProfile = {
       ...staticCaterer,
       minBudget: staticCaterer.minOrder || 0,
       certifications: (staticCaterer as any).certifications || "",
-      menu: staticCaterer.menu || [],
+      menu: (staticCaterer.menu || []).map((m: any) => ({
+        name: m.name,
+        category: m.category || "Menü",
+        desc: typeof m.desc === "object" ? m.desc : { de: m.desc || "", en: m.desc || "" },
+        price: (m.price_cents || 0) / 100,
+        unit:
+          typeof m.unit === "object"
+            ? m.unit
+            : { de: m.unit || "Portion", en: m.unit || "Portion" },
+        serves: m.serves || 1,
+        image_signed_url: m.image_url || null,
+      })),
+      packages: staticCaterer.packages || [],
+      gallery: staticCaterer.gallery || [],
     };
   }
 
@@ -845,6 +898,17 @@ function CatererPage() {
 
             {/* Desktop Top Right Actions */}
             <div className="hidden md:flex items-center gap-2 sm:gap-3">
+              {catererProfile.phone && (
+                <a
+                  href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich interessiere mich für das Catering von ${catererProfile.name} auf Speisely.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-1.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] px-4 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span>WhatsApp</span>
+                </a>
+              )}
               <button
                 onClick={scrollToMenu}
                 className="group flex items-center gap-1.5 rounded-full bg-[#10b981] hover:bg-[#10b981]/90 px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
@@ -1022,6 +1086,17 @@ function CatererPage() {
 
             {/* Mobile Only Clean Action Buttons Bar */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:hidden pt-3 border-t border-white/15">
+              {catererProfile.phone && (
+                <a
+                  href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich interessiere mich für das Catering von ${catererProfile.name} auf Speisely.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-1.5 rounded-full bg-[#25D366] active:bg-[#20ba59] py-2.5 text-xs font-bold text-white shadow-md transition-all cursor-pointer"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span>WhatsApp</span>
+                </a>
+              )}
               <button
                 onClick={scrollToMenu}
                 className="w-full flex items-center justify-center gap-1.5 rounded-full bg-[#10b981] active:bg-[#10b981]/90 py-2.5 text-xs font-bold text-white shadow-md transition-all cursor-pointer"
@@ -1248,6 +1323,163 @@ function CatererPage() {
           </div>
         )}
       </section>
+
+      {/* Packages Section */}
+      {catererProfile.packages && catererProfile.packages.length > 0 && (
+        <section
+          id="packages"
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12 scroll-mt-24"
+        >
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2">
+                <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+                {t("All-Inclusive Event-Pakete", "All-Inclusive Event Packages")}
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-display font-bold text-forest">
+                {t("Catering-Pakete & Live-Erlebnisse", "Catering Packages & Live Experiences")}
+              </h2>
+              <p className="mt-1 text-sm text-forest/70 max-w-2xl">
+                {t(
+                  "Komplett abgestimmte Menüs & Live-Stationen für Ihr Event – transparente Preise pro Person und unkomplizierte Buchung.",
+                  "Curated menus & live cooking stations for your event – transparent per-person pricing and seamless booking.",
+                )}
+              </p>
+            </div>
+            {catererProfile.phone && (
+              <a
+                href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich interessiere mich für das Catering von ${catererProfile.name} auf Speisely.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white px-4 py-2 text-xs font-bold shadow-sm transition shrink-0"
+              >
+                <MessageSquare className="h-4 w-4" />
+                {t("Direkt per WhatsApp anfragen", "Inquire via WhatsApp")}
+              </a>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {catererProfile.packages.map((pkg: any) => (
+              <div
+                key={pkg.id || pkg.title}
+                className="group relative flex flex-col justify-between rounded-2xl bg-white border border-[#eadfce] p-6 shadow-sm hover:shadow-xl hover:border-forest/40 transition-all duration-300"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fdfaf5] border border-[#eadfce] text-[11px] font-bold uppercase tracking-wide text-forest/80">
+                      <ChefHat className="h-3.5 w-3.5 text-[#10b981]" />
+                      {pkg.min_guests
+                        ? t(`Ab ${pkg.min_guests} Personen`, `Min. ${pkg.min_guests} guests`)
+                        : t("Event-Paket", "Event Package")}
+                    </span>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold font-display text-forest">
+                        {pkg.price_amount > 0
+                          ? `€${pkg.price_amount}`
+                          : t("Auf Anfrage", "On Request")}
+                      </div>
+                      <div className="text-[11px] text-forest/60 font-medium">
+                        {pkg.price_type === "per_person"
+                          ? t("pro Gast", "per guest")
+                          : t("Pauschal", "flat rate")}
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-display font-bold text-forest group-hover:text-emerald-800 transition-colors">
+                    {pkg.title}
+                  </h3>
+
+                  {pkg.short_summary && (
+                    <p className="mt-1 text-xs font-semibold text-emerald-800 bg-emerald-50/70 rounded-lg px-2.5 py-1 border border-emerald-100">
+                      {pkg.short_summary}
+                    </p>
+                  )}
+
+                  <p className="mt-3 text-sm text-forest/80 leading-relaxed">{pkg.description}</p>
+
+                  {pkg.included_items && pkg.included_items.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-[#eadfce]/60">
+                      <div className="text-xs font-bold text-forest/60 uppercase tracking-wider mb-2">
+                        {t("Im Paket enthalten:", "Included in package:")}
+                      </div>
+                      <ul className="space-y-1.5">
+                        {pkg.included_items.map((item: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-2 text-xs text-forest/80">
+                            <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0 mt-0.5" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-[#eadfce]/60 flex items-center justify-between gap-3">
+                  <button
+                    onClick={() => {
+                      setInquiryForm((prev) => ({
+                        ...prev,
+                        eventType: pkg.title,
+                        notes: `[INTERESSE AN PAKET: ${pkg.title} (${pkg.price_amount > 0 ? `€${pkg.price_amount}/P` : "Auf Anfrage"})]\n\n`,
+                        guestCount: Math.max(prev.guestCount, pkg.min_guests || 20),
+                      }));
+                      setInquiryModalOpen(true);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 rounded-full bg-forest hover:bg-forest/90 text-white py-2.5 px-4 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer"
+                  >
+                    <span>{t("Dieses Paket anfragen", "Inquire this package")}</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Gallery Section */}
+      {catererProfile.gallery && catererProfile.gallery.length > 0 && (
+        <section id="gallery" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-14">
+          <div className="mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cream/60 border border-[#eadfce] text-forest text-xs font-bold uppercase tracking-wider mb-2">
+              <Camera className="h-3.5 w-3.5 text-forest/70" />
+              {t("Live-Eindrücke & Buffets", "Live Impressions & Buffets")}
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-display font-bold text-forest">
+              {t("Impressionen & Catering-Setup", "Impressions & Catering Setup")}
+            </h2>
+            <p className="mt-1 text-sm text-forest/70">
+              {t(
+                "Authentische Einblicke in unsere Live-Cooking-Stationen, warmen Buffets und Event-Momente.",
+                "Authentic insights into our live cooking stations, warm buffets, and event moments.",
+              )}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {catererProfile.gallery.map((imgItem: any, idx: number) => (
+              <div
+                key={idx}
+                className="group relative overflow-hidden rounded-2xl border border-[#eadfce] bg-white shadow-sm hover:shadow-lg transition-all duration-300 aspect-[4/3]"
+              >
+                <img
+                  src={imgItem.url}
+                  alt={imgItem.caption?.[lang] || "Catering Impression"}
+                  className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                  <p className="text-white text-xs font-medium leading-snug drop-shadow-sm">
+                    {imgItem.caption?.[lang] || imgItem.caption?.de || ""}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section
         id="menu"
@@ -1732,7 +1964,10 @@ function CatererPage() {
                 ) : (
                   <Link
                     to="/auth"
-                    search={{ redirect: window.location.pathname }}
+                    search={{
+                      redirect:
+                        typeof window !== "undefined" ? window.location.pathname : "/catering",
+                    }}
                     className="text-[10px] text-forest underline hover:text-emerald-700 font-semibold"
                   >
                     {t("Bereits Kunde? Anmelden", "Already have an account? Sign In")}

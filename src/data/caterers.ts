@@ -28,6 +28,7 @@ export type Caterer = {
   dietary: string[];
   about: { de: string; en: string };
   packages: any[];
+  gallery?: { url: string; caption: { de: string; en: string } }[];
   menu?: { category?: string; [key: string]: any }[];
   serviceCategories?: string[];
   announcement_active?: boolean;
@@ -1323,6 +1324,292 @@ export const fallbackCaterers: Caterer[] = [
     menu: [],
   },
   {
+    id: "kampala-rolex-germany",
+    slug: "kampala-rolex-germany",
+    name: "Kampala Rolex Germany",
+    tagline: {
+      de: "Authentisches ugandisches & ostafrikanisches Catering · Live-Rolex-Station & Festtags-Buffets in München",
+      en: "Authentic Ugandan & East African Catering · Live Rolex Station & Warm Buffet Experience in Munich",
+    },
+    rating: 5.0,
+    reviewCount: 28,
+    minOrder: 250,
+    minGuests: 15,
+    perPerson: 19,
+    time: "48 Stunden Vorlauf",
+    tags: [
+      "Ugandisches Catering",
+      "Live-Cooking Station",
+      "Ostafrikanisches Buffet",
+      "Firmenfeiern & Hochzeiten",
+      "Halal-friendly",
+    ],
+    serviceCategories: ["events", "wedding", "private", "corporate", "christmas"],
+    img: "/caterers/kampala-rolex-muenchen/06_buffet_event_guests.jpg",
+    logo: "/caterers/kampala-rolex-muenchen/logo.png",
+    status: "available",
+    area: "München & Umgebung (Bayernweit auf Anfrage)",
+    address: "München & Umgebung, Deutschland",
+    phone: "+49 152 14438923",
+    cat: "all",
+    verified: true,
+    dietary: ["Halal-Optionen", "Vegetarisch", "Glutenfrei-Optionen", "Ostafrika-Klassiker"],
+    about: {
+      de: "Bringen Sie den echten Geschmack Ugandas zu Ihrer nächsten Veranstaltung! Kampala Rolex Germany bietet authentisches ostafrikanisches Catering mit großzügigem Buffetservice, ansprechender Präsentation und einem unverwechselbaren kulinarischen Erlebnis. Unser Herzstück: Die interaktive Live-Ugandan-Rolex-Station, bei der traditionelle Rolex-Wraps (frisch gebackenes Chapati, gerollt mit fluffigem Omelett, feinem Gemüse und mariniertem Fleisch) frisch vor den Augen Ihrer Gäste zubereitet werden. Dazu servieren wir duftenden Pilau-Gewürzreis, zarte geschmorte Fleisch- und Hähnchengerichte, Matooke, handgemachte Samosas und frisches Kachumbari. Ob Firmenfeier, Weihnachtsfeier, Hochzeit oder privates Jubiläum – wir machen Essen zum unvergesslichen Event-Highlight.",
+      en: "Bring the vibrant taste of Uganda and East Africa to your next event! Kampala Rolex Germany offers authentic catering with generous buffet service in chafing dishes, stunning presentation, and a truly memorable culinary journey. Our showstopper is the interactive Live Ugandan Rolex Station, where signature Rolex wraps (warm, flaky chapatis rolled with seasoned omelette, fresh vegetables, and tender meat) are prepared fresh right in front of your guests. Complemented by aromatic Pilau rice, slow-simmered beef & chicken stews, Matooke, golden samosas, and crisp Kachumbari salad.",
+    },
+    announcement_active: true,
+    announcement_bg_color: "primary",
+    announcement_text:
+      "🎉 Jetzt anfragen: Exklusive Live-Rolex-Station & ostafrikanisches Buffet für Sommerfeste, Hochzeiten & Firmenevents in München!",
+    gallery: [
+      {
+        url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg",
+        caption: {
+          de: "Original Ugandan Rolex Wrap – Frisch vor Ort gerollt",
+          en: "Original Ugandan Rolex Wrap – Freshly rolled on-site",
+        },
+      },
+      {
+        url: "/caterers/kampala-rolex-muenchen/01_live_station_foodtruck.jpg",
+        caption: {
+          de: "Live-Station & Food-Truck Event Setup",
+          en: "Live Station & Food Truck Event Setup",
+        },
+      },
+      {
+        url: "/caterers/kampala-rolex-muenchen/04_pilau_rice_buffet.png",
+        caption: {
+          de: "Aromatischer Pilau-Gewürzreis im Warmhaltebuffet",
+          en: "Aromatic Pilau spiced rice in chafing dish buffet",
+        },
+      },
+      {
+        url: "/caterers/kampala-rolex-muenchen/05_beef_meat_stew_chafing.jpg",
+        caption: {
+          de: "Slow-Cooked Beef Stew in reichhaltiger Tomaten-Gewürzsauce",
+          en: "Slow-Cooked Beef Stew in rich tomato herb sauce",
+        },
+      },
+      {
+        url: "/caterers/kampala-rolex-muenchen/08_chapati_potatoes_sauce.png",
+        caption: {
+          de: "Luftig-blätterige Chapati & traditionelle Beilagen",
+          en: "Flaky East African Chapati & traditional sides",
+        },
+      },
+      {
+        url: "/caterers/kampala-rolex-muenchen/12_hanging_grill_crisp_chicken.jpg",
+        caption: {
+          de: "Hängender Grill für knuspriges Festtags-Geflügel",
+          en: "Hanging carousel grill for crispy festive chicken",
+        },
+      },
+      {
+        url: "/caterers/kampala-rolex-muenchen/06_buffet_event_guests.jpg",
+        caption: {
+          de: "Begeisterte Gäste am ostafrikanischen Buffet",
+          en: "Happy guests at the East African buffet",
+        },
+      },
+    ],
+    packages: [
+      {
+        id: "live-rolex-streetfood-experience",
+        title: "Live Ugandan Rolex Experience",
+        price_amount: 19,
+        price_type: "per_person",
+        min_guests: 20,
+        short_summary:
+          "Live vor Ort zubereitete ugandische Rolex-Wraps (Classic Veggie & Chicken), Samosas & frisches Kachumbari",
+        description:
+          "Das interaktive Streetfood-Highlight direkt auf Ihrem Event: Unsere Köche rollen die berühmten ugandischen Rolex frisch vor den Gästen auf der heißen Platte. Warmes, handgemachtes Chapati gefüllt mit saftigem Gemüse-Omelett, Tomaten, Zwiebeln und wahlweise zartem Chicken. Dazu servieren wir knusprig frittierte Samosas und erfrischenden Kachumbari-Salat.",
+        included_items: [
+          "Interaktive Live-Rolex-Station vor Ort",
+          "Classic Veggie Rolex (Chapati mit frischem Gemüse-Omelett)",
+          "Chicken Rolex (mit marinierten Hähnchenstreifen)",
+          "Knusprige Samosas mit pikantem Dip",
+          "Frisches Kachumbari (Tomaten-Zwiebel-Koriander-Salat)",
+          "Traditionelle ugandische Chilisaucen",
+        ],
+      },
+      {
+        id: "grosses-kampala-festtags-buffet",
+        title: "Das Große Ostafrika Festtags-Buffet",
+        price_amount: 29,
+        price_type: "per_person",
+        min_guests: 25,
+        short_summary:
+          "Aromatischer Pilau-Reis, geschmorter Rindfleischeintopf, zartes Hähnchen, Chapati, Matooke & Saucen",
+        description:
+          "Unser reichhaltiges Haupt-Buffet mit professionellem Warmservice in Chafing-Dishes. Perfekt für Firmenfeiern, Hochzeiten, Jahresabschlüsse und Jubiläen. Eine harmonische Kombination aus würzigem Fleisch, duftendem Reis und traditionellen Beilagen.",
+        included_items: [
+          "Aromatischer Pilau (ostafrikanischer Gewürzreis)",
+          "Gedämpfter weißer Basmati-Reis",
+          "Herzhafter Fleischeintopf (Slow-Cooked Beef Stew)",
+          "Ostafrikanisches Hähnchen (mariniert & saftig geschmort)",
+          "Traditionelle Matooke (gedämpfte Kochbananen)",
+          "Frisch gebackene Chapati-Fladenbrote",
+          "Frisches Kachumbari",
+          "Traditionelle Saucen & Dips",
+        ],
+      },
+      {
+        id: "ostafrika-fingerfood-flying-buffet",
+        title: "Ostafrika Fingerfood & Flying Buffet",
+        price_amount: 22,
+        price_type: "per_person",
+        min_guests: 15,
+        short_summary:
+          "Mini-Rolex-Bites, handgefaltete Samosas, Mandazi-Swahili-Gebäck & pikante Dips",
+        description:
+          "Ideal für lockere Stehempfänge, Networking-Events, Produkt-Launches und Office-Partys: Handliche ostafrikanische Fingerfood-Spezialitäten, unkompliziert zu genießen ohne schweres Besteck.",
+        included_items: [
+          "Mini-Rolex Rolls (handliche Fingerfood-Größe)",
+          "Handgefaltete Rindfleisch- & Gemüse-Samosas",
+          "Goldbraune Mandazi (Swahili Donuts / Krapfen)",
+          "Würzige Kartoffel-Wedges mit ostafrikanischem Dip",
+          "Kachumbari-Salatcups",
+          "Tamarinden- & Mango-Chili-Dips",
+        ],
+      },
+      {
+        id: "ultimate-kampala-vip-kombi",
+        title: "The Ultimate Kampala VIP Kombi-Erlebnis",
+        price_amount: 38,
+        price_type: "per_person",
+        min_guests: 30,
+        short_summary:
+          "Vollständiges warmes Chafing-Buffet PLUS Live-Cooking-Rolex-Station & Dessert",
+        description:
+          "Die Königsklasse für exklusive Events, Hochzeiten und große Firmengalas: Ihre Gäste genießen das komplette ostafrikanische Warmspeisen-Buffet und können sich zusätzlich an der Live-Cooking-Station ihren individuellen Rolex frisch rollen lassen.",
+        included_items: [
+          "Interaktive Live-Rolex-Station vor Ort (unbegrenzt live gerollt)",
+          "Chafing-Dish Warmservice mit Beef Stew & Grillhähnchen",
+          "Aromatischer Pilau-Gewürzreis & Basmatireis",
+          "Matooke & geröstete Gewürzkartoffeln",
+          "Frische Chapati-Körbe",
+          "Samosa-Auswahl & Kachumbari-Salatbar",
+          "Süße Mandazi mit Honig & Gewürzen als Dessert",
+        ],
+      },
+    ],
+    menu: [
+      {
+        id: "item-ugandan-rolex-classic",
+        category: "Live-Station & Signature Wraps",
+        name: "Ugandan Rolex (Classic & Chicken)",
+        desc: {
+          de: "Das Nationalgericht Ugandas: Ein handgemachtes warmes Chapati, gerollt mit einem frisch zubereiteten Omelett aus Eiern, Tomaten, Zwiebeln und Weißkohl, wahlweise mit saftigem Chicken.",
+          en: "Uganda's iconic street food: Warm handmade chapati rolled with a fresh vegetable omelette (tomatoes, cabbage, onions), optional seasoned chicken.",
+        },
+        price_cents: 1199,
+        unit: "Stück (Live zubereitet)",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg",
+      },
+      {
+        id: "item-pilau-rice",
+        category: "Reis & Beilagen",
+        name: "Aromatischer Ostafrikanischer Pilau",
+        desc: {
+          de: "Traditionell gekochter Langkornreis mit warmen Gewürzen wie Kreuzkümmel, Kardamom, Zimt, Nelken und Knoblauch. Duftend, locker und voller Aroma.",
+          en: "Fragrant East African spiced rice infused with cumin, cardamom, cinnamon, cloves, and garlic. Fluffy and deeply aromatic.",
+        },
+        price_cents: 0,
+        unit: "Portion (Buffet)",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/04_pilau_rice_buffet.png",
+      },
+      {
+        id: "item-beef-stew",
+        category: "Warme Hauptgerichte",
+        name: "Traditioneller Fleischeintopf (Beef Stew)",
+        desc: {
+          de: "Stundenlang sanft geschmortes Rindfleisch in einer reichhaltigen, aromatischen Sauce mit Tomaten, Zwiebeln, Karotten und traditionellen Gewürzen. Butterzart.",
+          en: "Slow-simmered tender beef stew in a rich tomato and herb gravy with root vegetables and traditional spices.",
+        },
+        price_cents: 0,
+        unit: "Portion (Chafing Dish)",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/05_beef_meat_stew_chafing.jpg",
+      },
+      {
+        id: "item-chapati",
+        category: "Brot & Teigwaren",
+        name: "Handgemachte Ostafrikanische Chapati",
+        desc: {
+          de: "Schicht für Schicht handgerolltes, luftig-blätteriges Fladenbrot. Goldbraun ausgebacken – perfekt zum Dippen in Saucen und Eintöpfe.",
+          en: "Flaky, multi-layered East African flatbread, pan-fried to golden perfection. Ideal for dipping into stews and sauces.",
+        },
+        price_cents: 0,
+        unit: "Stück",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/08_chapati_potatoes_sauce.png",
+      },
+      {
+        id: "item-crispy-chicken",
+        category: "Warme Hauptgerichte",
+        name: "Ostafrikanisches Gewürz-Hähnchen",
+        desc: {
+          de: "Zart mariniertes Hähnchen mit ostafrikanischen Kräutern und Gewürzen, goldgelb gegrillt und saftig serviert.",
+          en: "Marinated chicken seasoned with East African spices, roasted until golden and juicy.",
+        },
+        price_cents: 0,
+        unit: "Portion",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/12_hanging_grill_crisp_chicken.jpg",
+      },
+      {
+        id: "item-samosas",
+        category: "Vorspeisen & Fingerfood",
+        name: "Knusprige Samosas (Rind & Veggie)",
+        desc: {
+          de: "Hausgemachte Dreieckstaschen mit knusprigem Teigmantel, gefüllt mit pikant gewürztem Rinderhackfleisch oder bunten Gemüsen.",
+          en: "Crispy pastry triangles stuffed with spiced minced beef or seasonal vegetables.",
+        },
+        price_cents: 0,
+        unit: "Stück",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/06_buffet_event_guests.jpg",
+      },
+      {
+        id: "item-mandazi",
+        category: "Desserts & Gebäck",
+        name: "Mandazi (Swahili Gebäck)",
+        desc: {
+          de: "Traditionelle ostafrikanische Krapfen, dezent mit Kardamom und Kokosmilch aromatisiert. Luftig, leicht süß und unwiderstehlich.",
+          en: "Traditional Swahili fried dough pastries delicately spiced with cardamom and coconut milk. Fluffy and mildly sweet.",
+        },
+        price_cents: 0,
+        unit: "Stück",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/11_chapati_close_up.png",
+      },
+      {
+        id: "item-kachumbari",
+        category: "Salate & Frische",
+        name: "Frisches Kachumbari",
+        desc: {
+          de: "Der erfrischende Klassiker Ostafrikas: Fein gewürfelte Tomaten, Zwiebeln, Gurken, Koriander, Limettensaft und eine Spur frische Chili.",
+          en: "Refreshing East African salad with diced tomatoes, onions, cucumber, fresh cilantro, lime juice, and a hint of chili.",
+        },
+        price_cents: 0,
+        unit: "Portion",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/09_pilau_and_white_rice.png",
+      },
+    ],
+  },
+  {
     id: "maison-verde",
     name: "Maison Verde",
     tagline: { de: "Fine Dining · Privates Dinner", en: "Fine Dining · Private Dinner" },
@@ -1618,6 +1905,16 @@ export async function getCaterers(): Promise<Caterer[]> {
       const kuepperFallback = fallbackCaterers.find((c) => c.id === "partyservice-kuepper");
       if (kuepperFallback) {
         combined.unshift(kuepperFallback);
+      }
+    }
+
+    const hasKampala = combined.some((c) =>
+      (c.slug || c.id || "").toLowerCase().includes("kampala"),
+    );
+    if (!hasKampala) {
+      const kampalaFallback = fallbackCaterers.find((c) => c.id === "kampala-rolex-germany");
+      if (kampalaFallback) {
+        combined.unshift(kampalaFallback);
       }
     }
 

@@ -23,7 +23,8 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - Blog: https://speisely.de/blog
 - About Us: https://speisely.de/about
 
-## Specialized Catering Services
+## Specialized Catering Services & Featured Partners
+- Kampala Rolex Germany (Authentic Ugandan & East African Catering München): https://speisely.de/catering/kampala-rolex-germany
 - Daily Catering Subscriptions: https://speisely.de/catering/daily-catering-subscriptions
 - Institutional Catering: https://speisely.de/catering/institutional-catering
 - Events Catering: https://speisely.de/catering/events
