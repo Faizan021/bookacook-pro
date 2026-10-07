@@ -46,6 +46,7 @@ ${blogUrls}
 
 ## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
 
+- BBQ Chicken Berlin-Kreuzberg (Berlin): ${BASE}/magazin/community/bbq-chicken-berlin-kreuzberg
 - King Tut Restaurant & Café (Berlin): ${BASE}/magazin/community/king-tut-restaurant-berlin
 - San Sebastian The Original® (Berlin): ${BASE}/magazin/community/san-sebastian-berlin
 - Chicken Krush (Prague): ${BASE}/magazin/community/chicken-krush-prag

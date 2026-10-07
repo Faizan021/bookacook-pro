@@ -69,6 +69,7 @@ import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
 import { Route as MagazinCommunityAlzaeemRestaurantBerlinRouteImport } from './routes/magazin.community.alzaeem-restaurant-berlin'
 import { Route as MagazinCommunityArianaRestaurantFrankfurtRouteImport } from './routes/magazin.community.ariana-restaurant-frankfurt'
+import { Route as MagazinCommunityBbqChickenBerlinKreuzbergRouteImport } from './routes/magazin.community.bbq-chicken-berlin-kreuzberg'
 import { Route as MagazinCommunityChickenKrushPragRouteImport } from './routes/magazin.community.chicken-krush-prag'
 import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes/magazin.community.garcon-de-cafe-berlin'
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
@@ -401,6 +402,12 @@ const MagazinCommunityArianaRestaurantFrankfurtRoute =
     path: '/magazin/community/ariana-restaurant-frankfurt',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityBbqChickenBerlinKreuzbergRoute =
+  MagazinCommunityBbqChickenBerlinKreuzbergRouteImport.update({
+    id: '/magazin/community/bbq-chicken-berlin-kreuzberg',
+    path: '/magazin/community/bbq-chicken-berlin-kreuzberg',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunityChickenKrushPragRoute =
   MagazinCommunityChickenKrushPragRouteImport.update({
     id: '/magazin/community/chicken-krush-prag',
@@ -564,6 +571,7 @@ export interface FileRoutesByFullPath {
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  '/magazin/community/bbq-chicken-berlin-kreuzberg': typeof MagazinCommunityBbqChickenBerlinKreuzbergRoute
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
@@ -640,6 +648,7 @@ export interface FileRoutesByTo {
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  '/magazin/community/bbq-chicken-berlin-kreuzberg': typeof MagazinCommunityBbqChickenBerlinKreuzbergRoute
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
@@ -721,6 +730,7 @@ export interface FileRoutesById {
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
   '/magazin/community/alzaeem-restaurant-berlin': typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   '/magazin/community/ariana-restaurant-frankfurt': typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  '/magazin/community/bbq-chicken-berlin-kreuzberg': typeof MagazinCommunityBbqChickenBerlinKreuzbergRoute
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
@@ -802,6 +812,7 @@ export interface FileRouteTypes {
     | '/checkout/deposit/$bookingId'
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
+    | '/magazin/community/bbq-chicken-berlin-kreuzberg'
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
@@ -878,6 +889,7 @@ export interface FileRouteTypes {
     | '/checkout/deposit/$bookingId'
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
+    | '/magazin/community/bbq-chicken-berlin-kreuzberg'
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
@@ -958,6 +970,7 @@ export interface FileRouteTypes {
     | '/checkout/deposit/$bookingId'
     | '/magazin/community/alzaeem-restaurant-berlin'
     | '/magazin/community/ariana-restaurant-frankfurt'
+    | '/magazin/community/bbq-chicken-berlin-kreuzberg'
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
@@ -1021,6 +1034,7 @@ export interface RootRouteChildren {
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
   MagazinCommunityAlzaeemRestaurantBerlinRoute: typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
   MagazinCommunityArianaRestaurantFrankfurtRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRoute
+  MagazinCommunityBbqChickenBerlinKreuzbergRoute: typeof MagazinCommunityBbqChickenBerlinKreuzbergRoute
   MagazinCommunityChickenKrushPragRoute: typeof MagazinCommunityChickenKrushPragRoute
   MagazinCommunityGarconDeCafeBerlinRoute: typeof MagazinCommunityGarconDeCafeBerlinRoute
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
@@ -1457,6 +1471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityArianaRestaurantFrankfurtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/bbq-chicken-berlin-kreuzberg': {
+      id: '/magazin/community/bbq-chicken-berlin-kreuzberg'
+      path: '/magazin/community/bbq-chicken-berlin-kreuzberg'
+      fullPath: '/magazin/community/bbq-chicken-berlin-kreuzberg'
+      preLoaderRoute: typeof MagazinCommunityBbqChickenBerlinKreuzbergRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/chicken-krush-prag': {
       id: '/magazin/community/chicken-krush-prag'
       path: '/magazin/community/chicken-krush-prag'
@@ -1786,6 +1807,8 @@ const rootRouteChildren: RootRouteChildren = {
     MagazinCommunityAlzaeemRestaurantBerlinRoute,
   MagazinCommunityArianaRestaurantFrankfurtRoute:
     MagazinCommunityArianaRestaurantFrankfurtRoute,
+  MagazinCommunityBbqChickenBerlinKreuzbergRoute:
+    MagazinCommunityBbqChickenBerlinKreuzbergRoute,
   MagazinCommunityChickenKrushPragRoute: MagazinCommunityChickenKrushPragRoute,
   MagazinCommunityGarconDeCafeBerlinRoute:
     MagazinCommunityGarconDeCafeBerlinRoute,

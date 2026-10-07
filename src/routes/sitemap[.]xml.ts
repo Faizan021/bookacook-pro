@@ -140,6 +140,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly",
             priority: "0.8",
           },
+          {
+            path: "/magazin/community/bbq-chicken-berlin-kreuzberg",
+            lastmod: "2026-10-07",
+            changefreq: "monthly",
+            priority: "0.8",
+          },
           ...restaurants
             .filter((r) => r.slug || r.id)
             .map((r) => ({

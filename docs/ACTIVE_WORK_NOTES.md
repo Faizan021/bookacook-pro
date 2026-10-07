@@ -2,10 +2,15 @@
 
 _This document serves as the active working memory for ongoing tasks, context updates, and immediate implementation states. Permanent decisions are moved to core documentation once finalized._
 
-## Current Status (2026-10-02)
+## Current Status (2026-10-07)
 
 **Active Focus:**
-- **Speisely Journal (Ausgabe 04): Page-by-Page Editorial Content Review** (Scheduled for next session)
+- **Community Partner Story: BBQ Chicken Berlin-Kreuzberg (100% Completed & Verified):**
+  - *Route:* `/magazin/community/bbq-chicken-berlin-kreuzberg` (`src/routes/magazin.community.bbq-chicken-berlin-kreuzberg.tsx`)
+  - *Layout Architecture:* Strictly mirrors King Tut Berlin standard (Breadcrumb bar, 3-column quick facts, 4:3 double-border hero feast, 6 official scraped menu classics, authentic K-food streetfood section with Rosé Tteokbokki and Bulgogi Mandu, Chicken-Mu palate cleanser feature, combined Insider Ordering Guide & Görli Picnic Vibe, official factsheet and community mailto box).
+  - *Instagram Carousel Standard (Rule 12 & 13):* 7 slides generated in 1080×1350 portrait format (both clean and with_text overlay versions with circular Speisely brand seal) in `public/magazin/bbq-chicken-berlin/instagram/` along with high-engagement SEO caption (`caption.txt`).
+  - *Sitemaps & GEO Synchronization (Rule 9 & 11):* Synced across `src/routes/sitemap[.]xml.ts`, `src/routes/llms[.]txt.ts`, `public/llms.txt`, and featured in `src/routes/community.index.tsx`.
+- **Speisely Journal (Ausgabe 04): Page-by-Page Editorial Content Review** (Ongoing)
 
 **Completed Sprint Task (2026-10-02):**
 - **Magazine Architecture & Layout Geometry Harmonization (100% Complete & Live):**

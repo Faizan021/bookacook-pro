@@ -254,5 +254,69 @@ Whenever modifying routes, layouts, meta tags, sitemaps, or static public assets
    - Public route loaders and read functions (`getRestaurants`, `getCaterers`, `getPlanners`, `getGeoPageData`) must NEVER execute destructive `DELETE` or `UPDATE` mutations on read requests.
    - All public catalog queries must implement lightweight in-memory TTL caching (60s SWR) to maintain fast TTFB (<25ms).
 
+---
+
+## 12. Mandatory Instagram Carousel Standard (King Tut Architecture & Layout Rule)
+
+Whenever creating or generating an Instagram Carousel for ANY restaurant, caterer, event, or partner story:
+Never improvise or change styling arbitrarily. Follow the standardized **King Tut Berlin Architecture** exactly:
+
+1. **Strict Format & Resolution:**
+   - Aspect ratio: Portrait 4:5 (`1080 x 1350 px`).
+   - Slide count: 6 to 8 slides per story.
+   - Outputs: Always export BOTH versions into organized folders:
+     - `public/magazin/<slug>/instagram/clean/`: Pure high-res images cropped to 1080×1350 without typography.
+     - `public/magazin/<slug>/instagram/with_text/`: Branded slides with standardized text overlays.
+
+2. **Standardized Typographic Hierarchy & Positioning:**
+   - **Slide Counter (Top Right):** e.g., `1/7`, `2/7` (White font with slight drop shadow, `font_size: 24px`, top offset `40px`).
+   - **Top Category / Spotlight Badge (Centered Top):**
+     - Frosted sage/cream pill (`radius: 20px`, fill `#EBF4EC`, outline `#7FA46B`, text `#182E22`, bold uppercase, e.g., `SPEISELY COMMUNITY SPOTLIGHT`, `STREETFOOD-LIEBLING`, `DER SHOWSTOPPER`).
+     - Y-position: `65px`.
+   - **Main Headline (Centered Below Badge):**
+     - Serif typography (Georgia Bold, `54px`), high-contrast white text with subtle drop shadow (Y-position: ~`125px`).
+   - **Subtitle / Dish Description (Centered Bottom Pill):**
+     - Translucent dark pill container (`fill: rgba(15, 25, 20, 0.78)`, border `#FFFFFF3C`, radius `12px`), Arial/Inter Bold `28px`, white text.
+     - Y-position: ~`TARGET_H - 165px`.
+   - **Footer Call-to-Action (Centered Bottom):**
+     - Speisely Gold (`#E6B84A`) text (`26px`), e.g., `Swipe für den Festschmaus >>` or `Speichere diesen Post für deinen nächsten Besuch!`.
+     - Y-position: ~`TARGET_H - 72px`.
+
+3. **Vignette Gradient Protection:**
+   - Dual-zone linear gradient overlays applied before text rendering:
+     - Top dark gradient: Height `320px`, alpha curve tapering to protect headline contrast.
+     - Bottom dark gradient: Height `280px`, alpha curve ramping up to protect subtitle & footer contrast.
+
+4. **Carousel Story Arc (Standardized Slide Order):**
+   - **Slide 1:** The Hero Feast / Table Spread (Hook + Location + "Swipe >>").
+   - **Slide 2:** Signature Starter or Streetfood Item (e.g. Hawawshi, Samosa, Rolex).
+   - **Slide 3:** Cultural Core / National Dish (e.g. Molokhia, Biryani, Schnitzel).
+   - **Slide 4:** The Showstopper Main Course (e.g. Silver Platter Mixed Grill, Grand Roast).
+   - **Slide 5:** Fresh Elements / Artisanal Sauces (Salads, Dips, House Bread).
+   - **Slide 6:** Atmosphere / Interior Design (Cozy dining room, acoustic slats, tables).
+   - **Slide 7 (Outro):** Signature Icon + Full Address + Opening Hours + Halal/Dietary Badges + Follow/Save CTA.
+
+---
+
+## 13. Mandatory High-Engagement Instagram Caption & Copywriting Standard (Clean Creator SEO Formula)
+
+Whenever writing Instagram post captions, Reels copy, or partner spotlight copy for Speisely, NEVER write dry, corporate texts, BUT DO NOT spam emojis or 30 hashtags. Follow the **Modern Instagram Algorithm Standards (Search & Semantic Discovery)**:
+
+1. **The 2026 Algorithm Truth (Why Excessive Emojis Harm Performance):**
+   - **Semantic Search NLP:** Instagram and Google crawl captions as text keywords. Wall-of-emoji text fragments sentence parsing and lowers keyword confidence score.
+   - **Spam Filter Trigger:** 15+ emojis or repetitive brackets (`🔥👑✨`) can trigger low-quality/engagement-bait flags.
+   - **Quality & Prestige:** Speisely is a high-end food & catering platform. 3 to 6 purposeful emojis maintain high readability, luxury aesthetics, and creator energy without looking like spam.
+   - **Hashtags:** Maximum **3 to 5 targeted keywords** (Instagram officially de-prioritized 30-tag clouds in favor of natural in-caption SEO).
+
+2. **Standardized 5-Part Structure:**
+   - **Part 1: The Keyword Hook (First 100 characters):** Contains the primary search query (e.g. *Ägyptisches Restaurant Berlin*, *Halal Food Berlin*, *Catering München*) before the "...more" cut.
+   - **Part 2: Sensory Storytelling (Short, punchy lines):** 2–3 mouthwatering sentences explaining the craft, taste, and atmosphere.
+   - **Part 3: 3 Clear Dish Highlights (Clean Bullet Points):** Max 1 emoji per bullet point.
+   - **Part 4: Restaurant Facts & Verification:** Name, address, opening times, dietary status (100% Halal).
+   - **Part 5: Single Follow CTA + 3-5 Targeted SEO Hashtags:** Clear call to follow `@speisely` and save the post.
+
+
+
+
 
 
