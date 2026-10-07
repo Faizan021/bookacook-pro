@@ -263,13 +263,21 @@ Never improvise or change styling arbitrarily. Follow the standardized **King Tu
 
 1. **Strict Format & Resolution:**
    - Aspect ratio: Portrait 4:5 (`1080 x 1350 px`).
-   - Slide count: 6 to 8 slides per story.
+   - Slide count: 7 to 8 slides per story.
    - Outputs: Always export BOTH versions into organized folders:
      - `public/magazin/<slug>/instagram/clean/`: Pure high-res images cropped to 1080×1350 without typography.
      - `public/magazin/<slug>/instagram/with_text/`: Branded slides with standardized text overlays.
 
-2. **Standardized Typographic Hierarchy & Positioning:**
-   - **Slide Counter (Top Right):** e.g., `1/7`, `2/7` (White font with slight drop shadow, `font_size: 24px`, top offset `40px`).
+2. **Mandatory First Slide (Pure Minimalist Speisely Branding Page):**
+   - **Slide 1 MUST ALWAYS BE the Pure Minimalist Speisely Brand Seal:**
+     - Background: Pure Speisely Deep Forest Green (`#083822` / `rgb(8, 56, 34)`).
+     - Center: ONLY the official Speisely Logo (crossed fork & spoon emblem + "Speisely" in creamy ivory `#F6F4EB`).
+     - Clutter-free: Zero additional text, zero headlines, zero badges, zero slide counter on Slide 1.
+     - This anchors every carousel instantly in the Instagram feed as an authoritative, prestigious Speisely curation.
+
+3. **Standardized Typographic Hierarchy & Positioning (Slides 2 to N):**
+   - **Slide Counter (Top Right):** e.g., `2/8`, `3/8` (White font with slight drop shadow, `font_size: 24px`, top offset `40px`).
+   - **Top Left Brand Mark:** Speisely circular gold seal logo (`72 x 72 px`).
    - **Top Category / Spotlight Badge (Centered Top):**
      - Frosted sage/cream pill (`radius: 20px`, fill `#EBF4EC`, outline `#7FA46B`, text `#182E22`, bold uppercase, e.g., `SPEISELY COMMUNITY SPOTLIGHT`, `STREETFOOD-LIEBLING`, `DER SHOWSTOPPER`).
      - Y-position: `65px`.
@@ -282,19 +290,20 @@ Never improvise or change styling arbitrarily. Follow the standardized **King Tu
      - Speisely Gold (`#E6B84A`) text (`26px`), e.g., `Swipe für den Festschmaus >>` or `Speichere diesen Post für deinen nächsten Besuch!`.
      - Y-position: ~`TARGET_H - 72px`.
 
-3. **Vignette Gradient Protection:**
+4. **Vignette Gradient Protection (Slides 2 to N):**
    - Dual-zone linear gradient overlays applied before text rendering:
      - Top dark gradient: Height `320px`, alpha curve tapering to protect headline contrast.
      - Bottom dark gradient: Height `280px`, alpha curve ramping up to protect subtitle & footer contrast.
 
-4. **Carousel Story Arc (Standardized Slide Order):**
-   - **Slide 1:** The Hero Feast / Table Spread (Hook + Location + "Swipe >>").
-   - **Slide 2:** Signature Starter or Streetfood Item (e.g. Hawawshi, Samosa, Rolex).
-   - **Slide 3:** Cultural Core / National Dish (e.g. Molokhia, Biryani, Schnitzel).
-   - **Slide 4:** The Showstopper Main Course (e.g. Silver Platter Mixed Grill, Grand Roast).
-   - **Slide 5:** Fresh Elements / Artisanal Sauces (Salads, Dips, House Bread).
-   - **Slide 6:** Atmosphere / Interior Design (Cozy dining room, acoustic slats, tables).
-   - **Slide 7 (Outro):** Signature Icon + Full Address + Opening Hours + Halal/Dietary Badges + Follow/Save CTA.
+5. **Standardized 8-Slide Story Arc:**
+   - **Slide 1:** Pure Minimalist Speisely Brand Page (Deep Forest Green + Centered Logo).
+   - **Slide 2:** The Hero Feast / Table Spread (Hook + Location + "Swipe >>").
+   - **Slide 3:** Signature Starter or Streetfood Item (e.g. Bulgogi Mandu, Hawawshi, Samosa).
+   - **Slide 4:** Core Specialty / Crisp Craftsmanship (e.g. Golden Fried Chicken, Slow Roast).
+   - **Slide 5:** The Showstopper Glaze / Signature Main (e.g. 20-Zutaten Secret Sauce, Silver Grill).
+   - **Slide 6:** Cultural Side Dish / Cult Favorite (e.g. Rosé Tteokbokki, Molokhia).
+   - **Slide 7:** Contrasting Flavor / Texture (e.g. Cheesling Snow Powder, Artisanal Mezze).
+   - **Slide 8 (Outro):** Verified Location + Full Address + Opening Hours + Halal/Dietary Badges + Follow & Save CTA.
 
 ---
 
