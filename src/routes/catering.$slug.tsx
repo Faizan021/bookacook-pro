@@ -902,22 +902,12 @@ function CatererPage() {
 
             {/* Desktop Top Right Actions */}
             <div className="hidden md:flex items-center gap-2 sm:gap-3">
-              {catererProfile.phone && (
-                <a
-                  href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich interessiere mich für das Catering von ${catererProfile.name} auf Speisely.`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-1.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] px-4 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
-                >
-                  <MessageSquare className="h-4 w-4" />
-                  <span>WhatsApp</span>
-                </a>
-              )}
               <button
-                onClick={scrollToMenu}
+                onClick={() => setInquiryModalOpen(true)}
                 className="group flex items-center gap-1.5 rounded-full bg-[#10b981] hover:bg-[#10b981]/90 px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
               >
-                {t("Anfrage senden", "Send request")}
+                <CheckCircle2 className="h-4 w-4" />
+                {t("Anfrage an Speisely senden", "Send inquiry to Speisely")}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
               <Dialog open={b2bOpen} onOpenChange={handleB2bOpenChange}>
@@ -1089,29 +1079,18 @@ function CatererPage() {
             )}
 
             {/* Mobile Only Clean Action Buttons Bar */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:hidden pt-3 border-t border-white/15">
-              {catererProfile.phone && (
-                <a
-                  href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich interessiere mich für das Catering von ${catererProfile.name} auf Speisely.`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-1.5 rounded-full bg-[#25D366] active:bg-[#20ba59] py-2.5 text-xs font-bold text-white shadow-md transition-all cursor-pointer"
-                >
-                  <MessageSquare className="h-4 w-4" />
-                  <span>WhatsApp</span>
-                </a>
-              )}
+            <div className="grid grid-cols-2 gap-2 md:hidden pt-3 border-t border-white/15 w-full max-w-md mx-auto">
               <button
-                onClick={scrollToMenu}
+                onClick={() => setInquiryModalOpen(true)}
                 className="w-full flex items-center justify-center gap-1.5 rounded-full bg-[#10b981] active:bg-[#10b981]/90 py-2.5 text-xs font-bold text-white shadow-md transition-all cursor-pointer"
               >
+                <CheckCircle2 className="h-4 w-4" />
                 {t("Anfrage senden", "Send request")}
-                <ChevronRight className="h-4 w-4" />
               </button>
               <Dialog open={b2bOpen} onOpenChange={handleB2bOpenChange}>
                 <DialogTrigger asChild>
                   <button className="w-full flex items-center justify-center gap-1.5 rounded-full border border-white bg-white/20 active:bg-white/30 backdrop-blur-md py-2.5 text-xs font-bold text-white shadow-md transition-all cursor-pointer">
-                    {t("B2B Firmen-Catering", "B2B corporate catering")}
+                    {t("B2B Firmen-Catering", "B2B catering")}
                     <ChevronRight className="h-4 w-4" />
                   </button>
                 </DialogTrigger>
@@ -1365,7 +1344,7 @@ function CatererPage() {
 
       {/* Signature Live Rolex Station Spotlight Banner (Exclusive for Kampala Rolex) */}
       {catererProfile.slug === "kampala-rolex-germany" && (
-        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12">
+        <section id="live-station" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 mt-12">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#083822] via-[#0d4a2f] to-[#083822] p-6 sm:p-8 md:p-10 text-white shadow-xl border border-[#E6B84A]/30">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               {/* Left Column: Story & Highlights */}
@@ -1434,21 +1413,26 @@ function CatererPage() {
                     }}
                     className="rounded-full bg-[#10b981] hover:bg-[#10b981]/90 text-white px-6 py-3 text-xs sm:text-sm font-bold shadow-lg transition-all cursor-pointer flex items-center gap-2"
                   >
-                    <span>{t("Live-Station jetzt anfragen", "Inquire Live Station Now")}</span>
+                    <CheckCircle2 className="h-4 w-4" />
+                    <span>{t("Live-Station bei Speisely anfragen", "Inquire Live Station via Speisely")}</span>
                     <ChevronRight className="h-4 w-4" />
                   </button>
 
-                  {catererProfile.phone && (
-                    <a
-                      href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich habe eine Frage zur Live-Rolex-Station von ${catererProfile.name} auf Speisely.`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white px-5 py-3 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer flex items-center gap-2"
-                    >
-                      <MessageSquare className="h-4 w-4" />
-                      <span>WhatsApp Beratung</span>
-                    </a>
-                  )}
+                  <button
+                    onClick={() => {
+                      setInquiryForm((prev) => ({
+                        ...prev,
+                        eventType: "Live-Rolex-Station Beratung",
+                        notes: "[FRAGE / BERATUNGSWUNSCH ZUR LIVE-ROLEX-STATION]\n\n",
+                        guestCount: Math.max(prev.guestCount, 20),
+                      }));
+                      setInquiryModalOpen(true);
+                    }}
+                    className="rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/30 px-5 py-3 text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer flex items-center gap-2"
+                  >
+                    <MessageSquare className="h-4 w-4 text-[#E6B84A]" />
+                    <span>{t("Frage an Speisely stellen", "Ask Speisely Concierge")}</span>
+                  </button>
                 </div>
               </div>
 
@@ -1500,17 +1484,21 @@ function CatererPage() {
                 )}
               </p>
             </div>
-            {catererProfile.phone && (
-              <a
-                href={`https://wa.me/${catererProfile.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hallo! Ich interessiere mich für das Catering von ${catererProfile.name} auf Speisely.`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white px-4 py-2 text-xs font-bold shadow-sm transition shrink-0"
-              >
-                <MessageSquare className="h-4 w-4" />
-                {t("Direkt per WhatsApp anfragen", "Inquire via WhatsApp")}
-              </a>
-            )}
+            <button
+              onClick={() => {
+                setInquiryForm((prev) => ({
+                  ...prev,
+                  eventType: "Individuelles Catering-Paket",
+                  notes: "[INDIVIDUELLES CATERING / WUNSCHPAKET]\n\n",
+                  guestCount: Math.max(prev.guestCount, 20),
+                }));
+                setInquiryModalOpen(true);
+              }}
+              className="inline-flex items-center gap-2 rounded-full bg-forest hover:bg-forest/90 text-white px-5 py-2.5 text-xs font-bold shadow-sm transition shrink-0 cursor-pointer"
+            >
+              <MessageSquare className="h-4 w-4 text-[#E6B84A]" />
+              {t("Individuelle Anfrage an Speisely", "Custom inquiry via Speisely")}
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2107,8 +2095,8 @@ function CatererPage() {
             </DialogTitle>
             <p className="text-xs text-forest/70">
               {t(
-                `Bitte geben Sie Ihre Kontaktdaten, das Eventdatum und den Lieferort an, damit ${catererProfile?.name} Ihre Anfrage prüfen und die Verfügbarkeit bestätigen kann.`,
-                `Please specify your contact info, event date, and delivery location so ${catererProfile?.name} can review and confirm availability.`,
+                `Geben Sie Ihre Event- und Kontaktdaten an. Das Speisely-Catering-Team prüft Ihre Anfrage, stimmt die Verfügbarkeit ab und meldet sich persönlich bei Ihnen.`,
+                `Provide your event details and contact info. The Speisely catering team will review your inquiry, verify availability, and get in touch with you.`,
               )}
             </p>
           </DialogHeader>
@@ -2182,8 +2170,8 @@ function CatererPage() {
 
                 toast.success(
                   t(
-                    "Catering-Anfrage erfolgreich gesendet! Ihre Anfrage ist unverbindlich.",
-                    "Catering enquiry sent successfully! Your enquiry is non-binding.",
+                    "Catering-Anfrage erfolgreich an Speisely übermittelt! Unser Team prüft Ihre Anfrage und meldet sich zeitnah.",
+                    "Catering inquiry sent successfully to Speisely! Our team will review your request and get back to you shortly.",
                   ),
                 );
                 setSubmittedSummary({ count: currentTotalCount, total: currentTotalAmount });
@@ -2258,8 +2246,8 @@ function CatererPage() {
                 <div className="space-y-1 sm:col-span-2">
                   <Label className="text-xs font-bold text-forest">
                     {t(
-                      "Telefonnummer (für Rückfragen & WhatsApp) *",
-                      "Phone Number (for SMS & WhatsApp) *",
+                      "Telefonnummer (für Speisely-Rückfragen) *",
+                      "Phone Number (for Speisely inquiry coordination) *",
                     )}
                   </Label>
                   <Input

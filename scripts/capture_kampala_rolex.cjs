@@ -27,6 +27,15 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   await page.screenshot({ path: path.join(OUTPUT_DIR, '01_desktop_hero.png') });
   console.log('✓ Captured 01_desktop_hero.png');
 
+  // Scroll to Live Station Spotlight
+  const liveStationEl = await page.$('#live-station');
+  if (liveStationEl) {
+    await liveStationEl.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
+    await page.screenshot({ path: path.join(OUTPUT_DIR, '02a_desktop_live_station.png') });
+    console.log('✓ Captured 02a_desktop_live_station.png');
+  }
+
   // Scroll to Packages
   const packagesEl = await page.$('#packages');
   if (packagesEl) {
