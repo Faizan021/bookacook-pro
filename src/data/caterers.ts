@@ -1336,7 +1336,7 @@ export const fallbackCaterers: Caterer[] = [
     reviewCount: 28,
     minOrder: 250,
     minGuests: 15,
-    perPerson: 19,
+    perPerson: 25,
     time: "48 Stunden Vorlauf",
     leadTimeDays: 2,
     tags: [
@@ -1366,10 +1366,10 @@ export const fallbackCaterers: Caterer[] = [
       "🎉 Jetzt anfragen: Exklusive Live-Rolex-Station & ostafrikanisches Buffet für Sommerfeste, Hochzeiten & Firmenevents in München!",
     gallery: [
       {
-        url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg",
+        url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_duo_signature.jpg",
         caption: {
-          de: "Original Ugandan Rolex Wrap – Frisch vor Ort gerollt",
-          en: "Original Ugandan Rolex Wrap – Freshly rolled on-site",
+          de: "Original Ugandan Rolex Wraps (Classic Veggie & Chicken) – Frisch vor Ort gerollt",
+          en: "Original Ugandan Rolex Wraps (Classic Veggie & Chicken) – Freshly rolled on-site",
         },
       },
       {
@@ -1426,12 +1426,12 @@ export const fallbackCaterers: Caterer[] = [
       {
         id: "live-rolex-streetfood-experience",
         title: "Live Ugandan Rolex Experience",
-        price_amount: 19,
+        price_amount: 25,
         price_type: "per_person",
         min_guests: 20,
         badge: "🔥 BELIEBTESTES EVENT-PAKET",
         is_bestseller: true,
-        image_url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg",
+        image_url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_duo_signature.jpg",
         short_summary:
           "Live vor Ort zubereitete ugandische Rolex-Wraps (Classic Veggie & Chicken), Samosas & frisches Kachumbari",
         description:
@@ -1525,7 +1525,7 @@ export const fallbackCaterers: Caterer[] = [
         unit: "Stück (Live zubereitet)",
         serves: 1,
         is_available: true,
-        image_url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg",
+        image_url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_duo_signature.jpg",
       },
       {
         id: "item-pilau-rice",

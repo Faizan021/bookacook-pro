@@ -1519,18 +1519,18 @@ function CatererPage() {
               <div className="lg:col-span-5 relative">
                 <div className="relative overflow-hidden rounded-2xl border-2 border-[#E6B84A]/40 bg-white/10 shadow-2xl p-2 aspect-[4/3] group">
                   <img
-                    src="/caterers/kampala-rolex-muenchen/02_ugandan_rolex_signature.jpg"
+                    src="/caterers/kampala-rolex-muenchen/02_ugandan_rolex_duo_signature.jpg"
                     alt="Ugandan Rolex Signature Wrap"
                     className="h-full w-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-black/75 backdrop-blur-md p-3 border border-white/20 text-white">
                     <div className="text-xs font-bold text-[#E6B84A]">
-                      {t("Original Ugandan Rolex Wrap", "Original Ugandan Rolex Wrap")}
+                      {t("Original Ugandan Rolex Duo", "Original Ugandan Rolex Duo")}
                     </div>
                     <div className="text-[11px] text-white/80">
                       {t(
-                        "Frisch gebackenes Chapati & saftiges Omelett",
-                        "Freshly baked chapati & savory omelette",
+                        "Classic Veggie & Chicken Rolex frisch vor Ort gerollt",
+                        "Classic Veggie & Chicken Rolex freshly rolled on-site",
                       )}
                     </div>
                   </div>
@@ -1621,6 +1621,13 @@ function CatererPage() {
                       {pkg.min_guests && (
                         <div className="absolute top-3 right-3 rounded-full bg-white/90 backdrop-blur-md px-3 py-1 text-[11px] font-bold text-forest shadow-sm">
                           {t(`Ab ${pkg.min_guests} Personen`, `Min. ${pkg.min_guests} guests`)}
+                        </div>
+                      )}
+
+                      {/* Dual variety highlight pill if Live Rolex */}
+                      {pkg.id === "live-rolex-streetfood-experience" && (
+                        <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/65 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold shadow-sm">
+                          <span>🌱 Veggie & 🍗 Chicken Rolex</span>
                         </div>
                       )}
 
