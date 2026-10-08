@@ -1747,12 +1747,30 @@ function CatererPage() {
           <h2 className="text-3xl font-display font-bold text-forest">
             {t("Speisekarte", "Menu")}
           </h2>
-          <p className="mt-2 text-sm font-medium text-emerald-800 bg-emerald-50 px-3.5 py-2 rounded-lg border border-emerald-200/80 max-w-full">
-            {t(
-              "💡 Sollten Sie ein gewünschtes Gericht nicht in der Speisekarte finden, kontaktieren Sie uns bitte direkt.",
-              "💡 If you require any other dish, please contact us directly.",
-            )}
-          </p>
+          <div className="mt-2 text-sm font-medium text-emerald-900 bg-emerald-50/90 px-3.5 py-2.5 rounded-xl border border-emerald-200/80 max-w-full flex items-center justify-between flex-wrap gap-2">
+            <span className="flex items-center gap-1.5">
+              <span>💡</span>
+              <span>
+                {t(
+                  "Wunschgericht nicht gefunden? Vermerken Sie individuelle Speisenwünsche einfach in Ihrer Speisely-Anfrage.",
+                  "Can't find a specific dish? Simply mention your custom requests in your Speisely inquiry.",
+                )}
+              </span>
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setInquiryForm((prev) => ({
+                  ...prev,
+                  notes: (prev.notes || "") + "[INDIVIDUELLES MENÜ / SONDERWUNSCH]\n\n",
+                }));
+                setInquiryModalOpen(true);
+              }}
+              className="text-xs font-bold text-forest underline hover:text-emerald-700 cursor-pointer transition-colors"
+            >
+              {t("Individuelle Anfrage stellen →", "Submit custom inquiry →")}
+            </button>
+          </div>
           <CategoryNav
             categories={categories}
             onSelect={(cat) => {
