@@ -1306,38 +1306,109 @@ function CatererPage() {
           </div>
         )}
 
-        {/* About Text */}
+        {/* About Section (Editorial 2-Column Showcase) */}
         {(dbCaterer?.seo_local_intro || (catererProfile.about && catererProfile.about[lang])) && (
-          <div className="mt-10">
-            <h2 className="text-2xl font-display font-bold text-forest mb-4">
-              {t(`Über ${catererProfile.name}`, `About ${catererProfile.name}`)}
-            </h2>
-            <p className="text-base text-forest/80 max-w-3xl leading-relaxed whitespace-pre-wrap">
-              {dbCaterer?.seo_local_intro || catererProfile.about[lang]}
-            </p>
-            {dbCaterer?.seo_nearby_landmarks && dbCaterer.seo_nearby_landmarks.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-2">
-                <span className="text-sm font-semibold text-forest/70">
-                  {t("In der Nähe:", "Nearby:")}
-                </span>
-                {dbCaterer.seo_nearby_landmarks.map((lm: string, i: number) => (
-                  <span key={i} className="text-sm text-forest/80 flex items-center gap-1">
-                    <MapPin className="h-3 w-3" />
-                    {lm}
-                  </span>
-                ))}
+          <div className="mt-10 rounded-3xl bg-[#fdfaf5] border border-[#eadfce] p-6 sm:p-8 md:p-10 shadow-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              {/* Left Column: Text & Culinary Pillars */}
+              <div className="lg:col-span-7 flex flex-col justify-center">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest/5 border border-forest/10 text-xs font-semibold text-forest/80 uppercase tracking-wider mb-3 w-fit">
+                  <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" />
+                  <span>{t("Tradition & Handwerk", "Heritage & Craft")}</span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-display font-bold text-forest tracking-tight mb-4">
+                  {t(`Über ${catererProfile.name}`, `About ${catererProfile.name}`)}
+                </h2>
+
+                <div className="text-base text-forest/80 leading-relaxed whitespace-pre-line space-y-3 font-normal">
+                  {dbCaterer?.seo_local_intro || catererProfile.about[lang]}
+                </div>
+
+                {/* Cultural & Operational Highlights */}
+                {catererProfile.slug === "kampala-rolex-germany" && (
+                  <div className="mt-6 flex flex-wrap gap-2.5 pt-4 border-t border-[#eadfce]/70">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#eadfce] text-xs font-semibold text-forest shadow-xs">
+                      🍳 {t("Live vor Ort gerollt", "Rolled live on-site")}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#eadfce] text-xs font-semibold text-forest shadow-xs">
+                      🍲 {t("Warmhalte-Buffet inklusive", "Hot buffet setup included")}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-[#eadfce] text-xs font-semibold text-forest shadow-xs">
+                      🚚 {t("Indoor & Foodtruck-Setup", "Indoor & food truck setups")}
+                    </span>
+                  </div>
+                )}
+
+                {dbCaterer?.seo_nearby_landmarks && dbCaterer.seo_nearby_landmarks.length > 0 && (
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <span className="text-sm font-semibold text-forest/70">
+                      {t("In der Nähe:", "Nearby:")}
+                    </span>
+                    {dbCaterer.seo_nearby_landmarks.map((lm: string, i: number) => (
+                      <span key={i} className="text-sm text-forest/80 flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {lm}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {dbCaterer?.seo_logistics_details && (
+                  <div className="mt-6 p-4 bg-white rounded-xl border border-[#eadfce]">
+                    <h4 className="font-semibold text-forest text-sm mb-2">
+                      {t("Catering & Logistik Details", "Catering & Logistics Details")}
+                    </h4>
+                    <p className="text-sm text-forest/80 whitespace-pre-wrap">
+                      {dbCaterer.seo_logistics_details}
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
-            {dbCaterer?.seo_logistics_details && (
-              <div className="mt-6 p-4 bg-[oklch(0.95_0.05_152)] rounded-xl border border-[oklch(0.85_0.05_152)]">
-                <h4 className="font-semibold text-forest text-sm mb-2">
-                  {t("Catering & Logistik Details", "Catering & Logistics Details")}
-                </h4>
-                <p className="text-sm text-forest/80 whitespace-pre-wrap">
-                  {dbCaterer.seo_logistics_details}
-                </p>
+
+              {/* Right Column: Visual Showcase Card */}
+              <div className="lg:col-span-5 flex justify-center">
+                <div className="relative w-full max-w-md lg:max-w-none group">
+                  {/* Subtle Glow Aura */}
+                  <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-[#E6B84A]/30 to-emerald-600/20 blur-md opacity-60 group-hover:opacity-100 transition duration-500" />
+
+                  {/* Luxury Passe-Partout Framed Image */}
+                  <div className="relative overflow-hidden rounded-3xl border-2 border-[#eadfce] bg-white p-2.5 shadow-xl transition-all duration-300 group-hover:border-[#E6B84A] group-hover:shadow-2xl aspect-[4/3]">
+                    <img
+                      src={
+                        catererProfile.slug === "kampala-rolex-germany"
+                          ? "/caterers/kampala-rolex-muenchen/08_chapati_potatoes_sauce.png"
+                          : catererProfile.gallery?.[0]?.url || catererProfile.img
+                      }
+                      alt={catererProfile.name}
+                      className="h-full w-full object-cover object-center rounded-2xl group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-2.5 rounded-2xl bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                    {/* Badge Overlay */}
+                    <div className="absolute bottom-5 left-5 right-5 text-left text-white pointer-events-none">
+                      <span className="inline-block px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] sm:text-[11px] font-bold text-white border border-white/30 mb-1.5">
+                        {catererProfile.slug === "kampala-rolex-germany"
+                          ? t("Traditionelle Chapati & Beilagen", "Traditional Chapati & Sides")
+                          : t("Frisch & Meisterhaft Zubereitet", "Freshly & Masterfully Prepared")}
+                      </span>
+                      <p className="text-xs sm:text-sm font-semibold text-white drop-shadow-md leading-tight">
+                        {catererProfile.slug === "kampala-rolex-germany"
+                          ? t(
+                              "Handgemacht auf der Tawa & im Chafing-Dish serviert",
+                              "Handmade on the tawa & served warm in chafing dishes",
+                            )
+                          : t(
+                              "Echte Handwerkskunst für Ihr Event",
+                              "Authentic craft for your special event",
+                            )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         )}
       </section>

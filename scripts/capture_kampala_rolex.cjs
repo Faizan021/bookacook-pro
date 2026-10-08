@@ -27,6 +27,12 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   await page.screenshot({ path: path.join(OUTPUT_DIR, '01_desktop_hero.png') });
   console.log('✓ Captured 01_desktop_hero.png');
 
+  // Capture About Section with new 2-column layout
+  await page.evaluate(() => window.scrollBy(0, 500));
+  await page.waitForTimeout(1000);
+  await page.screenshot({ path: path.join(OUTPUT_DIR, '01b_desktop_about.png') });
+  console.log('✓ Captured 01b_desktop_about.png');
+
   // Scroll to Live Station Spotlight
   const liveStationEl = await page.$('#live-station');
   if (liveStationEl) {
@@ -87,6 +93,11 @@ if (!fs.existsSync(OUTPUT_DIR)) {
   await mobilePage.waitForTimeout(2000);
   await mobilePage.screenshot({ path: path.join(OUTPUT_DIR, '05_mobile_hero.png') });
   console.log('✓ Captured 05_mobile_hero.png');
+
+  await mobilePage.evaluate(() => window.scrollBy(0, 480));
+  await mobilePage.waitForTimeout(1000);
+  await mobilePage.screenshot({ path: path.join(OUTPUT_DIR, '05b_mobile_about.png') });
+  console.log('✓ Captured 05b_mobile_about.png');
 
   const mobilePkg = await mobilePage.$('#packages');
   if (mobilePkg) {
