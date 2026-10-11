@@ -2,6 +2,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { getMarketplaceRestaurants } from "@/lib/restaurant/public.functions";
 import { getValidGeoLocations } from "@/lib/geo/server.functions";
+import { fallbackRestaurants } from "@/data/restaurants";
 import {
   Store,
   ArrowRight,
@@ -18,23 +19,43 @@ import { UnifiedMarketplaceTabs } from "@/components/UnifiedMarketplaceTabs";
 import { useMemo, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 
+const DEFAULT_SHOWCASE_RESTAURANTS = fallbackRestaurants.map((r) => ({
+  id: r.id,
+  slug: r.slug || r.id,
+  name: r.name,
+  cuisine_type: r.tags.slice(0, 2).join(" & "),
+  city: r.area,
+  min_order_amount: r.minOrder,
+  delivery_fee: parseFloat(r.fee.replace(/[^0-9.]/g, "")) || 0,
+  banner_image_url: r.img,
+  logo_url: r.logo || null,
+  approval_status: "approved",
+  is_showcase: true,
+}));
+
 export const Route = createFileRoute("/restaurants")({
   component: RestaurantsDirectory,
   loader: async () => {
     try {
       const timeoutPromise = new Promise<{ restaurants: any[]; validGeoLocations: any[] }>((res) =>
-        setTimeout(() => res({ restaurants: [], validGeoLocations: [] }), 2500),
+        setTimeout(
+          () => res({ restaurants: DEFAULT_SHOWCASE_RESTAURANTS, validGeoLocations: [] }),
+          2500,
+        ),
       );
       const fetchPromise = Promise.all([
-        getMarketplaceRestaurants().catch(() => ({ restaurants: [] })),
+        getMarketplaceRestaurants().catch(() => ({ restaurants: DEFAULT_SHOWCASE_RESTAURANTS })),
         getValidGeoLocations().catch(() => []),
-      ]).then(([marketplaceData, validGeoLocations]) => ({
-        restaurants: marketplaceData?.restaurants || [],
-        validGeoLocations: validGeoLocations || [],
-      }));
+      ]).then(([marketplaceData, validGeoLocations]) => {
+        const list = marketplaceData?.restaurants || [];
+        return {
+          restaurants: list.length > 0 ? list : DEFAULT_SHOWCASE_RESTAURANTS,
+          validGeoLocations: validGeoLocations || [],
+        };
+      });
       return await Promise.race([fetchPromise, timeoutPromise]);
     } catch {
-      return { restaurants: [], validGeoLocations: [] };
+      return { restaurants: DEFAULT_SHOWCASE_RESTAURANTS, validGeoLocations: [] };
     }
   },
   head: () => ({
@@ -76,10 +97,10 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
 
 function RestaurantsDirectory() {
   const loaderData = Route.useLoaderData() as any;
-  const restaurants = useMemo(
-    () => (Array.isArray(loaderData?.restaurants) ? loaderData.restaurants : []),
-    [loaderData],
-  );
+  const restaurants = useMemo(() => {
+    const raw = Array.isArray(loaderData?.restaurants) ? loaderData.restaurants : [];
+    return raw.length > 0 ? raw : DEFAULT_SHOWCASE_RESTAURANTS;
+  }, [loaderData]);
   const validGeoLocations = useMemo(
     () => (Array.isArray(loaderData?.validGeoLocations) ? loaderData.validGeoLocations : []),
     [loaderData],

@@ -283,12 +283,25 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
     };
   });
 
-  // Graceful showcase fallback: if fewer than 4 live opted-in restaurants, enrich with verified dining showcases
-  const MIN_RESTAURANT_COUNT = 4;
+  // Graceful showcase fallback: if fewer than 6 live opted-in restaurants, enrich with verified dining showcases
+  const MIN_RESTAURANT_COUNT = 6;
   const finalRestaurants = [...mappedRestaurants];
   if (finalRestaurants.length < MIN_RESTAURANT_COUNT) {
     const existingSlugs = new Set(finalRestaurants.map((r: any) => r.slug || r.id));
     const fallbackList = [
+      {
+        id: "schnitzel-schmiede",
+        slug: "schnitzel-schmiede",
+        name: "Schnitzel Schmiede",
+        cuisine_type: "Deutsche Küche & Schnitzel-Spezialitäten",
+        city: "Mönchengladbach",
+        min_order_amount: 12,
+        delivery_fee: 0,
+        banner_image_url: "/slide1_schnitzel_hero.webp",
+        logo_url: "/speisely_official_logo.png",
+        approval_status: "approved",
+        is_showcase: true,
+      },
       {
         id: "haus-spaas",
         slug: "haus-spaas",
@@ -313,6 +326,20 @@ export const getMarketplaceRestaurants = createServerFn({ method: "GET" }).handl
         delivery_fee: 1.49,
         banner_image_url:
           "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1200&h=900&fit=crop",
+        logo_url: null,
+        approval_status: "approved",
+        is_showcase: true,
+      },
+      {
+        id: "casa-limone",
+        slug: "casa-limone",
+        name: "Casa Limone",
+        cuisine_type: "Authentische Pasta & Antipasti",
+        city: "München",
+        min_order_amount: 18,
+        delivery_fee: 1.99,
+        banner_image_url:
+          "https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=1200&h=900&fit=crop",
         logo_url: null,
         approval_status: "approved",
         is_showcase: true,

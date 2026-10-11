@@ -30,6 +30,7 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - Events Catering: https://speisely.de/catering/events
 
 ## Speisely Visits & Community Partner Spotlights (Verified Field Reports)
+- Baba Pirzola Meze & Grill (Berlin-Wittenbergplatz): https://speisely.de/magazin/community/baba-pirzola-berlin
 - BBQ Chicken Berlin-Kreuzberg (Berlin): https://speisely.de/magazin/community/bbq-chicken-berlin-kreuzberg
 - King Tut Restaurant & Café (Berlin): https://speisely.de/magazin/community/king-tut-restaurant-berlin
 - San Sebastian The Original® (Berlin): https://speisely.de/magazin/community/san-sebastian-berlin

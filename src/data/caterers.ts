@@ -1366,10 +1366,17 @@ export const fallbackCaterers: Caterer[] = [
       "🎉 Jetzt anfragen: Exklusive Live-Rolex-Station & ostafrikanisches Buffet für Sommerfeste, Hochzeiten & Firmenevents in München!",
     gallery: [
       {
+        url: "/caterers/kampala-rolex-muenchen/02_veggie_rolex_signature.jpg",
+        caption: {
+          de: "Original Ugandan Veggie Rolex – Frisch gerolltes Chapati mit saftigem Gemüse-Omelett",
+          en: "Original Ugandan Veggie Rolex – Freshly rolled chapati with savory vegetable omelette",
+        },
+      },
+      {
         url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_duo_signature.jpg",
         caption: {
-          de: "Original Ugandan Rolex Wraps (Classic Veggie & Chicken) – Frisch vor Ort gerollt",
-          en: "Original Ugandan Rolex Wraps (Classic Veggie & Chicken) – Freshly rolled on-site",
+          de: "Ugandan Rolex Wraps (Classic Veggie & Chicken) – Live auf der Tawa gerollt",
+          en: "Ugandan Rolex Wraps (Classic Veggie & Chicken) – Rolled live on the tawa",
         },
       },
       {
@@ -1514,18 +1521,32 @@ export const fallbackCaterers: Caterer[] = [
     ],
     menu: [
       {
-        id: "item-ugandan-rolex-classic",
+        id: "item-ugandan-rolex-veggie",
         category: "Live-Station & Signature Wraps",
-        name: "Ugandan Rolex (Classic & Chicken)",
+        name: "Ugandan Veggie Rolex (Classic)",
         desc: {
-          de: "Das Nationalgericht Ugandas: Ein handgemachtes warmes Chapati, gerollt mit einem frisch zubereiteten Omelett aus Eiern, Tomaten, Zwiebeln und Weißkohl, wahlweise mit saftigem Chicken.",
-          en: "Uganda's iconic street food: Warm handmade chapati rolled with a fresh vegetable omelette (tomatoes, cabbage, onions), optional seasoned chicken.",
+          de: "Das originale Kultgericht Ugandas: Ein handgemachtes warmes Chapati, frisch gerollt mit einem saftigen Omelett aus Eiern, Tomaten, Zwiebeln und Weißkohl. 100% vegetarisch & live auf der Tawa gebraten.",
+          en: "Uganda's iconic street food classic: Warm handmade chapati rolled live on the tawa with a fresh vegetable omelette (tomatoes, cabbage, onions). 100% vegetarian.",
         },
-        price_cents: 1199,
+        price_cents: 1099,
         unit: "Stück (Live zubereitet)",
         serves: 1,
         is_available: true,
-        image_url: "/caterers/kampala-rolex-muenchen/02_ugandan_rolex_duo_signature.jpg",
+        image_url: "/caterers/kampala-rolex-muenchen/02_veggie_rolex_signature.jpg",
+      },
+      {
+        id: "item-ugandan-rolex-chicken",
+        category: "Live-Station & Signature Wraps",
+        name: "Ugandan Chicken Rolex (Signature)",
+        desc: {
+          de: "Die herzhafte Signature-Variante: Warmes Chapati, fluffiges Omelett und saftig marinierte Hähnchenstreifen mit traditionellen ugandischen Gewürzen, frisch gerollt vor den Gästen.",
+          en: "The savory signature edition: Warm chapati, fluffy egg omelette, and tender marinated chicken strips with traditional Ugandan spices, rolled fresh before guests.",
+        },
+        price_cents: 1299,
+        unit: "Stück (Live zubereitet)",
+        serves: 1,
+        is_available: true,
+        image_url: "/caterers/kampala-rolex-muenchen/03_chicken_rolex_closeup_clean.jpg",
       },
       {
         id: "item-pilau-rice",

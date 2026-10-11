@@ -282,7 +282,60 @@ function CommunityPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* 1. BBQ Chicken Berlin-Kreuzberg (Newest Story) */}
+            {/* 0. Baba Pirzola Meze & Grill Berlin (Newest Story) */}
+            <Link
+              to="/magazin/community/baba-pirzola-berlin"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                  <img
+                    src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=2"
+                    alt={
+                      isDe
+                        ? "Baba Pirzola Meze & Grill am Wittenbergplatz in Berlin: Lamm-Pirzola, Meze & Rakı"
+                        : "Baba Pirzola Meze & Grill at Wittenbergplatz Berlin: Lamb Pirzola, Meze & Rakı"
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-sm">
+                      <Sparkles className="h-3 w-3 text-forest" aria-hidden="true" />
+                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-forest/90 text-white text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                      Wittenbergplatz · Berlin
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                    📸 Speisely Community
+                  </div>
+                </div>
+                <div className="p-6">
+                  <span className="text-xs font-semibold text-[#9E6D18] uppercase tracking-wider block mb-1">
+                    {isDe ? "Meze & Grillkultur" : "Meze & Grill Culture"}
+                  </span>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#9E6D18] transition-colors leading-snug">
+                    {isDe
+                      ? "Baba Pirzola: Feuer, Meze & große Grillkunst am Wittenbergplatz"
+                      : "Baba Pirzola: Fire, Meze & High Grill Craft at Wittenbergplatz"}
+                  </h3>
+                  <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
+                    {isDe
+                      ? "Zarte Lammkoteletts vom Eichenbrett, rauchiges Ali Nazik auf Auberginen-Joghurt, saftiges Ribeye-Antrikot und im Tontopf karamellisierter Fırın Sütlaç nahe dem KaDeWe."
+                      : "Oak-board lamb pirzola, smoky Ali Nazik over roasted eggplant yogurt, juicy ribeye antrikot, and clay-pot caramelized Fırın Sütlaç near KaDeWe."}
+                  </p>
+                </div>
+              </div>
+              <div className="px-6 pb-6 pt-2 border-t border-forest/10 flex items-center justify-between text-xs text-forest/60">
+                <span>{isDe ? "Oktober 2026" : "October 2026"}</span>
+                <span className="font-semibold text-forest group-hover:text-[#9E6D18] flex items-center gap-1">
+                  {isDe ? "Story lesen" : "Read story"} →
+                </span>
+              </div>
+            </Link>
+
+            {/* 1. BBQ Chicken Berlin-Kreuzberg */}
             <Link
               to="/magazin/community/bbq-chicken-berlin-kreuzberg"
               className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"

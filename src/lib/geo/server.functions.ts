@@ -79,6 +79,32 @@ export const getGeoPageData = createServerFn({ method: "GET" })
             .limit(6);
           vendors = allRes || [];
         }
+
+        if (vendors.length < 4) {
+          const { fallbackRestaurants } = await import("@/data/restaurants");
+          const existingSlugs = new Set(vendors.map((v: any) => v.slug || v.id));
+          for (const fb of fallbackRestaurants) {
+            if (vendors.length >= 6) break;
+            const slug = fb.slug || fb.id;
+            if (!existingSlugs.has(slug)) {
+              vendors.push({
+                id: fb.id,
+                name: fb.name,
+                slug,
+                logo_url: fb.logo || null,
+                banner_image_url: fb.img,
+                cuisine_type: fb.tags.slice(0, 2).join(" & "),
+                min_order_amount: fb.minOrder,
+                delivery_fee: parseFloat(fb.fee.replace(/[^0-9.]/g, "")) || 0,
+                accepts_pickup: true,
+                accepts_delivery: true,
+                city: fb.area,
+                description: fb.about.de,
+                is_showcase: true,
+              });
+            }
+          }
+        }
       } else if (data.role === "caterer") {
         const { data: res } = await supabaseAdmin
           .from("caterers")

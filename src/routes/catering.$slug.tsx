@@ -1519,18 +1519,21 @@ function CatererPage() {
               <div className="lg:col-span-5 relative">
                 <div className="relative overflow-hidden rounded-2xl border-2 border-[#E6B84A]/40 bg-white/10 shadow-2xl p-2 aspect-[4/3] group">
                   <img
-                    src="/caterers/kampala-rolex-muenchen/02_ugandan_rolex_duo_signature.jpg"
-                    alt="Ugandan Rolex Signature Wrap"
+                    src="/caterers/kampala-rolex-muenchen/02_veggie_rolex_signature.jpg"
+                    alt="Authentic Ugandan Veggie Rolex"
                     className="h-full w-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-black/75 backdrop-blur-md p-3 border border-white/20 text-white">
-                    <div className="text-xs font-bold text-[#E6B84A]">
-                      {t("Original Ugandan Rolex Duo", "Original Ugandan Rolex Duo")}
+                  <div className="absolute bottom-4 left-4 right-4 rounded-xl bg-black/80 backdrop-blur-md p-3 border border-white/20 text-white">
+                    <div className="text-xs font-bold text-[#E6B84A] flex items-center gap-1.5">
+                      <span>🌱</span>
+                      <span>
+                        {t("Original Ugandan Veggie Rolex", "Original Ugandan Veggie Rolex")}
+                      </span>
                     </div>
                     <div className="text-[11px] text-white/80">
                       {t(
-                        "Classic Veggie & Chicken Rolex frisch vor Ort gerollt",
-                        "Classic Veggie & Chicken Rolex freshly rolled on-site",
+                        "Frisch zubereitetes Gemüse-Omelett mit Tomaten & Zwiebeln im warmen Chapati",
+                        "Freshly prepared vegetable omelette with tomatoes & onions in warm chapati",
                       )}
                     </div>
                   </div>
