@@ -2,9 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   MapPin,
   Clock,
-  Phone,
-  Globe,
-  Instagram,
   Utensils,
   Sparkles,
   Users,
@@ -24,12 +21,12 @@ export const Route = createFileRoute("/magazin/community/baba-pirzola-berlin")({
       {
         name: "description",
         content:
-          "Community-Besuch bei Baba Pirzola am Wittenbergplatz in Berlin: Zarte Lamm-Pirzola, Ali Nazik auf Rauch-Aubergine, Antrikot & Fırın Sütlaç.",
+          "Community-Besuch bei Baba Pirzola Berlin: Kuzu Pirzola, Lokum Bonfile, Nazik Ali, Antrikot, Katmer & Fırında Sütlaç Dondurmalı.",
       },
       {
         name: "keywords",
         content:
-          "Baba Pirzola Berlin, Türkisches Restaurant Wittenbergplatz, Meze & Grill Berlin, Lammkoteletts Pirzola, Ali Nazik Berlin, Antrikot Grill, Fırın Sütlaç, Bayreuther Str. 35 Berlin, Speisely Community Story",
+          "Baba Pirzola Berlin, Türkisches Restaurant Wittenbergplatz, Kuzu Pirzola, Lokum Bonfile, Nazik Ali, Antrikot, Fırında Sütlaç Dondurmalı, Katmer, Gavurdağı Salatası, Speisely Community Story",
       },
       { name: "geo.region", content: "DE-BE" },
       { name: "geo.placename", content: "Berlin-Schöneberg" },
@@ -42,12 +39,12 @@ export const Route = createFileRoute("/magazin/community/baba-pirzola-berlin")({
       {
         property: "og:description",
         content:
-          "Ein Speisely Community-Mitglied besucht Baba Pirzola in der Bayreuther Str. 35: Anatolische Grillkunst, Rakı-Meze-Kultur, Ali Nazik und karamellisierter Sütlaç.",
+          "Ein Speisely Community-Mitglied besucht Baba Pirzola in der Bayreuther Str. 35: Kuzu Pirzola, Deniz & Çayır Surf & Turf, Nazik Ali, Katmer und Fırında Sütlaç Dondurmalı.",
       },
       {
         property: "og:image",
         content:
-          "https://speisely.de/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=2",
+          "https://speisely.de/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=3",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -80,10 +77,10 @@ export const Route = createFileRoute("/magazin/community/baba-pirzola-berlin")({
               headline:
                 "Hohe Grillkunst am Wittenbergplatz: Unser Community-Abend im Baba Pirzola Berlin",
               description:
-                "Ein Speisely Community-Mitglied war zu Gast im Baba Pirzola Meze & Grill in der Bayreuther Straße 35 nahe dem KaDeWe und teilt Eindrücke von Lamm-Pirzola, Ali Nazik, Ribeye-Antrikot und Fırın Sütlaç.",
+                "Ein Speisely Community-Mitglied war zu Gast im Baba Pirzola Meze & Grill in der Bayreuther Straße 35 nahe dem KaDeWe und teilt Eindrücke von Kuzu Pirzola, Lokum Bonfile, Nazik Ali, Antrikot, Katmer und Fırında Sütlaç Dondurmalı.",
               image: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=2",
+                url: "https://speisely.de/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=3",
                 width: 1200,
                 height: 900,
               },
@@ -166,7 +163,7 @@ function BabaPirzolaBerlinCommunityArticle() {
 
   const emailBody = isDe
     ? `Hallo Speisely-Team,\n\nich habe das Baba Pirzola Meze & Grill in Berlin besucht und möchte meine Erfahrung teilen.\n\nMein Lieblingsgericht:\nAtmosphäre & Service:\nFotos anbei:`
-    : `Hello Speisely Team,\n\nI visited Baba Pirzola Meze & Grill in Berlin and want to share my experience.\n\nFavorite dish:\nAtmosphere & Service:\nPhotos attached:`;
+    : `Hello Speisely Team,\n\nI visited Baba Pirzola Meze & Grill in Berlin and want to share my experience.\n\nFavorite dish:\nAtmosphere & Service:\nFotos attached:`;
 
   const mailtoHref = `mailto:info@speisely.de?subject=${encodeURIComponent(
     emailSubject,
@@ -226,8 +223,8 @@ function BabaPirzolaBerlinCommunityArticle() {
 
           <p className="mt-4 text-base sm:text-lg text-forest/80 leading-relaxed font-normal">
             {isDe
-              ? "Nur wenige Schritte vom KaDeWe entfernt zelebriert das Baba Pirzola in der Bayreuther Straße 35 die gehobene türkisch-mediterrane Tafelkultur. Ein Mitglied unserer Speisely Community hat sich durch Lammkoteletts vom Eichenbrett, rauchiges Ali Nazik, saftiges Antrikot und im Tontopf karamellisierten Sütlaç probiert."
-              : "Just steps from KaDeWe on Bayreuther Straße 35, Baba Pirzola celebrates elevated Turkish-Mediterranean dining culture. A member of our Speisely Community experienced oak-board lamb pirzola, smoky Ali Nazik, juicy ribeye antrikot, and clay-pot caramelized Sütlaç."}
+              ? "Nur wenige Schritte vom KaDeWe entfernt zelebriert das Baba Pirzola in der Bayreuther Straße 35 klassische türkische Grillspeisen und Weine. Ein Mitglied unserer Speisely Community hat sich durch Kuzu Pirzola, Lokum Bonfile, Karides Şiş, rauchiges Nazik Ali, saftiges Antrikot sowie Katmer und Fırında Sütlaç Dondurmalı probiert."
+              : "Just steps from KaDeWe on Bayreuther Straße 35, Baba Pirzola celebrates classic Turkish charcoal grill specialties and fine wines. A member of our Speisely Community experienced Kuzu Pirzola, Lokum Bonfile, Karides Şiş, smoky Nazik Ali, juicy Antrikot, plus Katmer and Fırında Sütlaç Dondurmalı."}
           </p>
 
           {/* Community Visit Meta Bar */}
@@ -276,17 +273,19 @@ function BabaPirzolaBerlinCommunityArticle() {
                   {isDe ? "Unsere Auswahl" : "What We Ordered"}
                 </span>
                 <strong className="font-semibold text-forest">
-                  {isDe ? "Pirzola, Antrikot & Ali Nazik" : "Pirzola, Antrikot & Ali Nazik"}
+                  {isDe
+                    ? "Kuzu Pirzola, Antrikot & Nazik Ali"
+                    : "Kuzu Pirzola, Antrikot & Nazik Ali"}
                 </strong>
                 <span className="block text-forest/70 text-xs">
                   {isDe
-                    ? "Gavurdağı-Salat, Rosmarinkartoffeln, Meze"
-                    : "Gavurdağı Salad, Rosemary Potatoes, Meze"}
+                    ? "Lokum Bonfile, Karides Şiş, Gavurdağı Salatası, Patates Tava"
+                    : "Lokum Bonfile, Karides Şiş, Gavurdağı Salatası, Patates Tava"}
                 </span>
                 <span className="block text-forest/60 text-[11px]">
                   {isDe
-                    ? "Katmer & Fırın Sütlaç mit Antep-Pistazien"
-                    : "Katmer & Fırın Sütlaç with Antep Pistachios"}
+                    ? "Katmer & Fırında Sütlaç Dondurmalı"
+                    : "Katmer & Fırında Sütlaç Dondurmalı"}
                 </span>
               </div>
             </div>
@@ -317,8 +316,8 @@ function BabaPirzolaBerlinCommunityArticle() {
                   src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=3"
                   alt={
                     isDe
-                      ? "Gedeckte Tafel im Baba Pirzola Berlin mit Lamm-Pirzola auf dem Holzbrett, Gavurdağı-Walnusssalat, Rosmarinkartoffeln und Rakı"
-                      : "Full table spread at Baba Pirzola Berlin featuring lamb pirzola on a wooden board, Gavurdağı walnut salad, rosemary potatoes, and Rakı"
+                      ? "Gedeckte Tafel im Baba Pirzola Berlin mit Selections-Grillbrett (Üçü bir arada), Gavurdağı Salatası, Patates Tava, Küçük Salata und Rakı"
+                      : "Full table spread at Baba Pirzola Berlin featuring Selections grill board (Üçü bir arada), Gavurdağı Salatası, Patates Tava, Küçük Salata, and Rakı"
                   }
                   className="h-full w-full object-cover"
                   loading="eager"
@@ -327,7 +326,9 @@ function BabaPirzolaBerlinCommunityArticle() {
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md">
                     <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" aria-hidden="true" />
                     <span>
-                      {isDe ? "🍽️ Rakı, Meze & Grill-Tafel" : "🍽️ Rakı, Meze & Grill Spread"}
+                      {isDe
+                        ? "🍽️ Selections: Üçü bir arada & Meze-Tafel"
+                        : "🍽️ Selections: Üçü bir arada & Meze Spread"}
                     </span>
                   </span>
                 </div>
@@ -335,8 +336,8 @@ function BabaPirzolaBerlinCommunityArticle() {
               <div className="mt-2.5 px-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] text-forest/60">
                 <span>
                   {isDe
-                    ? "Der Auftakt auf dunklem Marmor: Gegrilltes Lammkotelett & Spieße auf dem Eichenbrett, begleitet von Gavurdağı-Salat mit Walnüssen, Ofenkartoffeln und klassischem Rakı auf Eis."
-                    : "The opening spread on dark marble: Grilled lamb chop & skewers on oak board, accompanied by Gavurdağı walnut salad, roasted potatoes, and classic Rakı over ice."}
+                    ? "Die gedeckte Tafel: Selections-Holzbrett (Kuzu Pirzola, Kuzu Küşleme & Lokum Bonfile) begleitet von Gavurdağı Salatası mit Walnüssen & Granatapfelsirup, Patates Tava, Küçük Salata und Yeni/Göbek Rakı."
+                    : "The full table spread: Selections oak board (Kuzu Pirzola, Kuzu Küşleme & Lokum Bonfile) served with Gavurdağı Salatası (walnuts & pomegranate syrup), Patates Tava, Küçük Salata, and Yeni/Göbek Rakı."}
                 </span>
                 <span className="italic text-[10px] text-forest/50 shrink-0">
                   {isDe ? "Community-Aufnahme (4:3 HD)" : "Community Capture (4:3 HD)"}
@@ -352,27 +353,27 @@ function BabaPirzolaBerlinCommunityArticle() {
               </h2>
               <p>
                 {isDe
-                  ? "Rund um den Wittenbergplatz und das KaDeWe pulsiert der Berliner Westen. Wer nur ein paar Meter in die ruhigere Bayreuther Straße einbiegt, steht vor der eleganten Fassade des Baba Pirzola. Schon der Name gibt das kulinarische Versprechen vor: ‚Pirzola‘ steht im Türkischen für zarte, am Knochen gegrillte Koteletts – und genau diese Disziplin beherrscht die Küche hier in Perfektion."
-                  : "Around Wittenbergplatz and KaDeWe, West Berlin beats with energy. Turn just a few meters into quieter Bayreuther Straße and you stand before the refined facade of Baba Pirzola. The name itself is a culinary promise: 'Pirzola' means tender, bone-in grilled chops in Turkish—a craft the kitchen here has mastered to perfection."}
+                  ? "Rund um den Wittenbergplatz und das KaDeWe pulsiert der Berliner Westen. Wer nur ein paar Meter in die ruhigere Bayreuther Straße einbiegt, steht vor der eleganten Fassade des Baba Pirzola. Schon der Name gibt das kulinarische Versprechen vor: ‚Kuzu Pirzola‘ steht für saftig am Knochen gegrillte Lamm-Koteletts – die Paradedisziplin des Hauses unter den ‚Babalar Grill Spezial‘-Gerichten."
+                  : "Around Wittenbergplatz and KaDeWe, West Berlin beats with energy. Turn just a few meters into quieter Bayreuther Straße and you stand before the refined facade of Baba Pirzola. The name itself is a culinary promise: 'Kuzu Pirzola' stands for juicy bone-in grilled lamb chops—the house's signature discipline under 'Babalar Grill Spezial'."}
               </p>
               <p>
                 {isDe
-                  ? "Statt Hektik erwartet die Gäste im Inneren ein warm ausgeleuchtetes, modernes Ambiente mit dunklen Marmortischen, stilvoller Bar und aufmerksamem Tischservice. Hier trifft die jahrhundertealte anatolische Meyhane-Kultur – das entspannte Teilen zahlreicher kleiner Vorspeisen (Meze) bei einem Glas Rakı oder ausgewählten türkischen Weinen – auf präzises Steakhouse-Handwerk."
-                  : "Instead of rush, guests step into a warmly lit, contemporary dining room with dark marble tables, a stylish bar, and attentive table service. Here, the centuries-old Anatolian Meyhane tradition—sharing vibrant small plates (Meze) over a glass of Rakı or curated Turkish wines—meets modern steakhouse precision."}
+                  ? "Statt Hektik erwartet die Gäste im Inneren ein warm ausgeleuchtetes, modernes Ambiente mit dunklen Marmortischen, stilvoller Bar und aufmerksamem Tischservice. Zum Auftakt lockt ‚Fırının Ruhu – Die Seele des Ofens‘ mit ofenfrischem Balon Ekmek aus dem Steinofen, Tulum Keçi Peyniri (Tulum-Ziegenkäse) sowie ‚Vitrinden 4 kap Meze‘ – vier kalt-warm kombinierbaren Mezze-Schalen direkt von der Frischetheke."
+                  : "Instead of rush, guests step into a warmly lit, contemporary dining room with dark marble tables, a stylish bar, and attentive table service. The evening begins with 'Fırının Ruhu – Soul of the Stove': fresh stone-oven Balon Ekmek, Tulum Keçi Peyniri (Tulum goat cheese), and 'Vitrinden 4 kap Meze'—four customizable bowls of cold and warm mezze straight from the counter."}
               </p>
             </div>
           </section>
 
-          {/* SECTION 2: ALI NAZIK & MEZE TRADITION */}
+          {/* SECTION 2: NAZIK ALI & MEZE TRADITION */}
           <section className="bg-white rounded-3xl p-6 sm:p-8 border border-forest/10 shadow-xs space-y-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[#7FA46B] block mb-1">
-                {isDe ? "Anatolische Spezialität" : "Anatolian Specialty"}
+                {isDe ? "Kebap aus Lamm- & Kalbsfleisch" : "Lamb & Veal Kebap Specialty"}
               </span>
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
                 {isDe
-                  ? "Ali Nazik: Wenn rauchige Aubergine auf saftigen Grillspieß trifft"
-                  : "Ali Nazik: When Smoky Eggplant Meets Juicy Charcoal Skewers"}
+                  ? "Nazik Ali: Gegrillter Hackfleischspieß auf geröstetem Auberginenpüree"
+                  : "Nazik Ali: Grilled Lamb & Veal Skewer on Roasted Eggplant Purée"}
               </h2>
             </div>
 
@@ -380,24 +381,24 @@ function BabaPirzolaBerlinCommunityArticle() {
               <div className="space-y-4 text-forest/80 text-sm sm:text-base leading-relaxed">
                 <p>
                   {isDe
-                    ? "Bevor die großen Holzbretter den Tisch erreichten, sorgten die kalten und warmen Vorspeisen für Begeisterung: Von cremigem Hummus über fein gewürzte Schafskäsecremes bis zum knackigen Gavurdağı-Salat mit fein gewürfelten Tomaten, Walnüssen und herb-süßer Granatapfelreduktion."
-                    : "Before the heavy wooden boards arrived at the table, the cold and warm starters set the tone: from velvety hummus and spiced feta creams to crisp Gavurdağı salad tossed with finely diced tomatoes, walnuts, and tangy pomegranate reduction."}
+                    ? "Neben warmen Spezialitäten wie Pastırmalı Humus (Hummus mit Pastırma und Butter), İçli Köfte (gefüllten Bulgurbällchen mit Walnüssen) oder knusprigen Fındık Lahmacun aus dem Steinofen gehörte der frisch zubereitete Gavurdağı Salatası mit Tomaten, grünen Peperoni, Walnüssen, Petersilie, Olivenöl und Granatapfelsirup zu unseren Highlights."
+                    : "Alongside warm mezze specialties like Pastırmalı Humus (hummus with pastırma and butter), İçli Köfte (bulgur balls stuffed with minced meat and walnuts), and stone-oven Fındık Lahmacun, the freshly tossed Gavurdağı Salatası with tomatoes, green peperoni, walnuts, parsley, olive oil, and pomegranate syrup stood out immediately."}
                 </p>
                 <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-2">
                   <strong className="text-forest block text-base">
                     {isDe
-                      ? "🔥 Unser Geheimtipp: Ali Nazik Kebab"
-                      : "🔥 Our Insider Pick: Ali Nazik Kebab"}
+                      ? "🔥 Unser Geheimtipp von der Kebap-Karte: Nazik Ali"
+                      : "🔥 Our Kebap Menu Pick: Nazik Ali"}
                   </strong>
                   <p className="text-xs sm:text-sm text-forest/75 leading-relaxed">
                     {isDe
-                      ? "Ein Klassiker aus Gaziantep, den man in dieser Qualität selten findet: Über offener Glut geröstetes, samtiges Auberginenpüree, verfeinert mit cremigem Knoblauch-Joghurt, auf dem ein saftig gegrillter Hackfleischspieß mit aufgeschäumter Paprikabutter, Schmortomate und gegrillter Spitzpaprika ruht. Der Kontrast aus kühler, rauchiger Creme und heißem Fleisch vom Rost ist schlichtweg herausragend."
-                      : "A Gaziantep classic rarely found at this level of quality: flame-roasted, silky eggplant purée folded with garlicky strained yogurt, crowned with a juicy charcoal-grilled skewer, sizzling paprika butter, blistered tomato, and charred green pepper. The interplay of cool smoky cream and hot meat from the grill is unforgettable."}
+                      ? "Auf der Karte als ‚Nazik Ali‘ geführt: Ein saftig gegrillter Hackfleischspieß aus Lamm- und Kalbsfleisch (mind. 200 g), gebettet auf über offener Glut geröstetem Auberginenpüree in feiner Joghurt-Butter-Knoblauchsoße, garniert mit geschmorter Tomate und gegrillter Spitzpaprika."
+                      : "Listed on the menu as 'Nazik Ali': a juicy charcoal-grilled minced meat skewer of lamb and veal (min. 200 g), resting on flame-roasted eggplant purée in a velvety yoghurt-butter-garlic sauce, garnished with blistered tomato and charred green pepper."}
                   </p>
                 </div>
               </div>
 
-              {/* Ali Nazik Photo */}
+              {/* Nazik Ali Photo */}
               <div className="space-y-2">
                 <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
@@ -405,23 +406,23 @@ function BabaPirzolaBerlinCommunityArticle() {
                       src="/magazin/baba-pirzola-berlin/05_baba_pirzola_ali_nazik_kebab_hd.jpg?v=3"
                       alt={
                         isDe
-                          ? "Ali Nazik Kebab bei Baba Pirzola auf geröstetem Auberginen-Joghurt-Bett mit Paprikabutter"
-                          : "Ali Nazik Kebab at Baba Pirzola on roasted eggplant-yogurt bed with paprika butter"
+                          ? "Nazik Ali bei Baba Pirzola: Gegrillter Hackfleischspieß auf geröstetem Auberginenpüree in Joghurt-Butter-Knoblauchsoße"
+                          : "Nazik Ali at Baba Pirzola: Grilled minced meat skewer on roasted eggplant puree in yoghurt-butter-garlic sauce"
                       }
                       className="h-full w-full object-cover"
                       loading="lazy"
                     />
                     <div className="absolute top-3 left-3">
                       <span className="rounded-full bg-forest/90 text-white px-3 py-1 text-[11px] font-bold backdrop-blur-md shadow-md">
-                        {isDe ? "🍆 Signature Ali Nazik" : "🍆 Signature Ali Nazik"}
+                        {isDe ? "🍆 Kebap-Klassiker: Nazik Ali" : "🍆 Kebap Classic: Nazik Ali"}
                       </span>
                     </div>
                   </div>
                 </div>
                 <p className="text-center text-[11px] text-forest/60 italic">
                   {isDe
-                    ? "Ali Nazik auf handgefertigter Keramik: Rauchige Aubergine, Knoblauchjoghurt & heißer Spieß"
-                    : "Ali Nazik on artisan ceramic: Smoky eggplant, garlic yogurt & sizzling skewer"}
+                    ? "Nazik Ali: Lamm- & Kalbs-Hackfleischspieß auf geröstetem Auberginenpüree in Joghurt-Butter-Knoblauchsoße"
+                    : "Nazik Ali: Lamb & veal skewer on roasted eggplant purée in yoghurt-butter-garlic sauce"}
                 </p>
               </div>
             </div>
@@ -431,30 +432,32 @@ function BabaPirzolaBerlinCommunityArticle() {
           <section className="space-y-5">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[#A85C36] block mb-1">
-                {isDe ? "Vom Holzkohlegrill aufs Eichenbrett" : "From Charcoal Grill to Oak Board"}
+                {isDe
+                  ? "Selections & Babalar Grill Spezial"
+                  : "Selections & Babalar Grill Spezial"}
               </span>
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
                 {isDe
-                  ? "Die Namensgeber: Lamm-Pirzola, Surf & Turf Platte & Ribeye-Antrikot"
-                  : "The Headliners: Lamb Pirzola, Surf & Turf Board & Ribeye Antrikot"}
+                  ? "Kuzu Pirzola, Lokum Bonfile, Karides Şiş & saftiges Antrikot"
+                  : "Kuzu Pirzola, Lokum Bonfile, Karides Şiş & Juicy Antrikot"}
               </h2>
               <p className="mt-2 text-forest/80 text-sm sm:text-base leading-relaxed">
                 {isDe
-                  ? "Beim Hauptgang zeigt sich, warum Stammgäste aus ganz Berlin immer wieder an den Wittenbergplatz zurückkehren. Serviert wird auf massiven Holzbrettern mit würzigem Sumach-Zwiebelsalat, gegrillter Pfefferoni und geschmorter Kirschtomate."
-                  : "When the mains arrive, it becomes clear why regulars from across Berlin return to Wittenbergplatz again and again. Cuts are presented on solid oak boards with tangy sumac onion salad, charred green pepper, and blistered cherry tomato."}
+                  ? "Wer die ganze Vielfalt des Holzkohlegrills erleben möchte, wählt aus den ‚Selections‘-Kombinationen – wie ‚Üçü bir arada (Dreierlei)‘, ‚Dördü bir arada (Viererlei)‘, ‚Klasik‘ oder ‚Deniz & Çayır (Surf & Turf)‘ – oder bestellt direkt aus den ‚Babalar Grill Spezial‘-Cuts."
+                  : "To experience the full range of the charcoal grill, guests choose from the 'Selections' boards—such as 'Üçü bir arada (Three-Way)', 'Dördü bir arada (Four-Way)', 'Klasik', or 'Deniz & Çayır (Surf & Turf)'—or order directly from the 'Babalar Grill Spezial' cuts."}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl md:max-w-none mx-auto">
-              {/* Card 1: Mixed Grill & Surf-and-Turf Board */}
+              {/* Card 1: Selections Deniz & Çayır (Surf & Turf) / Klasik */}
               <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl flex flex-col">
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
                   <img
                     src="/magazin/baba-pirzola-berlin/02_baba_pirzola_mixed_grill_board_hd.jpg?v=3"
                     alt={
                       isDe
-                        ? "Großes Eichenbrett bei Baba Pirzola mit Lamm-Pirzola, Rinderfilet-Medaillons, Riesengarnelen vom Grill und Spießen"
-                        : "Signature oak board at Baba Pirzola with lamb pirzola, beef fillet medallions, charcoal-grilled jumbo prawns, and skewers"
+                        ? "Selections-Grillbrett bei Baba Pirzola mit Kuzu Pirzola, Lokum Bonfile, Karides Şiş, Tavuk Külbastı und Kuzu Şiş"
+                        : "Selections grill board at Baba Pirzola with Kuzu Pirzola, Lokum Bonfile, Karides Şiş, Tavuk Külbastı, and Kuzu Şiş"
                     }
                     className="h-full w-full object-cover"
                     loading="lazy"
@@ -462,7 +465,11 @@ function BabaPirzolaBerlinCommunityArticle() {
                   <div className="absolute top-3 left-3">
                     <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 backdrop-blur-md text-white px-3 py-1 text-[11px] font-bold shadow-md">
                       <span>🔥</span>
-                      <span>{isDe ? "Pirzola, Filet & Garnelen" : "Pirzola, Filet & Prawns"}</span>
+                      <span>
+                        {isDe
+                          ? "Deniz & Çayır (Surf & Turf) & Klasik"
+                          : "Deniz & Çayır (Surf & Turf) & Klasik"}
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -470,27 +477,27 @@ function BabaPirzolaBerlinCommunityArticle() {
                   <div>
                     <h3 className="font-display text-lg font-bold text-forest">
                       {isDe
-                        ? "Das große Baba-Brett: Pirzola, Filet-Medaillons & Riesengarnelen"
-                        : "The Grand Baba Board: Pirzola, Filet Medallions & Prawns"}
+                        ? "Kuzu Pirzola, Lokum Bonfile, Karides Şiş & Tavuk Külbastı"
+                        : "Kuzu Pirzola, Lokum Bonfile, Karides Şiş & Tavuk Külbastı"}
                     </h3>
                     <p className="mt-1.5 text-xs sm:text-sm text-forest/75 leading-relaxed">
                       {isDe
-                        ? "Ein Festmahl zum Teilen: Am langen Knochen gereifte Lamm-Pirzola, zarte Rinderfilet-Medaillons mit perfektem Grill-Branding, goldbraun gegrillte Riesengarnelen (Karides) und saftig marinierte Spieße."
-                        : "A feast made for sharing: long-bone lamb pirzola, tender beef fillet medallions with bold sear marks, golden charcoal-kissed jumbo prawns (Karides), and juicy marinated skewers."}
+                        ? "Vereint auf dem großen Holzbrett: Saftig gegrillte Lamm-Koteletts (Kuzu Pirzola), butterzartes Kalbsfilet (Lokum Bonfile), gegrillte Garnelenspieße (Karides Şiş), ausgelöste Hähnchenschenkel (Tavuk Külbastı) sowie marinierte Kuzu Şiş- und Tavuk Şiş-Spieße."
+                        : "United on the solid oak board: juicy grilled lamb chops (Kuzu Pirzola), buttery veal fillet (Lokum Bonfile), grilled shrimp skewers (Karides Şiş), boneless chicken thighs (Tavuk Külbastı), plus marinated Kuzu Şiş and Tavuk Şiş skewers."}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Card 2: Antrikot with Herb Butter */}
+              {/* Card 2: Babalar Grill Spezial - Antrikot (300 g) */}
               <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl flex flex-col">
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
                   <img
                     src="/magazin/baba-pirzola-berlin/03_baba_pirzola_antrikot_herb_butter_hd.jpg?v=3"
                     alt={
                       isDe
-                        ? "Saftig gegrilltes Rinder-Antrikot (Entrecôte) mit Grillstreifen, Haus-Kräuterbutter und Sumach-Zwiebeln"
-                        : "Juicy grilled beef Antrikot (Ribeye) with sear marks, house herb butter, and sumac onions"
+                        ? "Babalar Grill Spezial: Antrikot 300 g (Saftig gegrilltes Entrecôte) mit Kräuterbutter auf dem Holzbrett"
+                        : "Babalar Grill Spezial: Antrikot 300 g (Juicy grilled entrecôte) with herb butter on wooden board"
                     }
                     className="h-full w-full object-cover"
                     loading="lazy"
@@ -498,7 +505,9 @@ function BabaPirzolaBerlinCommunityArticle() {
                   <div className="absolute top-3 left-3">
                     <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 backdrop-blur-md text-white px-3 py-1 text-[11px] font-bold shadow-md">
                       <span>🥩</span>
-                      <span>{isDe ? "Dry-Aged & Antrikot" : "Dry-Aged & Antrikot"}</span>
+                      <span>
+                        {isDe ? "Babalar Grill Spezial: Antrikot" : "Babalar Grill Spezial: Antrikot"}
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -506,13 +515,13 @@ function BabaPirzolaBerlinCommunityArticle() {
                   <div>
                     <h3 className="font-display text-lg font-bold text-forest">
                       {isDe
-                        ? "Dana Antrikot mit Haus-Kräuterbutter"
-                        : "Dana Antrikot with House Herb Butter"}
+                        ? "Antrikot (300 g) – Saftig gegrilltes Entrecôte"
+                        : "Antrikot (300 g) – Juicy Grilled Entrecôte"}
                     </h3>
                     <p className="mt-1.5 text-xs sm:text-sm text-forest/75 leading-relaxed">
                       {isDe
-                        ? "Perfekt marmoriertes Entrecôte mit ausgeprägtem Branding vom Rost, groben Meersalzflocken und einer Scheibe hausgemachter mediterraner Kräuter-Chili-Butter, die langsam auf dem heißen Schnitt schmilzt."
-                        : "Richly marbled ribeye steak with bold grill sear marks, flaky sea salt, and a medallion of house-made Mediterranean herb-chili butter slowly melting alongside."}
+                        ? "Aus der Rubrik ‚Babalar Grill Spezial‘: 300 Gramm saftig gegrilltes Entrecôte (Antrikot) mit intensivem Grill-Branding, groben Salzflocken, würziger Kräuterbutter und Sumach-Zwiebelsalat."
+                        : "From the 'Babalar Grill Spezial' section: 300 grams of juicy charcoal-grilled entrecôte (Antrikot) with bold sear marks, flaky sea salt, aromatic herb butter, and sumac onion salad."}
                     </p>
                   </div>
                 </div>
@@ -520,26 +529,26 @@ function BabaPirzolaBerlinCommunityArticle() {
             </div>
           </section>
 
-          {/* SECTION 4: SWEET FINALE DUO (Katmer & Fırın Sütlaç) */}
+          {/* SECTION 4: SWEET FINALE DUO (Tatlılar: Katmer & Fırında Sütlaç Dondurmalı) */}
           <section className="bg-white rounded-3xl p-6 sm:p-8 border border-forest/10 shadow-xs space-y-6">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#E6B84A]">
                 <Sparkles className="h-4 w-4" />
                 <span>
                   {isDe
-                    ? "Das süße Finale aus Gaziantep & dem Steinofen"
-                    : "The Sweet Finale from Gaziantep & the Clay Oven"}
+                    ? "Tatlılar – Süßspeisen & Sweets"
+                    : "Tatlılar – Traditional Turkish Sweets"}
                 </span>
               </div>
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
                 {isDe
-                  ? "Knuspriges Pistazien-Katmer & im Tontopf karamellisiertes Fırın Sütlaç"
-                  : "Crispy Pistachio Katmer & Clay-Pot Caramelized Fırın Sütlaç"}
+                  ? "Katmer mit Pistazien & Sahne sowie Fırında Sütlaç Dondurmalı"
+                  : "Pistachio & Cream Katmer and Fırında Sütlaç Dondurmalı"}
               </h2>
               <p className="text-forest/80 leading-relaxed text-sm sm:text-base">
                 {isDe
-                  ? "Nach den herzhaften Röstaromen vom Holzkohlegrill führt kein Weg an der türkischen Patisserie vorbei. Unsere beiden Favoriten zeigen die ganze Bandbreite zwischen hauchdünnem, warmem Blätterteig-Handwerk und cremig überbackener Tradition."
-                  : "After the savory char of the charcoal grill, Turkish pastry craft takes center stage. Our two favorites showcase the full spectrum between paper-thin warm phyllo artistry and creamy oven-baked tradition."}
+                  ? "Unter ‚Tatlılar (Süßspeisen)‘ stehen im Baba Pirzola vier Klassiker zur Wahl: Baklava, Baba Künefe, Katmer und Fırında Sütlaç Dondurmalı. Unsere Wahl fiel auf die knusprige Pistazien-Teigtasche und den im Tontopf überbackenen Milchreis."
+                  : "Under 'Tatlılar (Sweets)', Baba Pirzola features four classics: Baklava, Baba Künefe, Katmer, and Fırında Sütlaç Dondurmalı. We chose the crispy pistachio pastry pocket and the clay-pot baked rice pudding."}
               </p>
             </div>
 
@@ -551,61 +560,61 @@ function BabaPirzolaBerlinCommunityArticle() {
                     src="/magazin/baba-pirzola-berlin/06_baba_pirzola_katmer_pistachio_hd.jpg?v=3"
                     alt={
                       isDe
-                        ? "Knusprig gebackenes Gaziantep-Katmer auf dem Holzbrett mit Kaymak-Rahm und grünen Antep-Pistazien"
-                        : "Crispy baked Gaziantep Katmer on a wooden board with Kaymak clotted cream and green Antep pistachios"
+                        ? "Katmer bei Baba Pirzola: Knusprige Teigtasche mit Pistazien und Sahne auf dem Holzbrett"
+                        : "Katmer at Baba Pirzola: Crispy puff pastry with pistachios and cream on a wooden board"
                     }
                     className="h-full w-full object-cover"
                     loading="lazy"
                   />
                   <div className="absolute top-3 left-3">
                     <span className="rounded-full bg-forest/90 text-white px-3 py-1 text-[11px] font-bold backdrop-blur-md shadow-md">
-                      {isDe ? "🥐 Warmes Pistazien-Katmer" : "🥐 Warm Pistachio Katmer"}
+                      {isDe ? "🥐 Tatlılar: Katmer" : "🥐 Tatlılar: Katmer"}
                     </span>
                   </div>
                 </div>
                 <div className="p-2 pt-3 flex-grow">
                   <h3 className="font-display text-lg font-bold text-forest">
                     {isDe
-                      ? "Gaziantep Katmer mit Kaymak & Pistazien"
-                      : "Gaziantep Katmer with Kaymak & Pistachios"}
+                      ? "Katmer – Teigtasche mit Pistazien & Sahne"
+                      : "Katmer – Puff Pastry with Pistachios & Cream"}
                   </h3>
                   <p className="mt-1.5 text-xs sm:text-sm text-forest/75 leading-relaxed">
                     {isDe
-                      ? "Hauchdünn gezogener Yufka-Teig, gefüllt mit schmelzendem Kaymak (türkischem Rahm) und fein gemahlenen Antep-Pistazien – goldbraun und knusprig gebacken direkt auf dem Holzbrett serviert."
-                      : "Paper-thin hand-stretched phyllo pastry filled with melting Kaymak (Turkish clotted cream) and finely ground Antep pistachios—baked golden-crisp and served warm on an oak board."}
+                      ? "Hauchdünn gebackene, goldbraun knusprige Blätterteigtasche, gefüllt mit reichlich gemahlenen Pistazien und cremiger Sahne (serviert mit Vanilleeis)."
+                      : "Paper-thin, golden-crisp baked pastry pocket generously filled with ground pistachios and rich cream (served with vanilla ice cream)."}
                   </p>
                 </div>
               </div>
 
-              {/* Dessert 2: Fırın Sütlaç */}
+              {/* Dessert 2: Fırında Sütlaç Dondurmalı */}
               <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl flex flex-col">
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
                   <img
                     src="/magazin/baba-pirzola-berlin/04_baba_pirzola_firin_suetlac_pistachio_hd.jpg?v=3"
                     alt={
                       isDe
-                        ? "Fırın Sütlaç im Tontopf gebacken mit Vanilleeis und grünen Antep-Pistazien bei Baba Pirzola"
-                        : "Fırın Sütlaç baked in a clay pot topped with vanilla ice cream and green Antep pistachios at Baba Pirzola"
+                        ? "Fırında Sütlaç Dondurmalı bei Baba Pirzola: Türkischer Milchreis mit Zimt, Eiscreme und Pistazien im Tontopf"
+                        : "Fırında Sütlaç Dondurmalı at Baba Pirzola: Turkish rice pudding with cinnamon, ice cream, and pistachios in a clay pot"
                     }
                     className="h-full w-full object-cover"
                     loading="lazy"
                   />
                   <div className="absolute top-3 left-3">
                     <span className="rounded-full bg-forest/90 text-white px-3 py-1 text-[11px] font-bold backdrop-blur-md shadow-md">
-                      {isDe ? "🍨 Fırın Sütlaç im Tontopf" : "🍨 Clay-Pot Fırın Sütlaç"}
+                      {isDe ? "🍨 Fırında Sütlaç Dondurmalı" : "🍨 Fırında Sütlaç Dondurmalı"}
                     </span>
                   </div>
                 </div>
                 <div className="p-2 pt-3 flex-grow">
                   <h3 className="font-display text-lg font-bold text-forest">
                     {isDe
-                      ? "Fırın Sütlaç mit Eis & Antep-Pistazien"
-                      : "Fırın Sütlaç with Ice Cream & Pistachios"}
+                      ? "Fırında Sütlaç Dondurmalı"
+                      : "Fırında Sütlaç Dondurmalı"}
                   </h3>
                   <p className="mt-1.5 text-xs sm:text-sm text-forest/75 leading-relaxed">
                     {isDe
-                      ? "Traditioneller Milchreis, im Terrakotta-Tontopf überbacken bis sich eine karamellisierte Kruste bildet, gekrönt von einer kühlen Kugel Eis und leuchtend grünen Pistazien."
-                      : "Traditional rice pudding baked in a terracotta clay pot until a caramelized crust forms, crowned with a cool scoop of ice cream and vibrant green pistachios."}
+                      ? "Im Ofen karamellisierter türkischer Milchreis im Tontopf, serviert mit einer Kugel Eiscreme, feiner Zimtnote und leuchtend grünen Pistazien."
+                      : "Oven-caramelized Turkish rice pudding baked in a clay pot, served with a scoop of ice cream, cinnamon, and vibrant green pistachios."}
                   </p>
                 </div>
               </div>
@@ -624,13 +633,13 @@ function BabaPirzolaBerlinCommunityArticle() {
             </div>
             <h3 className="font-display text-xl sm:text-2xl font-bold text-forest">
               {isDe
-                ? "Mehr als nur Fleisch: Große vegetarische Meze-Vielfalt & kuratierte Weinkarte"
-                : "More Than Meat: Rich Vegetarian Meze Diversity & Curated Wine List"}
+                ? "Mehr als nur Fleisch: Große Mezze-Vielfalt, Urla-Weine & Rakı-Kultur"
+                : "More Than Meat: Rich Mezze Diversity, Urla Wines & Rakı Culture"}
             </h3>
             <p className="text-forest/80 leading-relaxed text-sm sm:text-base">
               {isDe
-                ? "Was viele beim Blick auf den Namen ‚Pirzola‘ überrascht: Die anatolische Küche besitzt eine beeindruckende vegetarische Tradition. Wer ohne Fleisch genießt, kann sich aus Dutzenden frisch zubereiteten Meze-Schälchen, Ofenkartoffeln, gegrilltem Gemüse, Feta-Variationen und Salaten eine vollwertige Festtafel zusammenstellen. Dazu berät der aufmerksame Service kompetent zu charakterstarken türkischen und mediterranen Weinen sowie zur klassischen Rakı-Begleitung."
-                : "What surprises many at first glance is how deeply rooted vegetarian dishes are in Anatolian dining culture. Guests dining meat-free can assemble a lavish feast from dozens of freshly prepared cold and warm Meze plates, rosemary potatoes, grilled vegetables, feta creations, and crisp salads—paired with characterful Turkish wines or traditional Rakı."}
+                ? "Auch wer vegetarisch genießt, wird im Baba Pirzola fündig: Von ‚Vitrinden 4 kap Meze‘ über Kiraz Domatesli Keçi Peyniri (im Tontopf gebratener Ziegenkäse mit Cherrytomaten), Patlıcan Yatağında Kuşkonmaz (gerösteter Spargel auf Auberginen-Joghurtsauce) und Sebze Tava bis hin zu frischen Salaten. Dazu führt die Weinkarte ausgewählte türkische Spitzenweine von Weingütern wie Urla, Yedibilgeler, Lucien Arkas und Kavaklıdere sowie Yeni, Gold und Göbek Rakı."
+                : "Vegetarian guests are equally spoiled at Baba Pirzola: from 'Vitrinden 4 kap Meze' to Kiraz Domatesli Keçi Peyniri (clay-pot roasted goat cheese with cherry tomatoes), Patlıcan Yatağında Kuşkonmaz (roasted asparagus on eggplant-yoghurt sauce), Sebze Tava, and crisp salads. The wine list showcases premier Turkish estates including Urla, Yedibilgeler, Lucien Arkas, and Kavaklıdere alongside Yeni, Gold, and Göbek Rakı."}
             </p>
           </section>
 
@@ -649,110 +658,6 @@ function BabaPirzolaBerlinCommunityArticle() {
                 ? "Dieser Beitrag ist Teil unserer unabhängigen Reihe ‚Speisely Community Stories‘. Die Aufnahmen stammen direkt von einem Vor-Ort-Besuch aus unserer Community und wurden für das Magazin-Format auf ein einheitliches 4:3-Retina-Verhältnis zugeschnitten sowie farblich und in der Detailschärfe behutsam optimiert."
                 : "This article is part of our independent 'Speisely Community Stories' series. All photographs were captured during a real on-site dining visit by our community and carefully cropped to a unified 4:3 retina ratio with subtle color and sharpness grading for our magazine layout."}
             </p>
-          </section>
-
-          {/* SECTION 7: VISITING GUIDE & RESERVATION BOX */}
-          <section className="bg-gradient-to-br from-[#EBF4EC] to-[#FAF7F0] rounded-3xl p-6 sm:p-8 border border-[#7FA46B]/25 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-forest/60">
-                  {isDe ? "Alle Infos für deinen Besuch" : "All Details for Your Visit"}
-                </span>
-                <h3 className="font-display text-xl sm:text-2xl font-bold text-forest mt-1">
-                  Baba Pirzola Meze & Grill besuchen
-                </h3>
-              </div>
-              <div className="flex flex-wrap gap-2.5">
-                <a
-                  href="https://babapirzola.de/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-forest text-white px-5 py-2.5 text-xs font-bold hover:bg-forest/90 transition shadow-md shrink-0"
-                >
-                  <Globe className="h-4 w-4" />
-                  <span>{isDe ? "Website & Tisch reservieren" : "Website & Book a Table"}</span>
-                </a>
-                <a
-                  href="tel:+493043662023"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white text-forest border border-forest/20 px-4 py-2.5 text-xs font-bold hover:bg-forest/5 transition shadow-xs shrink-0"
-                >
-                  <Phone className="h-3.5 w-3.5 text-[#7FA46B]" />
-                  <span>030 / 43662023</span>
-                </a>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-              <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-forest/10">
-                <span className="font-bold text-forest block mb-1">📍 Adresse</span>
-                <p className="text-forest/75 leading-relaxed">
-                  Bayreuther Str. 35
-                  <br />
-                  10789 Berlin (Wittenbergplatz)
-                </p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-forest/10">
-                <span className="font-bold text-forest block mb-1">📞 Kontakt & Reservierung</span>
-                <p className="text-forest/75 leading-relaxed">
-                  <a href="tel:+493043662023" className="hover:underline font-semibold">
-                    030 / 43662023
-                  </a>
-                  <br />
-                  <a href="mailto:info@babapirzola.de" className="hover:underline truncate block">
-                    info@babapirzola.de
-                  </a>
-                  <span className="block text-[11px] text-forest/60 mt-0.5">
-                    Online via Tablekult / Website
-                  </span>
-                </p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-forest/10">
-                <span className="font-bold text-forest block mb-1">⏰ Öffnungszeiten</span>
-                <p className="text-forest/75 leading-relaxed">
-                  Mo–Do: 12:00 – 00:00 Uhr
-                  <br />
-                  Fr–Sa: 12:00 – 01:00 Uhr
-                  <br />
-                  Sonntag: 12:00 – 00:00 Uhr
-                </p>
-              </div>
-
-              <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-forest/10">
-                <span className="font-bold text-forest block mb-1">📱 Instagram</span>
-                <p className="text-forest/75 leading-relaxed">
-                  <a
-                    href="https://www.instagram.com/baba.pirzola/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline inline-flex items-center gap-1 text-forest font-semibold"
-                  >
-                    <Instagram className="h-3.5 w-3.5 text-[#E6B84A]" />
-                    @baba.pirzola
-                  </a>
-                  <span className="block text-forest/60 text-[11px] mt-0.5">
-                    6.500+ Follower · 420+ Beiträge
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-forest/10 flex flex-wrap items-center justify-between gap-3 text-xs text-forest/75">
-              <span>
-                {isDe
-                  ? "💡 Tipp: Für Freitag- und Samstagabend empfehlen wir unbedingt eine frühzeitige Tischreservierung."
-                  : "💡 Tip: For Friday and Saturday evenings, we strongly recommend booking a table in advance."}
-              </span>
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Baba+Pirzola+Bayreuther+Str.+35+10789+Berlin"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-forest hover:text-[#7FA46B] underline"
-              >
-                {isDe ? "Route in Google Maps öffnen →" : "Open route in Google Maps →"}
-              </a>
-            </div>
           </section>
 
           {/* SECTION 8: COMMUNITY CALLOUT */}

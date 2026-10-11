@@ -290,11 +290,11 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=2"
+                    src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=3"
                     alt={
                       isDe
-                        ? "Baba Pirzola Meze & Grill am Wittenbergplatz in Berlin: Lamm-Pirzola, Meze & Rakı"
-                        : "Baba Pirzola Meze & Grill at Wittenbergplatz Berlin: Lamb Pirzola, Meze & Rakı"
+                        ? "Baba Pirzola Meze & Grill am Wittenbergplatz in Berlin: Kuzu Pirzola, Lokum Bonfile, Meze & Rakı"
+                        : "Baba Pirzola Meze & Grill at Wittenbergplatz Berlin: Kuzu Pirzola, Lokum Bonfile, Meze & Rakı"
                     }
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
@@ -322,8 +322,8 @@ function CommunityPage() {
                   </h3>
                   <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
                     {isDe
-                      ? "Zarte Lammkoteletts vom Eichenbrett, rauchiges Ali Nazik auf Auberginen-Joghurt, saftiges Ribeye-Antrikot und im Tontopf karamellisierter Fırın Sütlaç nahe dem KaDeWe."
-                      : "Oak-board lamb pirzola, smoky Ali Nazik over roasted eggplant yogurt, juicy ribeye antrikot, and clay-pot caramelized Fırın Sütlaç near KaDeWe."}
+                      ? "Kuzu Pirzola, Lokum Bonfile & Karides Şiş vom Holzbrett, rauchiges Nazik Ali, saftiges Antrikot sowie Katmer und Fırında Sütlaç Dondurmalı nahe dem KaDeWe."
+                      : "Oak-board Kuzu Pirzola, Lokum Bonfile & Karides Şiş, smoky Nazik Ali, juicy Antrikot, plus Katmer and Fırında Sütlaç Dondurmalı near KaDeWe."}
                   </p>
                 </div>
               </div>
