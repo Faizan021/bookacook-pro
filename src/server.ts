@@ -75,77 +75,84 @@ export default {
             host !== "app.speisely.de" &&
             host !== "admin.speisely.de" &&
             host !== "speisely.de";
-          let searchColumn = "custom_domain";
-          let searchValue = host;
+          if (isCustomDomain || isSpeiselySubdomain) {
+            let searchColumn = "custom_domain";
+            let searchValue = host;
 
-          if (isSpeiselySubdomain) {
-            targetSlug = host.replace(".speisely.de", "");
-            searchColumn = "slug";
-            searchValue = targetSlug;
-          }
-          const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-          const supabaseKey =
-            process.env.SUPABASE_SERVICE_ROLE_KEY ||
-            process.env.VITE_SUPABASE_ANON_KEY ||
-            process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-            process.env.SUPABASE_PUBLISHABLE_KEY ||
-            "";
-
-          let targetPath = null;
-
-          const subPath = url.pathname === "/" ? "" : url.pathname;
-
-          // Check domain cache first
-          const domainCacheKey = `${searchColumn}:${searchValue}`;
-          const cachedPath = domainCache.get(domainCacheKey);
-
-          if (cachedPath) {
-            targetPath = `${cachedPath}${subPath}`;
-          } else {
-            const fetchOpts = {
-              headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
-            };
-
-            // Query restaurants, caterers, planners concurrently
-            const [resRest, resCat, resPlan] = await Promise.all([
-              fetch(
-                `${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`,
-                fetchOpts,
-              )
-                .then((r) => r.json())
-                .catch(() => []),
-              fetch(
-                `${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`,
-                fetchOpts,
-              )
-                .then((r) => r.json())
-                .catch(() => []),
-              fetch(
-                `${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`,
-                fetchOpts,
-              )
-                .then((r) => r.json())
-                .catch(() => []),
-            ]);
-
-            if (resRest && resRest.length > 0) {
-              domainCache.set(domainCacheKey, `/restaurant/${resRest[0].slug}`);
-              targetPath = `/restaurant/${resRest[0].slug}${subPath}`;
-            } else if (resCat && resCat.length > 0) {
-              domainCache.set(domainCacheKey, `/catering/${resCat[0].slug}`);
-              targetPath = `/catering/${resCat[0].slug}${subPath}`;
-            } else if (resPlan && resPlan.length > 0) {
-              domainCache.set(domainCacheKey, `/planner/${resPlan[0].slug}`);
-              targetPath = `/planner/${resPlan[0].slug}${subPath}`;
+            if (isSpeiselySubdomain) {
+              targetSlug = host.replace(".speisely.de", "");
+              searchColumn = "slug";
+              searchValue = targetSlug;
             }
-          }
+            const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+            const supabaseKey =
+              process.env.SUPABASE_SERVICE_ROLE_KEY ||
+              process.env.VITE_SUPABASE_ANON_KEY ||
+              process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+              process.env.SUPABASE_PUBLISHABLE_KEY ||
+              "";
 
-          if (targetPath) {
-            const newUrl = new URL(targetPath, request.url);
-            newUrl.search = url.search;
+            let targetPath = null;
 
-            // Rewrite the request internally for SSR
-            currentRequest = new Request(newUrl, request);
+            const subPath = url.pathname === "/" ? "" : url.pathname;
+
+            // Check domain cache first
+            const domainCacheKey = `${searchColumn}:${searchValue}`;
+            const cachedPath = domainCache.get(domainCacheKey);
+
+            if (cachedPath) {
+              if (cachedPath !== "__NONE__") {
+                targetPath = `${cachedPath}${subPath}`;
+              }
+            } else if (supabaseUrl && supabaseKey) {
+              const fetchOpts = {
+                headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` },
+                signal: AbortSignal.timeout(1500),
+              };
+
+              // Query restaurants, caterers, planners concurrently
+              const [resRest, resCat, resPlan] = await Promise.all([
+                fetch(
+                  `${supabaseUrl}/rest/v1/restaurants?${searchColumn}=eq.${searchValue}&select=slug`,
+                  fetchOpts,
+                )
+                  .then((r) => r.json())
+                  .catch(() => []),
+                fetch(
+                  `${supabaseUrl}/rest/v1/caterers?${searchColumn}=eq.${searchValue}&select=slug`,
+                  fetchOpts,
+                )
+                  .then((r) => r.json())
+                  .catch(() => []),
+                fetch(
+                  `${supabaseUrl}/rest/v1/planners?${searchColumn}=eq.${searchValue}&select=slug`,
+                  fetchOpts,
+                )
+                  .then((r) => r.json())
+                  .catch(() => []),
+              ]);
+
+              if (resRest && resRest.length > 0) {
+                domainCache.set(domainCacheKey, `/restaurant/${resRest[0].slug}`);
+                targetPath = `/restaurant/${resRest[0].slug}${subPath}`;
+              } else if (resCat && resCat.length > 0) {
+                domainCache.set(domainCacheKey, `/catering/${resCat[0].slug}`);
+                targetPath = `/catering/${resCat[0].slug}${subPath}`;
+              } else if (resPlan && resPlan.length > 0) {
+                domainCache.set(domainCacheKey, `/planner/${resPlan[0].slug}`);
+                targetPath = `/planner/${resPlan[0].slug}${subPath}`;
+              } else {
+                domainCache.set(domainCacheKey, "__NONE__");
+              }
+            }
+
+            if (targetPath) {
+              const newUrl = new URL(targetPath, request.url);
+              newUrl.search = url.search;
+
+              // Rewrite the request internally for SSR
+              currentRequest = new Request(newUrl, request);
+            }
           }
         }
 
