@@ -174,10 +174,9 @@ function Datenschutz() {
                 "The controller responsible for data processing on this website within the meaning of the General Data Protection Regulation (GDPR) is:",
               )}
             </p>
-            <div className="surface-card p-5 rounded-2xl border border-forest/10 my-4 text-sm space-y-0.5">
+            <div className="surface-card p-5 rounded-2xl border border-forest/10 my-4 text-sm space-y-1">
               <strong className="font-bold text-forest block">Speisely</strong>
               <span className="block text-forest/80">Projektteam Speisely</span>
-              <span className="block text-forest/80">Mellenseestr. 32</span>
               <span className="block text-forest/80">
                 10319 Berlin, {tt("Deutschland", "Germany")}
               </span>
@@ -189,6 +188,12 @@ function Datenschutz() {
                 >
                   info@speisely.de
                 </a>
+              </span>
+              <span className="block text-forest/80">
+                {tt("Kontaktformular:", "Contact Form:")}{" "}
+                <Link to="/contact" className="text-[#b28a3c] font-semibold underline">
+                  https://speisely.de/contact
+                </Link>
               </span>
               <span className="block text-forest/80">Webseite: https://speisely.de</span>
             </div>

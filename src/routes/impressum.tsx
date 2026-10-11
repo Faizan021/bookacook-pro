@@ -70,7 +70,7 @@ function Impressum() {
               <strong>{tt("Projektname:", "Project name:")}</strong> Speisely
             </li>
             <li>
-              <strong>{tt("Anschrift:", "Address:")}</strong> Mellenseestr. 32, 10319 Berlin,{" "}
+              <strong>{tt("Standort:", "Location:")}</strong> 10319 Berlin,{" "}
               {tt("Deutschland", "Germany")}
             </li>
             <li>
@@ -80,19 +80,24 @@ function Impressum() {
               </a>
             </li>
             <li>
-              <strong>{tt("Kontakt:", "Contact:")}</strong>{" "}
+              <strong>{tt("E-Mail:", "Email:")}</strong>{" "}
               <a href="mailto:info@speisely.de" className="text-[#b28a3c] hover:underline">
                 info@speisely.de
               </a>
             </li>
+            <li>
+              <strong>{tt("Kontaktformular:", "Contact form:")}</strong>{" "}
+              <Link to="/contact" className="text-[#b28a3c] hover:underline font-semibold">
+                speisely.de/contact
+              </Link>
+            </li>
           </ul>
 
           <h2 className="text-2xl font-display text-forest mt-8 mb-4">
-            {tt("Anbieterinformationen (§ 5 DDG)", "Provider Information (§ 5 DDG)")}
+            {tt("Anbieterinformationen", "Provider Information")}
           </h2>
-          <div className="rounded-2xl bg-white p-5 border border-forest/10 space-y-1 text-sm">
+          <div className="rounded-2xl bg-white p-5 border border-forest/10 space-y-1.5 text-sm">
             <strong className="font-bold text-forest block">Speisely — Projektteam Speisely</strong>
-            <span className="block text-forest/80">Mellenseestr. 32</span>
             <span className="block text-forest/80">
               10319 Berlin, {tt("Deutschland", "Germany")}
             </span>
@@ -102,11 +107,17 @@ function Impressum() {
                 info@speisely.de
               </a>
             </span>
+            <span className="block text-forest/80">
+              <strong>{tt("Direktkontakt:", "Direct Contact:")}</strong>{" "}
+              <Link to="/contact" className="text-[#b28a3c] hover:underline font-semibold">
+                {tt("Zum Online-Kontaktformular (/contact)", "Open Online Contact Form (/contact)")}
+              </Link>
+            </span>
           </div>
           <p>
             {tt(
-              "Speisely wird derzeit als frühes Startup- und Produktprojekt entwickelt. Sobald die juristische Trägergesellschaft und Handelsregistereintragung finalisiert sind, werden die entsprechenden Registerangaben auf dieser Seite ergänzt.",
-              "Speisely is currently being developed as an early-stage startup and product project. Once the corporate legal entity and commercial register entry are finalized, the corresponding registry details will be added to this page.",
+              "Speisely wird derzeit als frühes Startup- und Produktprojekt (Pre-Launch) entwickelt. Sobald die juristische Trägergesellschaft und Handelsregistereintragung finalisiert sind, werden die vollständigen Registerangaben auf dieser Seite ergänzt.",
+              "Speisely is currently being developed as an early-stage startup and product project (pre-launch). Once the corporate legal entity and commercial register entry are finalized, the complete registry details will be added to this page.",
             )}
           </p>
 
