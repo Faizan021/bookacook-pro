@@ -1,34 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Linkedin, Instagram, ArrowRight } from "lucide-react";
 import { SpeiselyLogo } from "./SpeiselyLogo";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useServerFn } from "@tanstack/react-start";
-import { getValidGeoLocations } from "@/lib/geo/server.functions";
 
 export function SiteFooter() {
   const { t, lang } = useI18n();
   const [email, setEmail] = useState("");
-  const getLocs = useServerFn(getValidGeoLocations);
-  const [validLocs, setValidLocs] = useState<{ path: string; label: string }[]>([]);
+  const isDe = lang === "de";
 
-  useEffect(() => {
-    getLocs()
-      .then(setValidLocs)
-      .catch(() => {});
-  }, [getLocs]);
-
-  const topCities = [
-    { name: "Berlin", slug: "berlin" },
-    { name: "Hamburg", slug: "hamburg" },
-    { name: "München", slug: "muenchen" },
-    { name: "Köln", slug: "koeln" },
-    { name: "Frankfurt", slug: "frankfurt" },
+  // Static SSR-rendered Geo Landing Links so Googlebot discovers them on initial HTML crawl (Depth 1)
+  const cityLinks = [
+    { label: "Restaurants in Berlin", to: "/restaurant/ort/berlin" },
+    { label: "Catering in Berlin", to: "/catering/ort/berlin" },
+    { label: "Restaurants in München", to: "/restaurant/ort/muenchen" },
+    { label: "Catering in München", to: "/catering/ort/muenchen" },
+    { label: "Restaurants in Hamburg", to: "/restaurant/ort/hamburg" },
+    { label: "Catering in Hamburg", to: "/catering/ort/hamburg" },
+    { label: "Catering in Köln", to: "/catering/ort/koeln" },
+    { label: "Catering in Frankfurt", to: "/catering/ort/frankfurt" },
   ];
 
-  const cityLinks = topCities
-    .filter((city) => validLocs.some((loc) => loc.path === `/restaurant/ort/${city.slug}`))
-    .map((city) => ({ label: `Restaurants in ${city.name}`, to: `/restaurant/ort/${city.slug}` }));
+  // SSR-rendered Community & Partner Index Links to prevent "Discovered - currently not indexed" in GSC
+  const directoryLinks = [
+    { label: "Baba Pirzola Berlin", to: "/magazin/community/baba-pirzola-berlin" },
+    { label: "bb.q Chicken Kreuzberg", to: "/magazin/community/bbq-chicken-berlin-kreuzberg" },
+    { label: "King Tut Berlin", to: "/magazin/community/king-tut-restaurant-berlin" },
+    { label: "San Sebastian Berlin", to: "/magazin/community/san-sebastian-berlin" },
+    { label: "Chicken Krush Prag", to: "/magazin/community/chicken-krush-prag" },
+    { label: "Garçon de Café Berlin", to: "/magazin/community/garcon-de-cafe-berlin" },
+    { label: "Thronburger Berlin", to: "/magazin/community/thronburger-berlin" },
+    { label: "Kokio Berlin", to: "/magazin/community/kokio-berlin" },
+    { label: "Al Zaeem Berlin", to: "/magazin/community/alzaeem-restaurant-berlin" },
+    { label: "Ariana Frankfurt", to: "/magazin/community/ariana-restaurant-frankfurt" },
+    { label: "Harput Wiesbaden", to: "/magazin/community/harput-wiesbaden" },
+    { label: "Mandy Restaurant Berlin", to: "/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln" },
+    { label: "Shawarma Albaik Berlin", to: "/magazin/speisely-visits/shawarma-albaik-berlin" },
+    { label: "Schnitzel Schmiede", to: "/magazin/schnitzel-schmiede" },
+    { label: "Speisely Visits", to: "/magazin/speisely-visits" },
+    { label: "Architecture Simulator", to: "/architecture-simulator" },
+  ];
 
   return (
     <footer className="mt-24 bg-forest text-[oklch(0.97_0.02_92)]">
@@ -46,7 +57,7 @@ export function SiteFooter() {
           title={t("footer.discover")}
           items={[
             {
-              label: lang === "de" ? "Lokale Restaurants" : "Local Restaurants",
+              label: isDe ? "Lokale Restaurants" : "Local Restaurants",
               to: "/restaurants",
             },
             { label: t("nav.catering"), to: "/catering" },
@@ -67,15 +78,15 @@ export function SiteFooter() {
             <FooterLink to="/partners" label={t("nav.partners")} />
             <FooterLink
               to="/partner/webseiten"
-              label={lang === "de" ? "Kostenlose Gastro-Websites" : "Free Gastro Websites"}
+              label={isDe ? "Kostenlose Gastro-Websites" : "Free Gastro Websites"}
             />
             <FooterLink
               to="/case-study/haus-spaas"
-              label={lang === "de" ? "Case Study: Haus Spaas" : "Case Study: Haus Spaas"}
+              label={isDe ? "Case Study: Haus Spaas" : "Case Study: Haus Spaas"}
             />
             <FooterLink
               to="/case-study/partyservice-kuepper"
-              label={lang === "de" ? "Case Study: Partyservice Küpper" : "Case Study: Küpper BBQ"}
+              label={isDe ? "Case Study: Partyservice Küpper" : "Case Study: Küpper BBQ"}
             />
             <FooterLink to="/speisely" label={t("Was ist Speisely?", "What is Speisely?")} />
             <FooterLink to="/about" label={t("nav.about")} />
@@ -104,8 +115,8 @@ export function SiteFooter() {
           </div>
         </div>
 
-        {/* Top Locations */}
-        {cityLinks.length > 0 && <FooterCol title="Städte" items={cityLinks} />}
+        {/* Top Locations (SSR rendered for instant Googlebot crawl) */}
+        <FooterCol title={isDe ? "Städte & Regionen" : "Cities & Regions"} items={cityLinks} />
 
         {/* Legal & Newsletter */}
         <div>
@@ -148,10 +159,32 @@ export function SiteFooter() {
         </div>
       </div>
 
+      {/* SSR Internal Link Hub for Magazin & Community Stories (Eliminates Orphan Sitemap URLs) */}
+      <div className="border-t border-[oklch(0.97_0.02_92)]/10">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-6">
+          <p className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[oklch(0.97_0.02_92)]/50 mb-3">
+            {isDe
+              ? "Speisely Community Stories & Kulinarik-Guides"
+              : "Speisely Community Stories & Culinary Guides"}
+          </p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-[oklch(0.97_0.02_92)]/65">
+            {directoryLinks.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="hover:text-[oklch(0.97_0.02_92)] transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="border-t border-[oklch(0.97_0.02_92)]/10">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-5 text-xs text-[oklch(0.97_0.02_92)]/60 flex flex-wrap gap-2 justify-between">
           <span>© {new Date().getFullYear()} Speisely</span>
-          <span>Berlin · Hamburg · München</span>
+          <span>Berlin · Hamburg · München · Köln · Frankfurt</span>
         </div>
       </div>
     </footer>

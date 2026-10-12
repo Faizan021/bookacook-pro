@@ -51,6 +51,7 @@ export const Route = createFileRoute("/partner/webseiten")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://speisely.de/partner/webseiten" },
     ],
+    links: [{ rel: "canonical", href: "https://speisely.de/partner/webseiten" }],
   }),
   component: WebsiteCreationPage,
 });
