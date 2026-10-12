@@ -38,7 +38,7 @@ export const Route = createFileRoute("/magazin/community/neumanns-cafe-berlin")(
       {
         property: "og:title",
         content:
-          "„…am Ende ist es nur Brot“: Frühstück im Neumanns Café Berlin-Friedrichshain — Speisely Community Story",
+          "Neumanns Café Berlin-Friedrichshain: Sauerteig-Bäckerei, Frühstück & Weinbar — Speisely Community Story",
       },
       {
         property: "og:description",
@@ -103,9 +103,9 @@ export const Route = createFileRoute("/magazin/community/neumanns-cafe-berlin")(
             {
               "@type": "Article",
               headline:
-                "„…am Ende ist es nur Brot“: Warum das Neumanns Café am Boxhagener Platz Berlins ehrlichstes Sauerteig-Frühstück serviert",
+                "Neumanns Café Berlin: Warum die eigene Sauerteig-Bäckerei am Boxhagener Platz Friedrichshains bestes Frühstück serviert",
               alternateName:
-                "...in the end, it's just bread: Why Neumanns Café by Boxhagener Platz Serves Berlin's Most Honest Sourdough Breakfast",
+                "Neumanns Café Berlin: Why This Artisanal Sourdough Bakery by Boxhagener Platz Serves Friedrichshain's Finest Breakfast",
               description:
                 "Ein Speisely Community-Frühstücksbericht über das Neumanns Café in Berlin-Friedrichshain (Gabriel-Max-Straße 18): Hausgebackenes Sauerteigbrot, pochierte Eier auf Blattspinat, spanische Tortilla, Karotten-Süßkartoffel-Stulle mit Pekannüssen & Ziegenkäse sowie Kaffee der Andraschko Kaffeemanufaktur.",
               image: [
@@ -269,14 +269,14 @@ function NeumannsCafeBerlinArticle() {
 
           <h1 className="font-display text-3xl sm:text-5xl font-bold text-forest leading-[1.12] tracking-tight mb-5">
             {isDe
-              ? "„…am Ende ist es nur Brot“: Warum das Neumanns Café am Boxhagener Platz Berlins ehrlichstes Sauerteig-Frühstück serviert"
-              : "“...in the end, it’s just bread”: Why Neumanns Café by Boxhagener Platz Serves Berlin’s Most Honest Sourdough Breakfast"}
+              ? "Neumanns Café Berlin: Warum die eigene Sauerteig-Bäckerei am Boxhagener Platz Friedrichshains bestes Frühstück serviert"
+              : "Neumanns Café Berlin: Why This Artisanal Sourdough Bakery by Boxhagener Platz Serves Friedrichshain’s Finest Breakfast"}
           </h1>
 
           <p className="text-lg sm:text-xl text-forest/80 leading-relaxed font-normal mb-6">
             {isDe
-              ? "Sechs Worte Berliner Understatement, hinter denen tagelange Fermentation steckt: In der Gabriel-Max-Straße 18 zeigt das Neumanns jeden Morgen, welche Strahlkraft ein Frühstück entfaltet, wenn das Sauerteigbrot aus der eigenen Backstube stammt – begleitet von pochierten Bio-Eiern auf jungem Blattspinat, spanischer Kartoffel-Tortilla, gerösteten Pekannüssen, französischem Ziegenkäse und Espresso der Berliner Kaffeemanufaktur Andraschko."
-              : "Six words of classic Berlin understatement backed by days of wild fermentation: At Gabriel-Max-Straße 18, Neumanns proves every morning what happens when breakfast is built on sourdough from its own bakery—paired with poached organic eggs over wilted spinach, Spanish potato tortilla, toasted pecans, French chèvre, and espresso roasted in Berlin by Andraschko Kaffeemanufaktur."}
+              ? "Wahres Bäckerhandwerk schmeckt man ab dem ersten Bissen: In der Gabriel-Max-Straße 18 zeigt das Neumanns jeden Morgen, welche Strahlkraft ein Frühstück entfaltet, wenn das langzeitfermentierte Sauerteigbrot aus der eigenen Backstube stammt – begleitet von pochierten Bio-Eiern auf jungem Blattspinat, spanischer Kartoffel-Tortilla, gerösteten Pekannüssen, französischem Ziegenkäse und Espresso der Berliner Kaffeemanufaktur Andraschko."
+              : "True bakery craft is unmistakable from the very first bite: At Gabriel-Max-Straße 18, Neumanns proves every morning how extraordinary breakfast becomes when built on slow-fermented sourdough from its own bakery—paired with poached organic eggs over wilted spinach, Spanish potato tortilla, toasted pecans, French chèvre, and espresso roasted in Berlin by Andraschko Kaffeemanufaktur."}
           </p>
 
           {/* Editorial Disclosure Banner */}
@@ -341,7 +341,7 @@ function NeumannsCafeBerlinArticle() {
                 {isDe ? "Neumanns Berlin: Drei Orte, eine Backstube" : "Neumanns Berlin: Three Concepts, One Bakery"}
               </h2>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-3.5 py-1 text-xs font-bold text-forest border border-forest/15">
-                „…am Ende ist es nur Brot 🥖“
+                {isDe ? "🥖 Eigene Sauerteig-Bäckerei" : "🥖 In-House Sourdough Bakery"}
               </span>
             </div>
 
@@ -503,17 +503,17 @@ function NeumannsCafeBerlinArticle() {
 
         {/* Main Narrative Body */}
         <div className="mx-auto max-w-3xl px-4 sm:px-6 space-y-12 text-base sm:text-lg leading-relaxed text-forest/90">
-          {/* Section 1: "...am Ende ist es nur Brot" */}
+          {/* Section 1: Artisanal Sourdough Craft */}
           <section className="space-y-4">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest tracking-tight">
               {isDe
-                ? "1. „…am Ende ist es nur Brot“ – Warum echtes Bäckerhandwerk keine großen Worte braucht"
-                : "1. “...in the end, it’s just bread” — Why True Bakery Craft Needs No Grandstanding"}
+                ? "1. Handwerk aus der eigenen Backstube: Wo großer Geschmack beim Sauerteig beginnt"
+                : "1. Craft from Their Own Bakery: Where Extraordinary Breakfast Begins with Wild Sourdough"}
             </h2>
             <p>
               {isDe
-                ? "Wer in Berlin-Friedrichshain frühstücken geht, hat die Wahl zwischen unzähligen Cafés rund um den Boxhagener Platz. Doch während viele Orte auf kurzlebige Show-Effekte setzen, liest man beim Neumanns in der Gabriel-Max-Straße 18 ein Motto, das trockener und sympathischer kaum sein könnte: „…am Ende ist es nur Brot 🥖“."
-                : "Anyone heading out for breakfast in Berlin-Friedrichshain is spoiled for choice around Boxhagener Platz. Yet while plenty of spots chase fleeting visual gimmicks, Neumanns at Gabriel-Max-Straße 18 greets you with a motto of dry, disarming Berlin modesty: “...in the end, it’s just bread 🥖”."}
+                ? "Wer in Berlin-Friedrichshain frühstücken geht, hat die Wahl zwischen unzähligen Cafés rund um den Boxhagener Platz. Doch während viele Orte auf kurzlebige Show-Effekte setzen, geht das Neumanns in der Gabriel-Max-Straße 18 den ehrlichen Weg: Während das Team sein Handwerk mit sympathischem Berliner Understatement („…am Ende ist es nur Brot“) beschreibt, schmeckt man ab dem ersten Bissen, wie viel Hingabe in jedem einzelnen Laib steckt."
+                : "Anyone heading out for breakfast in Berlin-Friedrichshain is spoiled for choice around Boxhagener Platz. Yet while plenty of spots chase fleeting visual gimmicks, Neumanns at Gabriel-Max-Straße 18 focuses on pure artisanal substance: though the bakers jokingly downplay their craft with charming Berlin modesty, one bite reveals the extraordinary dedication behind every loaf."}
             </p>
             <p>
               {isDe

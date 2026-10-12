@@ -290,7 +290,7 @@ function CommunityPage() {
               <div>
                 <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
                   <img
-                    src="/magazin/neumanns-cafe-berlin/05_poached_eggs_spinach_hd.jpg?v=2"
+                    src="/magazin/neumanns-cafe-berlin/05_poached_eggs_spinach_hd.jpg?v=3"
                     alt={
                       isDe
                         ? "Neumanns Café am Boxhagener Platz in Berlin-Friedrichshain: Hausgebackenes Sauerteigbrot, pochierte Eier & Andraschko Kaffee"
@@ -317,8 +317,8 @@ function CommunityPage() {
                   </span>
                   <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#9E6D18] transition-colors leading-snug">
                     {isDe
-                      ? "Neumanns Café: „…am Ende ist es nur Brot“ – Das schönste Frühstück am Boxhagener Platz"
-                      : "Neumanns Café: “...in the end, it’s just bread” — Artisan Sourdough Breakfast at Boxhagener Platz"}
+                      ? "Neumanns Café Berlin: Handwerkliches Sauerteig-Frühstück am Boxhagener Platz"
+                      : "Neumanns Café Berlin: Artisanal Sourdough Breakfast & Bakery by Boxhagener Platz"}
                   </h3>
                   <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
                     {isDe
