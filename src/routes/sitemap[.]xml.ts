@@ -87,6 +87,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.8",
           },
           {
+            path: "/magazin/community/neumanns-cafe-berlin",
+            lastmod: today,
+            changefreq: "monthly",
+            priority: "0.8",
+          },
+          {
             path: "/magazin/community/harput-wiesbaden",
             lastmod: today,
             changefreq: "monthly",

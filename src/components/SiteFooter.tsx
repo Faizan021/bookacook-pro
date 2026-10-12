@@ -23,6 +23,7 @@ export function SiteFooter() {
 
   // SSR-rendered Community & Partner Index Links to prevent "Discovered - currently not indexed" in GSC
   const directoryLinks = [
+    { label: "Neumanns Café Berlin", to: "/magazin/community/neumanns-cafe-berlin" },
     { label: "Baba Pirzola Berlin", to: "/magazin/community/baba-pirzola-berlin" },
     { label: "bb.q Chicken Kreuzberg", to: "/magazin/community/bbq-chicken-berlin-kreuzberg" },
     { label: "King Tut Berlin", to: "/magazin/community/king-tut-restaurant-berlin" },

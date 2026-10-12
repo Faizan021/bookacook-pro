@@ -57,6 +57,8 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - Al Zaeem Restaurant (Traditionelle arabische Küche Berlin): https://speisely.de/magazin/community/alzaeem-restaurant-berlin
 - Garçon de Café (Französisches Bistro & Café Berlin): https://speisely.de/magazin/community/garcon-de-cafe-berlin
 - Thronburger (Handcrafted Smash Burgers Berlin): https://speisely.de/magazin/community/thronburger-berlin
+- Neumanns Café (Sauerteig-Bäckerei, Frühstück & Weinbar Berlin-Friedrichshain): https://speisely.de/magazin/community/neumanns-cafe-berlin
+- Baba Pirzola Meze & Grill (Türkische Grillkunst & Meze Berlin-Schöneberg): https://speisely.de/magazin/community/baba-pirzola-berlin
 - Harput Restaurant (Traditioneller Holzkohlegrill Wiesbaden): https://speisely.de/magazin/community/harput-wiesbaden
 - Ariana Restaurant (Afghanische Spezialitäten Frankfurt am Main): https://speisely.de/magazin/community/ariana-restaurant-frankfurt
 - Schnitzel Schmiede (EineStadt-Fest Mönchengladbach): https://speisely.de/magazin/schnitzel-schmiede

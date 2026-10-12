@@ -282,7 +282,60 @@ function CommunityPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* 0. Baba Pirzola Meze & Grill Berlin (Newest Story) */}
+            {/* 00. Neumanns Café Berlin-Friedrichshain (Newest Story) */}
+            <Link
+              to="/magazin/community/neumanns-cafe-berlin"
+              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+            >
+              <div>
+                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                  <img
+                    src="/magazin/neumanns-cafe-berlin/05_poached_eggs_spinach_hd.jpg?v=2"
+                    alt={
+                      isDe
+                        ? "Neumanns Café am Boxhagener Platz in Berlin-Friedrichshain: Hausgebackenes Sauerteigbrot, pochierte Eier & Andraschko Kaffee"
+                        : "Neumanns Café at Boxhagener Platz Berlin-Friedrichshain: House-baked sourdough, poached eggs & Andraschko coffee"
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-sm">
+                      <Sparkles className="h-3 w-3 text-forest" aria-hidden="true" />
+                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-forest/90 text-white text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                      Friedrichshain · Berlin
+                    </span>
+                  </div>
+                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                    📸 Speisely Community
+                  </div>
+                </div>
+                <div className="p-6">
+                  <span className="text-xs font-semibold text-[#9E6D18] uppercase tracking-wider block mb-1">
+                    {isDe ? "Sauerteig-Bäckerei & Brunch" : "Sourdough Bakery & Brunch"}
+                  </span>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#9E6D18] transition-colors leading-snug">
+                    {isDe
+                      ? "Neumanns Café: „…am Ende ist es nur Brot“ – Das schönste Frühstück am Boxhagener Platz"
+                      : "Neumanns Café: “...in the end, it’s just bread” — Artisan Sourdough Breakfast at Boxhagener Platz"}
+                  </h3>
+                  <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
+                    {isDe
+                      ? "Hausgebackenes Sauerteigbrot aus der eigenen Bäckerei, pochierte Eier auf Blattspinat, Süßkartoffel-Pekannuss-Stulle mit Ziegenkäse, spanische Tortilla & Andraschko-Kaffee in der Gabriel-Max-Straße 18."
+                      : "House-baked sourdough from their own bakery, poached eggs on wilted spinach, sweet-potato pecan tartine with goat cheese, Spanish tortilla & Andraschko coffee at Gabriel-Max-Straße 18."}
+                  </p>
+                </div>
+              </div>
+              <div className="px-6 pb-6 pt-2 border-t border-forest/10 flex items-center justify-between text-xs text-forest/60">
+                <span>{isDe ? "Oktober 2026" : "October 2026"}</span>
+                <span className="font-semibold text-forest group-hover:text-[#9E6D18] flex items-center gap-1">
+                  {isDe ? "Story lesen" : "Read story"} →
+                </span>
+              </div>
+            </Link>
+
+            {/* 0. Baba Pirzola Meze & Grill Berlin */}
             <Link
               to="/magazin/community/baba-pirzola-berlin"
               className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
