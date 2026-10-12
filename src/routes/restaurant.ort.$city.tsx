@@ -18,20 +18,11 @@ export const Route = createFileRoute("/restaurant/ort/$city")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [] };
-    const { seoData, indexStatus, location, searchParams } = loaderData;
+    const { seoData, location, searchParams } = loaderData;
     if (!location) return { meta: [] };
 
     const isFiltered = Object.keys(searchParams).length > 0;
-    const meetsThreshold =
-      (loaderData?.vendors?.length ?? 0) >= 3 && ((seoData as any)?.intro_md?.length ?? 0) >= 150;
-    const finalIndexStatus =
-      isFiltered || !meetsThreshold || indexStatus !== "index"
-        ? "noindex, follow"
-        : "index, follow";
-
-    console.log(
-      `[SEO Index Gating] City: ${location.name} | Vendors count: ${loaderData?.vendors?.length ?? 0} (min 3) | Intro length: ${(seoData as any)?.intro_md?.length ?? 0} (min 150) | Status: ${finalIndexStatus}`,
-    );
+    const finalIndexStatus = isFiltered ? "noindex, follow" : "index, follow";
 
     const canonicalUrl = `https://speisely.de/restaurant/ort/${location.name.toLowerCase().replace(/\s+/g, "-")}`;
 

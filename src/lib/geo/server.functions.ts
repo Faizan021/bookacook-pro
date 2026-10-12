@@ -168,23 +168,8 @@ export const getGeoPageData = createServerFn({ method: "GET" })
       console.error("Vendor fetch error in getGeoPageData:", vErr);
     }
 
-    // 4. Quality Evaluation
-    let indexStatus: "index" | "noindex" | "404" = "index";
-
-    // Check SEO Field Completeness
-    const hasSeo = seoData && seoData.meta_title && seoData.target_keyword;
-    const hasUniqueText = seoData && seoData.content && seoData.content.length > 50;
-
-    // Vendor Thresholds
-    const minVendors = data.role === "restaurants" ? 3 : 1;
-    const hasEnoughVendors = vendors.length >= minVendors;
-
-    if (!hasEnoughVendors && !hasUniqueText) {
-      indexStatus = "noindex"; // Weak/incomplete page quarantined
-    }
-    if (!hasSeo) {
-      indexStatus = "noindex"; // Missing required SEO fields
-    }
+    // 4. Quality Evaluation (All valid city pages are indexable)
+    const indexStatus: "index" | "noindex" | "404" = "index";
 
     // 5. Aggregate Rating
     // We will aggregate reviews for these specific vendors if we need to.
@@ -270,125 +255,33 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
         .eq("status", "published")
         .like("slug", "%/ort/%")) as { data: any[] | null };
 
-      if (!seoPages || seoPages.length === 0) {
-        geoLocationsCache = { data: [], timestamp: now };
-        return [];
+      const validEntriesMap = new Map<string, { path: string; label: string }>();
+
+      // Core German cities always included
+      const coreCities = [
+        { slug: "berlin", label: "Berlin" },
+        { slug: "muenchen", label: "München" },
+        { slug: "hamburg", label: "Hamburg" },
+        { slug: "koeln", label: "Köln" },
+        { slug: "frankfurt", label: "Frankfurt" },
+      ];
+      for (const c of coreCities) {
+        validEntriesMap.set(`/restaurant/ort/${c.slug}`, { path: `/restaurant/ort/${c.slug}`, label: c.label });
+        validEntriesMap.set(`/catering/ort/${c.slug}`, { path: `/catering/ort/${c.slug}`, label: c.label });
+        validEntriesMap.set(`/planner/ort/${c.slug}`, { path: `/planner/ort/${c.slug}`, label: c.label });
       }
 
-      // Extract only unique target cities from the SEO pages
-      const targetCityNames = Array.from(
-        new Set(
-          seoPages
-            .map((p) => p.slug?.split("/")[2])
-            .filter(Boolean)
-            .map((slug) => slug.replace(/-/g, " ")),
-        ),
-      );
+      if (seoPages && seoPages.length > 0) {
+        for (const page of seoPages) {
+          const parts = page.slug?.split("/");
+          if (!parts || parts.length !== 3) continue;
 
-      // 2. Fetch targeted locations and vendor cities in parallel bulk queries
-      const safeQuery = async (p: PromiseLike<any>) => {
-        try {
-          return await p;
-        } catch {
-          return { data: [] };
-        }
-      };
-
-      const [locsRes, restRes, catRes, planRes] = await Promise.all([
-        targetCityNames.length > 0
-          ? safeQuery(
-              supabaseAdmin.from("german_locations").select("name").in("name", targetCityNames),
-            )
-          : Promise.resolve({ data: [] }),
-        safeQuery(supabaseAdmin.from("restaurants").select("city").eq("is_published", true)),
-        safeQuery(supabaseAdmin.from("caterers").select("city")),
-        safeQuery(supabaseAdmin.from("planners").select("city")),
-      ]);
-
-      const locationNameMap = new Map<string, string>();
-      if (locsRes && "data" in locsRes && locsRes.data) {
-        for (const loc of locsRes.data as any[]) {
-          if (loc.name) {
-            locationNameMap.set(loc.name.toLowerCase(), loc.name);
-          }
-        }
-      }
-
-      const restCounts = new Map<string, number>();
-      if (restRes && "data" in restRes && restRes.data) {
-        for (const r of restRes.data as any[]) {
-          if (r.city) {
-            const key = r.city.trim().toLowerCase();
-            restCounts.set(key, (restCounts.get(key) || 0) + 1);
-          }
-        }
-      }
-
-      const catCounts = new Map<string, number>();
-      if (catRes.data) {
-        for (const c of catRes.data) {
-          if (c.city) {
-            const key = c.city.trim().toLowerCase();
-            catCounts.set(key, (catCounts.get(key) || 0) + 1);
-          }
-        }
-      }
-
-      const planCounts = new Map<string, number>();
-      if (planRes.data) {
-        for (const p of planRes.data) {
-          if (p.city) {
-            const key = p.city.trim().toLowerCase();
-            planCounts.set(key, (planCounts.get(key) || 0) + 1);
-          }
-        }
-      }
-
-      const validEntries: { path: string; label: string }[] = [];
-
-      // 3. Evaluate each page in memory
-      for (const page of seoPages) {
-        const parts = page.slug?.split("/");
-        if (!parts || parts.length !== 3) continue;
-
-        const role = parts[0];
-        const citySlug = parts[2];
-
-        const hasSeo = page.meta_title && page.target_keyword;
-        const hasUniqueText = page.content && page.content.length > 50;
-
-        if (!hasSeo) continue;
-
-        const normalizedCity = citySlug.replace(/-/g, " ").toLowerCase();
-        const locationName =
-          locationNameMap.get(normalizedCity) ||
-          citySlug
+          const citySlug = parts[2];
+          const locationName = citySlug
             .split("-")
             .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
             .join(" ");
 
-        const cityKey = locationName.trim().toLowerCase();
-        let vendorCount = 0;
-        if (role === "restaurants") {
-          vendorCount = restCounts.get(cityKey) || 0;
-        } else if (role === "caterer") {
-          vendorCount = catCounts.get(cityKey) || 0;
-        } else if (role === "planner") {
-          vendorCount = planCounts.get(cityKey) || 0;
-        }
-
-        const minVendors = role === "restaurants" ? 3 : 1;
-        const hasEnoughVendors = vendorCount >= minVendors;
-
-        const introCopy: string = page.content || "";
-        const hasRichIntro = introCopy.length >= 150;
-
-        const isIndexable =
-          role === "restaurants"
-            ? hasEnoughVendors && hasRichIntro
-            : hasEnoughVendors || hasUniqueText;
-
-        if (isIndexable) {
           let finalSlug = page.slug;
           if (finalSlug && finalSlug.startsWith("restaurants/ort/")) {
             finalSlug = finalSlug.replace("restaurants/ort/", "restaurant/ort/");
@@ -396,10 +289,14 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
           if (finalSlug && finalSlug.startsWith("caterer/ort/")) {
             finalSlug = finalSlug.replace("caterer/ort/", "catering/ort/");
           }
-          validEntries.push({ path: `/${finalSlug}`, label: locationName });
+          const path = `/${finalSlug}`;
+          if (!validEntriesMap.has(path)) {
+            validEntriesMap.set(path, { path, label: locationName });
+          }
         }
       }
 
+      const validEntries = Array.from(validEntriesMap.values());
       geoLocationsCache = { data: validEntries, timestamp: now };
       return validEntries;
     })();
