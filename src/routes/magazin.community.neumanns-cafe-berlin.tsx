@@ -1,14 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   MapPin,
-  Clock,
-  Utensils,
-  Sparkles,
   Users,
   Camera,
   Info,
   Coffee,
-  Wine,
   Award,
   ArrowRight,
   Compass,
@@ -332,117 +328,8 @@ function NeumannsCafeBerlinArticle() {
           </figure>
         </section>
 
-        {/* Quick Key Facts Box + 3-Concept Kiez Compass + Speisely Verdict Bento */}
-        <section className="mx-auto max-w-3xl px-4 sm:px-6 mb-12 space-y-6">
-          <div className="rounded-3xl bg-white border border-forest/10 p-6 sm:p-8 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-forest/10 pb-4">
-              <h2 className="font-display text-lg sm:text-xl font-bold text-forest flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-[#9E6D18]" />
-                {isDe ? "Neumanns Berlin: Drei Orte, eine Backstube" : "Neumanns Berlin: Three Concepts, One Bakery"}
-              </h2>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-cream px-3.5 py-1 text-xs font-bold text-forest border border-forest/15">
-                {isDe ? "🥖 Eigene Sauerteig-Bäckerei" : "🥖 In-House Sourdough Bakery"}
-              </span>
-            </div>
-
-            {/* 3-Concept Visual Cards (Café / Weinbar, Um die Ecke, Bäckerei) */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-              <div className="rounded-2xl bg-cream/70 border border-forest/10 p-4 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between text-xs font-extrabold uppercase tracking-wider text-[#9E6D18] mb-1">
-                    <span>01 · Café & Weinbar</span>
-                    <Wine className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="font-bold text-forest text-sm mb-1">
-                    {isDe ? "Frühstück & Abend-Weinbar" : "Brunch & Evening Wine Bar"}
-                  </div>
-                  <p className="text-xs text-forest/75 leading-relaxed mb-3">
-                    {isDe
-                      ? "Ausgedehntes Sauerteig-Frühstück am Tag, entspannte Nachbarschafts-Weinbar am Abend."
-                      : "Long sourdough breakfasts by day, intimate neighborhood wine bar by night."}
-                  </p>
-                </div>
-                <div className="pt-2.5 border-t border-forest/10 text-xs font-semibold text-forest space-y-0.5">
-                  <div>▸ Café: 09:00 – 17:00</div>
-                  <div className="text-[#9E6D18]">▸ Do–Sa: 18:30 – 23:00 (Weinbar)</div>
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-cream/70 border border-forest/10 p-4 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between text-xs font-extrabold uppercase tracking-wider text-[#9E6D18] mb-1">
-                    <span>02 · Um die Ecke</span>
-                    <Coffee className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="font-bold text-forest text-sm mb-1">
-                    {isDe ? "Für Frühaufsteher & Unterwegs" : "Early Risers & Coffee to Go"}
-                  </div>
-                  <p className="text-xs text-forest/75 leading-relaxed mb-3">
-                    {isDe
-                      ? "Andraschko Espresso, Flat White, warme Croissants und belegte Stullen ab dem frühen Morgen."
-                      : "Andraschko espresso, flat whites, warm croissants, and sourdough sandwiches from early morning."}
-                  </p>
-                </div>
-                <div className="pt-2.5 border-t border-forest/10 text-xs font-semibold text-forest space-y-0.5">
-                  <div>▸ {isDe ? "Täglich:" : "Daily:"} 08:00 – 18:00</div>
-                  <div className="text-forest/60">Gabriel-Max-Str. 18 (Ecke)</div>
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-cream/70 border border-forest/10 p-4 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between text-xs font-extrabold uppercase tracking-wider text-[#9E6D18] mb-1">
-                    <span>03 · Die Bäckerei</span>
-                    <Utensils className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="font-bold text-forest text-sm mb-1">
-                    {isDe ? "Handwerkliche Backstube" : "Artisanal Sourdough Bakery"}
-                  </div>
-                  <p className="text-xs text-forest/75 leading-relaxed mb-3">
-                    {isDe
-                      ? "Ganze Sauerteiglaibe mit krachender Kruste und feines Gebäck für zu Hause."
-                      : "Whole slow-fermented sourdough loaves with crackling crusts to take home."}
-                  </p>
-                </div>
-                <div className="pt-2.5 border-t border-forest/10 text-xs font-semibold text-forest space-y-0.5">
-                  <div>▸ Mi–Fr: {isDe ? "ab 08:00 Uhr" : "from 08:00"}</div>
-                  <div className="text-forest/60">{isDe ? "Solange der Vorrat reicht" : "While loaves last"}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm pt-1">
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-cream/50">
-                <MapPin className="h-5 w-5 text-forest shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-bold text-forest">
-                    {isDe ? "Standort im Kiez" : "Neighborhood Location"}
-                  </div>
-                  <div className="text-forest/85 font-medium">Gabriel-Max-Straße 18, 10245 Berlin</div>
-                  <div className="text-xs text-forest/65 mt-0.5">
-                    {isDe
-                      ? "Berlin-Friedrichshain · Direkt am Boxhagener Platz"
-                      : "Berlin-Friedrichshain · Steps from Boxhagener Platz"}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-cream/50">
-                <Clock className="h-5 w-5 text-forest shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-bold text-forest">
-                    {isDe ? "Unsere 3 Bestellungen beim Besuch" : "Our 3 Orders During the Visit"}
-                  </div>
-                  <div className="text-forest/80 text-xs leading-relaxed mt-0.5">
-                    {isDe
-                      ? "1. Pochierte Eier auf Blattspinat & Sauerteig · 2. Spanische Kartoffel-Tortilla & Butter-Croissant · 3. Karotten-Süßkartoffel-Stulle mit Pekannüssen & Ziegenkäse"
-                      : "1. Poached eggs on spinach & sourdough · 2. Spanish potato tortilla & butter croissant · 3. Carrot-sweet-potato tartine with pecans & chèvre"}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        {/* Speisely Verdict Bento */}
+        <section className="mx-auto max-w-3xl px-4 sm:px-6 mb-12">
           {/* Speisely Verdict 4-Pillar Bento Box */}
           <div className="rounded-3xl bg-forest text-white p-6 sm:p-8 shadow-xl border border-[#E6B84A]/30">
             <div className="flex items-center justify-between gap-2 mb-5">
