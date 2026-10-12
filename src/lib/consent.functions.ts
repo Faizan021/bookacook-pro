@@ -130,6 +130,26 @@ export const upsertConsentRecord = createServerFn({ method: "POST" })
       );
     }
 
+    // Notify admin (owner) whenever a new user signs up via /auth
+    if (data.source === "auth_signup" && !existing) {
+      const { sendAdminSignupNotificationEmail } = await import("@/lib/email.functions");
+      const meta = data.metadata || {};
+      sendAdminSignupNotificationEmail({
+        data: {
+          email: data.email,
+          role: String(meta.role || data.audience_type || "customer"),
+          fullName: meta.fullName ? String(meta.fullName) : undefined,
+          businessName: meta.businessName ? String(meta.businessName) : undefined,
+          phone: meta.phone ? String(meta.phone) : undefined,
+          city: meta.city ? String(meta.city) : undefined,
+          address: meta.address ? String(meta.address) : undefined,
+          source: data.source_detail || "auth_signup",
+        },
+      }).catch((err) => {
+        console.error("Failed to trigger admin signup notification email:", err);
+      });
+    }
+
     return { success: true };
   });
 

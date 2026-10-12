@@ -195,3 +195,82 @@ export const sendPartnerNotificationEmail = createServerFn({ method: "POST" })
     }
     return { success: true };
   });
+
+export const sendAdminSignupNotificationEmail = createServerFn({ method: "POST" })
+  .validator(
+    (input: {
+      email: string;
+      role: string;
+      fullName?: string;
+      businessName?: string;
+      phone?: string;
+      city?: string;
+      address?: string;
+      source?: string;
+    }) =>
+      z
+        .object({
+          email: z.string().email(),
+          role: z.string(),
+          fullName: z.string().optional(),
+          businessName: z.string().optional(),
+          phone: z.string().optional(),
+          city: z.string().optional(),
+          address: z.string().optional(),
+          source: z.string().optional(),
+        })
+        .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const isPartner = data.role !== "customer";
+    const badgeLabel = isPartner ? `Business Partner (${data.role})` : "Customer";
+    const subject = `🎉 New Speisely Signup: ${data.businessName || data.fullName || data.email} [${badgeLabel}]`;
+
+    const text = `
+New User Signup on Speisely.de!
+
+Role: ${badgeLabel}
+Email: ${data.email}
+${data.fullName ? `Name: ${data.fullName}\n` : ""}${data.businessName ? `Business Name: ${data.businessName}\n` : ""}${data.phone ? `Phone: ${data.phone}\n` : ""}${data.city ? `City: ${data.city}\n` : ""}${data.address ? `Address: ${data.address}\n` : ""}Source: ${data.source || "auth_signup"}
+Time: ${new Date().toISOString()}
+    `.trim();
+
+    const html = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #16372f;">
+        <h2 style="color: #16372f;">🎉 New Speisely Signup!</h2>
+        <p><strong>Account Type:</strong> <span style="background-color: #eadfce; padding: 4px 10px; border-radius: 4px; font-weight: bold;">${badgeLabel}</span></p>
+        <p><strong>Email:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+        ${data.fullName ? `<p><strong>Full Name:</strong> ${data.fullName}</p>` : ""}
+        ${data.businessName ? `<p><strong>Business Name:</strong> ${data.businessName}</p>` : ""}
+        ${data.phone ? `<p><strong>Phone:</strong> ${data.phone}</p>` : ""}
+        ${data.city ? `<p><strong>City:</strong> ${data.city}</p>` : ""}
+        ${data.address ? `<p><strong>Address:</strong> ${data.address}</p>` : ""}
+        <hr style="border: none; border-top: 1px solid #eadfce; margin: 20px 0;" />
+        <p style="font-size: 12px; color: #666;">Signed up via Speisely (${data.source || "auth_signup"}) at ${new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}.</p>
+      </div>
+    `;
+
+    if (resend) {
+      try {
+        await resend.emails.send({
+          from: "Speisely Signups <noreply@send.speisely.de>",
+          to: "faizan.ahmed01213@gmail.com",
+          replyTo: data.email,
+          subject,
+          text,
+          html,
+        });
+        console.log(`[Email] Admin signup notification sent for ${data.email}`);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "unknown";
+        console.error(`[Email Error] Failed to send admin signup notification: ${msg}`);
+      }
+    } else {
+      console.log(
+        `[Email Dev] Admin signup notification NOT sent (no Resend key) for ${data.email} (${badgeLabel})`,
+      );
+    }
+
+    return { success: true };
+  });
+
