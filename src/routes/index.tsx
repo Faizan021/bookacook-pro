@@ -1504,8 +1504,8 @@ function Home() {
                 </Link>
                 <p className="text-xs sm:text-sm text-forest/75 leading-relaxed mb-6">
                   Vom unleserlichen PDF zum vollen Gastraum in 24 Stunden: Duales Speisekarten-System
-                  (Oktoberfest &amp; Klassik), 1-Klick WhatsApp Reservierung und ultraschnelle
-                  Google-Ladezeiten für maximale Reservierungs-Conversions.
+                  (Oktoberfest &amp; Klassik), direkte 1-Klick WhatsApp- &amp; E-Mail-Reservierung und
+                  ultraschnelle Google-Ladezeiten ohne Mittelsmann-Provision.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">
@@ -1514,11 +1514,11 @@ function Home() {
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-purple-800">
                     ⚡ 0.48s Ladezeit
                   </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-700">
+                    💬 WhatsApp &amp; E-Mail Engine
+                  </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-amber-800">
                     🥨 Duale Speisekarte
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
-                    📲 1-Klick WhatsApp
                   </span>
                 </div>
               </div>

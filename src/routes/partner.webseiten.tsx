@@ -23,6 +23,8 @@ import {
   Bot,
   FileSpreadsheet,
   Activity,
+  MessageSquare,
+  Mail,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -483,10 +485,10 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
         </section>
 
         {/* ─────────────────────────────────────────────────
-            CORE ADVANTAGES (4 Feature Cards)
+            CORE ADVANTAGES (5 Feature Cards including WhatsApp & Email)
         ───────────────────────────────────────────────── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             <div className="rounded-3xl bg-white p-6 border-2 border-forest/10 shadow-lg hover:border-[#E6B84A] transition">
               <Zap className="h-7 w-7 text-[#E6B84A] mb-3" />
               <h3 className="font-bold text-base text-forest mb-1">PageSpeed 99+</h3>
@@ -502,6 +504,15 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
               <p className="text-xs text-forest/70 leading-relaxed">
                 Strukturierte Schema.org-Daten für Google AI Overviews, Bing und Perplexity – damit
                 Kunden dich lokal sofort finden.
+              </p>
+            </div>
+
+            <div className="rounded-3xl bg-white p-6 border-2 border-forest/10 shadow-lg hover:border-[#E6B84A] transition">
+              <MessageSquare className="h-7 w-7 text-emerald-600 mb-3" />
+              <h3 className="font-bold text-base text-forest mb-1">WhatsApp &amp; E-Mail</h3>
+              <p className="text-xs text-forest/70 leading-relaxed">
+                1-Klick WhatsApp Reservierung &amp; automatisierte E-Mail Bestätigungen. Keine
+                Provision an Mittelsmänner, 100 % Gastkontakt.
               </p>
             </div>
 
