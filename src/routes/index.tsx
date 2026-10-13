@@ -278,6 +278,28 @@ function Home() {
     [tt],
   );
 
+  const partnerChips = useMemo(
+    () => [
+      {
+        label: tt("⚡ 0.48s Speed & KI-SEO", "⚡ 0.48s Speed & AI SEO"),
+        to: "/partner/webseiten",
+      },
+      {
+        label: tt("💶 34,99 € Rechner", "💶 34.99 € Calculator"),
+        to: "/partners#calculator",
+      },
+      {
+        label: tt("💬 WhatsApp Buchung", "💬 WhatsApp Booking"),
+        to: "/case-study/haus-spaas",
+      },
+      {
+        label: tt("🖥️ Live-KDS Küchenmonitor", "🖥️ Live KDS Display"),
+        to: "/restaurant/kitchen",
+      },
+    ],
+    [tt],
+  );
+
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
@@ -659,7 +681,7 @@ function Home() {
                 className="mt-8 mb-4"
               >
                 <LayoutGroup id="heroTabs">
-                  <div className="flex flex-wrap gap-2 relative">
+                  <div className="grid grid-cols-3 sm:flex sm:flex-wrap gap-1.5 sm:gap-2 relative">
                     {verticals.map((v) => (
                       <Link
                         key={v.key}
@@ -667,7 +689,7 @@ function Home() {
                         to={v.to}
                         onMouseEnter={() => setActiveVertical(v.key)}
                         onClick={() => setActiveVertical(v.key)}
-                        className={`relative flex items-center gap-2 rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
+                        className={`relative flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 rounded-full px-2.5 sm:px-5 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
                           activeVertical === v.key
                             ? "text-forest border-transparent"
                             : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
@@ -680,11 +702,11 @@ function Home() {
                             transition={{ type: "spring", stiffness: 380, damping: 30 }}
                           />
                         )}
-                        <span className="relative z-10 flex items-center gap-2">
+                        <span className="relative z-10 flex items-center gap-1.5 sm:gap-2 truncate">
                           {v.icon}
-                          <span>{v.label}</span>
+                          <span className="truncate">{v.label}</span>
                           {activeVertical !== v.key && (
-                            <span className="hidden sm:block text-[10px] text-white/50 font-medium">
+                            <span className="hidden md:inline text-[10px] text-white/50 font-medium">
                               {v.sublabel}
                             </span>
                           )}
@@ -709,7 +731,9 @@ function Home() {
               >
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                    {searching ? (
+                    {audienceMode === "partner" ? (
+                      <Globe className="h-5 w-5 text-[#b28a3c]" />
+                    ) : searching ? (
                       <Loader2 className="h-5 w-5 text-[#b28a3c] animate-spin" />
                     ) : (
                       <Sparkles className="h-5 w-5 text-[#b28a3c]" />
@@ -721,23 +745,35 @@ function Home() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        handleAISearch();
+                        if (audienceMode === "partner") {
+                          if (searchQuery.trim()) {
+                            trackEvent("partner_audit_hero_searched", { query: searchQuery.trim() });
+                          }
+                          navigate({ to: "/partner/webseiten" });
+                        } else {
+                          handleAISearch();
+                        }
                       }
                     }}
                     disabled={searching}
                     className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-3.5 pl-14 pr-36 sm:pr-44 text-sm sm:text-base text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
                     placeholder={
-                      activeVertical === "restaurant"
+                      audienceMode === "partner"
                         ? tt(
-                            "z.B. Neapolitanische Pizza, Sushi oder Tagesmenü...",
-                            "e.g. Neapolitan Pizza, Sushi or lunch specials...",
+                            "z.B. deine-domain.de für kostenlosen Speed- & SEO-Check...",
+                            "e.g. your-domain.com for free speed & SEO check...",
                           )
-                        : activeVertical === "planner"
+                        : activeVertical === "restaurant"
                           ? tt(
-                              "z.B. Hochzeitsplanung für 80 Gäste mit Location...",
-                              "e.g. Wedding planning for 80 guests with venue...",
+                              "z.B. Neapolitanische Pizza, Sushi oder Tagesmenü...",
+                              "e.g. Neapolitan Pizza, Sushi or lunch specials...",
                             )
-                          : rotatingPlaceholders[placeholderIndex]
+                          : activeVertical === "planner"
+                            ? tt(
+                                "z.B. Hochzeitsplanung für 80 Gäste mit Location...",
+                                "e.g. Wedding planning for 80 guests with venue...",
+                              )
+                            : rotatingPlaceholders[placeholderIndex]
                     }
                   />
 
@@ -746,6 +782,13 @@ function Home() {
                     <button
                       type="button"
                       onClick={() => {
+                        if (audienceMode === "partner") {
+                          if (searchQuery.trim()) {
+                            trackEvent("partner_audit_hero_searched", { query: searchQuery.trim() });
+                          }
+                          navigate({ to: "/partner/webseiten" });
+                          return;
+                        }
                         if (searchQuery.trim()) {
                           handleAISearch();
                         } else {
@@ -754,59 +797,93 @@ function Home() {
                       }}
                       disabled={searching}
                       className="bg-gradient-to-r from-[#b28a3c] via-[#c69a45] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-3.5 sm:px-5 py-2 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
-                      title={tt("Finden & KI-Berater starten", "Find & start AI advisor")}
+                      title={
+                        audienceMode === "partner"
+                          ? tt("Kostenlosen Website-Audit starten", "Start free website audit")
+                          : tt("Finden & KI-Berater starten", "Find & start AI advisor")
+                      }
                     >
-                      {searching ? (
-                        <Loader2 className="h-4 w-4 animate-spin text-forest shrink-0" />
+                      {audienceMode === "partner" ? (
+                        <>
+                          <Globe className="h-4 w-4 text-forest shrink-0" />
+                          <span>{tt("Audit starten", "Start Audit")}</span>
+                        </>
                       ) : (
-                        <Sparkles className="h-4 w-4 text-forest shrink-0" />
+                        <>
+                          {searching ? (
+                            <Loader2 className="h-4 w-4 animate-spin text-forest shrink-0" />
+                          ) : (
+                            <Sparkles className="h-4 w-4 text-forest shrink-0" />
+                          )}
+                          <span>{tt("Finden", "Find")}</span>
+                        </>
                       )}
-                      <span>{tt("Finden", "Find")}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Refined Context Chips Row: Elegant, un-cluttered suggestion pill bar */}
+                {/* Refined Context Chips Row: Contextual suggestions & 6-city jump links */}
                 <div className="mt-3.5 flex flex-wrap items-center gap-2 text-xs">
                   <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
-                    {tt("Vorschläge:", "Suggestions:")}
+                    {audienceMode === "partner"
+                      ? tt("Werkzeuge:", "Tools:")
+                      : tt("Vorschläge:", "Suggestions:")}
                   </span>
-                  {scenarioChips.map((chip, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => {
-                        setSearchQuery(chip.query);
-                        setIsConciergeOpen(true);
-                      }}
-                      className="inline-flex items-center rounded-full bg-white/[0.08] hover:bg-[#E6B84A] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer backdrop-blur-sm"
-                    >
-                      {chip.label}
-                    </button>
-                  ))}
-                  {/* Subtle, direct city jump links */}
-                  <div className="w-full sm:w-auto flex items-center gap-2 pt-1 sm:pt-0 sm:ml-auto">
-                    <span className="text-[11px] font-bold text-white/40 uppercase tracking-wider">
-                      {tt("Top:", "Top:")}
-                    </span>
-                    {["Berlin", "München", "Hamburg"].map((cityName) => {
-                      const slug = cityName === "München" ? "muenchen" : cityName.toLowerCase();
-                      return (
-                        <a
-                          key={slug}
-                          href={
-                            activeVertical === "restaurant"
-                              ? `/restaurants?city=${slug}`
-                              : activeVertical === "planner"
-                                ? `/planner/ort/${slug}`
-                                : `/catering/ort/${slug}`
+                  {audienceMode === "partner"
+                    ? partnerChips.map((chip, i) => (
+                        <Link
+                          key={i}
+                          to={chip.to}
+                          onClick={() =>
+                            trackEvent("hero_partner_chip_clicked", { label: chip.label })
                           }
-                          className="text-white/60 hover:text-[#E6B84A] underline-offset-4 hover:underline text-xs transition-colors"
+                          className="inline-flex items-center rounded-full bg-white/[0.08] hover:bg-[#E6B84A] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer backdrop-blur-sm"
                         >
-                          {cityName}
-                        </a>
-                      );
-                    })}
+                          {chip.label}
+                        </Link>
+                      ))
+                    : scenarioChips.map((chip, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => {
+                            setSearchQuery(chip.query);
+                            setIsConciergeOpen(true);
+                          }}
+                          className="inline-flex items-center rounded-full bg-white/[0.08] hover:bg-[#E6B84A] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer backdrop-blur-sm"
+                        >
+                          {chip.label}
+                        </button>
+                      ))}
+
+                  {/* 6 Direct City Jump Links for SEO & Quick Navigation */}
+                  <div className="w-full sm:w-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-1.5 sm:pt-0 sm:ml-auto">
+                    <span className="text-[11px] font-bold text-white/40 uppercase tracking-wider flex items-center gap-1">
+                      <MapPin className="h-3 w-3 text-[#E6B84A]" />
+                      {tt("Städte:", "Cities:")}
+                    </span>
+                    {[
+                      { name: "Berlin", slug: "berlin" },
+                      { name: "München", slug: "muenchen" },
+                      { name: "Hamburg", slug: "hamburg" },
+                      { name: "Frankfurt", slug: "frankfurt" },
+                      { name: "Köln", slug: "koeln" },
+                      { name: "Düsseldorf", slug: "duesseldorf" },
+                    ].map(({ name, slug }) => (
+                      <a
+                        key={slug}
+                        href={
+                          activeVertical === "restaurant"
+                            ? `/restaurant/ort/${slug}`
+                            : activeVertical === "planner"
+                              ? `/planner/ort/${slug}`
+                              : `/catering/ort/${slug}`
+                        }
+                        className="text-white/60 hover:text-[#E6B84A] underline-offset-4 hover:underline text-xs transition-colors"
+                      >
+                        {name}
+                      </a>
+                    ))}
                   </div>
                 </div>
 
@@ -836,8 +913,9 @@ function Home() {
 
             {/* Right Column: Live Hospitality Hub 3D Floating Preview */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-3xl bg-white/[0.07] backdrop-blur-xl border-2 border-white/20 p-6 sm:p-7 shadow-2xl overflow-hidden hover:border-[#E6B84A]/60 transition-all duration-500">
+              <div className="relative rounded-3xl bg-white/[0.07] backdrop-blur-xl border-2 border-white/20 p-6 sm:p-7 shadow-2xl overflow-hidden hover:border-[#E6B84A]/60 transition-all duration-500 ring-1 ring-[#E6B84A]/20 shadow-[0_0_50px_-12px_rgba(230,184,74,0.18)]">
                 <div className="absolute top-0 right-0 w-36 h-36 bg-[#E6B84A]/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
                   <div className="flex items-center gap-2">
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -856,6 +934,12 @@ function Home() {
                       {/* Capability 1: Direct Ordering */}
                       <Link
                         to="/restaurants"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "direct_ordering",
+                            mode: "foodie",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -883,6 +967,12 @@ function Home() {
                       {/* Capability 2: Table & WhatsApp Reservations */}
                       <Link
                         to="/restaurants"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "whatsapp_reservations",
+                            mode: "foodie",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -907,6 +997,12 @@ function Home() {
                       {/* Capability 3: Surplus Food Rescue */}
                       <Link
                         to="/restaurants"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "surplus_rescue",
+                            mode: "foodie",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -931,6 +1027,12 @@ function Home() {
                       {/* Capability 4: B2B Event Catering */}
                       <Link
                         to="/catering"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "b2b_catering",
+                            mode: "foodie",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -957,6 +1059,12 @@ function Home() {
                       {/* Partner Feature 1: High-End Webdesign */}
                       <Link
                         to="/partner/webseiten"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "high_end_website",
+                            mode: "partner",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -981,6 +1089,12 @@ function Home() {
                       {/* Partner Feature 2: Google KI-SEO, GEO & AEO */}
                       <Link
                         to="/partner/webseiten"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "google_ai_seo",
+                            mode: "partner",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -1005,6 +1119,12 @@ function Home() {
                       {/* Partner Feature 3: Live-KDS & CloudPRNT */}
                       <a
                         href="/restaurant/kitchen"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "live_kds_monitor",
+                            mode: "partner",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -1029,6 +1149,12 @@ function Home() {
                       {/* Partner Feature 4: 0% Direct Checkout */}
                       <Link
                         to="/partners#calculator"
+                        onClick={() =>
+                          trackEvent("hero_capability_clicked", {
+                            capability: "savings_calculator",
+                            mode: "partner",
+                          })
+                        }
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
                       >
                         <div className="flex items-center gap-3">
@@ -1093,6 +1219,9 @@ function Home() {
             {/* Tile 1: 0% Commission */}
             <Link
               to="/restaurants"
+              onClick={() =>
+                trackEvent("bento_tile_clicked", { tile: "direct_ordering" })
+              }
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1115,6 +1244,9 @@ function Home() {
             {/* Tile 2: Table & WhatsApp Reservations */}
             <Link
               to="/restaurants"
+              onClick={() =>
+                trackEvent("bento_tile_clicked", { tile: "whatsapp_reservations" })
+              }
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1137,6 +1269,9 @@ function Home() {
             {/* Tile 3: Surplus Food Rescue */}
             <Link
               to="/restaurants"
+              onClick={() =>
+                trackEvent("bento_tile_clicked", { tile: "surplus_food_rescue" })
+              }
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1159,6 +1294,9 @@ function Home() {
             {/* Tile 4: B2B Event Catering */}
             <Link
               to="/catering"
+              onClick={() =>
+                trackEvent("bento_tile_clicked", { tile: "b2b_catering" })
+              }
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1181,6 +1319,9 @@ function Home() {
             {/* Tile 5: Custom Websites & Google KI-SEO / GEO */}
             <Link
               to="/partner/webseiten"
+              onClick={() =>
+                trackEvent("bento_tile_clicked", { tile: "custom_websites_ai" })
+              }
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A] hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-300 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1442,6 +1583,31 @@ function Home() {
                     Live Case Study ⭐
                   </Link>
                 </div>
+
+                {/* Luxury Browser Mockup Preview */}
+                <Link
+                  to="/case-study/partyservice-kuepper"
+                  className="block relative rounded-2xl overflow-hidden border border-forest/15 bg-black/5 shadow-inner mb-6 group-hover:border-[#E6B84A] transition-all"
+                >
+                  <div className="bg-[#1e2922] px-3.5 py-2 flex items-center gap-1.5 border-b border-white/10">
+                    <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+                    <div className="ml-2 text-[10px] text-white/50 font-mono tracking-tight truncate">
+                      https://partyservicekuepper.de
+                    </div>
+                  </div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-forest/20">
+                    <img
+                      src="/showcase-kuepper.png"
+                      alt="Partyservice Küpper High-End Website"
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  </div>
+                </Link>
+
                 <Link
                   to="/case-study/partyservice-kuepper"
                   className="block group-hover:text-[#A85C36] transition"
@@ -1506,6 +1672,31 @@ function Home() {
                     Live Case Study ⭐
                   </Link>
                 </div>
+
+                {/* Luxury Browser Mockup Preview */}
+                <Link
+                  to="/case-study/haus-spaas"
+                  className="block relative rounded-2xl overflow-hidden border border-forest/15 bg-black/5 shadow-inner mb-6 group-hover:border-[#E6B84A] transition-all"
+                >
+                  <div className="bg-[#1e2922] px-3.5 py-2 flex items-center gap-1.5 border-b border-white/10">
+                    <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+                    <div className="ml-2 text-[10px] text-white/50 font-mono tracking-tight truncate">
+                      https://haus-spaas.de
+                    </div>
+                  </div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-forest/20">
+                    <img
+                      src="/showcase-haus-spaas.png"
+                      alt="Haus Spaas High-End Website & WhatsApp Engine"
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  </div>
+                </Link>
+
                 <Link
                   to="/case-study/haus-spaas"
                   className="block group-hover:text-[#A85C36] transition"
