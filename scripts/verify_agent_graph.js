@@ -350,6 +350,151 @@ function rule12_GlobalSchemaValidation() {
 }
 
 // =============================================================================
+// RULE 13 — Supabase Disk & Health Protection (Zero-Bloat Guardrail)
+// =============================================================================
+function rule13_SupabaseDiskProtection() {
+  const migrationsDir = path.resolve('supabase/migrations');
+  if (!fs.existsSync(migrationsDir)) return;
+  const sqlFiles = fs.readdirSync(migrationsDir).filter((f) => f.endsWith('.sql'));
+  let bloatErrors = 0;
+  let hasRetentionCleanup = false;
+
+  for (const file of sqlFiles) {
+    const fullPath = path.join(migrationsDir, file);
+    const raw = fs.readFileSync(fullPath, 'utf8');
+    // Strip SQL line comments (-- ...) so commented explanations don't false-positive
+    const uncommented = raw
+      .split('\n')
+      .filter((line) => !line.trim().startsWith('--'))
+      .join('\n');
+
+    if (uncommented.includes("'cleanup-cron-and-net-logs'")) {
+      hasRetentionCleanup = true;
+    }
+
+    // Block every-minute ('* * * * *') or sub-minute cron.schedule calls
+    if (/cron\.schedule\s*\([\s\S]*?['"]\* \* \* \* \*['"]/i.test(uncommented)) {
+      fail(
+        '13',
+        `supabase/migrations/${file}`,
+        'Forbidden every-minute ("* * * * *") pg_cron job detected. Causes disk & WAL exhaustion on Supabase.'
+      );
+      bloatErrors++;
+    }
+
+    // Block net.http_post / net.http_get inside cron.schedule
+    if (/cron\.schedule\s*\([\s\S]*?net\.http_(post|get)\s*\(/i.test(uncommented)) {
+      fail(
+        '13',
+        `supabase/migrations/${file}`,
+        'Forbidden pg_net (net.http_post/http_get) loop inside cron.schedule. Causes unbounded net._http_response disk bloat.'
+      );
+      bloatErrors++;
+    }
+  }
+
+  if (!hasRetentionCleanup) {
+    fail(
+      '13',
+      'supabase/migrations',
+      'Missing mandatory "cleanup-cron-and-net-logs" daily retention schedule to protect Supabase disk space.'
+    );
+    bloatErrors++;
+  }
+
+  if (bloatErrors === 0) {
+    pass('13', 'Supabase Disk & Health Protection intact (zero minute-cron loops, daily log retention active)');
+  }
+}
+
+// =============================================================================
+// RULE 14 — Database & API Security Safeguards (Zero-Trust RLS & RPC Standard)
+// =============================================================================
+function rule14_DatabaseSecuritySafeguards() {
+  const migrationsDir = path.resolve('supabase/migrations');
+  if (!fs.existsSync(migrationsDir)) return;
+  let secErrors = 0;
+
+  // 1. Verify baseline security hardening migration exists and is intact
+  const baselineFile = '20261012124500_harden_rls_and_security_definer.sql';
+  const baselinePath = path.join(migrationsDir, baselineFile);
+  if (!fs.existsSync(baselinePath)) {
+    fail('14', 'supabase/migrations', `Missing mandatory security hardening migration: ${baselineFile}`);
+    secErrors++;
+  } else {
+    const baselineSql = fs.readFileSync(baselinePath, 'utf8');
+    if (
+      !baselineSql.includes('ENABLE ROW LEVEL SECURITY') ||
+      !baselineSql.includes('security_invoker = true') ||
+      !baselineSql.includes('TO service_role') ||
+      !baselineSql.includes('REVOKE EXECUTE ON FUNCTION public.decrement_surplus_stock')
+    ) {
+      fail('14', `supabase/migrations/${baselineFile}`, 'Baseline RLS & SECURITY DEFINER hardening statements were tampered with or removed.');
+      secErrors++;
+    }
+  }
+
+  // 2. Audit any new migrations (> baselineFile) for mandatory RLS & SECURITY DEFINER locks
+  const sqlFiles = fs
+    .readdirSync(migrationsDir)
+    .filter((f) => f.endsWith('.sql') && f > baselineFile);
+
+  for (const file of sqlFiles) {
+    const raw = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
+    const uncommented = raw
+      .split('\n')
+      .filter((line) => !line.trim().startsWith('--'))
+      .join('\n');
+
+    if (/CREATE\s+TABLE/i.test(uncommented) && !/ENABLE\s+ROW\s+LEVEL\s+SECURITY/i.test(uncommented)) {
+      fail('14', `supabase/migrations/${file}`, 'New CREATE TABLE migration is missing mandatory ENABLE ROW LEVEL SECURITY.');
+      secErrors++;
+    }
+
+    if (/SECURITY\s+DEFINER/i.test(uncommented)) {
+      if (!/search_path/i.test(uncommented) || !/REVOKE\s+EXECUTE/i.test(uncommented)) {
+        fail('14', `supabase/migrations/${file}`, 'New SECURITY DEFINER function must set search_path = public and REVOKE EXECUTE FROM PUBLIC, anon.');
+        secErrors++;
+      }
+    }
+  }
+
+  // 3. Ensure client components never reference SUPABASE_SERVICE_ROLE_KEY or supabaseAdmin,
+  //    and non-API routes never have static top-level supabaseAdmin imports or .select("*") leaks
+  const componentFiles = collectFiles(path.join(SRC_DIR, 'components'));
+  for (const file of componentFiles) {
+    const content = fs.readFileSync(file, 'utf8');
+    if (content.includes('SUPABASE_SERVICE_ROLE_KEY') || /\bsupabaseAdmin\b/.test(content)) {
+      fail('14', path.relative('.', file), 'Client component must NEVER reference SUPABASE_SERVICE_ROLE_KEY or supabaseAdmin.');
+      secErrors++;
+    }
+  }
+
+  const routeFiles = collectFiles(ROUTES_DIR).filter(
+    (f) => !path.basename(f).startsWith('api.') && !f.includes(`${path.sep}api${path.sep}`) && !f.includes('/api/')
+  );
+  for (const file of routeFiles) {
+    const content = fs.readFileSync(file, 'utf8');
+    if (content.includes('SUPABASE_SERVICE_ROLE_KEY')) {
+      fail('14', path.relative('.', file), 'Route file must NEVER directly reference SUPABASE_SERVICE_ROLE_KEY.');
+      secErrors++;
+    }
+    if (/^import\s+.*supabaseAdmin/m.test(content)) {
+      fail('14', path.relative('.', file), 'Route file must NEVER use static top-level import of supabaseAdmin (use dynamic import inside createServerFn only).');
+      secErrors++;
+    }
+    if (/supabaseAdmin[\s\S]{0,120}\.select\(\s*['"`]\*['"`]\s*\)/.test(content)) {
+      fail('14', path.relative('.', file), 'Forbidden supabaseAdmin .select("*") in route file (data leak risk — select explicit safe columns only).');
+      secErrors++;
+    }
+  }
+
+  if (secErrors === 0) {
+    pass('14', 'Zero-Trust Database & API Security intact (100% RLS, locked SECURITY DEFINER RPCs, zero client secret/select(*) leaks)');
+  }
+}
+
+// =============================================================================
 // RUN ALL RULES
 // =============================================================================
 console.log();
@@ -370,6 +515,8 @@ rule9_PublicAssetIntegrity();
 rule10_SitemapIntegrity();
 rule11_MetaLengthStandards();
 rule12_GlobalSchemaValidation();
+rule13_SupabaseDiskProtection();
+rule14_DatabaseSecuritySafeguards();
 
 console.log();
 console.log('──────────────────────────────────────────────────────');

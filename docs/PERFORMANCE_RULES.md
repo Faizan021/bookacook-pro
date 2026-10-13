@@ -32,3 +32,11 @@ This document defines performance standards, bundle size controls, caching guide
 - Protect Core Web Vitals (LCP < 2.5s, FID/INP < 200ms, CLS < 0.1).
 - Protect client JS bundle sizes.
 - Every production deploy must pass `npm run smoke:test` to verify zero catastrophic render failures.
+
+---
+
+## 4. Supabase Database & Disk Health Protection
+
+- **No Minute-Level Cron or `pg_net` Loops:** Never schedule `* * * * *` `pg_cron` jobs or `net.http_post` / `net.http_get` cron loops. Every execution writes to `cron.job_run_details`, `net._http_response`, and 16 MB PostgreSQL WAL files (`pg_wal`), which can exhaust the 8 GB disk and cause PostgreSQL to refuse connections (`ECONNREFUSED`).
+- **Daily Log Retention & Lean WAL:** Keep `cleanup-cron-and-net-logs` (`0 4 * * *`) active, `"cron.log_statement": false`, `"pg_net.batch_size": 0`, and `wal_keep_size: "1MB"`.
+- **No Unthrottled Database Writes on Public Traffic:** Public routes and loaders must be strictly read-only with 60s SWR in-memory caching so traffic spikes never stress Nano compute or disk I/O.

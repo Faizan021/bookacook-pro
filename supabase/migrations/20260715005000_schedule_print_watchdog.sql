@@ -26,20 +26,16 @@ BEGIN
      EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_net') THEN
     
     PERFORM cron.unschedule(jobid) FROM cron.job WHERE jobname = 'print-watchdog';
+    PERFORM cron.unschedule(jobid) FROM cron.job WHERE jobname = 'cleanup-cron-and-net-logs';
 
+    -- Purge historical cron & pg_net logs daily so the 8 GB disk never fills up
     PERFORM cron.schedule(
-      'print-watchdog',         -- job name (unique, used for cron.unschedule())
-      '* * * * *',              -- every minute
-      $cron$
-        SELECT net.http_post(
-          url     := 'https://athwccvgdovglcpluwnu.supabase.co/functions/v1/print-watchdog',
-          headers := jsonb_build_object(
-            'Content-Type',  'application/json',
-            'Authorization', 'Bearer ' || current_setting('app.service_role_key', true)
-          ),
-          body    := '{}'::jsonb
-        );
-      $cron$
+      'cleanup-cron-and-net-logs',
+      '0 4 * * *',              -- daily at 04:00 UTC
+      $cleanup$
+        DELETE FROM cron.job_run_details WHERE end_time < now() - interval '24 hours';
+        DELETE FROM net._http_response WHERE created < now() - interval '1 hour';
+      $cleanup$
     );
   END IF;
 EXCEPTION

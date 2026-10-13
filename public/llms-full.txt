@@ -82,9 +82,9 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 
 Speisely provides three core hospitality services on a single platform:
 
-### Instant Orders
-Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. Restaurants can present their food ordering options to people searching to order food in Germany, with direct payments routed through their own Stripe or PayPal account.
-*Deutsch:* Restaurants können ihre Speisekarten auf Speisely listen und erhalten direkte Abhol- und Lieferbestellungen von Kunden. So erreichen sie Menschen, die in Deutschland Essen bestellen möchten, und die Zahlungen laufen über das eigene Stripe- oder PayPal-Konto.
+### Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)
+Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of €34.99/month with unlimited direct orders. Features include an interactive savings calculator on /partners, a live Kitchen Display System (KDS), Star CloudPRNT receipt printing, and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
+*Deutsch:* Restaurants starten ihre eigene gebrandete Bestell-Website und ihren PWA-Shop unter speisely.de/ihr-name mit 0 % Bestell-Provision. Restaurants zahlen eine transparente Flatrate von 34,99 €/Monat für unbegrenzte Direktbestellungen. Inklusive interaktivem Ersparnis-Rechner auf /partners, Live-KDS (Küchen-Display), Star CloudPRNT Bondrucker und 100 % Eigentum an den eigenen Gastdaten. Direktabrechnung über das eigene Stripe-Konto.
 
 ### Catering Marketplace
 Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. Supported catering types include event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.

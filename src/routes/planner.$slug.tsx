@@ -46,7 +46,11 @@ export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
       const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
         data.slug,
       );
-      const query = supabaseAdmin.from("planners").select("*");
+      const query = supabaseAdmin
+        .from("planners")
+        .select(
+          "id, owner_id, name, slug, city, postal_code, service_areas, description, logo_url, banner_image_url, custom_domain, available_for_bookings, announcement_active, announcement_text, announcement_bg_color, use_generated_branding",
+        );
 
       const { data: planner, error: pErr } = await (
         isUuid ? query.or(`slug.eq.${data.slug},id.eq.${data.slug}`) : query.eq("slug", data.slug)
@@ -65,7 +69,9 @@ export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
       const now = new Date().toISOString();
       const { data: promos } = await supabaseAdmin
         .from("promo_codes")
-        .select("*")
+        .select(
+          "id, code, discount_type, discount_value, min_order_cents, starts_at, ends_at, is_active",
+        )
         .eq("owner_id", planner.owner_id)
         .eq("is_active", true)
         .or(`starts_at.is.null,starts_at.lte.${now}`)
@@ -74,7 +80,8 @@ export const getPublicPlannerProfileFn = createServerFn({ method: "GET" })
         promoCodes = promos;
       }
 
-      return { ...planner, services: services || [], promoCodes };
+      const { owner_id: _omitOwnerId, ...safePlanner } = planner;
+      return { ...safePlanner, services: services || [], promoCodes };
     } catch (e) {
       console.error("Error in getPublicPlannerProfileFn:", e);
       return null;

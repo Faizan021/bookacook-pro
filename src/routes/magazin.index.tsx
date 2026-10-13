@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { ArrowRight, Calendar, Sparkles, MapPin, Eye } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 
 export const Route = createFileRoute("/magazin/")({
@@ -62,17 +62,161 @@ export const Route = createFileRoute("/magazin/")({
   component: MagazinIndexPage,
 });
 
-type FilterType = "all" | "festivals" | "portraits" | "speisely-visits";
+type FilterType = "all" | "speisely-visits" | "community" | "guides" | "festivals";
 
 type Article = {
   id: string;
+  slug: string;
+  titleDe: string;
+  titleEn: string;
+  excerptDe: string;
+  excerptEn: string;
+  image: string;
+  categoryBadgeDe: string;
+  categoryBadgeEn: string;
+  location: string;
+  dateDe: string;
+  dateEn: string;
+  readTime: string;
   categories: FilterType[];
+  to: string;
 };
 
 const articles: Article[] = [
-  { id: "schnitzel-schmiede", categories: ["festivals", "portraits"] },
-  { id: "shawarma-albaik", categories: ["speisely-visits"] },
-  { id: "mandy-restaurant", categories: ["speisely-visits"] },
+  {
+    id: "mandy-restaurant",
+    slug: "mandy-restaurant-berlin-neukoelln",
+    titleDe: "Warum wir bei Mandy natürlich Mandy bestellen mussten",
+    titleEn: "Why at Mandy We Naturally Had to Order Mandy",
+    excerptDe:
+      "Speisely besucht Mandy in Berlin-Neukölln. Wir bestellen Mandy Lamm für zwei, Vorspeisen und Chai – und zahlen rund 45 Euro.",
+    excerptEn:
+      "Speisely visits Mandy in Berlin-Neukölln. We order Mandy Lamb for two, appetizers, and chai — paying around 45 Euros total.",
+    image: "/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp",
+    categoryBadgeDe: "Speisely Visits",
+    categoryBadgeEn: "Speisely Visits",
+    location: "Berlin-Neukölln",
+    dateDe: "17. August 2026 · Wildenbruchstraße, Berlin",
+    dateEn: "August 17, 2026 · Wildenbruchstraße, Berlin",
+    readTime: "5 Min.",
+    categories: ["speisely-visits"],
+    to: "/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln",
+  },
+  {
+    id: "shawarma-albaik",
+    slug: "shawarma-albaik-berlin",
+    titleDe: "Ein Abend bei Shawarma Albaik auf der Sonnenallee",
+    titleEn: "An Evening at Shawarma Albaik on Sonnenallee",
+    excerptDe:
+      "Chicken Shawarma, gelber Reis, Knoblauchsauce und ein gemeinsamer Abend mit Freunden auf der Sonnenallee in Berlin-Neukölln.",
+    excerptEn:
+      "Chicken shawarma, yellow rice, garlic sauce, and an evening shared with friends on Sonnenallee in Berlin-Neukölln.",
+    image: "/magazin/albaik/albaik-shawarma-rice-hero.webp",
+    categoryBadgeDe: "Speisely Visits",
+    categoryBadgeEn: "Speisely Visits",
+    location: "Berlin-Neukölln",
+    dateDe: "16. August 2026 · Sonnenallee, Berlin",
+    dateEn: "August 16, 2026 · Sonnenallee, Berlin",
+    readTime: "4 Min.",
+    categories: ["speisely-visits"],
+    to: "/magazin/speisely-visits/shawarma-albaik-berlin",
+  },
+  {
+    id: "king-tut-restaurant",
+    slug: "king-tut-restaurant-berlin",
+    titleDe: "Hawawshi & Holzkohlegrill auf Silberplatten: King Tut Berlin",
+    titleEn: "Hawawshi & Charcoal Grill on Silver Platters: King Tut Berlin",
+    excerptDe:
+      "Knuspriges Hawawshi, dampfende Molokhia und kaiserliche Silberplatten mit Holzkohlegrill-Spezialitäten in Berlin-Wilmersdorf.",
+    excerptEn:
+      "Crisp hawawshi, steaming molokhia, and imperial silver platters of charcoal grill specialties in Berlin-Wilmersdorf.",
+    image: "/magazin/king-tut-berlin/16_king_tut_hawawshi_molokhia_hd.jpg",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Berlin-Wilmersdorf",
+    dateDe: "Oktober 2026 · Hohenzollerndamm, Berlin",
+    dateEn: "October 2026 · Hohenzollerndamm, Berlin",
+    readTime: "6 Min.",
+    categories: ["community"],
+    to: "/magazin/community/king-tut-restaurant-berlin",
+  },
+  {
+    id: "baba-pirzola",
+    slug: "baba-pirzola-berlin",
+    titleDe: "Feuer, Meze & große Grillkunst: Ein Abend im Baba Pirzola",
+    titleEn: "Fire, Meze & Masterful Grilling: An Evening at Baba Pirzola",
+    excerptDe:
+      "Zwischen KaDeWe und Wittenbergplatz: Kuzu Pirzola, rauchiges Nazik Ali, 300g Antrikot und warmes Katmer mit Eis.",
+    excerptEn:
+      "Between KaDeWe and Wittenbergplatz: Kuzu Pirzola, smoky Nazik Ali, 300g ribeye, and warm katmer with ice cream.",
+    image: "/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Berlin-Schöneberg",
+    dateDe: "September 2026 · Wittenbergplatz, Berlin",
+    dateEn: "September 2026 · Wittenbergplatz, Berlin",
+    readTime: "7 Min.",
+    categories: ["community"],
+    to: "/magazin/community/baba-pirzola-berlin",
+  },
+  {
+    id: "bbq-chicken",
+    slug: "bbq-chicken-berlin-kreuzberg",
+    titleDe: "Korean Fried Chicken & Secret Glaze: BBQ Chicken Kreuzberg",
+    titleEn: "Korean Fried Chicken & Secret Glaze: BBQ Chicken Kreuzberg",
+    excerptDe:
+      "Golden Olive Crunch, samtiges Cheesling-Puder und scharfe Secret Glaze in der Skalitzer Straße 97 in Berlin-Kreuzberg.",
+    excerptEn:
+      "Golden Olive crunch, velvet cheesling powder, and fiery secret glaze at Skalitzer Straße 97 in Berlin-Kreuzberg.",
+    image: "/magazin/bbq-chicken-berlin/01_golden_fried_chicken_hero.jpg",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Berlin-Kreuzberg",
+    dateDe: "September 2026 · Skalitzer Straße, Berlin",
+    dateEn: "September 2026 · Skalitzer Straße, Berlin",
+    readTime: "5 Min.",
+    categories: ["community"],
+    to: "/magazin/community/bbq-chicken-berlin-kreuzberg",
+  },
+  {
+    id: "neumanns-cafe",
+    slug: "neumanns-cafe-berlin",
+    titleDe: "Handwerklicher Sauerteig & pochierte Bio-Eier: Neumanns Café",
+    titleEn: "Artisanal Sourdough & Poached Bio Eggs: Neumanns Café",
+    excerptDe:
+      "Eigene Bäckerei im Friedrichshain: Pochierte Eier auf Blattspinat, Karotten-Stulle mit Ziegenkäse und Andraschko Espresso.",
+    excerptEn:
+      "In-house bakery in Friedrichshain: Poached eggs on spinach, carrot toast with goat cheese, and Andraschko espresso.",
+    image: "/magazin/neumanns-cafe-berlin/05_poached_eggs_spinach_hd.jpg",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Berlin-Friedrichshain",
+    dateDe: "August 2026 · Gabriel-Max-Straße, Berlin",
+    dateEn: "August 2026 · Gabriel-Max-Straße, Berlin",
+    readTime: "5 Min.",
+    categories: ["community"],
+    to: "/magazin/community/neumanns-cafe-berlin",
+  },
+  {
+    id: "schnitzel-schmiede",
+    slug: "schnitzel-schmiede",
+    titleDe: "Schnitzel Schmiede beim EineStadt-Fest 2026",
+    titleEn: "Schnitzel Schmiede at EineStadt-Fest 2026",
+    excerptDe:
+      "Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach: 13 Jahre Fest-Tradition und frisches Handwerk.",
+    excerptEn:
+      "A trusted partner on Mönchengladbach's gourmet mile: 13 years of festival tradition and fresh craft.",
+    image:
+      "https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1200&q=85",
+    categoryBadgeDe: "Partner-Story",
+    categoryBadgeEn: "Partner Story",
+    location: "Mönchengladbach",
+    dateDe: "14. – 16. August 2026 · EineStadt-Fest",
+    dateEn: "August 14–16, 2026 · EineStadt-Fest",
+    readTime: "5 Min.",
+    categories: ["festivals", "community"],
+    to: "/magazin/schnitzel-schmiede",
+  },
 ];
 
 function MagazinIndexPage() {
@@ -80,29 +224,22 @@ function MagazinIndexPage() {
   const isDe = lang === "de";
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
-  const showSchnitzelSchmiede =
-    activeFilter === "all" ||
-    articles.find((a) => a.id === "schnitzel-schmiede")?.categories.includes(activeFilter);
-
-  const showAlbaik =
-    activeFilter === "all" ||
-    articles.find((a) => a.id === "shawarma-albaik")?.categories.includes(activeFilter);
-
-  const showMandy =
-    activeFilter === "all" ||
-    articles.find((a) => a.id === "mandy-restaurant")?.categories.includes(activeFilter);
+  const filteredArticles = useMemo(() => {
+    if (activeFilter === "all") return articles;
+    return articles.filter((a) => a.categories.includes(activeFilter));
+  }, [activeFilter]);
 
   const filterTabs = isDe
     ? [
         { key: "all" as const, label: "Alle Ausgaben" },
-        { key: "speisely-visits" as const, label: "Speisely Visits" },
-        { key: "portraits" as const, label: "Partner-Stories" },
+        { key: "speisely-visits" as const, label: "Speisely Visits (Vor-Ort)" },
+        { key: "community" as const, label: "Community-Stories" },
         { key: "festivals" as const, label: "Stadtfeste & Gourmet-Meilen" },
       ]
     : [
-        { key: "all" as const, label: "All Issues" },
-        { key: "speisely-visits" as const, label: "Speisely Visits" },
-        { key: "portraits" as const, label: "Partner Stories" },
+        { key: "all" as const, label: "All Stories" },
+        { key: "speisely-visits" as const, label: "Speisely Visits (On-Site)" },
+        { key: "community" as const, label: "Community Stories" },
         { key: "festivals" as const, label: "City Festivals & Gourmet Miles" },
       ];
 
@@ -203,193 +340,71 @@ function MagazinIndexPage() {
           role="tabpanel"
           aria-live="polite"
         >
-          {/* Speisely Visits: Mandy */}
-          {showMandy && (
-            <Link
-              to="/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln"
-              className="group flex flex-col overflow-hidden hover:ring-2 hover:ring-[#7FA46B] transition rounded-3xl shadow-xl border border-[#173C32]/10 bg-white"
-            >
-              <div className="relative overflow-hidden h-60 bg-[#0c1813]">
-                <img
-                  src="/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp"
-                  alt={
-                    isDe
-                      ? "Mandy Lamm für zwei mit Reis, Cashews, Kräutern und roter Sauce in Berlin-Neukölln"
-                      : "Mandy Lamb for two with rice, cashews, herbs and red spicy sauce in Berlin-Neukölln"
-                  }
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  width="800"
-                  height="600"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4 flex gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7FA46B] text-white px-3 py-1 text-xs font-extrabold shadow">
-                    <Eye className="w-3 h-3" aria-hidden="true" />
-                    Speisely Visits
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 text-[#173C32] px-2.5 py-1 text-xs font-bold shadow">
-                    <MapPin className="w-3 h-3" aria-hidden="true" />
-                    Berlin-Neukölln
-                  </span>
+          {filteredArticles.map((article) => {
+            const isVisit = article.categories.includes("speisely-visits");
+            return (
+              <Link
+                key={article.id}
+                to={article.to}
+                className="group flex flex-col overflow-hidden hover:ring-2 hover:ring-[#E6B84A] transition-all duration-300 rounded-3xl shadow-xl border border-[#173C32]/10 bg-white hover:-translate-y-1"
+              >
+                <div className="relative overflow-hidden h-60 bg-[#0c1813]">
+                  <img
+                    src={`${article.image}${article.image.includes("?") ? "&" : "?"}v=2`}
+                    alt={isDe ? article.titleDe : article.titleEn}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    width="800"
+                    height="600"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold shadow ${
+                        isVisit
+                          ? "bg-[#7FA46B] text-white"
+                          : "bg-[#173C32]/95 backdrop-blur text-[#E6B84A] border border-white/10"
+                      }`}
+                    >
+                      {isVisit ? (
+                        <Eye className="w-3 h-3" aria-hidden="true" />
+                      ) : (
+                        <Sparkles className="w-3 h-3" aria-hidden="true" />
+                      )}
+                      {isDe ? article.categoryBadgeDe : article.categoryBadgeEn}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur text-[#173C32] px-2.5 py-1 text-xs font-bold shadow">
+                      <MapPin className="w-3 h-3 text-[#173C32]" aria-hidden="true" />
+                      {article.location}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col flex-1 p-6 space-y-3">
-                <div className="flex items-center gap-2 text-xs text-[#173C32]/50 font-medium">
-                  <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
-                  <span>
-                    {isDe
-                      ? "17. August 2026 · Wildenbruchstraße, Berlin"
-                      : "August 17, 2026 · Wildenbruchstraße, Berlin"}
-                  </span>
+                <div className="flex flex-col flex-1 p-6 space-y-3">
+                  <div className="flex items-center gap-2 text-xs text-[#173C32]/50 font-medium">
+                    <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
+                    <span>{isDe ? article.dateDe : article.dateEn}</span>
+                  </div>
+                  <h2 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
+                    {isDe ? article.titleDe : article.titleEn}
+                  </h2>
+                  <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
+                    {isDe ? article.excerptDe : article.excerptEn}
+                  </p>
+                  <div className="pt-3 border-t border-[#173C32]/10 flex items-center justify-between">
+                    <span className="text-sm font-extrabold text-[#173C32] group-hover:text-[#b8860b] flex items-center gap-1.5 transition-colors">
+                      {isDe ? "Story lesen" : "Read Story"}{" "}
+                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </span>
+                    <span className="text-xs text-[#173C32]/45">
+                      {article.readTime} {isDe ? "Lesezeit" : "read"}
+                    </span>
+                  </div>
                 </div>
-                <h2 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
-                  {isDe
-                    ? "Warum wir bei Mandy natürlich Mandy bestellen mussten"
-                    : "Why at Mandy We Naturally Had to Order Mandy"}
-                </h2>
-                <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
-                  {isDe
-                    ? "Speisely besucht Mandy in Berlin-Neukölln. Wir bestellen Mandy Lamm für zwei, Getränke und Chai – und zahlen zusammen rund 45 Euro."
-                    : "Speisely visits Mandy in Berlin-Neukölln. We order Mandy Lamb for two, drinks, and chai — paying around 45 Euros total."}
-                </p>
-                <div className="pt-2 border-t border-[#173C32]/10 flex items-center justify-between">
-                  <span className="text-sm font-extrabold text-[#173C32] group-hover:text-[#b8860b] flex items-center gap-1.5 transition-colors">
-                    {isDe ? "Story lesen" : "Read Story"}{" "}
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                  </span>
-                  <span className="text-xs text-[#173C32]/40">
-                    {isDe ? "5 Min. Lesezeit" : "5 min read"}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          )}
-
-          {/* Speisely Visits: Shawarma Albaik */}
-          {showAlbaik && (
-            <Link
-              to="/magazin/speisely-visits/shawarma-albaik-berlin"
-              className="group flex flex-col overflow-hidden hover:ring-2 hover:ring-[#7FA46B] transition rounded-3xl shadow-xl border border-[#173C32]/10 bg-white"
-            >
-              <div className="relative overflow-hidden h-60 bg-[#0c1813]">
-                <img
-                  src="/magazin/albaik/albaik-shawarma-rice-hero.webp"
-                  alt={
-                    isDe
-                      ? "Chicken Shawarma und gelber Reis bei Shawarma Albaik, Sonnenallee 28, Berlin-Neukölln"
-                      : "Chicken Shawarma and yellow rice at Shawarma Albaik, Sonnenallee 28, Berlin-Neukölln"
-                  }
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  width="800"
-                  height="600"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4 flex gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7FA46B] text-white px-3 py-1 text-xs font-extrabold shadow">
-                    <Eye className="w-3 h-3" aria-hidden="true" />
-                    Speisely Visits
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 text-[#173C32] px-2.5 py-1 text-xs font-bold shadow">
-                    <MapPin className="w-3 h-3" aria-hidden="true" />
-                    Berlin-Neukölln
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col flex-1 p-6 space-y-3">
-                <div className="flex items-center gap-2 text-xs text-[#173C32]/50 font-medium">
-                  <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
-                  <span>
-                    {isDe
-                      ? "16. August 2026 · Sonnenallee, Berlin"
-                      : "August 16, 2026 · Sonnenallee, Berlin"}
-                  </span>
-                </div>
-                <h2 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
-                  {isDe
-                    ? "Ein Abend bei Shawarma Albaik auf der Sonnenallee"
-                    : "An Evening at Shawarma Albaik on Sonnenallee"}
-                </h2>
-                <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
-                  {isDe
-                    ? "Chicken Shawarma, gelber Reis, Fladenbrot und ein gemeinsamer Abend mit Freunden auf der Sonnenallee in Berlin-Neukölln."
-                    : "Chicken shawarma, yellow rice, flatbread, and an evening shared with friends on Sonnenallee in Berlin-Neukölln."}
-                </p>
-                <div className="pt-2 border-t border-[#173C32]/10 flex items-center justify-between">
-                  <span className="text-sm font-extrabold text-[#173C32] group-hover:text-[#b8860b] flex items-center gap-1.5 transition-colors">
-                    {isDe ? "Story lesen" : "Read Story"}{" "}
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                  </span>
-                  <span className="text-xs text-[#173C32]/40">
-                    {isDe ? "4 Min. Lesezeit" : "4 min read"}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          )}
-
-          {/* Partner-Story: Schnitzel Schmiede */}
-          {showSchnitzelSchmiede && (
-            <Link
-              to="/magazin/schnitzel-schmiede"
-              className="group flex flex-col overflow-hidden hover:ring-2 hover:ring-[#173C32] transition rounded-3xl shadow-xl border border-[#173C32]/10 bg-white"
-            >
-              <div className="relative overflow-hidden h-60 bg-[#173C32]">
-                <img
-                  src="https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1200&q=85"
-                  alt={
-                    isDe
-                      ? "Schnitzel Schmiede beim EineStadt-Fest 2026 in Mönchengladbach"
-                      : "Schnitzel Schmiede at EineStadt-Fest 2026 in Mönchengladbach"
-                  }
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  width="1200"
-                  height="800"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4 flex gap-2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#173C32]/95 backdrop-blur text-[#E6B84A] px-3.5 py-1 text-xs font-extrabold shadow-lg border border-white/10">
-                    <Sparkles className="w-3 h-3" aria-hidden="true" />{" "}
-                    {isDe ? "Partner-Story" : "Partner Story"}
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/95 backdrop-blur text-[#173C32] px-3 py-1 text-xs font-bold shadow-md">
-                    <MapPin className="w-3 h-3 text-[#173C32]" aria-hidden="true" /> Mönchengladbach
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col flex-1 p-6 space-y-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#173C32]/60">
-                  <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
-                  <span>
-                    {isDe
-                      ? "14. – 16. August 2026 · EineStadt-Fest"
-                      : "August 14–16, 2026 · EineStadt-Fest"}
-                  </span>
-                </div>
-                <h2 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
-                  {isDe
-                    ? "Schnitzel Schmiede beim EineStadt-Fest 2026"
-                    : "Schnitzel Schmiede at EineStadt-Fest 2026"}
-                </h2>
-                <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
-                  {isDe
-                    ? "Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach: 13 Jahre Fest-Tradition und ein vertrauter Platz auf der kulinarischen Meile."
-                    : "A familiar partner on Mönchengladbach's gourmet mile: 13 years of festival tradition and a dedicated culinary spot."}
-                </p>
-                <div className="pt-2 border-t border-[#173C32]/10 flex items-center justify-between">
-                  <span className="text-sm font-extrabold text-[#173C32] group-hover:text-[#b8860b] flex items-center gap-1.5 transition-colors">
-                    {isDe ? "Story lesen" : "Read Story"}{" "}
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                  </span>
-                  <span className="text-xs text-[#173C32]/40">
-                    {isDe ? "5 Min. Lesezeit" : "5 min read"}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          )}
+              </Link>
+            );
+          })}
 
           {/* Empty state */}
-          {!showAlbaik && !showSchnitzelSchmiede && (
+          {filteredArticles.length === 0 && (
             <div className="col-span-full py-16 text-center text-[#173C32]/40 font-medium">
               {isDe ? "Keine Artikel in dieser Kategorie." : "No articles found in this category."}
             </div>

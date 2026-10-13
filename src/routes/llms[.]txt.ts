@@ -80,7 +80,7 @@ Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankf
 
 Speisely provides three core hospitality services on a single platform:
 
-1. **Instant Orders** — Restaurants list their menus on Speisely and receive direct pickup and delivery orders from customers. Restaurants pay a flat monthly subscription starting at €34.99/month, allowing unlimited direct orders. Customer payments are routed directly to the restaurant's own Stripe or PayPal account.
+1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of €34.99/month with unlimited direct orders. Features include an interactive savings calculator on /partners, a live Kitchen Display System (KDS), Star CloudPRNT receipt printing, and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
 
 2. **Catering Marketplace** — Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. When a booking is confirmed, Speisely charges a success-based service fee. Supported catering types include: event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
 

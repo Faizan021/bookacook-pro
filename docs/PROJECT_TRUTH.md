@@ -60,4 +60,19 @@ This document specifies the core project truths, architectural boundaries, busin
 - **Strict Canonical XML Sitemaps:** Sitemaps must contain only `200 OK` HTML canonical routes with valid slugs (no API paths, no raw UUIDs when slugs exist, and no 301/302 redirects).
 - **Automated Graph Enforcement:** All pre-build static verification is automated via `scripts/verify_agent_graph.js` (Node 3 in the Multi-Agent Execution Pipeline). Any violation automatically halts the build.
 
+---
 
+## 6. Supabase Infrastructure & Disk Protection Standard
+
+- **Zero High-Frequency `pg_cron` / `pg_net` Polling:** Sub-hour or minute-level `pg_cron` jobs (`* * * * *`) and `pg_net` HTTP calls (`net.http_post` / `net.http_get`) inside cron loops are strictly forbidden to prevent `cron.job_run_details`, `net._http_response`, and `pg_wal` from exhausting the 8 GB volume.
+- **Automated Daily Retention Purge:** The `cleanup-cron-and-net-logs` cron job (`0 4 * * *`) and Postgres configuration (`"cron.log_statement": false`, `"pg_net.batch_size": 0`, `wal_keep_size: "1MB"`) keep database size lean (~18 MB).
+- **Build-Time Enforcement:** `scripts/verify_agent_graph.js` (Rule 13) scans all SQL migrations and halts the build if any dangerous `pg_cron` or `pg_net` pattern is introduced.
+
+---
+
+## 7. Zero-Trust Database & API Security Standard
+
+- **100% RLS Enforcement:** All 46+ tables in `public` (including `_archive_*` tables) must have Row-Level Security enabled (`rls_off = 0`).
+- **Locked `SECURITY DEFINER` RPCs & Views:** All `SECURITY DEFINER` functions must lock `SET search_path = public` and revoke `PUBLIC`/`anon` execution; all `public` views must enforce `security_invoker = true`.
+- **Strict `service_role` Policy Scoping:** Internal/webhook policies (`stripe_webhook_events`) must explicitly target `TO service_role` (never default `PUBLIC`), and `supabaseAdmin` / `SUPABASE_SERVICE_ROLE_KEY` must never be imported in client routes or components.
+- **Automated Build Gate:** Enforced on every build by `scripts/verify_agent_graph.js` (Rule 14).

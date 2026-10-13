@@ -324,8 +324,54 @@ Whenever writing Instagram post captions, Reels copy, or partner spotlight copy 
    - **Part 4: Restaurant Facts & Verification:** Name, address, opening times, dietary status (100% Halal).
    - **Part 5: Single Follow CTA + 3-5 Targeted SEO Hashtags:** Clear call to follow `@speisely` and save the post.
 
+---
 
+## 14. Mandatory Supabase Health & Disk Protection Rule (Zero-Bloat Standard)
 
+To ensure the production Supabase instance (`athwccvgdovglcpluwnu`) NEVER exhausts disk space, WAL segments, or Nano compute limits and never becomes `UNHEALTHY`:
 
+1. **Zero High-Frequency `pg_cron` or `pg_net` Polling Jobs:**
+   - **STRICTLY FORBIDDEN:** Never schedule `pg_cron` jobs running every minute (`* * * * *`), every few minutes (`*/5 * * * *`), or on second-level intervals.
+   - **STRICTLY FORBIDDEN:** Never invoke `net.http_post` or `net.http_get` (`pg_net`) inside recurring `pg_cron` loops, as every invocation writes rows into `cron.job_run_details`, `net._http_response`, and 16 MB PostgreSQL WAL files (`pg_wal`) that will fill the 8 GB disk and crash PostgreSQL (`ECONNREFUSED :5432`).
 
+2. **Mandatory Daily Log Retention Purge:**
+   - The `cleanup-cron-and-net-logs` daily retention job (`0 4 * * *`) purging `cron.job_run_details` (>24h) and `net._http_response` (>1h) must remain active at all times.
+   - PostgreSQL configuration must maintain `"cron.log_statement": false`, `"pg_net.batch_size": 0`, and `wal_keep_size: "1MB"`.
 
+3. **No Unbounded Database Logging or Base64 Media in Tables:**
+   - Never store raw Base64 images, PDFs, or large binary blobs in PostgreSQL `text` or `jsonb` columns; store static assets in `public/` or Supabase Storage buckets with WebP compression.
+   - Never write per-request telemetry, polling heartbeats, or debug logs into PostgreSQL tables.
+
+4. **Read-Only & Cached Public Storefront Queries:**
+   - Public routes (`/`, `/catering`, `/restaurants`, `/planner`, `/magazin`, `sitemap.xml`) must never perform database writes (`INSERT`, `UPDATE`, `DELETE`) on page loads and must rely on in-memory TTL caching (60s SWR) and graceful static fallbacks so traffic spikes never overload Supabase compute.
+
+5. **Automated Build Gate Enforcement (`verify:graph` Rule 13):**
+   - `scripts/verify_agent_graph.js` automatically audits `supabase/migrations/*.sql` on every build and blocks any migration containing minute-level `pg_cron` schedules or `pg_net` HTTP loops.
+
+---
+
+## 15. Mandatory Database & API Security Safeguard Rule (Zero-Trust RLS & RPC Standard)
+
+To protect all customer, partner, order, and payment data in Supabase (`athwccvgdovglcpluwnu`) from unauthorized access, privilege escalation, or disk-spam attacks:
+
+1. **100% Row-Level Security (RLS) Coverage (`rls_off: 0`):**
+   - Every table in the `public` schema (including `_archive_*`, logs, and webhook tables) MUST have `ENABLE ROW LEVEL SECURITY` active at all times.
+   - Never create a table in `public` without enabling RLS in the exact same migration.
+
+2. **Strict `service_role` Isolation for Webhooks & Internal Tables:**
+   - Policies meant for backend-only tables (`stripe_webhook_events`, `_archive_*`, internal queues) MUST explicitly specify `TO service_role` — NEVER leave out the `TO` clause (which defaults to `PUBLIC` / `anon` in PostgreSQL).
+   - Never expose `SUPABASE_SERVICE_ROLE_KEY` or import `supabaseAdmin` inside client-side route or UI component files (`src/routes/`, `src/components/`).
+
+3. **Zero Unauthenticated `SECURITY DEFINER` RPC Execution:**
+   - PostgreSQL grants `EXECUTE ON FUNCTION ... TO PUBLIC` by default. Every `SECURITY DEFINER` function MUST immediately run:
+     - `ALTER FUNCTION ... SET search_path = public;` (prevents schema-shadowing attacks).
+     - `REVOKE EXECUTE ON FUNCTION ... FROM PUBLIC, anon;` (and revoke `authenticated` as well if the function is backend-only like `decrement_surplus_stock`).
+
+4. **Security Invoker Views (`security_invoker = true`):**
+   - Every SQL view in `public` (e.g. `public.planner_requests`) MUST set `WITH (security_invoker = true)` so queries always enforce the calling user's RLS policies rather than bypassing RLS as the view owner.
+
+5. **No Wide-Open `WITH CHECK (true)` Public Insert Policies on Core Tables:**
+   - Never add `FOR INSERT TO public WITH CHECK (true)` on user/partner/order tables (`profiles`, `caterers`, `restaurants`, `planners`, `orders`). Database triggers (`handle_new_user`) already run as `SECURITY DEFINER` and do not need open public RLS policies.
+
+6. **Automated Build Gate Enforcement (`verify:graph` Rule 14):**
+   - `scripts/verify_agent_graph.js` (Rule 14) automatically audits migrations and client routes on every build and halts compilation if any RLS, `SECURITY DEFINER`, `service_role`, or client-bundle secret rule is violated.

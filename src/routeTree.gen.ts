@@ -76,6 +76,7 @@ import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
 import { Route as MagazinCommunityKingTutRestaurantBerlinRouteImport } from './routes/magazin.community.king-tut-restaurant-berlin'
 import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
+import { Route as MagazinCommunityNeumannsCafeBerlinRouteImport } from './routes/magazin.community.neumanns-cafe-berlin'
 import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
 import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
 import { Route as MagazinSpeiselyVisitsIndexRouteImport } from './routes/magazin.speisely-visits.index'
@@ -445,6 +446,12 @@ const MagazinCommunityKokioBerlinRoute =
     path: '/magazin/community/kokio-berlin',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityNeumannsCafeBerlinRoute =
+  MagazinCommunityNeumannsCafeBerlinRouteImport.update({
+    id: '/magazin/community/neumanns-cafe-berlin',
+    path: '/magazin/community/neumanns-cafe-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunitySanSebastianBerlinRoute =
   MagazinCommunitySanSebastianBerlinRouteImport.update({
     id: '/magazin/community/san-sebastian-berlin',
@@ -585,6 +592,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
+  '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
@@ -663,6 +671,7 @@ export interface FileRoutesByTo {
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
+  '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
@@ -746,6 +755,7 @@ export interface FileRoutesById {
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
+  '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
@@ -829,6 +839,7 @@ export interface FileRouteTypes {
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
+    | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
@@ -907,6 +918,7 @@ export interface FileRouteTypes {
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
+    | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
@@ -989,6 +1001,7 @@ export interface FileRouteTypes {
     | '/magazin/community/harput-wiesbaden'
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
+    | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
@@ -1054,6 +1067,7 @@ export interface RootRouteChildren {
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
   MagazinCommunityKingTutRestaurantBerlinRoute: typeof MagazinCommunityKingTutRestaurantBerlinRoute
   MagazinCommunityKokioBerlinRoute: typeof MagazinCommunityKokioBerlinRoute
+  MagazinCommunityNeumannsCafeBerlinRoute: typeof MagazinCommunityNeumannsCafeBerlinRoute
   MagazinCommunitySanSebastianBerlinRoute: typeof MagazinCommunitySanSebastianBerlinRoute
   MagazinCommunityThronburgerBerlinRoute: typeof MagazinCommunityThronburgerBerlinRoute
   RestaurantOrtCityRoute: typeof RestaurantOrtCityRoute
@@ -1534,6 +1548,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityKokioBerlinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/neumanns-cafe-berlin': {
+      id: '/magazin/community/neumanns-cafe-berlin'
+      path: '/magazin/community/neumanns-cafe-berlin'
+      fullPath: '/magazin/community/neumanns-cafe-berlin'
+      preLoaderRoute: typeof MagazinCommunityNeumannsCafeBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/san-sebastian-berlin': {
       id: '/magazin/community/san-sebastian-berlin'
       path: '/magazin/community/san-sebastian-berlin'
@@ -1839,6 +1860,8 @@ const rootRouteChildren: RootRouteChildren = {
   MagazinCommunityKingTutRestaurantBerlinRoute:
     MagazinCommunityKingTutRestaurantBerlinRoute,
   MagazinCommunityKokioBerlinRoute: MagazinCommunityKokioBerlinRoute,
+  MagazinCommunityNeumannsCafeBerlinRoute:
+    MagazinCommunityNeumannsCafeBerlinRoute,
   MagazinCommunitySanSebastianBerlinRoute:
     MagazinCommunitySanSebastianBerlinRoute,
   MagazinCommunityThronburgerBerlinRoute:

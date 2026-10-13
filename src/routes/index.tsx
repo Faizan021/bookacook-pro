@@ -18,6 +18,13 @@ import {
   GlassWater,
   PartyPopper,
   Search,
+  ShieldCheck,
+  Percent,
+  Clock,
+  Smartphone,
+  MapPin,
+  Receipt,
+  ChefHat,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -202,6 +209,7 @@ function Home() {
   const tt = useCallback((de: string, en: string) => (lang === "de" ? de : en), [lang]);
   const shouldReduceMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
+  const [audienceMode, setAudienceMode] = useState<"foodie" | "partner">("foodie");
   const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">(
     "catering",
   );
@@ -507,304 +515,560 @@ function Home() {
           <div className="absolute inset-0 bg-forest/85" />
         </div>
 
-        {/* Hero text content */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 lg:pt-20 lg:pb-36">
-          <motion.div
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.08,
-                },
-              },
-            }}
-            initial="hidden"
-            animate="visible"
-            className="max-w-[42rem]"
-          >
-            {/* Eyebrow badge */}
+        {/* Hero text & interactive content */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 sm:pt-14 sm:pb-20 lg:pt-20 lg:pb-32">
+          {/* Dual Perspective Audience Toggle */}
+          <div className="flex items-center justify-start mb-6">
+            <div className="inline-flex items-center p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
+              <button
+                type="button"
+                onClick={() => setAudienceMode("foodie")}
+                className={`flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  audienceMode === "foodie"
+                    ? "bg-[#E6B84A] text-forest shadow-md"
+                    : "text-white/80 hover:text-white"
+                }`}
+              >
+                <UtensilsCrossed className="w-3.5 h-3.5" />
+                <span>{tt("Für Genießer & Events", "For Foodies & Events")}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setAudienceMode("partner")}
+                className={`flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  audienceMode === "partner"
+                    ? "bg-[#E6B84A] text-forest shadow-md"
+                    : "text-white/80 hover:text-white"
+                }`}
+              >
+                <Building2 className="w-3.5 h-3.5" />
+                <span>{tt("Für Gastronomen & Caterer", "For Restaurants & Caterers")}</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            {/* Left Column: Headline, Subheadline & Search Omnibar */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                hidden: { opacity: 0 },
                 visible: {
                   opacity: 1,
-                  y: 0,
-                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                  transition: {
+                    staggerChildren: 0.08,
+                  },
                 },
               }}
+              initial="hidden"
+              animate="visible"
+              className="lg:col-span-7 max-w-2xl"
             >
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-white/90 shadow-sm">
-                <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
-                {tt("Marktplatz für Gastronomie & Events", "Marketplace for hospitality & events")}
-              </span>
-            </motion.div>
-
-            {/* Main headline */}
-            <motion.h1
-              variants={{
-                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
-                },
-              }}
-              className="mt-8 font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.25rem] leading-[0.92] text-white"
-            >
-              {tt("Der richtige", "The right")}
-              <br />
-              {tt("Partner für", "partner for")}
-              <br />
-              <span className="text-[#b28a3c]">{tt("jedes Erlebnis.", "every experience.")}</span>
-            </motion.h1>
-
-            {/* Subheadline */}
-            <motion.p
-              variants={{
-                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
-                },
-              }}
-              className="mt-7 text-lg sm:text-xl text-white/80 max-w-[34rem] leading-relaxed"
-            >
-              {tt(
-                "Speisely verbindet dich mit geprüften Restaurants, Caterern und Event-Planern — von der schnellen Bestellung bis zur perfekten Veranstaltung.",
-                "Speisely connects you with vetted restaurants, caterers, and event planners — from a quick order to a perfect event.",
-              )}
-            </motion.p>
-
-            {/* Category Intent Selector (Above Search Bar) */}
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
-                },
-              }}
-              className="mt-8 mb-4"
-            >
-              <LayoutGroup id="heroTabs">
-                <div className="flex flex-wrap gap-2 relative">
-                  {verticals.map((v) => (
-                    <Link
-                      key={v.key}
-                      id={`hero-tab-${v.key}`}
-                      to={v.to}
-                      onMouseEnter={() => setActiveVertical(v.key)}
-                      onClick={() => setActiveVertical(v.key)}
-                      className={`relative flex items-center gap-2 rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
-                        activeVertical === v.key
-                          ? "text-forest border-transparent"
-                          : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
-                      }`}
-                    >
-                      {activeVertical === v.key && (
-                        <motion.div
-                          layoutId="activeTabPill"
-                          className="absolute inset-0 bg-white rounded-full -z-10 shadow-md"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                        />
+              {/* Eyebrow badge */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                  },
+                }}
+              >
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-3.5 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.22em] text-white/90 shadow-sm">
+                  <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" />
+                  {audienceMode === "foodie"
+                    ? tt(
+                        "0 % Aufschlag · 100 % Direkt beim Koch",
+                        "0% Markup · 100% Direct from Host",
+                      )
+                    : tt(
+                        "0 % Provision · Dein eigener Webshop",
+                        "0% Commission · Your Own Webshop",
                       )}
-                      <span className="relative z-10 flex items-center gap-2">
-                        {v.icon}
-                        <span>{v.label}</span>
-                        {activeVertical !== v.key && (
-                          <span className="hidden sm:block text-[10px] text-white/50 font-medium">
-                            {v.sublabel}
-                          </span>
+                </span>
+              </motion.div>
+
+              {/* Main headline */}
+              <motion.h1
+                variants={{
+                  hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                  },
+                }}
+                className="mt-5 sm:mt-6 font-display text-[2.75rem] sm:text-[3.75rem] lg:text-[4.5rem] leading-[0.98] sm:leading-[0.95] text-white"
+              >
+                {audienceMode === "foodie" ? (
+                  <>
+                    {tt("Essen bestellen,", "Order food,")}
+                    <br />
+                    {tt("Tische reservieren &", "reserve tables &")}
+                    <br />
+                    <span className="text-[#E6B84A]">
+                      {tt("Catering buchen.", "book catering.")}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    {tt("Dein Restaurant.", "Your restaurant.")}
+                    <br />
+                    {tt("Dein Webshop.", "Your webshop.")}
+                    <br />
+                    <span className="text-[#E6B84A]">{tt("0 % Provision.", "0% Commission.")}</span>
+                  </>
+                )}
+              </motion.h1>
+
+              {/* Subheadline */}
+              <motion.p
+                variants={{
+                  hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                  },
+                }}
+                className="mt-6 text-base sm:text-lg text-white/80 max-w-xl leading-relaxed"
+              >
+                {audienceMode === "foodie"
+                  ? tt(
+                      "Direkt bestellen, ohne dass dein Lieblingslokal 30 % an Lieferportale abgibt. Plus Rettertüten gegen Lebensmittelverschwendung und maßgeschneidertes B2B-Catering.",
+                      "Order directly without your favorite restaurant paying 30% to middleman portals. Plus surplus food rescue bags and bespoke corporate catering.",
+                    )
+                  : tt(
+                      "Schluss mit 30 % Lieferando-Gebühren. Unbegrenzte Bestellungen, Live-KDS Küchenmonitor und 100 % Gastdaten für faire 34,99 €/Monat.",
+                      "Stop giving 30% to delivery portals. Unlimited orders, Live KDS kitchen monitor, and 100% customer data for fair 34.99 €/month.",
+                    )}
+              </motion.p>
+
+              {/* Category Intent Selector (Above Search Bar) */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                  },
+                }}
+                className="mt-8 mb-4"
+              >
+                <LayoutGroup id="heroTabs">
+                  <div className="flex flex-wrap gap-2 relative">
+                    {verticals.map((v) => (
+                      <Link
+                        key={v.key}
+                        id={`hero-tab-${v.key}`}
+                        to={v.to}
+                        onMouseEnter={() => setActiveVertical(v.key)}
+                        onClick={() => setActiveVertical(v.key)}
+                        className={`relative flex items-center gap-2 rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
+                          activeVertical === v.key
+                            ? "text-forest border-transparent"
+                            : "bg-white/[0.08] backdrop-blur-sm text-white/80 border-white/15 hover:bg-white/15 hover:text-white hover:border-white/30 hover:shadow-sm"
+                        }`}
+                      >
+                        {activeVertical === v.key && (
+                          <motion.div
+                            layoutId="activeTabPill"
+                            className="absolute inset-0 bg-white rounded-full -z-10 shadow-md"
+                            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                          />
                         )}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </LayoutGroup>
-            </motion.div>
+                        <span className="relative z-10 flex items-center gap-2">
+                          {v.icon}
+                          <span>{v.label}</span>
+                          {activeVertical !== v.key && (
+                            <span className="hidden sm:block text-[10px] text-white/50 font-medium">
+                              {v.sublabel}
+                            </span>
+                          )}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </LayoutGroup>
+              </motion.div>
 
-            {/* AI Search & Omnibar */}
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
-                },
-              }}
-              className="relative max-w-2xl"
-            >
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                  {searching ? (
-                    <Loader2 className="h-5 w-5 text-[#b28a3c] animate-spin" />
-                  ) : (
-                    <Sparkles className="h-5 w-5 text-[#b28a3c]" />
-                  )}
-                </div>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleAISearch();
-                    }
-                  }}
-                  disabled={searching}
-                  className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-4 pl-14 pr-44 sm:pr-48 text-base sm:text-lg text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
-                  placeholder={
-                    activeVertical === "restaurant"
-                      ? tt(
-                          "z.B. Neapolitanische Pizza, Sushi oder Tagesmenü...",
-                          "e.g. Neapolitan Pizza, Sushi or lunch specials...",
-                        )
-                      : activeVertical === "planner"
-                        ? tt(
-                            "z.B. Hochzeitsplanung für 80 Gäste mit Location...",
-                            "e.g. Wedding planning for 80 guests with venue...",
-                          )
-                        : rotatingPlaceholders[placeholderIndex]
-                  }
-                />
-
-                {/* Single High-End Radiant Action Button */}
-                <div className="absolute inset-y-2 right-2 flex items-center">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (searchQuery.trim()) {
+              {/* AI Search & Omnibar */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
+                  },
+                }}
+                className="relative max-w-xl"
+              >
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    {searching ? (
+                      <Loader2 className="h-5 w-5 text-[#b28a3c] animate-spin" />
+                    ) : (
+                      <Sparkles className="h-5 w-5 text-[#b28a3c]" />
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
                         handleAISearch();
-                      } else {
-                        setIsConciergeOpen(true);
                       }
                     }}
                     disabled={searching}
-                    className="bg-gradient-to-r from-[#b28a3c] via-[#c69a45] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-4 sm:px-5 py-2.5 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.02] active:scale-[0.98]"
-                    title={tt("Finden & KI-Berater starten", "Find & start AI advisor")}
-                  >
-                    {searching ? (
-                      <Loader2 className="h-4 w-4 animate-spin text-forest" />
-                    ) : (
-                      <Sparkles className="h-4 w-4 text-forest" />
-                    )}
-                    <span>{tt("Finden & Beraten", "Find & Consult")}</span>
-                  </button>
-                </div>
-              </div>
+                    className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-3.5 pl-14 pr-44 sm:pr-48 text-base text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
+                    placeholder={
+                      activeVertical === "restaurant"
+                        ? tt(
+                            "z.B. Neapolitanische Pizza, Sushi oder Tagesmenü...",
+                            "e.g. Neapolitan Pizza, Sushi or lunch specials...",
+                          )
+                        : activeVertical === "planner"
+                          ? tt(
+                              "z.B. Hochzeitsplanung für 80 Gäste mit Location...",
+                              "e.g. Wedding planning for 80 guests with venue...",
+                            )
+                          : rotatingPlaceholders[placeholderIndex]
+                    }
+                  />
 
-              {/* Vorschläge Chips (Balanced, perfectly wrapped, no clipping) */}
-              <div className="mt-3.5 flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
-                  {tt("Beliebt:", "Popular:")}
-                </span>
-                {scenarioChips.map((chip, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => {
-                      setSearchQuery(chip.query);
-                      setIsConciergeOpen(true);
-                    }}
-                    className="rounded-full bg-white/[0.08] hover:bg-[#b28a3c] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition cursor-pointer backdrop-blur-sm shadow-sm"
-                  >
-                    {chip.label}
-                  </button>
-                ))}
-              </div>
+                  {/* Single High-End Radiant Action Button */}
+                  <div className="absolute inset-y-1.5 right-1.5 flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (searchQuery.trim()) {
+                          handleAISearch();
+                        } else {
+                          setIsConciergeOpen(true);
+                        }
+                      }}
+                      disabled={searching}
+                      className="bg-gradient-to-r from-[#b28a3c] via-[#c69a45] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.02] active:scale-[0.98]"
+                      title={tt("Finden & KI-Berater starten", "Find & start AI advisor")}
+                    >
+                      {searching ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-forest" />
+                      ) : (
+                        <Sparkles className="h-4 w-4 text-forest" />
+                      )}
+                      <span>{tt("Finden & Beraten", "Find & Consult")}</span>
+                    </button>
+                  </div>
+                </div>
 
-              {/* Social Proof & Trust Strip (Replaces clutter with proof) */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-white/75 text-xs sm:text-sm">
-                <div className="flex items-center gap-1.5 font-medium">
-                  <CheckCircle2 className="h-4 w-4 text-[#b28a3c]" />
-                  <span>{tt("47+ Geprüfte Partner", "47+ Vetted Partners")}</span>
+                {/* 1-Tap GEO City Matrix */}
+                <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
+                    {tt("Städte:", "Cities:")}
+                  </span>
+                  {[
+                    { name: "Berlin", slug: "berlin" },
+                    { name: "München", slug: "muenchen" },
+                    { name: "Hamburg", slug: "hamburg" },
+                    { name: "Frankfurt", slug: "frankfurt" },
+                    { name: "Köln", slug: "koeln" },
+                    { name: "Düsseldorf", slug: "duesseldorf" },
+                  ].map((city) => (
+                    <a
+                      key={city.slug}
+                      href={
+                        activeVertical === "restaurant"
+                          ? "/restaurants"
+                          : activeVertical === "planner"
+                            ? `/planner/ort/${city.slug}`
+                            : `/catering/ort/${city.slug}`
+                      }
+                      className="rounded-full bg-white/[0.08] hover:bg-[#E6B84A] hover:text-forest text-white/85 border border-white/15 px-2.5 py-0.5 text-xs font-semibold transition cursor-pointer backdrop-blur-sm"
+                    >
+                      📍 {city.name}
+                    </a>
+                  ))}
                 </div>
-                <span className="text-white/20 hidden sm:inline">•</span>
-                <div className="flex items-center gap-1.5 font-medium">
-                  <Star className="h-4 w-4 text-[#b28a3c] fill-[#b28a3c]" />
-                  <span>{tt("4.9/5 Bewertung", "4.9/5 Rating")}</span>
+
+                {/* Vorschläge Chips */}
+                <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
+                    {tt("Beliebt:", "Popular:")}
+                  </span>
+                  {scenarioChips.map((chip, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery(chip.query);
+                        setIsConciergeOpen(true);
+                      }}
+                      className="rounded-full bg-white/[0.06] hover:bg-white/20 text-white/75 border border-white/10 px-2.5 py-0.5 text-xs font-medium transition cursor-pointer"
+                    >
+                      {chip.label}
+                    </button>
+                  ))}
                 </div>
-                <span className="text-white/20 hidden sm:inline">•</span>
-                <div className="flex items-center gap-1.5 font-medium text-white/90">
-                  <span className="text-[#f4d58d] font-bold">0 €</span>
-                  <span>{tt("Kostenlos für dich", "100% Free")}</span>
+
+                {/* Social Proof & Trust Strip */}
+                <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-white/75 text-xs">
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <CheckCircle2 className="h-4 w-4 text-[#E6B84A]" />
+                    <span>{tt("47+ Geprüfte Partner", "47+ Vetted Partners")}</span>
+                  </div>
+                  <span className="text-white/20 hidden sm:inline">•</span>
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <Star className="h-4 w-4 text-[#E6B84A] fill-[#E6B84A]" />
+                    <span>{tt("4.9/5 Bewertung", "4.9/5 Rating")}</span>
+                  </div>
+                  <span className="text-white/20 hidden sm:inline">•</span>
+                  <div className="flex items-center gap-1.5 font-medium text-white/90">
+                    <span className="text-[#f4d58d] font-bold">0 €</span>
+                    <span>{tt("Kostenlos für dich", "100% Free")}</span>
+                  </div>
+                  <span className="text-white/20 hidden sm:inline">•</span>
+                  <Link
+                    to="/partners"
+                    className="text-[#f4d58d] hover:text-white transition-colors font-semibold inline-flex items-center gap-1"
+                  >
+                    <span>{tt("Partner werden →", "Become a Partner →")}</span>
+                  </Link>
                 </div>
-                <span className="text-white/20 hidden sm:inline">•</span>
-                <Link
-                  to="/partners"
-                  className="text-[#f4d58d] hover:text-white transition-colors font-semibold inline-flex items-center gap-1 text-xs sm:text-sm"
-                >
-                  <span>{tt("Partner werden →", "Become a Partner →")}</span>
-                </Link>
-              </div>
+              </motion.div>
             </motion.div>
 
-            {/* Social proof avatars */}
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 10 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
-                },
-              }}
-              className="mt-10 flex items-center gap-4 text-white/70"
-            >
-              <div className="flex items-center gap-2 pb-0.5">
-                <Building2 className="h-4 w-4 text-[#b28a3c] shrink-0" />
-                <span className="text-[10px] text-white/30">•</span>
-                <UtensilsCrossed className="h-4 w-4 text-[#b28a3c] shrink-0" />
-                <span className="text-[10px] text-white/30">•</span>
-                <PartyPopper className="h-4 w-4 text-[#b28a3c] shrink-0" />
-              </div>
-              <p className="text-sm text-white/55">
-                {tt("47+ Partner in ganz Deutschland", "47+ partners across Germany")}
-              </p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+            {/* Right Column: Live Hospitality Hub 3D Floating Preview */}
+            <div className="lg:col-span-5">
+              <div className="relative rounded-3xl bg-white/[0.07] backdrop-blur-xl border-2 border-white/20 p-6 sm:p-7 shadow-2xl overflow-hidden hover:border-[#E6B84A]/60 transition-all duration-500">
+                <div className="absolute top-0 right-0 w-36 h-36 bg-[#E6B84A]/15 rounded-full blur-3xl pointer-events-none" />
+                <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      Speisely Live Platform
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono text-[#E6B84A] bg-[#E6B84A]/10 px-2.5 py-0.5 rounded-full border border-[#E6B84A]/30">
+                    {audienceMode === "foodie" ? "0 % Gebühren" : "34,99 € Flat"}
+                  </span>
+                </div>
 
-      {/* ─────────────────────────────────────────────────
-          WHAT IS SPEISELY — Dark clarity strip
-      ───────────────────────────────────────────────── */}
-      <section className="bg-forest text-white py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-            <p className="text-base sm:text-lg text-white/75 max-w-2xl">
-              <span className="text-white font-semibold">Speisely</span>{" "}
-              {tt(
-                "ist deine Premium-Plattform, um die besten Gastronomie-Partner zu entdecken – von Restaurants bis hin zu maßgeschneidertem Event-Catering.",
-                "is your premium platform to discover top hospitality partners — from restaurants to bespoke event catering.",
-              )}
-            </p>
-            <div className="flex items-center gap-2 shrink-0">
-              <CheckCircle2 className="h-5 w-5 text-[#b28a3c]" />
-              <span className="text-sm font-semibold text-white/85">
-                {tt("Kostenlos entdecken", "Free to explore")}
-              </span>
+                <div className="space-y-3.5">
+                  {/* Capability 1: Direct Ordering */}
+                  <Link
+                    to="/restaurants"
+                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 grid place-items-center">
+                        <ShoppingBag className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                          {tt(
+                            "1. Direktbestellung (0 % Provision)",
+                            "1. Direct Ordering (0% Commission)",
+                          )}
+                        </div>
+                        <div className="text-xs text-white/60">
+                          {tt(
+                            "Stripe Connect Direktzahlung · Keine Mittelsmänner",
+                            "Stripe Connect Direct · Zero Middlemen",
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                  </Link>
+
+                  {/* Capability 2: Table Reservations */}
+                  <Link
+                    to="/restaurants"
+                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 grid place-items-center">
+                        <Clock className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                          {tt("2. Tisch reservieren", "2. Table Reservations")}
+                        </div>
+                        <div className="text-xs text-white/60">
+                          {tt(
+                            "Echtzeit-Gäste-Management ohne Pro-Kopf-Kosten",
+                            "Real-time guest management, zero per-cover fees",
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                  </Link>
+
+                  {/* Capability 3: Surplus Food Rescue */}
+                  <Link
+                    to="/restaurants"
+                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 grid place-items-center">
+                        <Sparkles className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                          {tt("3. Rettertüten (Surplus Food)", "3. Surplus Food Rescue")}
+                        </div>
+                        <div className="text-xs text-white/60">
+                          {tt(
+                            "Gutes Essen retten & Food-Waste aktiv senken",
+                            "Rescue delicious food & reduce food waste",
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                  </Link>
+
+                  {/* Capability 4: B2B Event Catering */}
+                  <Link
+                    to="/catering"
+                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 grid place-items-center">
+                        <Users className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                          {tt("4. B2B Event-Catering", "4. B2B Event Catering")}
+                        </div>
+                        <div className="text-xs text-white/60">
+                          {tt(
+                            "Geprüfte Caterer & strukturierte Briefings",
+                            "Vetted caterers & structured briefs",
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                  </Link>
+                </div>
+
+                {/* Live KDS & Printer Integration Badge */}
+                <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-white/70">
+                  <div className="flex items-center gap-1.5">
+                    <Receipt className="w-4 h-4 text-[#E6B84A]" />
+                    <span>{tt("Live-KDS & CloudPRNT fähig", "Live KDS & CloudPRNT ready")}</span>
+                  </div>
+                  <a
+                    href="/restaurant/kitchen"
+                    className="font-bold text-[#E6B84A] hover:underline"
+                  >
+                    {tt("KDS Demo ↗", "KDS Demo ↗")}
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────
-          STATS BAR
+          ILLUMINATED BENTO TRUST GRID — Real USPs Highlight
       ───────────────────────────────────────────────── */}
-      <section className="bg-cream border-b border-[#eadfce] py-8">
+      <section className="bg-gradient-to-b from-[#0a1f16] to-[#081812] border-t border-b border-white/10 py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-8 sm:gap-16 md:gap-24">
-            {stats.map((s, i) => (
-              <div key={i} className="text-center">
-                <div className="font-display text-3xl sm:text-4xl text-forest">{s.value}</div>
-                <div className="mt-1 text-xs text-forest/55 font-medium">{s.label}</div>
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#E6B84A]">
+              {tt("Warum Speisely?", "Why Speisely?")}
+            </span>
+            <h2 className="mt-2 font-display text-2xl sm:text-3xl text-white">
+              {tt(
+                "Kein Mittelsmann. Echte Wertschöpfung für Gastronomie & Genießer.",
+                "Zero Middlemen. Real value for restaurants and foodies.",
+              )}
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Tile 1: 0% Commission */}
+            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
+                <Percent className="w-6 h-6" />
               </div>
-            ))}
+              <div className="text-2xl font-black text-white mb-1">
+                0 % {tt("Provision", "Commission")}
+              </div>
+              <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
+                {tt("Direktbestellung", "Direct Ordering")}
+              </div>
+              <p className="text-xs text-white/70 leading-relaxed">
+                {tt(
+                  "100 % deiner Rechnung geht an die Küche. Keine 30 % Lieferando-Gebühren für das Restaurant.",
+                  "100% of your bill goes straight to the kitchen. Zero 30% aggregator cuts.",
+                )}
+              </p>
+            </div>
+
+            {/* Tile 2: Table Reservations */}
+            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
+                <Clock className="w-6 h-6" />
+              </div>
+              <div className="text-2xl font-black text-white mb-1">
+                {tt("Tisch-Reservierung", "Table Booking")}
+              </div>
+              <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
+                {tt("Echtzeit & Kostenlos", "Real-time & Free")}
+              </div>
+              <p className="text-xs text-white/70 leading-relaxed">
+                {tt(
+                  "Tische in Sekunden buchen. Restaurants behalten alle Gastdaten und zahlen 0 € pro Gast.",
+                  "Book tables in seconds. Hosts retain all guest relationships and pay zero per cover.",
+                )}
+              </p>
+            </div>
+
+            {/* Tile 3: Surplus Food Rescue */}
+            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+              <div className="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div className="text-2xl font-black text-white mb-1">
+                {tt("Rettertüten", "Surplus Rescue")}
+              </div>
+              <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
+                {tt("Gegen Food-Waste", "Against Food Waste")}
+              </div>
+              <p className="text-xs text-white/70 leading-relaxed">
+                {tt(
+                  "Überhanggerichte zu fairen Preisen retten. Nachhaltig für die Umwelt, rentabel für die Küche.",
+                  "Rescue fresh surplus meals at fair prices. Sustainable for the planet, profitable for the kitchen.",
+                )}
+              </p>
+            </div>
+
+            {/* Tile 4: B2B Event Catering */}
+            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
+                <Users className="w-6 h-6" />
+              </div>
+              <div className="text-2xl font-black text-white mb-1">
+                B2B & {tt("Events", "Events")}
+              </div>
+              <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
+                {tt("Geprüfte Caterer", "Vetted Caterers")}
+              </div>
+              <p className="text-xs text-white/70 leading-relaxed">
+                {tt(
+                  "Vom Office Lunch bis zur 500-Gäste-Gala: Strukturierte Briefings und transparente Direktangebote.",
+                  "From team lunches to 500-guest galas: Structured briefs and transparent direct proposals.",
+                )}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -1149,8 +1413,160 @@ function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────
-          PARTNER CTA — Forest editorial banner
+          SPEISELY VISITS & COMMUNITY EDITORIAL REEL
       ───────────────────────────────────────────────── */}
+      <section className="bg-forest text-white py-20 lg:py-28 overflow-hidden relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#E6B84A] block mb-2">
+                {tt("Echte Restaurantbesuche & Stories", "Authentic Field Reports & Stories")}
+              </span>
+              <h2 className="font-display text-3xl sm:text-5xl text-white font-bold leading-tight">
+                {tt("Speisely Visits.", "Speisely Visits.")} <br />
+                <span className="text-[#E6B84A]">
+                  {tt(
+                    "Vor Ort getestet, unabhängig bezahlt.",
+                    "Tested on-site, independently paid.",
+                  )}
+                </span>
+              </h2>
+            </div>
+            <Link
+              to="/magazin"
+              className="inline-flex items-center gap-2 text-sm font-bold text-white hover:text-[#E6B84A] transition whitespace-nowrap"
+            >
+              <span>{tt("Alle Magazin-Stories ansehen", "View all magazine stories")}</span>
+              <ArrowRight className="h-4 w-4 text-[#E6B84A]" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Story 1: Mandy Berlin-Neukölln */}
+            <Link
+              to="/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln"
+              className="group flex flex-col rounded-3xl overflow-hidden bg-white/[0.06] border border-white/15 hover:border-[#E6B84A] transition-all duration-300 hover:-translate-y-1 shadow-xl"
+            >
+              <div className="relative h-60 overflow-hidden bg-black/40">
+                <img
+                  src="/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp?v=2"
+                  alt="Mandy Lamm für zwei Berlin-Neukölln"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className="rounded-full bg-[#7FA46B] text-white text-[11px] font-extrabold px-3 py-1 shadow">
+                    Speisely Visits
+                  </span>
+                  <span className="rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1">
+                    📍 Berlin-Neukölln
+                  </span>
+                </div>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="font-display text-xl font-bold text-white mb-2 group-hover:text-[#E6B84A] transition">
+                  {tt(
+                    "Warum wir bei Mandy natürlich Mandy bestellen mussten",
+                    "Why at Mandy We Naturally Had to Order Mandy",
+                  )}
+                </h3>
+                <p className="text-xs sm:text-sm text-white/70 line-clamp-3 leading-relaxed flex-1 mb-4">
+                  {tt(
+                    "Mandy Lamm für zwei mit Safranreis, frischen Kräutern und Chai. Authentischer Vor-Ort-Besuch in der Wildenbruchstraße.",
+                    "Mandy Lamb for two with saffron rice, herbs, and chai. Authentic on-site visit in Wildenbruchstraße.",
+                  )}
+                </p>
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#E6B84A]">
+                  <span>{tt("Story lesen →", "Read story →")}</span>
+                  <span className="text-white/40">5 Min.</span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Story 2: King Tut Wilmersdorf */}
+            <Link
+              to="/magazin/community/king-tut-restaurant-berlin"
+              className="group flex flex-col rounded-3xl overflow-hidden bg-white/[0.06] border border-white/15 hover:border-[#E6B84A] transition-all duration-300 hover:-translate-y-1 shadow-xl"
+            >
+              <div className="relative h-60 overflow-hidden bg-black/40">
+                <img
+                  src="/magazin/king-tut-berlin/16_king_tut_hawawshi_molokhia_hd.jpg?v=2"
+                  alt="King Tut Restaurant Berlin"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className="rounded-full bg-[#E6B84A] text-forest text-[11px] font-extrabold px-3 py-1 shadow">
+                    Community Story
+                  </span>
+                  <span className="rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1">
+                    📍 Berlin-Wilmersdorf
+                  </span>
+                </div>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="font-display text-xl font-bold text-white mb-2 group-hover:text-[#E6B84A] transition">
+                  {tt(
+                    "Hawawshi & Holzkohlegrill auf Silberplatten: King Tut",
+                    "Hawawshi & Charcoal Grill on Silver Platters: King Tut",
+                  )}
+                </h3>
+                <p className="text-xs sm:text-sm text-white/70 line-clamp-3 leading-relaxed flex-1 mb-4">
+                  {tt(
+                    "Knuspriges Hawawshi, grüne Molokhia und kaiserliche Silberplatten mit Holzkohlegrill am Hohenzollerndamm.",
+                    "Crisp hawawshi, green molokhia, and imperial silver platters with charcoal grill at Hohenzollerndamm.",
+                  )}
+                </p>
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#E6B84A]">
+                  <span>{tt("Story lesen →", "Read story →")}</span>
+                  <span className="text-white/40">6 Min.</span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Story 3: Baba Pirzola Wittenbergplatz */}
+            <Link
+              to="/magazin/community/baba-pirzola-berlin"
+              className="group flex flex-col rounded-3xl overflow-hidden bg-white/[0.06] border border-white/15 hover:border-[#E6B84A] transition-all duration-300 hover:-translate-y-1 shadow-xl"
+            >
+              <div className="relative h-60 overflow-hidden bg-black/40">
+                <img
+                  src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=4"
+                  alt="Baba Pirzola Meze und Grill Berlin"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className="rounded-full bg-[#E6B84A] text-forest text-[11px] font-extrabold px-3 py-1 shadow">
+                    Community Story
+                  </span>
+                  <span className="rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1">
+                    📍 Berlin-Schöneberg
+                  </span>
+                </div>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="font-display text-xl font-bold text-white mb-2 group-hover:text-[#E6B84A] transition">
+                  {tt(
+                    "Feuer, Meze & große Grillkunst: Baba Pirzola",
+                    "Fire, Meze & Masterful Grilling: Baba Pirzola",
+                  )}
+                </h3>
+                <p className="text-xs sm:text-sm text-white/70 line-clamp-3 leading-relaxed flex-1 mb-4">
+                  {tt(
+                    "Kuzu Pirzola, Lokum Bonfile, rauchiges Nazik Ali und warmes Katmer mit Eis am Wittenbergplatz.",
+                    "Kuzu Pirzola, Lokum Bonfile, smoky Nazik Ali, and warm katmer with ice cream at Wittenbergplatz.",
+                  )}
+                </p>
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#E6B84A]">
+                  <span>{tt("Story lesen →", "Read story →")}</span>
+                  <span className="text-white/40">7 Min.</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
         <Link
           id="partner-banner-cta"

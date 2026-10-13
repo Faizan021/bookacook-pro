@@ -4,6 +4,7 @@ import { ArrowRight, Users, CalendarCheck, BarChart3 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { TrustSection } from "@/components/TrustSection";
+import { RestaurantSavingsCalculator } from "@/components/RestaurantSavingsCalculator";
 import capacity from "@/assets/capacity-diorama.jpg";
 import { Sparkles } from "lucide-react";
 
@@ -24,6 +25,56 @@ export const Route = createFileRoute("/partners")({
       { property: "og:url", content: "https://speisely.de/partners" },
     ],
     links: [{ rel: "canonical", href: "https://speisely.de/partners" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "SoftwareApplication",
+              name: "Speisely Restaurant Direct Ordering & Webshop",
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Web, iOS, Android (PWA)",
+              offers: {
+                "@type": "Offer",
+                price: "34.99",
+                priceCurrency: "EUR",
+                priceSpecification: {
+                  "@type": "UnitPriceSpecification",
+                  price: "34.99",
+                  priceCurrency: "EUR",
+                  unitText: "MONTH",
+                },
+              },
+              description:
+                "Provisionsfreies Bestellsystem für Gastronomen: 0 % Provision auf Direktbestellungen, Live-KDS und 100 % eigene Gastdaten.",
+            },
+            {
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "Wie hoch ist die Provision bei Speisely für Restaurants?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Speisely verlangt 0 % Provision auf alle Direktbestellungen und Tischreservierungen. Restaurants zahlen lediglich eine transparente Flatrate von 34,99 € pro Monat ohne versteckte Kosten.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Was unterscheidet Speisely von Lieferando oder Wolt?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Lieferportale verlangen 15 % bis 30 % Provision pro Bestellung und behalten die Kundendaten. Bei Speisely zahlen Gastronomen 0 % Provision, behalten 100 % ihrer Kundendaten und erhalten ein eigenes Kitchen Display System (KDS) inklusive Cloud-Drucker-Schnittstelle.",
+                  },
+                },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
   component: Partners,
 });
@@ -119,6 +170,11 @@ function Partners() {
         ]}
       />
 
+      {/* Interactive Savings Calculator (FoodAmigos & Lieferando Alternative) */}
+      <section id="calculator" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-16 lg:py-24">
+        <RestaurantSavingsCalculator />
+      </section>
+
       {/* Premium Pricing Section */}
       <section id="pricing" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-20">
         <div className="text-center max-w-2xl mx-auto mb-12">
@@ -149,12 +205,12 @@ function Partners() {
                 </span>
               </div>
               <h3 className="mt-4 font-display text-3xl text-forest">
-                {t("Direktbestellungen", "Direct Ordering")}
+                {t("Direktbestellungen & Webshop", "Direct Ordering & Webshop")}
               </h3>
               <p className="mt-2 text-sm text-forest/70 min-h-[40px] font-medium">
                 {t(
-                  "Kostenlose Kontoerstellung. Unbegrenzte Bestellungen. 100% Deins.",
-                  "Free account creation. Unlimited orders. 100% yours.",
+                  "0 % Provision auf Bestellungen. Unbegrenzte Reichweite. Deine Kunden gehören dir.",
+                  "0% order commission. Unlimited reach. 100% your customer data.",
                 )}
               </p>
 
@@ -164,43 +220,62 @@ function Partners() {
               </div>
 
               <div className="mt-4 inline-block text-xs font-bold text-[#b28a3c] bg-[#b28a3c]/15 px-3 py-1.5 rounded-lg border border-[#b28a3c]/20">
-                ⭐ {t("Keine versteckten Gebühren", "No hidden fees")}
+                ⭐{" "}
+                {t("0 % Provision · Keine versteckten Gebühren", "0% Commission · No hidden fees")}
               </div>
 
               <ul className="mt-8 space-y-4 text-sm text-forest/80">
                 <li className="flex items-start gap-3">
-                  <span className="text-[oklch(0.6_0.15_152)]">✓</span>
+                  <span className="text-[oklch(0.6_0.15_152)] font-bold">✓</span>
                   <span>
                     {t(
-                      "Eigene Website unter speisely.de/ihr-name",
-                      "Your own website under speisely.de/your-name",
+                      "0 % Provision auf alle Abhol- & Lieferbestellungen",
+                      "0% commission on all pickup & delivery orders",
                     )}
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-[oklch(0.6_0.15_152)]">✓</span>
+                  <span className="text-[oklch(0.6_0.15_152)] font-bold">✓</span>
                   <span>
                     {t(
-                      "Unbegrenzte Direktbestellungen & Tischreservierungen",
-                      "Unlimited direct orders & table reservations",
+                      "Eigene Website & PWA-Bestellshop unter speisely.de/ihr-name",
+                      "Your branded website & PWA direct shop under speisely.de/your-name",
                     )}
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-[oklch(0.6_0.15_152)]">✓</span>
+                  <span className="text-[oklch(0.6_0.15_152)] font-bold">✓</span>
                   <span>
                     {t(
-                      "Kostenloser Eintrag im Instant Food Order Entdeckungsportal",
-                      "Free listing in the Instant Food Order discovery directory",
+                      "100 % Kundendaten-Eigentum (Keine Weiterleitung an Konkurrenten)",
+                      "100% customer data ownership (No poaching to competitors)",
                     )}
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-[oklch(0.6_0.15_152)]">✓</span>
+                  <span className="text-[oklch(0.6_0.15_152)] font-bold">✓</span>
                   <span>
                     {t(
-                      "Kitchen Display System (KDS) für das Bestellmanagement",
-                      "Kitchen Display System (KDS) for order management",
+                      "Live Kitchen Display System (KDS) & Star CloudPRNT Bondrucker",
+                      "Live Kitchen Display System (KDS) & Star CloudPRNT receipt printing",
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-[oklch(0.6_0.15_152)] font-bold">✓</span>
+                  <span>
+                    {t(
+                      "Tischreservierungen & Too-Good-To-Go-Stil Rettertüten inklusive",
+                      "Table reservations & surplus rescue food bags included",
+                    )}
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-[oklch(0.6_0.15_152)] font-bold">✓</span>
+                  <span>
+                    {t(
+                      "Eintrag im Speisely Entdeckungsportal & Google Local SEO",
+                      "Featured listing in Speisely Discovery & Google Local SEO",
                     )}
                   </span>
                 </li>
