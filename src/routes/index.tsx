@@ -25,6 +25,8 @@ import {
   MapPin,
   Receipt,
   ChefHat,
+  Globe,
+  Bot,
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -849,104 +851,206 @@ function Home() {
                 </div>
 
                 <div className="space-y-3.5">
-                  {/* Capability 1: Direct Ordering */}
-                  <Link
-                    to="/restaurants"
-                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 grid place-items-center">
-                        <ShoppingBag className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                          {tt(
-                            "1. Direktbestellung (0 % Provision)",
-                            "1. Direct Ordering (0% Commission)",
-                          )}
+                  {audienceMode === "foodie" ? (
+                    <>
+                      {/* Capability 1: Direct Ordering */}
+                      <Link
+                        to="/restaurants"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 grid place-items-center">
+                            <ShoppingBag className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt(
+                                "1. Direktbestellung (0 % Provision)",
+                                "1. Direct Ordering (0% Commission)",
+                              )}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "Stripe Connect Direktzahlung · Keine Mittelsmänner",
+                                "Stripe Connect Direct · Zero Middlemen",
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-white/60">
-                          {tt(
-                            "Stripe Connect Direktzahlung · Keine Mittelsmänner",
-                            "Stripe Connect Direct · Zero Middlemen",
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
-                  </Link>
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </Link>
 
-                  {/* Capability 2: Table Reservations */}
-                  <Link
-                    to="/restaurants"
-                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 grid place-items-center">
-                        <Clock className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                          {tt("2. Tisch reservieren", "2. Table Reservations")}
+                      {/* Capability 2: Table Reservations */}
+                      <Link
+                        to="/restaurants"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 grid place-items-center">
+                            <Clock className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt("2. Tisch reservieren", "2. Table Reservations")}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "Echtzeit-Gäste-Management ohne Pro-Kopf-Kosten",
+                                "Real-time guest management, zero per-cover fees",
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-white/60">
-                          {tt(
-                            "Echtzeit-Gäste-Management ohne Pro-Kopf-Kosten",
-                            "Real-time guest management, zero per-cover fees",
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
-                  </Link>
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </Link>
 
-                  {/* Capability 3: Surplus Food Rescue */}
-                  <Link
-                    to="/restaurants"
-                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 grid place-items-center">
-                        <Sparkles className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                          {tt("3. Rettertüten (Surplus Food)", "3. Surplus Food Rescue")}
+                      {/* Capability 3: Surplus Food Rescue */}
+                      <Link
+                        to="/restaurants"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 grid place-items-center">
+                            <Sparkles className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt("3. Rettertüten (Surplus Food)", "3. Surplus Food Rescue")}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "Gutes Essen retten & Food-Waste aktiv senken",
+                                "Rescue delicious food & reduce food waste",
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-white/60">
-                          {tt(
-                            "Gutes Essen retten & Food-Waste aktiv senken",
-                            "Rescue delicious food & reduce food waste",
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
-                  </Link>
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </Link>
 
-                  {/* Capability 4: B2B Event Catering */}
-                  <Link
-                    to="/catering"
-                    className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 grid place-items-center">
-                        <Users className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                          {tt("4. B2B Event-Catering", "4. B2B Event Catering")}
+                      {/* Capability 4: B2B Event Catering */}
+                      <Link
+                        to="/catering"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 grid place-items-center">
+                            <Users className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt("4. B2B Event-Catering", "4. B2B Event Catering")}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "Geprüfte Caterer & strukturierte Briefings",
+                                "Vetted caterers & structured briefs",
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-white/60">
-                          {tt(
-                            "Geprüfte Caterer & strukturierte Briefings",
-                            "Vetted caterers & structured briefs",
-                          )}
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      {/* Partner Feature 1: High-End Webdesign */}
+                      <Link
+                        to="/partner/webseiten"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-[#E6B84A] grid place-items-center">
+                            <Globe className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt("1. High-End Gastro-Website", "1. High-End Gastro Website")}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "PageSpeed 99+ · 0.48s Ladezeit · Eigene Domain",
+                                "PageSpeed 99+ · 0.48s load time · Custom domain",
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
-                  </Link>
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </Link>
+
+                      {/* Partner Feature 2: Google KI-SEO, GEO & AEO */}
+                      <Link
+                        to="/partner/webseiten"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 grid place-items-center">
+                            <Bot className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt("2. Google-KI & AEO Optimierung", "2. Google AI & AEO Optimization")}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "ChatGPT & Perplexity Zitate · Lokales Ranking",
+                                "ChatGPT & Perplexity citations · Local GEO rank",
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </Link>
+
+                      {/* Partner Feature 3: Live-KDS & CloudPRNT */}
+                      <a
+                        href="/restaurant/kitchen"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-300 grid place-items-center">
+                            <Receipt className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt("3. Live-KDS Küchenmonitor", "3. Live KDS Kitchen Display")}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "Bondrucker & Tablet-Steuerung ohne App-Zwang",
+                                "Receipt printer & tablet control, zero app lock-in",
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </a>
+
+                      {/* Partner Feature 4: 0% Direct Checkout */}
+                      <Link
+                        to="/partners#calculator"
+                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-300 grid place-items-center">
+                            <Percent className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
+                              {tt("4. Rechner: 30 % Lieferando sparen", "4. Calculator: Save 30% cuts")}
+                            </div>
+                            <div className="text-xs text-white/60">
+                              {tt(
+                                "Bis zu 23.000 € Ersparnis/Jahr berechnen",
+                                "Calculate up to €23,000 yearly savings",
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                      </Link>
+                    </>
+                  )}
                 </div>
 
                 {/* Live KDS & Printer Integration Badge */}
@@ -1258,35 +1362,44 @@ function Home() {
 
       {/* ─────────────────────────────────────────────────
           LIVE WEBSITE SHOWCASE FOR RESTAURANTS & CATERERS
+          Highlights Agency Capability: Custom Websites, Google KI-SEO, GEO & AEO
       ───────────────────────────────────────────────── */}
       <section className="bg-cream border-t border-b border-[#eadfce] py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#b28a3c] block mb-2">
-                Speisely Digital Suite
-              </span>
+              <div className="inline-flex items-center gap-2 rounded-full bg-forest/5 border border-forest/15 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#b28a3c] mb-3">
+                <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" />
+                <span>Speisely Digital Suite · High-End Webdesign &amp; GEO / AEO</span>
+              </div>
               <h2 className="font-display text-3xl sm:text-5xl text-forest font-bold leading-tight">
                 Wir bauen High-End Websites <br />
-                <span className="text-[#A85C36]">für Caterer &amp; Gastronomen.</span>
+                <span className="text-[#A85C36]">mit Google-KI-SEO, GEO &amp; AEO Setup.</span>
               </h2>
+              <p className="mt-3 text-sm sm:text-base text-forest/75 max-w-2xl leading-relaxed">
+                Schluss mit langsamen 5.000 € WordPress-Seiten. Wir entwickeln maßgeschneiderte,
+                blitzschnelle Webauftritte für Caterer &amp; Gastronomen — optimiert für
+                Google AI Overviews, Perplexity &amp; ChatGPT-Zitate mit integrierter Buchungsengine.
+              </p>
             </div>
-            <Link
-              to="/partner/webseiten"
-              className="inline-flex items-center gap-2 text-sm font-bold text-forest hover:text-[#b28a3c] transition whitespace-nowrap"
-            >
-              <span>Alle Referenzen &amp; Angebot ansehen</span>
-              <ArrowRight className="h-4 w-4 text-[#E6B84A]" />
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                to="/partner/webseiten"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-forest text-white px-6 py-3.5 text-sm font-bold shadow-lg hover:bg-[#b28a3c] transition whitespace-nowrap"
+              >
+                <span>Kostenlosen Website-Audit starten</span>
+                <ArrowRight className="h-4 w-4 text-[#E6B84A]" />
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Case 1: Partyservice Küpper */}
-            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
+            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 sm:p-8 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider">
-                    BBQ &amp; Event-Catering NRW
+                    BBQ &amp; Event-Catering NRW · Live Referenz
                   </span>
                   <Link
                     to="/case-study/partyservice-kuepper"
@@ -1299,19 +1412,23 @@ function Home() {
                   to="/case-study/partyservice-kuepper"
                   className="block group-hover:text-[#A85C36] transition"
                 >
-                  <h3 className="font-display text-2xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
                     Partyservice Küpper
                   </h3>
                 </Link>
-                <p className="text-xs sm:text-sm text-forest/75 line-clamp-3 leading-relaxed mb-6">
-                  Moderner Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, lokaler
-                  Google-KI-SEO-Struktur und direkter Angebotsanfrage.
+                <p className="text-xs sm:text-sm text-forest/75 leading-relaxed mb-6">
+                  Von statischem PDF zum volldigitalen Flaggschiff-Auftritt: All-Inclusive BBQ-Pakete,
+                  interaktiver Event-Kalkulator und strukturierte GEO / AEO Schema.org Daten für
+                  regionale Google-KI-Sichtbarkeit.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
-                    ⚡ PageSpeed 99+
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">
+                    ⚡ PageSpeed 99/100
                   </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-purple-800">
+                    🤖 Google AI / AEO Ready
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-amber-800">
                     🥩 All-Inclusive BBQ
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
@@ -1324,7 +1441,7 @@ function Home() {
                 <div className="flex items-center gap-2">
                   <Link
                     to="/case-study/partyservice-kuepper"
-                    className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3.5 py-1.5 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
+                    className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-4 py-2 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
                   >
                     <span>Case Study</span>
                     <ArrowRight className="h-3 w-3" />
@@ -1342,11 +1459,11 @@ function Home() {
             </div>
 
             {/* Case 2: Haus Spaas */}
-            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
+            <div className="rounded-3xl bg-white border-2 border-forest/10 p-7 sm:p-8 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider">
-                    Traditions-Gastronomie &amp; Eventlokal
+                    Traditions-Gastronomie &amp; Eventlokal · Live Referenz
                   </span>
                   <Link
                     to="/case-study/haus-spaas"
@@ -1359,23 +1476,27 @@ function Home() {
                   to="/case-study/haus-spaas"
                   className="block group-hover:text-[#A85C36] transition"
                 >
-                  <h3 className="font-display text-2xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
                     Haus Spaas
                   </h3>
                 </Link>
-                <p className="text-xs sm:text-sm text-forest/75 line-clamp-3 leading-relaxed mb-6">
-                  Vom statischen PDF zum vollen Gastraum: Duales Menü-System, 1-Klick WhatsApp
-                  Reservierung &amp; 44 Besucher in den ersten 24 Stunden.
+                <p className="text-xs sm:text-sm text-forest/75 leading-relaxed mb-6">
+                  Vom unleserlichen PDF zum vollen Gastraum in 24 Stunden: Duales Speisekarten-System
+                  (Oktoberfest &amp; Klassik), 1-Klick WhatsApp Reservierung und ultraschnelle
+                  Google-Ladezeiten für maximale Reservierungs-Conversions.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">
                     📈 +44 Gäste in 24h
                   </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-purple-800">
+                    ⚡ 0.48s Ladezeit
+                  </span>
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-amber-800">
                     🥨 Duale Speisekarte
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
-                    ⚡ 0.48s Ladezeit
+                    📲 1-Klick WhatsApp
                   </span>
                 </div>
               </div>
@@ -1384,7 +1505,7 @@ function Home() {
                 <div className="flex items-center gap-2">
                   <Link
                     to="/case-study/haus-spaas"
-                    className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3.5 py-1.5 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
+                    className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-4 py-2 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
                   >
                     <span>Case Study</span>
                     <ArrowRight className="h-3 w-3" />
