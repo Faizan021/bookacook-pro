@@ -516,7 +516,7 @@ function Home() {
         </div>
 
         {/* Hero text & interactive content */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 sm:pt-14 sm:pb-20 lg:pt-20 lg:pb-32">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-32">
           {/* Dual Perspective Audience Toggle */}
           <div className="flex items-center justify-start mb-6">
             <div className="inline-flex items-center p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
@@ -723,7 +723,7 @@ function Home() {
                       }
                     }}
                     disabled={searching}
-                    className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-3.5 pl-14 pr-44 sm:pr-48 text-base text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
+                    className="w-full rounded-full bg-white/95 backdrop-blur-md border-2 border-white/50 py-3.5 pl-14 pr-36 sm:pr-44 text-sm sm:text-base text-forest shadow-xl focus:border-[#b28a3c] focus:bg-white focus:outline-none transition-all placeholder:text-forest/45 disabled:opacity-80"
                     placeholder={
                       activeVertical === "restaurant"
                         ? tt(
@@ -751,52 +751,23 @@ function Home() {
                         }
                       }}
                       disabled={searching}
-                      className="bg-gradient-to-r from-[#b28a3c] via-[#c69a45] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-4 sm:px-5 py-2 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.02] active:scale-[0.98]"
+                      className="bg-gradient-to-r from-[#b28a3c] via-[#c69a45] to-[#d6a538] hover:from-[#9a7633] hover:to-[#b28a3c] text-forest font-black rounded-full px-3.5 sm:px-5 py-2 text-xs sm:text-sm shadow-lg shadow-[#b28a3c]/30 hover:shadow-xl transition-all flex items-center gap-1.5 sm:gap-2 cursor-pointer border border-[#f4d58d]/50 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
                       title={tt("Finden & KI-Berater starten", "Find & start AI advisor")}
                     >
                       {searching ? (
-                        <Loader2 className="h-4 w-4 animate-spin text-forest" />
+                        <Loader2 className="h-4 w-4 animate-spin text-forest shrink-0" />
                       ) : (
-                        <Sparkles className="h-4 w-4 text-forest" />
+                        <Sparkles className="h-4 w-4 text-forest shrink-0" />
                       )}
-                      <span>{tt("Finden & Beraten", "Find & Consult")}</span>
+                      <span>{tt("Finden", "Find")}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* 1-Tap GEO City Matrix */}
-                <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
+                {/* Refined Context Chips Row: Elegant, un-cluttered suggestion pill bar */}
+                <div className="mt-3.5 flex flex-wrap items-center gap-2 text-xs">
                   <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
-                    {tt("Städte:", "Cities:")}
-                  </span>
-                  {[
-                    { name: "Berlin", slug: "berlin" },
-                    { name: "München", slug: "muenchen" },
-                    { name: "Hamburg", slug: "hamburg" },
-                    { name: "Frankfurt", slug: "frankfurt" },
-                    { name: "Köln", slug: "koeln" },
-                    { name: "Düsseldorf", slug: "duesseldorf" },
-                  ].map((city) => (
-                    <a
-                      key={city.slug}
-                      href={
-                        activeVertical === "restaurant"
-                          ? "/restaurants"
-                          : activeVertical === "planner"
-                            ? `/planner/ort/${city.slug}`
-                            : `/catering/ort/${city.slug}`
-                      }
-                      className="rounded-full bg-white/[0.08] hover:bg-[#E6B84A] hover:text-forest text-white/85 border border-white/15 px-2.5 py-0.5 text-xs font-semibold transition cursor-pointer backdrop-blur-sm"
-                    >
-                      📍 {city.name}
-                    </a>
-                  ))}
-                </div>
-
-                {/* Vorschläge Chips */}
-                <div className="mt-2.5 flex flex-wrap items-center gap-2">
-                  <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
-                    {tt("Beliebt:", "Popular:")}
+                    {tt("Vorschläge:", "Suggestions:")}
                   </span>
                   {scenarioChips.map((chip, i) => (
                     <button
@@ -806,30 +777,51 @@ function Home() {
                         setSearchQuery(chip.query);
                         setIsConciergeOpen(true);
                       }}
-                      className="rounded-full bg-white/[0.06] hover:bg-white/20 text-white/75 border border-white/10 px-2.5 py-0.5 text-xs font-medium transition cursor-pointer"
+                      className="inline-flex items-center rounded-full bg-white/[0.08] hover:bg-[#E6B84A] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer backdrop-blur-sm"
                     >
                       {chip.label}
                     </button>
                   ))}
+                  {/* Subtle, direct city jump links */}
+                  <div className="w-full sm:w-auto flex items-center gap-2 pt-1 sm:pt-0 sm:ml-auto">
+                    <span className="text-[11px] font-bold text-white/40 uppercase tracking-wider">
+                      {tt("Top:", "Top:")}
+                    </span>
+                    {["Berlin", "München", "Hamburg"].map((cityName) => {
+                      const slug = cityName === "München" ? "muenchen" : cityName.toLowerCase();
+                      return (
+                        <a
+                          key={slug}
+                          href={
+                            activeVertical === "restaurant"
+                              ? `/restaurants?city=${slug}`
+                              : activeVertical === "planner"
+                                ? `/planner/ort/${slug}`
+                                : `/catering/ort/${slug}`
+                          }
+                          className="text-white/60 hover:text-[#E6B84A] underline-offset-4 hover:underline text-xs transition-colors"
+                        >
+                          {cityName}
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                {/* Social Proof & Trust Strip */}
-                <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-white/75 text-xs">
-                  <div className="flex items-center gap-1.5 font-medium">
+                {/* Social Proof & Trust Strip (Clean separation with luxury micro-cards) */}
+                <div className="mt-7 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-y-3 text-white/80 text-xs">
+                  <div className="flex items-center gap-2 font-medium">
                     <CheckCircle2 className="h-4 w-4 text-[#E6B84A]" />
                     <span>{tt("47+ Geprüfte Partner", "47+ Vetted Partners")}</span>
                   </div>
-                  <span className="text-white/20 hidden sm:inline">•</span>
                   <div className="flex items-center gap-1.5 font-medium">
                     <Star className="h-4 w-4 text-[#E6B84A] fill-[#E6B84A]" />
-                    <span>{tt("4.9/5 Bewertung", "4.9/5 Rating")}</span>
+                    <span>{tt("4.9/5 Gast-Bewertung", "4.9/5 Guest Rating")}</span>
                   </div>
-                  <span className="text-white/20 hidden sm:inline">•</span>
                   <div className="flex items-center gap-1.5 font-medium text-white/90">
                     <span className="text-[#f4d58d] font-bold">0 €</span>
-                    <span>{tt("Kostenlos für dich", "100% Free")}</span>
+                    <span>{tt("Kostenlos für Genießer", "100% Free for Foodies")}</span>
                   </div>
-                  <span className="text-white/20 hidden sm:inline">•</span>
                   <Link
                     to="/partners"
                     className="text-[#f4d58d] hover:text-white transition-colors font-semibold inline-flex items-center gap-1"
