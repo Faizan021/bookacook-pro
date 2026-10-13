@@ -880,7 +880,7 @@ function Home() {
                         <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
 
-                      {/* Capability 2: Table Reservations */}
+                      {/* Capability 2: Table & WhatsApp Reservations */}
                       <Link
                         to="/restaurants"
                         className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/25 transition group cursor-pointer"
@@ -891,12 +891,12 @@ function Home() {
                           </div>
                           <div>
                             <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                              {tt("2. Tisch reservieren", "2. Table Reservations")}
+                              {tt("2. Tisch & WhatsApp Reservierung", "2. Table & WhatsApp Booking")}
                             </div>
                             <div className="text-xs text-white/60">
                               {tt(
-                                "Echtzeit-Gäste-Management ohne Pro-Kopf-Kosten",
-                                "Real-time guest management, zero per-cover fees",
+                                "1-Klick WhatsApp & E-Mail · 0 € Pro-Kopf-Kosten",
+                                "1-Click WhatsApp & E-Mail · Zero per-cover fees",
                               )}
                             </div>
                           </div>
@@ -1091,7 +1091,10 @@ function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {/* Tile 1: 0% Commission */}
-            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+            <Link
+              to="/restaurants"
+              className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
+            >
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Percent className="w-6 h-6" />
               </div>
@@ -1107,29 +1110,35 @@ function Home() {
                   "100% of your bill goes straight to the kitchen. Zero 30% aggregator cuts.",
                 )}
               </p>
-            </div>
+            </Link>
 
-            {/* Tile 2: Table Reservations */}
-            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+            {/* Tile 2: Table & WhatsApp Reservations */}
+            <Link
+              to="/restaurants"
+              className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
+            >
               <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Clock className="w-6 h-6" />
               </div>
               <div className="text-xl sm:text-2xl font-black text-white mb-1">
-                {tt("Reservierung", "Reservations")}
+                {tt("WhatsApp & Tisch", "WhatsApp & Tables")}
               </div>
               <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
-                {tt("Echtzeit & Kostenlos", "Real-time & Free")}
+                {tt("1-Klick & 0 € Provision", "1-Click & Zero Commission")}
               </div>
               <p className="text-xs text-white/70 leading-relaxed">
                 {tt(
-                  "Tische in Sekunden buchen. Restaurants behalten alle Gastdaten und zahlen 0 € pro Gast.",
-                  "Book tables in seconds. Hosts retain all guest relationships and pay zero per cover.",
+                  "Tische via WhatsApp & E-Mail in Sekunden buchen. Restaurants behalten 100 % Gastdaten und zahlen 0 € pro Gast.",
+                  "Book tables via WhatsApp & E-Mail in seconds. Hosts retain 100% guest data and pay zero per cover.",
                 )}
               </p>
-            </div>
+            </Link>
 
             {/* Tile 3: Surplus Food Rescue */}
-            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+            <Link
+              to="/restaurants"
+              className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
+            >
               <div className="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Sparkles className="w-6 h-6" />
               </div>
@@ -1145,10 +1154,13 @@ function Home() {
                   "Rescue fresh surplus meals at fair prices. Sustainable for the planet, profitable for the kitchen.",
                 )}
               </p>
-            </div>
+            </Link>
 
             {/* Tile 4: B2B Event Catering */}
-            <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
+            <Link
+              to="/catering"
+              className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
+            >
               <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Users className="w-6 h-6" />
               </div>
@@ -1164,7 +1176,7 @@ function Home() {
                   "From team lunches to 500-guest galas: Structured briefs and transparent direct proposals.",
                 )}
               </p>
-            </div>
+            </Link>
 
             {/* Tile 5: Custom Websites & Google KI-SEO / GEO */}
             <Link
