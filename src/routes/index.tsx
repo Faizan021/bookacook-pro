@@ -1089,13 +1089,13 @@ function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
             {/* Tile 1: 0% Commission */}
             <div className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Percent className="w-6 h-6" />
               </div>
-              <div className="text-2xl font-black text-white mb-1">
+              <div className="text-xl sm:text-2xl font-black text-white mb-1">
                 0 % {tt("Provision", "Commission")}
               </div>
               <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
@@ -1114,8 +1114,8 @@ function Home() {
               <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Clock className="w-6 h-6" />
               </div>
-              <div className="text-2xl font-black text-white mb-1">
-                {tt("Tisch-Reservierung", "Table Booking")}
+              <div className="text-xl sm:text-2xl font-black text-white mb-1">
+                {tt("Reservierung", "Reservations")}
               </div>
               <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
                 {tt("Echtzeit & Kostenlos", "Real-time & Free")}
@@ -1133,7 +1133,7 @@ function Home() {
               <div className="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Sparkles className="w-6 h-6" />
               </div>
-              <div className="text-2xl font-black text-white mb-1">
+              <div className="text-xl sm:text-2xl font-black text-white mb-1">
                 {tt("Rettertüten", "Surplus Rescue")}
               </div>
               <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
@@ -1152,8 +1152,8 @@ function Home() {
               <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
                 <Users className="w-6 h-6" />
               </div>
-              <div className="text-2xl font-black text-white mb-1">
-                B2B & {tt("Events", "Events")}
+              <div className="text-xl sm:text-2xl font-black text-white mb-1">
+                B2B &amp; {tt("Events", "Events")}
               </div>
               <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
                 {tt("Geprüfte Caterer", "Vetted Caterers")}
@@ -1165,6 +1165,28 @@ function Home() {
                 )}
               </p>
             </div>
+
+            {/* Tile 5: Custom Websites & Google KI-SEO / GEO */}
+            <Link
+              to="/partner/webseiten"
+              className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A] hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-300 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
+                <Globe className="w-6 h-6" />
+              </div>
+              <div className="text-xl sm:text-2xl font-black text-white mb-1">
+                Websites &amp; KI
+              </div>
+              <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
+                {tt("Google KI-SEO & AEO", "Google AI SEO & AEO")}
+              </div>
+              <p className="text-xs text-white/70 leading-relaxed">
+                {tt(
+                  "0.48s Ladezeit, eigene Domain & ChatGPT / Perplexity Zitate. Powered by TechGlanz.",
+                  "0.48s speed, custom domain & ChatGPT / Perplexity citations. Powered by TechGlanz.",
+                )}
+              </p>
+            </Link>
           </div>
         </div>
       </section>
