@@ -60,7 +60,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/nadir-gullu-bakla
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/nadir-gullu/nadir-gullu-havuc-dilimi-macro.webp",
+        content: "https://speisely.de/magazin/nadir-gullu/nadir-gullu-havuc-dilimi-landscape.webp",
       },
       { property: "og:type", content: "article" },
       {
@@ -337,11 +337,11 @@ function NadirGulluArticlePage() {
               <span>40 HAUCHDÜNNE SCHICHTEN · KIRK KAT</span>
             </div>
             <img
-              src="/magazin/nadir-gullu/nadir-gullu-havuc-dilimi-macro.webp?v=1"
+              src="/magazin/nadir-gullu/nadir-gullu-havuc-dilimi-landscape.webp?v=1"
               alt="Havuç Dilimi Pistazien-Baklava von Nadir Güllü mit 40 hauchdünnen Teigschichten"
               className="w-full h-auto object-cover rounded-2xl"
-              width="765"
-              height="1020"
+              width="1024"
+              height="576"
               loading="eager"
             />
           </div>
