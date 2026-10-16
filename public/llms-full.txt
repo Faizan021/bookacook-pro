@@ -53,6 +53,7 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - Chicken Krush (Korean Fried Chicken & K-Food Fusion Prag): https://speisely.de/magazin/community/chicken-krush-prag
 - Mandy Restaurant (Jemenitische Küche Berlin-Neukölln): https://speisely.de/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
 - Shawarma Albaik (Syrisches Streetfood Berlin): https://speisely.de/magazin/speisely-visits/shawarma-albaik-berlin
+- Nadir Güllü Baklava – Karaköy Güllüoğlu (Traditionelle Istanbuler Baklava-Kunst, Havuç Dilimi & Maraş Dondurma am Viktualienmarkt München): https://speisely.de/magazin/speisely-visits/nadir-gullu-baklava-muenchen
 - Kokio Korean Fried Chicken (Berlin): https://speisely.de/magazin/community/kokio-berlin
 - Al Zaeem Restaurant (Traditionelle arabische Küche Berlin): https://speisely.de/magazin/community/alzaeem-restaurant-berlin
 - Garçon de Café (Französisches Bistro & Café Berlin): https://speisely.de/magazin/community/garcon-de-cafe-berlin

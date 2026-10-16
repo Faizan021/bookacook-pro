@@ -747,7 +747,9 @@ function Home() {
                       if (e.key === "Enter") {
                         if (audienceMode === "partner") {
                           if (searchQuery.trim()) {
-                            trackEvent("partner_audit_hero_searched", { query: searchQuery.trim() });
+                            trackEvent("partner_audit_hero_searched", {
+                              query: searchQuery.trim(),
+                            });
                           }
                           navigate({ to: "/partner/webseiten" });
                         } else {
@@ -784,7 +786,9 @@ function Home() {
                       onClick={() => {
                         if (audienceMode === "partner") {
                           if (searchQuery.trim()) {
-                            trackEvent("partner_audit_hero_searched", { query: searchQuery.trim() });
+                            trackEvent("partner_audit_hero_searched", {
+                              query: searchQuery.trim(),
+                            });
                           }
                           navigate({ to: "/partner/webseiten" });
                           return;
@@ -981,7 +985,10 @@ function Home() {
                           </div>
                           <div>
                             <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                              {tt("2. Tisch & WhatsApp Reservierung", "2. Table & WhatsApp Booking")}
+                              {tt(
+                                "2. Tisch & WhatsApp Reservierung",
+                                "2. Table & WhatsApp Booking",
+                              )}
                             </div>
                             <div className="text-xs text-white/60">
                               {tt(
@@ -1103,7 +1110,10 @@ function Home() {
                           </div>
                           <div>
                             <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                              {tt("2. Google-KI & AEO Optimierung", "2. Google AI & AEO Optimization")}
+                              {tt(
+                                "2. Google-KI & AEO Optimierung",
+                                "2. Google AI & AEO Optimization",
+                              )}
                             </div>
                             <div className="text-xs text-white/60">
                               {tt(
@@ -1148,7 +1158,8 @@ function Home() {
 
                       {/* Partner Feature 4: 0% Direct Checkout */}
                       <Link
-                        to="/partners#calculator"
+                        to="/partners"
+                        hash="calculator"
                         onClick={() =>
                           trackEvent("hero_capability_clicked", {
                             capability: "savings_calculator",
@@ -1163,7 +1174,10 @@ function Home() {
                           </div>
                           <div>
                             <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                              {tt("4. Rechner: 30 % Lieferando sparen", "4. Calculator: Save 30% cuts")}
+                              {tt(
+                                "4. Rechner: 30 % Lieferando sparen",
+                                "4. Calculator: Save 30% cuts",
+                              )}
                             </div>
                             <div className="text-xs text-white/60">
                               {tt(
@@ -1219,9 +1233,7 @@ function Home() {
             {/* Tile 1: 0% Commission */}
             <Link
               to="/restaurants"
-              onClick={() =>
-                trackEvent("bento_tile_clicked", { tile: "direct_ordering" })
-              }
+              onClick={() => trackEvent("bento_tile_clicked", { tile: "direct_ordering" })}
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1244,9 +1256,7 @@ function Home() {
             {/* Tile 2: Table & WhatsApp Reservations */}
             <Link
               to="/restaurants"
-              onClick={() =>
-                trackEvent("bento_tile_clicked", { tile: "whatsapp_reservations" })
-              }
+              onClick={() => trackEvent("bento_tile_clicked", { tile: "whatsapp_reservations" })}
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1269,9 +1279,7 @@ function Home() {
             {/* Tile 3: Surplus Food Rescue */}
             <Link
               to="/restaurants"
-              onClick={() =>
-                trackEvent("bento_tile_clicked", { tile: "surplus_food_rescue" })
-              }
+              onClick={() => trackEvent("bento_tile_clicked", { tile: "surplus_food_rescue" })}
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-teal-500/20 text-teal-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1294,9 +1302,7 @@ function Home() {
             {/* Tile 4: B2B Event Catering */}
             <Link
               to="/catering"
-              onClick={() =>
-                trackEvent("bento_tile_clicked", { tile: "b2b_catering" })
-              }
+              onClick={() => trackEvent("bento_tile_clicked", { tile: "b2b_catering" })}
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A]/60 hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1319,9 +1325,7 @@ function Home() {
             {/* Tile 5: Custom Websites & Google KI-SEO / GEO */}
             <Link
               to="/partner/webseiten"
-              onClick={() =>
-                trackEvent("bento_tile_clicked", { tile: "custom_websites_ai" })
-              }
+              onClick={() => trackEvent("bento_tile_clicked", { tile: "custom_websites_ai" })}
               className="rounded-3xl bg-white/[0.05] backdrop-blur-md border border-white/15 p-6 hover:border-[#E6B84A] hover:bg-white/[0.08] transition-all duration-300 group cursor-pointer block"
             >
               <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-300 grid place-items-center mb-4 group-hover:scale-110 transition-transform">
@@ -1553,8 +1557,8 @@ function Home() {
               </h2>
               <p className="mt-3 text-sm sm:text-base text-forest/75 max-w-2xl leading-relaxed">
                 Schluss mit langsamen 5.000 € WordPress-Seiten. Wir entwickeln maßgeschneiderte,
-                blitzschnelle Webauftritte für Caterer &amp; Gastronomen — optimiert für
-                Google AI Overviews, Perplexity &amp; ChatGPT-Zitate mit integrierter Buchungsengine.
+                blitzschnelle Webauftritte für Caterer &amp; Gastronomen — optimiert für Google AI
+                Overviews, Perplexity &amp; ChatGPT-Zitate mit integrierter Buchungsengine.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -1617,9 +1621,9 @@ function Home() {
                   </h3>
                 </Link>
                 <p className="text-xs sm:text-sm text-forest/75 leading-relaxed mb-6">
-                  Von statischem PDF zum volldigitalen Flaggschiff-Auftritt: All-Inclusive BBQ-Pakete,
-                  interaktiver Event-Kalkulator und strukturierte GEO / AEO Schema.org Daten für
-                  regionale Google-KI-Sichtbarkeit.
+                  Von statischem PDF zum volldigitalen Flaggschiff-Auftritt: All-Inclusive
+                  BBQ-Pakete, interaktiver Event-Kalkulator und strukturierte GEO / AEO Schema.org
+                  Daten für regionale Google-KI-Sichtbarkeit.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">
@@ -1706,9 +1710,10 @@ function Home() {
                   </h3>
                 </Link>
                 <p className="text-xs sm:text-sm text-forest/75 leading-relaxed mb-6">
-                  Vom unleserlichen PDF zum vollen Gastraum in 24 Stunden: Duales Speisekarten-System
-                  (Oktoberfest &amp; Klassik), direkte 1-Klick WhatsApp- &amp; E-Mail-Reservierung und
-                  ultraschnelle Google-Ladezeiten ohne Mittelsmann-Provision.
+                  Vom unleserlichen PDF zum vollen Gastraum in 24 Stunden: Duales
+                  Speisekarten-System (Oktoberfest &amp; Klassik), direkte 1-Klick WhatsApp- &amp;
+                  E-Mail-Reservierung und ultraschnelle Google-Ladezeiten ohne
+                  Mittelsmann-Provision.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">

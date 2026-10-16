@@ -400,6 +400,67 @@ function SpeiselyVisitsPage() {
                 </div>
               </div>
             </Link>
+
+            {/* Nadir Güllü Article Card */}
+            <Link
+              to="/magazin/speisely-visits/nadir-gullu-baklava-muenchen"
+              className="group flex flex-col overflow-hidden rounded-3xl shadow-lg border border-[#173C32]/10 bg-white hover:ring-2 hover:ring-[#7FA46B] transition"
+            >
+              <div className="relative overflow-hidden h-60 bg-[#0c1813]">
+                <img
+                  src="/magazin/nadir-gullu/nadir-gullu-havuc-dilimi-macro.webp"
+                  alt={
+                    isDe
+                      ? "Nadir Güllü Havuç Dilimi Baklava mit Smaragdpistazien am Viktualienmarkt München"
+                      : "Nadir Güllü Havuç Dilimi Baklava with emerald pistachios at Viktualienmarkt Munich"
+                  }
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  width="800"
+                  height="600"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7FA46B] text-white px-3 py-1 text-xs font-extrabold shadow">
+                    <Eye className="w-3 h-3" aria-hidden="true" />
+                    Speisely Visits
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 text-[#173C32] px-2.5 py-1 text-xs font-bold shadow">
+                    <MapPin className="w-3 h-3" aria-hidden="true" />
+                    München
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col flex-1 p-6 space-y-3">
+                <div className="flex items-center gap-2 text-xs text-[#173C32]/50 font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
+                  <span>
+                    {isDe
+                      ? "16. Oktober 2026 · Viktualienmarkt, München"
+                      : "October 16, 2026 · Viktualienmarkt, Munich"}
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
+                  {isDe
+                    ? "Nadir Güllü München: Die Kunst der 40 Schichten"
+                    : "Nadir Güllü Munich: The Art of 40 Layers"}
+                </h3>
+                <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
+                  {isDe
+                    ? "180 Jahre Istanbuler Handwerkstradition von Karaköy Güllüoğlu am Viktualienmarkt: 40 hauchdünne Teigschichten, Urfa-Butter und das Hışırtı-Knistern."
+                    : "180 years of Istanbul craft by Karaköy Güllüoğlu at Viktualienmarkt: 40 pastry layers, Urfa butter, and the signature Hışırtı crunch."}
+                </p>
+                <div className="pt-2 border-t border-[#173C32]/10 flex items-center justify-between">
+                  <span className="text-sm font-bold text-[#173C32] group-hover:text-[#b8860b] flex items-center gap-1.5 transition-colors">
+                    {isDe ? "Story lesen" : "Read Story"}{" "}
+                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                  </span>
+                  <span className="text-xs text-[#173C32]/40">
+                    {isDe ? "6 Min. Lesezeit" : "6 min read"}
+                  </span>
+                </div>
+              </div>
+            </Link>
           </div>
         </section>
 

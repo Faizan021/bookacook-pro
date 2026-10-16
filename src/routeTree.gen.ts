@@ -81,6 +81,7 @@ import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes
 import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
 import { Route as MagazinSpeiselyVisitsIndexRouteImport } from './routes/magazin.speisely-visits.index'
 import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
+import { Route as MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRouteImport } from './routes/magazin.speisely-visits.nadir-gullu-baklava-muenchen'
 import { Route as MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport } from './routes/magazin.speisely-visits.shawarma-albaik-berlin'
 import { Route as PlannerOrtCityRouteImport } from './routes/planner.ort.$city'
 import { Route as RestaurantSlugLinksRouteImport } from './routes/restaurant.$slug.links'
@@ -476,6 +477,12 @@ const MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute =
     path: '/mandy-restaurant-berlin-neukoelln',
     getParentRoute: () => MagazinSpeiselyVisitsRoute,
   } as any)
+const MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute =
+  MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRouteImport.update({
+    id: '/nadir-gullu-baklava-muenchen',
+    path: '/nadir-gullu-baklava-muenchen',
+    getParentRoute: () => MagazinSpeiselyVisitsRoute,
+  } as any)
 const MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute =
   MagazinSpeiselyVisitsShawarmaAlbaikBerlinRouteImport.update({
     id: '/shawarma-albaik-berlin',
@@ -596,6 +603,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
+  '/magazin/speisely-visits/nadir-gullu-baklava-muenchen': typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
@@ -675,6 +683,7 @@ export interface FileRoutesByTo {
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
+  '/magazin/speisely-visits/nadir-gullu-baklava-muenchen': typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
@@ -759,6 +768,7 @@ export interface FileRoutesById {
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
+  '/magazin/speisely-visits/nadir-gullu-baklava-muenchen': typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute
   '/magazin/speisely-visits/shawarma-albaik-berlin': typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   '/planner/ort/$city': typeof PlannerOrtCityRoute
   '/restaurant/$slug/links': typeof RestaurantSlugLinksRoute
@@ -843,6 +853,7 @@ export interface FileRouteTypes {
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
+    | '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
@@ -922,6 +933,7 @@ export interface FileRouteTypes {
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
+    | '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
@@ -1005,6 +1017,7 @@ export interface FileRouteTypes {
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
+    | '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
     | '/magazin/speisely-visits/shawarma-albaik-berlin'
     | '/planner/ort/$city'
     | '/restaurant/$slug/links'
@@ -1583,6 +1596,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport
       parentRoute: typeof MagazinSpeiselyVisitsRoute
     }
+    '/magazin/speisely-visits/nadir-gullu-baklava-muenchen': {
+      id: '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
+      path: '/nadir-gullu-baklava-muenchen'
+      fullPath: '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
+      preLoaderRoute: typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRouteImport
+      parentRoute: typeof MagazinSpeiselyVisitsRoute
+    }
     '/magazin/speisely-visits/shawarma-albaik-berlin': {
       id: '/magazin/speisely-visits/shawarma-albaik-berlin'
       path: '/shawarma-albaik-berlin'
@@ -1776,6 +1796,7 @@ const PlannerRouteWithChildren =
 
 interface MagazinSpeiselyVisitsRouteChildren {
   MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute: typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
+  MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute: typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute
   MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute: typeof MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute
   MagazinSpeiselyVisitsIndexRoute: typeof MagazinSpeiselyVisitsIndexRoute
 }
@@ -1783,6 +1804,8 @@ interface MagazinSpeiselyVisitsRouteChildren {
 const MagazinSpeiselyVisitsRouteChildren: MagazinSpeiselyVisitsRouteChildren = {
   MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute:
     MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute,
+  MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute:
+    MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute,
   MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute:
     MagazinSpeiselyVisitsShawarmaAlbaikBerlinRoute,
   MagazinSpeiselyVisitsIndexRoute: MagazinSpeiselyVisitsIndexRoute,

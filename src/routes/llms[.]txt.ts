@@ -54,6 +54,7 @@ ${blogUrls}
 - Chicken Krush (Prague): ${BASE}/magazin/community/chicken-krush-prag
 - Mandy Restaurant (Berlin-Neukölln): ${BASE}/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
 - Shawarma Albaik (Berlin): ${BASE}/magazin/speisely-visits/shawarma-albaik-berlin
+- Nadir Güllü Baklava (München Viktualienmarkt): ${BASE}/magazin/speisely-visits/nadir-gullu-baklava-muenchen
 - Neumanns Café (Berlin-Friedrichshain): ${BASE}/magazin/community/neumanns-cafe-berlin
 - Baba Pirzola Meze & Grill (Berlin-Schöneberg): ${BASE}/magazin/community/baba-pirzola-berlin
 - Kokio Korean Fried Chicken (Berlin): ${BASE}/magazin/community/kokio-berlin

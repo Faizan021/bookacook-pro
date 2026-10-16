@@ -37,6 +37,7 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - Chicken Krush (Prague): https://speisely.de/magazin/community/chicken-krush-prag
 - Mandy Restaurant (Berlin-Neukölln): https://speisely.de/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
 - Shawarma Albaik (Berlin): https://speisely.de/magazin/speisely-visits/shawarma-albaik-berlin
+- Nadir Güllü Baklava (München Viktualienmarkt): https://speisely.de/magazin/speisely-visits/nadir-gullu-baklava-muenchen
 - Kokio Korean Fried Chicken (Berlin): https://speisely.de/magazin/community/kokio-berlin
 - Al Zaeem Restaurant (Berlin): https://speisely.de/magazin/community/alzaeem-restaurant-berlin
 - Garçon de Café (Berlin): https://speisely.de/magazin/community/garcon-de-cafe-berlin

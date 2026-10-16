@@ -81,6 +81,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.8",
           },
           {
+            path: "/magazin/speisely-visits/nadir-gullu-baklava-muenchen",
+            lastmod: today,
+            changefreq: "monthly",
+            priority: "0.8",
+          },
+          {
             path: "/community",
             lastmod: today,
             changefreq: "weekly",
