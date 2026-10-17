@@ -4,7 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'supabase/**'
+      - 'src/integrations/supabase/**'
+      - '.github/workflows/supabase-types.yml'
   pull_request:
+    paths:
+      - 'supabase/**'
+      - 'src/integrations/supabase/**'
+      - '.github/workflows/supabase-types.yml'
 
 jobs:
   check-types:
