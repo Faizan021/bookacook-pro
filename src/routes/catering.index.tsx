@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, useDeferredValue, useTransition, type ReactNode } from "react";
 import {
   Search,
   Star,
@@ -131,6 +131,11 @@ function Catering() {
   const [menu, setMenu] = useState("");
   const [sort, setSort] = useState<SortKey>("price-asc");
 
+  // React 18/19 INP Optimization: Defer expensive filtering so typing remains <16ms response
+  const deferredQuery = useDeferredValue(query);
+  const deferredCity = useDeferredValue(city);
+  const [, startTransition] = useTransition();
+
   // B2B Dialog State
   const [b2bOpen, setB2bOpen] = useState(false);
   const [selectedCatererSlug, setSelectedCatererSlug] = useState<string | undefined>(undefined);
@@ -170,13 +175,15 @@ function Catering() {
   }, [allCaterers]);
 
   const resetFilters = () => {
-    setCat("all");
-    setQuery("");
-    setDate("");
-    setGuests("");
-    setCity("");
-    setMenu("");
-    setSort("price-asc");
+    startTransition(() => {
+      setCat("all");
+      setQuery("");
+      setDate("");
+      setGuests("");
+      setCity("");
+      setMenu("");
+      setSort("price-asc");
+    });
   };
 
   const getTagline = (caterer: Caterer, l: "de" | "en") => {
@@ -185,26 +192,37 @@ function Catering() {
     return caterer.tagline[l] || caterer.tagline.de || caterer.tagline.en || "";
   };
 
-  const filtered = (allCaterers || []).filter((c) => {
-    if (!c) return false;
-    if (cat !== "all" && c.cat !== cat) return false;
-    if (city && c.area && !c.area.toLowerCase().includes(city.toLowerCase())) return false;
-    if (guests && c.minGuests && c.minGuests > Number(guests)) return false;
-    if (menu && !c.menu?.some((m) => (m.category || "Menü") === menu)) return false;
-    if (
-      query &&
-      !`${c.name || ""} ${getTagline(c, lang)} ${c.area || ""}`
-        .toLowerCase()
-        .includes(query.toLowerCase())
-    )
-      return false;
-    return true;
-  });
+  const filtered = useMemo(() => {
+    return (allCaterers || []).filter((c) => {
+      if (!c) return false;
+      if (cat !== "all" && c.cat !== cat) return false;
+      if (deferredCity && c.area && !c.area.toLowerCase().includes(deferredCity.toLowerCase()))
+        return false;
+      if (guests && c.minGuests && c.minGuests > Number(guests)) return false;
+      if (menu && !c.menu?.some((m) => (m.category || "Menü") === menu)) return false;
+      if (
+        deferredQuery &&
+        !`${c.name || ""} ${getTagline(c, lang)} ${c.area || ""}`
+          .toLowerCase()
+          .includes(deferredQuery.toLowerCase())
+      )
+        return false;
+      return true;
+    });
+  }, [allCaterers, cat, deferredCity, guests, menu, deferredQuery, lang]);
 
-  const visible = [...filtered].sort((a, b) => {
-    if (sort === "price-asc") return a.perPerson - b.perPerson;
-    return b.perPerson - a.perPerson;
-  });
+  const visible = useMemo(() => {
+    return [...filtered].sort((a, b) => {
+      if (sort === "price-asc") return a.perPerson - b.perPerson;
+      return b.perPerson - a.perPerson;
+    });
+  }, [filtered, sort]);
+
+  const handleSetCat = (newCat: CatId) => {
+    startTransition(() => {
+      setCat(newCat);
+    });
+  };
 
   const handleOpenB2bDialog = (catererSlug?: string) => {
     setSelectedCatererSlug(catererSlug);
@@ -522,7 +540,7 @@ function Catering() {
             {cats.map((c) => (
               <button
                 key={c.id}
-                onClick={() => setCat(c.id)}
+                onClick={() => handleSetCat(c.id)}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 cursor-pointer shadow-sm border ${
                   cat === c.id
                     ? "bg-forest text-white border-forest shadow-forest/20"

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { SiteShell } from "@/components/SiteShell";
 import { UnifiedMarketplaceTabs } from "@/components/UnifiedMarketplaceTabs";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useDeferredValue } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const DEFAULT_SHOWCASE_RESTAURANTS = fallbackRestaurants.map((r) => ({
@@ -107,6 +107,9 @@ function RestaurantsDirectory() {
   );
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
+  // React 18/19 INP Optimization: Keep keyboard response instant (<16ms) while deferring distance & filter passes
+  const deferredQuery = useDeferredValue(query);
+  const deferredLocation = useDeferredValue(location);
   const [cityOpen, setCityOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
   const { lang } = useI18n();
@@ -172,8 +175,8 @@ function RestaurantsDirectory() {
   };
 
   const filteredAndSorted = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const l = location.trim().toLowerCase();
+    const q = deferredQuery.trim().toLowerCase();
+    const l = deferredLocation.trim().toLowerCase();
 
     // 1. Filter
     const filteredList = restaurants.filter((rest: any) => {
@@ -224,7 +227,7 @@ function RestaurantsDirectory() {
     }
 
     return filteredList;
-  }, [restaurants, query, location, geoStatus, userCoords]);
+  }, [restaurants, deferredQuery, deferredLocation, geoStatus, userCoords]);
 
   const formatDistance = (dist: number) => {
     if (dist < 1) {

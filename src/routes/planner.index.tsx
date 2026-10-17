@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import * as React from "react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useDeferredValue, useTransition } from "react";
 import {
   Sparkles,
   PartyPopper,
@@ -880,6 +880,29 @@ function PlannerDirectory({
   const [service, setService] = useState<ServiceType>("all");
   const [sort, setSort] = useState<PlannerSort>("price-asc");
 
+  // React 18/19 INP Optimization: Keep input typing instant and non-blocking
+  const deferredCity = useDeferredValue(city);
+  const deferredGuests = useDeferredValue(guests);
+  const [, startTransition] = useTransition();
+
+  const handleSetCat = (newCat: PlannerCat) => {
+    startTransition(() => {
+      setCat(newCat);
+    });
+  };
+
+  const handleSetService = (newService: ServiceType) => {
+    startTransition(() => {
+      setService(newService);
+    });
+  };
+
+  const handleSetSort = (newSort: PlannerSort) => {
+    startTransition(() => {
+      setSort(newSort);
+    });
+  };
+
   const cats: { id: PlannerCat; label: string }[] = [
     { id: "all", label: tt("Alle", "All") },
     { id: "wedding", label: tt("Hochzeit", "Wedding") },
@@ -904,11 +927,11 @@ function PlannerDirectory({
   const filtered = useMemo(() => {
     return planners.filter((p) => {
       if (cat !== "all" && p.cat !== cat) return false;
-      if (city && !p.area?.toLowerCase().includes(city.toLowerCase())) return false;
-      if (guests && p.minGuests > Number(guests)) return false;
+      if (deferredCity && !p.area?.toLowerCase().includes(deferredCity.toLowerCase())) return false;
+      if (deferredGuests && p.minGuests > Number(deferredGuests)) return false;
       return true;
     });
-  }, [cat, city, guests]);
+  }, [planners, cat, deferredCity, deferredGuests]);
 
   const visible = useMemo(() => {
     const arr = [...filtered];

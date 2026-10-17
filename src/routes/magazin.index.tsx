@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { ArrowRight, Calendar, Sparkles, MapPin, Eye } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useTransition } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
 
 export const Route = createFileRoute("/magazin/")({
@@ -74,6 +74,14 @@ function MagazinIndexPage() {
   const { lang } = useI18n();
   const isDe = lang === "de";
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
+  // React 18/19 INP Optimization: Defer article grid re-render on tab click
+  const [, startTransition] = useTransition();
+
+  const handleFilterChange = (key: FilterType) => {
+    startTransition(() => {
+      setActiveFilter(key);
+    });
+  };
 
   const filteredArticles = useMemo(() => {
     if (activeFilter === "all") return magazineArticles;
@@ -118,7 +126,7 @@ function MagazinIndexPage() {
               key={key}
               role="tab"
               aria-selected={activeFilter === key}
-              onClick={() => setActiveFilter(key)}
+              onClick={() => handleFilterChange(key)}
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
                 activeFilter === key
                   ? key === "speisely-visits"

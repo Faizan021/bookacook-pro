@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { classifySearchIntent } from "@/lib/search/ai.functions";
 import { classifyWithSystem1 } from "@/lib/decision/system1";
 import { trackEvent } from "@/utils/posthog";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useDeferredValue, useTransition } from "react";
 import {
   ArrowRight,
   ShoppingBag,
@@ -216,6 +216,22 @@ function Home() {
     "catering",
   );
   const [searchQuery, setSearchQuery] = useState("");
+  // React 18/19 INP Optimization: Keep input responsiveness instant (<16ms)
+  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const [, startTransition] = useTransition();
+
+  const handleAudienceChange = (mode: "foodie" | "partner") => {
+    startTransition(() => {
+      setAudienceMode(mode);
+    });
+  };
+
+  const handleVerticalChange = (verticalKey: "restaurant" | "catering" | "planner") => {
+    startTransition(() => {
+      setActiveVertical(verticalKey);
+    });
+  };
+
   const [isConciergeOpen, setIsConciergeOpen] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
 
@@ -549,7 +565,7 @@ function Home() {
             <div className="inline-flex items-center p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
               <button
                 type="button"
-                onClick={() => setAudienceMode("foodie")}
+                onClick={() => handleAudienceChange("foodie")}
                 className={`flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   audienceMode === "foodie"
                     ? "bg-[#E6B84A] text-forest shadow-md"
@@ -561,7 +577,7 @@ function Home() {
               </button>
               <button
                 type="button"
-                onClick={() => setAudienceMode("partner")}
+                onClick={() => handleAudienceChange("partner")}
                 className={`flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   audienceMode === "partner"
                     ? "bg-[#E6B84A] text-forest shadow-md"
@@ -690,8 +706,8 @@ function Home() {
                         key={v.key}
                         id={`hero-tab-${v.key}`}
                         to={v.to}
-                        onMouseEnter={() => setActiveVertical(v.key)}
-                        onClick={() => setActiveVertical(v.key)}
+                        onMouseEnter={() => handleVerticalChange(v.key)}
+                        onClick={() => handleVerticalChange(v.key)}
                         className={`relative flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 rounded-full px-2.5 sm:px-5 py-2 sm:py-2.5 text-center text-xs sm:text-sm font-semibold transition-all duration-200 border cursor-pointer select-none overflow-hidden ${
                           activeVertical === v.key
                             ? "text-forest border-transparent"
@@ -854,8 +870,10 @@ function Home() {
                           key={i}
                           type="button"
                           onClick={() => {
-                            setSearchQuery(chip.query);
-                            setIsConciergeOpen(true);
+                            startTransition(() => {
+                              setSearchQuery(chip.query);
+                              setIsConciergeOpen(true);
+                            });
                           }}
                           className="inline-flex items-center rounded-full bg-white/[0.08] hover:bg-[#E6B84A] hover:text-forest text-white/85 border border-white/15 px-3 py-1 text-xs font-medium transition-all duration-200 cursor-pointer backdrop-blur-sm"
                         >
