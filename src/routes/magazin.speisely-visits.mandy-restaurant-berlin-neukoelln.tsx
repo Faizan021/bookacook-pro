@@ -4,6 +4,7 @@ import { ArrowRight, MapPin, Calendar, Eye, Shield, Globe, Utensils, Info } from
 import { useEffect, useRef } from "react";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useI18n } from "@/i18n/I18nProvider";
+import { RestaurantClaimBridge } from "@/components/RestaurantClaimBridge";
 
 export const Route = createFileRoute("/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln")({
   head: () => ({
@@ -895,6 +896,9 @@ function MandyArticlePage() {
               </li>
             </ul>
           </section>
+
+          {/* Restaurant Claim & Foodie Recommendation Bridge */}
+          <RestaurantClaimBridge restaurantName="Mandy Restaurant" city="Berlin-Neukölln" />
 
           {/* Related Articles in Speisely Visits */}
           <section

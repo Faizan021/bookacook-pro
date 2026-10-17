@@ -16,6 +16,7 @@ import {
 import { useEffect, useRef } from "react";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useI18n } from "@/i18n/I18nProvider";
+import { RestaurantClaimBridge } from "@/components/RestaurantClaimBridge";
 
 export const Route = createFileRoute("/magazin/speisely-visits/nadir-gullu-baklava-muenchen")({
   head: () => ({
@@ -698,6 +699,9 @@ function NadirGulluArticlePage() {
               : "This editorial story was created through the initiative of our Speisely Community: The photographs and on-site tasting impressions were contributed by an active community member. Supplementary historical details, product specifications, and artisanal facts were researched via Nadir Güllü's official website and public culinary archives. No sponsorship or commercial agreements existed at the time of publication."}
           </p>
         </aside>
+
+        {/* Restaurant Claim & Foodie Recommendation Bridge */}
+        <RestaurantClaimBridge restaurantName="Nadir Güllü München" city="München" />
 
         {/* Back Link */}
         <div className="pt-6 text-center">

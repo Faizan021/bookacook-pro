@@ -35,11 +35,13 @@ export function SiteFooter() {
     { label: "Al Zaeem Berlin", to: "/magazin/community/alzaeem-restaurant-berlin" },
     { label: "Ariana Frankfurt", to: "/magazin/community/ariana-restaurant-frankfurt" },
     { label: "Harput Wiesbaden", to: "/magazin/community/harput-wiesbaden" },
-    { label: "Mandy Restaurant Berlin", to: "/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln" },
+    {
+      label: "Mandy Restaurant Berlin",
+      to: "/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln",
+    },
     { label: "Shawarma Albaik Berlin", to: "/magazin/speisely-visits/shawarma-albaik-berlin" },
     { label: "Schnitzel Schmiede", to: "/magazin/schnitzel-schmiede" },
     { label: "Speisely Visits", to: "/magazin/speisely-visits" },
-    { label: "Architecture Simulator", to: "/architecture-simulator" },
   ];
 
   return (
@@ -128,7 +130,7 @@ export function SiteFooter() {
             <FooterLink to="/contact" label={t("nav.contact")} />
             <FooterLink to="/impressum" label={t("footer.imprint")} />
             <FooterLink to="/datenschutz" label={t("footer.privacy")} />
-            <FooterLink to="/impressum" label={t("footer.terms")} />
+            <FooterLink to="/nutzungsbedingungen" label={t("footer.terms")} />
           </ul>
 
           <div className="mt-6">
@@ -185,7 +187,11 @@ export function SiteFooter() {
       <div className="border-t border-[oklch(0.97_0.02_92)]/10">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-5 text-xs text-[oklch(0.97_0.02_92)]/60 flex flex-wrap gap-2 justify-between">
           <span>© {new Date().getFullYear()} Speisely</span>
-          <span>Berlin · Hamburg · München · Köln · Frankfurt</span>
+          <span>
+            {isDe
+              ? "Aktuell im Aufbau: Berlin · München · Hamburg · Köln · Frankfurt"
+              : "Currently expanding: Berlin · Munich · Hamburg · Cologne · Frankfurt"}
+          </span>
         </div>
       </div>
     </footer>

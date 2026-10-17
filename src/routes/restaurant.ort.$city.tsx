@@ -49,44 +49,45 @@ export const Route = createFileRoute("/restaurant/ort/$city")({
             "@graph": [
               {
                 "@type": "BreadcrumbList",
-                "itemListElement": [
+                itemListElement: [
                   {
                     "@type": "ListItem",
-                    "position": 1,
-                    "name": "Home",
-                    "item": "https://speisely.de",
+                    position: 1,
+                    name: "Home",
+                    item: "https://speisely.de",
                   },
                   {
                     "@type": "ListItem",
-                    "position": 2,
-                    "name": "Restaurants",
-                    "item": "https://speisely.de/restaurants",
+                    position: 2,
+                    name: "Restaurants",
+                    item: "https://speisely.de/restaurants",
                   },
                   {
                     "@type": "ListItem",
-                    "position": 3,
-                    "name": `Restaurants in ${location.name}`,
-                    "item": canonicalUrl,
+                    position: 3,
+                    name: `Restaurants in ${location.name}`,
+                    item: canonicalUrl,
                   },
                 ],
               },
               {
                 "@type": "ItemList",
-                "name": `Top Restaurants in ${location.name}`,
-                "description": seoData?.meta_description || `Geprüfte Restaurants in ${location.name}`,
-                "url": canonicalUrl,
-                "numberOfItems": loaderData?.vendors?.length ?? 0,
-                "itemListElement": (loaderData?.vendors ?? []).map((v: any, i: number) => ({
+                name: `Top Restaurants in ${location.name}`,
+                description:
+                  seoData?.meta_description || `Geprüfte Restaurants in ${location.name}`,
+                url: canonicalUrl,
+                numberOfItems: loaderData?.vendors?.length ?? 0,
+                itemListElement: (loaderData?.vendors ?? []).map((v: any, i: number) => ({
                   "@type": "ListItem",
-                  "position": i + 1,
-                  "item": {
+                  position: i + 1,
+                  item: {
                     "@type": "Restaurant",
-                    "name": v.business_name || v.name,
-                    "url": `https://speisely.de/restaurant/${v.slug || v.id}`,
-                    "address": {
+                    name: v.business_name || v.name,
+                    url: `https://speisely.de/restaurant/${v.slug || v.id}`,
+                    address: {
                       "@type": "PostalAddress",
-                      "addressLocality": location.name,
-                      "addressCountry": "DE",
+                      addressLocality: location.name,
+                      addressCountry: "DE",
                     },
                   },
                 })),
@@ -361,7 +362,40 @@ function GeoRestaurantsPage() {
 
       {/* Vendor Grid */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-12">
-        {filteredVendors.length === 0 ? (
+        {vendors.length === 0 ? (
+          <div className="mx-auto max-w-xl text-center py-16 px-6 surface-card rounded-3xl border border-forest/15 shadow-sm">
+            <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-[#E6B84A]/15 text-[#b28a3c]">
+              <UtensilsCrossed className="h-8 w-8 text-[#b28a3c]" />
+            </div>
+            <div className="inline-block mt-4 px-3 py-1 rounded-full bg-forest/5 text-forest/70 text-xs font-bold uppercase tracking-wider">
+              Netzwerk im Aufbau
+            </div>
+            <h3 className="mt-3 font-display text-2xl sm:text-3xl text-forest font-bold">
+              Demnächst in {location.name}
+            </h3>
+            <p className="mt-3 text-sm sm:text-base text-forest/80 leading-relaxed max-w-md mx-auto">
+              Wir bauen unser Netzwerk in {location.name} gerade auf. Plane ein Event oder möchtest
+              du ein Restaurant empfehlen? Schick uns deine Nachricht, wir melden uns persönlich.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/community"
+                className="inline-flex items-center gap-2 rounded-full bg-[#173C32] text-white px-6 py-3 text-xs sm:text-sm font-bold shadow hover:bg-[#0c1813] transition"
+              >
+                Restaurant empfehlen
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  document.querySelector("footer")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-cream text-forest border border-forest/20 px-6 py-3 text-xs sm:text-sm font-bold hover:bg-[#eadfce] transition"
+              >
+                Benachrichtigt werden
+              </button>
+            </div>
+          </div>
+        ) : filteredVendors.length === 0 ? (
           <div className="mx-auto max-w-md text-center py-16">
             <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-[#eadfce] text-[#b28a3c]">
               <UtensilsCrossed className="h-7 w-7" />

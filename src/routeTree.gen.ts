@@ -22,6 +22,7 @@ import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as InstantOrderRouteImport } from './routes/instant-order'
 import { Route as LlmsFullDottxtRouteImport } from './routes/llms-full[.]txt'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as NutzungsbedingungenRouteImport } from './routes/nutzungsbedingungen'
 import { Route as PartnerRouteImport } from './routes/partner'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PlannerRouteImport } from './routes/planner'
@@ -154,6 +155,11 @@ const LlmsFullDottxtRoute = LlmsFullDottxtRouteImport.update({
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: '/llms.txt',
   path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NutzungsbedingungenRoute = NutzungsbedingungenRouteImport.update({
+  id: '/nutzungsbedingungen',
+  path: '/nutzungsbedingungen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnerRoute = PartnerRouteImport.update({
@@ -546,6 +552,7 @@ export interface FileRoutesByFullPath {
   '/instant-order': typeof InstantOrderRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/nutzungsbedingungen': typeof NutzungsbedingungenRoute
   '/partner': typeof PartnerRouteWithChildren
   '/partners': typeof PartnersRouteWithChildren
   '/planner': typeof PlannerRouteWithChildren
@@ -628,6 +635,7 @@ export interface FileRoutesByTo {
   '/instant-order': typeof InstantOrderRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/nutzungsbedingungen': typeof NutzungsbedingungenRoute
   '/partner': typeof PartnerRouteWithChildren
   '/partners': typeof PartnersRouteWithChildren
   '/restaurants': typeof RestaurantsRoute
@@ -711,6 +719,7 @@ export interface FileRoutesById {
   '/instant-order': typeof InstantOrderRoute
   '/llms-full.txt': typeof LlmsFullDottxtRoute
   '/llms.txt': typeof LlmsDottxtRoute
+  '/nutzungsbedingungen': typeof NutzungsbedingungenRoute
   '/partner': typeof PartnerRouteWithChildren
   '/partners': typeof PartnersRouteWithChildren
   '/planner': typeof PlannerRouteWithChildren
@@ -796,6 +805,7 @@ export interface FileRouteTypes {
     | '/instant-order'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/nutzungsbedingungen'
     | '/partner'
     | '/partners'
     | '/planner'
@@ -878,6 +888,7 @@ export interface FileRouteTypes {
     | '/instant-order'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/nutzungsbedingungen'
     | '/partner'
     | '/partners'
     | '/restaurants'
@@ -960,6 +971,7 @@ export interface FileRouteTypes {
     | '/instant-order'
     | '/llms-full.txt'
     | '/llms.txt'
+    | '/nutzungsbedingungen'
     | '/partner'
     | '/partners'
     | '/planner'
@@ -1045,6 +1057,7 @@ export interface RootRouteChildren {
   InstantOrderRoute: typeof InstantOrderRoute
   LlmsFullDottxtRoute: typeof LlmsFullDottxtRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
+  NutzungsbedingungenRoute: typeof NutzungsbedingungenRoute
   PartnerRoute: typeof PartnerRouteWithChildren
   PartnersRoute: typeof PartnersRouteWithChildren
   PlannerRoute: typeof PlannerRouteWithChildren
@@ -1181,6 +1194,13 @@ declare module '@tanstack/react-router' {
       path: '/llms.txt'
       fullPath: '/llms.txt'
       preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nutzungsbedingungen': {
+      id: '/nutzungsbedingungen'
+      path: '/nutzungsbedingungen'
+      fullPath: '/nutzungsbedingungen'
+      preLoaderRoute: typeof NutzungsbedingungenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partner': {
@@ -1842,6 +1862,7 @@ const rootRouteChildren: RootRouteChildren = {
   InstantOrderRoute: InstantOrderRoute,
   LlmsFullDottxtRoute: LlmsFullDottxtRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
+  NutzungsbedingungenRoute: NutzungsbedingungenRoute,
   PartnerRoute: PartnerRouteWithChildren,
   PartnersRoute: PartnersRouteWithChildren,
   PlannerRoute: PlannerRouteWithChildren,

@@ -4,6 +4,7 @@ import { ArrowRight, MapPin, Calendar, Eye, Shield, Globe } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useI18n } from "@/i18n/I18nProvider";
+import { RestaurantClaimBridge } from "@/components/RestaurantClaimBridge";
 
 export const Route = createFileRoute("/magazin/speisely-visits/shawarma-albaik-berlin")({
   head: () => ({
@@ -793,6 +794,9 @@ function AlbaikVisitPage() {
             </p>
           </div>
         </section>
+
+        {/* Restaurant Claim & Foodie Recommendation Bridge */}
+        <RestaurantClaimBridge restaurantName="Shawarma Albaik" city="Berlin-Neukölln" />
 
         <AboutSpeiselySection />
       </article>

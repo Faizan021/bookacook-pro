@@ -69,10 +69,10 @@ const SHOWCASE_PROJECTS = [
     description:
       "Von statischer PDF-Speisekarte zum vollen Gastraum: Dual-Menü (Oktoberfest & Klassik), 1-Klick WhatsApp Reservierung & Top-Performance.",
     highlights: [
-      "+44 Besucher in 24h",
-      "0.48s Ladezeit (99/100)",
+      "WhatsApp-Reservierung",
+      "Schnelle Ladezeiten, mobiloptimiert",
       "Duale Speisekarte",
-      "1-Klick WhatsApp Buchung",
+      "Direkte Gästekommunikation",
     ],
   },
   {
@@ -85,10 +85,10 @@ const SHOWCASE_PROJECTS = [
     description:
       "Kompletter Webauftritt mit All-Inclusive BBQ-Paketen, Event-Kalkulator, regionaler Google-KI-SEO-Struktur und nahtloser Angebotsanfrage.",
     highlights: [
-      "PageSpeed 99/100",
+      "Schnelle Ladezeiten, mobiloptimiert",
       "Google AI Overview Schema",
       "All-Inclusive BBQ Menüs",
-      "100% Mobiloptimiert",
+      "Interaktiver Event-Kalkulator",
     ],
   },
 ];

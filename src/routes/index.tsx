@@ -81,7 +81,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland.",
+          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung. Wir bauen das Netzwerk Stadt für Stadt auf.",
       },
       {
         property: "og:title",
@@ -90,7 +90,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Speisely verbindet spontane Restaurant-Bestellungen, erstklassiges Event-Catering und professionelle Eventplanung auf einer Plattform in ganz Deutschland.",
+          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung. Wir bauen das Netzwerk Stadt für Stadt auf.",
       },
       { property: "og:image", content: "https://speisely.de/hero-cinematic.webp" },
       { property: "og:url", content: "https://speisely.de" },
@@ -281,7 +281,7 @@ function Home() {
   const partnerChips = useMemo(
     () => [
       {
-        label: tt("⚡ 0.48s Speed & KI-SEO", "⚡ 0.48s Speed & AI SEO"),
+        label: tt("⚡ Schnelle Ladezeiten & KI-SEO", "⚡ Fast Speed & AI SEO"),
         to: "/partner/webseiten",
       },
       {
@@ -438,9 +438,12 @@ function Home() {
 
   const stats = useMemo(
     () => [
-      { value: "47+", label: tt("Geprüfte Partner", "Vetted partners") },
-      { value: "3", label: tt("Service-Bereiche", "Service areas") },
-      { value: "100%", label: tt("Kostenlos für dich", "Free for you") },
+      { value: "0%", label: tt("Provision auf Direktbestellungen", "Commission on direct orders") },
+      {
+        value: "100%",
+        label: tt("Unabhängige Visits (selbst bezahlt)", "Independent visits (self-paid)"),
+      },
+      { value: "0€", label: tt("Kostenlos für Genießer", "Free for foodies") },
       { value: "0€", label: tt("Versteckte Gebühren", "Hidden fees") },
     ],
     [tt],
@@ -453,8 +456,8 @@ function Home() {
         icon: <Sparkles className="h-6 w-6" />,
         title: tt("Entdecken", "Discover"),
         body: tt(
-          "Stöbere durch geprüfte Restaurants, Caterer und Event-Planer in deiner Region — kostenlos und ohne Anmeldung.",
-          "Browse vetted restaurants, caterers, and event planners in your region — free and without sign-up.",
+          "Entdecke Restaurants, Caterer und Event-Planer in deiner Region. Kostenlos und ohne Anmeldung.",
+          "Discover restaurants, caterers, and event planners in your region. Free and without sign-up.",
         ),
       },
       {
@@ -659,8 +662,8 @@ function Home() {
               >
                 {audienceMode === "foodie"
                   ? tt(
-                      "Direkt bestellen, ohne dass dein Lieblingslokal 30 % an Lieferportale abgibt. Plus Rettertüten gegen Lebensmittelverschwendung und maßgeschneidertes B2B-Catering.",
-                      "Order directly without your favorite restaurant paying 30% to middleman portals. Plus surplus food rescue bags and bespoke corporate catering.",
+                      "Direkt bestellen, ohne dass dein Lieblingslokal 30 % an Lieferportale abgibt. Plus bald verfügbare Rettertüten gegen Lebensmittelverschwendung und maßgeschneidertes B2B-Catering.",
+                      "Order directly without your favorite restaurant paying 30% to middleman portals. Plus upcoming surplus food rescue and bespoke corporate catering.",
                     )
                   : tt(
                       "Schluss mit 30 % Lieferando-Gebühren. Unbegrenzte Bestellungen, Live-KDS Küchenmonitor und 100 % Gastdaten für faire 34,99 €/Monat.",
@@ -895,11 +898,18 @@ function Home() {
                 <div className="mt-7 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-y-3 text-white/80 text-xs">
                   <div className="flex items-center gap-2 font-medium">
                     <CheckCircle2 className="h-4 w-4 text-[#E6B84A]" />
-                    <span>{tt("47+ Geprüfte Partner", "47+ Vetted Partners")}</span>
+                    <span>
+                      {tt("0 % Provision auf Direktbestellungen", "0% Commission on Direct Orders")}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5 font-medium">
                     <Star className="h-4 w-4 text-[#E6B84A] fill-[#E6B84A]" />
-                    <span>{tt("4.9/5 Gast-Bewertung", "4.9/5 Guest Rating")}</span>
+                    <span>
+                      {tt(
+                        "100 % unabhängige Visits: selbst besucht, selbst bezahlt",
+                        "100% independent visits: self-visited, self-paid",
+                      )}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5 font-medium text-white/90">
                     <span className="text-[#f4d58d] font-bold">0 €</span>
@@ -1018,7 +1028,7 @@ function Home() {
                           </div>
                           <div>
                             <div className="text-sm font-bold text-white group-hover:text-[#E6B84A] transition">
-                              {tt("3. Rettertüten (Surplus Food)", "3. Surplus Food Rescue")}
+                              {tt("3. Rettertüten: bald verfügbar", "3. Food Rescue: coming soon")}
                             </div>
                             <div className="text-xs text-white/60">
                               {tt(
@@ -1084,8 +1094,8 @@ function Home() {
                             </div>
                             <div className="text-xs text-white/60">
                               {tt(
-                                "PageSpeed 99+ · 0.48s Ladezeit · Eigene Domain",
-                                "PageSpeed 99+ · 0.48s load time · Custom domain",
+                                "Schnelle Ladezeiten · Eigene Domain · Mobiloptimiert",
+                                "Fast loading · Custom domain · Mobile-optimized",
                               )}
                             </div>
                           </div>
@@ -1286,7 +1296,7 @@ function Home() {
                 <Sparkles className="w-6 h-6" />
               </div>
               <div className="text-xl sm:text-2xl font-black text-white mb-1">
-                {tt("Rettertüten", "Surplus Rescue")}
+                {tt("Rettertüten: bald verfügbar", "Surplus Rescue: coming soon")}
               </div>
               <div className="text-xs font-bold text-[#E6B84A] uppercase tracking-wider mb-2">
                 {tt("Gegen Food-Waste", "Against Food Waste")}
@@ -1339,8 +1349,8 @@ function Home() {
               </div>
               <p className="text-xs text-white/70 leading-relaxed">
                 {tt(
-                  "0.48s Ladezeit, eigene Domain & ChatGPT / Perplexity Zitate. Powered by TechGlanz.",
-                  "0.48s speed, custom domain & ChatGPT / Perplexity citations. Powered by TechGlanz.",
+                  "Schnelle Ladezeiten, eigene Domain & ChatGPT / Perplexity Zitate. Powered by TechGlanz.",
+                  "Fast loading, custom domain & ChatGPT / Perplexity citations. Powered by TechGlanz.",
                 )}
               </p>
             </Link>
@@ -1627,7 +1637,7 @@ function Home() {
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">
-                    ⚡ PageSpeed 99/100
+                    ⚡ Schnelle Ladezeiten, mobiloptimiert
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-purple-800">
                     🤖 Google AI / AEO Ready
@@ -1636,7 +1646,7 @@ function Home() {
                     🥩 All-Inclusive BBQ
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10">
-                    📱 100% Mobiloptimiert
+                    📱 Event-Kalkulator
                   </span>
                 </div>
               </div>
@@ -1710,23 +1720,22 @@ function Home() {
                   </h3>
                 </Link>
                 <p className="text-xs sm:text-sm text-forest/75 leading-relaxed mb-6">
-                  Vom unleserlichen PDF zum vollen Gastraum in 24 Stunden: Duales
+                  Von der PDF-Speisekarte zur direkten WhatsApp-Reservierung: Duales
                   Speisekarten-System (Oktoberfest &amp; Klassik), direkte 1-Klick WhatsApp- &amp;
-                  E-Mail-Reservierung und ultraschnelle Google-Ladezeiten ohne
-                  Mittelsmann-Provision.
+                  E-Mail-Reservierung und schnelle Google-Ladezeiten ohne Mittelsmann-Provision.
                 </p>
                 <div className="flex flex-wrap gap-2 text-xs font-bold text-forest/80 mb-6">
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">
-                    📈 +44 Gäste in 24h
+                    💬 WhatsApp-Reservierung
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-purple-800">
-                    ⚡ 0.48s Ladezeit
+                    ⚡ Schnelle Ladezeiten, mobiloptimiert
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-700">
-                    💬 WhatsApp &amp; E-Mail Engine
+                    🥨 Duale Speisekarte
                   </span>
                   <span className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] border border-forest/10 text-amber-800">
-                    🥨 Duale Speisekarte
+                    📱 0 % Provision
                   </span>
                 </div>
               </div>

@@ -44,10 +44,10 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.8",
           },
           {
-            path: "/architecture-simulator",
+            path: "/nutzungsbedingungen",
             lastmod: today,
             changefreq: "monthly",
-            priority: "0.6",
+            priority: "0.4",
           },
           { path: "/blog", lastmod: today, changefreq: "weekly", priority: "0.8" },
           { path: "/about", lastmod: today, changefreq: "monthly", priority: "0.5" },

@@ -62,162 +62,13 @@ export const Route = createFileRoute("/magazin/")({
   component: MagazinIndexPage,
 });
 
-type FilterType = "all" | "speisely-visits" | "community" | "guides" | "festivals";
+import {
+  magazineArticles,
+  type ArticleCategory,
+  type MagazineArticle,
+} from "@/data/magazineArticles";
 
-type Article = {
-  id: string;
-  slug: string;
-  titleDe: string;
-  titleEn: string;
-  excerptDe: string;
-  excerptEn: string;
-  image: string;
-  categoryBadgeDe: string;
-  categoryBadgeEn: string;
-  location: string;
-  dateDe: string;
-  dateEn: string;
-  readTime: string;
-  categories: FilterType[];
-  to: string;
-};
-
-const articles: Article[] = [
-  {
-    id: "mandy-restaurant",
-    slug: "mandy-restaurant-berlin-neukoelln",
-    titleDe: "Warum wir bei Mandy natürlich Mandy bestellen mussten",
-    titleEn: "Why at Mandy We Naturally Had to Order Mandy",
-    excerptDe:
-      "Speisely besucht Mandy in Berlin-Neukölln. Wir bestellen Mandy Lamm für zwei, Vorspeisen und Chai – und zahlen rund 45 Euro.",
-    excerptEn:
-      "Speisely visits Mandy in Berlin-Neukölln. We order Mandy Lamb for two, appetizers, and chai — paying around 45 Euros total.",
-    image: "/magazin/mandy/mandy-lamm-fuer-zwei-berlin-neukoelln.webp",
-    categoryBadgeDe: "Speisely Visits",
-    categoryBadgeEn: "Speisely Visits",
-    location: "Berlin-Neukölln",
-    dateDe: "17. August 2026 · Wildenbruchstraße, Berlin",
-    dateEn: "August 17, 2026 · Wildenbruchstraße, Berlin",
-    readTime: "5 Min.",
-    categories: ["speisely-visits"],
-    to: "/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln",
-  },
-  {
-    id: "shawarma-albaik",
-    slug: "shawarma-albaik-berlin",
-    titleDe: "Ein Abend bei Shawarma Albaik auf der Sonnenallee",
-    titleEn: "An Evening at Shawarma Albaik on Sonnenallee",
-    excerptDe:
-      "Chicken Shawarma, gelber Reis, Knoblauchsauce und ein gemeinsamer Abend mit Freunden auf der Sonnenallee in Berlin-Neukölln.",
-    excerptEn:
-      "Chicken shawarma, yellow rice, garlic sauce, and an evening shared with friends on Sonnenallee in Berlin-Neukölln.",
-    image: "/magazin/albaik/albaik-shawarma-rice-hero.webp",
-    categoryBadgeDe: "Speisely Visits",
-    categoryBadgeEn: "Speisely Visits",
-    location: "Berlin-Neukölln",
-    dateDe: "16. August 2026 · Sonnenallee, Berlin",
-    dateEn: "August 16, 2026 · Sonnenallee, Berlin",
-    readTime: "4 Min.",
-    categories: ["speisely-visits"],
-    to: "/magazin/speisely-visits/shawarma-albaik-berlin",
-  },
-  {
-    id: "king-tut-restaurant",
-    slug: "king-tut-restaurant-berlin",
-    titleDe: "Hawawshi & Holzkohlegrill auf Silberplatten: King Tut Berlin",
-    titleEn: "Hawawshi & Charcoal Grill on Silver Platters: King Tut Berlin",
-    excerptDe:
-      "Knuspriges Hawawshi, dampfende Molokhia und kaiserliche Silberplatten mit Holzkohlegrill-Spezialitäten in Berlin-Wilmersdorf.",
-    excerptEn:
-      "Crisp hawawshi, steaming molokhia, and imperial silver platters of charcoal grill specialties in Berlin-Wilmersdorf.",
-    image: "/magazin/king-tut-berlin/16_king_tut_hawawshi_molokhia_hd.jpg",
-    categoryBadgeDe: "Community Story",
-    categoryBadgeEn: "Community Story",
-    location: "Berlin-Wilmersdorf",
-    dateDe: "Oktober 2026 · Hohenzollerndamm, Berlin",
-    dateEn: "October 2026 · Hohenzollerndamm, Berlin",
-    readTime: "6 Min.",
-    categories: ["community"],
-    to: "/magazin/community/king-tut-restaurant-berlin",
-  },
-  {
-    id: "baba-pirzola",
-    slug: "baba-pirzola-berlin",
-    titleDe: "Feuer, Meze & große Grillkunst: Ein Abend im Baba Pirzola",
-    titleEn: "Fire, Meze & Masterful Grilling: An Evening at Baba Pirzola",
-    excerptDe:
-      "Zwischen KaDeWe und Wittenbergplatz: Kuzu Pirzola, rauchiges Nazik Ali, 300g Antrikot und warmes Katmer mit Eis.",
-    excerptEn:
-      "Between KaDeWe and Wittenbergplatz: Kuzu Pirzola, smoky Nazik Ali, 300g ribeye, and warm katmer with ice cream.",
-    image: "/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg",
-    categoryBadgeDe: "Community Story",
-    categoryBadgeEn: "Community Story",
-    location: "Berlin-Schöneberg",
-    dateDe: "September 2026 · Wittenbergplatz, Berlin",
-    dateEn: "September 2026 · Wittenbergplatz, Berlin",
-    readTime: "7 Min.",
-    categories: ["community"],
-    to: "/magazin/community/baba-pirzola-berlin",
-  },
-  {
-    id: "bbq-chicken",
-    slug: "bbq-chicken-berlin-kreuzberg",
-    titleDe: "Korean Fried Chicken & Secret Glaze: BBQ Chicken Kreuzberg",
-    titleEn: "Korean Fried Chicken & Secret Glaze: BBQ Chicken Kreuzberg",
-    excerptDe:
-      "Golden Olive Crunch, samtiges Cheesling-Puder und scharfe Secret Glaze in der Skalitzer Straße 97 in Berlin-Kreuzberg.",
-    excerptEn:
-      "Golden Olive crunch, velvet cheesling powder, and fiery secret glaze at Skalitzer Straße 97 in Berlin-Kreuzberg.",
-    image: "/magazin/bbq-chicken-berlin/01_golden_fried_chicken_hero.jpg",
-    categoryBadgeDe: "Community Story",
-    categoryBadgeEn: "Community Story",
-    location: "Berlin-Kreuzberg",
-    dateDe: "September 2026 · Skalitzer Straße, Berlin",
-    dateEn: "September 2026 · Skalitzer Straße, Berlin",
-    readTime: "5 Min.",
-    categories: ["community"],
-    to: "/magazin/community/bbq-chicken-berlin-kreuzberg",
-  },
-  {
-    id: "neumanns-cafe",
-    slug: "neumanns-cafe-berlin",
-    titleDe: "Handwerklicher Sauerteig & pochierte Bio-Eier: Neumanns Café",
-    titleEn: "Artisanal Sourdough & Poached Bio Eggs: Neumanns Café",
-    excerptDe:
-      "Eigene Bäckerei im Friedrichshain: Pochierte Eier auf Blattspinat, Karotten-Stulle mit Ziegenkäse und Andraschko Espresso.",
-    excerptEn:
-      "In-house bakery in Friedrichshain: Poached eggs on spinach, carrot toast with goat cheese, and Andraschko espresso.",
-    image: "/magazin/neumanns-cafe-berlin/05_poached_eggs_spinach_hd.jpg",
-    categoryBadgeDe: "Community Story",
-    categoryBadgeEn: "Community Story",
-    location: "Berlin-Friedrichshain",
-    dateDe: "August 2026 · Gabriel-Max-Straße, Berlin",
-    dateEn: "August 2026 · Gabriel-Max-Straße, Berlin",
-    readTime: "5 Min.",
-    categories: ["community"],
-    to: "/magazin/community/neumanns-cafe-berlin",
-  },
-  {
-    id: "schnitzel-schmiede",
-    slug: "schnitzel-schmiede",
-    titleDe: "Schnitzel Schmiede beim EineStadt-Fest 2026",
-    titleEn: "Schnitzel Schmiede at EineStadt-Fest 2026",
-    excerptDe:
-      "Ein vertrauter Partner auf der kulinarischen Meile von Mönchengladbach: 13 Jahre Fest-Tradition und frisches Handwerk.",
-    excerptEn:
-      "A trusted partner on Mönchengladbach's gourmet mile: 13 years of festival tradition and fresh craft.",
-    image:
-      "https://images.unsplash.com/photo-1599921841143-819065a55cc6?auto=format&fit=crop&w=1200&q=85",
-    categoryBadgeDe: "Partner-Story",
-    categoryBadgeEn: "Partner Story",
-    location: "Mönchengladbach",
-    dateDe: "14. – 16. August 2026 · EineStadt-Fest",
-    dateEn: "August 14–16, 2026 · EineStadt-Fest",
-    readTime: "5 Min.",
-    categories: ["festivals", "community"],
-    to: "/magazin/schnitzel-schmiede",
-  },
-];
+type FilterType = ArticleCategory;
 
 function MagazinIndexPage() {
   const { lang } = useI18n();
@@ -225,8 +76,8 @@ function MagazinIndexPage() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
 
   const filteredArticles = useMemo(() => {
-    if (activeFilter === "all") return articles;
-    return articles.filter((a) => a.categories.includes(activeFilter));
+    if (activeFilter === "all") return magazineArticles;
+    return magazineArticles.filter((a) => a.categories.includes(activeFilter));
   }, [activeFilter]);
 
   const filterTabs = isDe

@@ -17,7 +17,7 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 - B2B Website-Erstellung (Custom Websites for Caterers): https://speisely.de/partner/webseiten
 - Flagship Case Study Haus Spaas: https://speisely.de/case-study/haus-spaas
 - Flagship Case Study Partyservice Küpper: https://speisely.de/case-study/partyservice-kuepper
-- Interactive Architecture Simulator: https://speisely.de/architecture-simulator
+- Terms of Service & Legal Framework: https://speisely.de/nutzungsbedingungen
 - Enterprise GEO API: https://speisely.de/api/geo
 - GeoJSON Registry: https://speisely.de/geo.json
 - Blog: https://speisely.de/blog

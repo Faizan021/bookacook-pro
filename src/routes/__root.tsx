@@ -85,7 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung auf einer Plattform in ganz Deutschland.",
+          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung. Wir bauen das Netzwerk Stadt für Stadt auf.",
       },
       { property: "og:site_name", content: "Speisely" },
       { property: "og:type", content: "website" },
@@ -97,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung auf einer Plattform in ganz Deutschland.",
+          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung. Wir bauen das Netzwerk Stadt für Stadt auf.",
       },
       { property: "og:url", content: "https://speisely.de" },
       { property: "og:image", content: "https://speisely.de/hero-cinematic.webp" },

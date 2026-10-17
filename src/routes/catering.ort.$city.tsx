@@ -48,44 +48,46 @@ export const Route = createFileRoute("/catering/ort/$city")({
             "@graph": [
               {
                 "@type": "BreadcrumbList",
-                "itemListElement": [
+                itemListElement: [
                   {
                     "@type": "ListItem",
-                    "position": 1,
-                    "name": "Home",
-                    "item": "https://speisely.de",
+                    position: 1,
+                    name: "Home",
+                    item: "https://speisely.de",
                   },
                   {
                     "@type": "ListItem",
-                    "position": 2,
-                    "name": "Catering",
-                    "item": "https://speisely.de/catering",
+                    position: 2,
+                    name: "Catering",
+                    item: "https://speisely.de/catering",
                   },
                   {
                     "@type": "ListItem",
-                    "position": 3,
-                    "name": `Catering in ${location.name}`,
-                    "item": canonicalUrl,
+                    position: 3,
+                    name: `Catering in ${location.name}`,
+                    item: canonicalUrl,
                   },
                 ],
               },
               {
                 "@type": "ItemList",
-                "name": `Top Caterer in ${location.name}`,
-                "description": seoData?.meta_description || `Geprüfte Catering-Anbieter und Partyservices in ${location.name}`,
-                "url": canonicalUrl,
-                "numberOfItems": loaderData?.vendors?.length ?? 0,
-                "itemListElement": (loaderData?.vendors ?? []).map((v: any, i: number) => ({
+                name: `Top Caterer in ${location.name}`,
+                description:
+                  seoData?.meta_description ||
+                  `Geprüfte Catering-Anbieter und Partyservices in ${location.name}`,
+                url: canonicalUrl,
+                numberOfItems: loaderData?.vendors?.length ?? 0,
+                itemListElement: (loaderData?.vendors ?? []).map((v: any, i: number) => ({
                   "@type": "ListItem",
-                  "position": i + 1,
-                  "item": {
+                  position: i + 1,
+                  item: {
                     "@type": "FoodEstablishment",
-                    "name": v.business_name || v.name,
-                    "url": `https://speisely.de/catering/${v.slug || v.id}`,
-                    "address": {
+                    name: v.business_name || v.name,
+                    url: `https://speisely.de/catering/${v.slug || v.id}`,
+                    address: {
                       "@type": "PostalAddress",
-                      "addressLocality": location.name,
-                      "addressCountry": "DE",
+                      addressLocality: location.name,
+                      addressCountry: "DE",
                     },
                   },
                 })),
@@ -224,7 +226,8 @@ function GeoCateringPage() {
               </div>
             )}
             <p className="text-lg opacity-90 max-w-xl whitespace-pre-wrap">
-              {seoData?.hero_copy || seoData?.meta_description ||
+              {seoData?.hero_copy ||
+                seoData?.meta_description ||
                 `Entdecke die besten Caterer in ${location.name} für dein nächstes Event.`}
             </p>
           </div>
@@ -262,7 +265,40 @@ function GeoCateringPage() {
 
       {/* Vendor Grid */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-12">
-        {filteredVendors.length === 0 ? (
+        {vendors.length === 0 ? (
+          <div className="mx-auto max-w-xl text-center py-16 px-6 surface-card rounded-3xl border border-forest/15 shadow-sm">
+            <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-[#E6B84A]/15 text-[#b28a3c]">
+              <ChefHat className="h-8 w-8 text-[#b28a3c]" />
+            </div>
+            <div className="inline-block mt-4 px-3 py-1 rounded-full bg-forest/5 text-forest/70 text-xs font-bold uppercase tracking-wider">
+              Netzwerk im Aufbau
+            </div>
+            <h3 className="mt-3 font-display text-2xl sm:text-3xl text-forest font-bold">
+              Demnächst in {location.name}
+            </h3>
+            <p className="mt-3 text-sm sm:text-base text-forest/80 leading-relaxed max-w-md mx-auto">
+              Wir bauen unser Netzwerk in {location.name} gerade auf. Plane ein Event? Schick uns
+              deine Anfrage, wir melden uns persönlich.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href={`/planner?city=${encodeURIComponent(location.name)}&topic=catering_inquiry`}
+                className="inline-flex items-center gap-2 rounded-full bg-[#173C32] text-white px-6 py-3 text-xs sm:text-sm font-bold shadow hover:bg-[#0c1813] transition"
+              >
+                Anfrage senden
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  document.querySelector("footer")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-cream text-forest border border-forest/20 px-6 py-3 text-xs sm:text-sm font-bold hover:bg-[#eadfce] transition"
+              >
+                Benachrichtigt werden
+              </button>
+            </div>
+          </div>
+        ) : filteredVendors.length === 0 ? (
           <div className="mx-auto max-w-md text-center py-16">
             <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-[#eadfce] text-[#b28a3c]">
               <ChefHat className="h-7 w-7" />

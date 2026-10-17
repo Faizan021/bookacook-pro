@@ -14,6 +14,10 @@ export const Route = createFileRoute("/architecture-simulator")({
         content:
           "Interactive simulator: TanStack Start SSR, Supabase RLS, Stripe Connect, thermal printing & SEO graphs.",
       },
+      {
+        name: "robots",
+        content: "noindex, nofollow",
+      },
     ],
     links: [{ rel: "canonical", href: "https://speisely.de/architecture-simulator" }],
   }),

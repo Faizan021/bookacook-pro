@@ -64,8 +64,8 @@ const dict: Dict = {
   "home.pillar.instant.eyebrow": { de: "Jetzt essen", en: "Eat now" },
   "home.pillar.instant.title": { de: "Essen sofort bestellen", en: "Instant Food Order" },
   "home.pillar.instant.body": {
-    de: "Restaurants in deiner Nähe, live verfügbar, Menüs und transparente Preise.",
-    en: "Restaurants near you, live availability, menus and transparent pricing.",
+    de: "Entdecke lokale Restaurants und bestelle direkt, wo Partner bereits dabei sind.",
+    en: "Discover local restaurants and order directly where partners are already live.",
   },
   "home.pillar.instant.cta": { de: "Restaurants entdecken", en: "Discover restaurants" },
   "home.pillar.catering.eyebrow": { de: "Event planen", en: "Plan an event" },
@@ -238,7 +238,7 @@ const dict: Dict = {
   "footer.legal": { de: "Rechtliches", en: "Legal" },
   "footer.imprint": { de: "Impressum", en: "Imprint" },
   "footer.privacy": { de: "Datenschutz", en: "Privacy" },
-  "footer.terms": { de: "AGB", en: "Terms" },
+  "footer.terms": { de: "Nutzungsbedingungen", en: "Terms of Service" },
 };
 
 const Ctx = createContext<{

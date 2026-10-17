@@ -373,9 +373,9 @@ function Catering() {
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div className="text-[12px] font-bold text-white leading-none">
-                  <div>100% Vetted</div>
+                  <div>{lang === "de" ? "Kuratiert" : "Curated"}</div>
                   <div className="text-[10px] text-white/60 font-medium mt-1">
-                    {lang === "de" ? "Geprüfte Partner" : "Verified partners"}
+                    {lang === "de" ? "Persönliche Auswahl" : "Handpicked selection"}
                   </div>
                 </div>
               </div>
@@ -385,9 +385,9 @@ function Catering() {
                   <Star className="h-5 w-5 fill-current" />
                 </div>
                 <div className="text-[12px] font-bold text-white leading-none">
-                  <div>4.9 / 5.0</div>
+                  <div>0 % Provision</div>
                   <div className="text-[10px] text-white/60 font-medium mt-1">
-                    {lang === "de" ? "Kundenbewertung" : "Customer rating"}
+                    {lang === "de" ? "Direktanfrage & Buchung" : "Direct inquiry & booking"}
                   </div>
                 </div>
               </div>

@@ -305,9 +305,9 @@ function RestaurantsDirectory() {
                   <div className="absolute bottom-4 left-4 right-4 backdrop-blur-md bg-forest/85 border border-white/20 p-4 rounded-2xl flex items-center justify-between text-white shadow-lg">
                     <div>
                       <div className="flex items-center gap-1.5 text-[#f2d896] font-bold text-sm">
-                        <span>★ 4.9/5.0</span>
+                        <span>★ {tt("Handverlesen", "Handpicked")}</span>
                         <span className="text-white/60 font-normal text-xs">
-                          • {tt("Qualitätsgeprüft", "Vetted Quality")}
+                          • {tt("Direktbestellung", "Direct Ordering")}
                         </span>
                       </div>
                       <p className="text-xs text-white/80 mt-0.5 font-medium">

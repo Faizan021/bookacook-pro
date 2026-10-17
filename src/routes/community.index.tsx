@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { PageHero } from "@/components/PageHero";
 import { useI18n } from "@/i18n/I18nProvider";
+import { magazineArticles } from "@/data/magazineArticles";
 import {
   Mail,
   Instagram,
@@ -53,6 +55,14 @@ export const Route = createFileRoute("/community/")({
 function CommunityPage() {
   const { lang } = useI18n();
   const isDe = lang === "de";
+
+  const [submitted, setSubmitted] = useState(false);
+  const [formName, setFormName] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [formSpot, setFormSpot] = useState("");
+  const [formStory, setFormStory] = useState("");
+  const [formDisclosure, setFormDisclosure] = useState("selbst-bezahlt");
+  const [agreeRights, setAgreeRights] = useState(false);
 
   const emailSubject = isDe
     ? "Mein Erlebnis für die Speisely Community"
@@ -282,608 +292,60 @@ function CommunityPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* 00. Neumanns Café Berlin-Friedrichshain (Newest Story) */}
-            <Link
-              to="/magazin/community/neumanns-cafe-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/neumanns-cafe-berlin/05_poached_eggs_spinach_hd.jpg?v=3"
-                    alt={
-                      isDe
-                        ? "Neumanns Café am Boxhagener Platz in Berlin-Friedrichshain: Hausgebackenes Sauerteigbrot, pochierte Eier & Andraschko Kaffee"
-                        : "Neumanns Café at Boxhagener Platz Berlin-Friedrichshain: House-baked sourdough, poached eggs & Andraschko coffee"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-sm">
-                      <Sparkles className="h-3 w-3 text-forest" aria-hidden="true" />
-                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-forest/90 text-white text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
-                      Friedrichshain · Berlin
-                    </span>
+            {magazineArticles
+              .filter((a) => a.categories.includes("community"))
+              .map((article) => (
+                <Link
+                  key={article.id}
+                  to={article.to}
+                  className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
+                      <img
+                        src={`${article.image}${article.image.includes("?") ? "&" : "?"}v=3`}
+                        alt={isDe ? article.titleDe : article.titleEn}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#173C32]/90 backdrop-blur-sm text-[#E6B84A] px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-sm border border-white/10">
+                          <Sparkles className="h-3 w-3 text-[#E6B84A]" aria-hidden="true" />
+                          Community Story
+                        </span>
+                        <span className="px-3 py-1 rounded-full bg-forest/90 text-white text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                          {article.location}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
+                        📸 Speisely Community
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <div className="flex items-center justify-between text-xs font-semibold text-[#9E6D18] uppercase tracking-wider mb-2">
+                        <span>{article.city}</span>
+                        <span className="bg-amber-50 text-amber-800 border border-amber-200/60 px-2.5 py-0.5 rounded-full text-[10px]">
+                          {isDe
+                            ? article.disclosureDe || "Selbst bezahlt"
+                            : article.disclosureEn || "Self-paid"}
+                        </span>
+                      </div>
+                      <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#9E6D18] transition-colors leading-snug">
+                        {isDe ? article.titleDe : article.titleEn}
+                      </h3>
+                      <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
+                        {isDe ? article.excerptDe : article.excerptEn}
+                      </p>
+                    </div>
                   </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-                <div className="p-6">
-                  <span className="text-xs font-semibold text-[#9E6D18] uppercase tracking-wider block mb-1">
-                    {isDe ? "Sauerteig-Bäckerei & Brunch" : "Sourdough Bakery & Brunch"}
-                  </span>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#9E6D18] transition-colors leading-snug">
-                    {isDe
-                      ? "Neumanns Café Berlin: Handwerkliches Sauerteig-Frühstück am Boxhagener Platz"
-                      : "Neumanns Café Berlin: Artisanal Sourdough Breakfast & Bakery by Boxhagener Platz"}
-                  </h3>
-                  <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
-                    {isDe
-                      ? "Hausgebackenes Sauerteigbrot aus der eigenen Bäckerei, pochierte Eier auf Blattspinat, Süßkartoffel-Pekannuss-Stulle mit Ziegenkäse, spanische Tortilla & Andraschko-Kaffee in der Gabriel-Max-Straße 18."
-                      : "House-baked sourdough from their own bakery, poached eggs on wilted spinach, sweet-potato pecan tartine with goat cheese, Spanish tortilla & Andraschko coffee at Gabriel-Max-Straße 18."}
-                  </p>
-                </div>
-              </div>
-              <div className="px-6 pb-6 pt-2 border-t border-forest/10 flex items-center justify-between text-xs text-forest/60">
-                <span>{isDe ? "Oktober 2026" : "October 2026"}</span>
-                <span className="font-semibold text-forest group-hover:text-[#9E6D18] flex items-center gap-1">
-                  {isDe ? "Story lesen" : "Read story"} →
-                </span>
-              </div>
-            </Link>
-
-            {/* 0. Baba Pirzola Meze & Grill Berlin */}
-            <Link
-              to="/magazin/community/baba-pirzola-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=3"
-                    alt={
-                      isDe
-                        ? "Baba Pirzola Meze & Grill am Wittenbergplatz in Berlin: Kuzu Pirzola, Lokum Bonfile, Meze & Rakı"
-                        : "Baba Pirzola Meze & Grill at Wittenbergplatz Berlin: Kuzu Pirzola, Lokum Bonfile, Meze & Rakı"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3 py-1 text-[11px] font-bold uppercase tracking-wider shadow-sm">
-                      <Sparkles className="h-3 w-3 text-forest" aria-hidden="true" />
-                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-forest/90 text-white text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
-                      Wittenbergplatz · Berlin
+                  <div className="px-6 pb-6 pt-2 border-t border-forest/10 flex items-center justify-between text-xs text-forest/60">
+                    <span>{isDe ? article.dateDe : article.dateEn}</span>
+                    <span className="font-semibold text-forest group-hover:text-[#9E6D18] flex items-center gap-1">
+                      {isDe ? "Story lesen" : "Read story"} →
                     </span>
                   </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-                <div className="p-6">
-                  <span className="text-xs font-semibold text-[#9E6D18] uppercase tracking-wider block mb-1">
-                    {isDe ? "Meze & Grillkultur" : "Meze & Grill Culture"}
-                  </span>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#9E6D18] transition-colors leading-snug">
-                    {isDe
-                      ? "Baba Pirzola: Feuer, Meze & große Grillkunst am Wittenbergplatz"
-                      : "Baba Pirzola: Fire, Meze & High Grill Craft at Wittenbergplatz"}
-                  </h3>
-                  <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
-                    {isDe
-                      ? "Kuzu Pirzola, Lokum Bonfile & Karides Şiş vom Holzbrett, rauchiges Nazik Ali, saftiges Antrikot sowie Katmer und Fırında Sütlaç Dondurmalı nahe dem KaDeWe."
-                      : "Oak-board Kuzu Pirzola, Lokum Bonfile & Karides Şiş, smoky Nazik Ali, juicy Antrikot, plus Katmer and Fırında Sütlaç Dondurmalı near KaDeWe."}
-                  </p>
-                </div>
-              </div>
-              <div className="px-6 pb-6 pt-2 border-t border-forest/10 flex items-center justify-between text-xs text-forest/60">
-                <span>{isDe ? "Oktober 2026" : "October 2026"}</span>
-                <span className="font-semibold text-forest group-hover:text-[#9E6D18] flex items-center gap-1">
-                  {isDe ? "Story lesen" : "Read story"} →
-                </span>
-              </div>
-            </Link>
-
-            {/* 1. BBQ Chicken Berlin-Kreuzberg */}
-            <Link
-              to="/magazin/community/bbq-chicken-berlin-kreuzberg"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/bbq-chicken-berlin/01_golden_fried_chicken_hero.jpg?v=2"
-                    alt={
-                      isDe
-                        ? "Crispy Korean Fried Chicken bei BBQ Chicken Berlin-Kreuzberg"
-                        : "Crispy Korean Fried Chicken at BBQ Chicken Berlin-Kreuzberg"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="px-3 py-1 rounded-full bg-forest/90 text-white text-[11px] font-bold uppercase tracking-wider backdrop-blur-sm">
-                      Berlin-Kreuzberg
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-[#E6B84A] text-forest text-[11px] font-bold uppercase tracking-wider shadow-sm">
-                      K-Food & Fried Chicken
-                    </span>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <span className="text-xs font-semibold text-[#9E6D18] uppercase tracking-wider block mb-1">
-                    {isDe ? "Community Spotlight" : "Community Spotlight"}
-                  </span>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#9E6D18] transition-colors leading-snug">
-                    {isDe
-                      ? "BBQ Chicken: Authentisches Korean Fried Chicken & Seoul Streetfood in Kreuzberg"
-                      : "BBQ Chicken: Authentic Korean Fried Chicken & Seoul Streetfood in Kreuzberg"}
-                  </h3>
-                  <p className="mt-3 text-sm text-forest/75 line-clamp-3 leading-relaxed">
-                    {isDe
-                      ? "Goldgelber Crunch, Cheesling Snow Powder und feurig-süße Secret Glazes: Ein Blick auf das K-Food Phänomen in Berlin-Kreuzberg."
-                      : "Golden Olive acoustic crunch, savory Cheesling dusting, and fiery Secret Glazes: Exploring Berlin-Kreuzberg's favorite Korean chicken."}
-                  </p>
-                </div>
-              </div>
-              <div className="px-6 pb-6 pt-2 border-t border-forest/10 flex items-center justify-between text-xs text-forest/60">
-                <span>{isDe ? "Oktober 2026" : "October 2026"}</span>
-                <span className="font-semibold text-forest group-hover:text-[#9E6D18] flex items-center gap-1">
-                  {isDe ? "Story lesen" : "Read story"} →
-                </span>
-              </div>
-            </Link>
-
-            {/* 2. King Tut Restaurant Berlin */}
-            <Link
-              to="/magazin/community/king-tut-restaurant-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/king-tut-berlin/16_king_tut_hawawshi_molokhia_hd.jpg?v=2"
-                    alt={
-                      isDe
-                        ? "Ägyptisches Festmahl mit Hawawshi, Molokhia und Holzkohlegrill bei King Tut Berlin"
-                        : "Egyptian feast with Hawawshi, Molokhia and charcoal grill at King Tut Berlin"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3 py-1 text-xs font-bold shadow-md">
-                      <Sparkles className="h-3.5 w-3.5 text-forest" aria-hidden="true" />
-                      {isDe ? "NEUSTE STORY" : "NEWEST STORY"}
-                    </span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-2.5 py-1 text-xs font-semibold backdrop-blur-xs">
-                      Berlin-Wilmersdorf
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Berlin (Hohenzollerndamm 11, Wilmersdorf)</span>
-                    <span>•</span>
-                    <span>{isDe ? "Community Story" : "Community Story"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Ägyptens kulinarisches Herz am Hohenzollerndamm"
-                      : "Egypt's Culinary Heart on Hohenzollerndamm"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Knuspriges Hawawshi, grüne Molokhia mit zischender Knoblauch-Teshah und zarte Holzkohle-Grillplatten auf ornamentalen Silberplatten bei King Tut Berlin."
-                      : "Crispy Hawawshi, green Molokhia with sizzling garlic Teshah, and tender charcoal mixed grill on ornate silver platters at King Tut Berlin."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
-
-            {/* 2. Chicken Krush Prag */}
-            <Link
-              to="/magazin/community/chicken-krush-prag"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/chicken-krush-prag/chicken-krush-real-01.webp"
-                    alt={
-                      isDe
-                        ? "Korean Fried Chicken, Snow Flake Seasoning und Pommes bei Chicken Krush in Prag"
-                        : "Korean Fried Chicken, Snow Flake seasoning and fries at Chicken Krush in Prague"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-2.5 py-1 text-xs font-semibold backdrop-blur-xs">
-                      Prag-Nové Město
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Prag (Příčná 9, Nové Město)</span>
-                    <span>•</span>
-                    <span>{isDe ? "Community Story" : "Community Story"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Goldener Crunch, Yangnyeom-Glanz und Rose Tteokbokki in Prag"
-                      : "Golden Crunch, Yangnyeom Glaze and Rose Tteokbokki in Prague"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Knuspriges Korean Fried Chicken, cremiges Rose Tteokbokki, Snow-Flake-Käsepulver und digitale Tisch-Bestellung bei Chicken Krush in Prag."
-                      : "Crispy Korean fried chicken, velvety Rose Tteokbokki, snow-flake cheese seasoning and digital table ordering at Chicken Krush in Prague."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
-
-            {/* 2. Garçon de Café Berlin */}
-            <Link
-              to="/magazin/community/garcon-de-cafe-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/garcon-de-cafe-berlin/garcon-01.webp"
-                    alt={
-                      isDe
-                        ? "Das lichtdurchflutete Atrium von Garçon de Café im Berliner EDGE-Gebäude"
-                        : "The light-filled atrium of Garçon de Café inside Berlin EDGE Workspaces"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-2.5 py-1 text-xs font-semibold backdrop-blur-xs">
-                      Berlin-Mitte
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Berlin-Mitte (~160m Hauptbahnhof)</span>
-                    <span>•</span>
-                    <span>{isDe ? "Community Story" : "Community Story"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Eine Pause aus Holz, Licht und drei Espressoshots"
-                      : "A Pause of Timber, Light and Three Espresso Shots"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Specialty Coffee, detaillierte Latte Art, Frühstücksschalen und mobiles Kaffeecatering bei Garçon de Café im Berliner EDGE-Gebäude."
-                      : "Specialty coffee, detailed latte art, breakfast bowls, and mobile coffee catering at Garçon de Café in Berlin."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
-
-            {/* 2. Thronburger Berlin */}
-            <Link
-              to="/magazin/community/thronburger-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/thronburger-berlin/thronburger-01.webp?v=2"
-                    alt={
-                      isDe
-                        ? "Halal Beef Burger im Sesam-Brioche bei Thronburger Berlin"
-                        : "Halal beef burger in sesame brioche at Thronburger Berlin"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-2.5 py-1 text-xs font-semibold backdrop-blur-xs">
-                      Berlin-Friedrichshain
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Berlin-Friedrichshain</span>
-                    <span>•</span>
-                    <span>{isDe ? "Community Story" : "Community Story"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Ein Burger, viele Berliner Straßen"
-                      : "One Burger, Many Berlin Streets"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Ein dunkles Sesam-Brioche, Halal Beef Burger, Süßkartoffel-Pommes und ein Speisekarten-Konzept mit Berliner Straßennamen bei Thronburger."
-                      : "A dark sesame brioche, halal beef burgers, sweet potato fries and a Berlin street-name menu concept at Thronburger."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
-
-            {/* 2. KOKIO Berlin */}
-            <Link
-              to="/magazin/community/kokio-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/kokio-berlin/kokio-boneless-02.webp"
-                    alt={
-                      isDe
-                        ? "Korean Fried Chicken bei KOKIO in Berlin-Prenzlauer Berg"
-                        : "Korean Fried Chicken at KOKIO in Berlin-Prenzlauer Berg"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-3 py-1 text-xs font-bold shadow-xs">
-                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
-                      Berlin-Prenzlauer Berg
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Berlin-Prenzlauer Berg</span>
-                    <span>•</span>
-                    <span>{isDe ? "Community Story" : "Community Story"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Zwischen Crunch, Sauce und koreanischer Esskultur"
-                      : "Where Crunch Meets Korean Chicken Culture"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Ein Speisely-Community-Besuch bei KOKIO Berlin: knuspriges Fried Chicken, hausgemachte Saucen und Chimaek-Tradition."
-                      : "A Speisely Community visit to KOKIO Berlin: crisp fried chicken, house-made sauces and chimaek culture."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
-
-            {/* 2. Alzaeem Restaurant Berlin */}
-            <Link
-              to="/magazin/community/alzaeem-restaurant-berlin"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/alzaeem-berlin/mix-grill-close.webp"
-                    alt={
-                      isDe
-                        ? "Mix Grill und syrische Spezialitäten beim Alzaeem Restaurant in Berlin-Neukölln"
-                        : "Mix Grill and Syrian charcoal dishes at Alzaeem Restaurant in Berlin-Neukölln"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-3 py-1 text-xs font-bold shadow-xs">
-                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
-                      Berlin-Neukölln
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Berlin-Neukölln</span>
-                    <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Ein Fest aus Holzkohle, Mezze und Grillgenuss"
-                      : "A Feast of Charcoal, Mezze and Grilled Flavours"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Mix Grill #44, syrische Grillgerichte und ein vielseitiges Kindermenü beim Alzaeem Restaurant an der Sonnenallee in Berlin-Neukölln."
-                      : "Mix Grill #44, Syrian charcoal-grilled dishes and a varied children's meal at Alzaeem Restaurant on Sonnenallee in Berlin-Neukölln."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
-
-            {/* 3. Ariana Frankfurt */}
-            <Link
-              to="/magazin/community/ariana-restaurant-frankfurt"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/ariana-frankfurt/qabili-palau.webp"
-                    alt={
-                      isDe
-                        ? "Qabili Palau bei Ariana in Frankfurt"
-                        : "Qabili Palau at Ariana in Frankfurt"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-3 py-1 text-xs font-bold shadow-xs">
-                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
-                      Frankfurt am Main
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Frankfurt am Main</span>
-                    <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Das Geheimnis unter dem Reisberg"
-                      : "The Secret Beneath the Mountain of Rice"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Qabili Palau bei Ariana in Frankfurt: Wenn das Entscheidende nicht oben liegt."
-                      : "Qabili Palau at Ariana Frankfurt: when the best part is hidden underneath."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
-
-            {/* 4. Harput Wiesbaden */}
-            <Link
-              to="/magazin/community/harput-wiesbaden"
-              className="group surface-card rounded-3xl border border-forest/10 overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-black/5">
-                  <img
-                    src="/magazin/harput-wiesbaden/harput-fisch.webp"
-                    alt={
-                      isDe
-                        ? "Grillabend bei Harput in Wiesbaden"
-                        : "Grill Evening at Harput in Wiesbaden"
-                    }
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-forest/90 text-white px-3 py-1 text-xs font-bold shadow-xs">
-                      <Sparkles className="h-3.5 w-3.5 text-[#f2d896]" aria-hidden="true" />
-                      Wiesbaden
-                    </span>
-                  </div>
-                  <div className="absolute bottom-3 right-3 rounded-md bg-black/60 backdrop-blur-xs text-white px-2.5 py-1 text-[11px] font-medium">
-                    📸 Speisely Community
-                  </div>
-                </div>
-
-                <div className="p-6 sm:p-7">
-                  <div className="flex items-center gap-2 text-xs font-medium text-forest/60 mb-2">
-                    <MapPin className="h-3.5 w-3.5 text-[#b28a3c]" aria-hidden="true" />
-                    <span>Wiesbaden</span>
-                    <span>•</span>
-                    <span>{isDe ? "Selbst bezahlt" : "Self-paid"}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-forest group-hover:text-[#7FA46B] transition-colors leading-snug">
-                    {isDe
-                      ? "Ein Grillabend bei Harput in Wiesbaden"
-                      : "An Evening at Harput in Wiesbaden"}
-                  </h3>
-                  <p className="mt-2.5 text-sm text-forest/75 line-clamp-2 leading-relaxed font-medium">
-                    {isDe
-                      ? "Gegrillter Fisch und Hähnchenspieß mit Reis: Ein Food-Moment aus Wiesbaden."
-                      : "Whole grilled fish and chicken skewer over rice: a food moment from Wiesbaden."}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-6 sm:p-7 pt-0 flex items-center justify-between border-t border-forest/5 text-xs font-bold text-forest">
-                <span>{isDe ? "Story lesen" : "Read Story"}</span>
-                <ArrowRight
-                  className="h-4 w-4 text-[#7FA46B] transform group-hover:translate-x-1 transition-transform"
-                  aria-hidden="true"
-                />
-              </div>
-            </Link>
+                </Link>
+              ))}
           </div>
         </section>
 
@@ -1044,8 +506,8 @@ function CommunityPage() {
           </div>
         </section>
 
-        {/* 9. Final CTA */}
-        <section className="relative overflow-hidden rounded-3xl bg-forest text-[oklch(0.97_0.02_92)] p-8 sm:p-14 text-center shadow-2xl">
+        {/* 9. Final CTA & Lead Magnet Intake */}
+        <section className="relative overflow-hidden rounded-3xl bg-forest text-[oklch(0.97_0.02_92)] p-6 sm:p-12 shadow-2xl">
           <div className="absolute inset-0 z-0 opacity-15">
             <img
               src="/hero-cinematic.webp"
@@ -1054,44 +516,196 @@ function CommunityPage() {
             />
           </div>
           <div className="relative z-10 mx-auto max-w-2xl">
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#f2d896]">
-              {isDe ? "MITMACHEN & TEILEN" : "PARTICIPATE & SHARE"}
-            </span>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
-              {isDe ? "Deine Geschichte könnte die nächste sein." : "Your story could be next."}
-            </h2>
-            <p className="mt-4 text-sm sm:text-base text-white/80 max-w-lg mx-auto leading-relaxed font-medium">
-              {isDe
-                ? "Teile dein Restaurant-, Catering- oder Eventerlebnis mit deinen eigenen Fotos oder Videos."
-                : "Share your restaurant, catering or event experience with your own photos or videos."}
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-              <a
-                href={mailtoHref}
-                className="inline-flex items-center gap-2 rounded-full bg-[#b28a3c] text-white px-7 py-3.5 text-xs sm:text-sm font-bold shadow-xl shadow-[#b28a3c]/30 hover:bg-[#9a7633] transition-all"
-              >
-                <Mail className="h-4 w-4" aria-hidden="true" />
-                <span>{isDe ? "Erlebnis per E-Mail teilen" : "Share Your Experience"}</span>
-              </a>
-
-              <a
-                href={instagramHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Speisely Instagram Profil"
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/25 text-white px-6 py-3.5 text-xs sm:text-sm font-semibold hover:bg-white/20 transition-all"
-              >
-                <Instagram className="h-4 w-4 text-[#f2d896]" aria-hidden="true" />
-                <span>{isDe ? "Auf Instagram schreiben" : "Message Us on Instagram"}</span>
-              </a>
+            <div className="text-center mb-8">
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#f2d896]">
+                {isDe ? "MITMACHEN & TEILEN" : "PARTICIPATE & SHARE"}
+              </span>
+              <h2 className="mt-2 font-display text-3xl sm:text-4xl font-bold text-white leading-tight">
+                {isDe ? "Deine Geschichte könnte die nächste sein." : "Your story could be next."}
+              </h2>
+              <p className="mt-3 text-sm text-white/80 max-w-lg mx-auto leading-relaxed font-medium">
+                {isDe
+                  ? "Teile dein Restaurant-, Catering- oder Food-Erlebnis direkt online. Als Dankeschön erhältst du sofortigen Zugang zum Speisely Digital Food Guide 2026."
+                  : "Share your culinary experience directly online. As a thank-you, get instant access to the Speisely Digital Food Guide 2026."}
+              </p>
             </div>
 
-            <p className="mt-4 text-[11px] text-white/50 font-medium">
-              {isDe
-                ? "Mit dem Senden erfolgt noch keine automatische Veröffentlichung."
-                : "Sending your content does not mean it will be published automatically."}
-            </p>
+            {submitted ? (
+              <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-[#E6B84A]/30 p-8 text-center space-y-4">
+                <div className="w-12 h-12 rounded-full bg-[#E6B84A] text-forest mx-auto flex items-center justify-center font-bold text-xl">
+                  ✓
+                </div>
+                <h3 className="font-display text-2xl font-bold text-white">
+                  {isDe ? "Danke für dein Erlebnis!" : "Thank you for sharing!"}
+                </h3>
+                <p className="text-sm text-white/80 max-w-md mx-auto leading-relaxed">
+                  {isDe
+                    ? "Wir haben deine Einsendung erhalten und prüfen sie sorgfältig. Dein Speisely Magazin (Digital Flip Edition) steht jetzt bereit."
+                    : "We received your submission. Your Speisely Digital Flip Magazine is ready to explore."}
+                </p>
+                <div className="pt-2">
+                  <a
+                    href="/magazin/edition.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#E6B84A] text-forest px-6 py-3 text-xs sm:text-sm font-bold shadow hover:bg-[#d4a538] transition"
+                  >
+                    <span>
+                      {isDe ? "Digital Food Guide jetzt öffnen ↗" : "Open Digital Food Guide ↗"}
+                    </span>
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!agreeRights) return;
+                  setSubmitted(true);
+                }}
+                className="rounded-2xl bg-white/[0.08] backdrop-blur-md border border-white/15 p-6 sm:p-8 text-left space-y-4"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-white/90 mb-1">
+                      {isDe ? "Dein Name / Instagram Handle" : "Your Name / Instagram"} *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={formName}
+                      onChange={(e) => setFormName(e.target.value)}
+                      placeholder={
+                        isDe ? "z.B. Sarah M. oder @foodie_berlin" : "e.g. Sarah M. or @foodie"
+                      }
+                      className="w-full rounded-xl bg-white/10 border border-white/20 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#E6B84A]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-white/90 mb-1">
+                      {isDe ? "Deine E-Mail-Adresse" : "Your Email Address"} *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={formEmail}
+                      onChange={(e) => setFormEmail(e.target.value)}
+                      placeholder="name@beispiel.de"
+                      className="w-full rounded-xl bg-white/10 border border-white/20 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#E6B84A]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-white/90 mb-1">
+                    {isDe
+                      ? "Restaurant, Caterer oder Event & Stadt"
+                      : "Restaurant, Caterer or Event & City"}{" "}
+                    *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formSpot}
+                    onChange={(e) => setFormSpot(e.target.value)}
+                    placeholder={
+                      isDe
+                        ? "z.B. Mandy Restaurant, Berlin-Neukölln"
+                        : "e.g. Mandy Restaurant, Berlin"
+                    }
+                    className="w-full rounded-xl bg-white/10 border border-white/20 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#E6B84A]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-white/90 mb-1">
+                    {isDe ? "Deine Geschichte & Empfehlung" : "Your Story & Recommendation"} *
+                  </label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={formStory}
+                    onChange={(e) => setFormStory(e.target.value)}
+                    placeholder={
+                      isDe
+                        ? "Was hast du bestellt? Wie war die Atmosphäre und das Essen? Welche Details machen diesen Ort besonders?"
+                        : "What did you order? How was the food and atmosphere? What makes this spot special?"
+                    }
+                    className="w-full rounded-xl bg-white/10 border border-white/20 px-3.5 py-2.5 text-sm text-white placeholder:text-white/40 outline-none focus:border-[#E6B84A]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-white/90 mb-1">
+                    {isDe ? "Transparenz-Status" : "Transparency Status"}
+                  </label>
+                  <select
+                    value={formDisclosure}
+                    onChange={(e) => setFormDisclosure(e.target.value)}
+                    className="w-full rounded-xl bg-[#0c1813] border border-white/20 px-3.5 py-2.5 text-sm text-white outline-none focus:border-[#E6B84A]"
+                  >
+                    <option value="selbst-bezahlt">
+                      {isDe ? "Selbst bezahlt (Regulärer Gast)" : "Self-paid (Regular guest)"}
+                    </option>
+                    <option value="eingeladen">
+                      {isDe ? "Eingeladen / Pressebesuch" : "Invited / Press visit"}
+                    </option>
+                    <option value="gesponsert">
+                      {isDe ? "Kooperation / Gesponsert" : "Collaboration / Sponsored"}
+                    </option>
+                  </select>
+                </div>
+
+                <div className="flex items-start gap-2.5 pt-2">
+                  <input
+                    type="checkbox"
+                    id="rights-check"
+                    required
+                    checked={agreeRights}
+                    onChange={(e) => setAgreeRights(e.target.checked)}
+                    className="mt-1 h-4 w-4 rounded accent-[#E6B84A]"
+                  />
+                  <label
+                    htmlFor="rights-check"
+                    className="text-xs text-white/80 leading-snug cursor-pointer"
+                  >
+                    {isDe
+                      ? "Ich bestätige, dass ich Urheber der Fotos/Texte bin und Speisely diese nach redaktioneller Rücksprache verwenden darf."
+                      : "I confirm that I own all rights to submitted media and grant Speisely editorial permission upon review."}
+                  </label>
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <button
+                    type="submit"
+                    className="inline-flex items-center justify-center gap-2 w-full sm:w-auto rounded-full bg-[#E6B84A] text-forest px-8 py-3.5 text-xs sm:text-sm font-bold shadow hover:bg-[#d4a538] transition"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>
+                      {isDe ? "Geschichte einreichen & Guide erhalten" : "Submit Story & Get Guide"}
+                    </span>
+                  </button>
+
+                  <div className="flex items-center gap-3 text-xs text-white/60">
+                    <span>{isDe ? "oder direkt via:" : "or directly via:"}</span>
+                    <a
+                      href={mailtoHref}
+                      className="text-white hover:text-[#E6B84A] underline underline-offset-4 flex items-center gap-1"
+                    >
+                      <Mail className="w-3.5 h-3.5" /> E-Mail
+                    </a>
+                    <a
+                      href={instagramHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white hover:text-[#E6B84A] underline underline-offset-4 flex items-center gap-1"
+                    >
+                      <Instagram className="w-3.5 h-3.5" /> Instagram
+                    </a>
+                  </div>
+                </div>
+              </form>
+            )}
           </div>
         </section>
       </main>
