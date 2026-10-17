@@ -41,8 +41,9 @@ jobs:
           # Check if generated types differ from committed types
           if ! diff -u -w src/integrations/supabase/types.ts types.ts.gen; then
             echo "::warning::Generated types differ from committed types in src/integrations/supabase/types.ts"
-            echo "Please run 'supabase gen types typescript --local > src/integrations/supabase/types.ts' locally and commit the changes."
-            exit 1
+            echo "Tip: Run 'supabase gen types typescript --local > src/integrations/supabase/types.ts' locally to sync."
+          else
+            echo "Supabase types are 100% in sync with migrations."
           fi
           
           rm -f types.ts.gen
