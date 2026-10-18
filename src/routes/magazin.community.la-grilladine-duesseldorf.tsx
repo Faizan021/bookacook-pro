@@ -231,22 +231,22 @@ function LaGrilladineArticlePage() {
   return (
     <article className="min-h-screen bg-[#F6F4EB] text-[#173C32]">
       {/* Editorial Navigation Top Bar */}
-      <header className="sticky top-0 z-40 bg-[#083822] text-[#F6F4EB] border-b border-[#E6B84A]/30 backdrop-blur-md px-4 py-2.5 shadow-md">
+      <header className="sticky top-0 z-40 bg-[#083822] text-[#F6F4EB] border-b border-[#E6B84A]/30 backdrop-blur-md px-3 sm:px-4 py-2.5 shadow-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
             <Link
               to="/magazin"
               className="text-xs uppercase tracking-widest text-[#E6B84A] hover:underline flex items-center gap-1 font-bold whitespace-nowrap"
             >
-              ← Speisely Magazin
+              ← <span className="hidden xs:inline">Speisely</span> Magazin
             </Link>
-            <span className="text-[#F6F4EB]/30 hidden xs:inline">|</span>
+            <span className="text-[#F6F4EB]/30 hidden md:inline">|</span>
             <span className="text-xs tracking-wider uppercase text-[#F6F4EB]/80 hidden md:inline font-mono truncate">
               Düsseldorf · Oberbilk
             </span>
           </div>
-          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-            <span className="text-[11px] sm:text-xs font-mono bg-[#E6B84A]/20 text-[#E6B84A] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold border border-[#E6B84A]/40 whitespace-nowrap">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <span className="hidden sm:inline-block text-[11px] sm:text-xs font-mono bg-[#E6B84A]/20 text-[#E6B84A] px-2.5 py-0.5 rounded-full font-bold border border-[#E6B84A]/40 whitespace-nowrap">
               Holzkohle & Tajine
             </span>
             <LanguageToggle />
@@ -257,17 +257,21 @@ function LaGrilladineArticlePage() {
       {/* Hero Header Section */}
       <section
         ref={heroRef}
-        className="relative bg-gradient-to-b from-[#083822] via-[#0D442B] to-[#F6F4EB] text-white pt-16 pb-20 px-4 overflow-hidden"
+        className="relative bg-gradient-to-b from-[#083822] via-[#0D442B] to-[#F6F4EB] text-white pt-12 sm:pt-16 pb-16 sm:pb-20 px-4 overflow-hidden"
       >
-        <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#E6B84A]/20 border border-[#E6B84A]/40 px-4 py-1.5 text-xs font-mono font-bold tracking-widest text-[#E6B84A] uppercase shadow-sm">
-            <Flame className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
-            {isDe
-              ? "SPEISELY COMMUNITY VISIT · DÜSSELDORF OBERBILK · MAROKKANISCHE KÜCHE"
-              : "SPEISELY COMMUNITY VISIT · DÜSSELDORF OBERBILK · MOROCCAN CUISINE"}
+        <div className="max-w-4xl mx-auto text-center space-y-5 sm:space-y-6 relative z-10">
+          <div className="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-full bg-[#E6B84A]/20 border border-[#E6B84A]/40 px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-mono font-bold tracking-wider sm:tracking-widest text-[#E6B84A] uppercase shadow-sm max-w-full">
+            <Flame className="w-3.5 h-3.5 text-[#E6B84A] shrink-0" aria-hidden="true" />
+            <span className="whitespace-nowrap">SPEISELY COMMUNITY VISIT</span>
+            <span className="hidden md:inline">•</span>
+            <span className="hidden md:inline">DÜSSELDORF OBERBILK</span>
+            <span className="hidden md:inline">•</span>
+            <span className="hidden md:inline">
+              {isDe ? "MAROKKANISCHE KÜCHE" : "MOROCCAN CUISINE"}
+            </span>
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] text-[#F6F4EB]">
+          <h1 className="font-serif text-2xl xs:text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.15] text-[#F6F4EB]">
             {isDe ? (
               <>
                 La Grilladine Düsseldorf: <br className="hidden sm:inline" />
@@ -285,25 +289,25 @@ function LaGrilladineArticlePage() {
             )}
           </h1>
 
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#F6F4EB]/85 leading-relaxed font-sans">
+          <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-[#F6F4EB]/85 leading-relaxed font-sans px-1">
             {isDe
               ? "Glühende Buchenholzkohle auf offener Flamme, zischende Dorade Royale mit krossen Kartoffel-Rondellen und im Tontopf geschmortes Hähnchen mit herben Salzzitronen: Wie ein unverfälschtes Traditionslokal im Düsseldorfer Maghreb-Viertel pure Handwerkskunst zelebriert."
               : "Glowing beechwood embers over an open hearth, sizzling whole Dorade Royale with crisp potato rounds, and slow-braised claypot chicken with preserved lemons: How an authentic sanctuary in Düsseldorf's Maghreb district celebrates pure culinary devotion."}
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-[#F6F4EB]/70 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs font-mono text-[#F6F4EB]/70 pt-2">
             <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-[#E6B84A]" />
+              <MapPin className="w-3.5 h-3.5 text-[#E6B84A] shrink-0" />
               Dreieckstraße 26, 40227 Düsseldorf
             </span>
-            <span>•</span>
+            <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" />
+              <Calendar className="w-3.5 h-3.5 text-[#E6B84A] shrink-0" />
               {isDe ? "Oktober 2026" : "October 2026"}
             </span>
-            <span>•</span>
+            <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-1.5">
-              <Shield className="w-3.5 h-3.5 text-[#7FA46B]" />
+              <Shield className="w-3.5 h-3.5 text-[#7FA46B] shrink-0" />
               {isDe ? "Unabhängig verkostet & bezahlt" : "Independently tasted & self-funded"}
             </span>
           </div>
@@ -315,8 +319,8 @@ function LaGrilladineArticlePage() {
         {/* Editorial Introduction with Master Drop-Cap (Lindt Style) */}
         <section className="space-y-6">
           <div className="relative">
-            <p className="text-lg sm:text-xl leading-relaxed text-[#173C32]/90 font-serif">
-              <span className="float-left text-6xl sm:text-7xl leading-[0.8] font-bold font-serif text-[#E6B84A] pr-4 pt-1">
+            <p className="text-base sm:text-xl leading-relaxed text-[#173C32]/90 font-serif">
+              <span className="float-left text-5xl sm:text-7xl leading-[0.85] font-bold font-serif text-[#E6B84A] mr-3 sm:mr-4 mt-0.5 sm:mt-1">
                 {isDe ? "W" : "T"}
               </span>
               {isDe ? (
@@ -360,12 +364,11 @@ function LaGrilladineArticlePage() {
         <figure className="relative my-10 max-w-2xl mx-auto">
           <div className="relative overflow-hidden rounded-3xl border-2 border-[#173C32]/15 bg-white p-3 shadow-2xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-3xl">
             {/* Frosted Badge */}
-            <div className="absolute top-6 left-6 z-10 flex items-center gap-2 rounded-full bg-[#083822]/85 backdrop-blur-md px-3.5 py-1.5 text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg">
-              <Flame className="w-3.5 h-3.5 text-[#E6B84A]" />
-              <span>
-                {isDe
-                  ? "DER GRILL & DIE THEKE · DREIECKSTRASSE"
-                  : "THE HEARTH & COUNTER · DREIECKSTRASSE"}
+            <div className="absolute top-3 left-3 sm:top-6 sm:left-6 z-10 flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#083822]/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg max-w-[calc(100%-1.5rem)]">
+              <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E6B84A] shrink-0" />
+              <span className="truncate">
+                {isDe ? "DER GRILL & DIE THEKE" : "THE HEARTH & COUNTER"}
+                <span className="hidden sm:inline"> · DREIECKSTRASSE</span>
               </span>
             </div>
             <img
@@ -404,15 +407,15 @@ function LaGrilladineArticlePage() {
         </section>
 
         {/* Sensory Tasting Masterclass: Die 3 Schritte (Inspired by Lindt Sensory Framework) */}
-        <section className="p-8 sm:p-10 rounded-3xl bg-white border-2 border-[#E6B84A]/30 shadow-xl space-y-6">
+        <section className="p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-white border-2 border-[#E6B84A]/30 shadow-xl space-y-5 sm:space-y-6">
           <div className="flex items-center gap-2.5 text-[#083822]">
-            <Award className="w-6 h-6 text-[#E6B84A]" />
+            <Award className="w-5 sm:w-6 h-5 sm:h-6 text-[#E6B84A] shrink-0" />
             <span className="font-mono text-xs uppercase tracking-widest font-black text-[#E6B84A]">
               {isDe ? "DIE SPEISELY GENUSS-SCHULE" : "THE SPEISELY CONNOISSEUR GUIDE"}
             </span>
           </div>
 
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#083822] leading-snug">
+          <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#083822] leading-snug">
             {isDe
               ? "Die 3 goldenen Schritte der Verkostung bei La Grilladine"
               : "The 3 Golden Steps of Tasting at La Grilladine"}
@@ -424,9 +427,9 @@ function LaGrilladineArticlePage() {
               : "To truly appreciate authentic Moroccan hearth cooking, do not rush through the meal — observe the harmonious progression of char, earthenware steam, and herbal freshness:"}
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2">
             {/* Step 1 */}
-            <div className="p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-3">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-2 sm:space-y-3">
               <span className="font-mono text-3xl font-black text-[#E6B84A]">01</span>
               <h4 className="font-serif text-lg font-bold text-[#083822]">
                 {isDe ? "Das Auge & Die Theke" : "The Eye & The Counter"}
@@ -469,12 +472,11 @@ function LaGrilladineArticlePage() {
         {/* Feature Platter: Whole Dorade Royale in Butterfly Cut */}
         <figure className="relative my-10 max-w-2xl mx-auto">
           <div className="relative overflow-hidden rounded-3xl border-2 border-[#173C32]/15 bg-white p-3 shadow-2xl transition-all duration-300 hover:border-[#E6B84A]">
-            <div className="absolute top-6 left-6 z-10 flex items-center gap-2 rounded-full bg-[#083822]/85 backdrop-blur-md px-3.5 py-1.5 text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg">
-              <Fish className="w-3.5 h-3.5 text-[#E6B84A]" />
-              <span>
-                {isDe
-                  ? "SIGNATURE SERVE · DORADE ROYALE PAPILLON"
-                  : "SIGNATURE SERVE · DORADE ROYALE PAPILLON"}
+            <div className="absolute top-3 left-3 sm:top-6 sm:left-6 z-10 flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#083822]/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg max-w-[calc(100%-1.5rem)]">
+              <Fish className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E6B84A] shrink-0" />
+              <span className="truncate">
+                SIGNATURE SERVE · DORADE
+                <span className="hidden sm:inline"> ROYALE PAPILLON</span>
               </span>
             </div>
             <img
@@ -494,8 +496,8 @@ function LaGrilladineArticlePage() {
         </figure>
 
         {/* Product Callout: The Showstopper (Lindt Style Callout Box) */}
-        <section className="p-7 rounded-3xl bg-gradient-to-r from-[#083822] to-[#124E34] text-white space-y-4 shadow-xl border border-[#E6B84A]/30">
-          <div className="flex items-center gap-2">
+        <section className="p-5 sm:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#083822] to-[#124E34] text-white space-y-3 sm:space-y-4 shadow-xl border border-[#E6B84A]/30">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="bg-[#E6B84A] text-[#083822] text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded">
               {isDe ? "DER SHOWSTOPPER" : "THE SHOWSTOPPER"}
             </span>
@@ -503,7 +505,7 @@ function LaGrilladineArticlePage() {
               {isDe ? "EINFACH KÖSTLICH!" : "SIMPLY DELICIOUS!"}
             </span>
           </div>
-          <h3 className="font-serif text-2xl font-bold text-[#F6F4EB]">
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#F6F4EB] leading-snug">
             {isDe
               ? "Dorade Royale & Chermoula: Das Spiel von Röstung & Frische"
               : "Dorade Royale & Chermoula: The Symphony of Smoke & Brightness"}
@@ -547,7 +549,7 @@ function LaGrilladineArticlePage() {
             {/* Item 1: Tajine de Poulet */}
             <div className="flex flex-col rounded-3xl bg-white border-2 border-[#173C32]/15 shadow-xl overflow-hidden transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
               <div className="relative aspect-[4/3] w-full bg-[#083822]/5 overflow-hidden">
-                <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-3 py-1 text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
                   <Utensils className="w-3 h-3 text-[#E6B84A]" />
                   <span>TAJINE DE POULET</span>
                 </div>
@@ -580,7 +582,7 @@ function LaGrilladineArticlePage() {
             {/* Item 2: Mint Tea Ritual */}
             <div className="flex flex-col rounded-3xl bg-white border-2 border-[#173C32]/15 shadow-xl overflow-hidden transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
               <div className="relative aspect-[4/3] w-full bg-[#083822]/5 overflow-hidden">
-                <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-3 py-1 text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
                   <Coffee className="w-3 h-3 text-[#E6B84A]" />
                   <span>ATAY BI NA'NA</span>
                 </div>
@@ -613,13 +615,13 @@ function LaGrilladineArticlePage() {
         </section>
 
         {/* Fact Sheet / Speisely Gastro Dossier */}
-        <section className="p-8 rounded-3xl bg-[#083822] text-[#F6F4EB] space-y-6 shadow-2xl border border-[#E6B84A]/30">
-          <div className="flex items-center justify-between border-b border-[#E6B84A]/30 pb-4">
+        <section className="p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#083822] text-[#F6F4EB] space-y-6 shadow-2xl border border-[#E6B84A]/30">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E6B84A]/30 pb-4">
             <div>
-              <span className="text-xs font-mono text-[#E6B84A] uppercase tracking-widest font-bold">
+              <span className="text-[11px] sm:text-xs font-mono text-[#E6B84A] uppercase tracking-widest font-bold">
                 SPEISELY GASTRO-DOSSIER
               </span>
-              <h3 className="font-serif text-2xl font-bold text-[#F6F4EB]">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#F6F4EB]">
                 La Grilladine Düsseldorf
               </h3>
             </div>
