@@ -115,7 +115,33 @@ export const magazineArticles: MagazineArticle[] = [
     disclosureEn: "Independently visited and self-paid",
   },
 
-  // 4. Community: Neumanns Café Berlin
+  // 4. Community: La Grilladine Düsseldorf
+  {
+    id: "la-grilladine-duesseldorf",
+    slug: "la-grilladine-duesseldorf",
+    titleDe: "Marokkanisches vom Holzkohlegrill: La Grilladine Düsseldorf",
+    titleEn: "Moroccan Charcoal Grilling: La Grilladine Düsseldorf",
+    excerptDe:
+      "Marokkanischer Buchenholz-Grill, ganze Dorade Royale, zarte Tajine de Poulet mit Salzzitronen & Atay-Minztee im Herzen des Maghreb-Viertels.",
+    excerptEn:
+      "Beechwood charcoal grill, whole sea bream, tender chicken tagine with preserved lemons & fresh mint tea in Düsseldorf's Maghreb quarter.",
+    image: "/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=1",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Oberbilk, Düsseldorf",
+    city: "Düsseldorf",
+    dateDe: "Oktober 2026",
+    dateEn: "October 2026",
+    readTime: "5 Min.",
+    categories: ["community", "guides"],
+    to: "/magazin/community/la-grilladine-duesseldorf",
+    isVisit: false,
+    disclosureType: "selbst-bezahlt",
+    disclosureDe: "Community-Einsendung · Selbst bezahlt",
+    disclosureEn: "Community Submission · Self-paid",
+  },
+
+  // 5. Community: Neumanns Café Berlin
   {
     id: "neumanns-cafe",
     slug: "neumanns-cafe-berlin",
