@@ -287,8 +287,8 @@ function LaGrilladineArticlePage() {
 
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#F6F4EB]/85 leading-relaxed font-sans">
             {isDe
-              ? "Glühende Buchenholzkohle auf offener Flamme, zischende Dorade Royale mit krossen Kartoffel-Rondellen und stundenlang im Tontopf geschmorte Salzzitronen: Wie ein unverfälschtes Traditionslokal im Düsseldorfer Maghreb-Viertel pure Handwerkskunst zelebriert."
-              : "Glowing beechwood embers over open hearth, sizzling whole Dorade Royale with crisp potato crisps, and tagines braised in clay for hours with preserved lemons: How an authentic sanctuary in Düsseldorf's Maghreb district celebrates pure culinary devotion."}
+              ? "Glühende Buchenholzkohle auf offener Flamme, zischende Dorade Royale mit krossen Kartoffel-Rondellen und im Tontopf geschmortes Hähnchen mit herben Salzzitronen: Wie ein unverfälschtes Traditionslokal im Düsseldorfer Maghreb-Viertel pure Handwerkskunst zelebriert."
+              : "Glowing beechwood embers over an open hearth, sizzling whole Dorade Royale with crisp potato rounds, and slow-braised claypot chicken with preserved lemons: How an authentic sanctuary in Düsseldorf's Maghreb district celebrates pure culinary devotion."}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-[#F6F4EB]/70 pt-2">
@@ -304,7 +304,7 @@ function LaGrilladineArticlePage() {
             <span>•</span>
             <span className="flex items-center gap-1.5">
               <Shield className="w-3.5 h-3.5 text-[#7FA46B]" />
-              {isDe ? "Unabhängig verkostet & bezahlt" : "Independently tasted & paid"}
+              {isDe ? "Unabhängig verkostet & bezahlt" : "Independently tasted & self-funded"}
             </span>
           </div>
         </div>
@@ -323,7 +323,7 @@ function LaGrilladineArticlePage() {
                 <>
                   er die Dreieckstraße in Düsseldorf-Oberbilk an einem kühlen Herbstabend betritt,
                   wird noch vor der Eingangstür von einem vertrauten, tiefen Duft empfangen:
-                  Trockenes Buchenholz, geschmolzenes Meersalz und die harzige Note glimmender
+                  Trockenes Buchenholz, aufglimmendes Meersalz und die harzige Note glimmender
                   Holzkohle. Hier, im Herzen des lebendigen Düsseldorfer Maghreb-Viertels, liegt{" "}
                   <strong>La Grilladine</strong> — kein poliertes Konzeptrestaurant, sondern ein
                   refugiumhafter Ort, an dem ein einfaches, aber unerbittliches Gesetz gilt:{" "}
@@ -393,7 +393,7 @@ function LaGrilladineArticlePage() {
           </h2>
           <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
             {isDe
-              ? "Das Bestellen bei La Grilladine folgt keinem unpersönlichen Menükatalog, sondern dem Blick in die Frischetheke. Ganze Doraden, saftige Lammkoteletts, Merguez-Würstchen und Rindersteaks liegen auf gestoßenem Eis bereit. Man zeigt auf den gewünschten Schnitt, der Grillmeister wiegt ihn ab, würzt ihn mit hauseigener Chermoula — jener legendären nordafrikanischen Marinade aus frischem Koriander, glatter Petersilie, Knoblauch, gemahlenem Kreuzkümmel und Olivenöl — und legt ihn direkt auf das gusseiserne Grillrost."
+              ? "Das Bestellen bei La Grilladine folgt keinem unpersönlichen Menükatalog, sondern dem Blick in die Frischetheke. Ganze Doraden, saftige Lammkoteletts, Merguez-Würstchen und Rindersteaks liegen auf gestoßenem Eis bereit. Man zeigt auf den gewünschten Schnitt, der Grillmeister wiegt ihn ab, würzt ihn mit hauseigener Chermoula — jener legendären nordafrikanischen Marinade aus frischem Koriander, glatter Petersilie, Knoblauch, gemahlenem Kreuzkümmel und Olivenöl — und legt ihn direkt auf den gusseisernen Grillrost."
               : "Ordering at La Grilladine bypasses generic menu folders and starts directly at the glass counter. Whole sea bream, lamb chops, spiced merguez, and prime rib cuts rest over crushed ice. You indicate your selection, the pitmaster weighs it, perfumes it with house-ground chermoula — the legendary North African marinade of coriander, flat parsley, garlic, toasted cumin, and cold-pressed olive oil — and lays it across the cast-iron grate."}
           </p>
           <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
@@ -488,8 +488,8 @@ function LaGrilladineArticlePage() {
           </div>
           <figcaption className="text-xs font-mono text-[#173C32]/60 mt-3 text-center">
             {isDe
-              ? "Foto: Speisely Community. Der unangefochtene Liebling der Gäste: Ganze Dorade Royale im Schmetterlingsschnitt, serviert mit goldgelben Kartoffelchips und frischer Zitrone."
-              : "Photo: Speisely Community. The guest favorite: Whole Dorade Royale butterfly-split across beechwood coals, served with hand-sliced potato rounds and fresh lemon."}
+              ? "Foto: Speisely Community. Der unangefochtene Liebling der Gäste: Ganze Dorade Royale im Schmetterlingsschnitt, serviert mit krossen, handgeschnittenen Kartoffelrondellen und frischer Zitrone."
+              : "Photo: Speisely Community. The guest favorite: Whole Dorade Royale butterfly-split across beechwood coals, served with crisp, hand-sliced potato rounds and fresh lemon."}
           </figcaption>
         </figure>
 
@@ -510,8 +510,8 @@ function LaGrilladineArticlePage() {
           </h3>
           <p className="text-sm sm:text-base text-[#F6F4EB]/85 leading-relaxed font-sans">
             {isDe
-              ? "Wenn die frisch gegrillte Dorade am Tisch ankommt, steigt eine feine Rauchsäule aus gebranntem Meersalz und geröstetem Kreuzkümmel empor. Die Haut ist durch die Buchenholzkohle hauchdünn blisteriert und knusprig, während das Fleisch darunter schneeweiß, glasig und unvergleichlich saftig bleibt. Begleitet von den hauchfein geschnittenen, kross frittierten Kartoffelrondellen entsteht eine Textur-Harmonie, die man in hochpreisigen Fischrestaurants oft vergeblich sucht."
-              : "When the freshly grilled sea bream arrives, an aromatic vapor of toasted cumin, sea salt, and citrus lifts into the room. The skin is blistered and crisp from beechwood charcoal, while the pearlescent flesh remains exquisitely tender and moist. Paired with razor-thin, golden potato rounds, it creates a textural contrast rare even in high-end seafood dining."}
+              ? "Wenn die frisch gegrillte Dorade am Tisch ankommt, steigt eine feine Duftwolke aus geröstetem Kreuzkümmel, Meersalz und frischer Zitrone empor. Die Haut ist durch die Buchenholzkohle hauchdünn blisteriert und knusprig, während das Fleisch darunter schneeweiß, glasig und unvergleichlich saftig bleibt. Begleitet von den hauchfein geschnittenen, kross frittierten Kartoffelrondellen entsteht eine Textur-Harmonie, die man in hochpreisigen Fischrestaurants oft vergeblich sucht."
+              : "When the freshly grilled sea bream arrives, an aromatic vapor of toasted cumin, sea salt, and fresh lemon lifts into the room. The skin is blistered and crisp from beechwood charcoal, while the pearlescent flesh remains exquisitely tender and moist. Paired with razor-thin, golden potato rounds, it creates a textural contrast rare even in high-end seafood dining."}
           </p>
         </section>
 
