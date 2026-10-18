@@ -351,8 +351,8 @@ function LaGrilladineArticlePage() {
 
           <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
             {isDe
-              ? "Ein engagiertes Mitglied unserer Speisely Community hat La Grilladine besucht — selbst bezahlt, ohne Ankündigung und mit dem Blick für das Wesentliche. Hinter der schlichten Fassade verbirgt sich eine der verlässlichsten Grill- und Schmorstuben Nordrhein-Westfalens, in der marokkanische Familien, Taxifahrer und passionierte Food-Enthusiasten gleichermaßen an rustikalen Tischen zusammenkommen."
-              : "An active member of the Speisely community visited La Grilladine — self-paid, unannounced, and with an eye for tactile craftsmanship. Behind its modest storefront lies one of North Rhine-Westphalia's most authentic hearth kitchens, where Moroccan families, local drivers, and discerning gourmets gather at rustic tables."}
+              ? "Ein engagiertes Mitglied unserer Speisely Community hat La Grilladine besucht — selbst bezahlt, ohne Ankündigung und mit dem Blick für das Wesentliche. Hinter der schlichten Fassade verbirgt sich eine der verlässlichsten Grill- und Schmorstuben Nordrhein-Westfalens: Ein lebendiger Treffpunkt, an dem Nachbarn aus dem Viertel, Familien von nah und fern sowie Food-Liebhaber aus ganz NRW an rustikalen Tischen zusammenkommen, um ehrliche Gastfreundschaft zu teilen."
+              : "An active member of the Speisely community visited La Grilladine — self-paid, unannounced, and with an eye for tactile craftsmanship. Behind its modest storefront lies one of North Rhine-Westphalia's most authentic hearth kitchens: a welcoming, lively gathering place where neighborhood regulars, families from across the region, and food enthusiasts from all walks of life share rustic tables and genuine hospitality."}
           </p>
         </section>
 
