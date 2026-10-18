@@ -375,3 +375,47 @@ To protect all customer, partner, order, and payment data in Supabase (`athwccvg
 
 6. **Automated Build Gate Enforcement (`verify:graph` Rule 14):**
    - `scripts/verify_agent_graph.js` (Rule 14) automatically audits migrations and client routes on every build and halts compilation if any RLS, `SECURITY DEFINER`, `service_role`, or client-bundle secret rule is violated.
+
+---
+
+## 16. Mandatory Instagram Reel & Video 9:16 UI Safe Zone Standard
+
+Whenever generating, animating, or rendering vertical 9:16 video reels (`1080 x 1920 px`) for Instagram, TikTok, or YouTube Shorts:
+Never place typography, logos, badges, dossier cards, or CTAs haphazardly. You MUST strictly adhere to the **Instagram Native App Interface Safe Zones**:
+
+1. **Top Exclusion Zone (Y: 0 px to 260 px — STRICTLY BLANK OF TEXT/LOGOS):**
+   - **Why:** The Instagram app overlays device status bars (notch/island, clock, battery), navigation buttons (`< Posts`), the profile picture circle, account username (`speisely`), follow button, and active music/audio title marquee inside `Y = 0` to `Y = 240 px`.
+   - **Rule:** ALL badges, headlines, and slide counters MUST sit at or below `Y = 280 px`. Zero headlines or logo badges are allowed in the top 260 px.
+
+2. **Bottom Exclusion Zone (Y: 1520 px to 1920 px — STRICTLY BLANK OF TEXT/CARDS):**
+   - **Why:** The Instagram app overlays the post caption (first 2-3 lines before "...more"), account tag, audio sticker, right-hand mute speaker button (`X: ~960, Y: ~1700`), engagement action bar (Like, Comment, Share, Bookmark), and mobile gesture home bar.
+   - **Rule:** ALL action buttons, Dossier fact sheets, and call-to-action pills MUST sit at or above `Y = 1460 px`. Zero typography or interactive cards may enter the bottom 400 px.
+
+3. **Right Sidebar Margin Protection (X > 940 px):**
+   - In full-screen Reels viewer, the vertical action stack (Heart, Comment bubble, Share paper plane, Remix icon, Sound disc) occupies the rightmost 140 px. Keep all critical headlines and text centered or within `X = 80 px` to `X = 940 px`.
+
+4. **Standard 1080 × 1920 Coordinate Grid:**
+   - **Top Category / Spotlight Badge:** `Y = 280 px` (Centered pill).
+   - **Main Headline (Georgia Bold):** `Y = 350 px` to `Y = 370 px`.
+   - **Sub-headline / Descriptor:** `Y = 430 px` to `Y = 450 px`.
+   - **Central Gastro-Dossier Fact Card (Scene 6):** Centered vertically from `Y = 560 px` to `Y = 1040 px` (`width: 880 px, height: 480 px`).
+   - **Bottom Dish Highlight Pill:** `Y = 1340 px`.
+   - **Bottom Primary Call-to-Action Pill:** `Y = 1410 px` (Speisely Gold pill, e.g. `Lies den vollständigen Report auf speisely.de >>`).
+
+---
+
+## 17. Mandatory Mobile-First Responsive UX/UI Standard (375px Viewport Audit)
+
+Whenever designing, auditing, or refactoring public routes, magazine articles, or storefront components:
+Never assume desktop-first layout proportions. Every implementation MUST be verified on a compact mobile screen (`375 x 812 px`, iPhone standard):
+
+1. **Top Sticky Navigation Protection:**
+   - Back links (`← Speisely Magazin`), category tags, and the `<LanguageToggle />` component must never collide, overlap, or wrap onto each other.
+   - Long category badges must be hidden on mobile screens (`hidden sm:inline-block`) to preserve space for language switching and navigation.
+
+2. **Zero Multi-Line Badge Overflow:**
+   - Category and spotlight pills in hero headers or photo overlays must use responsive typography (`text-[10px] sm:text-xs`) and hide secondary descriptors on mobile (e.g. `hidden sm:inline`) to prevent multi-line wrapping and padding distortion.
+
+3. **Harmonious Container Padding & Drop-Caps:**
+   - Use progressive padding (`p-5 sm:p-8 md:p-10`) so cards and fact sheets do not squeeze canvas space on 375px screens.
+   - Editorial drop-caps must use proportional mobile sizing (`text-5xl sm:text-7xl leading-[0.85] mr-3 sm:mr-4`) to eliminate collision with wrapped body text.
