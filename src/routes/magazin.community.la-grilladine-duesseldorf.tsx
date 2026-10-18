@@ -1,50 +1,61 @@
+import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   MapPin,
+  Calendar,
+  Shield,
+  Utensils,
+  Info,
+  Award,
+  Sparkles,
+  Flame,
+  Fish,
+  Coffee,
+  Coins,
   Clock,
   Phone,
   Globe,
-  Sparkles,
-  Users,
-  CheckCircle2,
-  Heart,
-  Camera,
-  Info,
-  Flame,
-  Coffee,
-  Coins,
-  AlertCircle,
-  Fish,
-  Utensils,
-  ChevronRight,
 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { useI18n } from "@/i18n/I18nProvider";
-import { SiteShell } from "@/components/SiteShell";
-import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 import { RestaurantClaimBridge } from "@/components/RestaurantClaimBridge";
 
 export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldorf")({
   head: () => ({
     meta: [
-      { title: "La Grilladine Düsseldorf — Speisely Magazin" },
+      {
+        title: "La Grilladine Düsseldorf: Glut, Ton & Minze",
+      },
       {
         name: "description",
         content:
-          "Ein Community-Besuch bei La Grilladine in Düsseldorf-Oberbilk: Ganze Dorade über Buchenglut, Salzzitronen-Tajine und die Kunst des Atay-Tees.",
+          "Speisely Community Visit bei La Grilladine in Düsseldorf-Oberbilk: Ganze Dorade über Buchenglut, Salzzitronen-Tajine und das Zeremoniell des Atay-Tees.",
       },
       {
         name: "keywords",
         content:
           "La Grilladine Düsseldorf, Marokkanisches Restaurant Düsseldorf, Holzkohlegrill Düsseldorf, Tajine Salzzitronen Oliven, Oberbilk Maghreb Viertel, Dorade Royale Grill, Atay Minztee, Halal Restaurant Düsseldorf, Speisely Community Visit",
       },
-      { name: "geo.region", content: "DE-NW" },
-      { name: "geo.placename", content: "Düsseldorf-Oberbilk" },
-      { name: "geo.position", content: "51.2155;6.7972" },
-      { name: "ICBM", content: "51.2155, 6.7972" },
+      {
+        name: "geo.region",
+        content: "DE-NW",
+      },
+      {
+        name: "geo.placename",
+        content: "Düsseldorf-Oberbilk",
+      },
+      {
+        name: "geo.position",
+        content: "51.2155;6.7972",
+      },
+      {
+        name: "ICBM",
+        content: "51.2155, 6.7972",
+      },
       {
         property: "og:title",
-        content: "Glut, Ton & Minze: Community-Besuch bei La Grilladine Düsseldorf | Speisely",
+        content: "La Grilladine Düsseldorf: Glut, Ton & Maghreb-Feuer | Speisely Magazin",
       },
       {
         property: "og:description",
@@ -54,7 +65,7 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
       {
         property: "og:image",
         content:
-          "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1",
+          "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=2",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -63,7 +74,10 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
         content: "https://speisely.de/magazin/community/la-grilladine-duesseldorf",
       },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "robots", content: "index, follow, max-image-preview:large" },
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large",
+      },
     ],
     links: [
       {
@@ -78,37 +92,22 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "Article",
-              "@id": "https://speisely.de/magazin/community/la-grilladine-duesseldorf#article",
-              mainEntityOfPage: {
-                "@type": "WebPage",
-                "@id": "https://speisely.de/magazin/community/la-grilladine-duesseldorf",
-              },
-              headline:
-                "Glut, Ton & Minze: Ein sensorischer Community-Besuch bei La Grilladine in Düsseldorf-Oberbilk",
-              description:
-                "Ein Mitglied der Speisely Community berichtet aus der Dreieckstraße 26: Ganze Dorade Royale über offener Buchenglut, Salzzitronen-Tajine und die Zeremonie des Atay-Tees.",
-              image: {
+              "@type": "Organization",
+              "@id": "https://speisely.de/#organization",
+              name: "Speisely",
+              url: "https://speisely.de",
+              logo: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1",
-                width: 1200,
-                height: 900,
+                url: "https://speisely.de/speisely_logo.png",
               },
-              datePublished: "2026-10-18",
-              dateModified: "2026-10-18",
-              author: {
-                "@type": "Organization",
-                name: "Speisely Community",
-                url: "https://speisely.de/community",
-              },
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://speisely.de/#website",
+              url: "https://speisely.de",
+              name: "Speisely",
               publisher: {
-                "@type": "Organization",
-                name: "Speisely",
-                url: "https://speisely.de",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://speisely.de/speisely_logo.png",
-                },
+                "@id": "https://speisely.de/#organization",
               },
               inLanguage: "de-DE",
               contentLocation: {
@@ -117,7 +116,7 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
                 url: "https://la-grilladine.de",
                 telephone: "+49 211 94216796",
                 priceRange: "€€",
-                servesCuisine: "Moroccan",
+                servesCuisine: "Marokkanisch, Holzkohlegrill, Maghreb",
                 address: {
                   "@type": "PostalAddress",
                   streetAddress: "Dreieckstraße 26",
@@ -148,23 +147,65 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
               },
             },
             {
+              "@type": "Article",
+              "@id": "https://speisely.de/magazin/community/la-grilladine-duesseldorf#article",
+              isPartOf: {
+                "@id": "https://speisely.de/#website",
+              },
+              headline:
+                "La Grilladine Düsseldorf: Die Magie von Glut, Ton & marokkanischer Gastfreundschaft",
+              description:
+                "Ein Mitglied der Speisely Community berichtet aus der Dreieckstraße 26 in Düsseldorf: Ganze Dorade über Buchenglut, Salzzitronen-Tajine und die Kunst des Atay-Tees.",
+              image:
+                "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=2",
+              datePublished: "2026-10-18T12:00:00+02:00",
+              dateModified: "2026-10-18T18:00:00+02:00",
+              inLanguage: "de-DE",
+              author: {
+                "@type": "Organization",
+                name: "Speisely Community",
+                url: "https://speisely.de/community",
+              },
+              publisher: {
+                "@id": "https://speisely.de/#organization",
+              },
+              about: {
+                "@type": "FoodEstablishment",
+                name: "La Grilladine",
+                servesCuisine: "Marokkanische Küche & Holzkohlespezialitäten",
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "Dreieckstraße 26",
+                  addressLocality: "Düsseldorf",
+                  postalCode: "40227",
+                  addressCountry: "DE",
+                },
+              },
+            },
+            {
               "@type": "BreadcrumbList",
               itemListElement: [
                 {
                   "@type": "ListItem",
                   position: 1,
-                  name: "Startseite",
+                  name: "Home",
                   item: "https://speisely.de",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
+                  name: "Magazin",
+                  item: "https://speisely.de/magazin",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
                   name: "Community",
                   item: "https://speisely.de/community",
                 },
                 {
                   "@type": "ListItem",
-                  position: 3,
+                  position: 4,
                   name: "La Grilladine Düsseldorf",
                   item: "https://speisely.de/magazin/community/la-grilladine-duesseldorf",
                 },
@@ -175,592 +216,528 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
       },
     ],
   }),
-  component: LaGrilladineCommunityVisitArticle,
+  component: LaGrilladineArticlePage,
 });
 
-/**
- * 3D Interactive Perspective Tilt Card
- * High-end micro-interaction with hardware acceleration
- */
-function ThreeDCard({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState<string>(
-    "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
-  );
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
-
-    setTransform(
-      `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`,
-    );
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTransform("perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)");
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transform,
-        transition: isHovered
-          ? "transform 0.08s ease-out"
-          : "transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
-        transformStyle: "preserve-3d",
-      }}
-      className={`group relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 shadow-xl hover:border-[#E6B84A] hover:shadow-[0_24px_50px_rgba(230,184,74,0.18)] ${className}`}
-    >
-      {children}
-    </div>
-  );
-}
-
-function LaGrilladineCommunityVisitArticle() {
+function LaGrilladineArticlePage() {
   const { lang } = useI18n();
   const isDe = lang === "de";
+  const heroRef = useRef<HTMLDivElement>(null);
 
-  const emailSubject = isDe
-    ? "Mein Besuch bei La Grilladine Düsseldorf – Feedback für Speisely Community"
-    : "My visit to La Grilladine Düsseldorf – Feedback for Speisely Community";
-
-  const emailBody = isDe
-    ? `Hallo Speisely-Team,\n\nich habe La Grilladine in Düsseldorf besucht und möchte meine Erfahrung teilen.\n\nMein Lieblingsgericht:\nAtmosphäre & Service:\nFotos anbei:`
-    : `Hello Speisely Team,\n\nI visited La Grilladine in Düsseldorf and want to share my experience.\n\nFavorite dish:\nAtmosphere & Service:\nPhotos attached:`;
-
-  const mailtoHref = `mailto:info@speisely.de?subject=${encodeURIComponent(
-    emailSubject,
-  )}&body=${encodeURIComponent(emailBody)}`;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <SiteShell>
-      <div className="bg-[#FAF7F0] text-forest min-h-screen selection:bg-[#E6B84A]/30">
-        {/* Sticky Breadcrumb Bar */}
-        <div className="border-b border-forest/10 bg-white/70 backdrop-blur-md sticky top-16 z-30">
-          <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6 flex items-center justify-between">
-            <nav aria-label="Breadcrumb" className="text-xs font-medium text-forest/70 truncate">
-              <ol className="flex items-center gap-1.5 flex-wrap">
-                <li>
-                  <Link to="/" className="hover:text-forest transition">
-                    {isDe ? "Startseite" : "Home"}
-                  </Link>
-                </li>
-                <li aria-hidden="true" className="text-forest/30">
-                  ›
-                </li>
-                <li>
-                  <Link to="/community" className="hover:text-forest transition">
-                    Community
-                  </Link>
-                </li>
-                <li aria-hidden="true" className="text-forest/30">
-                  ›
-                </li>
-                <li aria-current="page" className="text-forest font-bold truncate">
-                  La Grilladine Düsseldorf
-                </li>
-              </ol>
-            </nav>
+    <article className="min-h-screen bg-[#F6F4EB] text-[#173C32]">
+      {/* Editorial Navigation Top Bar */}
+      <header className="sticky top-0 z-40 bg-[#083822] text-[#F6F4EB] border-b border-[#E6B84A]/30 backdrop-blur-md px-4 py-2.5 shadow-md">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <Link
-              to="/community"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-[#7FA46B] transition"
+              to="/magazin"
+              className="text-xs uppercase tracking-widest text-[#E6B84A] hover:underline flex items-center gap-1 font-bold whitespace-nowrap"
             >
-              <Users className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>{isDe ? "Alle Community Stories" : "All Community Stories"}</span>
+              ← Speisely Magazin
             </Link>
+            <span className="text-[#F6F4EB]/30 hidden xs:inline">|</span>
+            <span className="text-xs tracking-wider uppercase text-[#F6F4EB]/80 hidden md:inline font-mono truncate">
+              Düsseldorf · Oberbilk
+            </span>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+            <span className="text-[11px] sm:text-xs font-mono bg-[#E6B84A]/20 text-[#E6B84A] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full font-bold border border-[#E6B84A]/40 whitespace-nowrap">
+              Holzkohle & Tajine
+            </span>
+            <LanguageToggle />
           </div>
         </div>
+      </header>
 
-        {/* Editorial Article Header */}
-        <header className="mx-auto max-w-4xl px-4 pt-10 pb-6 sm:px-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#EBF4EC] text-forest px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider mb-4 shadow-xs border border-[#7FA46B]/25">
-            <Users className="h-3.5 w-3.5 text-[#7FA46B]" aria-hidden="true" />
-            <span>{isDe ? "Community Story · Selbst bezahlt" : "Community Story · Self-paid"}</span>
+      {/* Hero Header Section */}
+      <section
+        ref={heroRef}
+        className="relative bg-gradient-to-b from-[#083822] via-[#0D442B] to-[#F6F4EB] text-white pt-16 pb-20 px-4 overflow-hidden"
+      >
+        <div className="max-w-4xl mx-auto text-center space-y-6 relative z-10">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#E6B84A]/20 border border-[#E6B84A]/40 px-4 py-1.5 text-xs font-mono font-bold tracking-widest text-[#E6B84A] uppercase shadow-sm">
+            <Flame className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
+            {isDe
+              ? "SPEISELY COMMUNITY VISIT · DÜSSELDORF OBERBILK · MAROKKANISCHE KÜCHE"
+              : "SPEISELY COMMUNITY VISIT · DÜSSELDORF OBERBILK · MOROCCAN CUISINE"}
           </div>
 
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-[46px] font-bold text-forest leading-[1.16] tracking-tight">
-            {isDe
-              ? "Glut, Ton & Minze: Ein Abend bei La Grilladine in Düsseldorf-Oberbilk"
-              : "Embers, Clay & Mint: An Evening at La Grilladine in Düsseldorf-Oberbilk"}
+          <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] text-[#F6F4EB]">
+            {isDe ? (
+              <>
+                La Grilladine Düsseldorf: <br className="hidden sm:inline" />
+                <span className="text-[#E6B84A] italic font-normal">
+                  Die Kunst von Glut, Ton & Minze
+                </span>
+              </>
+            ) : (
+              <>
+                La Grilladine Düsseldorf: <br className="hidden sm:inline" />
+                <span className="text-[#E6B84A] italic font-normal">
+                  The Art of Embers, Clay & Mint
+                </span>
+              </>
+            )}
           </h1>
 
-          <p className="mt-4 text-base sm:text-lg text-forest/85 leading-relaxed font-normal">
+          <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#F6F4EB]/85 leading-relaxed font-sans">
             {isDe
-              ? "Wer gutes Essen wirklich verstehen will, muss den Sinnen folgen: Dem Knistern glühender Buchenholzkohle, dem ersten Duft von geröstetem Kreuzkümmel und der samtigen Tiefe einer stundenlang geschmorten Tajine. Unser Community-Mitglied hat das kleine marokkanische Traditionslokal in der Dreieckstraße 26 besucht – ein Bericht über die feine Poesie unberührten Handwerks."
-              : "To truly understand honest culinary craft, one must follow the senses: the gentle crackle of beechwood embers, the perfume of roasted cumin, and the velvety reduction of a tagine braised in clay for hours. A Speisely community member visited the intimate Moroccan dining room on Dreieckstraße 26 — an evocative chronicle of raw devotion to fire, earth, and hospitality."}
+              ? "Glühende Buchenholzkohle auf offener Flamme, zischende Dorade Royale mit krossen Kartoffel-Rondellen und stundenlang im Tontopf geschmorte Salzzitronen: Wie ein unverfälschtes Traditionslokal im Düsseldorfer Maghreb-Viertel pure Handwerkskunst zelebriert."
+              : "Glowing beechwood embers over open hearth, sizzling whole Dorade Royale with crisp potato crisps, and tagines braised in clay for hours with preserved lemons: How an authentic sanctuary in Düsseldorf's Maghreb district celebrates pure culinary devotion."}
           </p>
 
-          {/* Verification & Sensoric Meta Strip */}
-          <div className="mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs text-forest/70 border-y border-forest/10 py-3">
-            <span className="inline-flex items-center gap-1.5 font-semibold text-forest">
-              <Camera className="h-3.5 w-3.5 text-[#E6B84A]" />
-              {isDe ? "Fotografiert & dokumentiert vor Ort" : "Photographed & documented on-site"}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-[#F6F4EB]/70 pt-2">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#E6B84A]" />
+              Dreieckstraße 26, 40227 Düsseldorf
             </span>
-            <span className="text-forest/30">•</span>
-            <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              100% Halal
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" />
+              {isDe ? "Oktober 2026" : "October 2026"}
             </span>
-            <span className="text-forest/30">•</span>
-            <span className="inline-flex items-center gap-1 font-semibold text-amber-700">
-              <Flame className="h-3.5 w-3.5" />
-              {isDe ? "Echte Buchenholzkohle" : "Natural Beechwood Charcoal"}
+            <span>•</span>
+            <span className="flex items-center gap-1.5">
+              <Shield className="w-3.5 h-3.5 text-[#7FA46B]" />
+              {isDe ? "Unabhängig verkostet & bezahlt" : "Independently tasted & paid"}
             </span>
-            <span className="text-forest/30">•</span>
-            <span className="text-forest/60">{isDe ? "Oktober 2026" : "October 2026"}</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Editorial Content */}
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-16">
+        {/* Editorial Introduction with Master Drop-Cap (Lindt Style) */}
+        <section className="space-y-6">
+          <div className="relative">
+            <p className="text-lg sm:text-xl leading-relaxed text-[#173C32]/90 font-serif">
+              <span className="float-left text-6xl sm:text-7xl leading-[0.8] font-bold font-serif text-[#E6B84A] pr-4 pt-1">
+                {isDe ? "W" : "T"}
+              </span>
+              {isDe ? (
+                <>
+                  er die Dreieckstraße in Düsseldorf-Oberbilk an einem kühlen Herbstabend betritt,
+                  wird noch vor der Eingangstür von einem vertrauten, tiefen Duft empfangen:
+                  Trockenes Buchenholz, geschmolzenes Meersalz und die harzige Note glimmender
+                  Holzkohle. Hier, im Herzen des lebendigen Düsseldorfer Maghreb-Viertels, liegt{" "}
+                  <strong>La Grilladine</strong> — kein poliertes Konzeptrestaurant, sondern ein
+                  refugiumhafter Ort, an dem ein einfaches, aber unerbittliches Gesetz gilt:{" "}
+                  <em>
+                    „Der Geschmack entsteht nicht durch Chichi. Er entsteht durch Hitze, reines Holz
+                    und das geduldige Schmoren in gebranntem Ton.“
+                  </em>
+                </>
+              ) : (
+                <>
+                  alking down Dreieckstraße in Düsseldorf-Oberbilk on a brisk autumn evening, one is
+                  greeted before even reaching the threshold by a deep, evocative scent: dry
+                  beechwood embers, sea salt, and the aromatic crackle of live charcoal. Here, in
+                  the heart of Düsseldorf's vibrant Maghreb quarter, lies{" "}
+                  <strong>La Grilladine</strong> — not an over-curated dining concept, but a
+                  grounded sanctuary guided by one unbending principle:{" "}
+                  <em>
+                    "True flavor is never born from superficial fanfare. It is forged through heat,
+                    pure wood embers, and the patient alchemy of terracotta clay."
+                  </em>
+                </>
+              )}
+            </p>
           </div>
 
-          {/* Scraped Operational Quick-Dossier */}
-          <div className="mt-6 p-5 sm:p-6 rounded-3xl border border-forest/10 bg-white shadow-xs grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs sm:text-sm">
-            <div className="flex items-start gap-3">
-              <MapPin className="h-4 w-4 text-[#E6B84A] shrink-0 mt-0.5" aria-hidden="true" />
-              <div className="space-y-1">
-                <span className="block text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                  {isDe ? "Ort & Anfahrt" : "Location"}
-                </span>
-                <strong className="font-semibold text-forest block">La Grilladine</strong>
-                <p className="text-forest/75 text-xs leading-snug">
-                  Dreieckstraße 26, 40227 Düsseldorf
-                </p>
-                <p className="text-forest/60 text-[11px]">
-                  {isDe
-                    ? "Oberbilk (Maghreb-Viertel, nahe Hbf)"
-                    : "Oberbilk (Maghreb Quarter, near Central Station)"}
-                </p>
-                <div className="pt-1 flex items-center gap-3">
-                  <a
-                    href="tel:+4921194216796"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-forest hover:text-[#7FA46B] transition"
-                  >
-                    <Phone className="h-3 w-3 text-[#7FA46B]" />
-                    <span>0211 94216796</span>
-                  </a>
-                  <a
-                    href="https://la-grilladine.de"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-forest hover:text-[#7FA46B] transition"
-                  >
-                    <Globe className="h-3 w-3 text-[#E6B84A]" />
-                    <span>Website</span>
-                  </a>
-                </div>
-              </div>
-            </div>
+          <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
+            {isDe
+              ? "Ein engagiertes Mitglied unserer Speisely Community hat La Grilladine besucht — selbst bezahlt, ohne Ankündigung und mit dem Blick für das Wesentliche. Hinter der schlichten Fassade verbirgt sich eine der verlässlichsten Grill- und Schmorstuben Nordrhein-Westfalens, in der marokkanische Familien, Taxifahrer und passionierte Food-Enthusiasten gleichermaßen an rustikalen Tischen zusammenkommen."
+              : "An active member of the Speisely community visited La Grilladine — self-paid, unannounced, and with an eye for tactile craftsmanship. Behind its modest storefront lies one of North Rhine-Westphalia's most authentic hearth kitchens, where Moroccan families, local drivers, and discerning gourmets gather at rustic tables."}
+          </p>
+        </section>
 
-            <div className="flex items-start gap-3">
-              <Clock className="h-4 w-4 text-[#7FA46B] shrink-0 mt-0.5" aria-hidden="true" />
-              <div className="space-y-1">
-                <span className="block text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                  {isDe ? "Öffnungszeiten" : "Hours"}
-                </span>
-                <div className="text-xs text-forest/80 space-y-0.5">
-                  <div className="flex justify-between gap-2">
-                    <span className="font-medium">{isDe ? "Di – Sa:" : "Tue – Sat:"}</span>
-                    <strong className="font-semibold text-forest">12:00 – 22:00</strong>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <span className="font-medium">{isDe ? "Sonntag:" : "Sunday:"}</span>
-                    <strong className="font-semibold text-forest">13:00 – 21:00</strong>
-                  </div>
-                  <div className="flex justify-between gap-2 text-forest/50">
-                    <span>{isDe ? "Montag:" : "Monday:"}</span>
-                    <span>{isDe ? "Ruhetag" : "Closed"}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <Coins className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
-              <div className="space-y-1">
-                <span className="block text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                  {isDe ? "Gästehinweise" : "House Notes"}
-                </span>
-                <div className="space-y-1.5 text-xs text-forest/80">
-                  <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-50 border border-amber-200 px-2 py-0.5 text-[11px] font-bold text-amber-900">
-                    <AlertCircle className="h-3 w-3 text-amber-700 shrink-0" />
-                    <span>{isDe ? "Nur Barzahlung (Cash Only)" : "Cash Only"}</span>
-                  </div>
-                  <p className="text-[11px] text-forest/70 leading-snug">
-                    {isDe
-                      ? "First Come, First Served — keine Reservierungen."
-                      : "Strictly walk-ins only — no telephone reservations."}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Narrative Body: 4 Curated Chapters with Focused 3D Imagery */}
-        <main className="mx-auto max-w-4xl px-4 py-4 sm:px-6 space-y-16 pb-20">
-          {/* CHAPTER 1: THE SANCTUARY OF CHARCOAL & CLAY */}
-          <section className="space-y-6">
-            <ThreeDCard>
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
-                <img
-                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=1"
-                  alt={
-                    isDe
-                      ? "Die Theke von La Grilladine mit traditioneller Berber-Keramik, Terracotta-Töpfen und offener Holzkohleglut im Hintergrund"
-                      : "The counter of La Grilladine with traditional Moroccan pottery, earthenware vessels, and open woodfire embers"
-                  }
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  loading="eager"
-                />
-                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
-                    <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" />
-                    <span>{isDe ? "Kapitel 01 · Der Ort" : "Chapter 01 · The Sanctuary"}</span>
-                  </span>
-                </div>
-                <div
-                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
-                  style={{ transform: "translateZ(20px)" }}
-                >
-                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
-                    {isDe
-                      ? "Handgeformte Tonkrüge, der arabische Schriftzug مشاوي (Mashawee) und im Hintergrund das leise Lodern der Buchenglut."
-                      : "Hand-thrown earthenware, the Arabic script مشاوي (Grills), and the quiet glow of beechwood embers behind the wood counter."}
-                  </p>
-                </div>
-              </div>
-            </ThreeDCard>
-
-            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
-                {isDe
-                  ? "Der Eintritt in eine andere Zeit: Dreieckstraße 26"
-                  : "Entering Another Rhythm: Dreieckstraße 26"}
-              </h2>
-              <p>
-                {isDe
-                  ? "Wer die geschäftige Kölner Straße in Düsseldorf-Oberbilk verlässt und in die Dreieckstraße einbiegt, spürt sofort, wie der Takt der Stadt langsamer wird. Noch bevor man die schwere Holztür von La Grilladine berührt, kündigt sich das Lokal in der kühlen Abendluft an: Mit dem trockenen, harzigen Aroma verbrennender Buchenholzkohle und der fernen, warmen Note von angeröstetem Kreuzkümmel."
-                  : "Turning off the bustling Kölner Straße in Düsseldorf-Oberbilk into the quieter Dreieckstraße instantly shifts the tempo of the evening. Before your hand even touches the wooden door of La Grilladine, the restaurant announces itself in the cool evening air: with the dry, resinous perfume of beechwood charcoal and the distant, warm note of lightly toasted cumin."}
-              </p>
-              <p>
-                {isDe
-                  ? "Der Raum selbst verzichtet auf jede künstliche Inszenierung. Auf dem massiven Holztresen stehen handbemalte Tajine-Gefäße aus Fès und Terracotta-Krüge. Dahinter: Die offene Glut, betreut von einem Grillmeister, der die Hitze nicht mit Displays oder Reglern misst, sondern mit der Handfläche und dem geübten Blick für das Farbspektrum der Asche. Hier gilt kein formaler Reservierungsplan; man tritt ein, wird mit einem kurzen, herzlichen Lächeln begrüßt und nimmt Platz."
-                  : "The room itself rejects all decorative vanity. Across the solid wooden counter sit hand-painted Fassi tagine vessels and porous terracotta jugs. Behind it: open coals tended by a grillmaster who measures temperature not with digital probes, but with his palm and an instinctive eye for the changing palette of white ash. There are no reservation buzzers here; you step inside, receive an understated nod, and take your seat."}
-              </p>
-            </div>
-          </section>
-
-          {/* CHAPTER 2: THE ANATOMY OF WOODFIRE (DORADE ROYALE) */}
-          <section className="space-y-6 pt-6 border-t border-forest/10">
-            <ThreeDCard>
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
-                <img
-                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1"
-                  alt={
-                    isDe
-                      ? "Ganze Dorade Royale im Schmetterlingsschnitt über Buchenholzkohle gegrillt mit goldenen Kartoffel-Rondellen und Salat"
-                      : "Whole butterflied Sea Bream grilled over beechwood coals with golden potato rondelles and salad"
-                  }
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
-                    <Fish className="h-3.5 w-3.5 text-[#E6B84A]" />
-                    <span>{isDe ? "Kapitel 02 · Das Feuer" : "Chapter 02 · The Fire"}</span>
-                  </span>
-                </div>
-                <div
-                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
-                  style={{ transform: "translateZ(20px)" }}
-                >
-                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
-                    {isDe
-                      ? "Dorade Royale 'Papillon': Knusprig karamellisierte Haut, berauschende Chermoula-Glasur und saftiges weißes Filet."
-                      : "Dorade Royale 'Papillon': Crisp blistered skin, fragrant chermoula glaze, and moist white fillets."}
-                  </p>
-                </div>
-              </div>
-            </ThreeDCard>
-
-            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
-                {isDe
-                  ? "Die Textur des Feuers: Dorade Royale im Schmetterlingsschnitt"
-                  : "The Texture of Fire: Butterflied Dorade Royale"}
-              </h2>
-              <p>
-                {isDe
-                  ? "Guter Fisch über Holzkohle ist eine Frage von Sekunden und Berührung. Bei La Grilladine wird die Dorade Royale der Länge nach im Schmetterlingsschnitt aufgefaltet. Durch die vergrößerte Oberfläche trifft die intensive Strahlungshitze der Buchenglut direkt auf das Fleisch, während die Haut in Sekunden kross aufknuspert, ohne dass das feine Meerwasser-Aroma verloren geht."
-                  : "Grilling fish over woodfire is an art of seconds and tactile precision. At La Grilladine, the sea bream is butterflied flat across the grate. By expanding the surface area, intense radiant heat crisps the silver skin in moments while sealing moisture inside the delicate white flesh."}
-              </p>
-              <p>
-                {isDe
-                  ? "Die Veredelung geschieht durch eine hauseigene Chermoula: Frischer Koriander, glatte Petersilie, zerstoßener Knoblauch, Kreuzkümmel, edelsüßes Paprikapulver und frisch gepresste Zitrone. Die Säure bricht die Fettstruktur des Fisches, während die Gewürze an den Rändern leicht anrösten. Dazu reicht die Küche keine gewöhnlichen Pommes Frites, sondern hauchdünn geschnittene, frische Kartoffel-Rondellen – kreisrunde Knusperscheiben, die im Mund knacken wie hausgemachte Chips und innen weich nach Kartoffel schmecken."
-                  : "The dish is basted with house chermoula: fresh cilantro, flat-leaf parsley, crushed garlic, cumin, sweet paprika, and cold-pressed lemon juice. The citrus acidity balances the richness of the fish, while the herbs caramelize delicately along the blistered edges. Alongside it, the kitchen serves thin potato rondelles — circular discs that snap with the crispness of artisanal chips before revealing a fluffy, steaming core."}
-              </p>
-            </div>
-          </section>
-
-          {/* CHAPTER 3: THE ALCHEMY OF CLAY & TIME (TAJINE AUX CITRONS) */}
-          <section className="space-y-6 pt-6 border-t border-forest/10">
-            <ThreeDCard>
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
-                <img
-                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_tajine_poulet_3d.webp?v=1"
-                  alt={
-                    isDe
-                      ? "Traditionelle Tajine de Poulet mit eingelegten Salzzitronen, gerösteten Mandeln und grünen Oliven im Tontopf"
-                      : "Traditional Chicken Tagine with preserved lemons, toasted almonds, and green olives in earthenware"
-                  }
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
-                    <Utensils className="h-3.5 w-3.5 text-[#E6B84A]" />
-                    <span>{isDe ? "Kapitel 03 · Der Ton" : "Chapter 03 · The Earth"}</span>
-                  </span>
-                </div>
-                <div
-                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
-                  style={{ transform: "translateZ(20px)" }}
-                >
-                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
-                    {isDe
-                      ? "Tajine de Poulet aux Citrons: Sanftes Blubbern im schweren Tontopf, confierte Salzzitronen und der Kontrast gerösteter Mandeln."
-                      : "Tajine de Poulet aux Citrons: Gentle bubbling within dense clay, preserved lemon peel, and the crunch of toasted almonds."}
-                  </p>
-                </div>
-              </div>
-            </ThreeDCard>
-
-            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
-                {isDe
-                  ? "Die Alchemie der Geduld: Tajine de Poulet aux Citrons Confits"
-                  : "The Alchemy of Patience: Tagine with Preserved Lemons"}
-              </h2>
-              <p>
-                {isDe
-                  ? "Wenn der schwere, konische Tondeckel am Tisch angehoben wird, entweicht eine dichte Wolke aus Ingwer, Safran und karamellisierten Zwiebeln. In der marokkanischen Küche ist die Tajine kein bloßes Gefäß, sondern ein Mikrokosmos: Der Dampf steigt an den kühlen Wänden empor, kondensiert und tropft kontinuierlich auf das Fleisch zurück. Das Ergebnis ist eine samtige, tief konzentrierte Sauce (M'qalli), die das Huhn so mürbe macht, dass es sich ohne Messer mit einem Stück warmem Fladenbrot teilen lässt."
-                  : "When the conical clay lid is lifted tableside, a scented plume of ginger, saffron, and sweet braised onions fills the air. In Moroccan cooking, the tagine is not merely cookware, but an ecosystem: steam rises along the cooling ceramic slopes, condenses, and returns continuously to baste the ingredients. The resulting sauce is velvety and deeply concentrated, rendering the chicken so tender it requires no knife — only a tear of warm crusty bread."}
-              </p>
-              <p>
-                {isDe
-                  ? "Der sensorische Reiz liegt in der Balance dreier Elemente: Die herbe Frische monatelang in Meersalz fermentierter Zitronenschale, die herbe Würze grüner Oliven und der nussige Biss goldbraun gerösteter Mandeln. Es ist dieser ruhige Zusammenklang aus Säure, Salz und milder Süße, der zeigt, wie vollkommen traditionelle Rezepturen sein können, wenn ihnen nichts hinzugefügt und nichts genommen wird."
-                  : "The sensory elegance hinges on three harmonized textures: the bright citrus depth of lemons aged in sea salt for months, the earthy brine of green olives, and the satisfying bite of golden almonds. It is this quiet interplay of acidity, savory depth, and gentle sweetness that demonstrates the timeless power of heritage recipes preserved without shortcuts."}
-              </p>
-            </div>
-          </section>
-
-          {/* CHAPTER 4: THE TEA RITUAL (ATAY BI NA'NA) */}
-          <section className="space-y-6 pt-6 border-t border-forest/10">
-            <ThreeDCard>
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
-                <img
-                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_minztee_3d.webp?v=1"
-                  alt={
-                    isDe
-                      ? "Traditioneller marokkanischer Minztee aus polierter Silberkanne in feines Glas mit Schaumkrone auf gehämmertem Silbertablett"
-                      : "Traditional Moroccan mint tea poured from silver teapot with frothy crown on hammered tray"
-                  }
-                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
-                    <Coffee className="h-3.5 w-3.5 text-[#E6B84A]" />
-                    <span>{isDe ? "Kapitel 04 · Das Ritual" : "Chapter 04 · The Ritual"}</span>
-                  </span>
-                </div>
-                <div
-                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
-                  style={{ transform: "translateZ(20px)" }}
-                >
-                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
-                    {isDe
-                      ? "Atay bi Na'na: Frisch aufgebrüht in der Silberkanne, mit hoher Geste eingegossen für die zarte Schaumkrone (R'gwa)."
-                      : "Atay bi Na'na: Brewed fresh in a silver teapot, poured from an elevated height to create the delicate crown of foam."}
-                  </p>
-                </div>
-              </div>
-            </ThreeDCard>
-
-            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
-                {isDe
-                  ? "Der krönende Abschluss: Das Zeremoniell des Atay"
-                  : "The Final Act: The Living Ritual of Atay"}
-              </h2>
-              <p>
-                {isDe
-                  ? "Ein marokkanisches Mahl endet nicht mit dem Besteck, sondern mit dem Klingen von Glas auf Silber. Der Atay bi Na'na wird in einer schweren, polierten Silberkanne serviert. Grüner Gunpowder-Tee, ein üppiger Strauß frischer Nanaminze und dezente Süße ziehen darin zu einem bernsteinfarbenen Elixier heran."
-                  : "A Moroccan meal does not conclude with cutlery; it ends with the gentle clink of patterned glass on hammered silver. Atay bi Na'na is served in a polished teapot. Chinese gunpowder tea leaves, a generous bouquet of fresh spearmint, and measured sweetness steep into an amber elixir."}
-              </p>
-              <p>
-                {isDe
-                  ? "Das Einschenken aus halber Armlänge Höhe ist keine Show, sondern Physik: Durch den Fallstrahl kühlt der heiße Tee leicht ab, belüftet sich mit Sauerstoff und bildet im filigranen Glas jene dichte, cremige Schaumkrone ('R'gwa' oder 'Rezza'), die in Marokko als Siegel wahrer Gastfreundschaft gilt. Der erste Schluck reinigt den Gaumen von den Röstaromen des Holzkohlegrills und hinterlässt eine kühle, anhaltende Klarheit."
-                  : "Pouring from an elevated height is not mere theater; it is purposeful: the falling arc cools the infusion slightly, aerates the tea, and crowns the glass with a silky, delicate foam ring ('R'gwa'), revered as the hallmark of authentic hospitality. The first sip lifts the smoky intensity of the grill from the palate, leaving an enduring, refreshing clarity."}
-              </p>
-            </div>
-          </section>
-
-          {/* COMMUNITY SUMMARY & PRACTICAL TAKEAWAY */}
-          <section className="bg-white rounded-3xl p-6 sm:p-8 border border-forest/15 shadow-sm space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-[#E6B84A]/20 text-forest">
-                <Heart className="h-6 w-6 text-[#E6B84A]" />
-              </div>
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-forest/60 block">
-                  {isDe ? "Persönliches Fazit" : "Community Reflection"}
-                </span>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-forest">
-                  {isDe
-                    ? "Warum dieser Besuch in Erinnerung bleibt"
-                    : "Why This Visit Remains Unforgettable"}
-                </h3>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-forest/80">
-              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
-                <span className="font-bold text-forest flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Echte Buchenholzkohle" : "Pure Beechwood Embers"}
-                </span>
-                <p>
-                  {isDe
-                    ? "Kein Gas, kein Elektro-Heizstab. Fisch und Fleisch tragen jene reine Holzfeuer-Signatur, die man heute nur noch selten findet."
-                    : "Zero electric elements or gas shortcuts. Meats and seafood carry an authentic woodfire imprint rare to find today."}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
-                <span className="font-bold text-forest flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Echtes Schmoren im Ton" : "Slow Claypot Braising"}
-                </span>
-                <p>
-                  {isDe
-                    ? "Die Tajines werden nicht in Edelstahltöpfen vorgekocht und umgefüllt, sondern schmoren langsam in porösem Ton zu tiefem Aroma."
-                    : "Tagines are braised genuinely in unglazed clay, concentrating juices naturally over hours without industrial shortcuts."}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
-                <span className="font-bold text-forest flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Gästefreundliche Preise" : "Transparent, Fair Value"}
-                </span>
-                <p>
-                  {isDe
-                    ? "Großzügige Portionen mit reichlich frischem Salat, Fladenbrot und Kartoffel-Rondellen zu sehr fairen Preisen."
-                    : "Substantial portions accompanied by crisp potato discs, bread, and fresh salad at very fair neighborhood pricing."}
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
-                <span className="font-bold text-forest flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Ehrliche Nachbarschaft" : "Authentic Neighborhood Soul"}
-                </span>
-                <p>
-                  {isDe
-                    ? "Keine Schickimicki-Attitüde. Man kommt als Gast und wird mit der unkomplizierten Herzlichkeit des Maghreb empfangen."
-                    : "No pretentious velvet ropes. You arrive hungry and are greeted with the heartfelt ease of genuine Maghrebi hospitality."}
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* EDITORIAL DISCLOSURE & SOURCES */}
-          <aside className="p-6 rounded-2xl bg-white border border-forest/10 text-xs text-forest/70 space-y-2 shadow-xs">
-            <div className="flex items-center gap-2 font-bold text-forest">
-              <Info className="w-4 h-4 text-[#E6B84A]" />
+        {/* Hero Image 1: The Counter & Open Grill (Passe-Partout Luxury Frame) */}
+        <figure className="relative my-10 max-w-2xl mx-auto">
+          <div className="relative overflow-hidden rounded-3xl border-2 border-[#173C32]/15 bg-white p-3 shadow-2xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-3xl">
+            {/* Frosted Badge */}
+            <div className="absolute top-6 left-6 z-10 flex items-center gap-2 rounded-full bg-[#083822]/85 backdrop-blur-md px-3.5 py-1.5 text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg">
+              <Flame className="w-3.5 h-3.5 text-[#E6B84A]" />
               <span>
                 {isDe
-                  ? "Transparenzhinweis & redaktionelle Recherche"
-                  : "Editorial Transparency & Background"}
+                  ? "DER GRILL & DIE THEKE · DREIECKSTRASSE"
+                  : "THE HEARTH & COUNTER · DREIECKSTRASSE"}
               </span>
             </div>
-            <p className="leading-relaxed">
-              {isDe
-                ? "Dieser Beitrag basiert auf den Vor-Ort-Eindrücken und Fotografien eines aktiven Speisely Community-Mitglieds (selbst bezahlt, ohne Einladung oder Gegenleistung). Die Betriebszeiten, Standortangaben und Küchenspezifikationen wurden über die offizielle Webpräsenz (la-grilladine.de) sowie das Tourismusportal Visit Düsseldorf (visitduesseldorf.de) redaktionell geprüft. Speisely führt keine bezahlten Ranking-Einträge."
-                : "This story is based on the verified on-site experience and photography contributed by a Speisely community member (self-paid, without invitation or promotional perks). Operating hours, location details, and culinary data were cross-checked via the restaurant's official presence (la-grilladine.de) and Visit Düsseldorf (visitduesseldorf.de). Speisely publishes zero paid rating rankings."}
-            </p>
-          </aside>
+            <img
+              src="/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=2"
+              alt="Frischetheke und Holzkohlegrill bei La Grilladine Düsseldorf mit traditionellen Tajine-Tongefäßen"
+              className="w-full h-auto object-cover rounded-2xl"
+              width="1024"
+              height="768"
+              loading="eager"
+            />
+          </div>
+          <figcaption className="text-xs font-mono text-[#173C32]/60 mt-3 text-center">
+            {isDe
+              ? "Foto: Speisely Community. Das Herzstück von La Grilladine: Die gekühlte Auslage mit frischem Fang und Fleischzuschnitten, flankiert von traditionellen marokkanischen Ton-Tajines."
+              : "Photo: Speisely Community. The pulsating heart of La Grilladine: chilled displays of fresh catch and butcher cuts, framed by earthenware tagine pots."}
+          </figcaption>
+        </figure>
 
-          {/* STANDARDIZED RESTAURANT CLAIM & FOODIE RECOMMENDATION BRIDGE */}
-          <RestaurantClaimBridge restaurantName="La Grilladine" city="Düsseldorf" />
+        {/* Section 1: The Hearth & Craft */}
+        <section className="space-y-4">
+          <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#173C32] tracking-tight">
+            {isDe
+              ? "Das Geheimnis des Feuers: Frischetheke und Buchenglut"
+              : "The Secret of the Embers: Display Counter & Live Fire"}
+          </h2>
+          <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
+            {isDe
+              ? "Das Bestellen bei La Grilladine folgt keinem unpersönlichen Menükatalog, sondern dem Blick in die Frischetheke. Ganze Doraden, saftige Lammkoteletts, Merguez-Würstchen und Rindersteaks liegen auf gestoßenem Eis bereit. Man zeigt auf den gewünschten Schnitt, der Grillmeister wiegt ihn ab, würzt ihn mit hauseigener Chermoula — jener legendären nordafrikanischen Marinade aus frischem Koriander, glatter Petersilie, Knoblauch, gemahlenem Kreuzkümmel und Olivenöl — und legt ihn direkt auf das gusseiserne Grillrost."
+              : "Ordering at La Grilladine bypasses generic menu folders and starts directly at the glass counter. Whole sea bream, lamb chops, spiced merguez, and prime rib cuts rest over crushed ice. You indicate your selection, the pitmaster weighs it, perfumes it with house-ground chermoula — the legendary North African marinade of coriander, flat parsley, garlic, toasted cumin, and cold-pressed olive oil — and lays it across the cast-iron grate."}
+          </p>
+          <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
+            {isDe
+              ? "Hier brennt kein Gasfeuer. Die Buchenholzkohle wird kontinuierlich mit einem Fächer auf die exakte Gluttemperatur gebracht. Die Flammen lecken nur für Millisekunden an der Außenseite, um eine krosse Kruste zu karamellisieren, während der Kern sanft im eigenen Saft dämpft."
+              : "No gas burner is tolerated here. Hardwood beechwood charcoal is maintained at optimal temperature with steady rhythmic fanning. Flames kiss the surface just long enough to caramelize a paper-thin crust while the core gently poaches in its own natural juices."}
+          </p>
+        </section>
 
-          {/* COMMUNITY PARTICIPATION CTA */}
-          <section className="bg-forest text-white rounded-3xl p-6 sm:p-10 text-center space-y-6 relative overflow-hidden shadow-xl">
-            <div className="max-w-xl mx-auto space-y-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-semibold text-[#E6B84A] border border-white/10">
-                <Users className="h-3.5 w-3.5" />
-                <span>{isDe ? "Werde Teil der Community" : "Join the Community"}</span>
-              </span>
-              <h2 className="font-serif text-2xl sm:text-4xl font-bold text-white">
+        {/* Sensory Tasting Masterclass: Die 3 Schritte (Inspired by Lindt Sensory Framework) */}
+        <section className="p-8 sm:p-10 rounded-3xl bg-white border-2 border-[#E6B84A]/30 shadow-xl space-y-6">
+          <div className="flex items-center gap-2.5 text-[#083822]">
+            <Award className="w-6 h-6 text-[#E6B84A]" />
+            <span className="font-mono text-xs uppercase tracking-widest font-black text-[#E6B84A]">
+              {isDe ? "DIE SPEISELY GENUSS-SCHULE" : "THE SPEISELY CONNOISSEUR GUIDE"}
+            </span>
+          </div>
+
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#083822] leading-snug">
+            {isDe
+              ? "Die 3 goldenen Schritte der Verkostung bei La Grilladine"
+              : "The 3 Golden Steps of Tasting at La Grilladine"}
+          </h3>
+
+          <p className="text-sm sm:text-base text-[#173C32]/75 leading-relaxed font-sans">
+            {isDe
+              ? "Wer marokkanische Küche in ihrer reinsten Form begreifen möchte, schneidet Gerichte nicht unbedacht an, sondern achtet auf das Zusammenspiel von Kruste, Tontopf-Dampf und Minz-Frische:"
+              : "To truly appreciate authentic Moroccan hearth cooking, do not rush through the meal — observe the harmonious progression of char, earthenware steam, and herbal freshness:"}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+            {/* Step 1 */}
+            <div className="p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-3">
+              <span className="font-mono text-3xl font-black text-[#E6B84A]">01</span>
+              <h4 className="font-serif text-lg font-bold text-[#083822]">
+                {isDe ? "Das Auge & Die Theke" : "The Eye & The Counter"}
+              </h4>
+              <p className="text-xs sm:text-sm text-[#173C32]/70 leading-relaxed font-sans">
                 {isDe
-                  ? "Kennst du ein Restaurant mit echter Seele?"
-                  : "Know a Restaurant with Genuine Soul?"}
-              </h2>
-              <p className="text-white/80 text-sm sm:text-base leading-relaxed">
-                {isDe
-                  ? "Ob Holzkohlegrill, Familienbäckerei oder Spezialitätenküche: Teile deine ehrlichen Genuss-Momente mit der Speisely Community."
-                  : "Whether open woodfire, family bakery, or heritage cuisine: share your genuine food discoveries with the Speisely Community."}
+                  ? "Wähle deinen Fisch an der Theke selbst aus. Achte auf glänzende Schuppen, klare Augen und das dezente Knistern der Glut beim ersten Auflegen."
+                  : "Select your catch personally at the counter. Look for luminous scales, clear eyes, and listen for the sharp sizzle as it meets glowing coals."}
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-              <a
-                href={mailtoHref}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#E6B84A] hover:bg-[#d4a73d] text-forest font-bold px-6 py-3.5 text-sm transition shadow-lg"
-              >
-                <Camera className="h-4 w-4" />
-                <span>{isDe ? "Deine Food Story einsenden" : "Submit your food story"}</span>
-              </a>
-              <Link
-                to="/community"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium px-6 py-3.5 text-sm transition border border-white/20"
-              >
-                <span>{isDe ? "Alle Community Stories" : "Browse all stories"}</span>
-              </Link>
+            {/* Step 2 */}
+            <div className="p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-3">
+              <span className="font-mono text-3xl font-black text-[#E6B84A]">02</span>
+              <h4 className="font-serif text-lg font-bold text-[#083822]">
+                {isDe ? "Der Knusper & Die Flocke" : "The Crisp & The Flake"}
+              </h4>
+              <p className="text-xs sm:text-sm text-[#173C32]/70 leading-relaxed font-sans">
+                {isDe
+                  ? "Der Gabeltest: Die Haut muss mit einem feinen Knuspern nachgeben. Das weiße Fleisch darunter löst sich in saftigen Lamellen von der Gräte."
+                  : "The fork test: The charred skin should yield with an audible crunch. Beneath it, pearlescent flakes detach effortlessly in moist segments."}
+              </p>
             </div>
-          </section>
 
-          {/* Back Navigation Link */}
-          <div className="pt-2 text-center">
-            <Link
-              to="/community"
-              className="inline-flex items-center gap-2 text-sm font-bold text-[#083822] hover:text-[#E6B84A] transition-colors font-mono"
-            >
-              ← {isDe ? "Zurück zur Community-Übersicht" : "Back to Community Overview"}
-            </Link>
+            {/* Step 3 */}
+            <div className="p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-3">
+              <span className="font-mono text-3xl font-black text-[#E6B84A]">03</span>
+              <h4 className="font-serif text-lg font-bold text-[#083822]">
+                {isDe ? "Die R'gwa (Die Schaumkrone)" : "The R'gwa (The Foam Crown)"}
+              </h4>
+              <p className="text-xs sm:text-sm text-[#173C32]/70 leading-relaxed font-sans">
+                {isDe
+                  ? "Der Atay-Tee wird aus mindestens 40 cm Höhe eingegossen. Die dichte Schaumkrone schützt das Aroma und kühlt den heißen Minzaufguss sanft ab."
+                  : "Mint tea poured from at least 40 cm height aerates the liquor, creating a creamy foam crown (R'gwa) that seals in mint oils and tempers heat."}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Feature Platter: Whole Dorade Royale in Butterfly Cut */}
+        <figure className="relative my-10 max-w-2xl mx-auto">
+          <div className="relative overflow-hidden rounded-3xl border-2 border-[#173C32]/15 bg-white p-3 shadow-2xl transition-all duration-300 hover:border-[#E6B84A]">
+            <div className="absolute top-6 left-6 z-10 flex items-center gap-2 rounded-full bg-[#083822]/85 backdrop-blur-md px-3.5 py-1.5 text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg">
+              <Fish className="w-3.5 h-3.5 text-[#E6B84A]" />
+              <span>
+                {isDe
+                  ? "SIGNATURE SERVE · DORADE ROYALE PAPILLON"
+                  : "SIGNATURE SERVE · DORADE ROYALE PAPILLON"}
+              </span>
+            </div>
+            <img
+              src="/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=2"
+              alt="Ganze Dorade Royale vom Holzkohlegrill mit knusprigen Kartoffel-Rondellen und Chermoula bei La Grilladine"
+              className="w-full h-auto object-cover rounded-2xl"
+              width="1024"
+              height="768"
+              loading="lazy"
+            />
+          </div>
+          <figcaption className="text-xs font-mono text-[#173C32]/60 mt-3 text-center">
+            {isDe
+              ? "Foto: Speisely Community. Der unangefochtene Liebling der Gäste: Ganze Dorade Royale im Schmetterlingsschnitt, serviert mit goldgelben Kartoffelchips und frischer Zitrone."
+              : "Photo: Speisely Community. The guest favorite: Whole Dorade Royale butterfly-split across beechwood coals, served with hand-sliced potato rounds and fresh lemon."}
+          </figcaption>
+        </figure>
+
+        {/* Product Callout: The Showstopper (Lindt Style Callout Box) */}
+        <section className="p-7 rounded-3xl bg-gradient-to-r from-[#083822] to-[#124E34] text-white space-y-4 shadow-xl border border-[#E6B84A]/30">
+          <div className="flex items-center gap-2">
+            <span className="bg-[#E6B84A] text-[#083822] text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded">
+              {isDe ? "DER SHOWSTOPPER" : "THE SHOWSTOPPER"}
+            </span>
+            <span className="text-xs font-mono text-[#E6B84A] tracking-wider uppercase">
+              {isDe ? "EINFACH KÖSTLICH!" : "SIMPLY DELICIOUS!"}
+            </span>
+          </div>
+          <h3 className="font-serif text-2xl font-bold text-[#F6F4EB]">
+            {isDe
+              ? "Dorade Royale & Chermoula: Das Spiel von Röstung & Frische"
+              : "Dorade Royale & Chermoula: The Symphony of Smoke & Brightness"}
+          </h3>
+          <p className="text-sm sm:text-base text-[#F6F4EB]/85 leading-relaxed font-sans">
+            {isDe
+              ? "Wenn die frisch gegrillte Dorade am Tisch ankommt, steigt eine feine Rauchsäule aus gebranntem Meersalz und geröstetem Kreuzkümmel empor. Die Haut ist durch die Buchenholzkohle hauchdünn blisteriert und knusprig, während das Fleisch darunter schneeweiß, glasig und unvergleichlich saftig bleibt. Begleitet von den hauchfein geschnittenen, kross frittierten Kartoffelrondellen entsteht eine Textur-Harmonie, die man in hochpreisigen Fischrestaurants oft vergeblich sucht."
+              : "When the freshly grilled sea bream arrives, an aromatic vapor of toasted cumin, sea salt, and citrus lifts into the room. The skin is blistered and crisp from beechwood charcoal, while the pearlescent flesh remains exquisitely tender and moist. Paired with razor-thin, golden potato rounds, it creates a textural contrast rare even in high-end seafood dining."}
+          </p>
+        </section>
+
+        {/* Section: The Community Atmosphere in Oberbilk */}
+        <section className="space-y-4">
+          <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#173C32] tracking-tight">
+            {isDe
+              ? "Oberbilk: Das pulsierende Maghreb-Viertel als kulinarische Heimat"
+              : "Oberbilk: Düsseldorf's Maghreb Quarter as a Culinary Home"}
+          </h2>
+          <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
+            {isDe
+              ? "La Grilladine ist fest in der Nachbarschaft von Düsseldorf-Oberbilk verankert. Zwischen marokkanischen Bäckereien, Minzhändlern und Gewürzläden ist das Restaurant seit Jahren die verlässliche Konstante für authentische nordafrikanische Küche. Der Service ist herzlich, zügig und unprätentiös: Wer hier speist, teilt sich oft Schalen mit marinierten Oliven und taucht frisches, warmes Fladenbrot gemeinsam in Schmortöpfe."
+              : "La Grilladine is deeply woven into the fabric of Düsseldorf-Oberbilk. Surrounded by Moroccan bakeries, fresh mint vendors, and spice merchants, the dining room has stood as an authentic anchor for years. Service is warm, swift, and completely unpretentious: guests share bowls of cured olives and dip warm, freshly baked flatbread together."}
+          </p>
+        </section>
+
+        {/* 2-Column Sensory Grid: Tajine & Mint Tea (Lindt Flatlay Style) */}
+        <section
+          aria-label={isDe ? "Kulinarische Begleiter" : "Culinary Pairings"}
+          className="my-14 space-y-6"
+        >
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#E6B84A] font-bold">
+              {isDe ? "HARMONIE & KONTRAST" : "HARMONY & CONTRAST"}
+            </span>
+            <h3 className="font-serif text-2xl sm:text-3xl font-black text-[#083822]">
+              {isDe ? "Die vollendeten Begleiter" : "The Perfect Pairings"}
+            </h3>
           </div>
 
-          {/* About Speisely Trust Section */}
-          <AboutSpeiselySection />
-        </main>
-      </div>
-    </SiteShell>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            {/* Item 1: Tajine de Poulet */}
+            <div className="flex flex-col rounded-3xl bg-white border-2 border-[#173C32]/15 shadow-xl overflow-hidden transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+              <div className="relative aspect-[4/3] w-full bg-[#083822]/5 overflow-hidden">
+                <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-3 py-1 text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
+                  <Utensils className="w-3 h-3 text-[#E6B84A]" />
+                  <span>TAJINE DE POULET</span>
+                </div>
+                <img
+                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_tajine_poulet_3d.webp?v=2"
+                  alt="Marokkanische Hähnchen-Tajine mit Salzzitronen, grünen Oliven und Safran im Tontopf"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  loading="lazy"
+                  width="800"
+                  height="600"
+                />
+              </div>
+              <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between space-y-3">
+                <div className="space-y-2">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#083822]/5 text-[#083822] text-[11px] font-mono font-bold uppercase tracking-wider border border-[#083822]/10">
+                    {isDe ? "DIE ALCHEMIE DER GEDULD" : "ALCHEMY OF PATIENCE"}
+                  </span>
+                  <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#083822] leading-snug">
+                    {isDe ? "Tajine aux Citrons Confits" : "Tagine aux Citrons Confits"}
+                  </h4>
+                  <p className="text-sm text-[#173C32]/80 leading-relaxed font-sans">
+                    {isDe
+                      ? "Im schweren Tongefäß langsam geschmort: Das zarte Hähnchenfleisch zerfällt auf der Zunge. Die herbe Frische fermentierter Salzzitronen balanciert die sämige Zwiebel-Safran-Reduktion perfekt aus."
+                      : "Slowly braised in heavy unglazed clay: Fall-apart tender chicken enveloped in a velvety reduction of sweet caramelized onions, earthy saffron, and briny preserved lemon."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Item 2: Mint Tea Ritual */}
+            <div className="flex flex-col rounded-3xl bg-white border-2 border-[#173C32]/15 shadow-xl overflow-hidden transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
+              <div className="relative aspect-[4/3] w-full bg-[#083822]/5 overflow-hidden">
+                <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-3 py-1 text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
+                  <Coffee className="w-3 h-3 text-[#E6B84A]" />
+                  <span>ATAY BI NA'NA</span>
+                </div>
+                <img
+                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_minztee_3d.webp?v=2"
+                  alt="Frischer marokkanischer Minztee im traditionellen Silberkännchen mit gravierten Gläsern"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  loading="lazy"
+                  width="800"
+                  height="600"
+                />
+              </div>
+              <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between space-y-3">
+                <div className="space-y-2">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#083822]/5 text-[#083822] text-[11px] font-mono font-bold uppercase tracking-wider border border-[#083822]/10">
+                    {isDe ? "DAS ZEREMONIELL" : "THE SACRED RITUAL"}
+                  </span>
+                  <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#083822] leading-snug">
+                    {isDe ? "Marokkanischer Atay bi Na'na" : "Moroccan Atay bi Na'na"}
+                  </h4>
+                  <p className="text-sm text-[#173C32]/80 leading-relaxed font-sans">
+                    {isDe
+                      ? "Heiß aufgegossener Gunpowder-Grüntee mit ganzen Zweigen frischer Krauseminze. Aus der kunstvoll ziselierten Silberkanne hoch eingegossen, bildet sich die unverzichtbare Schaumkrone (R'gwa)."
+                      : "Piping-hot gunpowder green tea steeped with whole bunches of fresh spearmint. Poured from high above into ornamented glasses, creating the iconic silky crown of aromatic foam."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Fact Sheet / Speisely Gastro Dossier */}
+        <section className="p-8 rounded-3xl bg-[#083822] text-[#F6F4EB] space-y-6 shadow-2xl border border-[#E6B84A]/30">
+          <div className="flex items-center justify-between border-b border-[#E6B84A]/30 pb-4">
+            <div>
+              <span className="text-xs font-mono text-[#E6B84A] uppercase tracking-widest font-bold">
+                SPEISELY GASTRO-DOSSIER
+              </span>
+              <h3 className="font-serif text-2xl font-bold text-[#F6F4EB]">
+                La Grilladine Düsseldorf
+              </h3>
+            </div>
+            <div className="text-right">
+              <span className="inline-block bg-[#E6B84A] text-[#083822] text-xs font-mono font-black px-2.5 py-1 rounded">
+                OBERBILK
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm font-sans text-[#F6F4EB]/85">
+            <div className="space-y-2">
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
+                {isDe ? "Standort & Adresse" : "Location & Address"}
+              </p>
+              <p className="leading-snug">
+                Dreieckstraße 26
+                <br />
+                40227 Düsseldorf-Oberbilk (Maghreb-Viertel)
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
+                {isDe ? "Öffnungszeiten" : "Opening Hours"}
+              </p>
+              <p className="leading-snug">
+                Di – Sa: 12:00 – 22:00 Uhr
+                <br />
+                So: 13:00 – 21:00 Uhr
+                <br />
+                <span className="text-[#E6B84A] font-mono text-xs">
+                  Montag Ruhetag / Closed on Mondays
+                </span>
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
+                {isDe ? "Konditionen & Bezahlung" : "Terms & Payment"}
+              </p>
+              <p className="leading-snug">
+                • <strong className="text-white">Nur Barzahlung</strong> (Cash Only!)
+                <br />
+                • Keine Reservierung möglich (First Come, First Served)
+                <br />• Ausgezeichnetes Preis-Leistungs-Verhältnis (€€)
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
+                {isDe ? "Kontakt & Webpräsenz" : "Contact & Web"}
+              </p>
+              <p className="leading-snug">
+                Telefon:{" "}
+                <a href="tel:+4921194216796" className="text-[#E6B84A] hover:underline font-mono">
+                  +49 211 94216796
+                </a>
+                <br />
+                Website:{" "}
+                <a
+                  href="https://la-grilladine.de"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#E6B84A] underline font-bold hover:text-white"
+                >
+                  la-grilladine.de
+                </a>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Conclusion / Fazit */}
+        <section className="space-y-4 pt-4 border-t border-[#173C32]/15">
+          <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#173C32] tracking-tight">
+            {isDe ? "Das Speisely-Fazit" : "The Speisely Verdict"}
+          </h2>
+          <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
+            {isDe
+              ? "La Grilladine ist die seltene Antithese zur austauschbaren Großstadtgastronomie: Keine gekünstelte Ästhetik, sondern echte Hingabe zum Handwerk. Wer die Buchenglut knistern hören, fangfrische Dorade im perfekten Garpunkt probieren und in die sämige Tiefe einer echten Tajine eintauchen möchte, findet in der Dreieckstraße 26 einen der ehrlichsten Genussorte Düsseldorfs."
+              : "La Grilladine represents the rare antithesis to generic urban dining: zero manufactured pretension, but unconditional devotion to hearth cooking. Those who wish to hear beechwood coals crackle, savor whole sea bream cooked to succulent perfection, and dive into the slow-simmered depths of earthenware tagines will find Dreieckstraße 26 to be one of Düsseldorf's most rewarding culinary truths."}
+          </p>
+        </section>
+
+        {/* Transparent Notice */}
+        <aside className="p-6 rounded-2xl bg-white border border-[#173C32]/10 text-xs text-[#173C32]/70 space-y-2 shadow-sm font-sans">
+          <div className="flex items-center gap-2 font-bold text-[#173C32]">
+            <Info className="w-4 h-4 text-[#E6B84A]" />
+            <span>
+              {isDe
+                ? "Transparenzhinweis & Community-Dokumentation"
+                : "Editorial Disclosure & Community Notes"}
+            </span>
+          </div>
+          <p className="leading-relaxed">
+            {isDe
+              ? "Dieser redaktionelle Beitrag entstand im Rahmen unserer Speisely Community-Initiative: Die Fotografien und ersten Tasting-Notizen wurden von einem Community-Mitglied vor Ort unabhängig und auf eigene Kosten erstellt. Die gastronomischen Eckdaten, Öffnungszeiten und Kontaktdaten wurden über offizielle Register und vor Ort verifiziert. Zum Zeitpunkt der Veröffentlichung bestanden keinerlei werbliche oder finanzielle Vereinbarungen mit dem Restaurantbetreiber."
+              : "This editorial story was created as part of the Speisely Community Initiative: Visual assets and on-site tasting impressions were documented independently and self-funded by a community contributor. Operational facts, opening times, and contact information were cross-referenced with official local records. No commercial or promotional agreements existed with the restaurant at publication time."}
+          </p>
+        </aside>
+
+        {/* Restaurant Claim & Foodie Recommendation Bridge */}
+        <RestaurantClaimBridge restaurantName="La Grilladine" city="Düsseldorf" />
+
+        {/* Back Link */}
+        <div className="pt-6 text-center">
+          <Link
+            to="/magazin"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#083822] hover:text-[#E6B84A] transition-colors font-mono"
+          >
+            ← {isDe ? "Zurück zum Speisely Magazin" : "Back to Speisely Magazine"}
+          </Link>
+        </div>
+      </main>
+
+      {/* About Speisely Section Footer */}
+      <AboutSpeiselySection />
+    </article>
   );
 }
