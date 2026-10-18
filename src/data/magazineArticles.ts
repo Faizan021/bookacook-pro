@@ -119,13 +119,13 @@ export const magazineArticles: MagazineArticle[] = [
   {
     id: "la-grilladine-duesseldorf",
     slug: "la-grilladine-duesseldorf",
-    titleDe: "Marokkanisches vom Holzkohlegrill: La Grilladine Düsseldorf",
-    titleEn: "Moroccan Charcoal Grilling: La Grilladine Düsseldorf",
+    titleDe: "Glut, Ton & Minze: La Grilladine Düsseldorf",
+    titleEn: "Embers, Clay & Mint: La Grilladine Düsseldorf",
     excerptDe:
-      "Marokkanischer Buchenholz-Grill, ganze Dorade Royale, zarte Tajine de Poulet mit Salzzitronen & Atay-Minztee im Herzen des Maghreb-Viertels.",
+      "Buchenholzkohle-Röstaromen, ganze Dorade Royale papillon, im Tontopf geschmorte Salzzitronen-Tajine und die Zeremonie des Atay-Tees im Maghreb-Viertel.",
     excerptEn:
-      "Beechwood charcoal grill, whole sea bream, tender chicken tagine with preserved lemons & fresh mint tea in Düsseldorf's Maghreb quarter.",
-    image: "/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=1",
+      "Beechwood charcoal aromas, butterflied whole sea bream, claypot-simmered lemon tagine, and the ritual of fresh Atay mint tea in Düsseldorf.",
+    image: "/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1",
     categoryBadgeDe: "Community Story",
     categoryBadgeEn: "Community Story",
     location: "Oberbilk, Düsseldorf",

@@ -4,7 +4,6 @@ import {
   Clock,
   Phone,
   Globe,
-  Utensils,
   Sparkles,
   Users,
   CheckCircle2,
@@ -15,10 +14,9 @@ import {
   Coffee,
   Coins,
   AlertCircle,
-  ExternalLink,
-  ChevronRight,
   Fish,
-  Beef,
+  Utensils,
+  ChevronRight,
 } from "lucide-react";
 import { useState, useRef } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -33,12 +31,12 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
       {
         name: "description",
         content:
-          "Speisely Community bei La Grilladine in Düsseldorf-Oberbilk: Marokkanischer Holzkohlegrill, zarte Tajine mit Pflaumen & frischer Fisch.",
+          "Ein Community-Besuch bei La Grilladine in Düsseldorf-Oberbilk: Ganze Dorade über Buchenglut, Salzzitronen-Tajine und die Kunst des Atay-Tees.",
       },
       {
         name: "keywords",
         content:
-          "La Grilladine Düsseldorf, Marokkanisches Restaurant Düsseldorf, Holzkohlegrill Düsseldorf, Tajine Pflaumen Mandeln, Oberbilk Maghreb Viertel, Dorade vom Grill, Gambas Holzkohlegrill, Halal Restaurant Düsseldorf, Speisely Community Story",
+          "La Grilladine Düsseldorf, Marokkanisches Restaurant Düsseldorf, Holzkohlegrill Düsseldorf, Tajine Salzzitronen Oliven, Oberbilk Maghreb Viertel, Dorade Royale Grill, Atay Minztee, Halal Restaurant Düsseldorf, Speisely Community Visit",
       },
       { name: "geo.region", content: "DE-NW" },
       { name: "geo.placename", content: "Düsseldorf-Oberbilk" },
@@ -46,17 +44,17 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
       { name: "ICBM", content: "51.2155, 6.7972" },
       {
         property: "og:title",
-        content: "Community-Besuch: La Grilladine Düsseldorf | Speisely",
+        content: "Glut, Ton & Minze: Community-Besuch bei La Grilladine Düsseldorf | Speisely",
       },
       {
         property: "og:description",
         content:
-          "Ein Speisely Community-Mitglied teilt sein Erlebnis bei La Grilladine in Düsseldorf: Marokkanischer Holzkohlegrill, Entrecôte, Pflaumen-Tajine & Gambas.",
+          "Sensorischer Erlebnisbericht aus dem Düsseldorfer Maghreb-Viertel: Meisterhafte Buchenholzkohle-Röstaromen, schmorende Tajine im Tontopf und Atay-Zeremonie.",
       },
       {
         property: "og:image",
         content:
-          "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=1",
+          "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -87,12 +85,12 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
                 "@id": "https://speisely.de/magazin/community/la-grilladine-duesseldorf",
               },
               headline:
-                "Community-Besuch bei La Grilladine in Düsseldorf-Oberbilk — Marokkanisches vom Holzkohlegrill",
+                "Glut, Ton & Minze: Ein sensorischer Community-Besuch bei La Grilladine in Düsseldorf-Oberbilk",
               description:
-                "Ein Speisely Community-Mitglied hat das Restaurant La Grilladine in der Dreieckstraße 26 besucht: Rauchiges Entrecôte, echte Tajine mit Pflaumen und frischer Minztee.",
+                "Ein Mitglied der Speisely Community berichtet aus der Dreieckstraße 26: Ganze Dorade Royale über offener Buchenglut, Salzzitronen-Tajine und die Zeremonie des Atay-Tees.",
               image: {
                 "@type": "ImageObject",
-                url: "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=1",
+                url: "https://speisely.de/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1",
                 width: 1200,
                 height: 900,
               },
@@ -177,12 +175,12 @@ export const Route = createFileRoute("/magazin/community/la-grilladine-duesseldo
       },
     ],
   }),
-  component: LaGrilladineDuesseldorfArticle,
+  component: LaGrilladineCommunityVisitArticle,
 });
 
 /**
- * 3D Interactive Card Component
- * Adds mouse-tracked perspective tilt, floating 3D depth layers, and luxury border glow
+ * 3D Interactive Perspective Tilt Card
+ * High-end micro-interaction with hardware acceleration
  */
 function ThreeDCard({
   children,
@@ -204,8 +202,8 @@ function ThreeDCard({
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5.5;
-    const rotateY = ((x - centerX) / centerX) * 5.5;
+    const rotateX = ((y - centerY) / centerY) * -5;
+    const rotateY = ((x - centerX) / centerX) * 5;
 
     setTransform(
       `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`,
@@ -237,95 +235,9 @@ function ThreeDCard({
   );
 }
 
-function LaGrilladineDuesseldorfArticle() {
+function LaGrilladineCommunityVisitArticle() {
   const { lang } = useI18n();
   const isDe = lang === "de";
-
-  // 3D Dish Showcase State
-  const [activeDishIndex, setActiveDishIndex] = useState(0);
-
-  const showcaseDishes = [
-    {
-      id: "theke",
-      titleDe: "Theke, Berber-Keramik & Holzkohlegrill",
-      titleEn: "Artisanal Counter, Pottery & Charcoal Hearth",
-      subtitleDe: "Handbemalte Tajine-Schalen, مشاوي-Schriftzug und offenes Buchenfeuer",
-      subtitleEn: "Hand-painted tagines, Arabic calligraphy and open beechwood flame",
-      badgeDe: "Tradition & Handwerk",
-      badgeEn: "Heritage & Craft",
-      badgeIcon: Sparkles,
-      image: "/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=1",
-      cameraDe: "50mm f/1.8 · 45° Feste Perspektive · Buchenglut-Licht",
-      cameraEn: "50mm f/1.8 · 45° Fixed Perspective · Amber Firelight",
-    },
-    {
-      id: "dorade",
-      titleDe: "Ganze Dorade Royale 'Papillon'",
-      titleEn: "Whole Sea Bream 'Papillon' Over Coals",
-      subtitleDe: "Schmetterlingsschnitt mit Chermoula-Glasur, Knusper-Rondelles & Frischesalat",
-      subtitleEn: "Butterflied flat with chermoula glaze, potato rondelles & garden salad",
-      badgeDe: "🐟 Ganzer Fisch vom Grill",
-      badgeEn: "🐟 Whole Flame-Grilled Fish",
-      badgeIcon: Fish,
-      image: "/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1",
-      cameraDe: "50mm f/1.8 · 45° Feste Perspektive · Warmer Holztisch",
-      cameraEn: "50mm f/1.8 · 45° Fixed Perspective · Warm Wood Table",
-    },
-    {
-      id: "tajine-poulet",
-      titleDe: "Tajine de Poulet aux Citrons Confits",
-      titleEn: "Chicken Tagine with Preserved Lemons & Olives",
-      subtitleDe: "Zart geschmortes Huhn, Salzzitronen, geröstete Mandeln & grüne Oliven",
-      subtitleEn: "Slow-braised chicken, salted lemons, toasted almonds & green olives",
-      badgeDe: "🍲 Geschmort im Tontopf",
-      badgeEn: "🍲 Slow-Braised Claypot",
-      badgeIcon: Sparkles,
-      image: "/magazin/la-grilladine-duesseldorf/la_grilladine_tajine_poulet_3d.webp?v=1",
-      cameraDe: "50mm f/1.8 · 45° Feste Perspektive · Warmer Holztisch",
-      cameraEn: "50mm f/1.8 · 45° Fixed Perspective · Warm Wood Table",
-    },
-    {
-      id: "entrecote",
-      titleDe: "Rinder-Entrecôte vom Holzkohlegrill",
-      titleEn: "Charcoal-Grilled Beef Entrecôte",
-      subtitleDe: "Karamellisierte Grillkruste, schmelzende Kräuterbutter & Kartoffelscheiben",
-      subtitleEn: "Smoky seared crust, melting herb butter & crispy potato rondelles",
-      badgeDe: "🥩 Fleisch-Handwerk",
-      badgeEn: "🥩 Charcoal Steak Craft",
-      badgeIcon: Beef,
-      image: "/magazin/la-grilladine-duesseldorf/la_grilladine_entrecote_3d.webp?v=1",
-      cameraDe: "50mm f/1.8 · 45° Feste Perspektive · Warmer Holztisch",
-      cameraEn: "50mm f/1.8 · 45° Fixed Perspective · Warm Wood Table",
-    },
-    {
-      id: "gambas",
-      titleDe: "Riesengambas-Spieße vom Grill",
-      titleEn: "Grilled Tiger Prawn Skewers",
-      subtitleDe: "Knoblauch-Koriander-Öl, karamellisierte Röstaromen & Salat",
-      subtitleEn: "Garlic-coriander oil, flame-kissed shells & crisp salad",
-      badgeDe: "🦐 Frische Meeresfrüchte",
-      badgeEn: "🦐 Fresh Seafood",
-      badgeIcon: Sparkles,
-      image: "/magazin/la-grilladine-duesseldorf/la_grilladine_gambas_3d.webp?v=1",
-      cameraDe: "50mm f/1.8 · 45° Feste Perspektive · Warmer Holztisch",
-      cameraEn: "50mm f/1.8 · 45° Fixed Perspective · Warm Wood Table",
-    },
-    {
-      id: "minztee",
-      titleDe: "Klassische Minztee-Zeremonie",
-      titleEn: "Authentic Moroccan Mint Tea Ceremony",
-      subtitleDe: "Silberkännchen auf gehämmertem Tablett mit feiner R'gwa-Schaumkrone",
-      subtitleEn: "Silver teapot on hammered tray poured with signature frothy crown",
-      badgeDe: "🫖 Maghreb Teekultur",
-      badgeEn: "🫖 Moroccan Tea Culture",
-      badgeIcon: Coffee,
-      image: "/magazin/la-grilladine-duesseldorf/la_grilladine_minztee_3d.webp?v=1",
-      cameraDe: "50mm f/1.8 · 45° Feste Perspektive · Warmer Holztisch",
-      cameraEn: "50mm f/1.8 · 45° Fixed Perspective · Warm Wood Table",
-    },
-  ];
-
-  const currentDish = showcaseDishes[activeDishIndex];
 
   const emailSubject = isDe
     ? "Mein Besuch bei La Grilladine Düsseldorf – Feedback für Speisely Community"
@@ -341,8 +253,8 @@ function LaGrilladineDuesseldorfArticle() {
 
   return (
     <SiteShell>
-      <div className="bg-[#FAF7F0] text-forest min-h-screen">
-        {/* Breadcrumb Bar */}
+      <div className="bg-[#FAF7F0] text-forest min-h-screen selection:bg-[#E6B84A]/30">
+        {/* Sticky Breadcrumb Bar */}
         <div className="border-b border-forest/10 bg-white/70 backdrop-blur-md sticky top-16 z-30">
           <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6 flex items-center justify-between">
             <nav aria-label="Breadcrumb" className="text-xs font-medium text-forest/70 truncate">
@@ -352,13 +264,17 @@ function LaGrilladineDuesseldorfArticle() {
                     {isDe ? "Startseite" : "Home"}
                   </Link>
                 </li>
-                <li aria-hidden="true">›</li>
+                <li aria-hidden="true" className="text-forest/30">
+                  ›
+                </li>
                 <li>
                   <Link to="/community" className="hover:text-forest transition">
                     Community
                   </Link>
                 </li>
-                <li aria-hidden="true">›</li>
+                <li aria-hidden="true" className="text-forest/30">
+                  ›
+                </li>
                 <li aria-current="page" className="text-forest font-bold truncate">
                   La Grilladine Düsseldorf
                 </li>
@@ -374,34 +290,30 @@ function LaGrilladineDuesseldorfArticle() {
           </div>
         </div>
 
-        {/* Hero Header */}
+        {/* Editorial Article Header */}
         <header className="mx-auto max-w-4xl px-4 pt-10 pb-6 sm:px-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#EBF4EC] text-forest px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider mb-4 shadow-xs border border-[#7FA46B]/20">
+          <div className="inline-flex items-center gap-2 rounded-full bg-[#EBF4EC] text-forest px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider mb-4 shadow-xs border border-[#7FA46B]/25">
             <Users className="h-3.5 w-3.5 text-[#7FA46B]" aria-hidden="true" />
-            <span>
-              {isDe
-                ? "Erfahrungsbericht aus der Speisely Community"
-                : "Experience from the Speisely Community"}
-            </span>
+            <span>{isDe ? "Community Story · Selbst bezahlt" : "Community Story · Self-paid"}</span>
           </div>
 
-          <h1 className="font-display text-3xl sm:text-5xl lg:text-[44px] font-bold text-forest leading-[1.18] tracking-tight">
+          <h1 className="font-serif text-3xl sm:text-5xl lg:text-[46px] font-bold text-forest leading-[1.16] tracking-tight">
             {isDe
-              ? "Marokkanisches vom Holzkohlegrill: Unser Besuch bei La Grilladine in Düsseldorf"
-              : "Moroccan from the Charcoal Grill: Our Visit to La Grilladine in Düsseldorf"}
+              ? "Glut, Ton & Minze: Ein Abend bei La Grilladine in Düsseldorf-Oberbilk"
+              : "Embers, Clay & Mint: An Evening at La Grilladine in Düsseldorf-Oberbilk"}
           </h1>
 
-          <p className="mt-4 text-base sm:text-lg text-forest/80 leading-relaxed font-normal">
+          <p className="mt-4 text-base sm:text-lg text-forest/85 leading-relaxed font-normal">
             {isDe
-              ? "Düsseldorf-Oberbilk gilt als das Herz der marokkanischen Gastronomie im Rheinland. Mitten im pulsierenden Maghreb-Viertel liegt La Grilladine in der Dreieckstraße 26: Ein unprätentiöser, herzlicher Treffpunkt für echten Buchen-Holzkohlegrill, stundenlang geschmorte Tajines im Tontopf und traditionelle Minztee-Kultur."
-              : "Düsseldorf-Oberbilk stands as the culinary heart of Moroccan gastronomy in the Rhineland. In the bustling Maghreb district, La Grilladine at Dreieckstraße 26 is an authentic sanctuary for real beechwood charcoal grilling, slow-simmered earthenware tagines, and traditional Moroccan mint tea culture."}
+              ? "Wer gutes Essen wirklich verstehen will, muss den Sinnen folgen: Dem Knistern glühender Buchenholzkohle, dem ersten Duft von geröstetem Kreuzkümmel und der samtigen Tiefe einer stundenlang geschmorten Tajine. Unser Community-Mitglied hat das kleine marokkanische Traditionslokal in der Dreieckstraße 26 besucht – ein Bericht über die feine Poesie unberührten Handwerks."
+              : "To truly understand honest culinary craft, one must follow the senses: the gentle crackle of beechwood embers, the perfume of roasted cumin, and the velvety reduction of a tagine braised in clay for hours. A Speisely community member visited the intimate Moroccan dining room on Dreieckstraße 26 — an evocative chronicle of raw devotion to fire, earth, and hospitality."}
           </p>
 
-          {/* Verification & Disclosure Meta Bar */}
+          {/* Verification & Sensoric Meta Strip */}
           <div className="mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs text-forest/70 border-y border-forest/10 py-3">
             <span className="inline-flex items-center gap-1.5 font-semibold text-forest">
               <Camera className="h-3.5 w-3.5 text-[#E6B84A]" />
-              {isDe ? "Community-Besuch vor Ort" : "Community on-site visit"}
+              {isDe ? "Fotografiert & dokumentiert vor Ort" : "Photographed & documented on-site"}
             </span>
             <span className="text-forest/30">•</span>
             <span className="inline-flex items-center gap-1 font-semibold text-emerald-700">
@@ -411,22 +323,19 @@ function LaGrilladineDuesseldorfArticle() {
             <span className="text-forest/30">•</span>
             <span className="inline-flex items-center gap-1 font-semibold text-amber-700">
               <Flame className="h-3.5 w-3.5" />
-              {isDe ? "Echter Buchenholz-Grill" : "Beech Charcoal Hearth"}
+              {isDe ? "Echte Buchenholzkohle" : "Natural Beechwood Charcoal"}
             </span>
             <span className="text-forest/30">•</span>
-            <span className="text-forest/60">
-              {isDe ? "Selbst bezahlt · Unabhängig" : "Self-paid · Independent"}
-            </span>
+            <span className="text-forest/60">{isDe ? "Oktober 2026" : "October 2026"}</span>
           </div>
 
-          {/* Operational Facts & Scraped Details Grid */}
+          {/* Scraped Operational Quick-Dossier */}
           <div className="mt-6 p-5 sm:p-6 rounded-3xl border border-forest/10 bg-white shadow-xs grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs sm:text-sm">
-            {/* Location & Contact */}
             <div className="flex items-start gap-3">
               <MapPin className="h-4 w-4 text-[#E6B84A] shrink-0 mt-0.5" aria-hidden="true" />
               <div className="space-y-1">
                 <span className="block text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                  {isDe ? "Adresse & Anfahrt" : "Location & Transit"}
+                  {isDe ? "Ort & Anfahrt" : "Location"}
                 </span>
                 <strong className="font-semibold text-forest block">La Grilladine</strong>
                 <p className="text-forest/75 text-xs leading-snug">
@@ -434,8 +343,8 @@ function LaGrilladineDuesseldorfArticle() {
                 </p>
                 <p className="text-forest/60 text-[11px]">
                   {isDe
-                    ? "Oberbilk (Maghreb-Viertel, 5 Min. vom Hbf)"
-                    : "Oberbilk (Maghreb Quarter, 5 min from Central Station)"}
+                    ? "Oberbilk (Maghreb-Viertel, nahe Hbf)"
+                    : "Oberbilk (Maghreb Quarter, near Central Station)"}
                 </p>
                 <div className="pt-1 flex items-center gap-3">
                   <a
@@ -452,18 +361,17 @@ function LaGrilladineDuesseldorfArticle() {
                     className="inline-flex items-center gap-1 text-[11px] font-bold text-forest hover:text-[#7FA46B] transition"
                   >
                     <Globe className="h-3 w-3 text-[#E6B84A]" />
-                    <span>la-grilladine.de</span>
+                    <span>Website</span>
                   </a>
                 </div>
               </div>
             </div>
 
-            {/* Opening Times (Scraped verified from Visit Düsseldorf) */}
             <div className="flex items-start gap-3">
               <Clock className="h-4 w-4 text-[#7FA46B] shrink-0 mt-0.5" aria-hidden="true" />
               <div className="space-y-1">
                 <span className="block text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                  {isDe ? "Öffnungszeiten" : "Opening Hours"}
+                  {isDe ? "Öffnungszeiten" : "Hours"}
                 </span>
                 <div className="text-xs text-forest/80 space-y-0.5">
                   <div className="flex justify-between gap-2">
@@ -476,18 +384,17 @@ function LaGrilladineDuesseldorfArticle() {
                   </div>
                   <div className="flex justify-between gap-2 text-forest/50">
                     <span>{isDe ? "Montag:" : "Monday:"}</span>
-                    <span>{isDe ? "Ruhetag (geschlossen)" : "Closed"}</span>
+                    <span>{isDe ? "Ruhetag" : "Closed"}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Crucial House Policies (First Come First Served + Cash Only) */}
             <div className="flex items-start gap-3">
               <Coins className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
               <div className="space-y-1">
                 <span className="block text-[11px] font-bold text-forest/50 uppercase tracking-wider">
-                  {isDe ? "Wichtige Gästetipps" : "Essential Guest Tips"}
+                  {isDe ? "Gästehinweise" : "House Notes"}
                 </span>
                 <div className="space-y-1.5 text-xs text-forest/80">
                   <div className="inline-flex items-center gap-1.5 rounded-md bg-amber-50 border border-amber-200 px-2 py-0.5 text-[11px] font-bold text-amber-900">
@@ -496,8 +403,8 @@ function LaGrilladineDuesseldorfArticle() {
                   </div>
                   <p className="text-[11px] text-forest/70 leading-snug">
                     {isDe
-                      ? "Keine Reservierungen: Es gilt strikt „First Come, First Served“."
-                      : "Strictly 'First Come, First Served'. No phone reservations."}
+                      ? "First Come, First Served — keine Reservierungen."
+                      : "Strictly walk-ins only — no telephone reservations."}
                   </p>
                 </div>
               </div>
@@ -505,433 +412,280 @@ function LaGrilladineDuesseldorfArticle() {
           </div>
         </header>
 
-        {/* Main Content */}
-        <main className="mx-auto max-w-4xl px-4 py-4 sm:px-6 space-y-12 pb-20">
-          {/* INTERACTIVE 3D DISH SPOTLIGHT / SINGLE-CAMERA STUDIO SHOWCASE */}
-          <section className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-              <div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#7FA46B] mb-1">
-                  <Camera className="h-3.5 w-3.5 text-[#E6B84A]" />
-                  <span>{isDe ? "Speisely 3D Studio-Kamera" : "Speisely 3D Studio Camera"}</span>
-                </div>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
-                  {isDe
-                    ? "Die 6 Signature-Gerichte aus einer Kameraperspektive"
-                    : "The 6 Signature Dishes Captured from One Camera"}
-                </h2>
-              </div>
-              <div className="text-left sm:text-right">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/5 border border-forest/10 px-3 py-1 text-[11px] font-mono text-forest/70">
-                  <span>📷</span>
-                  <span>{isDe ? currentDish.cameraDe : currentDish.cameraEn}</span>
-                </span>
-              </div>
-            </div>
-
-            {/* 3D Interactive Main Stage */}
+        {/* Narrative Body: 4 Curated Chapters with Focused 3D Imagery */}
+        <main className="mx-auto max-w-4xl px-4 py-4 sm:px-6 space-y-16 pb-20">
+          {/* CHAPTER 1: THE SANCTUARY OF CHARCOAL & CLAY */}
+          <section className="space-y-6">
             <ThreeDCard>
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
                 <img
-                  src={currentDish.image}
-                  alt={isDe ? currentDish.titleDe : currentDish.titleEn}
+                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_theke_3d.webp?v=1"
+                  alt={
+                    isDe
+                      ? "Die Theke von La Grilladine mit traditioneller Berber-Keramik, Terracotta-Töpfen und offener Holzkohleglut im Hintergrund"
+                      : "The counter of La Grilladine with traditional Moroccan pottery, earthenware vessels, and open woodfire embers"
+                  }
                   className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   loading="eager"
                 />
-
-                {/* Floating 3D Badge Overlay */}
-                <div className="absolute top-4 left-4" style={{ transform: "translateZ(30px)" }}>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-lg border border-white/10">
-                    <currentDish.badgeIcon
-                      className="h-3.5 w-3.5 text-[#E6B84A]"
-                      aria-hidden="true"
-                    />
-                    <span>{isDe ? currentDish.badgeDe : currentDish.badgeEn}</span>
+                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
+                    <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" />
+                    <span>{isDe ? "Kapitel 01 · Der Ort" : "Chapter 01 · The Sanctuary"}</span>
                   </span>
                 </div>
-
-                {/* Floating 3D Description Bottom Bar */}
                 <div
-                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3.5 text-white border border-white/10 shadow-xl"
-                  style={{ transform: "translateZ(24px)" }}
+                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
+                  style={{ transform: "translateZ(20px)" }}
                 >
-                  <h3 className="font-display text-base sm:text-lg font-bold text-white leading-tight">
-                    {isDe ? currentDish.titleDe : currentDish.titleEn}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-white/80 mt-1 leading-snug">
-                    {isDe ? currentDish.subtitleDe : currentDish.subtitleEn}
+                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
+                    {isDe
+                      ? "Handgeformte Tonkrüge, der arabische Schriftzug مشاوي (Mashawee) und im Hintergrund das leise Lodern der Buchenglut."
+                      : "Hand-thrown earthenware, the Arabic script مشاوي (Grills), and the quiet glow of beechwood embers behind the wood counter."}
                   </p>
                 </div>
-              </div>
-
-              <div className="mt-3 px-1 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] text-forest/60">
-                <span className="italic">
-                  {isDe
-                    ? "Tipp: Bewege den Cursor über das Bild für interaktive 3D-Tiefe."
-                    : "Tip: Hover your cursor over the frame for interactive 3D perspective tilt."}
-                </span>
-                <span className="text-[10px] text-forest/50 font-mono">
-                  {activeDishIndex + 1} / {showcaseDishes.length}
-                </span>
               </div>
             </ThreeDCard>
 
-            {/* Dish Selector Thumbnails / Tabs */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 pt-1">
-              {showcaseDishes.map((dish, idx) => {
-                const isActive = idx === activeDishIndex;
-                return (
-                  <button
-                    key={dish.id}
-                    onClick={() => setActiveDishIndex(idx)}
-                    className={`relative overflow-hidden rounded-xl border-2 p-1.5 text-left transition-all ${
-                      isActive
-                        ? "border-[#E6B84A] bg-white shadow-md scale-102"
-                        : "border-forest/10 bg-white/70 hover:border-forest/30 hover:bg-white"
-                    }`}
-                  >
-                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-forest/5 mb-1.5">
-                      <img
-                        src={dish.image}
-                        alt={isDe ? dish.titleDe : dish.titleEn}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                    <span
-                      className={`block text-[11px] font-bold truncate leading-tight ${
-                        isActive ? "text-forest" : "text-forest/70"
-                      }`}
-                    >
-                      {isDe ? dish.titleDe : dish.titleEn}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* SECTION 1: THE ATMOSPHERE & THE MAGHREB QUARTER */}
-          <section className="space-y-4 pt-4 border-t border-forest/10">
-            <div className="text-forest/85 leading-relaxed text-base sm:text-lg space-y-4">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
+            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
                 {isDe
-                  ? "„Mitten in Oberbilk – ein Tempel für echte Holzkohle-Liebhaber“"
-                  : "“In the heart of Oberbilk – a true sanctuary for charcoal aficionados”"}
+                  ? "Der Eintritt in eine andere Zeit: Dreieckstraße 26"
+                  : "Entering Another Rhythm: Dreieckstraße 26"}
               </h2>
               <p>
                 {isDe
-                  ? "Düsseldorf-Oberbilk gilt weit über Nordrhein-Westfalen hinaus als die kulinarische Hochburg für nordafrikanische Esskultur. Wer die Kölner Straße entlangschlendert, entdeckt Gewürzläden, Minzteestuben, marokkanische Bäckereien mit ofenfrischem Khobz und Metzgereien mit traditionellem Zuschnitt. Doch wer nach dem unverfälschten Beherrschen der offenen Glut sucht, biegt in die ruhigere Dreieckstraße 26 ab: Zu La Grilladine."
-                  : "Düsseldorf-Oberbilk is renowned far beyond North Rhine-Westphalia as the epicenter of North African food culture in Germany. Strolling down Kölner Straße reveals spice merchants, mint tea rooms, Moroccan bakeries baking fresh Khobz flatbreads, and halal butchers. Yet those seeking the uncompromised mastery of the open charcoal hearth turn into the quiet Dreieckstraße 26: La Grilladine."}
+                  ? "Wer die geschäftige Kölner Straße in Düsseldorf-Oberbilk verlässt und in die Dreieckstraße einbiegt, spürt sofort, wie der Takt der Stadt langsamer wird. Noch bevor man die schwere Holztür von La Grilladine berührt, kündigt sich das Lokal in der kühlen Abendluft an: Mit dem trockenen, harzigen Aroma verbrennender Buchenholzkohle und der fernen, warmen Note von angeröstetem Kreuzkümmel."
+                  : "Turning off the bustling Kölner Straße in Düsseldorf-Oberbilk into the quieter Dreieckstraße instantly shifts the tempo of the evening. Before your hand even touches the wooden door of La Grilladine, the restaurant announces itself in the cool evening air: with the dry, resinous perfume of beechwood charcoal and the distant, warm note of lightly toasted cumin."}
               </p>
               <p>
                 {isDe
-                  ? "Schon beim Betreten empfängt einen der feine, nussige Duft glühender Buchenholzkohle und angeröstetem Kreuzkümmel. Auf der massiven Holztheke thronen traditionelle, handbemalte Berber-Keramiken, Tonkrüge und Terracotta-Tajines. An der Wand prangt der arabische Schriftzug مشاوي (Mashawee – Gegrilltes). Hier gibt es keine künstliche Show, sondern echte, herzliche Gastfreundschaft und ein kompromissloses Qualitätsversprechen."
-                  : "Stepping inside greets you with the fragrant aroma of natural beechwood embers and roasted cumin. Authentic hand-painted Berber pottery and earthenware tagines crown the wooden counter beneath the Arabic script مشاوي (Mashawee — Grills). There is no staged gimmickry here — just genuine, heartfelt hospitality and an unwavering commitment to culinary craft."}
+                  ? "Der Raum selbst verzichtet auf jede künstliche Inszenierung. Auf dem massiven Holztresen stehen handbemalte Tajine-Gefäße aus Fès und Terracotta-Krüge. Dahinter: Die offene Glut, betreut von einem Grillmeister, der die Hitze nicht mit Displays oder Reglern misst, sondern mit der Handfläche und dem geübten Blick für das Farbspektrum der Asche. Hier gilt kein formaler Reservierungsplan; man tritt ein, wird mit einem kurzen, herzlichen Lächeln begrüßt und nimmt Platz."
+                  : "The room itself rejects all decorative vanity. Across the solid wooden counter sit hand-painted Fassi tagine vessels and porous terracotta jugs. Behind it: open coals tended by a grillmaster who measures temperature not with digital probes, but with his palm and an instinctive eye for the changing palette of white ash. There are no reservation buzzers here; you step inside, receive an understated nod, and take your seat."}
               </p>
             </div>
           </section>
 
-          {/* SECTION 2: CHARCOAL STEAK & ROUND CRISPY POTATOES */}
-          <section className="bg-white rounded-3xl p-6 sm:p-8 border border-forest/10 shadow-xs space-y-6">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#7FA46B] block mb-1">
-                {isDe ? "Fleisch-Handwerk & Offene Flamme" : "Butcher's Craft & Open Flame"}
-              </span>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
-                {isDe
-                  ? "Das Entrecôte: Zarte Röstaromen & schmelzende Kräuterbutter"
-                  : "The Entrecôte: Caramelized Sear & Melting Herb Butter"}
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-              <div className="space-y-4 text-forest/80 text-sm sm:text-base leading-relaxed">
-                <p>
-                  {isDe
-                    ? "Auf dem offenen Holzkohlegrill schlägt das Herz des Hauses: Ein gut marmoriertes Rinder-Entrecôte wird bei hoher Strahlungshitze scharf angegrillt. Durch das Buchenholzfeuer karamellisieren die Fleischsäfte an der Oberfläche, während das Innere herrlich saftig und zartrosa bleibt."
-                    : "The beating heart of the kitchen is the open charcoal grill: A marbled beef ribeye is seared over glowing beechwood coals. The intense radiant heat creates a crisp, savory crust while preserving deep succulence inside."}
-                </p>
-                <div className="space-y-3">
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-forest/10">
-                    <strong className="text-forest block mb-1 flex items-center gap-1.5">
-                      <Flame className="h-4 w-4 text-amber-600" />
-                      {isDe ? "Hausgemachte Kräuterbutter" : "Housemade Chilled Herb Butter"}
-                    </strong>
-                    <p className="text-xs sm:text-sm text-forest/75 leading-relaxed">
-                      {isDe
-                        ? "Auf dem heißen Steak schmilzt eine Nocke frische Kräuterbutter mit Petersilie, Knoblauch und Meersalz, die sich mit dem Fleischsaft zu einer aromatischen Sauce verbindet."
-                        : "Freshly whipped herb butter melts slowly into the piping-hot steak, blending parsley, garlic, and sea salt into the rich natural juices."}
-                    </p>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-forest/10">
-                    <strong className="text-forest block mb-1 flex items-center gap-1.5">
-                      <Sparkles className="h-4 w-4 text-[#E6B84A]" />
-                      {isDe ? "Die goldenen Kartoffel-Rondelles" : "Golden Potato Rondelles"}
-                    </strong>
-                    <p className="text-xs sm:text-sm text-forest/75 leading-relaxed">
-                      {isDe
-                        ? "Statt industrieller Tiefkühl-Pommes serviert La Grilladine hauchdünn geschnittene, goldgelb ausgebackene Kartoffel-Rondellen – außen kross wie handgemachte Chips, innen wunderbar fluffig."
-                        : "In place of standard frozen fries, La Grilladine slices fresh potatoes into thin medallions, frying them golden and crisp like artisanal chips with a tender core."}
-                    </p>
-                  </div>
+          {/* CHAPTER 2: THE ANATOMY OF WOODFIRE (DORADE ROYALE) */}
+          <section className="space-y-6 pt-6 border-t border-forest/10">
+            <ThreeDCard>
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
+                <img
+                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1"
+                  alt={
+                    isDe
+                      ? "Ganze Dorade Royale im Schmetterlingsschnitt über Buchenholzkohle gegrillt mit goldenen Kartoffel-Rondellen und Salat"
+                      : "Whole butterflied Sea Bream grilled over beechwood coals with golden potato rondelles and salad"
+                  }
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
+                    <Fish className="h-3.5 w-3.5 text-[#E6B84A]" />
+                    <span>{isDe ? "Kapitel 02 · Das Feuer" : "Chapter 02 · The Fire"}</span>
+                  </span>
                 </div>
-              </div>
-
-              {/* 3D Card for Steak */}
-              <ThreeDCard>
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-forest/5">
-                  <img
-                    src="/magazin/la-grilladine-duesseldorf/la_grilladine_entrecote_3d.webp?v=1"
-                    alt={
-                      isDe
-                        ? "Saftiges Entrecôte vom Holzkohlegrill mit schmelzender Kräuterbutter und Kartoffel-Rondelles"
-                        : "Juicy charcoal-grilled entrecôte with herb butter and potato rondelles"
-                    }
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div
-                    className="absolute bottom-3 left-3"
-                    style={{ transform: "translateZ(20px)" }}
-                  >
-                    <span className="rounded-lg bg-forest/85 text-white px-2.5 py-1 text-[11px] font-bold backdrop-blur-md shadow-md">
-                      {isDe
-                        ? "🥩 Rinder-Entrecôte vom Holzkohlegrill"
-                        : "🥩 Charcoal-Grilled Entrecôte"}
-                    </span>
-                  </div>
-                </div>
-                <p className="mt-2 text-center text-[10px] text-forest/50 italic">
-                  {isDe
-                    ? "Perfekter Garpunkt: Saftiges Fleisch mit Buchenholz-Röstaromen"
-                    : "Perfect cook: Succulent beef with beechwood char"}
-                </p>
-              </ThreeDCard>
-            </div>
-          </section>
-
-          {/* SECTION 3: THE TAJINE & MINT TEA CEREMONY */}
-          <section className="space-y-6">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#7FA46B] block mb-1">
-                {isDe ? "Tontopf-Handwerk & Gastfreundschaft" : "Claypot Mastery & Hospitality"}
-              </span>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
-                {isDe
-                  ? "Tajine de Poulet & die Maghreb-Minztee-Zeremonie"
-                  : "Chicken Tagine & the Moroccan Mint Tea Ritual"}
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-              {/* 3D Card for Tajine */}
-              <ThreeDCard>
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-forest/5">
-                  <img
-                    src="/magazin/la-grilladine-duesseldorf/la_grilladine_tajine_poulet_3d.webp?v=1"
-                    alt={
-                      isDe
-                        ? "Traditionelle marokkanische Tajine de Poulet mit eingelegten Salzzitronen, gerösteten Mandeln und Oliven"
-                        : "Traditional Moroccan chicken tagine with preserved lemons, toasted almonds, and green olives"
-                    }
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div
-                    className="absolute bottom-3 left-3"
-                    style={{ transform: "translateZ(20px)" }}
-                  >
-                    <span className="rounded-lg bg-forest/85 text-white px-2.5 py-1 text-[11px] font-bold backdrop-blur-md shadow-md">
-                      {isDe ? "🍲 Tajine de Poulet aux Citrons" : "🍲 Lemon & Olive Chicken Tagine"}
-                    </span>
-                  </div>
-                </div>
-                <p className="mt-2 text-center text-[10px] text-forest/50 italic">
-                  {isDe
-                    ? "Stundenlang im traditionellen Tontopf geschmort"
-                    : "Slow-simmered for hours in traditional earthenware"}
-                </p>
-              </ThreeDCard>
-
-              <div className="space-y-4 text-forest/80 text-sm sm:text-base leading-relaxed">
-                <p>
-                  {isDe
-                    ? "Wer marokkanische Festtagsküche schätzt, kommt an den Tajines von La Grilladine nicht vorbei: Das Fleisch schmort im glasierten Tontopf mit Zwiebeln, frischem Ingwer, Kurkuma und Safran, bis es butterzart vom Knochen fällt. Die eingelegten Salzzitronen bringen eine elegante Frische, die von den fruchtigen grünen Oliven und dem Knusper gerösteter Mandeln harmonisch abgerundet wird."
-                    : "For lovers of traditional Moroccan feasts, La Grilladine's tagines are legendary: Meat slow-simmers gently in earthenware with sweet onions, fresh ginger, turmeric, and saffron until falling off the bone. Salt-preserved lemons deliver a bright, citrus zest that balances effortlessly against plump green olives and crunchy toasted almonds."}
-                </p>
-                <div className="p-4 rounded-2xl bg-white border border-forest/10 space-y-2">
-                  <strong className="text-forest flex items-center gap-2">
-                    <Coffee className="h-4 w-4 text-[#E6B84A]" />
+                <div
+                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
+                  style={{ transform: "translateZ(20px)" }}
+                >
+                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
                     {isDe
-                      ? "Frischer marokkanischer Minztee (Atay)"
-                      : "Fresh Moroccan Mint Tea (Atay)"}
-                  </strong>
-                  <p className="text-xs sm:text-sm text-forest/75 leading-relaxed">
-                    {isDe
-                      ? "Der krönende Abschluss: Grüner Gunpowder-Tee, üppige Bündel frischer marokkanischer Minze und feiner Zucker, traditionell aus der polierten Silberkanne aus hohem Bogen eingegossen, um die begehrte Schaumkrone (R'gwa) im Glas zu formen."
-                      : "The ultimate finale: Chinese gunpowder tea brewed with abundant fresh spearmint leaves, poured high from a polished silver teapot to create the revered frothy crown (R'gwa) in delicate patterned glassware."}
+                      ? "Dorade Royale 'Papillon': Knusprig karamellisierte Haut, berauschende Chermoula-Glasur und saftiges weißes Filet."
+                      : "Dorade Royale 'Papillon': Crisp blistered skin, fragrant chermoula glaze, and moist white fillets."}
                   </p>
                 </div>
               </div>
-            </div>
-          </section>
+            </ThreeDCard>
 
-          {/* SECTION 4: MEDITERRANEAN SEAFOOD SPREAD (Dorade & Gambas) */}
-          <section className="bg-white rounded-3xl p-6 sm:p-8 border border-forest/10 shadow-xs space-y-6">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#7FA46B] block mb-1">
-                {isDe ? "Frische aus dem Mittelmeer" : "Fresh Catch of the Mediterranean"}
-              </span>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
+            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
                 {isDe
-                  ? "Meeresfrüchte & Ganzer Fisch über glühender Kohle"
-                  : "Seafood & Whole Fish Over Glowing Coals"}
+                  ? "Die Textur des Feuers: Dorade Royale im Schmetterlingsschnitt"
+                  : "The Texture of Fire: Butterflied Dorade Royale"}
               </h2>
-              <p className="mt-2 text-forest/75 text-sm sm:text-base leading-relaxed">
+              <p>
                 {isDe
-                  ? "Marokkos Atlantik- und Mittelmeerküsten von Tanger bis Essaouira sind weltberühmt für ihre Fischmärkte. Bei La Grilladine wird dieser Küstenzauber auf den Rost geholt:"
-                  : "From Tangier to Essaouira, Morocco's coastal cuisine is celebrated for seafood cooked immediately over woodfire. La Grilladine brings that coastal magic to life:"}
+                  ? "Guter Fisch über Holzkohle ist eine Frage von Sekunden und Berührung. Bei La Grilladine wird die Dorade Royale der Länge nach im Schmetterlingsschnitt aufgefaltet. Durch die vergrößerte Oberfläche trifft die intensive Strahlungshitze der Buchenglut direkt auf das Fleisch, während die Haut in Sekunden kross aufknuspert, ohne dass das feine Meerwasser-Aroma verloren geht."
+                  : "Grilling fish over woodfire is an art of seconds and tactile precision. At La Grilladine, the sea bream is butterflied flat across the grate. By expanding the surface area, intense radiant heat crisps the silver skin in moments while sealing moisture inside the delicate white flesh."}
+              </p>
+              <p>
+                {isDe
+                  ? "Die Veredelung geschieht durch eine hauseigene Chermoula: Frischer Koriander, glatte Petersilie, zerstoßener Knoblauch, Kreuzkümmel, edelsüßes Paprikapulver und frisch gepresste Zitrone. Die Säure bricht die Fettstruktur des Fisches, während die Gewürze an den Rändern leicht anrösten. Dazu reicht die Küche keine gewöhnlichen Pommes Frites, sondern hauchdünn geschnittene, frische Kartoffel-Rondellen – kreisrunde Knusperscheiben, die im Mund knacken wie hausgemachte Chips und innen weich nach Kartoffel schmecken."
+                  : "The dish is basted with house chermoula: fresh cilantro, flat-leaf parsley, crushed garlic, cumin, sweet paprika, and cold-pressed lemon juice. The citrus acidity balances the richness of the fish, while the herbs caramelize delicately along the blistered edges. Alongside it, the kitchen serves thin potato rondelles — circular discs that snap with the crispness of artisanal chips before revealing a fluffy, steaming core."}
               </p>
             </div>
+          </section>
 
-            {/* 2-Column 3D Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Dorade Card */}
-              <ThreeDCard>
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-forest/5">
-                  <img
-                    src="/magazin/la-grilladine-duesseldorf/la_grilladine_dorade_3d.webp?v=1"
-                    alt={
-                      isDe
-                        ? "Ganze Dorade Royale butterflied vom Holzkohlegrill mit Zitrone und Kartoffelscheiben"
-                        : "Whole butterflied sea bream grilled over charcoal with lemon and potato rounds"
-                    }
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div
-                    className="absolute bottom-3 left-3"
-                    style={{ transform: "translateZ(20px)" }}
-                  >
-                    <span className="rounded-lg bg-forest/85 text-white px-2.5 py-1 text-[11px] font-bold backdrop-blur-md shadow-md">
-                      {isDe ? "🐟 Ganze Dorade Royale" : "🐟 Whole Sea Bream"}
-                    </span>
-                  </div>
+          {/* CHAPTER 3: THE ALCHEMY OF CLAY & TIME (TAJINE AUX CITRONS) */}
+          <section className="space-y-6 pt-6 border-t border-forest/10">
+            <ThreeDCard>
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
+                <img
+                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_tajine_poulet_3d.webp?v=1"
+                  alt={
+                    isDe
+                      ? "Traditionelle Tajine de Poulet mit eingelegten Salzzitronen, gerösteten Mandeln und grünen Oliven im Tontopf"
+                      : "Traditional Chicken Tagine with preserved lemons, toasted almonds, and green olives in earthenware"
+                  }
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
+                    <Utensils className="h-3.5 w-3.5 text-[#E6B84A]" />
+                    <span>{isDe ? "Kapitel 03 · Der Ton" : "Chapter 03 · The Earth"}</span>
+                  </span>
                 </div>
-                <div className="mt-3 px-1 text-xs sm:text-sm text-forest/80 space-y-1">
-                  <strong className="text-forest font-semibold block">
-                    {isDe ? "Dorade Royale 'Papillon'" : "Whole Grilled Dorade"}
-                  </strong>
-                  <p>
+                <div
+                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
+                  style={{ transform: "translateZ(20px)" }}
+                >
+                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
                     {isDe
-                      ? "Im Schmetterlingsschnitt flach aufgefaltet und mit hausgemachter marokkanischer Chermoula (Kreuzkümmel, Paprika, frischer Koriander, Zitrone & Knoblauch) bestrichen. Knusprige Haut, saftiges weißes Fleisch."
-                      : "Butterflied flat and basted with house Chermoula (ground cumin, sweet paprika, fresh cilantro, garlic & lemon) over intense coals. Blistered skin with tender, flaky fillets."}
+                      ? "Tajine de Poulet aux Citrons: Sanftes Blubbern im schweren Tontopf, confierte Salzzitronen und der Kontrast gerösteter Mandeln."
+                      : "Tajine de Poulet aux Citrons: Gentle bubbling within dense clay, preserved lemon peel, and the crunch of toasted almonds."}
                   </p>
                 </div>
-              </ThreeDCard>
+              </div>
+            </ThreeDCard>
 
-              {/* Gambas Card */}
-              <ThreeDCard>
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-forest/5">
-                  <img
-                    src="/magazin/la-grilladine-duesseldorf/la_grilladine_gambas_3d.webp?v=1"
-                    alt={
-                      isDe
-                        ? "Gegrillte Riesengarnelen auf Spieß mit Knusper-Kartoffeln und gemischtem Salat"
-                        : "Grilled tiger prawns on skewers with crispy potato rondelles and mixed salad"
-                    }
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div
-                    className="absolute bottom-3 left-3"
-                    style={{ transform: "translateZ(20px)" }}
-                  >
-                    <span className="rounded-lg bg-forest/85 text-white px-2.5 py-1 text-[11px] font-bold backdrop-blur-md shadow-md">
-                      {isDe ? "🦐 Gegrillte Riesengambas" : "🦐 Grilled Tiger Prawns"}
-                    </span>
-                  </div>
-                </div>
-                <div className="mt-3 px-1 text-xs sm:text-sm text-forest/80 space-y-1">
-                  <strong className="text-forest font-semibold block">
-                    {isDe ? "Gambas-Spieße vom Grill" : "Grilled Gambas Skewers"}
-                  </strong>
-                  <p>
-                    {isDe
-                      ? "Große, saftige Riesengarnelen auf Holzspießen mit Kräuter-Knoblauch-Glasur auf den Punkt über glühender Holzkohle gegrillt, bis die Schale leicht karamellisiert und das Fleisch knackig bleibt."
-                      : "Plump tiger prawns skewered and basted with garlic-herb oil, grilled over open coals until the shells caramelize and the meat stays sweet and crisp."}
-                  </p>
-                </div>
-              </ThreeDCard>
+            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
+                {isDe
+                  ? "Die Alchemie der Geduld: Tajine de Poulet aux Citrons Confits"
+                  : "The Alchemy of Patience: Tagine with Preserved Lemons"}
+              </h2>
+              <p>
+                {isDe
+                  ? "Wenn der schwere, konische Tondeckel am Tisch angehoben wird, entweicht eine dichte Wolke aus Ingwer, Safran und karamellisierten Zwiebeln. In der marokkanischen Küche ist die Tajine kein bloßes Gefäß, sondern ein Mikrokosmos: Der Dampf steigt an den kühlen Wänden empor, kondensiert und tropft kontinuierlich auf das Fleisch zurück. Das Ergebnis ist eine samtige, tief konzentrierte Sauce (M'qalli), die das Huhn so mürbe macht, dass es sich ohne Messer mit einem Stück warmem Fladenbrot teilen lässt."
+                  : "When the conical clay lid is lifted tableside, a scented plume of ginger, saffron, and sweet braised onions fills the air. In Moroccan cooking, the tagine is not merely cookware, but an ecosystem: steam rises along the cooling ceramic slopes, condenses, and returns continuously to baste the ingredients. The resulting sauce is velvety and deeply concentrated, rendering the chicken so tender it requires no knife — only a tear of warm crusty bread."}
+              </p>
+              <p>
+                {isDe
+                  ? "Der sensorische Reiz liegt in der Balance dreier Elemente: Die herbe Frische monatelang in Meersalz fermentierter Zitronenschale, die herbe Würze grüner Oliven und der nussige Biss goldbraun gerösteter Mandeln. Es ist dieser ruhige Zusammenklang aus Säure, Salz und milder Süße, der zeigt, wie vollkommen traditionelle Rezepturen sein können, wenn ihnen nichts hinzugefügt und nichts genommen wird."
+                  : "The sensory elegance hinges on three harmonized textures: the bright citrus depth of lemons aged in sea salt for months, the earthy brine of green olives, and the satisfying bite of golden almonds. It is this quiet interplay of acidity, savory depth, and gentle sweetness that demonstrates the timeless power of heritage recipes preserved without shortcuts."}
+              </p>
             </div>
           </section>
 
-          {/* SECTION 5: COMMUNITY VERDICT */}
-          <section className="bg-[#FAF7F0] rounded-3xl p-6 sm:p-8 border border-forest/15 shadow-sm space-y-6">
+          {/* CHAPTER 4: THE TEA RITUAL (ATAY BI NA'NA) */}
+          <section className="space-y-6 pt-6 border-t border-forest/10">
+            <ThreeDCard>
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-forest/5">
+                <img
+                  src="/magazin/la-grilladine-duesseldorf/la_grilladine_minztee_3d.webp?v=1"
+                  alt={
+                    isDe
+                      ? "Traditioneller marokkanischer Minztee aus polierter Silberkanne in feines Glas mit Schaumkrone auf gehämmertem Silbertablett"
+                      : "Traditional Moroccan mint tea poured from silver teapot with frothy crown on hammered tray"
+                  }
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute top-4 left-4" style={{ transform: "translateZ(28px)" }}>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/90 backdrop-blur-md text-white px-3.5 py-1 text-xs font-bold shadow-md border border-white/10">
+                    <Coffee className="h-3.5 w-3.5 text-[#E6B84A]" />
+                    <span>{isDe ? "Kapitel 04 · Das Ritual" : "Chapter 04 · The Ritual"}</span>
+                  </span>
+                </div>
+                <div
+                  className="absolute bottom-4 left-4 right-4 rounded-xl bg-forest/90 backdrop-blur-md p-3 text-white border border-white/10 shadow-lg"
+                  style={{ transform: "translateZ(20px)" }}
+                >
+                  <p className="text-xs sm:text-sm font-medium text-white/95 leading-snug">
+                    {isDe
+                      ? "Atay bi Na'na: Frisch aufgebrüht in der Silberkanne, mit hoher Geste eingegossen für die zarte Schaumkrone (R'gwa)."
+                      : "Atay bi Na'na: Brewed fresh in a silver teapot, poured from an elevated height to create the delicate crown of foam."}
+                  </p>
+                </div>
+              </div>
+            </ThreeDCard>
+
+            <div className="prose prose-forest max-w-none text-forest/85 leading-relaxed text-base sm:text-lg space-y-4 font-sans">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight">
+                {isDe
+                  ? "Der krönende Abschluss: Das Zeremoniell des Atay"
+                  : "The Final Act: The Living Ritual of Atay"}
+              </h2>
+              <p>
+                {isDe
+                  ? "Ein marokkanisches Mahl endet nicht mit dem Besteck, sondern mit dem Klingen von Glas auf Silber. Der Atay bi Na'na wird in einer schweren, polierten Silberkanne serviert. Grüner Gunpowder-Tee, ein üppiger Strauß frischer Nanaminze und dezente Süße ziehen darin zu einem bernsteinfarbenen Elixier heran."
+                  : "A Moroccan meal does not conclude with cutlery; it ends with the gentle clink of patterned glass on hammered silver. Atay bi Na'na is served in a polished teapot. Chinese gunpowder tea leaves, a generous bouquet of fresh spearmint, and measured sweetness steep into an amber elixir."}
+              </p>
+              <p>
+                {isDe
+                  ? "Das Einschenken aus halber Armlänge Höhe ist keine Show, sondern Physik: Durch den Fallstrahl kühlt der heiße Tee leicht ab, belüftet sich mit Sauerstoff und bildet im filigranen Glas jene dichte, cremige Schaumkrone ('R'gwa' oder 'Rezza'), die in Marokko als Siegel wahrer Gastfreundschaft gilt. Der erste Schluck reinigt den Gaumen von den Röstaromen des Holzkohlegrills und hinterlässt eine kühle, anhaltende Klarheit."
+                  : "Pouring from an elevated height is not mere theater; it is purposeful: the falling arc cools the infusion slightly, aerates the tea, and crowns the glass with a silky, delicate foam ring ('R'gwa'), revered as the hallmark of authentic hospitality. The first sip lifts the smoky intensity of the grill from the palate, leaving an enduring, refreshing clarity."}
+              </p>
+            </div>
+          </section>
+
+          {/* COMMUNITY SUMMARY & PRACTICAL TAKEAWAY */}
+          <section className="bg-white rounded-3xl p-6 sm:p-8 border border-forest/15 shadow-sm space-y-6">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-2xl bg-[#E6B84A]/20 text-forest">
                 <Heart className="h-6 w-6 text-[#E6B84A]" />
               </div>
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-forest/60 block">
-                  {isDe ? "Unser Fazit" : "Community Verdict"}
+                  {isDe ? "Persönliches Fazit" : "Community Reflection"}
                 </span>
-                <h3 className="font-display text-xl sm:text-2xl font-bold text-forest">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-forest">
                   {isDe
-                    ? "Warum La Grilladine ein absolutes Highlight in NRW ist"
-                    : "Why La Grilladine is a true North Rhine-Westphalia highlight"}
+                    ? "Warum dieser Besuch in Erinnerung bleibt"
+                    : "Why This Visit Remains Unforgettable"}
                 </h3>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-forest/80">
-              <div className="p-4 rounded-2xl bg-white border border-forest/10 space-y-1.5 shadow-xs">
+              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
                 <span className="font-bold text-forest flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Echter Holzkohlegeschmack" : "Genuine Charcoal Aroma"}
+                  {isDe ? "Echte Buchenholzkohle" : "Pure Beechwood Embers"}
                 </span>
                 <p>
                   {isDe
-                    ? "Kein Gas- oder Elektrogrill: Fleisch, Gambas und Fisch tragen das feine, nussige Raucharoma natürlicher Holzkohle."
-                    : "Zero electric or gas shortcuts: meats, prawns, and fish carry the unmistakable, gentle smoke signature of natural charcoal."}
+                    ? "Kein Gas, kein Elektro-Heizstab. Fisch und Fleisch tragen jene reine Holzfeuer-Signatur, die man heute nur noch selten findet."
+                    : "Zero electric elements or gas shortcuts. Meats and seafood carry an authentic woodfire imprint rare to find today."}
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-forest/10 space-y-1.5 shadow-xs">
+              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
                 <span className="font-bold text-forest flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Hausgemacht & Frisch zubereitet" : "Fresh & Made from Scratch"}
+                  {isDe ? "Echtes Schmoren im Ton" : "Slow Claypot Braising"}
                 </span>
                 <p>
                   {isDe
-                    ? "Von den frisch ausgestochenen Kartoffel-Rondellen über die Chermoula bis zur Kräuterbutter ist jedes Detail hausgemacht."
-                    : "From hand-sliced potato rounds and house chermoula to chilled herb butter, every component is prepared fresh."}
+                    ? "Die Tajines werden nicht in Edelstahltöpfen vorgekocht und umgefüllt, sondern schmoren langsam in porösem Ton zu tiefem Aroma."
+                    : "Tagines are braised genuinely in unglazed clay, concentrating juices naturally over hours without industrial shortcuts."}
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-forest/10 space-y-1.5 shadow-xs">
+              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
                 <span className="font-bold text-forest flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Faire Preise & Reiche Portionen" : "Generous Portions & Fair Pricing"}
+                  {isDe ? "Gästefreundliche Preise" : "Transparent, Fair Value"}
                 </span>
                 <p>
                   {isDe
-                    ? "Die Teller sind reichlich bemessen, Beilagen wie Salat, Brot und Kartoffeln werden großzügig serviert. Exzellentes Preis-Leistungs-Verhältnis."
-                    : "Generously portioned plates accompanied by abundant fresh salads, bread, and potato rounds. Outstanding value for money."}
+                    ? "Großzügige Portionen mit reichlich frischem Salat, Fladenbrot und Kartoffel-Rondellen zu sehr fairen Preisen."
+                    : "Substantial portions accompanied by crisp potato discs, bread, and fresh salad at very fair neighborhood pricing."}
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-white border border-forest/10 space-y-1.5 shadow-xs">
+              <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-forest/10 space-y-1.5 shadow-xs">
                 <span className="font-bold text-forest flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {isDe ? "Zentral erreichbar in Düsseldorf" : "Centrally Located in Düsseldorf"}
+                  {isDe ? "Ehrliche Nachbarschaft" : "Authentic Neighborhood Soul"}
                 </span>
                 <p>
                   {isDe
-                    ? "Nur 5 Gehminuten vom Düsseldorfer Hauptbahnhof und der Haltestelle Oberbilk S-Bahnhof entfernt."
-                    : "Just a 5-minute walk from Düsseldorf Central Station and Oberbilk public transit."}
+                    ? "Keine Schickimicki-Attitüde. Man kommt als Gast und wird mit der unkomplizierten Herzlichkeit des Maghreb empfangen."
+                    : "No pretentious velvet ropes. You arrive hungry and are greeted with the heartfelt ease of genuine Maghrebi hospitality."}
                 </p>
               </div>
             </div>
@@ -942,13 +696,15 @@ function LaGrilladineDuesseldorfArticle() {
             <div className="flex items-center gap-2 font-bold text-forest">
               <Info className="w-4 h-4 text-[#E6B84A]" />
               <span>
-                {isDe ? "Transparenzhinweis & Quellenangaben" : "Editorial Transparency & Sources"}
+                {isDe
+                  ? "Transparenzhinweis & redaktionelle Recherche"
+                  : "Editorial Transparency & Background"}
               </span>
             </div>
             <p className="leading-relaxed">
               {isDe
-                ? "Dieser redaktionelle Beitrag entstand im Rahmen unserer Speisely Community: Fotos und Vor-Ort-Erfahrungen wurden von einem engagierten Community-Mitglied geteilt. Ergänzende Öffnungszeiten, Standortdaten und kulinarische Details wurden über die offizielle Website (la-grilladine.de) sowie das Tourismusportal Visit Düsseldorf (visitduesseldorf.de) redaktionell recherchiert und abgeglichen. Es bestanden zum Zeitpunkt der Veröffentlichung keine bezahlten Werbeabsprachen mit dem Betreiber."
-                : "This editorial article was created within our Speisely Community: Photography and on-site tasting notes were contributed by an active community member. Operational hours, location specifications, and culinary facts were verified via the official restaurant website (la-grilladine.de) and the Visit Düsseldorf tourism directory (visitduesseldorf.de). No commercial sponsorship existed at the time of publication."}
+                ? "Dieser Beitrag basiert auf den Vor-Ort-Eindrücken und Fotografien eines aktiven Speisely Community-Mitglieds (selbst bezahlt, ohne Einladung oder Gegenleistung). Die Betriebszeiten, Standortangaben und Küchenspezifikationen wurden über die offizielle Webpräsenz (la-grilladine.de) sowie das Tourismusportal Visit Düsseldorf (visitduesseldorf.de) redaktionell geprüft. Speisely führt keine bezahlten Ranking-Einträge."
+                : "This story is based on the verified on-site experience and photography contributed by a Speisely community member (self-paid, without invitation or promotional perks). Operating hours, location details, and culinary data were cross-checked via the restaurant's official presence (la-grilladine.de) and Visit Düsseldorf (visitduesseldorf.de). Speisely publishes zero paid rating rankings."}
             </p>
           </aside>
 
@@ -962,13 +718,15 @@ function LaGrilladineDuesseldorfArticle() {
                 <Users className="h-3.5 w-3.5" />
                 <span>{isDe ? "Werde Teil der Community" : "Join the Community"}</span>
               </span>
-              <h2 className="font-display text-2xl sm:text-4xl font-bold text-white">
-                {isDe ? "Warst du schon bei La Grilladine?" : "Have you visited La Grilladine?"}
+              <h2 className="font-serif text-2xl sm:text-4xl font-bold text-white">
+                {isDe
+                  ? "Kennst du ein Restaurant mit echter Seele?"
+                  : "Know a Restaurant with Genuine Soul?"}
               </h2>
               <p className="text-white/80 text-sm sm:text-base leading-relaxed">
                 {isDe
-                  ? "Teile deine eigenen Restaurant-Entdeckungen, Lieblingsgerichte oder Catering-Erlebnisse mit Genießerinnen und Genießern auf Speisely."
-                  : "Share your own restaurant discoveries, favorite dishes, or catering moments with food lovers across Speisely."}
+                  ? "Ob Holzkohlegrill, Familienbäckerei oder Spezialitätenküche: Teile deine ehrlichen Genuss-Momente mit der Speisely Community."
+                  : "Whether open woodfire, family bakery, or heritage cuisine: share your genuine food discoveries with the Speisely Community."}
               </p>
             </div>
 
