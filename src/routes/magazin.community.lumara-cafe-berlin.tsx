@@ -11,6 +11,10 @@ import {
   Coffee,
   Heart,
   Egg,
+  Flame,
+  Clock,
+  Phone,
+  Laptop,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { LanguageToggle } from "@/components/LanguageToggle";
@@ -21,17 +25,17 @@ export const Route = createFileRoute("/magazin/community/lumara-cafe-berlin")({
   head: () => ({
     meta: [
       {
-        title: "Lumara Café Berlin: Brunch, Hummus & Brioche",
+        title: "Lumara Café Berlin: Brunch, Lavabrot & Tahini Latte",
       },
       {
         name: "description",
         content:
-          "Speisely Community Visit im Lumara Café Berlin-Charlottenburg: Samtiger Hummus, ofenfrisches Lavabrot, Tiramisu French Toast und Specialty Coffee.",
+          "Lumara Café Berlin-Charlottenburg: Echtes Lavabrot 'Golden Pear', Nonna Maria Tiramisu French Toast, Croffle Truffle und Specialty Tahini Latte.",
       },
       {
         name: "keywords",
         content:
-          "Lumara Cafe Berlin, Brunch Charlottenburg, Mediterranes Fruehstueck Berlin, Hummus Lavabrot Berlin, Tiramisu French Toast, Knesebeckstrasse Cafe, Speisely Community Visit, Halal Brunch Berlin",
+          "Lumara Cafe Berlin, Lumara Charlottenburg, Lavabrot Berlin, Nonna Maria French Toast, Croffle Truffle Berlin, Tahini Latte, Knesebeckstrasse Brunch, Pure Pistachio Kuchen, Mediterraner Brunch Berlin",
       },
       {
         name: "geo.region",
@@ -51,12 +55,12 @@ export const Route = createFileRoute("/magazin/community/lumara-cafe-berlin")({
       },
       {
         property: "og:title",
-        content: "Lumara Café Berlin: Mediterrane Brunch-Kultur | Speisely Magazin",
+        content: "Lumara Café Berlin: Das Licht des Marmors & Moderne Brunch-Kultur",
       },
       {
         property: "og:description",
         content:
-          "Erlebnisbericht aus der Knesebeckstraße: Wie Lumara Café in Charlottenburg samtigen Hummus, pochierte Eier und kunstvolles Tiramisu French Toast zelebriert.",
+          "Das neue Brunch-Refugium in der Knesebeckstraße: Ofenfrisches Lavabrot, getrüffelte Croffles, Nonna Maria Brioche und Tahini-Kaffee.",
       },
       {
         property: "og:image",
@@ -108,9 +112,11 @@ export const Route = createFileRoute("/magazin/community/lumara-cafe-berlin")({
               contentLocation: {
                 "@type": "Restaurant",
                 name: "Lumara Café",
-                url: "https://www.instagram.com/lumara.cafe/",
+                url: "https://lumara-cafe.de",
+                telephone: "+49 30 628 59 260",
                 priceRange: "€€",
-                servesCuisine: "Mediterraner Brunch, Levantinisches Frühstück, Specialty Coffee",
+                servesCuisine:
+                  "Mediterranes Brunch Café, Lavabrot Spezialitäten, Specialty Coffee & Bowls",
                 address: {
                   "@type": "PostalAddress",
                   streetAddress: "Knesebeckstraße 29",
@@ -136,8 +142,8 @@ export const Route = createFileRoute("/magazin/community/lumara-cafe-berlin")({
                       "Saturday",
                       "Sunday",
                     ],
-                    opens: "09:00",
-                    closes: "17:00",
+                    opens: "08:00",
+                    closes: "18:00",
                   },
                 ],
               },
@@ -149,12 +155,12 @@ export const Route = createFileRoute("/magazin/community/lumara-cafe-berlin")({
                 "@id": "https://speisely.de/#website",
               },
               headline:
-                "Lumara Café Berlin: Die Kunst von samtigem Hummus, Tiramisu-Brioche & Morgenlicht",
+                "Lumara Café Berlin: Licht des Marmors, Ofen-Lavabrot & 'Nonna Maria' Brioche",
               description:
-                "Ein Mitglied der Speisely Community berichtet aus der Knesebeckstraße 29 in Berlin-Charlottenburg: Mediterranes Frühstück, ofenfrisches Lavabrot und meisterhafter Specialty Coffee.",
+                "Authentischer Tasting-Report aus der Knesebeckstraße 29 in Charlottenburg: Wie Lumara Café modernes Lavabrot, getrüffelte Croffles und Specialty Tahini Latte meistert.",
               image: "https://speisely.de/magazin/lumara-cafe-berlin/lumara_table_spread.webp?v=1",
               datePublished: "2026-10-19T08:00:00+02:00",
-              dateModified: "2026-10-19T08:00:00+02:00",
+              dateModified: "2026-10-19T11:30:00+02:00",
               inLanguage: "de-DE",
               author: {
                 "@type": "Organization",
@@ -167,7 +173,7 @@ export const Route = createFileRoute("/magazin/community/lumara-cafe-berlin")({
               about: {
                 "@type": "FoodEstablishment",
                 name: "Lumara Café",
-                servesCuisine: "Mediterranes Frühstück & Specialty Coffee",
+                servesCuisine: "Mediterraner Brunch & Specialty Coffee",
                 address: {
                   "@type": "PostalAddress",
                   streetAddress: "Knesebeckstraße 29",
@@ -225,7 +231,7 @@ function LumaraCafeArticlePage() {
 
   return (
     <article className="min-h-screen bg-[#F6F4EB] text-[#173C32]">
-      {/* Editorial Navigation Top Bar (Rule 17: Mobile Safe) */}
+      {/* Editorial Navigation Top Bar */}
       <header className="sticky top-0 z-40 bg-[#083822] text-[#F6F4EB] border-b border-[#E6B84A]/30 backdrop-blur-md px-3 sm:px-4 py-2.5 shadow-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
@@ -271,14 +277,14 @@ function LumaraCafeArticlePage() {
               <>
                 Lumara Café Berlin: <br className="hidden sm:inline" />
                 <span className="text-[#E6B84A] italic font-normal">
-                  Die Kunst des mediterranen Brunches
+                  Das Licht des Marmors & Moderne Brunch-Kultur
                 </span>
               </>
             ) : (
               <>
                 Lumara Café Berlin: <br className="hidden sm:inline" />
                 <span className="text-[#E6B84A] italic font-normal">
-                  The Art of Mediterranean Brunch
+                  The Light of Marble & Modern Brunch Craft
                 </span>
               </>
             )}
@@ -286,8 +292,8 @@ function LumaraCafeArticlePage() {
 
           <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-[#F6F4EB]/85 leading-relaxed font-sans px-1">
             {isDe
-              ? "Samtig geschlagener Hummus mit gerösteten Kichererbsen, ofenfrisches Lavabrot, pochierte Eier unter feiner Hollandaise und sündhaftes Tiramisu-Brioche: Wie ein lichtdurchflutetes Refugium in der Knesebeckstraße die Berliner Brunchkultur verzaubert."
-              : "Silky whipped hummus with toasted chickpeas, piping-hot lavash bread, poached eggs under velvet hollandaise, and decadent tiramisu brioche: How a sun-drenched sanctuary on Knesebeckstraße redefines Berlin's morning dining scene."}
+              ? "Ofenfrisches Lavabrot mit gerösteten Birnen und Dattelsirup, 'Nonna Maria' Tiramisu-Brioche, getrüffelte Croffles und samtige Tahini Lattes: Wie ein lichtdurchflutetes Refugium in der Knesebeckstraße mediterrane Leichtigkeit zelebriert."
+              : "Stone-baked lavash bread with roasted pears and date syrup, 'Nonna Maria' tiramisu brioche, truffle-infused croffles, and silky tahini lattes: How a sun-drenched sanctuary on Knesebeckstraße redefines Berlin's morning scene."}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs font-mono text-[#F6F4EB]/70 pt-2">
@@ -297,8 +303,8 @@ function LumaraCafeArticlePage() {
             </span>
             <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-[#E6B84A] shrink-0" />
-              {isDe ? "Oktober 2026" : "October 2026"}
+              <Clock className="w-3.5 h-3.5 text-[#E6B84A] shrink-0" />
+              {isDe ? "Täglich 08:00 – 18:00 Uhr" : "Daily 08:00 AM – 06:00 PM"}
             </span>
             <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-1.5">
@@ -311,32 +317,32 @@ function LumaraCafeArticlePage() {
 
       {/* Main Editorial Content */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-16">
-        {/* Editorial Introduction with Master Drop-Cap (Lindt Style) */}
+        {/* Editorial Introduction with Master Drop-Cap */}
         <section className="space-y-6">
           <div className="relative">
             <p className="text-base sm:text-xl leading-relaxed text-[#173C32]/90 font-serif">
               <span className="float-left text-5xl sm:text-7xl leading-[0.85] font-bold font-serif text-[#E6B84A] mr-3 sm:mr-4 mt-0.5 sm:mt-1">
-                {isDe ? "W" : "W"}
+                L
               </span>
               {isDe ? (
                 <>
-                  er die Knesebeckstraße unweit des Savignyplatzes entlangspaziert, ahnt hinter der
-                  eleganten Charlottenburger Altbaufassade zunächst einen der vielen klassischen
-                  Treffpunkte des Westens. Doch wer die Stufen ins <strong>Lumara Café</strong>{" "}
-                  hinabtritt, lässt die urbane Betriebsamkeit der Hauptstadt im Nu hinter sich. Es
-                  ist die sinnliche Verschmelzung aus warmer mediterraner Leichtigkeit, sanft
-                  beleuchteten Terrakotta-Bögen und dem verlockenden Duft von frisch gebrühtem
-                  Specialty Coffee und warmem Lavabrot, die sofort gefangen nimmt.
+                  UMARA – der Name leitet sich aus dem poetischen Zusammenspiel von <em>Licht</em>{" "}
+                  und <em>Marmor</em> ab. Wer die Knesebeckstraße unweit des Savignyplatzes und des
+                  Kurfürstendamms entlangspaziert und die Stufen in dieses Refugium hinabtritt,
+                  spürt sofort, dass hier kein gewöhnliches Großstadtlokal wartet. Es ist ein
+                  moderner, eleganter "Place to be": Sanft beleuchtete Terrakotta-Rundbögen, echter
+                  Marmor, ein Solitär-Olivenbaum und das leise Surren der Siebträgermaschine
+                  schaffen ein Gefühl von mediterranem Kurzurlaub mitten in Charlottenburg.
                 </>
               ) : (
                 <>
-                  alking down Knesebeckstraße just a few steps from Savignyplatz, one might expect
-                  another understated café tucked into historic Charlottenburg architecture. Yet the
-                  moment you cross the threshold into <strong>Lumara Café</strong>, Berlin's hurried
-                  metropolitan rhythm gives way to serene warmth. A harmonious blend of
-                  Mediterranean ease, sun-dappled terracotta alcoves, and the intoxicating fragrance
-                  of freshly brewed specialty coffee and stone-baked lavash bread welcomes every
-                  guest.
+                  UMARA – a name inspired by the luminous dialogue between <em>light</em> and{" "}
+                  <em>marble</em>. Walking down Knesebeckstraße just a few steps from Savignyplatz
+                  and Kurfürstendamm, the moment you cross the threshold, the frantic metropolitan
+                  rhythm gives way to serene warmth. This is not another generic breakfast spot; it
+                  is a design-forward, light-filled sanctuary where sun-dappled terracotta alcoves,
+                  polished marble, a potted olive tree, and the aroma of specialty coffee inspire
+                  quiet Mediterranean indulgence.
                 </>
               )}
             </p>
@@ -344,8 +350,8 @@ function LumaraCafeArticlePage() {
 
           <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
             {isDe
-              ? "Ein Mitglied unserer Speisely Community hat Lumara Café besucht — unabhängig, ohne Ankündigung und auf eigene Kosten. Das Urteil ist eindeutig: Lumara ist mehr als ein fotogenes Frühstückslokal; es ist ein durchdachtes gastronomisches Erlebnis, das levantinische Mezzekunst und kosmopolitische Brunch-Klassiker auf handwerklich höchstem Niveau zusammenführt."
-              : "A dedicated member of our Speisely Community visited Lumara Café — unannounced, independent, and completely self-funded. The takeaway is clear: Lumara is far more than a camera-ready brunch destination; it is an impeccably executed culinary haven uniting Levantine mezze traditions with cosmopolitan brunch benchmarks."}
+              ? "Ein Mitglied unserer Speisely Community hat Lumara Café besucht — unabhängig, ohne Ankündigung und auf eigene Kosten. Das kulinarische Profil ist bemerkenswert präzise: Das Küchenteam vereint mediterrane Wärme mit moderner urbaner Genusskultur. Hier gibt es keine schwerfälligen Standardgerichte, sondern bio-zertifizierte Frische, veganfreundliche Vielfalt, ofenfrisches Lavabrot, getrüffelte Spezialitäten und zuckerreduzierte Desserts, die den Gaumen begeistern."
+              : "A dedicated member of our Speisely Community visited Lumara Café — unannounced, independent, and completely self-funded. The culinary concept is remarkably sharp: an experienced international kitchen team fusing Mediterranean warmth with contemporary brunch sophistication. Rather than heavy clichés, Lumara focuses on organic farm-fresh ingredients, stone-baked lavash flatbreads, truffle croffles, and refined sugar-reduced pastries."}
           </p>
         </section>
 
@@ -370,26 +376,26 @@ function LumaraCafeArticlePage() {
           </div>
           <figcaption className="text-xs font-mono text-[#173C32]/60 mt-3 text-center">
             {isDe
-              ? "Foto: Speisely Community. Der lichtdurchflutete Gastraum von Lumara Café: Dezente Beleuchtung, gewölbte Nischen, ein echter Olivenbaum und warmes Wiener Geflecht schaffen pure Ruhe."
-              : "Photo: Speisely Community. The luminous dining hall of Lumara Café: Warm backlit alcoves, an olive tree centerpiece, and woven cane seating inspire quiet Mediterranean indulgence."}
+              ? "Foto: Speisely Community. Der lichtdurchflutete Gastraum von Lumara Café: Beleuchtete Rundbögen, echter Olivenbaum, Wiener Geflecht und Marmortische zum Genießen oder produktiven Verweilen."
+              : "Photo: Speisely Community. Lumara Café's light-filled interior: Backlit alcoves, an olive tree centerpiece, woven cane chairs, and marble tables ideal for relaxed dining or focused remote work."}
           </figcaption>
         </figure>
 
-        {/* Section 1: The Architectural & Culinary Sanctuary */}
+        {/* Section 1: The Concept — Bewusst genießen & kreative Vielfalt */}
         <section className="space-y-4">
           <h2 className="font-serif text-2xl sm:text-3xl font-black text-[#173C32] tracking-tight">
             {isDe
-              ? "Der Raum als Ouvertüre: Licht, Terrazzo und Olivenzweige"
-              : "The Space as a Prelude: Light, Terrazzo & Olive Boughs"}
+              ? "Die Lumara-Philosophie: Bio-Qualität, Zuckerreduktion & Lavabrot"
+              : "The Lumara Philosophy: Organic Quality, Mindful Sugar & Stone-Baked Lavash"}
           </h2>
           <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
             {isDe
-              ? "Bevor der erste Teller den Tisch berührt, entfaltet das Interior seine beruhigende Wirkung. Helle, kalkweiße Wände mit sanft hinterleuchteten Rundbögen erinnern an kykladische Sommerhäuser, während Stühle aus hellem Eichenholz und feinem Wiener Geflecht nordische Behaglichkeit einbringen. Ein Solitär-Olivenbaum im sandfarbenen Pflanzkübel bildet den visuellen Ankerpunkt des Raumes. An den kühlen Marmortischen wird nicht gehetzt; hier nimmt man sich Zeit."
-              : "Before the first plate touches the table, the interior works its restorative spell. Whitewashed walls accented by glowing arched recesses evoke Mediterranean retreats, while light oak chairs with woven cane craftsmanship introduce Nordic warmth. A solitary potted olive tree serves as the room’s organic anchor. At cool marble tables, hurried mornings naturally dissolve into relaxed conversation."}
+              ? "Das Herzstück der Speisekarte ist das ofenfrische Lava-Brot: Knusprig gebackenes Fladenbrot, das dampfend aus dem Ofen serviert und kreativ belegt wird. Ob als 'Golden Pear' mit milder Ziegenkäsemischung, gerösteten Birnen, Rosmarin, Walnüssen und Dattelsirup, oder als 'Feta Fiesta' mit hausgemachter Muhammara-Walnusspaste und Oliven – hier verschmelzen levantinische Aromen mit mediterraner Eleganz. Ergänzt wird dies durch zuckerreduzierte Kuchen wie den reinen Pistazienkuchen 'Pure Pistachio', der vollkommen ohne Mehl und Industriezucker auskommt."
+              : "The centerpiece of the culinary offering is their stone-baked Lava Bread: served steaming straight from the oven and topped with inspired flavor pairings. Highlights include the 'Golden Pear' with creamy goat cheese, roasted pears, rosemary, walnuts, and date syrup, and the 'Feta Fiesta' with homemade muhammara walnut spread and olives. Mindful eaters will delight in flourless, sugar-reduced cakes like the signature 'Pure Pistachio', baked purely from pistachios and served with airy cream."}
           </p>
         </section>
 
-        {/* Sensory Tasting Masterclass: Die Speisely Genuss-Schule (Lindt Style Framework) */}
+        {/* Sensory Tasting Masterclass: Die Speisely Genuss-Schule */}
         <section className="p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-white border-2 border-[#E6B84A]/30 shadow-xl space-y-5 sm:space-y-6">
           <div className="flex items-center gap-2.5 text-[#083822]">
             <Award className="w-5 sm:w-6 h-5 sm:h-6 text-[#E6B84A] shrink-0" />
@@ -406,8 +412,8 @@ function LumaraCafeArticlePage() {
 
           <p className="text-sm sm:text-base text-[#173C32]/75 leading-relaxed font-sans">
             {isDe
-              ? "Ein wahrhaft meisterhafter Brunch erschöpft sich nicht im einfachen Verzehr. Er belohnt den bewussten Genuss in 3 sensorischen Akten:"
-              : "True brunch mastery is not about haste. It rewards mindful tasting across 3 distinct sensory movements:"}
+              ? "Die Küche von Lumara belohnt die Neugier und die bewusste sensorische Wahrnehmung in 3 Stufen:"
+              : "Lumara's kitchen rewards mindful discovery across 3 distinct sensory movements:"}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2">
@@ -415,12 +421,12 @@ function LumaraCafeArticlePage() {
             <div className="p-4 sm:p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-2 sm:space-y-3">
               <span className="font-mono text-3xl font-black text-[#E6B84A]">01</span>
               <h4 className="font-serif text-lg font-bold text-[#083822]">
-                {isDe ? "Die samtige Welle" : "The Velvet Wave"}
+                {isDe ? "Der Lavabrot-Biss" : "The Lavash Crisp"}
               </h4>
               <p className="text-xs sm:text-sm text-[#173C32]/70 leading-relaxed font-sans">
                 {isDe
-                  ? "Das warme Lavabrot anreißen und durch den kühlen, mit Sumach und gerösteten Kichererbsen bestreuten Hummus ziehen. Die Textur muss seidig und ohne körnigen Widerstand gleiten."
-                  : "Tear a warm fragment of lavash bread and scoop through the cool hummus. The texture should yield like velvet, punctuated only by toasted chickpeas and tart sumac."}
+                  ? "Das noch dampfende Lavabrot 'Golden Pear' teilen: Der warme Ziegenkäse, das herbe Aroma von Thymian und die Süße des Dattelsirups vereinen sich mit dem Knacken gerösteter Walnüsse."
+                  : "Break into the steaming 'Golden Pear' lava bread: warm goat cheese, aromatic thyme, and sweet date syrup balance the crunch of roasted walnuts."}
               </p>
             </div>
 
@@ -428,12 +434,12 @@ function LumaraCafeArticlePage() {
             <div className="p-4 sm:p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-2 sm:space-y-3">
               <span className="font-mono text-3xl font-black text-[#E6B84A]">02</span>
               <h4 className="font-serif text-lg font-bold text-[#083822]">
-                {isDe ? "Der goldene Schnitt" : "The Golden Yield"}
+                {isDe ? "Der goldene Schnitt" : "The Golden Cut"}
               </h4>
               <p className="text-xs sm:text-sm text-[#173C32]/70 leading-relaxed font-sans">
                 {isDe
-                  ? "Der Schnitt ins pochierte Ei: Das flüssige, warme Eigelb fließt langsam über cremige Avocado, geröstetes Sauerteigbrot und herbe Granatapfelkerne."
-                  : "The fork test on the poached egg: Rich liquid yolk slowly blankets velvety avocado, rustic sourdough, and bursts of tart pomegranate."}
+                  ? "Der Schnitt in die pochierten Eier des 'Green Goddess' oder 'Eggs Benedict': Seidige Hollandaise und flüssiger Dotter treffen auf cremige Avocado und kräftiges Sauerteigbrot."
+                  : "The fork test on the poached eggs of the 'Green Goddess' or 'Eggs Benedict': Velvety hollandaise and golden yolk cascade over sourdough and fresh avocado."}
               </p>
             </div>
 
@@ -441,12 +447,12 @@ function LumaraCafeArticlePage() {
             <div className="p-4 sm:p-5 rounded-2xl bg-[#F6F4EB] border border-[#173C32]/10 space-y-2 sm:space-y-3">
               <span className="font-mono text-3xl font-black text-[#E6B84A]">03</span>
               <h4 className="font-serif text-lg font-bold text-[#083822]">
-                {isDe ? "Der süße Akkord" : "The Sweet Accord"}
+                {isDe ? "Nonna Marias Akkord" : "The Nonna Maria Finale"}
               </h4>
               <p className="text-xs sm:text-sm text-[#173C32]/70 leading-relaxed font-sans">
                 {isDe
-                  ? "Beim Tiramisu French Toast trifft die karamellisierte Brioche-Kruste auf herbes Kakaopulver, getränkte Löffelbiskuits und kühle Mascarpone-Creme."
-                  : "On the Tiramisu French Toast, caramelized golden crust contrasts with bitter Dutch cocoa, espresso-soaked ladyfingers, and chilled mascarpone."}
+                  ? "Beim French Toast 'Nonna Maria' verschmelzen butterzarte Brioche, luftige Mascarpone, getränkte Löffelbiskuits und herber Kakao zu einem vollendeten Tiramisu-Dessert."
+                  : "On the 'Nonna Maria' French toast, caramelized brioche, whipped mascarpone, espresso-kissed ladyfingers, and Dutch cocoa harmonize into tiramisu perfection."}
               </p>
             </div>
           </div>
@@ -458,13 +464,13 @@ function LumaraCafeArticlePage() {
             <div className="absolute top-3 left-3 sm:top-6 sm:left-6 z-10 flex items-center gap-1.5 sm:gap-2 rounded-full bg-[#083822]/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg max-w-[calc(100%-1.5rem)]">
               <Egg className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E6B84A] shrink-0" />
               <span className="truncate">
-                SIGNATURE BRUNCH · EGGS BENEDICT
-                <span className="hidden sm:inline"> & AVOCADO SOURDOUGH</span>
+                BRUNCH-KLASSIKER · EGGS BENEDICT
+                <span className="hidden sm:inline"> & GREEN GODDESS TOAST</span>
               </span>
             </div>
             <img
               src="/magazin/lumara-cafe-berlin/lumara_benedict_avotoast.webp?v=1"
-              alt="Eggs Benedict mit cremigem Hollandaise-Spiegel und Avocado-Sauerteigbrot mit pochierten Eiern bei Lumara Café"
+              alt="Eggs Benedict auf Brioche mit pochierten Eiern und Guacamole-Sauerteigbrot bei Lumara Café"
               className="w-full h-auto object-cover rounded-2xl"
               width="1200"
               height="900"
@@ -473,30 +479,30 @@ function LumaraCafeArticlePage() {
           </div>
           <figcaption className="text-xs font-mono text-[#173C32]/60 mt-3 text-center">
             {isDe
-              ? "Foto: Speisely Community. Perfektionierter Frühstücksklassiker: Zwei pochierte Bio-Eier auf gebeiztem Lachs und Brioche unter seidiger Sauce Hollandaise, flankiert von knusprigem Avocado-Sauerteigbrot mit Za'atar und Granatapfelkernen."
-              : "Photo: Speisely Community. Breakfast perfection: Poached organic eggs over salmon and brioche under velvety hollandaise, paired with sourdough avocado toast seasoned with za'atar and pomegranate."}
+              ? "Foto: Speisely Community. Brioche-Scheiben mit pochierten Freilandeiern, seidiger Hollandaise und Avocado – serviert neben knusprigem Sauerteigbrot mit Granatapfelkernen."
+              : "Photo: Speisely Community. Golden brioche with poached organic eggs, silky hollandaise, and avocado—paired with crusty sourdough toast crowned with ruby pomegranate."}
           </figcaption>
         </figure>
 
-        {/* Product Callout: The Showstopper (Lindt Style Callout Box) */}
+        {/* Product Callout: The Showstopper — Nonna Maria & Frenchie */}
         <section className="p-5 sm:p-7 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#083822] to-[#124E34] text-white space-y-3 sm:space-y-4 shadow-xl border border-[#E6B84A]/30">
           <div className="flex flex-wrap items-center gap-2">
             <span className="bg-[#E6B84A] text-[#083822] text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded">
               {isDe ? "DER SHOWSTOPPER" : "THE SHOWSTOPPER"}
             </span>
             <span className="text-xs font-mono text-[#E6B84A] tracking-wider uppercase">
-              {isDe ? "EINFACH KÖSTLICH!" : "SIMPLY DELICIOUS!"}
+              NONNA MARIA (16 €) · FRENCHIE (16.90 €)
             </span>
           </div>
           <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#F6F4EB] leading-snug">
             {isDe
-              ? "Tiramisu French Toast & Brioche-Türme: Die süße Meisterschaft"
-              : "Tiramisu French Toast & Brioche Towers: Sweet Mastery"}
+              ? "French Toast 'Nonna Maria': Wenn Tiramisu auf warme Brioche trifft"
+              : "French Toast 'Nonna Maria': When Tiramisu Meets Warm Brioche"}
           </h3>
           <p className="text-sm sm:text-base text-[#F6F4EB]/85 leading-relaxed font-sans">
             {isDe
-              ? "Wenn der French-Toast-Turm an den Tisch gebracht wird, verstummen die Gespräche: Extra dicke Scheiben goldbraun ausgebackener Brioche, außen mit feinem Knusperkaramell und innen so watteweich wie eine Wolke. Gekrönt wird das Ensemble entweder von frischen Beeren, Apfelscheiben und Minze – oder in der spektakulären Tiramisu-Interpretation mit samtiger Mascarpone, Kakaobestäubung und getränkten Biskuits. Ein Dessert, das jeden Morgen zum Festtag erhebt."
-              : "When the French toast towers arrive, conversation naturally halts: thick cuts of golden brioche, caramelized crisp at the crust and cloud-soft within. Accented by seasonal berries, crisp apple ribbons, and mint—or served in the showstopping Tiramisu rendition with chilled mascarpone, cocoa dusting, and soaked ladyfingers. A morning celebration in its purest form."}
+              ? "Die süßen Kreationen bei Lumara sind keine bloßen Beilagen, sondern eigenständige Meisterwerke: Bei 'Nonna Maria' wird goldbraun ausgebackene Brioche im Tiramisu-Stil mit Mascarpone, Kakaopulver, knusprigen Ladyfinger-Keksen und einer samtigen Kaffee-Sahne-Sauce serviert. Wer es fruchtiger mag, wählt den 'Frenchie' mit saisonalen Beeren, Apfelstiften, gehackten Pistazien und purem Ahornsirup."
+              : "Sweet selections at Lumara are culinary centerpieces: 'Nonna Maria' layers golden brioche in tiramisu elegance with rich mascarpone, cocoa powder, crisp ladyfingers, and a velvety coffee cream reduction. Those craving orchard brightness can opt for 'Frenchie', laden with seasonal fresh berries, apple batons, chopped pistachios, and pure maple syrup."}
           </p>
         </section>
 
@@ -507,12 +513,12 @@ function LumaraCafeArticlePage() {
               <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E6B84A] shrink-0" />
               <span className="truncate">
                 {isDe ? "DER FESTSCHMAUS" : "THE SWEET FEAST"}
-                <span className="hidden sm:inline"> · TIRAMISU & BERRY BRIOCHE</span>
+                <span className="hidden sm:inline"> · NONNA MARIA & ICED MATCHA</span>
               </span>
             </div>
             <img
               src="/magazin/lumara-cafe-berlin/lumara_table_spread.webp?v=1"
-              alt="Große Brunch-Tafel bei Lumara Café mit Tiramisu French Toast, Beeren-Brioche, Iced Matcha und Mezze"
+              alt="Große Brunch-Tafel bei Lumara Café mit Tiramisu French Toast Nonna Maria, Beeren-Brioche und Iced Matcha"
               className="w-full h-auto object-cover rounded-2xl"
               width="1200"
               height="900"
@@ -521,32 +527,32 @@ function LumaraCafeArticlePage() {
           </div>
           <figcaption className="text-xs font-mono text-[#173C32]/60 mt-3 text-center">
             {isDe
-              ? "Foto: Speisely Community. Der Höhepunkt des Lumara-Tisches: Tiramisu French Toast mit Kakaoschleier, fluffiger Beeren-Brioche-Turm und schaumig geschlagener Iced Matcha Latte."
-              : "Photo: Speisely Community. The pinnacle of the Lumara table: Tiramisu French toast under rich cocoa, towering berry brioche, and hand-whisked iced matcha latte."}
+              ? "Foto: Speisely Community. Die süße Tafel bei Lumara: Nonna Maria French Toast mit Löffelbiskuits, Beeren-Brioche-Turm und frisch aufgeschlagener Iced Matcha Latte."
+              : "Photo: Speisely Community. Sweet brunch mastery: Nonna Maria French toast with ladyfingers, berry brioche tower, and whisked iced matcha latte."}
           </figcaption>
         </figure>
 
-        {/* 2-Column Sensory Grid: Hummus & Specialty Coffee (Lindt Style) */}
+        {/* 2-Column Sensory Grid: Hummus Bowls & Signature Tahini Latte */}
         <section
           aria-label={isDe ? "Kulinarische Begleiter" : "Culinary Pairings"}
           className="my-14 space-y-6"
         >
           <div className="text-center max-w-xl mx-auto space-y-2">
             <span className="text-xs font-mono uppercase tracking-widest text-[#E6B84A] font-bold">
-              {isDe ? "HARMONIE & KONTRAST" : "HARMONY & CONTRAST"}
+              {isDe ? "SIGNATURE KREATIONEN" : "SIGNATURE CREATIONS"}
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl font-black text-[#083822]">
-              {isDe ? "Die vollendeten Begleiter" : "The Perfect Pairings"}
+              {isDe ? "Hummus-Bowls & Tahini-Kaffee" : "Hummus Bowls & Tahini Coffee"}
             </h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-            {/* Item 1: Artisanal Hummus */}
+            {/* Item 1: Artisanal Hummus Bowls */}
             <div className="flex flex-col rounded-3xl bg-white border-2 border-[#173C32]/15 shadow-xl overflow-hidden transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
               <div className="relative aspect-[4/3] w-full bg-[#083822]/5 overflow-hidden">
                 <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
                   <Utensils className="w-3 h-3 text-[#E6B84A]" />
-                  <span>ARTISANAL HUMMUS</span>
+                  <span>GREEN DREAM & GOLDEN HUMMUS</span>
                 </div>
                 <img
                   src="/magazin/lumara-cafe-berlin/lumara_hummus_plate.webp?v=1"
@@ -560,26 +566,26 @@ function LumaraCafeArticlePage() {
               <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between space-y-3">
                 <div className="space-y-2">
                   <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#083822]/5 text-[#083822] text-[11px] font-mono font-bold uppercase tracking-wider border border-[#083822]/10">
-                    {isDe ? "DIE LEVANTINISCHE SEELE" : "LEVANTINE HERITAGE"}
+                    {isDe ? "HAUSGEMACHTE BOWLS" : "SCRATCH-MADE BOWLS"}
                   </span>
                   <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#083822] leading-snug">
-                    {isDe ? "Seidiger Hummus & Lavabrot" : "Silky Hummus & Lavash Bread"}
+                    {isDe ? "Cremige Hummus-Variationen" : "Silky Hummus Bowls"}
                   </h4>
                   <p className="text-sm text-[#173C32]/80 leading-relaxed font-sans">
                     {isDe
-                      ? "Stundenlang mit feinem Tahini, Zitrone und kaltgepresstem Olivenöl aufgeschlagen. Vollendet mit knusprig gerösteten Kichererbsen, geschmorten Cocktailtomaten und säuerlich-fruchtigen Granatapfelkernen. Ein Hochgenuss zu ofenfrischem, dampfendem Lavabrot."
-                      : "Whipped to airy perfection with cold-pressed sesame tahini, fresh lemon, and virgin olive oil. Crowned with crisp roasted chickpeas, blistered cherry tomatoes, and tart ruby pomegranate. An exquisite counterpart to piping-hot, stone-baked lavash bread."}
+                      ? "Vom 'Golden Hummus' (8 €) mit Tahini, Zitrone, Pinienkernen und Pickled Onions bis zum 'Green Dream' (9.50 €) mit Avocado, Feta, Joghurt und gerösteten Cashews & Pistazien: Cremig geschlagen und ideal zum Dippen mit ofenfrischem Brot."
+                      : "From the 'Golden Hummus' (€8) with tahini, pine nuts, and pickled onions to the vibrant 'Green Dream' (€9.50) topped with avocado, feta, yogurt, and toasted cashews & pistachios."}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Item 2: Specialty Coffee Ritual */}
+            {/* Item 2: Signature Drinks — Tahini Latte & Matcha */}
             <div className="flex flex-col rounded-3xl bg-white border-2 border-[#173C32]/15 shadow-xl overflow-hidden transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
               <div className="relative aspect-[4/3] w-full bg-[#083822]/5 overflow-hidden">
                 <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 flex items-center gap-1.5 rounded-full bg-[#083822]/85 backdrop-blur-md px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-md">
                   <Coffee className="w-3 h-3 text-[#E6B84A]" />
-                  <span>SPECIALTY COFFEE</span>
+                  <span>TAHINI LATTE & SPECIALTY COFFEE</span>
                 </div>
                 <img
                   src="/magazin/lumara-cafe-berlin/lumara_latte_art.webp?v=1"
@@ -593,15 +599,15 @@ function LumaraCafeArticlePage() {
               <div className="p-6 sm:p-7 flex flex-col flex-1 justify-between space-y-3">
                 <div className="space-y-2">
                   <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#083822]/5 text-[#083822] text-[11px] font-mono font-bold uppercase tracking-wider border border-[#083822]/10">
-                    {isDe ? "BARISTA-PRÄZISION" : "BARISTA MASTERY"}
+                    {isDe ? "SIGNATURE DRINKS" : "SIGNATURE DRINKS"}
                   </span>
                   <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#083822] leading-snug">
-                    {isDe ? "Flat White & Latte Art" : "Flat White & Latte Art"}
+                    {isDe ? "Tahini Latte & Jade Matcha" : "Tahini Latte & Jade Matcha"}
                   </h4>
                   <p className="text-sm text-[#173C32]/80 leading-relaxed font-sans">
                     {isDe
-                      ? "Ausgewählte Bohnen, fein austarierte Extraktion und seidige Mikroschaum-Textur: Das florale Tulpen-Motiv zeugt von Barista-Hingabe. Feine Kakaonoten harmonieren ideal mit der süßen Brioche."
-                      : "Artisanal espresso blend, precise extraction, and velvety microfoam poured with textbook tulip art. Nutty cocoa profiles balance the richness of sweet breakfast plates."}
+                      ? "Die Signature-Getränke sind Berlins Geheimtipp: Der 'Tahini Latte' (5.50 €) verschmilzt nussiges Sesam-Tahini mit Espresso, während der 'Jade Matcha' (6.50 €) kaltes Kokosnusswasser mit samtigem Matcha-Schaum krönt. Natürlich gibt es auch Flat White mit perfekter Tulpen-Latte-Art."
+                      : "Berlin's most creative morning pour: The 'Tahini Latte' (€5.50) infuses nutty sesame tahini with rich espresso, while the 'Jade Matcha' (€6.50) crowns coconut water with airy matcha foam."}
                   </p>
                 </div>
               </div>
@@ -629,58 +635,86 @@ function LumaraCafeArticlePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm font-sans text-[#F6F4EB]/85">
             <div className="space-y-2">
-              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#E6B84A]" />
                 {isDe ? "Standort & Adresse" : "Location & Address"}
               </p>
               <p className="leading-snug">
                 Knesebeckstraße 29
                 <br />
-                10623 Berlin-Charlottenburg {isDe ? "(nahe Savignyplatz)" : "(near Savignyplatz)"}
+                10623 Berlin-Charlottenburg{" "}
+                {isDe ? "(nahe Savignyplatz & Ku'damm)" : "(near Savignyplatz & Ku'damm)"}
               </p>
             </div>
 
             <div className="space-y-2">
-              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#E6B84A]" />
                 {isDe ? "Öffnungszeiten" : "Opening Hours"}
               </p>
               <p className="leading-snug">
-                {isDe ? "Täglich: 09:00 – 17:00 Uhr" : "Daily: 09:00 AM – 05:00 PM"}
+                {isDe ? "Täglich: 08:00 – 18:00 Uhr" : "Daily: 08:00 AM – 06:00 PM"}
                 <br />
                 <span className="text-[#E6B84A] font-mono text-xs">
-                  {isDe ? "Kein Ruhetag · Täglich geöffnet" : "Open 7 Days a Week · No Rest Day"}
+                  {isDe
+                    ? "Küche bis 15:00 Uhr · Kaffee & Kuchen bis 18:00 Uhr"
+                    : "Kitchen until 3:00 PM · Coffee & Cake until 6:00 PM"}
                 </span>
               </p>
             </div>
 
             <div className="space-y-2">
-              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
-                {isDe ? "Konditionen & Besonderheiten" : "Terms & Highlights"}
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider flex items-center gap-1.5">
+                <Flame className="w-3.5 h-3.5 text-[#E6B84A]" />
+                {isDe ? "Besonderheiten & Ernährung" : "Highlights & Dietary"}
               </p>
               <p className="leading-snug">
                 {isDe ? (
                   <>
-                    • 100% Halal-Fleischauswahl & reichhaltig vegetarisch
+                    • Ofenfrisches Lava-Brot & Croffle-Spezialitäten
                     <br />
-                    • Kartenzahlung & Barzahlung möglich
-                    <br />• Walk-in willkommen (am Wochenende früh kommen!)
+                    • Vegetarisch, veganfreundlich & zuckerreduziert
+                    <br />
+                    • Bio-Zutaten & laktosefreie Alternativen (Hafer, Soja, Kokos)
+                    <br />• Highspeed-WLAN & sonnige Außenterrasse
                   </>
                 ) : (
                   <>
-                    • 100% Halal meat options & rich vegetarian selection
+                    • Stone-baked lava flatbreads & truffle croffles
                     <br />
-                    • Card and cash payments accepted
-                    <br />• Walk-ins welcome (arrive early on weekends!)
+                    • Vegetarian, vegan-friendly & low-sugar pastries
+                    <br />
+                    • Organic produce & dairy-free milks (oat, soy, coconut)
+                    <br />• High-speed Wi-Fi & sunny outdoor patio
                   </>
                 )}
               </p>
             </div>
 
             <div className="space-y-2">
-              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider">
-                {isDe ? "Kontakt & Instagram" : "Contact & Social"}
+              <p className="font-bold text-[#E6B84A] uppercase text-xs font-mono tracking-wider flex items-center gap-1.5">
+                <Phone className="w-3.5 h-3.5 text-[#E6B84A]" />
+                {isDe ? "Kontakt & Reservierung" : "Contact & Reservations"}
               </p>
               <p className="leading-snug">
-                Instagram:{" "}
+                Telefon:{" "}
+                <a
+                  href="tel:+493062859260"
+                  className="text-[#E6B84A] underline font-bold hover:text-white"
+                >
+                  +49 30 628 59 260
+                </a>
+                <br />
+                Web:{" "}
+                <a
+                  href="https://lumara-cafe.de"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#E6B84A] underline font-bold hover:text-white"
+                >
+                  lumara-cafe.de
+                </a>{" "}
+                · Instagram:{" "}
                 <a
                   href="https://www.instagram.com/lumara.cafe/"
                   target="_blank"
@@ -690,9 +724,7 @@ function LumaraCafeArticlePage() {
                   @lumara.cafe
                 </a>
                 <br />
-                {isDe
-                  ? "Reservierungen / Walk-in: Vor Ort in der Knesebeckstraße"
-                  : "Reservations / Walk-in: On-site at Knesebeckstraße"}
+                {isDe ? "Walk-ins herzlich willkommen" : "Walk-ins warmly welcome"}
               </p>
             </div>
           </div>
@@ -705,8 +737,8 @@ function LumaraCafeArticlePage() {
           </h2>
           <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
             {isDe
-              ? "Lumara Café beweist, wie moderner Brunch sein sollte: Nicht überladen mit künstlichen Effekten, sondern getragen von ehrlicher Handwerkskunst, frischen Zutaten und einer Atmosphäre, die wie ein Kurzurlaub am Mittelmeer wirkt. Wer samtigen Hummus mit warmem Lavabrot liebt und bei pochierten Eiern oder karamellisiertem Brioche ins Schwärmen gerät, findet in der Knesebeckstraße 29 seinen neuen Lieblingsort im Berliner Westen."
-              : "Lumara Café demonstrates what modern breakfast dining can achieve when anchored in authentic craft rather than fleeting hype: Mediterranean soul, pristine ingredients, and an ambiance reminiscent of a coastal retreat. For lovers of velvety hummus, hot stone-baked lavash, and indulgent brioche, Knesebeckstraße 29 is a premier morning destination in West Berlin."}
+              ? "Lumara Café ist kein beliebiges Frühstückslokal, sondern eine Bereicherung für Charlottenburg. Mit echtem Ofen-Lavabrot ('Golden Pear'), getrüffelten Croffles, dem sündhaften 'Nonna Maria' Tiramisu-French-Toast und innovativen Signature-Getränken wie dem Tahini Latte beweist das Team, wie zeitgemäßer Brunch schmecken muss: Natürlich, frisch, voller mediterraner Seele und mit Liebe zum Detail zubereitet."
+              : "Lumara Café is far more than a routine breakfast room; it is an inspired asset for Charlottenburg. Through stone-baked lava flatbreads ('Golden Pear'), truffle croffles, decadent 'Nonna Maria' tiramisu French toast, and pioneer drinks like the Tahini Latte, the team proves what contemporary brunch can achieve: natural, unpretentious, brimming with Mediterranean warmth, and impeccably executed."}
           </p>
         </section>
 
