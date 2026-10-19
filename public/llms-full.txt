@@ -46,6 +46,7 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - https://speisely.de/blog/catering-event-planung-deutschland
 
 ### Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
+- Lumara Café (Mediterraner Brunch, Artisanal Hummus, Lavabrot & Tiramisu French Toast Berlin-Charlottenburg): https://speisely.de/magazin/community/lumara-cafe-berlin
 - La Grilladine (Marokkanische Küche, Buchen-Holzkohlegrill, Tajines & Dorade Royale Düsseldorf-Oberbilk): https://speisely.de/magazin/community/la-grilladine-duesseldorf
 - Baba Pirzola Meze & Grill (Türkische – Mediterrane Küche, Meze & Holzkohlegrill Berlin-Wittenbergplatz): https://speisely.de/magazin/community/baba-pirzola-berlin
 - BBQ Chicken Berlin-Kreuzberg (Korean Fried Chicken Berlin): https://speisely.de/magazin/community/bbq-chicken-berlin-kreuzberg

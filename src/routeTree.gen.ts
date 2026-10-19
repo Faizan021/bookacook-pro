@@ -78,6 +78,7 @@ import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/ma
 import { Route as MagazinCommunityKingTutRestaurantBerlinRouteImport } from './routes/magazin.community.king-tut-restaurant-berlin'
 import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
 import { Route as MagazinCommunityLaGrilladineDuesseldorfRouteImport } from './routes/magazin.community.la-grilladine-duesseldorf'
+import { Route as MagazinCommunityLumaraCafeBerlinRouteImport } from './routes/magazin.community.lumara-cafe-berlin'
 import { Route as MagazinCommunityNeumannsCafeBerlinRouteImport } from './routes/magazin.community.neumanns-cafe-berlin'
 import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
 import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
@@ -460,6 +461,12 @@ const MagazinCommunityLaGrilladineDuesseldorfRoute =
     path: '/magazin/community/la-grilladine-duesseldorf',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityLumaraCafeBerlinRoute =
+  MagazinCommunityLumaraCafeBerlinRouteImport.update({
+    id: '/magazin/community/lumara-cafe-berlin',
+    path: '/magazin/community/lumara-cafe-berlin',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunityNeumannsCafeBerlinRoute =
   MagazinCommunityNeumannsCafeBerlinRouteImport.update({
     id: '/magazin/community/neumanns-cafe-berlin',
@@ -614,6 +621,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
+  '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -696,6 +704,7 @@ export interface FileRoutesByTo {
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
+  '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -783,6 +792,7 @@ export interface FileRoutesById {
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
+  '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -870,6 +880,7 @@ export interface FileRouteTypes {
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/la-grilladine-duesseldorf'
+    | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
@@ -952,6 +963,7 @@ export interface FileRouteTypes {
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/la-grilladine-duesseldorf'
+    | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
@@ -1038,6 +1050,7 @@ export interface FileRouteTypes {
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/la-grilladine-duesseldorf'
+    | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/thronburger-berlin'
@@ -1107,6 +1120,7 @@ export interface RootRouteChildren {
   MagazinCommunityKingTutRestaurantBerlinRoute: typeof MagazinCommunityKingTutRestaurantBerlinRoute
   MagazinCommunityKokioBerlinRoute: typeof MagazinCommunityKokioBerlinRoute
   MagazinCommunityLaGrilladineDuesseldorfRoute: typeof MagazinCommunityLaGrilladineDuesseldorfRoute
+  MagazinCommunityLumaraCafeBerlinRoute: typeof MagazinCommunityLumaraCafeBerlinRoute
   MagazinCommunityNeumannsCafeBerlinRoute: typeof MagazinCommunityNeumannsCafeBerlinRoute
   MagazinCommunitySanSebastianBerlinRoute: typeof MagazinCommunitySanSebastianBerlinRoute
   MagazinCommunityThronburgerBerlinRoute: typeof MagazinCommunityThronburgerBerlinRoute
@@ -1602,6 +1616,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityLaGrilladineDuesseldorfRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/lumara-cafe-berlin': {
+      id: '/magazin/community/lumara-cafe-berlin'
+      path: '/magazin/community/lumara-cafe-berlin'
+      fullPath: '/magazin/community/lumara-cafe-berlin'
+      preLoaderRoute: typeof MagazinCommunityLumaraCafeBerlinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/neumanns-cafe-berlin': {
       id: '/magazin/community/neumanns-cafe-berlin'
       path: '/magazin/community/neumanns-cafe-berlin'
@@ -1927,6 +1948,7 @@ const rootRouteChildren: RootRouteChildren = {
   MagazinCommunityKokioBerlinRoute: MagazinCommunityKokioBerlinRoute,
   MagazinCommunityLaGrilladineDuesseldorfRoute:
     MagazinCommunityLaGrilladineDuesseldorfRoute,
+  MagazinCommunityLumaraCafeBerlinRoute: MagazinCommunityLumaraCafeBerlinRoute,
   MagazinCommunityNeumannsCafeBerlinRoute:
     MagazinCommunityNeumannsCafeBerlinRoute,
   MagazinCommunitySanSebastianBerlinRoute:

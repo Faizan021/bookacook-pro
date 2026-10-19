@@ -47,6 +47,7 @@ ${blogUrls}
 
 ## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
 
+- Lumara Café (Berlin-Charlottenburg): ${BASE}/magazin/community/lumara-cafe-berlin
 - La Grilladine (Düsseldorf-Oberbilk): ${BASE}/magazin/community/la-grilladine-duesseldorf
 - Baba Pirzola Meze & Grill (Berlin-Wittenbergplatz): ${BASE}/magazin/community/baba-pirzola-berlin
 - BBQ Chicken Berlin-Kreuzberg (Berlin): ${BASE}/magazin/community/bbq-chicken-berlin-kreuzberg

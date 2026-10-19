@@ -141,6 +141,32 @@ export const magazineArticles: MagazineArticle[] = [
     disclosureEn: "Community Submission · Self-paid",
   },
 
+  // 5. Community: Lumara Café Berlin
+  {
+    id: "lumara-cafe-berlin",
+    slug: "lumara-cafe-berlin",
+    titleDe: "Samt & Brioche: Lumara Café Berlin-Charlottenburg",
+    titleEn: "Velvet & Brioche: Lumara Café Berlin-Charlottenburg",
+    excerptDe:
+      "Samtig geschlagener Hummus, ofenfrisches Lavabrot, pochierte Eier unter feiner Hollandaise und sündhaftes Tiramisu-Brioche in der Knesebeckstraße.",
+    excerptEn:
+      "Silky whipped hummus, stone-baked lavash bread, poached eggs under hollandaise, and decadent tiramisu brioche on Knesebeckstraße.",
+    image: "/magazin/lumara-cafe-berlin/lumara_table_spread.webp?v=1",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Knesebeckstraße, Berlin-Charlottenburg",
+    city: "Berlin",
+    dateDe: "Oktober 2026",
+    dateEn: "October 2026",
+    readTime: "5 Min.",
+    categories: ["community", "guides"],
+    to: "/magazin/community/lumara-cafe-berlin",
+    isVisit: false,
+    disclosureType: "selbst-bezahlt",
+    disclosureDe: "Community-Einsendung · Selbst bezahlt",
+    disclosureEn: "Community Submission · Self-paid",
+  },
+
   // 5. Community: Neumanns Café Berlin
   {
     id: "neumanns-cafe",
