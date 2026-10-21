@@ -177,7 +177,7 @@ export const magazineArticles: MagazineArticle[] = [
       "Der virale Baklava Burger im Community-Test: Knuspriger Gaziantep-Teig, Maraş-Eis, heiße Pistazien-Lava, Midye Baklava & herzhaftes Çiğköfte-Dürüm im Rhein-Main-Gebiet.",
     excerptEn:
       "The viral Baklava Burger reviewed: Crisp Gaziantep pastry, Maraş ice cream, hot pistachio lava, Midye Baklava & savory Çiğköfte dürüm across Rhine-Main.",
-    image: "/magazin/seydioglu/seydioglu_baklava_burger_hero.webp?v=2",
+    image: "/magazin/seydioglu/seydioglu_baklava_burger_hero.webp?v=3",
     categoryBadgeDe: "Community Story",
     categoryBadgeEn: "Community Story",
     location: "Nordwestzentrum & Zeil, Frankfurt am Main",

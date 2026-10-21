@@ -351,22 +351,23 @@ function SeydiogluArticlePage() {
             <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <img
-                  src="/magazin/seydioglu/seydioglu_baklava_burger_hero.webp?v=2"
+                  src="/magazin/seydioglu/seydioglu_baklava_burger_hero.webp?v=3"
                   alt="Seydioğlu Baklava Burger Schichten mit Maraş Eis"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   loading="eager"
+                  width={1200}
+                  height={900}
                 />
-                <div className="absolute top-3 left-3 bg-[#083822]/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#E6B84A]/30 text-white text-xs font-mono font-medium flex items-center gap-1.5 shadow-md">
-                  <span>🍔</span>
-                  <span>
-                    {isDe ? "Havuç-Dilimi Bun · Maraş Patty" : "Havuç-Dilimi Bun · Maraş Patty"}
-                  </span>
-                </div>
               </div>
-              <figcaption className="mt-3 text-center text-xs text-[#173C32]/70 font-sans italic">
-                {isDe
-                  ? "Der Seydioğlu Baklava Burger vor dem Überguss: Butterknuspriger Teig, Maraş-Dondurma und Antep-Pistazien."
-                  : "The Seydioğlu Baklava Burger prior to pouring: crisp butter pastry, Maraş dondurma, and Antep pistachios."}
+              <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 px-1">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#083822]/10 text-[#083822]">
+                  🍔 {isDe ? "Havuç-Dilimi Bun · Maraş Patty" : "Havuç-Dilimi Bun · Maraş Patty"}
+                </span>
+                <span className="text-xs text-[#173C32]/70 font-sans italic">
+                  {isDe
+                    ? "Der Seydioğlu Baklava Burger vor dem Überguss: Butterknuspriger Teig, Maraş-Dondurma und Antep-Pistazien."
+                    : "The Seydioğlu Baklava Burger prior to pouring: crisp butter pastry, Maraş dondurma, and Antep pistachios."}
+                </span>
               </figcaption>
             </div>
           </figure>
@@ -397,22 +398,23 @@ function SeydiogluArticlePage() {
             <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <img
-                  src="/magazin/seydioglu/seydioglu_pistachio_lava_pour.webp?v=2"
+                  src="/magazin/seydioglu/seydioglu_pistachio_lava_pour.webp?v=3"
                   alt="Heißer Pistazien Lava Pour über den Baklava Burger"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   loading="eager"
+                  width={1200}
+                  height={900}
                 />
-                <div className="absolute top-3 left-3 bg-[#083822]/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#E6B84A]/30 text-white text-xs font-mono font-medium flex items-center gap-1.5 shadow-md">
-                  <span>🔥</span>
-                  <span>
-                    {isDe ? "Warme Pistazien-Lava · Live Pour" : "Warm Pistachio Lava · Live Pour"}
-                  </span>
-                </div>
               </div>
-              <figcaption className="mt-3 text-center text-xs text-[#173C32]/70 font-sans italic">
-                {isDe
-                  ? "Der Servier-Moment: Warme Pistaziensauce trifft auf das kühle Maraş-Eis im Inneren."
-                  : "The table pour: Warm pistachio sauce coats the cool Maraş ice cream within."}
+              <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 px-1">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#083822]/10 text-[#083822]">
+                  🔥 {isDe ? "Warme Pistazien-Lava · Live Pour" : "Warm Pistachio Lava · Live Pour"}
+                </span>
+                <span className="text-xs text-[#173C32]/70 font-sans italic">
+                  {isDe
+                    ? "Der Servier-Moment: Warme Pistaziensauce trifft auf das kühle Maraş-Eis im Inneren."
+                    : "The table pour: Warm pistachio sauce coats the cool Maraş ice cream within."}
+                </span>
               </figcaption>
             </div>
           </figure>
@@ -472,23 +474,25 @@ function SeydiogluArticlePage() {
           {/* 2-Column Luxury Gallery: Midye Baklava & Fıstık Sarma */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
             {/* Midye Baklava */}
-            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl">
+            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <img
-                  src="/magazin/seydioglu/seydioglu_midye_baklava_tray.webp?v=2"
+                  src="/magazin/seydioglu/seydioglu_midye_baklava_tray.webp?v=3"
                   alt="Ofenfrisches Blech Midye Baklava mit Antep Pistazien"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   loading="eager"
+                  width={1200}
+                  height={900}
                 />
-                <div className="absolute top-2.5 left-2.5 bg-[#083822]/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#E6B84A]/30 text-white text-[11px] font-mono font-medium">
-                  🐚 Midye Baklava · Mit Grieß-Kaymak
-                </div>
               </div>
-              <div className="p-2">
-                <h4 className="font-serif font-bold text-[#083822] text-base">
+              <div className="p-3 pt-3.5 flex flex-col justify-between flex-1 space-y-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#083822]/10 text-[#083822] w-fit">
+                  🐚 {isDe ? "Midye Baklava · Mit Grieß-Kaymak" : "Midye Baklava · Semolina Kaymak"}
+                </div>
+                <h4 className="font-serif font-bold text-[#083822] text-lg">
                   {isDe ? "Midye Baklava (Muschelform)" : "Midye Baklava (Shell Shape)"}
                 </h4>
-                <p className="text-xs text-[#173C32]/80 mt-1 font-sans leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#173C32]/80 font-sans leading-relaxed">
                   {isDe
                     ? "In charakteristischer Muschelform gefaltet, gefüllt mit cremigem Grieß-Kaymak und grob gemahlenen Antep-Pistazien."
                     : "Folded into distinctive shell ridges, filled with smooth semolina kaymak cream and ground Antep pistachios."}
@@ -497,23 +501,25 @@ function SeydiogluArticlePage() {
             </div>
 
             {/* Fıstık Sarma */}
-            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl">
+            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <img
-                  src="/magazin/seydioglu/seydioglu_fistik_sarma_rolls.webp?v=2"
+                  src="/magazin/seydioglu/seydioglu_fistik_sarma_rolls.webp?v=3"
                   alt="Edle Fıstık Sarma Pistazienrollen auf Silberteller"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   loading="eager"
+                  width={1200}
+                  height={900}
                 />
-                <div className="absolute top-2.5 left-2.5 bg-[#083822]/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#E6B84A]/30 text-white text-[11px] font-mono font-medium">
-                  🌿 Fıstık Sarma · Antep-Pistazienrolle
-                </div>
               </div>
-              <div className="p-2">
-                <h4 className="font-serif font-bold text-[#083822] text-base">
+              <div className="p-3 pt-3.5 flex flex-col justify-between flex-1 space-y-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#083822]/10 text-[#083822] w-fit">
+                  🌿 {isDe ? "Fıstık Sarma · Antep-Pistazienrolle" : "Fıstık Sarma · Emerald Rolls"}
+                </div>
+                <h4 className="font-serif font-bold text-[#083822] text-lg">
                   {isDe ? "Fıstık Sarma (Pistazien-Rollen)" : "Fıstık Sarma (Emerald Rolls)"}
                 </h4>
-                <p className="text-xs text-[#173C32]/80 mt-1 font-sans leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#173C32]/80 font-sans leading-relaxed">
                   {isDe
                     ? "Besonders intensiv im Geschmack: Fast ausschließlich reine Pistazienmasse in hauchzarter Hülle, serviert auf traditioneller Platte."
                     : "Intensely nutty: Pure emerald pistachio paste rolled in an ultra-fine pastry sheet, presented on traditional tableware."}
@@ -525,23 +531,25 @@ function SeydiogluArticlePage() {
           {/* 2-Column Luxury Gallery: Şöbiyet & Hot Künefe */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
             {/* Şöbiyet */}
-            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl">
+            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <img
-                  src="/magazin/seydioglu/seydioglu_sobiyet_havuc_plate.webp?v=2"
+                  src="/magazin/seydioglu/seydioglu_sobiyet_havuc_plate.webp?v=3"
                   alt="Seydioğlu Şöbiyet und Havuç Dilimi Servierteller"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   loading="eager"
+                  width={1200}
+                  height={900}
                 />
-                <div className="absolute top-2.5 left-2.5 bg-[#083822]/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#E6B84A]/30 text-white text-[11px] font-mono font-medium">
-                  🍮 Şöbiyet · Grieß-Sahne Füllung
-                </div>
               </div>
-              <div className="p-2">
-                <h4 className="font-serif font-bold text-[#083822] text-base">
+              <div className="p-3 pt-3.5 flex flex-col justify-between flex-1 space-y-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#083822]/10 text-[#083822] w-fit">
+                  🍮 {isDe ? "Şöbiyet · Grieß-Sahne Füllung" : "Şöbiyet · Semolina Pudding"}
+                </div>
+                <h4 className="font-serif font-bold text-[#083822] text-lg">
                   {isDe ? "Şöbiyet & Havuç Dilimi" : "Şöbiyet & Havuç Dilimi"}
                 </h4>
-                <p className="text-xs text-[#173C32]/80 mt-1 font-sans leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#173C32]/80 font-sans leading-relaxed">
                   {isDe
                     ? "Dreieckige Teigtaschen mit gekochtem Milch-Grieß-Pudding (İrmik Kaymağı), serviert mit Pistazienstaub."
                     : "Triangular pastry pockets filled with soft milk-semolina cream, dusted with fresh ground pistachios."}
@@ -550,23 +558,25 @@ function SeydiogluArticlePage() {
             </div>
 
             {/* Künefe */}
-            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl">
+            <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-lg transition-all duration-300 hover:border-[#E6B84A] hover:shadow-xl flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <img
-                  src="/magazin/seydioglu/seydioglu_hot_kunefe_platter.webp?v=2"
+                  src="/magazin/seydioglu/seydioglu_hot_kunefe_platter.webp?v=3"
                   alt="Heißes Pfannen-Künefe mit Fädenziehendem Antakya Käse"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   loading="eager"
+                  width={1200}
+                  height={900}
                 />
-                <div className="absolute top-2.5 left-2.5 bg-[#083822]/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#E6B84A]/30 text-white text-[11px] font-mono font-medium">
-                  🧀 Pfannen-Künefe · Ziehender Käse
-                </div>
               </div>
-              <div className="p-2">
-                <h4 className="font-serif font-bold text-[#083822] text-base">
+              <div className="p-3 pt-3.5 flex flex-col justify-between flex-1 space-y-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-[#083822]/10 text-[#083822] w-fit">
+                  🧀 {isDe ? "Pfannen-Künefe · Ziehender Käse" : "Hot Pan Künefe · Melted Cheese"}
+                </div>
+                <h4 className="font-serif font-bold text-[#083822] text-lg">
                   {isDe ? "Heißes Pfannen-Künefe" : "Hot Pan Künefe"}
                 </h4>
-                <p className="text-xs text-[#173C32]/80 mt-1 font-sans leading-relaxed">
+                <p className="text-xs sm:text-sm text-[#173C32]/80 font-sans leading-relaxed">
                   {isDe
                     ? "Frisch gebackenes Kadayıf-Engelshaar mit mildem Schmelzkäse und heißem Zuckersirup in der Kupferpfanne."
                     : "Crisp shredded pastry threads baked with mild melting cheese and sweet syrup in a traditional pan."}
@@ -614,24 +624,26 @@ function SeydiogluArticlePage() {
             <div className="relative overflow-hidden rounded-3xl border-2 border-[#083822]/15 bg-white p-3 shadow-xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-2xl">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <img
-                  src="/magazin/seydioglu/seydioglu_cigkofte_roll_platter.webp?v=2"
+                  src="/magazin/seydioglu/seydioglu_cigkofte_roll_platter.webp?v=3"
                   alt="Seydioğlu Çiğköfte Dürüm Rolle mit Salat und Granatapfelsirup"
                   className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                   loading="eager"
+                  width={1200}
+                  height={900}
                 />
-                <div className="absolute top-3 left-3 bg-[#083822]/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-[#E6B84A]/30 text-white text-xs font-mono font-medium flex items-center gap-1.5 shadow-md">
-                  <span>🌿</span>
-                  <span>
-                    {isDe
-                      ? "Çiğköfte Dürüm · Würziger Bulgur & Frische"
-                      : "Çiğköfte Dürüm · Spiced Bulgur & Herbs"}
-                  </span>
-                </div>
               </div>
-              <figcaption className="mt-3 text-center text-xs text-[#173C32]/70 font-sans italic">
-                {isDe
-                  ? "Direkt am Tisch serviert: Mundgerechte Çiğköfte-Rollen mit knackigem Salat, Essiggurken, Zitrone und Granatapfelsirup (Nar Ekşisi)."
-                  : "Served at the table: Sliced çiğköfte rolls paired with crisp salad, pickles, fresh lemon, and tart pomegranate molasses."}
+              <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2 px-1">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#083822]/10 text-[#083822]">
+                  🌿{" "}
+                  {isDe
+                    ? "Çiğköfte Dürüm · Würziger Bulgur & Frische"
+                    : "Çiğköfte Dürüm · Spiced Bulgur & Herbs"}
+                </span>
+                <span className="text-xs text-[#173C32]/70 font-sans italic">
+                  {isDe
+                    ? "Direkt am Tisch serviert: Mundgerechte Çiğköfte-Rollen mit knackigem Salat, Essiggurken, Zitrone und Granatapfelsirup (Nar Ekşisi)."
+                    : "Served at the table: Sliced çiğköfte rolls paired with crisp salad, pickles, fresh lemon, and tart pomegranate molasses."}
+                </span>
               </figcaption>
             </div>
           </figure>
