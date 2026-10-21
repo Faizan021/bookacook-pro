@@ -197,4 +197,207 @@ html, body {
   .animate-cart-bounce {
     animation: cart-bounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
+
+  /* Editorial Luxury Article Typography & Layout */
+  .editorial-article {
+    color: var(--color-forest);
+  }
+
+  .editorial-article h2 {
+    font-family: var(--font-display);
+    font-size: 1.875rem;
+    line-height: 1.25;
+    font-weight: 700;
+    color: var(--color-forest);
+    margin-top: 3.25rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid oklch(0.27 0.06 152 / 0.12);
+  }
+
+  @media (min-width: 640px) {
+    .editorial-article h2 {
+      font-size: 2.25rem;
+    }
+  }
+
+  .editorial-article h3 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--color-forest);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .editorial-article h3 {
+      font-size: 1.6rem;
+    }
+  }
+
+  .editorial-article p {
+    font-size: 1.0625rem;
+    line-height: 1.85;
+    color: oklch(0.27 0.06 152 / 0.85);
+    margin-bottom: 1.5rem;
+    text-align: left;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    text-wrap: pretty;
+  }
+
+  @media (min-width: 640px) {
+    .editorial-article p {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+  }
+
+  .editorial-article p:first-of-type {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: oklch(0.27 0.06 152 / 0.95);
+  }
+
+  .editorial-article ul,
+  .editorial-article ol {
+    margin-top: 1.25rem;
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+  }
+
+  .editorial-article ul {
+    list-style-type: disc;
+  }
+
+  .editorial-article ol {
+    list-style-type: decimal;
+  }
+
+  .editorial-article li {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: oklch(0.27 0.06 152 / 0.85);
+    margin-bottom: 0.85rem;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+
+  @media (min-width: 640px) {
+    .editorial-article li {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+  }
+
+  .editorial-article strong {
+    color: var(--color-forest);
+    font-weight: 700;
+  }
+
+  .editorial-article a {
+    color: #b28a3c;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.15s ease;
+  }
+
+  .editorial-article a:hover {
+    color: var(--color-forest);
+  }
+
+  /* Editorial Bottom Callout Box */
+  .editorial-cta-box {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    padding: 1.75rem 2rem;
+    border-radius: 1.25rem;
+    background-color: #083822;
+    color: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(8, 56, 34, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .editorial-cta-box {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .editorial-cta-box .cta-kicker {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #E6B84A;
+    margin-bottom: 0.25rem;
+  }
+
+  .editorial-cta-box .cta-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .editorial-cta-box .cta-desc {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin-top: 0.25rem;
+  }
+
+  .editorial-cta-box .cta-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .editorial-cta-box .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    border-radius: 9999px;
+    background-color: #E6B84A;
+    color: #083822;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(230, 184, 74, 0.35);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .editorial-cta-box .btn-gold:hover {
+    background-color: #d6a538;
+    transform: translateY(-1px);
+    color: #083822 !important;
+  }
+
+  .editorial-cta-box .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.15rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: background-color 0.15s ease;
+  }
+
+  .editorial-cta-box .btn-outline:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff !important;
+  }
 }

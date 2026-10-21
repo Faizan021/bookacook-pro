@@ -87,7 +87,21 @@ export const blogPosts: BlogPost[] = [
 
         <h3>Ausblick: Voller Fokus auf Qualität und Partner-Wachstum</h3>
         <p>Dieses Programm ist für uns keine Trophäe, sondern ein starker Beschleuniger. Unser Fokus bleibt unverändert: den besten Gastronomen, Konditoreien und B2B-Catering-Spezialisten Deutschlands faire, moderne digitale Schaufenster zu bieten — und Unternehmen das Bestellen von gutem Essen so einfach wie möglich zu machen.</p>
-        <p><a href="/partners">Jetzt als Partner registrieren</a> | <a href="/catering">Catering-Angebote entdecken</a></p>
+        <div class="editorial-cta-box">
+          <div>
+            <div class="cta-kicker">Catering & Event-Planung</div>
+            <div class="cta-title">Erlebe die neue Generation des B2B-Caterings</div>
+            <div class="cta-desc">Direktkontakt zu handverlesenen Caterern ohne Provisionsaufschlag.</div>
+          </div>
+          <div class="cta-actions">
+            <a href="/catering" class="btn-gold">
+              Caterer entdecken →
+            </a>
+            <a href="/partners" class="btn-outline">
+              Partner werden
+            </a>
+          </div>
+        </div>
       `,
       en: `
         <h2>A Milestone for Fair Hospitality and Catering Technology</h2>
@@ -118,7 +132,21 @@ export const blogPosts: BlogPost[] = [
           <li><strong>International Network:</strong> Exchanging insights with high-growth founders across Europe and the EMEA region.</li>
         </ol>
 
-        <p><a href="/partners">Become a Partner</a> | <a href="/catering">Explore Catering</a></p>
+        <div class="editorial-cta-box">
+          <div>
+            <div class="cta-kicker">Catering & Event Planning</div>
+            <div class="cta-title">Experience the New Era of B2B Catering</div>
+            <div class="cta-desc">Direct inquiries with verified culinary artisans with zero commission markups.</div>
+          </div>
+          <div class="cta-actions">
+            <a href="/catering" class="btn-gold">
+              Explore Catering →
+            </a>
+            <a href="/partners" class="btn-outline">
+              Become a Partner
+            </a>
+          </div>
+        </div>
       `,
     },
     faq: [

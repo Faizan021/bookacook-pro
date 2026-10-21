@@ -151,48 +151,65 @@ function BlogPostPage() {
             </div>
           </header>
 
-          {/* Featured Image Frame */}
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mb-16">
-            <div className="relative overflow-hidden rounded-3xl border-2 border-forest/10 bg-white p-3 sm:p-4 shadow-xl max-w-2xl mx-auto">
+          {/* Featured Image Frame with Editorial Passe-Partout & Journalistic Caption */}
+          <figure className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mb-16">
+            <div className="relative overflow-hidden rounded-3xl border-2 border-forest/15 bg-white p-3 sm:p-4 shadow-xl max-w-2xl mx-auto transition-all duration-300 hover:border-[#E6B84A]/60 hover:shadow-2xl">
               <img
                 src={post.image}
                 alt={post.title[lang]}
                 className="w-full h-auto max-h-[520px] object-contain rounded-2xl mx-auto"
                 width={1200}
                 height={900}
+                loading="eager"
               />
             </div>
-          </div>
+            <figcaption className="text-center text-xs text-forest/65 mt-3.5 font-medium tracking-wide max-w-xl mx-auto">
+              {tt(
+                "Offizielle Auswahl: Speisely nimmt an Phase 1 des Google for Startups Immersion EMEA Programms teil — powered by Antler.",
+                "Official selection: Speisely joins Phase 1 of Google for Startups Immersion EMEA — powered by Antler.",
+              )}
+            </figcaption>
+          </figure>
 
           {/* Article Content */}
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            {/* TLDR Box */}
+            {/* Executive Briefing Dossier Card */}
             {post.tldr && post.tldr[lang] && post.tldr[lang].length > 0 && (
-              <div className="mb-10 rounded-2xl bg-[#eadfce]/30 border border-[#eadfce] p-6 sm:p-8">
-                <h2 className="text-xl font-display font-bold text-forest mb-4 flex items-center gap-2">
-                  <HelpCircle className="h-5 w-5 text-[#b28a3c]" />
-                  {tt("Kurz & Knapp", "Quick Answer")}
-                </h2>
-                <ul className="space-y-3">
+              <aside className="mb-12 rounded-2xl bg-[#FBF9F4] border border-forest/15 border-l-4 border-l-[#E6B84A] p-6 sm:p-8 shadow-sm">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-forest/10">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-[#E6B84A] animate-pulse" />
+                    <span className="text-xs font-bold uppercase tracking-[0.2em] text-forest/80">
+                      {tt(
+                        "Executive Briefing · Auf einen Blick",
+                        "Executive Briefing · At a Glance",
+                      )}
+                    </span>
+                  </div>
+                  <span className="text-[11px] font-mono font-bold text-[#b28a3c] bg-[#b28a3c]/10 px-2.5 py-0.5 rounded-full border border-[#b28a3c]/20">
+                    TL;DR
+                  </span>
+                </div>
+                <ul className="space-y-3.5">
                   {post.tldr[lang].map((item, idx) => (
-                    <li key={idx} className="flex gap-3 text-forest/80 leading-relaxed text-[15px]">
-                      <span className="text-[#b28a3c] font-bold mt-0.5">•</span>
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 text-forest/85 text-[15px] sm:text-base leading-relaxed sm:text-justify hyphens-auto [text-justify:inter-word]"
+                    >
+                      <span className="text-[#b28a3c] font-black text-lg leading-none mt-0.5 shrink-0">
+                        ✦
+                      </span>
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </aside>
             )}
 
-            {/* The raw HTML from our content engine */}
+            {/* High-End Editorial Typography Container */}
             <div
-              className="prose prose-forest prose-lg max-w-none 
-                         prose-headings:font-display prose-headings:text-forest
-                         prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
-                         prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-6
-                         prose-p:text-forest/80 prose-p:leading-8 prose-p:mb-10
-                         prose-strong:text-forest
-                         prose-a:text-[#b28a3c] hover:prose-a:text-[#8a6a2e]"
+              lang={lang}
+              className="editorial-article max-w-none"
               dangerouslySetInnerHTML={{ __html: post.content[lang] }}
             />
 
