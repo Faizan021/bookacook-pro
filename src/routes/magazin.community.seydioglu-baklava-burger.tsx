@@ -314,21 +314,6 @@ function SeydiogluArticlePage() {
 
       {/* Main Editorial Content Container */}
       <main className="max-w-4xl mx-auto px-4 py-12 sm:py-16 space-y-16">
-        {/* Intro Disclaimer / Transparency Pill */}
-        <div className="bg-white/80 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-[#083822]/10 shadow-sm flex items-start gap-3.5">
-          <Info className="w-5 h-5 text-[#E6B84A] shrink-0 mt-0.5" />
-          <div className="text-xs sm:text-sm text-[#173C32]/85 leading-relaxed font-sans space-y-1">
-            <p>
-              <strong className="text-[#083822] font-semibold">
-                {isDe ? "Speisely Community-Transparenz:" : "Speisely Community Disclosure:"}
-              </strong>{" "}
-              {isDe
-                ? "Dieser Erfahrungsbericht basiert auf einem Vor-Ort-Besuch unseres Community-Mitglieds im Rhein-Main-Gebiet. Die visuellen Eindrücke verbinden echte Schnappschüsse direkt vom Gast-Tisch mit detailreichen Aufnahmen aus den Filialen und Social-Media-Kanälen des Hauses, um das Handwerk greifbar zu machen. Alle Speisen wurden selbst bezahlt."
-                : "This feature reflects an on-site dining experience shared by a Speisely community member in Rhine-Main. The visual presentation pairs genuine table snapshots from the diner with high-definition showcases from the restaurant's channels to illustrate the craftsmanship clearly. All dishes were independently self-paid."}
-            </p>
-          </div>
-        </div>
-
         {/* Section 1: The Baklava Burger Sensory Experience */}
         <section className="space-y-6">
           <div className="space-y-2">
@@ -784,6 +769,19 @@ function SeydiogluArticlePage() {
             </Link>
           </div>
         </section>
+
+        {/* Speisely Community Disclosure (Editorial Endnote) */}
+        <aside className="p-6 rounded-2xl bg-white border border-[#173C32]/10 text-xs sm:text-sm text-[#173C32]/75 space-y-2 shadow-sm font-sans">
+          <div className="flex items-center gap-2 font-bold text-[#083822]">
+            <Info className="w-4 h-4 text-[#E6B84A] shrink-0" />
+            <span>{isDe ? "Speisely Community-Transparenz" : "Speisely Community Disclosure"}</span>
+          </div>
+          <p className="leading-relaxed">
+            {isDe
+              ? "Dieser Erfahrungsbericht basiert auf einem Vor-Ort-Besuch unseres Community-Mitglieds im Rhein-Main-Gebiet. Die visuellen Eindrücke verbinden echte Schnappschüsse direkt vom Gast-Tisch mit detailreichen Aufnahmen aus den Filialen und Social-Media-Kanälen des Hauses, um das Handwerk greifbar zu machen. Alle Speisen wurden selbst bezahlt."
+              : "This feature reflects an on-site dining experience shared by a Speisely community member in Rhine-Main. The visual presentation pairs genuine table snapshots from the diner with high-definition showcases from the restaurant's channels to illustrate the craftsmanship clearly. All dishes were independently self-paid."}
+          </p>
+        </aside>
 
         {/* Claim / Partner Bridge for Seydioglu */}
         <RestaurantClaimBridge restaurantName="Seydioğlu Baklava" city="Frankfurt am Main" />
