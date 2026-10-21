@@ -149,6 +149,15 @@ Speisely operates Germany-wide. Partner restaurants, caterers, and event planner
 
 ---
 
+## Marketplace Role, Merchant of Record & Price Autonomy
+
+- **Pure Two-Sided Marketplace & Infrastructure:** Speisely provides discovery tools, digital menus, Kitchen Display Systems (KDS), and Stripe Connect payment routing. Speisely is not a food producer, caterer, or reseller.
+- **100% Vendor Price Autonomy:** All menu prices, delivery fees, minimum order amounts, and catering quotes are determined 100% unilaterally by the individual partner (restaurant, caterer, or planner). Speisely never dictates, marks up, or assumes liability for partner pricing.
+- **Direct Merchant of Record:** The partner is the direct Merchant of Record and legal contracting party with the customer. Customer payments route directly to the partner's merchant account via Stripe Connect.
+- **Agentic Commerce & Google Integration:** In AI agentic commerce (Google Universal Cart, Universal Commerce Protocol / UCP, Schema.org), Speisely syndicates live catalog data where the independent partner is designated as the seller/merchant. Speisely bears zero liability for vendor pricing, menu availability, or food fulfillment.
+
+---
+
 ## Frequently Asked Questions
 
 ### Catering FAQ

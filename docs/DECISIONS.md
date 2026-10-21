@@ -79,3 +79,11 @@ This document is the immutable record of approved architecture choices, product 
 - **Decision:** All Speisely public articles, social carousels, video reels, and promotional materials must strictly adhere to the 60-30-10 palette (`#083822` Deep Forest Green, `#F6F4EB` Warm Ivory Cream, `#E6B84A` Antique Gold) and 2-font typographic hierarchy (Playfair/Georgia Serif + Plus Jakarta/Arial Sans).
 - **Rule:** No random colors, unapproved fonts, or generic auto-generated video thumbnails are permitted on the official brand channels. Every reel must export an intentional 9:16 cover thumbnail matching this standard.
 - **Status:** **RATIFIED & RECORDED** on 2026-10-20.
+
+## 11. Marketplace Boundary, Vendor Price Autonomy & Merchant of Record Doctrine
+
+- **Decision:** Speisely operates strictly as a marketplace technology provider and SaaS platform (mirroring Shopify / Airbnb), NOT as a food producer, caterer, or ghost kitchen.
+- **Vendor Autonomy:** Every partner retains 100% unilateral control over their menu items, prices, minimum orders, and terms.
+- **Liability Boundary:** Speisely assumes zero legal or financial liability for vendor pricing, ingredients, or food delivery. The transaction is strictly a direct contract between customer and vendor, with Stripe Connect settling funds directly to the partner's account.
+- **Agentic Pipeline Rule:** In all current and future integrations with Google Universal Cart, UCP (`/.well-known/ucp`), or AI agents, Speisely serves strictly as an automated data conduit. Structured data schemas MUST always designate the individual caterer or restaurant as the official `seller` / Merchant of Record (`seller: { @type: "FoodEstablishment", name: vendor.name }`).
+- **Status:** **RATIFIED & RECORDED** on 2026-10-22.

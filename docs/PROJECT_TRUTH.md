@@ -103,7 +103,6 @@ This document specifies the core project truths, architectural boundaries, busin
 - **Mandatory Dedicated Reel Covers:** Every video reel must include a dedicated 9:16 cover thumbnail conforming to the 60-30-10 palette and safe zones to maintain an aesthetically consistent profile grid.
 - **Pre-Publishing Gate:** All reels, carousels, and articles must be inspected against these criteria prior to user delivery.
 
-
 ---
 
 ## 10. Anti-AI Writing Framework & "Speisely Pro" Voice Standard
@@ -112,3 +111,21 @@ This document specifies the core project truths, architectural boundaries, busin
 - **Banned AI Tropes:** Zero tolerance for generic AI clichés (*„nestled in the heart of“, „culinary journey“, „symphony of flavors“, „hidden gem“, „tantalize your tastebuds“*).
 - **Burstiness & Dynamic Cadence:** Sentences must alternate between short 2-to-4 word punchy statements and rich descriptive observations; uniform sentence lengths are prohibited.
 - **Audit Requirement:** All articles must pass the 6-point Anti-AI checklist before publication.
+
+---
+
+## 11. Marketplace Role, Merchant of Record & Zero Pricing Liability Doctrine
+
+- **Pure Technology Platform (Shopify / Airbnb Model):**
+  - Speisely is strictly a software infrastructure and marketplace platform, **NOT** a caterer, restaurant, food operator, or ghost kitchen.
+  - Speisely never prepares food, holds inventory, or employs culinary staff.
+- **100% Vendor Price Autonomy:**
+  - All menu prices, per-person packages, minimum order values (Mindestbestellwert), cancellation policies, and delivery radii are determined, configured, and updated exclusively by the individual restaurant, caterer, or event planner in their vendor dashboard.
+  - Speisely has **zero responsibility, authority, or liability** over vendor pricing. Speisely never dictates, subsidizes, or guarantees partner prices.
+- **Direct Contracting & Merchant of Record:**
+  - The culinary sales contract is strictly between the **Customer** (corporate client or individual diner) and the **Partner** (caterer or restaurant).
+  - Stripe Connect routes payments directly to the partner's verified bank account.
+  - Speisely provides discovery, the digital ordering channel, the AI concierge, and payment routing, but assumes zero liability for food safety, ingredient changes, or pricing fluctuations.
+- **Agentic Search & Google Data Pipeline Role:**
+  - In all Google integrations (Schema.org, Google Merchant feeds, Universal Cart, UCP / WebMCP), Speisely acts solely as an automated technical conduit.
+  - The `seller` entity in all structured data and feeds is strictly the individual partner (`seller: { @type: "FoodEstablishment", name: vendor.name }`). Speisely merely pipes through the vendor's own database values without altering or underwriting them.

@@ -62,3 +62,9 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of €34.99/month with unlimited direct orders. Features include an interactive savings calculator on /partners, a live Kitchen Display System (KDS), Star CloudPRNT receipt printing, and 100% customer data retention. Payments route directly to the restaurant's own Stripe account.
 2. **Catering Marketplace** — Post and respond to catering inquiries (corporate, private, weddings, daily office, institutional catering).
 3. **Event Planning** — CRM and planning tool for professional event planners to handle event briefs.
+
+## Marketplace Role, Merchant of Record & Price Autonomy
+- Pure Two-Sided Marketplace & Infrastructure: Speisely provides discovery tools, digital menus, Kitchen Display Systems (KDS), and Stripe Connect payment routing. Speisely is not a food producer, caterer, or reseller.
+- 100% Vendor Price Autonomy: All menu prices, delivery fees, minimum order amounts, and catering quotes are determined 100% unilaterally by the individual partner (restaurant, caterer, or planner). Speisely never dictates, marks up, or assumes liability for partner pricing.
+- Direct Merchant of Record: The partner is the direct Merchant of Record and legal contracting party with the customer. Customer payments route directly to the partner merchant account via Stripe Connect.
+- Agentic Commerce & Google Integration: In AI agentic commerce (Google Universal Cart, Universal Commerce Protocol / UCP, Schema.org), Speisely syndicates live catalog data where the independent partner is designated as the seller/merchant. Speisely bears zero liability for vendor pricing, menu availability, or food fulfillment.
