@@ -32,6 +32,7 @@ Full Documentation for LLMs: https://speisely.de/llms-full.txt
 ## Speisely Visits & Community Partner Spotlights (Verified Field Reports)
 - La Grilladine (Düsseldorf-Oberbilk): https://speisely.de/magazin/community/la-grilladine-duesseldorf
 - Baba Pirzola Meze & Grill (Berlin-Wittenbergplatz): https://speisely.de/magazin/community/baba-pirzola-berlin
+- Seydioğlu Baklava Burger (Frankfurt, Darmstadt & Rhein-Main): https://speisely.de/magazin/community/seydioglu-baklava-burger
 - Lumara Café (Berlin-Charlottenburg): https://speisely.de/magazin/community/lumara-cafe-berlin
 - BBQ Chicken Berlin-Kreuzberg (Berlin): https://speisely.de/magazin/community/bbq-chicken-berlin-kreuzberg
 - King Tut Restaurant & Café (Berlin): https://speisely.de/magazin/community/king-tut-restaurant-berlin

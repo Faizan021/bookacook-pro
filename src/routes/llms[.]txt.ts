@@ -47,6 +47,7 @@ ${blogUrls}
 
 ## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
 
+- Seydioğlu Baklava Burger (Frankfurt, Darmstadt & Rhein-Main): ${BASE}/magazin/community/seydioglu-baklava-burger
 - Lumara Café (Berlin-Charlottenburg): ${BASE}/magazin/community/lumara-cafe-berlin
 - La Grilladine (Düsseldorf-Oberbilk): ${BASE}/magazin/community/la-grilladine-duesseldorf
 - Baba Pirzola Meze & Grill (Berlin-Wittenbergplatz): ${BASE}/magazin/community/baba-pirzola-berlin

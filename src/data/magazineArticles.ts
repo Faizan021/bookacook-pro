@@ -167,6 +167,33 @@ export const magazineArticles: MagazineArticle[] = [
     disclosureEn: "Community Submission · Self-paid",
   },
 
+  // 6. Community: Seydioğlu Baklava Burger (Frankfurt & Rhein-Main)
+  {
+    id: "seydioglu-baklava-burger",
+    slug: "seydioglu-baklava-burger",
+    titleDe: "Seydioğlu Baklava Burger: Pistazien-Lava & Eis im Rhein-Main",
+    titleEn: "Seydioğlu Baklava Burger: Pistachio Lava & Ice Cream in Rhine-Main",
+    excerptDe:
+      "Der virale Baklava Burger im Community-Test: Knuspriger Gaziantep-Teig, Maraş-Eis, heiße Pistazien-Lava, Midye Baklava & herzhaftes Çiğköfte-Dürüm im Rhein-Main-Gebiet.",
+    excerptEn:
+      "The viral Baklava Burger reviewed: Crisp Gaziantep pastry, Maraş ice cream, hot pistachio lava, Midye Baklava & savory Çiğköfte dürüm across Rhine-Main.",
+    image: "/magazin/seydioglu/seydioglu_baklava_burger_hero.webp?v=2",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Nordwestzentrum & Zeil, Frankfurt am Main",
+    city: "Frankfurt am Main",
+    dateDe: "Oktober 2026",
+    dateEn: "October 2026",
+    readTime: "5 Min.",
+    categories: ["community", "guides"],
+    to: "/magazin/community/seydioglu-baklava-burger",
+    isVisit: false,
+    disclosureType: "selbst-bezahlt",
+    disclosureDe: "Community-Einsendung · Selbst bezahlt",
+    disclosureEn: "Community Submission · Self-paid",
+    featured: true,
+  },
+
   // 5. Community: Neumanns Café Berlin
   {
     id: "neumanns-cafe",

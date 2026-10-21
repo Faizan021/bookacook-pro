@@ -81,6 +81,7 @@ import { Route as MagazinCommunityLaGrilladineDuesseldorfRouteImport } from './r
 import { Route as MagazinCommunityLumaraCafeBerlinRouteImport } from './routes/magazin.community.lumara-cafe-berlin'
 import { Route as MagazinCommunityNeumannsCafeBerlinRouteImport } from './routes/magazin.community.neumanns-cafe-berlin'
 import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
+import { Route as MagazinCommunitySeydiogluBaklavaBurgerRouteImport } from './routes/magazin.community.seydioglu-baklava-burger'
 import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
 import { Route as MagazinSpeiselyVisitsIndexRouteImport } from './routes/magazin.speisely-visits.index'
 import { Route as MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRouteImport } from './routes/magazin.speisely-visits.mandy-restaurant-berlin-neukoelln'
@@ -479,6 +480,12 @@ const MagazinCommunitySanSebastianBerlinRoute =
     path: '/magazin/community/san-sebastian-berlin',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunitySeydiogluBaklavaBurgerRoute =
+  MagazinCommunitySeydiogluBaklavaBurgerRouteImport.update({
+    id: '/magazin/community/seydioglu-baklava-burger',
+    path: '/magazin/community/seydioglu-baklava-burger',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunityThronburgerBerlinRoute =
   MagazinCommunityThronburgerBerlinRouteImport.update({
     id: '/magazin/community/thronburger-berlin',
@@ -624,6 +631,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
+  '/magazin/community/seydioglu-baklava-burger': typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/nadir-gullu-baklava-muenchen': typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute
@@ -707,6 +715,7 @@ export interface FileRoutesByTo {
   '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
+  '/magazin/community/seydioglu-baklava-burger': typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/nadir-gullu-baklava-muenchen': typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute
@@ -795,6 +804,7 @@ export interface FileRoutesById {
   '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
+  '/magazin/community/seydioglu-baklava-burger': typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
   '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln': typeof MagazinSpeiselyVisitsMandyRestaurantBerlinNeukoellnRoute
   '/magazin/speisely-visits/nadir-gullu-baklava-muenchen': typeof MagazinSpeiselyVisitsNadirGulluBaklavaMuenchenRoute
@@ -883,6 +893,7 @@ export interface FileRouteTypes {
     | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
+    | '/magazin/community/seydioglu-baklava-burger'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
@@ -966,6 +977,7 @@ export interface FileRouteTypes {
     | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
+    | '/magazin/community/seydioglu-baklava-burger'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
@@ -1053,6 +1065,7 @@ export interface FileRouteTypes {
     | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
     | '/magazin/community/san-sebastian-berlin'
+    | '/magazin/community/seydioglu-baklava-burger'
     | '/magazin/community/thronburger-berlin'
     | '/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln'
     | '/magazin/speisely-visits/nadir-gullu-baklava-muenchen'
@@ -1123,6 +1136,7 @@ export interface RootRouteChildren {
   MagazinCommunityLumaraCafeBerlinRoute: typeof MagazinCommunityLumaraCafeBerlinRoute
   MagazinCommunityNeumannsCafeBerlinRoute: typeof MagazinCommunityNeumannsCafeBerlinRoute
   MagazinCommunitySanSebastianBerlinRoute: typeof MagazinCommunitySanSebastianBerlinRoute
+  MagazinCommunitySeydiogluBaklavaBurgerRoute: typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   MagazinCommunityThronburgerBerlinRoute: typeof MagazinCommunityThronburgerBerlinRoute
   RestaurantOrtCityRoute: typeof RestaurantOrtCityRoute
   ReviewIntakeTokenRoute: typeof ReviewIntakeTokenRoute
@@ -1637,6 +1651,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunitySanSebastianBerlinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/seydioglu-baklava-burger': {
+      id: '/magazin/community/seydioglu-baklava-burger'
+      path: '/magazin/community/seydioglu-baklava-burger'
+      fullPath: '/magazin/community/seydioglu-baklava-burger'
+      preLoaderRoute: typeof MagazinCommunitySeydiogluBaklavaBurgerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/thronburger-berlin': {
       id: '/magazin/community/thronburger-berlin'
       path: '/magazin/community/thronburger-berlin'
@@ -1953,6 +1974,8 @@ const rootRouteChildren: RootRouteChildren = {
     MagazinCommunityNeumannsCafeBerlinRoute,
   MagazinCommunitySanSebastianBerlinRoute:
     MagazinCommunitySanSebastianBerlinRoute,
+  MagazinCommunitySeydiogluBaklavaBurgerRoute:
+    MagazinCommunitySeydiogluBaklavaBurgerRoute,
   MagazinCommunityThronburgerBerlinRoute:
     MagazinCommunityThronburgerBerlinRoute,
   RestaurantOrtCityRoute: RestaurantOrtCityRoute,

@@ -454,3 +454,95 @@ Never assume desktop-first layout proportions. Every implementation MUST be veri
 3. **Harmonious Container Padding & Drop-Caps:**
    - Use progressive padding (`p-5 sm:p-8 md:p-10`) so cards and fact sheets do not squeeze canvas space on 375px screens.
    - Editorial drop-caps must use proportional mobile sizing (`text-5xl sm:text-7xl leading-[0.85] mr-3 sm:mr-4`) to eliminate collision with wrapped body text.
+
+
+---
+
+## 18. Mandatory Social & Editorial Visual Brand Consistency Standard (The 60-30-10 Palette & Grid Rule)
+
+Whenever creating, generating, or auditing ANY magazine article, Instagram Reel, social carousel, or public promotional asset:
+You MUST enforce absolute visual brand consistency so the Speisely brand immediately communicates Michelin/Vogue-level prestige:
+
+1. **Strict 60-30-10 Color Palette (Zero Random Colors Allowed):**
+   - **60% Primary Canvas:** Speisely Deep Forest Green (`#083822` / `rgb(8, 56, 34)`). Anchors backgrounds, video overlays, and brand headers.
+   - **30% Secondary Accent:** Warm Ivory Cream (`#F6F4EB`). Used for high-contrast headline text, magazine spreads, and clean container borders.
+   - **10% Luxury Highlight:** Speisely Antique Gold (`#E6B84A`). Reserved strictly for verified badges, category pills (`SPEISELY SPOTLIGHT`), rating stars, and call-to-action buttons.
+   - *Prohibition:* Never use random blues, purples, or loud neon colors on covers, thumbnails, or official slides.
+
+2. **Strict Two-Font Typographic Hierarchy:**
+   - **Prestige Headlines:** Classic Editorial Serif (strictly `Playfair Display` or `Georgia Bold`). Never use playful, script, or novelty fonts for food titles.
+   - **Badges, Pills & Body Text:** Modern Clean Sans-Serif (strictly `Plus Jakarta Sans` or `Arial Bold` in uppercase tracking).
+
+3. **Mandatory Dedicated Reel Covers (No Random Frame Thumbnails):**
+   - Never allow Instagram or TikTok to default to a random, blurry mid-video frame for profile grid previews.
+   - Every video reel generated MUST export a dedicated 9:16 portrait cover graphic featuring the deep forest green vignette, centered signature dish, and gold category pill.
+
+4. **Curated Profile Grid 3-Way Rhythm (Checkerboard Standard):**
+   - When staging content for `@speisely`, rotate across 3 alternating visual pillars:
+     1. *Macro Sensory Food Action:* Crisp close-up (egg yolk break, syrup drizzle, layered pastry cut).
+     2. *Editorial / Brand Card:* Deep forest green graphic with gold quote, restaurant fact, or 0% commission insight.
+     3. *Architectural Interior:* Sunlit restaurant atmosphere, marble tables, and welcoming space.
+
+5. **Pre-Publishing Gate:**
+   - No article, reel, or carousel may be published or delivered to the user without verifying:
+     a) 60-30-10 color compliance,
+     b) Serif + Sans-Serif font pairing,
+     c) Official Speisely logo emblem on the opening and closing slides.
+
+
+---
+
+## 19. Mandatory Anti-AI Writing Framework & "Speisely Pro" Voice Standard
+
+Whenever writing, editing, or auditing ANY Speisely article, Community Story, or partner feature:
+You MUST enforce the "Speisely Pro" voice standard. Robotic, generic AI-style prose is strictly forbidden:
+
+1. **Strict Prohibition of AI Hallmarks & Clichés:**
+   - *BANNED:* `nestled in the heart of`, `culinary journey`, `symphony of flavors`, `tapestry of tastes`, `hidden gem`, `food paradise`, `tantalize your tastebuds`, `delicious treats`, `testament to passion`, `whether you're a foodie or...`.
+   - *REPLACEMENT:* Use concrete geographic anchors (street names, transit steps), precise flavor descriptions (acidity, roast, salinity, smoke), and physical room dimensions.
+
+2. **The "Lindt" Micro-Sensory Physics Rule:**
+   - Ban cheap adjectives (*lecker, tasty, delicious, amazing*).
+   - Describe physical textures and tactile mouthfeel: *samtig-dicht, schmelzend, kristallin aufbrechend, feucht-elastische Krume, viskoser Dattelsirup*.
+
+3. **Dynamic Sentence Cadence ("Burstiness"):**
+   - Never write consecutive sentences of equal length.
+   - Alternate between sharp 2-to-4 word punchy statements (*„Warm. Duftend. Dann folgt der Schmelz.“*) and rich, multi-clause culinary observations.
+
+4. **Technical Kitchen Mechanics & Exact Price Transparency:**
+   - Reveal the technical "Why": fermentation hours (e.g. *„48 Stunden Kaltgärung“*), blade speeds (e.g. *„bei 3.000 U/min mit Eiswürfeln emulgiert“*), or specific ingredient origins (e.g. *„Bio-Freiland-Eier aus Brandenburg“*).
+   - Embed real, transparent prices directly into the narrative (*„die Mezze-Platte für 39 Euro“*, *„der Tahini Latte für 4,80 Euro“*).
+
+5. **Independent Diner Perspective (The Table POV):**
+   - Write from the unannounced, self-funded diner's perspective sitting at the table.
+   - Never write as a promotional company mouth-piece or uncritical PR brochure. Include honest, grounded operational nuances (e.g. peak arrival times or bold flavor profiles).
+
+6. **Pre-Publishing Gate:**
+   - [ ] Zero banned AI clichés.
+   - [ ] Sentence burstiness verified (mix of short and long rhythms).
+   - [ ] Concrete numbers and prices included.
+   - [ ] Independent guest threshold opening verified.
+
+
+---
+
+## 20. Mandatory Truth-in-Editorial & Anti-Numerical Standard (Zero Forced Numbers & Honest Community Scope)
+
+Whenever writing, editing, or auditing ANY Speisely article, Community Story, or culinary review:
+You MUST enforce strict truthfulness, grounded human observation, and zero artificial specifications:
+
+1. **Zero Forced or Invented Numerical Claims:**
+   - **STRICTLY PROHIBITED:** Never invent or force technical numbers, arbitrary oven temperatures (e.g. *„exakt 200°C“*), artificial layer counts (e.g. *„40 Schichten“*), fabricated time limits (e.g. *„innerhalb der ersten 4 Minuten verzehren“*), shelf-life days (e.g. *„bis zu 5 Tage haltbar“*), or artificial rating scores (e.g. *„9.8 / 10“*).
+   - If a culinary metric is not explicitly stated on the restaurant's printed menu or confirmed by the kitchen, **omit the number entirely**. Let the sensory description, texture, and dining atmosphere carry the article.
+
+2. **Zero Unverified Recipe or Ingredient Speculation:**
+   - Never speculate on exotic ingredients or garnish toppings that cannot be 100% verified from the actual dish (e.g. do not invent avocado garnishes or special secret sauces unless directly confirmed by the venue). Describe dishes cleanly, accurately, and honestly.
+
+3. **Mandatory Community Disclosure Note:**
+   - Every community-submitted article must include a clear, transparent disclosure box stating:
+     - The story is based on an authentic visit shared by a community member.
+     - The visuals combine genuine table snapshots from the diner with high-definition presentations from the venue's official media to faithfully showcase the culinary craft.
+     - All dishes were independently ordered and paid for.
+
+4. **Zero Exaggerated Claims ("No Claiming Extra"):**
+   - Never write hyperbole such as *„so dünn, dass man eine Zeitung durchlesen kann“* or claims of culinary perfection. Write as an appreciative, discerning diner who values genuine craft without exaggerated marketing fluff.

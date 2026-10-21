@@ -76,3 +76,39 @@ This document specifies the core project truths, architectural boundaries, busin
 - **Locked `SECURITY DEFINER` RPCs & Views:** All `SECURITY DEFINER` functions must lock `SET search_path = public` and revoke `PUBLIC`/`anon` execution; all `public` views must enforce `security_invoker = true`.
 - **Strict `service_role` Policy Scoping:** Internal/webhook policies (`stripe_webhook_events`) must explicitly target `TO service_role` (never default `PUBLIC`), and `supabaseAdmin` / `SUPABASE_SERVICE_ROLE_KEY` must never be imported in client routes or components.
 - **Automated Build Gate:** Enforced on every build by `scripts/verify_agent_graph.js` (Rule 14).
+
+---
+
+## 8. Brand Identity & Official Logo Standard
+
+- **Official Logo Asset Location:** `public/images/speisely-official-logo.jpg` (mirrored to `public/images/speisely-square-logo.jpg` and `public/speisely-logo.jpg`).
+- **Brand Visual DNA:**
+  - Background: Speisely Forest Green (`#083822` / `rgb(8, 56, 34)`).
+  - Emblem: Clean crossed fork and spoon in creamy ivory (`#F6F4EB`).
+  - Wordmark: "Speisely" in rounded geometric sans-serif, matching the creamy ivory tone.
+- **Usage Rule:** Whenever generating decks, pitch materials, social carousels, or public headers, always reference this exact verified official logo. Never use placeholder icons, generic emoji utensils (`🍽️`), or unverified variations.
+
+
+---
+
+## 9. Social & Editorial Visual Brand Consistency Standard (60-30-10 Rule)
+
+- **Mandatory 3-Tone Palette:**
+  - 60% Speisely Forest Green (`#083822` / `rgb(8, 56, 34)`)
+  - 30% Warm Ivory Cream (`#F6F4EB`)
+  - 10% Speisely Antique Gold (`#E6B84A`)
+- **Strict 2-Font Typography:**
+  - Editorial Headlines: Serif (`Playfair Display` / `Georgia Bold`)
+  - Badges, Pills & Body Text: Clean Sans-Serif (`Plus Jakarta Sans` / `Arial Bold`)
+- **Mandatory Dedicated Reel Covers:** Every video reel must include a dedicated 9:16 cover thumbnail conforming to the 60-30-10 palette and safe zones to maintain an aesthetically consistent profile grid.
+- **Pre-Publishing Gate:** All reels, carousels, and articles must be inspected against these criteria prior to user delivery.
+
+
+---
+
+## 10. Anti-AI Writing Framework & "Speisely Pro" Voice Standard
+
+- **Hybrid Voice DNA:** Combines Lindt-level sensory micro-textures (*samtig-dicht, schmelzend, kristallin*), journalistic technical rigor (*fermentation hours, blade RPMs, transparent euro prices*), and the authentic unannounced perspective of a guest seated at the table.
+- **Banned AI Tropes:** Zero tolerance for generic AI clichés (*„nestled in the heart of“, „culinary journey“, „symphony of flavors“, „hidden gem“, „tantalize your tastebuds“*).
+- **Burstiness & Dynamic Cadence:** Sentences must alternate between short 2-to-4 word punchy statements and rich descriptive observations; uniform sentence lengths are prohibited.
+- **Audit Requirement:** All articles must pass the 6-point Anti-AI checklist before publication.

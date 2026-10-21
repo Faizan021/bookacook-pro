@@ -64,3 +64,18 @@ This document is the immutable record of approved architecture choices, product 
 
 - **Decision:** Five roles — Admin, Customer, Caterer, Restaurant, Event Manager — stay documented and operated separately even though Restaurant/Caterer/Planner share the unified `partner` identity (see §3).
 - **Current state, not yet a ratified decision:** Partners currently self-publish; admin can force-toggle `is_published`/`status` after the fact but there is no pre-publish approval gate. If pre-publish moderation is actually wanted, that requires a new decision and a `pending_review` default state — it is not currently implemented, and should not be assumed to exist.
+
+
+## 9. Official Brand Asset & Logo Standard
+
+- **Decision:** The official visual brand mark for Speisely is the square/rounded mark consisting of Deep Forest Green background (`#083822`), Ivory Cream crossed fork and spoon emblem, and the bold lowercase-weighted "Speisely" wordmark underneath.
+- **Physical Asset:** `public/images/speisely-official-logo.jpg` (synchronized to `public/images/speisely-square-logo.jpg` and `public/speisely-logo.jpg`).
+- **Rule:** All investor pitch decks, social media templates, carousels, and platform headers must strictly use this approved asset. Never replace with generic emojis or makeshift SVGs.
+- **Status:** **RATIFIED & RECORDED.** Verified in `public/images/speisely-official-logo.jpg` on 2026-10-20.
+
+
+## 10. Visual Brand Consistency & 60-30-10 Palette Rule
+
+- **Decision:** All Speisely public articles, social carousels, video reels, and promotional materials must strictly adhere to the 60-30-10 palette (`#083822` Deep Forest Green, `#F6F4EB` Warm Ivory Cream, `#E6B84A` Antique Gold) and 2-font typographic hierarchy (Playfair/Georgia Serif + Plus Jakarta/Arial Sans).
+- **Rule:** No random colors, unapproved fonts, or generic auto-generated video thumbnails are permitted on the official brand channels. Every reel must export an intentional 9:16 cover thumbnail matching this standard.
+- **Status:** **RATIFIED & RECORDED** on 2026-10-20.
