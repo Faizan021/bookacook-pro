@@ -100,16 +100,7 @@ function BlogPostPage() {
       <main className="bg-background pb-20">
         <article>
           {/* Header */}
-          <header className="relative pt-10 lg:pt-16 pb-12 overflow-hidden">
-            <div className="absolute inset-0 z-0">
-              <img
-                src={post.image}
-                alt={post.title[lang]}
-                className="w-full h-full object-cover opacity-10"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background to-background" />
-            </div>
-
+          <header className="relative pt-10 lg:pt-16 pb-12 overflow-hidden bg-gradient-to-b from-forest/[0.04] via-transparent to-transparent">
             <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
               <Link
                 to="/blog"
@@ -119,7 +110,7 @@ function BlogPostPage() {
               </Link>
 
               <div className="flex flex-wrap items-center gap-3 mb-6">
-                <span className="inline-flex items-center rounded-full bg-[#b28a3c] text-[#16372f] px-3 py-1 text-xs font-semibold shadow-sm">
+                <span className="inline-flex items-center rounded-full bg-[#E6B84A]/20 border border-[#E6B84A]/40 text-forest px-3.5 py-1 text-xs font-bold tracking-wide">
                   {post.category}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs font-medium text-forest/70">
@@ -127,17 +118,17 @@ function BlogPostPage() {
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display text-forest leading-[1.05] mb-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display text-forest leading-[1.08] mb-6">
                 {post.title[lang]}
               </h1>
 
-              <p className="text-xl text-forest/80 leading-relaxed font-medium">
+              <p className="text-xl text-forest/80 leading-relaxed font-normal">
                 {post.description[lang]}
               </p>
 
               <div className="mt-8 flex items-center justify-between border-t border-forest/10 pt-6">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-[#eadfce] text-[#b28a3c] grid place-items-center">
+                  <div className="h-10 w-10 rounded-full bg-[#eadfce] text-[#083822] grid place-items-center">
                     <User className="h-5 w-5" />
                   </div>
                   <div>
@@ -160,15 +151,15 @@ function BlogPostPage() {
             </div>
           </header>
 
-          {/* Featured Image */}
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 mb-16">
-            <div className="rounded-2xl overflow-hidden shadow-2xl ring-1 ring-forest/10">
+          {/* Featured Image Frame */}
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 mb-16">
+            <div className="relative overflow-hidden rounded-3xl border-2 border-forest/10 bg-white p-3 sm:p-4 shadow-xl max-w-2xl mx-auto">
               <img
                 src={post.image}
                 alt={post.title[lang]}
-                className="w-full h-auto aspect-video object-cover"
+                className="w-full h-auto max-h-[520px] object-contain rounded-2xl mx-auto"
                 width={1200}
-                height={675}
+                height={900}
               />
             </div>
           </div>
