@@ -27,7 +27,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/nadir-gullu-bakla
       {
         name: "description",
         content:
-          "Speisely besucht Nadir Güllü am Viktualienmarkt München: 40 Schichten Teig, Antep-Pistazien und das legendäre Hışırtı-Knistern im Test.",
+          "Speisely besucht Nadir Güllü am Viktualienmarkt München: hauchdünne Teigschichten, Antep-Pistazien und das legendäre Hışırtı-Knistern im Test.",
       },
       {
         name: "keywords",
@@ -57,7 +57,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/nadir-gullu-bakla
       {
         property: "og:description",
         content:
-          "Vom Goldenen Horn an den Viktualienmarkt: Speisely verkostet die weltberühmte 40-Schichten-Baklava von Nadir Güllü in München. Sensorik, Handwerk und die Kunst der Verkostung.",
+          "Vom Goldenen Horn an den Viktualienmarkt: Speisely verkostet die weltberühmte traditionelle Baklava von Nadir Güllü in München. Sensorik, Handwerk und die Kunst der Verkostung.",
       },
       {
         property: "og:image",
@@ -132,7 +132,7 @@ export const Route = createFileRoute("/magazin/speisely-visits/nadir-gullu-bakla
                 "@id": "https://speisely.de/#website",
               },
               headline:
-                "Nadir Güllü Baklava München: Die Kunst der 40 Schichten am Viktualienmarkt",
+                "Nadir Güllü Baklava München: Die Kunst der hauchdünnen Schichten am Viktualienmarkt",
               description:
                 "Speisely besucht Nadir Güllü am Viktualienmarkt in München. Ein sensorisches Porträt über 180 Jahre Istanbuler Handwerkstradition, Antep-Pistazien und die Kunst der Baklava-Verkostung.",
               image: "https://speisely.de/magazin/nadir-gullu/nadir-gullu-havuc-dilimi-macro.webp",
@@ -250,13 +250,15 @@ function NadirGulluArticlePage() {
               <>
                 Nadir Güllü München: <br className="hidden sm:inline" />
                 <span className="text-[#E6B84A] italic font-normal">
-                  Die Kunst der 40 Schichten
+                  Die Kunst der hauchdünnen Schichten
                 </span>
               </>
             ) : (
               <>
                 Nadir Güllü Munich: <br className="hidden sm:inline" />
-                <span className="text-[#E6B84A] italic font-normal">The Art of 40 Layers</span>
+                <span className="text-[#E6B84A] italic font-normal">
+                  The Art of Delicate Layers
+                </span>
               </>
             )}
           </h1>
@@ -329,17 +331,17 @@ function NadirGulluArticlePage() {
           </p>
         </section>
 
-        {/* Hero Image: 40 Layers Macro (Passe-Partout Luxury Frame) */}
+        {/* Hero Image: Delicate Layers Macro (Passe-Partout Luxury Frame) */}
         <figure className="relative my-10 max-w-2xl mx-auto">
           <div className="relative overflow-hidden rounded-3xl border-2 border-[#173C32]/15 bg-white p-3 shadow-2xl transition-all duration-300 hover:border-[#E6B84A] hover:shadow-3xl">
             {/* Frosted Badge */}
             <div className="absolute top-6 left-6 z-10 flex items-center gap-2 rounded-full bg-[#083822]/85 backdrop-blur-md px-3.5 py-1.5 text-xs font-mono font-bold text-[#F6F4EB] border border-[#E6B84A]/40 shadow-lg">
               <Sparkles className="w-3.5 h-3.5 text-[#E6B84A]" />
-              <span>40 HAUCHDÜNNE SCHICHTEN · KIRK KAT</span>
+              <span>TRADITIONELLES HANDWERK · KIRK KAT</span>
             </div>
             <img
               src="/magazin/nadir-gullu/nadir-gullu-havuc-dilimi-landscape.webp?v=1"
-              alt="Havuç Dilimi Pistazien-Baklava von Nadir Güllü mit 40 hauchdünnen Teigschichten"
+              alt="Havuç Dilimi Pistazien-Baklava von Nadir Güllü mit hauchdünnen Teigschichten"
               className="w-full h-auto object-cover rounded-2xl"
               width="1024"
               height="576"
@@ -348,8 +350,8 @@ function NadirGulluArticlePage() {
           </div>
           <figcaption className="text-xs font-mono text-[#173C32]/60 mt-3 text-center">
             {isDe
-              ? "Foto: Speisely Visits. Die legendäre Havuç-Dilimi-Dreiecks-Baklava bei Nadir Güllü München: 40 Schichten Teig, Antep-Smaragdpistazien und geklärte Urfa-Butter."
-              : "Photo: Speisely Visits. The legendary Havuç Dilimi triangle baklava at Nadir Güllü Munich: 40 layers of paper-thin dough, Antep emerald pistachios, and Urfa clarified butter."}
+              ? "Foto: Speisely Visits. Die legendäre Havuç-Dilimi-Dreiecks-Baklava bei Nadir Güllü München: hauchdünne Schichten Teig, Antep-Smaragdpistazien und geklärte Urfa-Butter."
+              : "Photo: Speisely Visits. The legendary Havuç Dilimi triangle baklava at Nadir Güllü Munich: delicate phyllo layers of paper-thin dough, Antep emerald pistachios, and Urfa clarified butter."}
           </figcaption>
         </figure>
 
@@ -682,7 +684,7 @@ function NadirGulluArticlePage() {
           </h2>
           <p className="text-base text-[#173C32]/80 leading-relaxed font-sans">
             {isDe
-              ? "Nadir Güllü am Münchner Viktualienmarkt ist keine einfache Konditorei, sondern ein Tempel des Handwerks. Wer einmal den feinen Knusper der 40 Schichten, den Röstduft der Boz-Fıstık-Pistazien und die Eleganz der Urfa-Butter erlebt hat, versteht, warum dieses Haus seit 1843 den weltweiten Maßstab setzt. Ein absolutes Muss für Feinschmecker, die wahre Meisterkunst zu schätzen wissen."
+              ? "Nadir Güllü am Münchner Viktualienmarkt ist keine einfache Konditorei, sondern ein Tempel des Handwerks. Wer einmal den feinen Knusper der Hauchdünne Schichten, den Röstduft der Boz-Fıstık-Pistazien und die Eleganz der Urfa-Butter erlebt hat, versteht, warum dieses Haus seit 1843 den weltweiten Maßstab setzt. Ein absolutes Muss für Feinschmecker, die wahre Meisterkunst zu schätzen wissen."
               : "Nadir Güllü at Munich's Viktualienmarkt is not simply a confectioner, but a sanctuary of timeless culinary artistry. Once you experience the 40 crisp layers, the perfume of wild Boz Fıstık pistachios, and the silkiness of Urfa butter, you instantly understand why this dynasty has defined the global pinnacle since 1843. An indispensable destination for true gourmets."}
           </p>
         </section>
