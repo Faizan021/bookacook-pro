@@ -29,6 +29,117 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: "google-for-startups-immersion-2026",
+    slug: "speisely-google-for-startups-immersion-emea",
+    date: "2026-10-21",
+    author: "Speisely Team",
+    image: "/images/google-antler-immersion.webp",
+    category: "Company",
+    title: {
+      de: "Speisely bei Google for Startups Immersion EMEA",
+      en: "Speisely Joins Google for Startups Immersion EMEA",
+    },
+    description: {
+      de: "Speisely wurde für Google for Startups Immersion EMEA (powered by Antler) ausgewählt. Details zur Beschleunigung unseres fairen B2B-Catering-Marktplatzes.",
+      en: "Speisely has been selected for Google for Startups Immersion EMEA (powered by Antler). Discover how this scales Germany's direct B2B catering ecosystem.",
+    },
+    tldr: {
+      de: [
+        "Speisely wurde offiziell für Phase 1 des Google for Startups Immersion EMEA Programms ausgewählt.",
+        "Das von Antler unterstützte Programm beschleunigt Speiselys Mission für faire digitale Gastronomie und B2B-Catering.",
+        "Zugang zu Google Cloud- und KI-Infrastruktur sowie weltweitem Mentoring stärkt Speiselys Technologie für Partner und Kunden.",
+      ],
+      en: [
+        "Speisely has been officially selected for Phase 1 of Google for Startups Immersion EMEA.",
+        "Powered by Antler, the program accelerates Speisely's mission for transparent B2B catering and gastronomy.",
+        "Access to Google Cloud, Gemini AI architecture, and global venture mentorship strengthens Speisely across Germany.",
+      ],
+    },
+    content: {
+      de: `
+        <h2>Ein Meilenstein für faire Gastronomie- und Event-Technologie</h2>
+        <p>Wir freuen uns sehr, eine bedeutende Neuigkeit für das gesamte Speisely-Ökosystem bekanntzugeben: <strong>Speisely wurde offiziell für das renommierte Programm Google for Startups Immersion EMEA ausgewählt, unterstützt und betrieben von Antler.</strong></p>
+        <p>Aus einer großen Zahl an Technologie-Startups aus ganz Europa, dem Nahen Osten und Afrika wurde Speisely für Phase 1 des Programms ernannt. Dies ist ein wichtiger Vertrauensbeweis in unsere Vision: den deutschen Markt für <a href="/catering">B2B-Catering</a>, Restaurant-Bestellungen und <a href="/planner">Event-Planung</a> von Grund auf zu modernisieren — fair, direkt und technologiegestützt.</p>
+
+        <h3>Die Herausforderung: Ein 12-Milliarden-Euro-Markt im Stillstand</h3>
+        <p>Ob Firmenfeier, Team-Lunch oder mehrtägige Konferenz: Wer in deutschen Metropolen wie Berlin, Frankfurt, München, Köln oder Hamburg hochqualitatives Catering buchen möchte, stand bislang vor Hürden:</p>
+        <ul>
+          <li><strong>Opaque Angebotsprozesse:</strong> Unternehmen müssen tagelang auf individuelle PDF-Angebote warten, ohne verlässlichen Preisvergleich pro Person.</li>
+          <li><strong>Hohe Vermittlungsgebühren:</strong> Traditionelle Event-Agenturen und Buchungsportale verlangen oft 20 bis 30 Prozent Provision. Das schmälert die Margen handwerklicher Küchen und verteuert das Angebot für Unternehmen.</li>
+          <li><strong>Verlust des direkten Kundenkontakts:</strong> Caterer und Gastronomen werden oft auf bloße Zulieferer degradiert, während Vermittler die wertvollen Kundenbeziehungen monopolisieren.</li>
+        </ul>
+
+        <h3>Die Speisely-Lösung: Direkter Marktplatz mit KI-gestütztem Matching</h3>
+        <p>Speisely bricht diese starren Strukturen auf:</p>
+        <ul>
+          <li><strong>Transparente Menü-Pakete:</strong> Fest kalkulierte Pro-Kopf-Preise, verifizierte Partner und vollständige Kennzeichnung von Allergenen und Ernährungsformen (Halal, Vegan, Bio, Koscher).</li>
+          <li><strong>Direkte Zusammenarbeit:</strong> Unternehmen kommunizieren und buchen direkt mit den besten Küchen ihrer Region — ohne verdeckte Aufschläge.</li>
+          <li><strong>Smarter KI-Event-Concierge:</strong> Mithilfe fortschrittlicher Sprachmodelle können Event-Planer Budget, Gästezahl und Menüwünsche eingeben und erhalten innerhalb von Sekunden maßgeschneiderte Vorschläge verifizierter lokaler Caterer.</li>
+        </ul>
+
+        <h3>Was bedeutet die Unterstützung von Google & Antler?</h3>
+        <p>Die Teilnahme an der <em>Google for Startups Immersion EMEA</em> ermöglicht es unserem Team, die Plattformtechnologie gezielt auf das nächste Level zu heben:</p>
+        <ol>
+          <li><strong>Google Cloud & KI-Architektur:</strong> Direkter Zugriff auf Googles Machine-Learning- und Cloud-Ingenieure zur Optimierung unserer KI-Concierge- und Matching-Algorithmen.</li>
+          <li><strong>Venture- und Skalierungs-Mentoring von Antler:</strong> Strategische Begleitung durch erfahrene Marktplatz-Operatoren zur nachhaltigen Expansion in weitere Metropolregionen.</li>
+          <li><strong>Vernetzung mit Europas Top-Gründern:</strong> Wissenstransfer mit führenden Technologie-Startups, die komplexe Marktplatz-Infrastrukturen entwickeln.</li>
+        </ol>
+
+        <h3>Ausblick: Voller Fokus auf Qualität und Partner-Wachstum</h3>
+        <p>Dieses Programm ist für uns keine Trophäe, sondern ein starker Beschleuniger. Unser Fokus bleibt unverändert: den besten Gastronomen, Konditoreien und B2B-Catering-Spezialisten Deutschlands faire, moderne digitale Schaufenster zu bieten — und Unternehmen das Bestellen von gutem Essen so einfach wie möglich zu machen.</p>
+        <p><a href="/partners">Jetzt als Partner registrieren</a> | <a href="/catering">Catering-Angebote entdecken</a></p>
+      `,
+      en: `
+        <h2>A Milestone for Fair Hospitality and Catering Technology</h2>
+        <p>We are thrilled to announce a major milestone for Speisely: <strong>Speisely has been officially selected for Google for Startups Immersion EMEA, powered by Antler.</strong></p>
+        <p>Selected among innovative technology companies across Europe, the Middle East, and Africa, Speisely joins Phase 1 of the program. This selection is a powerful validation of our mission: to build Germany's fairest, direct, and tech-driven ecosystem for <a href="/catering">corporate catering</a>, restaurant orders, and <a href="/planner">event planning</a>.</p>
+
+        <h3>The Challenge: A Fragmented €12B Hospitality Market</h3>
+        <p>From corporate board dinners and daily office lunches to large-scale conferences, companies across Berlin, Frankfurt, Munich, Cologne, and Hamburg have struggled with legacy workflows:</p>
+        <ul>
+          <li><strong>Opaque Inquiries:</strong> Organizing teams spend days waiting for scattered PDF quotes without reliable per-person price benchmarks.</li>
+          <li><strong>Heavy Middleman Fees:</strong> Legacy brokers charge up to 25% in commissions, cutting culinary margins and inflating corporate costs.</li>
+          <li><strong>Disconnected Relationships:</strong> Artisanal caterers lose their direct customer relationship to intermediary booking portals.</li>
+        </ul>
+
+        <h3>The Speisely Platform Solution</h3>
+        <p>Speisely bridges this gap with modern marketplace technology:</p>
+        <ul>
+          <li><strong>Transparent Packages:</strong> Per-person pricing, verified culinary artisans, and dietary tagging (Halal, Vegan, Organic).</li>
+          <li><strong>Direct Vendor Connection:</strong> Corporate teams interact directly with verified chefs and caterers with zero hidden markups.</li>
+          <li><strong>AI Event Concierge:</strong> Intelligent natural-language matching that pairs budget, headcount, and dietary needs with local partners in seconds.</li>
+        </ul>
+
+        <h3>What Google for Startups & Antler Bring to Speisely</h3>
+        <p>Participation in the Immersion EMEA program equips Speisely with world-class technical and venture acceleration:</p>
+        <ol>
+          <li><strong>Google Cloud & AI Acceleration:</strong> Collaborating with Google engineers to scale our event matchmaking models.</li>
+          <li><strong>Antler Venture Mentorship:</strong> Guidance from experienced marketplace builders on sustainable scaling and supply dynamics.</li>
+          <li><strong>International Network:</strong> Exchanging insights with high-growth founders across Europe and the EMEA region.</li>
+        </ol>
+
+        <p><a href="/partners">Become a Partner</a> | <a href="/catering">Explore Catering</a></p>
+      `,
+    },
+    faq: [
+      {
+        question: "Was bedeutet die Auswahl für das Google for Startups Immersion EMEA Programm?",
+        answer:
+          "Speisely erhält Zugang zu Google-Entwicklern, Cloud-Ressourcen und individuellem Mentoring durch Antler, um die Plattformarchitektur und KI-Funktionen für B2B-Catering deutschlandweit zu skalieren.",
+      },
+      {
+        question: "Wie profitieren Unternehmenskunden von dieser Entwicklung?",
+        answer:
+          "Unternehmenskunden profitieren von einer noch schnelleren KI-gestützten Event-Planung, optimierten Menü-Kalkulationen und einem stetig wachsenden Netzwerk geprüfter regionaler Caterer.",
+      },
+      {
+        question: "Wie können Caterer und Restaurants Partner von Speisely werden?",
+        answer:
+          "Gastronomen und Caterer können sich kostenlos unter speisely.de/partners registrieren. Speisely verlangt keine monatlichen Grundgebühren — Partner zahlen lediglich eine faire Erfolgsgebühr bei bestätigten Buchungen.",
+      },
+    ],
+  },
+  {
     id: "1",
     slug: "what-is-speisely",
     date: "2026-05-10",

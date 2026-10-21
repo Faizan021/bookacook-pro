@@ -20,6 +20,7 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - Enterprise GEO API: https://speisely.de/api/geo
 - GeoJSON Registry: https://speisely.de/geo.json
 - Blog: https://speisely.de/blog
+- Official Announcement (Google for Startups Immersion EMEA): https://speisely.de/blog/speisely-google-for-startups-immersion-emea
 - About Us: https://speisely.de/about
 
 ### Specialized Catering Services
