@@ -134,7 +134,7 @@ function SpeiselyVisitsPage() {
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pb-24 pt-8">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-8">
-          <ol className="flex items-center gap-2 text-xs text-[#173C32]/60 font-medium">
+          <ol className="flex items-center gap-2 text-xs text-[#173C32]/80 font-semibold">
             <li>
               <Link to="/" className="hover:text-[#173C32] transition-colors">
                 Speisely
@@ -298,7 +298,7 @@ function SpeiselyVisitsPage() {
                       loading="lazy"
                     />
                     <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7FA46B] text-white px-3 py-1 text-xs font-extrabold shadow">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#16382b] text-white border border-[#7FA46B]/50 px-3 py-1 text-xs font-extrabold shadow">
                         <Eye className="w-3 h-3" aria-hidden="true" />
                         Speisely Visits
                       </span>
@@ -327,7 +327,7 @@ function SpeiselyVisitsPage() {
                     <h3 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
                       {isDe ? article.titleDe : article.titleEn}
                     </h3>
-                    <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
+                    <p className="text-sm text-[#173C32]/85 leading-relaxed flex-1">
                       {isDe ? article.excerptDe : article.excerptEn}
                     </p>
                     <div className="pt-2 border-t border-[#173C32]/10 flex items-center justify-between">
@@ -335,7 +335,7 @@ function SpeiselyVisitsPage() {
                         {isDe ? "Story lesen" : "Read Story"}{" "}
                         <ArrowRight className="w-4 h-4" aria-hidden="true" />
                       </span>
-                      <span className="text-xs text-[#173C32]/40">
+                      <span className="text-xs text-[#173C32]/75 font-medium">
                         {article.readTime} {isDe ? "Lesezeit" : "read"}
                       </span>
                     </div>
@@ -349,7 +349,7 @@ function SpeiselyVisitsPage() {
         <div className="border-t border-[#173C32]/10 pt-8">
           <Link
             to="/magazin"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#173C32]/60 hover:text-[#173C32] transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#1b4d3e] hover:text-[#b8860b] transition-colors"
           >
             ← {isDe ? "Zurück zur Magazin-Übersicht" : "Back to Magazine Overview"}
           </Link>

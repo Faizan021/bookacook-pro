@@ -201,7 +201,7 @@ export function SiteFooter() {
         {/* Business */}
 
         <div>
-          <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/60">
+          <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
             {t("footer.business")}
           </h4>
 
@@ -273,7 +273,7 @@ export function SiteFooter() {
         {/* Legal & Newsletter */}
 
         <div>
-          <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/60">
+          <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
             {t("footer.legal")}
           </h4>
 
@@ -312,7 +312,7 @@ export function SiteFooter() {
 
                 aria-label="Email address"
 
-                className="flex-1 bg-transparent text-sm text-[oklch(0.97_0.02_92)] placeholder:text-[oklch(0.97_0.02_92)]/50 outline-none min-w-0"
+                className="flex-1 bg-transparent text-sm text-[oklch(0.97_0.02_92)] placeholder:text-[oklch(0.97_0.02_92)]/75 outline-none min-w-0"
               />
 
               <button
@@ -331,13 +331,13 @@ export function SiteFooter() {
 
       <div className="border-t border-[oklch(0.97_0.02_92)]/10">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-6">
-          <p className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[oklch(0.97_0.02_92)]/50 mb-3">
+          <p className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[oklch(0.97_0.02_92)]/75 mb-3">
             {isDe
               ? "Speisely Community Stories & Kulinarik-Guides"
               : "Speisely Community Stories & Culinary Guides"}
           </p>
 
-          <div className="flex flex-wrap gap-x-5 gap-y-2.5 text-xs text-[oklch(0.97_0.02_92)]/65 mb-4">
+          <div className="flex flex-wrap gap-x-5 gap-y-2.5 text-xs text-[oklch(0.97_0.02_92)]/80 mb-4">
             {directoryLinks.map((item) => (
               <Link
                 key={item.to}
@@ -351,11 +351,11 @@ export function SiteFooter() {
             ))}
           </div>
 
-          <p className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[oklch(0.97_0.02_92)]/50 mb-2">
+          <p className="text-[11px] uppercase tracking-[0.16em] font-semibold text-[oklch(0.97_0.02_92)]/75 mb-2">
             {isDe ? "Geprüfte Caterer & Catering-Guides" : "Verified Caterers & Catering Guides"}
           </p>
 
-          <div className="flex flex-wrap gap-x-5 gap-y-2.5 text-xs text-[oklch(0.97_0.02_92)]/65">
+          <div className="flex flex-wrap gap-x-5 gap-y-2.5 text-xs text-[oklch(0.97_0.02_92)]/80">
             {catererAndGuideLinks.map((item) => (
               <Link
                 key={item.to}
@@ -372,7 +372,7 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-[oklch(0.97_0.02_92)]/10">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-5 text-xs text-[oklch(0.97_0.02_92)]/60 flex flex-wrap gap-2 justify-between">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10 py-5 text-xs text-[oklch(0.97_0.02_92)]/75 flex flex-wrap gap-2 justify-between">
           <span>© {new Date().getFullYear()} Speisely</span>
 
           <span>
@@ -389,7 +389,7 @@ export function SiteFooter() {
 function FooterCol({ title, items }: { title: string; items: { label: string; to: string }[] }) {
   return (
     <div>
-      <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/60">
+      <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
         {title}
       </h4>
 

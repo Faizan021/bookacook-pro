@@ -130,7 +130,7 @@ function MagazinIndexPage() {
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
                 activeFilter === key
                   ? key === "speisely-visits"
-                    ? "bg-[#7FA46B] text-white shadow"
+                    ? "bg-[#16382b] text-white shadow border border-[#7FA46B]/50"
                     : "bg-[#173C32] text-white shadow"
                   : "bg-white/80 text-[#173C32] hover:bg-[#173C32]/10 border border-[#173C32]/15"
               }`}
@@ -220,7 +220,7 @@ function MagazinIndexPage() {
                     <span
                       className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold shadow ${
                         isVisit
-                          ? "bg-[#7FA46B] text-white"
+                          ? "bg-[#16382b] text-white border border-[#7FA46B]/50"
                           : "bg-[#173C32]/95 backdrop-blur text-[#E6B84A] border border-white/10"
                       }`}
                     >
@@ -238,14 +238,14 @@ function MagazinIndexPage() {
                   </div>
                 </div>
                 <div className="flex flex-col flex-1 p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-xs text-[#173C32]/50 font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-[#E6B84A]" aria-hidden="true" />
+                  <div className="flex items-center gap-2 text-xs text-[#173C32]/80 font-semibold">
+                    <Calendar className="w-3.5 h-3.5 text-[#b8860b]" aria-hidden="true" />
                     <span>{isDe ? article.dateDe : article.dateEn}</span>
                   </div>
                   <h2 className="font-serif text-xl font-black text-[#173C32] group-hover:text-[#b8860b] transition-colors leading-snug">
                     {isDe ? article.titleDe : article.titleEn}
                   </h2>
-                  <p className="text-sm text-[#173C32]/65 leading-relaxed flex-1">
+                  <p className="text-sm text-[#173C32]/85 leading-relaxed flex-1">
                     {isDe ? article.excerptDe : article.excerptEn}
                   </p>
                   <div className="pt-3 border-t border-[#173C32]/10 flex items-center justify-between">
@@ -253,7 +253,7 @@ function MagazinIndexPage() {
                       {isDe ? "Story lesen" : "Read Story"}{" "}
                       <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </span>
-                    <span className="text-xs text-[#173C32]/45">
+                    <span className="text-xs text-[#173C32]/75 font-medium">
                       {article.readTime} {isDe ? "Lesezeit" : "read"}
                     </span>
                   </div>
@@ -274,7 +274,7 @@ function MagazinIndexPage() {
         <div className="mt-10 pt-8 border-t border-[#173C32]/10">
           <Link
             to="/magazin/speisely-visits"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#7FA46B] hover:text-[#173C32] transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#1b4d3e] hover:text-[#b8860b] transition-colors"
           >
             <Eye className="w-4 h-4" aria-hidden="true" />
             {isDe ? "Alle Speisely Visits ansehen" : "View all Speisely Visits"}

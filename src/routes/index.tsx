@@ -2553,7 +2553,7 @@ function Home() {
                 />
 
                 <div className="absolute top-4 left-4 flex gap-2">
-                  <span className="rounded-full bg-[#7FA46B] text-white text-[11px] font-extrabold px-3 py-1 shadow">
+                  <span className="rounded-full bg-[#16382b] text-white border border-[#7FA46B]/50 text-[11px] font-extrabold px-3 py-1 shadow">
                     Speisely Visits
                   </span>
 
