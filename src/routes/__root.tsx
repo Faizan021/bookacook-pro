@@ -212,7 +212,6 @@ function RootShell({ children }: { children: ReactNode }) {
         <link rel="sitemap" type="application/xml" href="https://speisely.de/sitemap.xml" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="preload"
           as="style"

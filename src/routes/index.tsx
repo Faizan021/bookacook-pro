@@ -732,7 +732,7 @@ function Home() {
             <img
               src="/hero-cinematic.webp"
 
-              fetchPriority="high"
+              loading="lazy"
 
               decoding="async"
 
@@ -2118,23 +2118,8 @@ function Home() {
       <section className="relative py-20 lg:py-28 overflow-hidden">
         {/* Cinematic Background */}
 
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/hero-cinematic.webp"
-
-            loading="lazy"
-
-            decoding="async"
-
-            sizes="100vw"
-
-            alt="Speisely Experience"
-
-            className="w-full h-full object-cover object-center scale-105"
-          />
-
-          <div className="absolute inset-0 bg-forest/90 backdrop-blur-sm" />
-        </div>
+        {/* Cinematic Atmosphere Background (Pure CSS Gradient - 0 KB Payload) */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-forest via-[#062c1a] to-forest" />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-14 text-center">
@@ -2283,6 +2268,7 @@ function Home() {
                 <Link
                   to="/case-study/partyservice-kuepper"
 
+                  aria-label="Partyservice Küpper Case Study"
                   className="block group-hover:text-[#A85C36] transition"
                 >
                   <h3 className="font-display text-2xl sm:text-3xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
@@ -2402,6 +2388,7 @@ function Home() {
                 <Link
                   to="/case-study/haus-spaas"
 
+                  aria-label="Haus Spaas Case Study"
                   className="block group-hover:text-[#A85C36] transition"
                 >
                   <h3 className="font-display text-2xl sm:text-3xl font-bold text-forest mb-2 group-hover:text-[#A85C36] transition">
