@@ -148,15 +148,15 @@ export const Route = createFileRoute("/")({
         rel: "preload",
         href: "/hero-cinematic-mobile.webp",
         as: "image",
+        type: "image/webp",
         media: "(max-width: 768px)",
-        fetchpriority: "high",
       },
       {
         rel: "preload",
         href: "/hero-cinematic.webp",
         as: "image",
+        type: "image/webp",
         media: "(min-width: 769px)",
-        fetchpriority: "high",
       },
 
       { rel: "sitemap", type: "application/xml", href: "https://speisely.de/sitemap.xml" },
@@ -773,7 +773,7 @@ function Home() {
 
               fetchPriority="high"
 
-              decoding="async"
+              decoding="sync"
 
               sizes="100vw"
 
@@ -1959,19 +1959,26 @@ function Home() {
             className="group relative overflow-hidden rounded-[2rem] bg-[#2a4d3e] text-white flex flex-col min-h-[480px] hover:shadow-2xl transition-all duration-500 hover:-translate-y-1"
           >
             <div className="absolute inset-0">
-              <img
-                src="/hero-cinematic.webp"
-
-                loading="lazy"
-
-                decoding="async"
-
-                sizes="(min-width: 768px) 33vw, 100vw"
-
-                alt="Restaurants"
-
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
+              <picture>
+                <source
+                  media="(max-width: 768px)"
+                  srcSet="/hero-cinematic-mobile.webp"
+                  type="image/webp"
+                />
+                <source
+                  media="(min-width: 769px)"
+                  srcSet="/hero-cinematic.webp"
+                  type="image/webp"
+                />
+                <img
+                  src="/hero-cinematic.webp"
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  alt="Restaurants"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+              </picture>
 
               <div className="absolute inset-0 bg-gradient-to-t from-[#2a4d3e] via-[#2a4d3e]/65 to-[#2a4d3e]/15" />
             </div>
@@ -2252,7 +2259,7 @@ function Home() {
 
                   <div className="relative aspect-[16/10] overflow-hidden bg-forest/20">
                     <img
-                      src="/showcase-kuepper.png"
+                      src="/showcase-kuepper.webp"
 
                       alt="Partyservice Küpper High-End Website"
 
@@ -2310,6 +2317,7 @@ function Home() {
                   <Link
                     to="/case-study/partyservice-kuepper"
 
+                    aria-label="Case Study Partyservice Küpper lesen"
                     className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-4 py-2 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
                   >
                     <span>Case Study</span>
@@ -2372,7 +2380,7 @@ function Home() {
 
                   <div className="relative aspect-[16/10] overflow-hidden bg-forest/20">
                     <img
-                      src="/showcase-haus-spaas.png"
+                      src="/showcase-haus-spaas.webp"
 
                       alt="Haus Spaas High-End Website & WhatsApp Engine"
 
@@ -2428,6 +2436,7 @@ function Home() {
                   <Link
                     to="/case-study/haus-spaas"
 
+                    aria-label="Case Study Haus Spaas lesen"
                     className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-4 py-2 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
                   >
                     <span>Case Study</span>
@@ -2612,7 +2621,7 @@ function Home() {
             >
               <div className="relative h-60 overflow-hidden bg-black/40">
                 <img
-                  src="/magazin/king-tut-berlin/16_king_tut_hawawshi_molokhia_hd.jpg?v=2"
+                  src="/magazin/king-tut-berlin/16_king_tut_hawawshi_molokhia_hd.webp?v=3"
 
                   alt="King Tut Restaurant Berlin"
 
@@ -2666,7 +2675,7 @@ function Home() {
             >
               <div className="relative h-60 overflow-hidden bg-black/40">
                 <img
-                  src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.jpg?v=4"
+                  src="/magazin/baba-pirzola-berlin/01_baba_pirzola_feast_table_hd.webp?v=5"
 
                   alt="Baba Pirzola Meze und Grill Berlin"
 

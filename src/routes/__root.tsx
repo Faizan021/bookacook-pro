@@ -213,11 +213,6 @@ function RootShell({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/manifest.json" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link
-          rel="preload"
-          as="style"
-          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap"
-        />
-        <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap"
           media="print"
