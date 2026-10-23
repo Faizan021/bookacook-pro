@@ -154,14 +154,14 @@ export const Route = createFileRoute("/")({
         href: "/hero-cinematic-mobile.webp",
         as: "image",
         type: "image/webp",
-        media: "(max-width: 768px)",
+        media: "(max-width: 1023px)",
       },
       {
         rel: "preload",
         href: "/hero-cinematic.webp",
         as: "image",
         type: "image/webp",
-        media: "(min-width: 769px)",
+        media: "(min-width: 1024px)",
       },
 
       { rel: "sitemap", type: "application/xml", href: "https://speisely.de/sitemap.xml" },
@@ -313,8 +313,7 @@ function Home() {
 
   const shouldReduceMotion = useReducedMotion();
 
-  const [mounted, setMounted] = useState(false);
-
+  
   const [audienceMode, setAudienceMode] = useState<"foodie" | "partner">("foodie");
 
   const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">(
@@ -455,7 +454,6 @@ function Home() {
   );
 
   useEffect(() => {
-    setMounted(true);
 
     if (typeof window !== "undefined") {
       const host = window.location.hostname.toLowerCase();
@@ -728,73 +726,39 @@ function Home() {
 
         <div className="absolute inset-0 z-0 bg-forest" />
 
-        {/* Right-side cinematic image — desktop only */}
-
-        <div className="absolute right-0 top-0 bottom-0 w-[48%] z-0 hidden lg:block">
-          <picture>
-            <source srcSet="/hero-cinematic.webp" type="image/webp" />
-
-            <img
-              src="/hero-cinematic.webp"
-
-              loading="eager"
-
-              fetchPriority="high"
-
-              decoding="sync"
-
-              sizes="50vw"
-
-              alt={tt(
-                "Speisely – Premium Gastronomie & Events",
-
-                "Speisely – Premium Hospitality & Events",
-              )}
-
-              className="w-full h-full object-cover object-center"
-            />
-          </picture>
-
-          {/* Left-side gradient fade so text is never blocked */}
-
-          <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/80 to-transparent" />
-
-          {/* Subtle bottom vignette */}
-
-          <div className="absolute inset-0 bg-gradient-to-t from-forest/30 via-transparent to-transparent" />
-        </div>
-
-        {/* Mobile background image (behind content, heavily dimmed) */}
-
-        <div className="absolute inset-0 z-0 lg:hidden">
-          <picture>
+        {/* Unified Responsive Hero Background */}
+        <div className="absolute inset-0 lg:left-auto lg:right-0 lg:w-[48%] z-0 pointer-events-none overflow-hidden">
+          <picture className="w-full h-full">
             <source
-              media="(max-width: 768px)"
+              media="(max-width: 1023px)"
               srcSet="/hero-cinematic-mobile.webp"
               type="image/webp"
             />
-            <source srcSet="/hero-cinematic.webp" type="image/webp" />
-
+            <source
+              media="(min-width: 1024px)"
+              srcSet="/hero-cinematic.webp"
+              type="image/webp"
+            />
             <img
               src="/hero-cinematic-mobile.webp"
-
+              loading="eager"
               fetchPriority="high"
-
               decoding="sync"
-
-              sizes="100vw"
-
+              sizes="(min-width: 1024px) 50vw, 100vw"
               alt={tt(
                 "Speisely – Premium Gastronomie & Events",
-
-                "Speisely – Premium Hospitality & Events",
+                "Speisely – Premium Hospitality & Events"
               )}
-
               className="w-full h-full object-cover object-center"
             />
           </picture>
 
-          <div className="absolute inset-0 bg-forest/85" />
+          {/* Desktop gradient overlays */}
+          <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/80 to-transparent hidden lg:block" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest/30 via-transparent to-transparent hidden lg:block" />
+
+          {/* Mobile dimming overlay */}
+          <div className="absolute inset-0 bg-forest/85 lg:hidden" />
         </div>
 
         {/* Hero text & interactive content */}
@@ -854,10 +818,8 @@ function Home() {
                 },
               }}
 
-              initial="hidden"
-
+              initial={false}
               animate="visible"
-
               className="lg:col-span-7 max-w-2xl"
             >
               {/* Eyebrow Milestone Announcement */}
@@ -2745,22 +2707,27 @@ function Home() {
           className="group relative block overflow-hidden rounded-[2.5rem] text-white p-10 sm:p-14 lg:p-16 hover:-translate-y-1 transition-all duration-500 hover:shadow-2xl hover:shadow-forest/30"
         >
           {/* Cinematic Image Background */}
-
           <div className="absolute inset-0 z-0">
-            <img
-              src="/hero-cinematic.webp"
-
-              loading="lazy"
-
-              decoding="async"
-
-              sizes="100vw"
-
-              alt="Become a Partner"
-
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
-
+            <picture>
+              <source
+                media="(max-width: 1023px)"
+                srcSet="/hero-cinematic-mobile.webp"
+                type="image/webp"
+              />
+              <source
+                media="(min-width: 1024px)"
+                srcSet="/hero-cinematic.webp"
+                type="image/webp"
+              />
+              <img
+                src="/hero-cinematic-mobile.webp"
+                loading="lazy"
+                decoding="async"
+                sizes="100vw"
+                alt="Become a Partner"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            </picture>
             <div className="absolute inset-0 bg-gradient-to-r from-forest via-forest/90 to-forest/40" />
 
             <div className="absolute inset-0 bg-black/20" />
