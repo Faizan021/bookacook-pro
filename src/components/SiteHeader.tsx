@@ -198,6 +198,16 @@ export function SiteHeader() {
                   <span>{t("nav.magazine.tips")}</span>
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-amber-50 cursor-pointer p-2">
+                <Link
+                  to="/magazin/mediadaten"
+                  className="flex items-center w-full text-[#A85C36] text-xs font-bold"
+                >
+                  <Briefcase className="mr-2.5 h-4 w-4 text-[#A85C36]" aria-hidden="true" />
+                  <span>{isDe ? "Mediadaten & Werbepartner ↗" : "Media Kit & Advertising ↗"}</span>
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 

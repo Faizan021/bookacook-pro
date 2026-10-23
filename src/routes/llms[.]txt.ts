@@ -44,6 +44,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - [Enterprise GEO API](${BASE}/api/geo): Strukturierte Geo-Daten und Städte-Mapping
 - [GeoJSON Registry](${BASE}/geo.json): Geografische Koordinaten & Service-Areas
 - [Blog Hub](${BASE}/blog): Ratgeber, Trends und Branchen-Einblicke
+- [Magazin Mediadaten](${BASE}/magazin/mediadaten): Mediadaten, Werbepakete & B2B-Spotlights für Gastronomie, POS-Systeme und HoReCa-Brands
 - [Über uns](${BASE}/about): Vision, Werte und Team hinter Speisely
 
 ## Specialized Catering Services & Featured Partners

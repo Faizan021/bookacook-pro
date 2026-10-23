@@ -129,6 +129,7 @@ export function SiteFooter() {
     { label: "Schnitzel Schmiede", to: "/magazin/schnitzel-schmiede" },
 
     { label: "Speisely Visits Übersicht", to: "/magazin/speisely-visits" },
+    { label: "Mediadaten & Werbepartner", to: "/magazin/mediadaten" },
   ];
 
   const catererAndGuideLinks = [

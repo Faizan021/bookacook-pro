@@ -193,6 +193,33 @@ function MagazinIndexPage() {
           </div>
         </div>
 
+        {/* B2B Media Kit & Partner Banner (Commercial Inquiries for Gastro & HoReCa) */}
+        <div className="mb-10 rounded-3xl bg-[#FAF8F5] border-2 border-forest/15 p-6 sm:p-8 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <span className="text-[11px] font-black uppercase tracking-widest text-[#A85C36]">
+              {isDe ? "Für Gastronomie, POS & HoReCa-Marken" : "For Hospitality & Food-Tech Brands"}
+            </span>
+            <h3 className="font-display text-xl sm:text-2xl font-bold text-forest">
+              {isDe
+                ? "Präsentiere dein Restaurant oder Produkt im Speisely Magazin"
+                : "Feature Your Restaurant or Brand in Speisely Magazine"}
+            </h3>
+            <p className="text-xs sm:text-sm text-forest/75 leading-relaxed">
+              {isDe
+                ? "Erreiche monatlich über 25.000 Gastronomie-Entscheider, Event-Planer und Feinschmecker mit exklusiven Editorials, Vor-Ort-Besuchen und B2B-Spotlights."
+                : "Reach over 25,000 monthly food lovers, caterers, and restaurant owners with tailored editorial features and B2B spotlights."}
+            </p>
+          </div>
+          <div className="shrink-0 flex flex-wrap items-center gap-3">
+            <Link
+              to="/magazin/mediadaten"
+              className="inline-flex items-center gap-2 rounded-2xl bg-forest text-[#FAF8F5] px-5 py-3 text-xs font-bold shadow-md hover:bg-[#1a382b] transition"
+            >
+              <span>{isDe ? "Mediadaten & Pakete ↗" : "Media Kit & Packages ↗"}</span>
+            </Link>
+          </div>
+        </div>
+
         {/* Stories Grid */}
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
