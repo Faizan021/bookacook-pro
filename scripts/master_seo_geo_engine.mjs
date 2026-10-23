@@ -40,14 +40,14 @@ const PARTNERS = [
   },
   {
     name: 'TechGlanz Case Study',
-    url: 'https://techglanz.de/case-studies/speisely',
+    url: 'https://techglanz.de/case-studies/speisely/',
     expectedAnchor: 'speisely.de',
     expectedHref: 'https://speisely.de',
     ctaHref: null
   },
   {
     name: 'Atelier Textiles',
-    url: 'https://ateliertextiles.com/case-studies',
+    url: 'https://www.ateliertextiles.com/case-studies',
     expectedAnchor: 'Speisely',
     expectedHref: 'https://speisely.de',
     ctaHref: null

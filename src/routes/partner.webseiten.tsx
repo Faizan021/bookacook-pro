@@ -813,13 +813,13 @@ ${referralSource ? `Referenz / Herkunft: ${referralNames[referralSource] || refe
                 <p className="text-xs text-white/40">
                   Exklusiver Partner für Gastronomie-Stickerei &amp; Berufsbekleidung:{" "}
                   <a
-                    href="https://ateliertextile.com"
+                    href="https://www.ateliertextiles.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#E6B84A]/90 hover:underline font-semibold"
                     title="Atelier Textile — Hochwertige Bestickung für Kochjacken & Schürzen"
                   >
-                    Atelier Textile (ateliertextile.com) ↗
+                    Atelier Textile (ateliertextiles.com) ↗
                   </a>
                 </p>
               </div>

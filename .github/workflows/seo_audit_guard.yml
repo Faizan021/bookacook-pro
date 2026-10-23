@@ -1,0 +1,37 @@
+name: Autonomous SEO & Backlink Health Guard
+
+on:
+  schedule:
+    # Runs every Monday at 08:00 UTC (09:00 / 10:00 German time)
+    - cron: '0 8 * * 1'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  seo-health-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Master SEO / GEO Engine Audit
+        run: |
+          node scripts/master_seo_geo_engine.mjs
+
+      - name: Check git status for audit report updates
+        id: git_status
+        run: |
+          git config --global user.name "Speisely SEO Bot"
+          git config --global user.email "bot@speisely.de"
+          git add docs/ACTIVE_WORK_NOTES.md
+          if git diff --staged --quiet; then
+            echo "No changes in audit report."
+          else
+            git commit -m "chore(seo): weekly automated SEO/AEO audit report sync [skip ci]"
+            git push
+          fi
