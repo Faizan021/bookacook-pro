@@ -2663,24 +2663,30 @@ function CatererPage() {
                 `Hallo Speisely-Team! Ich habe gerade eine Catering-Anfrage für ${catererProfile?.name || "Catering"} gestellt:
 
 ` +
-                `• Name: ${inquiryForm.customerName || "Kunde"}
+                  `• Name: ${inquiryForm.customerName || "Kunde"}
 ` +
-                `• E-Mail: ${inquiryForm.customerEmail || "N/A"}
+                  `• E-Mail: ${inquiryForm.customerEmail || "N/A"}
 ` +
-                `• Telefon: ${inquiryForm.customerPhone || "N/A"}
+                  `• Telefon: ${inquiryForm.customerPhone || "N/A"}
 ` +
-                `• Event: ${inquiryForm.eventType || "Event"} für ${inquiryForm.guestCount || currentTotalCount || 10} Personen
+                  `• Event: ${inquiryForm.eventType || "Event"} für ${inquiryForm.guestCount || 10} Personen
 ` +
-                `• Datum & Ort: ${inquiryForm.eventDate || "Auf Anfrage"} in ${inquiryForm.postalCodeCity || "Deutschland"}
+                  `• Datum & Ort: ${inquiryForm.eventDate || "Auf Anfrage"} in ${inquiryForm.postalCodeCity || "Deutschland"}
 
 ` +
-                `Bitte geben Sie mir kurz Bescheid, ob der Termin frei ist!`
+                  `Bitte geben Sie mir kurz Bescheid, ob der Termin frei ist!`,
               )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition shadow-sm"
             >
-              <span>💬 {t("Per WhatsApp anfragen (+49 176 43218282)", "Chat via WhatsApp (+49 176 43218282)")}</span>
+              <span>
+                💬{" "}
+                {t(
+                  "Per WhatsApp anfragen (+49 176 43218282)",
+                  "Chat via WhatsApp (+49 176 43218282)",
+                )}
+              </span>
             </a>
           </div>
 

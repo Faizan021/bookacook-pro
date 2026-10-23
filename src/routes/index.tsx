@@ -47,7 +47,7 @@ import { lazy, Suspense } from "react";
 const AiConciergeModal = lazy(() =>
   import("@/components/search/AiConciergeModal").then((m) => ({
     default: m.AiConciergeModal,
-  }))
+  })),
 );
 
 export const Route = createFileRoute("/")({
@@ -168,10 +168,6 @@ export const Route = createFileRoute("/")({
     ],
 
     scripts: [
-      {
-        children: `(function(){try{var h=window.location.hostname.toLowerCase();if(h.endsWith('.speisely.de')&&h!=='speisely.de'&&h!=='www.speisely.de'&&h!=='app.speisely.de'&&h!=='admin.speisely.de'){var sub=h.replace('.speisely.de','').trim();if(sub&&!window.location.pathname.startsWith('/catering/')&&!window.location.pathname.startsWith('/restaurant/')&&!window.location.pathname.startsWith('/planner/')){window.location.replace('/catering/'+sub+window.location.search);}}}catch(e){}})();`,
-      },
-
       {
         type: "application/ld+json",
 
@@ -313,7 +309,6 @@ function Home() {
 
   const shouldReduceMotion = useReducedMotion();
 
-  
   const [audienceMode, setAudienceMode] = useState<"foodie" | "partner">("foodie");
 
   const [activeVertical, setActiveVertical] = useState<"restaurant" | "catering" | "planner">(
@@ -454,7 +449,6 @@ function Home() {
   );
 
   useEffect(() => {
-
     if (typeof window !== "undefined") {
       const host = window.location.hostname.toLowerCase();
 
@@ -734,11 +728,7 @@ function Home() {
               srcSet="/hero-cinematic-mobile.webp"
               type="image/webp"
             />
-            <source
-              media="(min-width: 1024px)"
-              srcSet="/hero-cinematic.webp"
-              type="image/webp"
-            />
+            <source media="(min-width: 1024px)" srcSet="/hero-cinematic.webp" type="image/webp" />
             <img
               src="/hero-cinematic-mobile.webp"
               loading="eager"
@@ -747,7 +737,7 @@ function Home() {
               sizes="(min-width: 1024px) 50vw, 100vw"
               alt={tt(
                 "Speisely – Premium Gastronomie & Events",
-                "Speisely – Premium Hospitality & Events"
+                "Speisely – Premium Hospitality & Events",
               )}
               className="w-full h-full object-cover object-center"
             />
@@ -2714,11 +2704,7 @@ function Home() {
                 srcSet="/hero-cinematic-mobile.webp"
                 type="image/webp"
               />
-              <source
-                media="(min-width: 1024px)"
-                srcSet="/hero-cinematic.webp"
-                type="image/webp"
-              />
+              <source media="(min-width: 1024px)" srcSet="/hero-cinematic.webp" type="image/webp" />
               <img
                 src="/hero-cinematic-mobile.webp"
                 loading="lazy"

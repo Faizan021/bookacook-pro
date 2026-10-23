@@ -13,12 +13,13 @@ const APP_URL = process.env.VITE_APP_URL || "https://speisely.de";
 // 1. Portion & Price Estimator (Deterministic Guardrail)
 function calculatePortionsAndPrice(guestCount: number, eventType: string) {
   // Standard German Gastro Benchmarks: 400g - 600g per person
-  const isHearty = eventType.toLowerCase().includes("bbq") || eventType.toLowerCase().includes("hochzeit");
+  const isHearty =
+    eventType.toLowerCase().includes("bbq") || eventType.toLowerCase().includes("hochzeit");
   const pricePerHead = isHearty ? 32 : 24; // € per guest
   const savoryPieces = guestCount * (isHearty ? 6 : 4);
   const dessertPieces = guestCount * 2;
   const subtotalCents = guestCount * pricePerHead * 100;
-  const depositCents = Math.round(subtotalCents * 0.10); // 10% platform deposit
+  const depositCents = Math.round(subtotalCents * 0.1); // 10% platform deposit
 
   return {
     portions: {
@@ -27,8 +28,18 @@ function calculatePortionsAndPrice(guestCount: number, eventType: string) {
       dessertPiecesTotal: dessertPieces,
     },
     suggestedItems: [
-      { name: "Klassische Fingerfood & Vorspeisen-Platte", qty: Math.ceil(guestCount / 10), priceCents: 4500 },
-      { name: isHearty ? "Grill- & Hauptspeisen-Buffet (Live Warmhalte)" : "Mediterranes Buffet & Bowls", qty: guestCount, priceCents: (pricePerHead - 8) * 100 },
+      {
+        name: "Klassische Fingerfood & Vorspeisen-Platte",
+        qty: Math.ceil(guestCount / 10),
+        priceCents: 4500,
+      },
+      {
+        name: isHearty
+          ? "Grill- & Hauptspeisen-Buffet (Live Warmhalte)"
+          : "Mediterranes Buffet & Bowls",
+        qty: guestCount,
+        priceCents: (pricePerHead - 8) * 100,
+      },
       { name: "Saisonale Dessert-Variation & Cremes", qty: guestCount, priceCents: 350 },
     ],
     subtotalCents,
@@ -40,37 +51,40 @@ function calculatePortionsAndPrice(guestCount: number, eventType: string) {
 // SERVER FUNCTION: Generate Resumable Quote Draft & Alert Faizan
 // ─────────────────────────────────────────────────────────────
 export const createResumableQuoteDraft = createServerFn({ method: "POST" })
-  .validator((input: {
-    customerName: string;
-    customerEmail: string;
-    customerPhone?: string;
-    eventType: string;
-    eventDate: string;
-    guestCount: number;
-    city: string;
-    catererId: string;
-    catererName: string;
-    notes?: string;
-  }) =>
-    z.object({
-      customerName: z.string().min(1),
-      customerEmail: z.string().email(),
-      customerPhone: z.string().optional(),
-      eventType: z.string().default("Catering Event"),
-      eventDate: z.string().default("Auf Anfrage"),
-      guestCount: z.number().min(1).default(10),
-      city: z.string().default("Deutschland"),
-      catererId: z.string(),
-      catererName: z.string(),
-      notes: z.string().optional(),
-    }).parse(input),
+  .validator(
+    (input: {
+      customerName: string;
+      customerEmail: string;
+      customerPhone?: string;
+      eventType: string;
+      eventDate: string;
+      guestCount: number;
+      city: string;
+      catererId: string;
+      catererName: string;
+      notes?: string;
+    }) =>
+      z
+        .object({
+          customerName: z.string().min(1),
+          customerEmail: z.string().email(),
+          customerPhone: z.string().optional(),
+          eventType: z.string().default("Catering Event"),
+          eventDate: z.string().default("Auf Anfrage"),
+          guestCount: z.number().min(1).default(10),
+          city: z.string().default("Deutschland"),
+          catererId: z.string(),
+          catererName: z.string(),
+          notes: z.string().optional(),
+        })
+        .parse(input),
   )
   .handler(async ({ data }) => {
     // 1. Calculate Quote State
     const calc = calculatePortionsAndPrice(data.guestCount, data.eventType);
 
     // 2. Save Checkpoint State to Supabase PostgreSQL (tool_context.state)
-    const { data: quoteRecord, error } = await supabaseAdmin
+    const { data: quoteRecord, error } = await (supabaseAdmin as any)
       .from("quote_drafts")
       .insert({
         customer_name: data.customerName,
@@ -126,12 +140,10 @@ export const createResumableQuoteDraft = createServerFn({ method: "POST" })
 // SERVER FUNCTION: Rehydrate State & Approve (1-Click Action)
 // ─────────────────────────────────────────────────────────────
 export const approveQuoteCheckpoint = createServerFn({ method: "POST" })
-  .validator((input: { token: string }) =>
-    z.object({ token: z.string().min(10) }).parse(input),
-  )
+  .validator((input: { token: string }) => z.object({ token: z.string().min(10) }).parse(input))
   .handler(async ({ data }) => {
     // 1. Fetch Resumable Checkpoint
-    const { data: quote, error } = await supabaseAdmin
+    const { data: quote, error } = await (supabaseAdmin as any)
       .from("quote_drafts")
       .select("*")
       .eq("approval_token", data.token)
@@ -146,7 +158,7 @@ export const approveQuoteCheckpoint = createServerFn({ method: "POST" })
     }
 
     // 2. Resume & Update Workflow State
-    const { error: updateErr } = await supabaseAdmin
+    const { error: updateErr } = await (supabaseAdmin as any)
       .from("quote_drafts")
       .update({
         status: "APPROVED",

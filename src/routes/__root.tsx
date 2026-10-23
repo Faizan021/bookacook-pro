@@ -226,6 +226,13 @@ function RootShell({ children }: { children: ReactNode }) {
           />
         </noscript>
 
+        {/* TanStack Start Hydration Guard: Prevents $_TSR buffer from being deleted during concurrent hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var _t={buffer:[],initialized:false};Object.defineProperty(window,'$_TSR',{configurable:false,enumerable:true,get:function(){return _t;},set:function(v){if(v){Object.assign(_t,v);}}});}catch(e){}})();`,
+          }}
+        />
+
         {/* Generative AI Attribution & UTM Tracking Script (GA4, Looker Studio, PostHog) */}
         <script
           dangerouslySetInnerHTML={{

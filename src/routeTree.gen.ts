@@ -66,6 +66,7 @@ import { Route as AuthenticatedRestaurantFestivalRouteImport } from './routes/_a
 import { Route as AuthenticatedRestaurantKitchenRouteImport } from './routes/_authenticated/restaurant.kitchen'
 import { Route as AuthenticatedRestaurantReviewsRouteImport } from './routes/_authenticated/restaurant.reviews'
 import { Route as ApiPrintStarRouteImport } from './routes/api.print.star'
+import { Route as ApiQuotesApproveRouteImport } from './routes/api.quotes.approve'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api.webhooks.stripe'
 import { Route as CateringOrtCityRouteImport } from './routes/catering.ort.$city'
 import { Route as CheckoutDepositBookingIdRouteImport } from './routes/checkout.deposit.$bookingId'
@@ -392,6 +393,11 @@ const ApiPrintStarRoute = ApiPrintStarRouteImport.update({
   path: '/api/print/star',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiQuotesApproveRoute = ApiQuotesApproveRouteImport.update({
+  id: '/api/quotes/approve',
+  path: '/api/quotes/approve',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
   id: '/api/webhooks/stripe',
   path: '/api/webhooks/stripe',
@@ -622,6 +628,7 @@ export interface FileRoutesByFullPath {
   '/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
   '/api/print/star': typeof ApiPrintStarRoute
+  '/api/quotes/approve': typeof ApiQuotesApproveRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
@@ -707,6 +714,7 @@ export interface FileRoutesByTo {
   '/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
   '/api/print/star': typeof ApiPrintStarRoute
+  '/api/quotes/approve': typeof ApiQuotesApproveRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
@@ -797,6 +805,7 @@ export interface FileRoutesById {
   '/_authenticated/restaurant/kitchen': typeof AuthenticatedRestaurantKitchenRoute
   '/_authenticated/restaurant/reviews': typeof AuthenticatedRestaurantReviewsRoute
   '/api/print/star': typeof ApiPrintStarRoute
+  '/api/quotes/approve': typeof ApiQuotesApproveRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/catering/ort/$city': typeof CateringOrtCityRoute
   '/checkout/deposit/$bookingId': typeof CheckoutDepositBookingIdRoute
@@ -887,6 +896,7 @@ export interface FileRouteTypes {
     | '/restaurant/kitchen'
     | '/restaurant/reviews'
     | '/api/print/star'
+    | '/api/quotes/approve'
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
@@ -972,6 +982,7 @@ export interface FileRouteTypes {
     | '/restaurant/kitchen'
     | '/restaurant/reviews'
     | '/api/print/star'
+    | '/api/quotes/approve'
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
@@ -1061,6 +1072,7 @@ export interface FileRouteTypes {
     | '/_authenticated/restaurant/kitchen'
     | '/_authenticated/restaurant/reviews'
     | '/api/print/star'
+    | '/api/quotes/approve'
     | '/api/webhooks/stripe'
     | '/catering/ort/$city'
     | '/checkout/deposit/$bookingId'
@@ -1134,6 +1146,7 @@ export interface RootRouteChildren {
   CommunityIndexRoute: typeof CommunityIndexRoute
   MagazinIndexRoute: typeof MagazinIndexRoute
   ApiPrintStarRoute: typeof ApiPrintStarRoute
+  ApiQuotesApproveRoute: typeof ApiQuotesApproveRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
   CheckoutDepositBookingIdRoute: typeof CheckoutDepositBookingIdRoute
   MagazinCommunityAlzaeemRestaurantBerlinRoute: typeof MagazinCommunityAlzaeemRestaurantBerlinRoute
@@ -1559,6 +1572,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPrintStarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/quotes/approve': {
+      id: '/api/quotes/approve'
+      path: '/api/quotes/approve'
+      fullPath: '/api/quotes/approve'
+      preLoaderRoute: typeof ApiQuotesApproveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/webhooks/stripe': {
       id: '/api/webhooks/stripe'
       path: '/api/webhooks/stripe'
@@ -1971,6 +1991,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommunityIndexRoute: CommunityIndexRoute,
   MagazinIndexRoute: MagazinIndexRoute,
   ApiPrintStarRoute: ApiPrintStarRoute,
+  ApiQuotesApproveRoute: ApiQuotesApproveRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
   CheckoutDepositBookingIdRoute: CheckoutDepositBookingIdRoute,
   MagazinCommunityAlzaeemRestaurantBerlinRoute:
