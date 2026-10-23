@@ -131,6 +131,9 @@ const catererQueryOptions = (slug: string) =>
 export const Route = createFileRoute("/catering/$slug")({
   loader: async ({ params, context }) => {
     const cleanSlug = (params.slug || "").toLowerCase().trim();
+    if (isValidCateringCity(cleanSlug)) {
+      throw redirect({ href: `/catering/ort/${cleanSlug}`, statusCode: 301 });
+    }
     const fallback = fallbackCaterers.find(
       (c) =>
         (c.slug && c.slug.toLowerCase() === cleanSlug) ||

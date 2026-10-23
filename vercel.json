@@ -1,17 +1,52 @@
 {
   "framework": "vite",
-  "regions": ["fra1"],
+  "regions": [
+    "fra1"
+  ],
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "redirects": [
-    { "source": "/pro", "destination": "/partners", "permanent": true },
-    { "source": "/digital", "destination": "/partner/webseiten", "permanent": true },
-    { "source": "/catering/ort/:city", "destination": "/catering/:city", "permanent": true },
-    { "source": "/planner/ort/:city", "destination": "/planner/:city", "permanent": true },
-    { "source": "/signup/customer", "destination": "/auth?signup=customer", "permanent": true },
-    { "source": "/signup/caterer", "destination": "/auth?signup=caterer", "permanent": true },
-    { "source": "/signup", "destination": "/auth", "permanent": true },
-    { "source": "/caterers", "destination": "/catering", "permanent": true },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.speisely.de"
+        }
+      ],
+      "destination": "https://speisely.de/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/pro",
+      "destination": "/partners",
+      "permanent": true
+    },
+    {
+      "source": "/digital",
+      "destination": "/partner/webseiten",
+      "permanent": true
+    },
+    {
+      "source": "/signup/customer",
+      "destination": "/auth?signup=customer",
+      "permanent": true
+    },
+    {
+      "source": "/signup/caterer",
+      "destination": "/auth?signup=caterer",
+      "permanent": true
+    },
+    {
+      "source": "/signup",
+      "destination": "/auth",
+      "permanent": true
+    },
+    {
+      "source": "/caterers",
+      "destination": "/catering",
+      "permanent": true
+    },
     {
       "source": "/blog/restaurant-bestellen-ohne-provision-speisely",
       "destination": "/blog/restaurant-bestellen-direkt-speisely",

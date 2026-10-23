@@ -125,6 +125,9 @@ const plannerQueryOptions = (slug: string) =>
 export const Route = createFileRoute("/planner/$slug")({
   loader: async ({ params, context }) => {
     const cleanSlug = (params.slug || "").toLowerCase().trim();
+    if (isValidPlannerCity(cleanSlug)) {
+      throw redirect({ href: `/planner/ort/${cleanSlug}`, statusCode: 301 });
+    }
     const fallback = fallbackPlanners.find(
       (p) =>
         (p.slug && p.slug.toLowerCase() === cleanSlug) ||
