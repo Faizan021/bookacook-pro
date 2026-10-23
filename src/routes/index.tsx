@@ -99,7 +99,7 @@ export const Route = createFileRoute("/")({
         name: "description",
 
         content:
-          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung. Wir bauen das Netzwerk Stadt für Stadt auf.",
+          "Speisely: Die Plattform für Catering, Office Lunch & Restaurants. Catering für Meetings & Events vergleichen, konfigurieren und direkt buchen.",
       },
 
       {
@@ -112,7 +112,7 @@ export const Route = createFileRoute("/")({
         property: "og:description",
 
         content:
-          "Speisely verbindet Restaurant-Bestellungen, Event-Catering und Eventplanung. Wir bauen das Netzwerk Stadt für Stadt auf.",
+          "Speisely: Die Plattform für Catering, Office Lunch & Restaurants. Catering für Meetings & Events vergleichen, konfigurieren und direkt buchen.",
       },
 
       { property: "og:image", content: "https://speisely.de/hero-cinematic.webp" },
@@ -144,7 +144,20 @@ export const Route = createFileRoute("/")({
     links: [
       { rel: "canonical", href: "https://speisely.de" },
 
-      { rel: "preload", href: "/hero-cinematic.webp", as: "image", fetchpriority: "high" },
+      {
+        rel: "preload",
+        href: "/hero-cinematic-mobile.webp",
+        as: "image",
+        media: "(max-width: 768px)",
+        fetchpriority: "high",
+      },
+      {
+        rel: "preload",
+        href: "/hero-cinematic.webp",
+        as: "image",
+        media: "(min-width: 769px)",
+        fetchpriority: "high",
+      },
 
       { rel: "sitemap", type: "application/xml", href: "https://speisely.de/sitemap.xml" },
     ],
@@ -748,10 +761,15 @@ function Home() {
 
         <div className="absolute inset-0 z-0 lg:hidden">
           <picture>
+            <source
+              media="(max-width: 768px)"
+              srcSet="/hero-cinematic-mobile.webp"
+              type="image/webp"
+            />
             <source srcSet="/hero-cinematic.webp" type="image/webp" />
 
             <img
-              src="/hero-cinematic.webp"
+              src="/hero-cinematic-mobile.webp"
 
               fetchPriority="high"
 
@@ -873,7 +891,7 @@ function Home() {
                     ANTLER
                   </span>
 
-                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-white/10 text-[#E6B84A]">
+                  <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-black/40 border border-amber-400/30 text-amber-300 font-semibold">
                     Immersion EMEA
                   </span>
 
@@ -1016,7 +1034,7 @@ function Home() {
                           <span className="truncate">{v.label}</span>
 
                           {activeVertical !== v.key && (
-                            <span className="hidden md:inline text-[10px] text-white/50 font-medium">
+                            <span className="hidden md:inline text-[10px] text-white/80 font-medium">
                               {v.sublabel}
                             </span>
                           )}
@@ -1165,7 +1183,7 @@ function Home() {
                 {/* Refined Context Chips Row: Contextual suggestions & 6-city jump links */}
 
                 <div className="mt-3.5 flex flex-wrap items-center gap-2 text-xs">
-                  <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider shrink-0 mr-1">
+                  <span className="text-[11px] font-bold text-white/85 uppercase tracking-wider shrink-0 mr-1">
                     {audienceMode === "partner"
                       ? tt("Werkzeuge:", "Tools:")
                       : tt("Vorschläge:", "Suggestions:")}
@@ -1210,7 +1228,7 @@ function Home() {
                   {/* 6 Direct City Jump Links for SEO & Quick Navigation */}
 
                   <div className="w-full sm:w-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-1.5 sm:pt-0 sm:ml-auto">
-                    <span className="text-[11px] font-bold text-white/40 uppercase tracking-wider flex items-center gap-1">
+                    <span className="text-[11px] font-bold text-white/85 uppercase tracking-wider flex items-center gap-1">
                       <MapPin className="h-3 w-3 text-[#E6B84A]" />
 
                       {tt("Städte:", "Cities:")}
@@ -1352,7 +1370,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
 
                       {/* Capability 2: Table & WhatsApp Reservations */}
@@ -1394,7 +1412,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
 
                       {/* Capability 3: Surplus Food Rescue */}
@@ -1432,7 +1450,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
 
                       {/* Capability 4: B2B Event Catering */}
@@ -1470,7 +1488,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
                     </>
                   ) : (
@@ -1510,7 +1528,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
 
                       {/* Partner Feature 2: Google KI-SEO, GEO & AEO */}
@@ -1552,7 +1570,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
 
                       {/* Partner Feature 3: Live-KDS & CloudPRNT */}
@@ -1590,7 +1608,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </a>
 
                       {/* Partner Feature 4: 0% Direct Checkout */}
@@ -1634,7 +1652,7 @@ function Home() {
                           </div>
                         </div>
 
-                        <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-1 transition" />
+                        <ChevronRight className="w-4 h-4 text-white/75 group-hover:text-white group-hover:translate-x-1 transition" />
                       </Link>
                     </>
                   )}
@@ -1695,7 +1713,9 @@ function Home() {
             <div className="flex items-center gap-4 sm:gap-5">
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border border-white/20 shadow-md shrink-0 bg-white p-1">
                 <img
-                  src="/images/google-antler-immersion.webp"
+                  src="/images/google-antler-immersion-thumb.webp"
+                  loading="lazy"
+                  decoding="async"
 
                   alt="Google for Startups Immersion EMEA powered by Antler"
 
@@ -2171,8 +2191,8 @@ function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-forest/5 border border-forest/15 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[#b28a3c] mb-3">
-                <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" />
+              <div className="inline-flex items-center gap-2 rounded-full bg-forest/5 border border-forest/15 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-forest mb-3">
+                <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" />
 
                 <span>Speisely Digital Suite · High-End Webdesign &amp; GEO / AEO</span>
               </div>
@@ -2235,7 +2255,7 @@ function Home() {
 
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
 
-                    <div className="ml-2 text-[10px] text-white/50 font-mono tracking-tight truncate">
+                    <div className="ml-2 text-[10px] text-white/85 font-mono tracking-tight truncate">
                       https://partyservicekuepper.de
                     </div>
                   </div>
@@ -2291,7 +2311,9 @@ function Home() {
               </div>
 
               <div className="pt-4 border-t border-forest/10 flex items-center justify-between">
-                <span className="text-xs text-forest/50 font-mono">partyservicekuepper.de</span>
+                <span className="text-xs text-forest/80 font-mono font-medium">
+                  partyservicekuepper.de
+                </span>
 
                 <div className="flex items-center gap-2">
                   <Link
@@ -2351,7 +2373,7 @@ function Home() {
 
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
 
-                    <div className="ml-2 text-[10px] text-white/50 font-mono tracking-tight truncate">
+                    <div className="ml-2 text-[10px] text-white/85 font-mono tracking-tight truncate">
                       https://haus-spaas.de
                     </div>
                   </div>
@@ -2407,7 +2429,7 @@ function Home() {
               </div>
 
               <div className="pt-4 border-t border-forest/10 flex items-center justify-between">
-                <span className="text-xs text-forest/50 font-mono">haus-spaas.de</span>
+                <span className="text-xs text-forest/80 font-mono font-medium">haus-spaas.de</span>
 
                 <div className="flex items-center gap-2">
                   <Link
@@ -2529,7 +2551,7 @@ function Home() {
                 <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#E6B84A]">
                   <span>{tt("Story lesen →", "Read story →")}</span>
 
-                  <span className="text-white/40">5 Min.</span>
+                  <span className="text-white/80 font-medium">5 Min.</span>
                 </div>
               </div>
             </Link>
@@ -2583,7 +2605,7 @@ function Home() {
                 <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#E6B84A]">
                   <span>{tt("Story lesen →", "Read story →")}</span>
 
-                  <span className="text-white/40">5 Min.</span>
+                  <span className="text-white/80 font-medium">5 Min.</span>
                 </div>
               </div>
             </Link>
@@ -2637,7 +2659,7 @@ function Home() {
                 <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#E6B84A]">
                   <span>{tt("Story lesen →", "Read story →")}</span>
 
-                  <span className="text-white/40">6 Min.</span>
+                  <span className="text-white/80 font-medium">6 Min.</span>
                 </div>
               </div>
             </Link>
@@ -2691,7 +2713,7 @@ function Home() {
                 <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#E6B84A]">
                   <span>{tt("Story lesen →", "Read story →")}</span>
 
-                  <span className="text-white/40">7 Min.</span>
+                  <span className="text-white/80 font-medium">7 Min.</span>
                 </div>
               </div>
             </Link>

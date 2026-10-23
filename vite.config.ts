@@ -16,4 +16,9 @@ export default defineConfig({
   nitro: {
     preset: "vercel",
   },
+  vite: {
+    build: {
+      target: "es2022",
+    },
+  },
 });

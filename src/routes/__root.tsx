@@ -217,6 +217,25 @@ function RootShell({ children }: { children: ReactNode }) {
         <link rel="manifest" href="/manifest.json" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap"
+          media="print"
+          onLoad={(e) => {
+            (e.currentTarget as HTMLLinkElement).media = "all";
+          }}
+        />
+        <noscript>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap"
+          />
+        </noscript>
 
         {/* Generative AI Attribution & UTM Tracking Script (GA4, Looker Studio, PostHog) */}
         <script
@@ -302,59 +321,71 @@ function RootComponent() {
         navigator.serviceWorker.register("/sw.js").catch(() => {});
       }
 
-      // 1. Initialize strictly necessary, anonymized error monitoring (Sentry) ONCE on mount
-      import("@sentry/react")
-        .then((SentryModule) => {
-          SentryModule.init({
-            dsn: "https://9a2bcf7470d25fb0f32cdae74a09c335@o4511677378002944.ingest.de.sentry.io/4511677391306832",
-            sendDefaultPii: false,
-            replaysSessionSampleRate: 0,
-            replaysOnErrorSampleRate: 0,
-            ignoreErrors: [
-              /window\.webkit\.messageHandlers/,
-              "undefined is not an object (evaluating 'window.webkit.messageHandlers')",
-              "ResizeObserver loop limit exceeded",
-              "ResizeObserver loop completed with undelivered notifications",
-              "NS_ERROR_FAILURE",
-              "The operation is insecure",
-              "Failed to fetch",
-              "NetworkError when attempting to fetch resource.",
-              "Load failed",
-              "AbortError",
-              /TypeError: Failed to fetch/,
-              /Network request failed/,
-              /Importing a module script failed/,
-            ],
-            beforeBreadcrumb(breadcrumb) {
-              if (breadcrumb.data?.url) {
-                breadcrumb.data.url = sanitizeSentryUrl(breadcrumb.data.url);
-              }
-              if (breadcrumb.message) {
-                breadcrumb.message = sanitizeSentryUrl(breadcrumb.message);
-              }
-              return breadcrumb;
-            },
-            beforeSend(event) {
-              event.user = undefined;
-              if (event.request?.url) {
-                event.request.url = sanitizeSentryUrl(event.request.url);
-              }
-              if (event.request?.headers) {
-                delete event.request.headers["authorization"];
-                delete event.request.headers["cookie"];
-              }
-              const frames = event.exception?.values?.[0]?.stacktrace?.frames ?? [];
-              const hasOwnFrame = frames.some(
-                (f) => f.filename && f.filename.includes("speisely.de"),
-              );
-              if (frames.length > 0 && !hasOwnFrame) {
-                return null;
-              }
-              return event;
-            },
-          });
-        })
-        .catch(() => {});
+      // 1. Initialize strictly necessary, anonymized error monitoring (Sentry) off the critical path
+      const initSentry = () => {
+        import("@sentry/react")
+          .then((SentryModule) => {
+            SentryModule.init({
+              dsn: "https://9a2bcf7470d25fb0f32cdae74a09c335@o4511677378002944.ingest.de.sentry.io/4511677391306832",
+              sendDefaultPii: false,
+              replaysSessionSampleRate: 0,
+              replaysOnErrorSampleRate: 0,
+              ignoreErrors: [
+                /window\.webkit\.messageHandlers/,
+                "undefined is not an object (evaluating 'window.webkit.messageHandlers')",
+                "ResizeObserver loop limit exceeded",
+                "ResizeObserver loop completed with undelivered notifications",
+                "NS_ERROR_FAILURE",
+                "The operation is insecure",
+                "Failed to fetch",
+                "NetworkError when attempting to fetch resource.",
+                "Load failed",
+                "AbortError",
+                /TypeError: Failed to fetch/,
+                /Network request failed/,
+                /Importing a module script failed/,
+              ],
+              beforeBreadcrumb(breadcrumb) {
+                if (breadcrumb.data?.url) {
+                  breadcrumb.data.url = sanitizeSentryUrl(breadcrumb.data.url);
+                }
+                if (breadcrumb.message) {
+                  breadcrumb.message = sanitizeSentryUrl(breadcrumb.message);
+                }
+                return breadcrumb;
+              },
+              beforeSend(event) {
+                event.user = undefined;
+                if (event.request?.url) {
+                  event.request.url = sanitizeSentryUrl(event.request.url);
+                }
+                if (event.request?.headers) {
+                  delete event.request.headers["authorization"];
+                  delete event.request.headers["cookie"];
+                }
+                const frames = event.exception?.values?.[0]?.stacktrace?.frames ?? [];
+                const hasOwnFrame = frames.some(
+                  (f) => f.filename && f.filename.includes("speisely.de"),
+                );
+                if (frames.length > 0 && !hasOwnFrame) {
+                  return null;
+                }
+                return event;
+              },
+            });
+          })
+          .catch(() => {});
+      };
+
+      if ("requestIdleCallback" in window) {
+        (
+          window as Window & {
+            requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number;
+          }
+        ).requestIdleCallback(initSentry, { timeout: 3500 });
+      } else {
+        setTimeout(initSentry, 2500);
+      }
 
       // 2. Check initial analytics consent
       if (hasAnalyticsConsent()) {
