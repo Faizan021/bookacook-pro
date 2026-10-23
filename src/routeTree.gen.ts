@@ -50,6 +50,7 @@ import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
 import { Route as MagazinIndexRouteImport } from './routes/magazin.index'
 import { Route as MagazinEditionDothtmlRouteImport } from './routes/magazin.edition[.]html'
+import { Route as MagazinMediadatenRouteImport } from './routes/magazin.mediadaten'
 import { Route as MagazinReaderRouteImport } from './routes/magazin.reader'
 import { Route as MagazinSchnitzelSchmiedeRouteImport } from './routes/magazin.schnitzel-schmiede'
 import { Route as MagazinSpeiselyVisitsRouteImport } from './routes/magazin.speisely-visits'
@@ -302,6 +303,11 @@ const MagazinIndexRoute = MagazinIndexRouteImport.update({
 const MagazinEditionDothtmlRoute = MagazinEditionDothtmlRouteImport.update({
   id: '/magazin/edition.html',
   path: '/magazin/edition.html',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MagazinMediadatenRoute = MagazinMediadatenRouteImport.update({
+  id: '/magazin/mediadaten',
+  path: '/magazin/mediadaten',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MagazinReaderRoute = MagazinReaderRouteImport.update({
@@ -596,6 +602,7 @@ export interface FileRoutesByFullPath {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/edition.html': typeof MagazinEditionDothtmlRoute
+  '/magazin/mediadaten': typeof MagazinMediadatenRoute
   '/magazin/reader': typeof MagazinReaderRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
@@ -681,6 +688,7 @@ export interface FileRoutesByTo {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/edition.html': typeof MagazinEditionDothtmlRoute
+  '/magazin/mediadaten': typeof MagazinMediadatenRoute
   '/magazin/reader': typeof MagazinReaderRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/partner/webseiten': typeof PartnerWebseitenRoute
@@ -769,6 +777,7 @@ export interface FileRoutesById {
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/edition.html': typeof MagazinEditionDothtmlRoute
+  '/magazin/mediadaten': typeof MagazinMediadatenRoute
   '/magazin/reader': typeof MagazinReaderRoute
   '/magazin/schnitzel-schmiede': typeof MagazinSchnitzelSchmiedeRoute
   '/magazin/speisely-visits': typeof MagazinSpeiselyVisitsRouteWithChildren
@@ -858,6 +867,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/edition.html'
+    | '/magazin/mediadaten'
     | '/magazin/reader'
     | '/magazin/schnitzel-schmiede'
     | '/magazin/speisely-visits'
@@ -943,6 +953,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/edition.html'
+    | '/magazin/mediadaten'
     | '/magazin/reader'
     | '/magazin/schnitzel-schmiede'
     | '/partner/webseiten'
@@ -1030,6 +1041,7 @@ export interface FileRouteTypes {
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/edition.html'
+    | '/magazin/mediadaten'
     | '/magazin/reader'
     | '/magazin/schnitzel-schmiede'
     | '/magazin/speisely-visits'
@@ -1112,6 +1124,7 @@ export interface RootRouteChildren {
   CaseStudyPartyserviceKuepperRoute: typeof CaseStudyPartyserviceKuepperRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   MagazinEditionDothtmlRoute: typeof MagazinEditionDothtmlRoute
+  MagazinMediadatenRoute: typeof MagazinMediadatenRoute
   MagazinReaderRoute: typeof MagazinReaderRoute
   MagazinSchnitzelSchmiedeRoute: typeof MagazinSchnitzelSchmiedeRoute
   MagazinSpeiselyVisitsRoute: typeof MagazinSpeiselyVisitsRouteWithChildren
@@ -1432,6 +1445,13 @@ declare module '@tanstack/react-router' {
       path: '/magazin/edition.html'
       fullPath: '/magazin/edition.html'
       preLoaderRoute: typeof MagazinEditionDothtmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/mediadaten': {
+      id: '/magazin/mediadaten'
+      path: '/magazin/mediadaten'
+      fullPath: '/magazin/mediadaten'
+      preLoaderRoute: typeof MagazinMediadatenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/magazin/reader': {
@@ -1941,6 +1961,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudyPartyserviceKuepperRoute: CaseStudyPartyserviceKuepperRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   MagazinEditionDothtmlRoute: MagazinEditionDothtmlRoute,
+  MagazinMediadatenRoute: MagazinMediadatenRoute,
   MagazinReaderRoute: MagazinReaderRoute,
   MagazinSchnitzelSchmiedeRoute: MagazinSchnitzelSchmiedeRoute,
   MagazinSpeiselyVisitsRoute: MagazinSpeiselyVisitsRouteWithChildren,
