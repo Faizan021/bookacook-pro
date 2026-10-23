@@ -665,3 +665,22 @@ To ensure Speisely permanently retains top-tier Google PageSpeed Insights rating
 
 6. **Automated Compiler Enforcement (`verify:graph` Rule 16):**
    - `scripts/verify_agent_graph.js` (Rule 16) automatically audits font preloads, LCP sync decoding, asset size budgets, and link accessibility on every build. Any violation halts `npm run build` immediately before code can be deployed.
+
+---
+
+## 25. Mandatory Social Media Cross-Linking & Fast-Index Standard (The 24-Hour Social Synergy Rule)
+
+To maximize Google Search indexing speed, Google Perspectives carousel inclusion, and Brand E-E-A-T authority whenever publishing new public content:
+
+1. **The 24-Hour Cross-Publishing Protocol:**
+   - Whenever ANY new **Speisely Visit**, **Community Partner Story**, **Case Study**, or major **Blog Article** is published live on `https://speisely.de`:
+     - **Instagram Action:** Within 24 hours, publish a companion Instagram Carousel (following Section 12) or Reel (following Section 16). The post caption MUST follow Section 13 (Keyword Hook in first 100 chars, max 3-5 keywords, no emoji wall), tag the partner's Instagram handle, and link back to the exact article URL (`speisely.de/magazin/...` or `speisely.de/case-study/...`) in the profile bio or stories.
+     - **LinkedIn Action:** Within 24 hours, publish a companion B2B post on the official Speisely LinkedIn page (`https://www.linkedin.com/company/speisely`) sharing the case study or visit, highlighting business metrics, and linking directly to the canonical URL.
+     - **Why:** Google's crawling algorithms monitor simultaneous cross-platform publication across verified entities (`sameAs`). When a new website URL receives immediate referral traffic and social citations from verified LinkedIn and Instagram channels, Googlebot accelerates crawl priority and bypasses long "Discovered - currently not indexed" queues.
+
+2. **Entity Consistency & NAP Uniformity:**
+   - The brand name (**Speisely**), website URL (**`https://speisely.de`**), and core description across Instagram bio, LinkedIn company page, and Google Search Console must remain 100% synchronized with Schema.org `Organization` metadata.
+   - Never reference speculative social channels (e.g. unverified Facebook or TikTok profiles) in structured data or code until officially created and active.
+
+3. **In-Caption Keyword Matching:**
+   - Social post captions must include the primary localized transactional keyword targeted by the webpage (e.g. *Catering Berlin*, *Halal Food Berlin*, *Catering München*, *Eventplanung Frankfurt*) within the first 100 characters to maximize Google SERP Perspectives ranking.
