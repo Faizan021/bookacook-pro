@@ -137,7 +137,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             url: "https://speisely.de",
             logo: {
               "@type": "ImageObject",
-              url: "https://speisely.de/favicon.svg",
+              url: "https://speisely.de/speisely_logo.png",
+              width: 400,
+              height: 400,
             },
             foundingDate: "2026",
             areaServed: {

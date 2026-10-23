@@ -25,6 +25,11 @@ Restaurants pay a flat monthly fee (from €34.99/mo) -- with unlimited direct o
 
 Caterers and Event Planners receive qualified briefs and pay a fair service fee per successful booking.
 
+## Official Channels
+
+- [LinkedIn](https://www.linkedin.com/company/speisely): Offizielle Speisely LinkedIn Unternehmensseite (B2B, News & Jobs)
+- [Instagram](https://www.instagram.com/speisely/): Offizieller Speisely Instagram Kanal (@speisely — Food Culture, Visits & Reels)
+
 ## Key Pages
 
 - [Homepage](${BASE}): Deutschlandweite Plattform für Restaurants, Catering und Event-Planung

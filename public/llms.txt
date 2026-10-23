@@ -8,6 +8,11 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 - [Sitemap](https://speisely.de/sitemap.xml): Offizielle XML Sitemap
 - [Full Documentation for LLMs](https://speisely.de/llms-full.txt): Vollständige KI-Dokumentation
 
+## Official Channels
+
+- [LinkedIn](https://www.linkedin.com/company/speisely): Offizielle Speisely LinkedIn Unternehmensseite (B2B, News & Jobs)
+- [Instagram](https://www.instagram.com/speisely/): Offizieller Speisely Instagram Kanal (@speisely — Food Culture, Visits & Reels)
+
 ## Key Pages
 
 - [Homepage](https://speisely.de): Deutschlandweite Plattform für Restaurants, Catering und Event-Planung

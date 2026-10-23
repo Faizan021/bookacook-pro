@@ -129,3 +129,13 @@ This document specifies the core project truths, architectural boundaries, busin
 - **Agentic Search & Google Data Pipeline Role:**
   - In all Google integrations (Schema.org, Google Merchant feeds, Universal Cart, UCP / WebMCP), Speisely acts solely as an automated technical conduit.
   - The `seller` entity in all structured data and feeds is strictly the individual partner (`seller: { @type: "FoodEstablishment", name: vendor.name }`). Speisely merely pipes through the vendor's own database values without altering or underwriting them.
+
+---
+
+## 6. Official Social Channels & Brand Entity Verification
+
+- **Primary Domain:** `https://speisely.de` (canonical non-www)
+- **LinkedIn (B2B Authority):** `https://www.linkedin.com/company/speisely`
+- **Instagram (Culinary & Culture):** `https://www.instagram.com/speisely/` (`@speisely`)
+- **Facebook:** Inactive / Not maintained. Zero third-party Facebook tracking scripts or links.
+- **Knowledge Graph Schema:** Linked via Schema.org `sameAs` array in `src/routes/__root.tsx` to verify company entity across Google Search and AI answer engines.
