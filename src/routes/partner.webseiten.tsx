@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Globe,
   Sparkles,
@@ -97,6 +97,26 @@ function WebsiteCreationPage() {
   const { lang } = useI18n();
   const isDe = lang === "de";
 
+  // Referral tracking (?ref=kampala-rolex, ?ref=kuepper, ?ref=haus-spaas)
+  const [referralSource, setReferralSource] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+      if (ref) {
+        setReferralSource(ref.toLowerCase().trim());
+      }
+    }
+  }, []);
+
+  const referralNames: Record<string, string> = {
+    "kampala-rolex": "Kampala Rolex Germany",
+    kuepper: "Partyservice Küpper",
+    partykupper: "Partyservice Küpper",
+    "haus-spaas": "Haus Spaas",
+  };
+
   // Audit State
   const [auditUrl, setAuditUrl] = useState("");
   const [isAuditing, setIsAuditing] = useState(false);
@@ -185,7 +205,7 @@ Wünsche & Feedback:
 ${form.notes}
 
 Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
-`;
+${referralSource ? `Referenz / Herkunft: ${referralNames[referralSource] || referralSource} (?ref=${referralSource})\r\n` : ""}`;
 
     setTimeout(() => {
       setSubmitting(false);
@@ -213,6 +233,14 @@ Partner-Netzwerk: Speisely Marketplace x TechGlanz (https://techglanz.de)
               <Sparkles className="h-4 w-4" />
               <span>Speisely Digital Suite · Powered by TechGlanz</span>
             </div>
+            {referralSource && referralNames[referralSource] && (
+              <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-4 py-1.5 text-xs font-bold text-emerald-300 border border-emerald-400/30 animate-pulse">
+                <span>
+                  ⭐ {isDe ? "Exklusiver Partner-Zugang via" : "Exclusive Partner Referral via"}{" "}
+                  {referralNames[referralSource]}
+                </span>
+              </div>
+            )}
 
             <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-white leading-[1.08]">
               {isDe ? (
