@@ -627,6 +627,29 @@ function rule16_PerformanceAndAccessibilityGuardrails() {
         perfErrors++;
       }
     }
+    const liveLinkMatches = c.matchAll(/<a\b(?![^>]*\baria-label=)[^>]*>(?:(?!<\/a>)[\s\S])*?Live\s*↗[\s\S]*?<\/a>/gi);
+    for (const m of liveLinkMatches) {
+      fail(
+        '16',
+        path.relative('.', file),
+        'Generic "Live ↗" Link requires a unique aria-label (e.g. aria-label="[Partner Name] Website live ansehen") to comply with WCAG 2 AA/AAA.'
+      );
+      perfErrors++;
+    }
+  }
+
+  // 4b. Audit root for unused font preconnects
+  const rootRoute = path.join(ROUTES_DIR, '__root.tsx');
+  if (fs.existsSync(rootRoute)) {
+    const rc = fs.readFileSync(rootRoute, 'utf8');
+    if (/rel=["']preconnect["'][^>]*fonts\.gstatic/i.test(rc) || /rel=["']dns-prefetch["'][^>]*fonts\.googleapis/i.test(rc)) {
+      fail(
+        '16',
+        path.relative('.', rootRoute),
+        'Unused fonts preconnect/dns-prefetch detected. Google Fonts are loaded asynchronously via print onload, so preconnect links waste early TCP/TLS sockets and harm PageSpeed score.'
+      );
+      perfErrors++;
+    }
   }
 
   // 5. LLMs.txt markdown link standard

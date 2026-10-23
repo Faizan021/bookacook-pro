@@ -43,7 +43,12 @@ import { toast } from "sonner";
 
 import { motion, LayoutGroup, useReducedMotion, AnimatePresence } from "framer-motion";
 
-import { AiConciergeModal } from "@/components/search/AiConciergeModal";
+import { lazy, Suspense } from "react";
+const AiConciergeModal = lazy(() =>
+  import("@/components/search/AiConciergeModal").then((m) => ({
+    default: m.AiConciergeModal,
+  }))
+);
 
 export const Route = createFileRoute("/")({
   beforeLoad: async () => {
@@ -732,9 +737,11 @@ function Home() {
             <img
               src="/hero-cinematic.webp"
 
-              loading="lazy"
+              loading="eager"
 
-              decoding="async"
+              fetchPriority="high"
+
+              decoding="sync"
 
               sizes="50vw"
 
@@ -2332,6 +2339,8 @@ function Home() {
 
                     rel="noopener noreferrer"
 
+                    aria-label="Partyservice Küpper Website live ansehen (öffnet in neuem Tab)"
+
                     className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition"
                   >
                     <span>Live ↗</span>
@@ -2450,6 +2459,8 @@ function Home() {
                     target="_blank"
 
                     rel="noopener noreferrer"
+
+                    aria-label="Haus Spaas Website live ansehen (öffnet in neuem Tab)"
 
                     className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition"
                   >
@@ -2837,13 +2848,15 @@ function Home() {
 
       {/* Google Gemini AI Concierge Modal */}
 
-      <AiConciergeModal
-        isOpen={isConciergeOpen}
-
-        onClose={() => setIsConciergeOpen(false)}
-
-        initialQuery={searchQuery}
-      />
+      {isConciergeOpen && (
+        <Suspense fallback={null}>
+          <AiConciergeModal
+            isOpen={isConciergeOpen}
+            onClose={() => setIsConciergeOpen(false)}
+            initialQuery={searchQuery}
+          />
+        </Suspense>
+      )}
     </SiteShell>
   );
 }

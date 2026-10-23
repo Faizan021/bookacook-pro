@@ -13,7 +13,7 @@ async function main() {
 
   const sql = fs.readFileSync(
     "supabase/migrations/20260710024000_add_approval_status_and_role_settings.sql",
-    "utf-8"
+    "utf-8",
   );
 
   console.log("Applying migration SQL via exec_sql...");

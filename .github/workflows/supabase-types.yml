@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - 'supabase/migrations/**'
-      - 'src/integrations/supabase/**'
+      - "supabase/migrations/**"
+      - "src/integrations/supabase/**"
   pull_request:
     paths:
-      - 'supabase/migrations/**'
-      - 'src/integrations/supabase/**'
+      - "supabase/migrations/**"
+      - "src/integrations/supabase/**"
 
 jobs:
   check-types:
@@ -20,7 +20,7 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: latest
-      
+
       - name: Verify generated types match committed types
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE" || true
@@ -30,18 +30,18 @@ jobs:
             echo "::warning::supabase start could not boot local containers on runner. Skipping local type verification."
             exit 0
           fi
-          
+
           # Generate types from local DB
           if ! supabase gen types typescript --local > types.ts.gen; then
             echo "::warning::supabase gen types failed. Skipping type diff check."
             exit 0
           fi
-          
+
           if [ ! -s types.ts.gen ]; then
             echo "::warning::supabase gen types produced empty output."
             exit 0
           fi
-          
+
           # Check if generated types differ from committed types
           if ! diff -u -w src/integrations/supabase/types.ts types.ts.gen; then
             echo "::warning::Generated types differ from committed types in src/integrations/supabase/types.ts"
@@ -49,6 +49,5 @@ jobs:
           else
             echo "Supabase types are 100% in sync with migrations."
           fi
-          
-          rm -f types.ts.gen
 
+          rm -f types.ts.gen
