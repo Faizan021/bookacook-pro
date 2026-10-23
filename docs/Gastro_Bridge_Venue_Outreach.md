@@ -36,5 +36,5 @@ Herzliche Grüße aus der Region,
 
 **Faizan Ahmed**  
 Partnerschaften & Redaktion, Speisely  
-Telefon / WhatsApp: +49 176 84976722  
+Telefon / WhatsApp: +49 176 43218282  
 Web: https://speisely.de

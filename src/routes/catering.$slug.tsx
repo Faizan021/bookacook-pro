@@ -2646,6 +2646,44 @@ function CatererPage() {
             </div>
           )}
 
+          {/* Direct 1-Click WhatsApp Express Confirmation to Faizan (+4917643218282) */}
+          <div className="mt-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-left text-xs space-y-2.5">
+            <div className="flex items-center gap-2 font-bold text-emerald-950">
+              <span className="text-base">💬</span>
+              <span>{t("Express-Bestätigung via WhatsApp", "Instant WhatsApp Confirmation")}</span>
+            </div>
+            <p className="text-emerald-900/80 text-[11px] leading-relaxed">
+              {t(
+                "Möchtest du eine sofortige Antwort? Sende deine Anfrage mit 1 Klick direkt an unser Event-Team via WhatsApp.",
+                "Want an immediate reply? Send your inquiry directly to our event team on WhatsApp with 1 click.",
+              )}
+            </p>
+            <a
+              href={`https://wa.me/4917643218282?text=${encodeURIComponent(
+                `Hallo Speisely-Team! Ich habe gerade eine Catering-Anfrage für ${catererProfile?.name || "Catering"} gestellt:
+
+` +
+                `• Name: ${inquiryForm.customerName || "Kunde"}
+` +
+                `• E-Mail: ${inquiryForm.customerEmail || "N/A"}
+` +
+                `• Telefon: ${inquiryForm.customerPhone || "N/A"}
+` +
+                `• Event: ${inquiryForm.eventType || "Event"} für ${inquiryForm.guestCount || currentTotalCount || 10} Personen
+` +
+                `• Datum & Ort: ${inquiryForm.eventDate || "Auf Anfrage"} in ${inquiryForm.postalCodeCity || "Deutschland"}
+
+` +
+                `Bitte geben Sie mir kurz Bescheid, ob der Termin frei ist!`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition shadow-sm"
+            >
+              <span>💬 {t("Per WhatsApp anfragen (+49 176 43218282)", "Chat via WhatsApp (+49 176 43218282)")}</span>
+            </a>
+          </div>
+
           {/* Account Onboarding Box for Customers */}
           <div className="mt-4 p-4 rounded-2xl bg-forest/5 border border-forest/15 text-left text-xs space-y-2">
             <div className="flex items-center gap-2 font-bold text-forest">

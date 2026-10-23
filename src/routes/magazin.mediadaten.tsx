@@ -551,7 +551,7 @@ Anfrage über: https://speisely.de/magazin/mediadaten`;
                     redaktion@speisely.de
                   </a>{" "}
                   · Telefon / WhatsApp:{" "}
-                  <span className="text-white/80 font-semibold">+49 176 84976722</span>
+                  <span className="text-white/80 font-semibold">+49 176 43218282</span>
                 </p>
               </div>
             </form>
