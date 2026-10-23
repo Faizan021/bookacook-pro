@@ -798,7 +798,7 @@ ${referralSource ? `Referenz / Herkunft: ${referralNames[referralSource] || refe
                 </button>
               </div>
 
-              <div className="text-center pt-2">
+              <div className="text-center pt-2 space-y-2">
                 <p className="text-xs text-white/50">
                   Umsetzung &amp; technische Betreuung:{" "}
                   <a
@@ -808,6 +808,18 @@ ${referralSource ? `Referenz / Herkunft: ${referralNames[referralSource] || refe
                     className="text-[#E6B84A] hover:underline font-bold"
                   >
                     TechGlanz Digital Solutions (techglanz.de)
+                  </a>
+                </p>
+                <p className="text-xs text-white/40">
+                  Exklusiver Partner für Gastronomie-Stickerei &amp; Berufsbekleidung:{" "}
+                  <a
+                    href="https://ateliertextile.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#E6B84A]/90 hover:underline font-semibold"
+                    title="Atelier Textile — Hochwertige Bestickung für Kochjacken & Schürzen"
+                  >
+                    Atelier Textile (ateliertextile.com) ↗
                   </a>
                 </p>
               </div>
