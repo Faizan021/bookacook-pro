@@ -250,6 +250,7 @@ export function SiteHeader() {
                 <Link
                   to="/auth"
                   search={{ signup: "partner", message: undefined, logout: undefined }}
+                  aria-label={tt("Als Partner registrieren", "Sign up as Partner")}
                   className="flex items-center w-full text-forest text-xs font-bold text-[#b8860b]"
                 >
                   <UserPlus className="mr-2.5 h-4 w-4" aria-hidden="true" />

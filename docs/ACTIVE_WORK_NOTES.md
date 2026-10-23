@@ -5,20 +5,21 @@ _This document serves as the active working memory for ongoing tasks, context up
 ## Current Status (2026-10-07)
 
 **Active Focus:**
+
 - **Community Partner Story: BBQ Chicken Berlin-Kreuzberg (100% Completed & Verified):**
-  - *Route:* `/magazin/community/bbq-chicken-berlin-kreuzberg` (`src/routes/magazin.community.bbq-chicken-berlin-kreuzberg.tsx`)
-  - *Layout Architecture:* Strictly mirrors King Tut Berlin standard (Breadcrumb bar, 3-column quick facts, 4:3 double-border hero feast, 6 official scraped menu classics, authentic K-food streetfood section with Rosé Tteokbokki and Bulgogi Mandu, Chicken-Mu palate cleanser feature, combined Insider Ordering Guide & Görli Picnic Vibe, official factsheet and community mailto box).
-  - *Instagram Carousel Standard (Rule 12 & 13):* 7 slides generated in 1080×1350 portrait format (both clean and with_text overlay versions with circular Speisely brand seal) in `public/magazin/bbq-chicken-berlin/instagram/` along with high-engagement SEO caption (`caption.txt`).
-  - *Sitemaps & GEO Synchronization (Rule 9 & 11):* Synced across `src/routes/sitemap[.]xml.ts`, `src/routes/llms[.]txt.ts`, `public/llms.txt`, and featured in `src/routes/community.index.tsx`.
+  - _Route:_ `/magazin/community/bbq-chicken-berlin-kreuzberg` (`src/routes/magazin.community.bbq-chicken-berlin-kreuzberg.tsx`)
+  - _Layout Architecture:_ Strictly mirrors King Tut Berlin standard (Breadcrumb bar, 3-column quick facts, 4:3 double-border hero feast, 6 official scraped menu classics, authentic K-food streetfood section with Rosé Tteokbokki and Bulgogi Mandu, Chicken-Mu palate cleanser feature, combined Insider Ordering Guide & Görli Picnic Vibe, official factsheet and community mailto box).
+  - _Instagram Carousel Standard (Rule 12 & 13):_ 7 slides generated in 1080×1350 portrait format (both clean and with_text overlay versions with circular Speisely brand seal) in `public/magazin/bbq-chicken-berlin/instagram/` along with high-engagement SEO caption (`caption.txt`).
+  - _Sitemaps & GEO Synchronization (Rule 9 & 11):_ Synced across `src/routes/sitemap[.]xml.ts`, `src/routes/llms[.]txt.ts`, `public/llms.txt`, and featured in `src/routes/community.index.tsx`.
 - **New Caterer Partner Onboarding: Kampala Rolex Germany (München) (In Progress):**
-  - *Partner Name:* Kampala Rolex Germany
-  - *Cuisine & Niche:* Authentisches ugandisches & ostafrikanisches Catering (Ugandan & East African)
-  - *Location:* München & Umgebung (Munich & surrounding region)
-  - *Contact / Socials:* WhatsApp: `+49 152 14438923`, Instagram / TikTok: `@kampala.rolex1`
-  - *Signature Live Station:* Live-Ugandan-Rolex-Station (Freshly rolled Chapati with seasoned vegetable/egg omelette, spiced chicken/beef options)
-  - *Core Menu Selection:* Pilau (aromatic spiced rice), White Rice, Chicken Stew, Beef Stew, Matooke (steamed cooking bananas), Chapati, Samosas, Mandazi (Swahili pastries), Kachumbari (fresh East African tomato-onion-chili salad), traditional sauces
-  - *Service Formats:* Warmservice with Chafing-Dishes (Buffet), Live-Food-Station, Foodtruck & Festival setups (Private parties, corporate events, Christmas parties, weddings)
-  - *Assets Stored (12 HD Photos + Transparent Logo + Brochure):* `public/caterers/kampala-rolex-muenchen/`
+  - _Partner Name:_ Kampala Rolex Germany
+  - _Cuisine & Niche:_ Authentisches ugandisches & ostafrikanisches Catering (Ugandan & East African)
+  - _Location:_ München & Umgebung (Munich & surrounding region)
+  - _Contact / Socials:_ WhatsApp: `+49 152 14438923`, Instagram / TikTok: `@kampala.rolex1`
+  - _Signature Live Station:_ Live-Ugandan-Rolex-Station (Freshly rolled Chapati with seasoned vegetable/egg omelette, spiced chicken/beef options)
+  - _Core Menu Selection:_ Pilau (aromatic spiced rice), White Rice, Chicken Stew, Beef Stew, Matooke (steamed cooking bananas), Chapati, Samosas, Mandazi (Swahili pastries), Kachumbari (fresh East African tomato-onion-chili salad), traditional sauces
+  - _Service Formats:_ Warmservice with Chafing-Dishes (Buffet), Live-Food-Station, Foodtruck & Festival setups (Private parties, corporate events, Christmas parties, weddings)
+  - _Assets Stored (12 HD Photos + Transparent Logo + Brochure):_ `public/caterers/kampala-rolex-muenchen/`
     - `logo.png` (Official transparent Gorilla Chef logo)
     - `01_live_station_foodtruck.jpg` (Live cooking & DJ foodtruck station)
     - `02_ugandan_rolex_signature.jpg` & `03_ugandan_rolex_closeup.jpg` (Signature Ugandan Rolex street food wrap)
@@ -31,6 +32,7 @@ _This document serves as the active working memory for ongoing tasks, context up
 - **Speisely Journal (Ausgabe 04): Page-by-Page Editorial Content Review** (Ongoing)
 
 **Completed Sprint Task (2026-10-02):**
+
 - **Magazine Architecture & Layout Geometry Harmonization (100% Complete & Live):**
   - **Root Cause Solved:** StPageFlip injected inline `display: block` on `.page`, disabling vertical flex distribution (`justify-between`). Resolved by wrapping all 10 pages in an inner `.page-content` flex container (`y = 24px` to `y = 716px` exact padding bounds).
   - **Unconstrained Images Resolved:** Standardized Tailwind spacing tokens across Pages 2, 8, and 9 (`w-24 h-20`, `w-28 h-24`, etc.), locking natural aspect ratios within passe-partout gallery frames.
@@ -46,6 +48,7 @@ _This document serves as the active working memory for ongoing tasks, context up
 **Goal:** Go through each page (Page 1 to Page 10) systematically with the user to refine, audit, and finalize all editorial text, headlines, teasers, and translation nuances.
 
 ### Mandatory Rules for the Session:
+
 1. **Zero Invented Facts:**
    - Only use facts verified in the codebase, database, or existing partner route content.
    - If existing content does not contain enough verified facts, **reduce copy and let spacing/typography carry the layout** rather than fabricating numbers, equipment claims, or partner metrics.
@@ -57,6 +60,7 @@ _This document serves as the active working memory for ongoing tasks, context up
    - Run `npm run verify:graph`, `npm run build`, and `npm run qa:visual` with direct multimodal inspection before concluding any review round.
 
 ### Page Review Plan:
+
 - **Page 1 (Cover):** Title typography, headline, subtitles, date/issue badge, 3 teaser cards.
 - **Page 2 (Speisely Pro Ad):** B2B proposition, 3 module captions (Order Engine, Outdoor POS, Cloud KDS), bullet points, CTA URL.
 - **Page 3 (Impressum & Editor's Note):** Masthead team list, colophon, Managing Editor's Letter (Ahmad F.), partner network references.
@@ -73,6 +77,7 @@ _This document serves as the active working memory for ongoing tasks, context up
 ## 2. Core Architecture & Payment Hardening (Background Context)
 
 ### Recently Completed
+
 - **PayPal exposure hardening = implemented** (PayPal link generation moved to server inside `submitStorefrontOrder`, `paypal_email` removed from public payloads).
   - _Order status gap documented:_ PayPal.me orders currently auto-confirm due to lack of a webhook for capture verification. This is an accepted gap to preserve current payment behavior.
 - **Restaurant checkout rebuild = implemented**
@@ -83,6 +88,7 @@ _This document serves as the active working memory for ongoing tasks, context up
   - Implemented KDS and webhook payment method validation for Stripe, Cash, and PayPal.
 
 ### Pending Follow-up Hardening:
+
 - **webhook replay/dedup hardening = partial** (Idempotency currently relies on status updates, but event IDs are not strictly persisted in a dedicated table to prevent replay.)
 - **Business Model Strictness (Commissions & Subscriptions):**
   - Blocked manual `"booked"` transitions. Webhooks now exclusively control this state upon deposit capture.
@@ -92,15 +98,18 @@ _This document serves as the active working memory for ongoing tasks, context up
 - **Stripe ID Hardening (Stages 1 & 2):** Successfully decoupled application code from `restaurants.stripe_user_id`, ran a verification query, and dropped the column from the database. Types regenerated.
 
 ### Recently Verified System Truths (Not yet fully resolved in code):
+
 - Restaurant storefront promos evaluate against `mockPromoCodes`, not the real `promo_codes` table (Status: `missing`).
 - Reviews UI is purely mocked with `const reviews: any[] = [];` (Status: `missing`).
 - Programmatic GEO pages do not exist publicly; `seo_content_pages` is admin CRUD only (Status: `missing`).
 
 ### Active: Permanent Security Rule & Exposure Remediation
+
 - **Goal:** Eliminate data leaks via select(*) on mixed public/private tables and enforce stage-gated lead protection.
 - **Status:** Storefront public data leak remediation is `implemented` (all three loaders refactored to explicit safe fields). Lead protection is `implemented` (stage-gated reveal of PII at the "booked" status).
 
 ## 3. Current Temporary Lead-Capture State
+
 - VeeDo’s Kitchen and Partyservice Küpper currently use storefront slugs: `veedos-kitchen` and `partyservice-kuepper`.
 - The identifier `9b1deb4d-3b7d-4bad-9bdd-2b0d7b3d0001` has valid UUID syntax but is not a verified production `caterers.id`.
 - UUID-format validation does not prove that a corresponding caterer exists. The server queries the production `caterers` table first before assigning `preferred_caterer_id`.

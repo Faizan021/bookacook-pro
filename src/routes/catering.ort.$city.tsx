@@ -1,7 +1,22 @@
 import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-router";
 import { getGeoPageData } from "@/lib/geo/server.functions";
 import { SiteShell } from "@/components/SiteShell";
-import { MapPin, Star, ChevronRight, Search, ChefHat, X, Banknote } from "lucide-react";
+import {
+  MapPin,
+  Star,
+  ChevronRight,
+  Search,
+  ChefHat,
+  X,
+  Banknote,
+  Sparkles,
+  ShieldCheck,
+  Clock,
+  CheckCircle2,
+  UtensilsCrossed,
+  ArrowRight,
+} from "lucide-react";
+import { LeadCaptureForm } from "@/components/vendor/LeadCaptureForm";
 import { z } from "zod";
 import { useState } from "react";
 
@@ -266,36 +281,144 @@ function GeoCateringPage() {
       {/* Vendor Grid */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-12">
         {vendors.length === 0 ? (
-          <div className="mx-auto max-w-xl text-center py-16 px-6 surface-card rounded-3xl border border-forest/15 shadow-sm">
-            <div className="mx-auto h-16 w-16 grid place-items-center rounded-full bg-[#E6B84A]/15 text-[#b28a3c]">
-              <ChefHat className="h-8 w-8 text-[#b28a3c]" />
+          <div className="space-y-12">
+            {/* Benchmark Price Guide for City */}
+            <div className="surface-card p-8 sm:p-10 rounded-3xl border border-forest/15 shadow-sm text-left">
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-forest/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest/70 mb-2">
+                    <Sparkles className="h-3.5 w-3.5 text-[#b28a3c]" /> Orientierungswerte 2026
+                  </div>
+                  <h2 className="font-display text-2xl sm:text-3xl font-bold text-forest">
+                    Catering Richtwerte & Preise in {location.name}
+                  </h2>
+                </div>
+                <div className="inline-flex items-center gap-2 text-xs font-semibold text-forest/70 bg-cream px-3.5 py-1.5 rounded-full border border-forest/10">
+                  <Clock className="h-3.5 w-3.5 text-[#b28a3c]" /> Angebote in 24h
+                </div>
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-3">
+                <div className="p-6 rounded-2xl bg-cream/30 border border-forest/10 flex flex-col justify-between hover:shadow-md transition">
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-forest/60">
+                      Business & Meetings
+                    </span>
+                    <h3 className="font-display text-lg font-bold text-forest">
+                      Fingerfood & Platten
+                    </h3>
+                    <p className="text-xs text-forest/75 leading-relaxed">
+                      Belegte Canapés, Mini-Wraps, herzhafte Spieße und frische Obstplatten. Ideal
+                      für Konferenzen und Team-Meetings.
+                    </p>
+                  </div>
+                  <div className="mt-5 pt-3 border-t border-forest/10 flex items-baseline justify-between">
+                    <span className="text-xs text-forest/60">Richtpreis ab</span>
+                    <span className="text-xl font-bold text-forest">
+                      14,90 € <span className="text-xs font-normal text-forest/60">/ Pers.</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-cream/50 border-2 border-[#b28a3c]/30 flex flex-col justify-between shadow-sm hover:shadow-md transition relative">
+                  <div className="absolute -top-3 right-4 bg-[#b28a3c] text-white text-[9px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full">
+                    Beliebt
+                  </div>
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#b28a3c]">
+                      Office & Firmenevent
+                    </span>
+                    <h3 className="font-display text-lg font-bold text-forest">
+                      Business Lunch Buffet
+                    </h3>
+                    <p className="text-xs text-forest/75 leading-relaxed">
+                      2 warme Hauptgerichte (z.B. Geflügel & vegetarisch/vegan), Beilagen,
+                      saisonales Salatbuffet und Dessert.
+                    </p>
+                  </div>
+                  <div className="mt-5 pt-3 border-t border-forest/10 flex items-baseline justify-between">
+                    <span className="text-xs text-forest/60">Richtpreis ab</span>
+                    <span className="text-xl font-bold text-forest">
+                      22,50 € <span className="text-xs font-normal text-forest/60">/ Pers.</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-cream/30 border border-forest/10 flex flex-col justify-between hover:shadow-md transition">
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-forest/60">
+                      Exklusiv & Festlich
+                    </span>
+                    <h3 className="font-display text-lg font-bold text-forest">
+                      Premium Event & Feier
+                    </h3>
+                    <p className="text-xs text-forest/75 leading-relaxed">
+                      Mehrgängiges Menü oder Gala-Buffet inklusive Chafing Dishes, Warmhalteboxen
+                      und optionalem Servicepersonal.
+                    </p>
+                  </div>
+                  <div className="mt-5 pt-3 border-t border-forest/10 flex items-baseline justify-between">
+                    <span className="text-xs text-forest/60">Richtpreis ab</span>
+                    <span className="text-xl font-bold text-forest">
+                      38,00 € <span className="text-xs font-normal text-forest/60">/ Pers.</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-forest/70 border-t border-forest/10 pt-4">
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck className="h-4 w-4 text-[#b28a3c]" /> 100% Kostenloser Service
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-[#b28a3c]" /> Unverbindliche Angebote
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <UtensilsCrossed className="h-4 w-4 text-[#b28a3c]" /> Halal, vegan & vegetarisch
+                  verfügbar
+                </span>
+              </div>
             </div>
-            <div className="inline-block mt-4 px-3 py-1 rounded-full bg-forest/5 text-forest/70 text-xs font-bold uppercase tracking-wider">
-              Netzwerk im Aufbau
+
+            {/* Concierge Lead Intake Form */}
+            <div className="surface-card p-8 sm:p-12 rounded-3xl border border-[#b28a3c]/30 shadow-lg text-left">
+              <div className="max-w-2xl mx-auto text-center space-y-3 mb-8">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#E6B84A]/15 text-[#b28a3c] px-3.5 py-1 text-xs font-bold uppercase tracking-widest">
+                  <Sparkles className="h-3.5 w-3.5" /> Speisely Concierge Service
+                </div>
+                <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-forest">
+                  Kostenlose Catering-Angebote für {location.name}
+                </h2>
+                <p className="text-sm sm:text-base text-forest/75 leading-relaxed">
+                  Sag uns, was du planst (Gästeanzahl, Datum, Budget). Wir kontaktieren verifizierte
+                  Caterer mit garantierter Lieferung nach {location.name} und senden dir innerhalb
+                  von 24 Stunden passende Angebote.
+                </p>
+              </div>
+
+              <div className="max-w-xl mx-auto bg-white/80 p-6 sm:p-8 rounded-2xl border border-forest/10 shadow-sm">
+                <LeadCaptureForm
+                  defaultCity={location.name}
+                  sourceRoute={`/catering/ort/${location.name.toLowerCase()}`}
+                />
+              </div>
             </div>
-            <h3 className="mt-3 font-display text-2xl sm:text-3xl text-forest font-bold">
-              Demnächst in {location.name}
-            </h3>
-            <p className="mt-3 text-sm sm:text-base text-forest/80 leading-relaxed max-w-md mx-auto">
-              Wir bauen unser Netzwerk in {location.name} gerade auf. Plane ein Event? Schick uns
-              deine Anfrage, wir melden uns persönlich.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href={`/planner?city=${encodeURIComponent(location.name)}&topic=catering_inquiry`}
-                className="inline-flex items-center gap-2 rounded-full bg-[#173C32] text-white px-6 py-3 text-xs sm:text-sm font-bold shadow hover:bg-[#0c1813] transition"
-              >
-                Anfrage senden
-              </a>
-              <button
-                type="button"
-                onClick={() => {
-                  document.querySelector("footer")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="inline-flex items-center gap-2 rounded-full bg-cream text-forest border border-forest/20 px-6 py-3 text-xs sm:text-sm font-bold hover:bg-[#eadfce] transition"
-              >
-                Benachrichtigt werden
-              </button>
+
+            {/* Regional Delivery Radius Notice */}
+            <div className="rounded-2xl bg-forest/5 p-6 border border-forest/10 flex flex-col sm:flex-row items-center gap-4 text-left">
+              <div className="h-12 w-12 rounded-xl bg-forest text-cream grid place-items-center shrink-0">
+                <MapPin className="h-6 w-6 text-[#b28a3c]" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="font-bold text-forest text-sm">
+                  Regionale Liefergarantie für {location.name}
+                </h4>
+                <p className="text-xs text-forest/70 leading-relaxed">
+                  Unsere Partnerbetriebe liefern im Umkreis von bis zu 80 km frisch und pünktlich in
+                  Thermoboxen direkt zu deiner Location, ins Büro oder zu deinem Festsaal in{" "}
+                  {location.name} und Umland.
+                </p>
+              </div>
             </div>
           </div>
         ) : filteredVendors.length === 0 ? (

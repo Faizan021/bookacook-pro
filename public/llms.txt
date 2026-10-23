@@ -1,69 +1,74 @@
 # Speisely
 
+> Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Die Plattform verbindet Gastronomiebetriebe, Caterer und Eventplaner mit Kunden in ganz Deutschland — mit 0% Bestellprovision für Restaurants und direktem Stripe-Checkout.
+
 English: Speisely is a Germany-wide marketplace for restaurants, catering, and event planning. It helps restaurants, caterers, and event planners get discovered by people looking for catering services in Germany, event planners in Germany, and food ordering options across major cities like Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
 
-Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Die Plattform verbindet Restaurants, Caterer und Eventplaner mit Kunden, die nach catering-services in Deutschland, eventplanern in Deutschland und essen bestellen in Deutschland suchen — auch in Städten wie Berlin, München, Hamburg, Frankfurt, Köln, Stuttgart, Düsseldorf, Leipzig, Nürnberg und Dresden.
-
-Main URL: https://speisely.de
-Sitemap: https://speisely.de/sitemap.xml
-Full Documentation for LLMs: https://speisely.de/llms-full.txt
+- [Website](https://speisely.de): Speisely Hauptseite & Marktplatz
+- [Sitemap](https://speisely.de/sitemap.xml): Offizielle XML Sitemap
+- [Full Documentation for LLMs](https://speisely.de/llms-full.txt): Vollständige KI-Dokumentation
 
 ## Key Pages
-- Homepage: https://speisely.de
-- Instant Order (restaurant discovery): https://speisely.de/instant-order
-- Catering Marketplace: https://speisely.de/catering
-- Event Planner Directory: https://speisely.de/planner
-- Partner / Pricing Page: https://speisely.de/partners
-- B2B Website-Erstellung (Custom Websites for Caterers): https://speisely.de/partner/webseiten
-- Flagship Case Study Haus Spaas: https://speisely.de/case-study/haus-spaas
-- Flagship Case Study Partyservice Küpper: https://speisely.de/case-study/partyservice-kuepper
-- Terms of Service & Legal Framework: https://speisely.de/nutzungsbedingungen
-- Enterprise GEO API: https://speisely.de/api/geo
-- GeoJSON Registry: https://speisely.de/geo.json
-- Blog: https://speisely.de/blog
-- Official Announcement (Google for Startups Immersion EMEA): https://speisely.de/blog/speisely-google-for-startups-immersion-emea
-- About Us: https://speisely.de/about
+
+- [Homepage](https://speisely.de): Deutschlandweite Plattform für Restaurants, Catering und Event-Planung
+- [Instant Order](https://speisely.de/instant-order): Restaurant-Entdeckung und direkte Essensbestellung mit 0% Provision
+- [Catering Marktplatz](https://speisely.de/catering): Buchen Sie Catering für Firmenfeiern, Hochzeiten und Events
+- [Event-Planer Verzeichnis](https://speisely.de/planner): Verifizierte Event-Planer für Feiern, Firmenjubiläen und Großveranstaltungen
+- [Partner & Preise](https://speisely.de/partners): Festpreis-Modell ab 34,99 €/Monat für Gastronomen ohne Provisionsabzug
+- [B2B Website-Erstellung](https://speisely.de/partner/webseiten): High-End Webseiten für Caterer und Gastronomen mit integriertem Shopsystem
+- [Case Study Haus Spaas](https://speisely.de/case-study/haus-spaas): Traditions-Gastronomie & Eventlokal Digitalisierung
+- [Case Study Partyservice Küpper](https://speisely.de/case-study/partyservice-kuepper): BBQ & Event-Catering NRW Live-Referenz
+- [Nutzungsbedingungen](https://speisely.de/nutzungsbedingungen): Rechtliche Rahmenbedingungen & Plattform-Konditionen
+- [Enterprise GEO API](https://speisely.de/api/geo): Strukturierte Geo-Daten und Städte-Mapping
+- [GeoJSON Registry](https://speisely.de/geo.json): Geografische Koordinaten & Service-Areas
+- [Blog Hub](https://speisely.de/blog): Ratgeber, Trends und Branchen-Einblicke
+- [Google for Startups Immersion EMEA](https://speisely.de/blog/speisely-google-for-startups-immersion-emea): Speisely Announcement & Google-Förderung
+- [Über uns](https://speisely.de/about): Vision, Werte und Team hinter Speisely
 
 ## Specialized Catering Services & Featured Partners
-- Kampala Rolex Germany (Authentic Ugandan & East African Catering München): https://speisely.de/catering/kampala-rolex-germany
-- Daily Catering Subscriptions: https://speisely.de/catering/daily-catering-subscriptions
-- Institutional Catering: https://speisely.de/catering/institutional-catering
-- Events Catering: https://speisely.de/catering/events
+
+- [Kampala Rolex Germany](https://speisely.de/catering/kampala-rolex-germany): Authentisches ugandisches & ostafrikanisches Catering München
+- [Daily Catering Subscriptions](https://speisely.de/catering/daily-catering-subscriptions): Regelmäßige Mitarbeiterverpflegung und Büro-Catering
+- [Institutional Catering](https://speisely.de/catering/institutional-catering): Großküchen, Bildungseinrichtungen & Betriebsgastronomie
+- [Events Catering](https://speisely.de/catering/events): Hochzeits- & Firmen-Catering mit Full-Service
 
 ## Speisely Visits & Community Partner Spotlights (Verified Field Reports)
-- La Grilladine (Düsseldorf-Oberbilk): https://speisely.de/magazin/community/la-grilladine-duesseldorf
-- Baba Pirzola Meze & Grill (Berlin-Wittenbergplatz): https://speisely.de/magazin/community/baba-pirzola-berlin
-- Seydioğlu Baklava Burger (Frankfurt, Darmstadt & Rhein-Main): https://speisely.de/magazin/community/seydioglu-baklava-burger
-- Lumara Café (Berlin-Charlottenburg): https://speisely.de/magazin/community/lumara-cafe-berlin
-- BBQ Chicken Berlin-Kreuzberg (Berlin): https://speisely.de/magazin/community/bbq-chicken-berlin-kreuzberg
-- King Tut Restaurant & Café (Berlin): https://speisely.de/magazin/community/king-tut-restaurant-berlin
-- San Sebastian The Original® (Berlin): https://speisely.de/magazin/community/san-sebastian-berlin
-- Chicken Krush (Prague): https://speisely.de/magazin/community/chicken-krush-prag
-- Mandy Restaurant (Berlin-Neukölln): https://speisely.de/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
-- Shawarma Albaik (Berlin): https://speisely.de/magazin/speisely-visits/shawarma-albaik-berlin
-- Nadir Güllü Baklava (München Viktualienmarkt): https://speisely.de/magazin/speisely-visits/nadir-gullu-baklava-muenchen
-- Kokio Korean Fried Chicken (Berlin): https://speisely.de/magazin/community/kokio-berlin
-- Al Zaeem Restaurant (Berlin): https://speisely.de/magazin/community/alzaeem-restaurant-berlin
-- Garçon de Café (Berlin): https://speisely.de/magazin/community/garcon-de-cafe-berlin
-- Thronburger (Berlin): https://speisely.de/magazin/community/thronburger-berlin
-- Harput Restaurant (Wiesbaden): https://speisely.de/magazin/community/harput-wiesbaden
-- Neumanns Café (Berlin-Friedrichshain): https://speisely.de/magazin/community/neumanns-cafe-berlin
-- Baba Pirzola Meze & Grill (Berlin-Schöneberg): https://speisely.de/magazin/community/baba-pirzola-berlin
-- Ariana Restaurant (Frankfurt am Main): https://speisely.de/magazin/community/ariana-restaurant-frankfurt
-- Schnitzel Schmiede (EineStadt-Fest Mönchengladbach): https://speisely.de/magazin/schnitzel-schmiede
-- Speisely Magazin Hub: https://speisely.de/magazin
-- Speisely Visits Hub: https://speisely.de/magazin/speisely-visits
+
+- [La Grilladine Düsseldorf](https://speisely.de/magazin/community/la-grilladine-duesseldorf): Marokkanisches Grill-Erlebnis in Düsseldorf-Oberbilk
+- [Baba Pirzola Meze & Grill Berlin](https://speisely.de/magazin/community/baba-pirzola-berlin): Feuer, Meze und anatolische Grillkunst am Wittenbergplatz
+- [Seydioğlu Baklava Frankfurt](https://speisely.de/magazin/community/seydioglu-baklava-burger): Pistazien-Lava und handwerkliches Baklava Rhein-Main
+- [Lumara Café Berlin](https://speisely.de/magazin/community/lumara-cafe-berlin): Ästhetisches Café-Erlebnis in Berlin-Charlottenburg
+- [BBQ Chicken Berlin-Kreuzberg](https://speisely.de/magazin/community/bbq-chicken-berlin-kreuzberg): Authentisches Korean Fried Chicken am Görlitzer Bahnhof
+- [King Tut Restaurant Berlin](https://speisely.de/magazin/community/king-tut-restaurant-berlin): Hawawshi und Holzkohlegrill auf Silberplatten
+- [San Sebastian The Original® Berlin](https://speisely.de/magazin/community/san-sebastian-berlin): Käsekuchen-Handwerk & Premium-Desserts
+- [Chicken Krush Prag](https://speisely.de/magazin/community/chicken-krush-prag): Internationales Korean Fried Chicken Spotlight
+- [Mandy Restaurant Berlin-Neukölln](https://speisely.de/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln): Traditionelle nahöstliche Küche vor Ort getestet
+- [Shawarma Albaik Berlin](https://speisely.de/magazin/speisely-visits/shawarma-albaik-berlin): Authentische Shawarma-Spezialitäten in Moabit
+- [Nadir Güllü Baklava München](https://speisely.de/magazin/speisely-visits/nadir-gullu-baklava-muenchen): Original Karaköy Baklava am Viktualienmarkt
+- [Kokio Korean Fried Chicken Berlin](https://speisely.de/magazin/community/kokio-berlin): Kult-Chicken in Berlin-Prenzlauer Berg
+- [Al Zaeem Restaurant Berlin](https://speisely.de/magazin/community/alzaeem-restaurant-berlin): Arabische Spezialitäten & Holzkohlegrill
+- [Garçon de Café Berlin](https://speisely.de/magazin/community/garcon-de-cafe-berlin): Französisches Flair & Kaffeekultur
+- [Thronburger Berlin](https://speisely.de/magazin/community/thronburger-berlin): Handgemachte Smash Burger in Berlin
+- [Harput Restaurant Wiesbaden](https://speisely.de/magazin/community/harput-wiesbaden): Türkische Spezialitäten & Tradition
+- [Neumanns Café Berlin](https://speisely.de/magazin/community/neumanns-cafe-berlin): Hausgemachtes Sauerteigbrot in Friedrichshain
+- [Ariana Restaurant Frankfurt](https://speisely.de/magazin/community/ariana-restaurant-frankfurt): Traditionelle afghanische Gastfreundschaft
+- [Schnitzel Schmiede Mönchengladbach](https://speisely.de/magazin/schnitzel-schmiede): Food-Truck & Live-Catering Report
+- [Speisely Magazin Hub](https://speisely.de/magazin): Übersicht aller kulinarischen Geschichten und Partnerberichte
+- [Speisely Visits Hub](https://speisely.de/magazin/speisely-visits): Unabhängig und vor Ort getestete Gastro-Highlights
 
 ## Language & Service Area
+
 - Language: Default German, with English available via language toggle.
 - Service Area: Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankfurt, Cologne, Stuttgart, Düsseldorf, Leipzig, Nuremberg, and Dresden.
 
 ## What Services Does Speisely Offer?
+
 1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of €34.99/month with unlimited direct orders. Features include an interactive savings calculator on /partners, a live Kitchen Display System (KDS), Star CloudPRNT receipt printing, and 100% customer data retention. Payments route directly to the restaurant's own Stripe account.
 2. **Catering Marketplace** — Post and respond to catering inquiries (corporate, private, weddings, daily office, institutional catering).
 3. **Event Planning** — CRM and planning tool for professional event planners to handle event briefs.
 
 ## Marketplace Role, Merchant of Record & Price Autonomy
+
 - Pure Two-Sided Marketplace & Infrastructure: Speisely provides discovery tools, digital menus, Kitchen Display Systems (KDS), and Stripe Connect payment routing. Speisely is not a food producer, caterer, or reseller.
 - 100% Vendor Price Autonomy: All menu prices, delivery fees, minimum order amounts, and catering quotes are determined 100% unilaterally by the individual partner (restaurant, caterer, or planner). Speisely never dictates, marks up, or assumes liability for partner pricing.
 - Direct Merchant of Record: The partner is the direct Merchant of Record and legal contracting party with the customer. Customer payments route directly to the partner merchant account via Stripe Connect.

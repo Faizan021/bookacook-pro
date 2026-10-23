@@ -9,37 +9,44 @@ export const Route = createFileRoute("/llms.txt")({
   server: {
     handlers: {
       GET: async () => {
-        const blogUrls = blogPosts.map((b) => `- ${BASE}/blog/${b.slug}`).join("\n");
+        const blogUrls = blogPosts
+          .map(
+            (b) =>
+              `- [${b.title}](${BASE}/blog/${b.slug}): ${b.description || "Speisely Blog Ratgeber"}`,
+          )
+          .join("\n");
 
         const text = `# Speisely
 
-Speisely is a Germany-wide food ordering, catering, and event management marketplace.
+> Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Die Plattform verbindet Gastronomiebetriebe, Caterer und Eventplaner mit Kunden in ganz Deutschland — mit 0% Bestellprovision für Restaurants und direktem Stripe-Checkout.
+
+English: Speisely is a Germany-wide food ordering, catering, and event management marketplace.
 Restaurants pay a flat monthly fee (from €34.99/mo) -- with unlimited direct orders.
 
 Caterers and Event Planners receive qualified briefs and pay a fair service fee per successful booking.
 
 ## Key Pages
 
-- Homepage: ${BASE}
-- Instant Order (restaurant discovery): ${BASE}/instant-order
-- Catering Marketplace: ${BASE}/catering
-- Event Planner Directory: ${BASE}/planner
-- Partner / Pricing Page: ${BASE}/partners
-- B2B Website-Erstellung (Websites for Caterers & Restaurants): ${BASE}/partner/webseiten
-- Flagship Case Study Haus Spaas (Web Digitalization): ${BASE}/case-study/haus-spaas
-- Flagship Case Study Partyservice Küpper (BBQ & Catering): ${BASE}/case-study/partyservice-kuepper
-- Terms of Service & Legal Framework: ${BASE}/nutzungsbedingungen
-- Enterprise GEO API: ${BASE}/api/geo
-- GeoJSON Registry: ${BASE}/geo.json
-- Blog: ${BASE}/blog
-- About Us: ${BASE}/about
+- [Homepage](${BASE}): Deutschlandweite Plattform für Restaurants, Catering und Event-Planung
+- [Instant Order](${BASE}/instant-order): Restaurant-Entdeckung und direkte Essensbestellung mit 0% Provision
+- [Catering Marktplatz](${BASE}/catering): Buchen Sie Catering für Firmenfeiern, Hochzeiten und Events
+- [Event-Planer Verzeichnis](${BASE}/planner): Verifizierte Event-Planer für Feiern, Firmenjubiläen und Großveranstaltungen
+- [Partner & Preise](${BASE}/partners): Festpreis-Modell ab 34,99 €/Monat für Gastronomen ohne Provisionsabzug
+- [B2B Website-Erstellung](${BASE}/partner/webseiten): High-End Webseiten für Caterer und Gastronomen mit integriertem Shopsystem
+- [Case Study Haus Spaas](${BASE}/case-study/haus-spaas): Traditions-Gastronomie & Eventlokal Digitalisierung
+- [Case Study Partyservice Küpper](${BASE}/case-study/partyservice-kuepper): BBQ & Event-Catering NRW Live-Referenz
+- [Nutzungsbedingungen](${BASE}/nutzungsbedingungen): Rechtliche Rahmenbedingungen & Plattform-Konditionen
+- [Enterprise GEO API](${BASE}/api/geo): Strukturierte Geo-Daten und Städte-Mapping
+- [GeoJSON Registry](${BASE}/geo.json): Geografische Koordinaten & Service-Areas
+- [Blog Hub](${BASE}/blog): Ratgeber, Trends und Branchen-Einblicke
+- [Über uns](${BASE}/about): Vision, Werte und Team hinter Speisely
 
 ## Specialized Catering Services & Featured Partners
 
-- Kampala Rolex Germany (Authentic Ugandan & East African Catering München): ${BASE}/catering/kampala-rolex-germany
-- Daily Catering Subscriptions: ${BASE}/catering/daily-catering-subscriptions
-- Institutional Catering: ${BASE}/catering/institutional-catering
-- Events Catering: ${BASE}/catering/events
+- [Kampala Rolex Germany](${BASE}/catering/kampala-rolex-germany): Authentisches ugandisches & ostafrikanisches Catering München
+- [Daily Catering Subscriptions](${BASE}/catering/daily-catering-subscriptions): Regelmäßige Mitarbeiterverpflegung und Büro-Catering
+- [Institutional Catering](${BASE}/catering/institutional-catering): Großküchen, Bildungseinrichtungen & Betriebsgastronomie
+- [Events Catering](${BASE}/catering/events): Hochzeits- & Firmen-Catering mit Full-Service
 
 ## Blog Articles
 
@@ -47,28 +54,28 @@ ${blogUrls}
 
 ## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
 
-- Seydioğlu Baklava Burger (Frankfurt, Darmstadt & Rhein-Main): ${BASE}/magazin/community/seydioglu-baklava-burger
-- Lumara Café (Berlin-Charlottenburg): ${BASE}/magazin/community/lumara-cafe-berlin
-- La Grilladine (Düsseldorf-Oberbilk): ${BASE}/magazin/community/la-grilladine-duesseldorf
-- Baba Pirzola Meze & Grill (Berlin-Wittenbergplatz): ${BASE}/magazin/community/baba-pirzola-berlin
-- BBQ Chicken Berlin-Kreuzberg (Berlin): ${BASE}/magazin/community/bbq-chicken-berlin-kreuzberg
-- King Tut Restaurant & Café (Berlin): ${BASE}/magazin/community/king-tut-restaurant-berlin
-- San Sebastian The Original® (Berlin): ${BASE}/magazin/community/san-sebastian-berlin
-- Chicken Krush (Prague): ${BASE}/magazin/community/chicken-krush-prag
-- Mandy Restaurant (Berlin-Neukölln): ${BASE}/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln
-- Shawarma Albaik (Berlin): ${BASE}/magazin/speisely-visits/shawarma-albaik-berlin
-- Nadir Güllü Baklava (München Viktualienmarkt): ${BASE}/magazin/speisely-visits/nadir-gullu-baklava-muenchen
-- Neumanns Café (Berlin-Friedrichshain): ${BASE}/magazin/community/neumanns-cafe-berlin
-- Baba Pirzola Meze & Grill (Berlin-Schöneberg): ${BASE}/magazin/community/baba-pirzola-berlin
-- Kokio Korean Fried Chicken (Berlin): ${BASE}/magazin/community/kokio-berlin
-- Al Zaeem Restaurant (Berlin): ${BASE}/magazin/community/alzaeem-restaurant-berlin
-- Garçon de Café (Berlin): ${BASE}/magazin/community/garcon-de-cafe-berlin
-- Thronburger (Berlin): ${BASE}/magazin/community/thronburger-berlin
-- Harput Restaurant (Wiesbaden): ${BASE}/magazin/community/harput-wiesbaden
-- Ariana Restaurant (Frankfurt am Main): ${BASE}/magazin/community/ariana-restaurant-frankfurt
-- Schnitzel Schmiede (EineStadt-Fest Mönchengladbach): ${BASE}/magazin/schnitzel-schmiede
-- Speisely Magazin Hub: ${BASE}/magazin
-- Speisely Visits Hub: ${BASE}/magazin/speisely-visits
+- [Seydioğlu Baklava Burger](${BASE}/magazin/community/seydioglu-baklava-burger): Pistazien-Lava und handwerkliches Baklava Rhein-Main
+- [Lumara Café Berlin](${BASE}/magazin/community/lumara-cafe-berlin): Ästhetisches Café-Erlebnis in Berlin-Charlottenburg
+- [La Grilladine Düsseldorf](${BASE}/magazin/community/la-grilladine-duesseldorf): Marokkanisches Grill-Erlebnis in Düsseldorf-Oberbilk
+- [Baba Pirzola Meze & Grill Wittenbergplatz](${BASE}/magazin/community/baba-pirzola-berlin): Feuer, Meze und anatolische Grillkunst am Wittenbergplatz
+- [BBQ Chicken Berlin-Kreuzberg](${BASE}/magazin/community/bbq-chicken-berlin-kreuzberg): Authentisches Korean Fried Chicken am Görlitzer Bahnhof
+- [King Tut Restaurant & Café](${BASE}/magazin/community/king-tut-restaurant-berlin): Hawawshi und Holzkohlegrill auf Silberplatten
+- [San Sebastian The Original® Berlin](${BASE}/magazin/community/san-sebastian-berlin): Käsekuchen-Handwerk & Premium-Desserts
+- [Chicken Krush Prag](${BASE}/magazin/community/chicken-krush-prag): Internationales Korean Fried Chicken Spotlight
+- [Mandy Restaurant Berlin-Neukölln](${BASE}/magazin/speisely-visits/mandy-restaurant-berlin-neukoelln): Traditionelle nahöstliche Küche vor Ort getestet
+- [Shawarma Albaik Berlin](${BASE}/magazin/speisely-visits/shawarma-albaik-berlin): Authentische Shawarma-Spezialitäten in Moabit
+- [Nadir Güllü Baklava München](${BASE}/magazin/speisely-visits/nadir-gullu-baklava-muenchen): Original Karaköy Baklava am Viktualienmarkt
+- [Neumanns Café Berlin](${BASE}/magazin/community/neumanns-cafe-berlin): Hausgemachtes Sauerteigbrot in Friedrichshain
+- [Baba Pirzola Schöneberg](${BASE}/magazin/community/baba-pirzola-berlin): Türkische Spezialitäten in Schöneberg
+- [Kokio Korean Fried Chicken](${BASE}/magazin/community/kokio-berlin): Kult-Chicken in Berlin-Prenzlauer Berg
+- [Al Zaeem Restaurant Berlin](${BASE}/magazin/community/alzaeem-restaurant-berlin): Arabische Spezialitäten & Holzkohlegrill
+- [Garçon de Café Berlin](${BASE}/magazin/community/garcon-de-cafe-berlin): Französisches Flair & Kaffeekultur
+- [Thronburger Berlin](${BASE}/magazin/community/thronburger-berlin): Handgemachte Smash Burger in Berlin
+- [Harput Restaurant Wiesbaden](${BASE}/magazin/community/harput-wiesbaden): Türkische Spezialitäten & Tradition
+- [Ariana Restaurant Frankfurt](${BASE}/magazin/community/ariana-restaurant-frankfurt): Traditionelle afghanische Gastfreundschaft
+- [Schnitzel Schmiede Mönchengladbach](${BASE}/magazin/schnitzel-schmiede): Food-Truck & Live-Catering Report
+- [Speisely Magazin Hub](${BASE}/magazin): Übersicht aller kulinarischen Geschichten und Partnerberichte
+- [Speisely Visits Hub](${BASE}/magazin/speisely-visits): Unabhängig und vor Ort getestete Gastro-Highlights
 
 ## Language
 

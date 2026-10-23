@@ -1298,6 +1298,10 @@ function Home() {
                   <Link
                     to="/partners"
 
+                    aria-label={tt(
+                      "Partner-Modell und Vorteile ansehen",
+                      "View Partner benefits and pricing",
+                    )}
                     className="text-[#f4d58d] hover:text-white transition-colors font-semibold inline-flex items-center gap-1"
                   >
                     <span>{tt("Partner werden →", "Become a Partner →")}</span>
@@ -2235,6 +2239,7 @@ function Home() {
                   <Link
                     to="/case-study/partyservice-kuepper"
 
+                    aria-label="Live Case Study: Partyservice Küpper BBQ & Event-Catering NRW"
                     className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition"
                   >
                     Live Case Study ⭐
@@ -2353,6 +2358,7 @@ function Home() {
                   <Link
                     to="/case-study/haus-spaas"
 
+                    aria-label="Live Case Study: Haus Spaas Traditions-Gastronomie & Eventlokal"
                     className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition"
                   >
                     Live Case Study ⭐
@@ -2787,7 +2793,7 @@ function Home() {
             </div>
 
             <div className="flex lg:block">
-              <span className="inline-flex items-center gap-3 rounded-full bg-[#b28a3c] text-white px-8 py-5 text-base font-bold shadow-xl shadow-[#b28a3c]/20 transition-all group-hover:scale-105 group-hover:bg-[#9a7633] whitespace-nowrap">
+              <span className="inline-flex items-center gap-3 rounded-full bg-[#E6B84A] text-forest px-8 py-5 text-base font-bold shadow-xl shadow-[#E6B84A]/25 transition-all group-hover:scale-105 group-hover:bg-[#d4a73b] whitespace-nowrap">
                 {t("home.pillar.partner.cta")}
 
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1.5" />

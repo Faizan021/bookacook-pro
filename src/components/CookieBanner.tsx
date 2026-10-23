@@ -50,7 +50,7 @@ export function CookieBanner() {
           <span>{t("cookie.text")}</span>{" "}
           <a
             href="/datenschutz"
-            className="text-[#22C55E] font-medium underline hover:text-[#22C55E]/90 transition"
+            className="text-emerald-800 font-semibold underline hover:text-emerald-950 transition"
           >
             {t("cookie.privacy")}
           </a>
@@ -64,7 +64,7 @@ export function CookieBanner() {
           </button>
           <button
             onClick={handleAcceptAll}
-            className="flex-1 md:flex-initial inline-flex items-center justify-center rounded-full bg-[#22C55E] text-white px-4 py-2 md:px-5 md:py-2.5 text-xs md:text-sm font-semibold hover:opacity-90 transition shadow-sm cursor-pointer"
+            className="flex-1 md:flex-initial inline-flex items-center justify-center rounded-full bg-forest text-white px-4 py-2 md:px-5 md:py-2.5 text-xs md:text-sm font-semibold hover:bg-forest/90 transition shadow-sm cursor-pointer"
           >
             {t("cookie.accept")}
           </button>

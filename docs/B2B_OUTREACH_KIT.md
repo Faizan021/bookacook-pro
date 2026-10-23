@@ -30,7 +30,7 @@ Ich habe mir eure Website auf dem Smartphone angesehen und einen kurzen Performa
 
 1. **Ladezeit:** Auf Mobilgeräten lädt die Seite in ca. 3,5 Sekunden – dadurch springen laut Google bis zu 50% der hungrigen Event-Gäste vor der Anfrage ab.
 2. **Speisekarten:** Eure Menüs sind aktuell als PDF hinterlegt, was auf dem Handy schwer lesbar ist.
-3. **KI-Auffindbarkeit:** Wenn Kunden bei ChatGPT oder Google KI nach *"Catering für 80 Personen in [Stadt]"* suchen, fehlt die strukturierte Datenbrücke.
+3. **KI-Auffindbarkeit:** Wenn Kunden bei ChatGPT oder Google KI nach _"Catering für 80 Personen in [Stadt]"_ suchen, fehlt die strukturierte Datenbrücke.
 
 Gemeinsam mit unserem Technologie-Studio **TechGlanz** ([techglanz.de](https://techglanz.de)) und der Plattform **Speisely** ([speisely.de](https://speisely.de)) haben wir genau dafür eine Lösung gebaut – wie zum Beispiel für **Partyservice Küpper** ([partyservicekuepper.de](https://partyservicekuepper.de/)).
 
@@ -53,9 +53,9 @@ Web: [techglanz.de](https://techglanz.de) | [speisely.de](https://speisely.de)
 
 **Nachricht:**
 
-Hallo [Name/Team], hier ist [Dein Name] von Speisely & TechGlanz. Ich habe mir eure Website [Website-URL] angesehen: Eure Buffets sehen klasse aus! 
+Hallo [Name/Team], hier ist [Dein Name] von Speisely & TechGlanz. Ich habe mir eure Website [Website-URL] angesehen: Eure Buffets sehen klasse aus!
 
-Wir haben gerade für *Partyservice Küpper* ([partyservicekuepper.de](https://partyservicekuepper.de/)) einen neuen High-Speed Webauftritt mit Online-Eventkalkulator gebaut, der auf Google & Handys extrem gut konvertiert.
+Wir haben gerade für _Partyservice Küpper_ ([partyservicekuepper.de](https://partyservicekuepper.de/)) einen neuen High-Speed Webauftritt mit Online-Eventkalkulator gebaut, der auf Google & Handys extrem gut konvertiert.
 
 Ich habe für eure Seite kurz einen kostenlosen Live-Audit gemacht:  
 👉 https://speisely.de/partner/webseiten

@@ -33,6 +33,10 @@ export function SiteFooter() {
     { label: "Catering in Köln", to: "/catering/ort/koeln" },
 
     { label: "Catering in Frankfurt", to: "/catering/ort/frankfurt" },
+
+    { label: "Catering in Düsseldorf", to: "/catering/ort/duesseldorf" },
+
+    { label: "Catering in Stuttgart", to: "/catering/ort/stuttgart" },
   ];
 
   // SSR-rendered Community & Partner Index Links to prevent "Discovered - currently not indexed" in GSC
@@ -128,6 +132,22 @@ export function SiteFooter() {
   ];
 
   const catererAndGuideLinks = [
+    { label: "Meeting- & Office Catering bestellen", to: "/catering" },
+
+    { label: "Catering Konfigurator & Menü-Filter", to: "/catering" },
+
+    { label: "Event-Catering & Buffets", to: "/catering/events" },
+
+    {
+      label: "Büroverpflegung & Subscriptions",
+      to: "/catering/daily-catering-subscriptions",
+    },
+
+    {
+      label: "Groß- & Kitaverpflegung",
+      to: "/catering/institutional-catering",
+    },
+
     { label: "Maison Verde Catering", to: "/catering/maison-verde" },
 
     { label: "Partyservice Küpper", to: "/catering/partyservice-kuepper" },
@@ -201,9 +221,9 @@ export function SiteFooter() {
         {/* Business */}
 
         <div>
-          <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
+          <h3 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
             {t("footer.business")}
-          </h4>
+          </h3>
 
           <ul className="space-y-2.5 text-sm">
             <FooterLink to="/partners" label={t("nav.partners")} />
@@ -273,9 +293,9 @@ export function SiteFooter() {
         {/* Legal & Newsletter */}
 
         <div>
-          <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
+          <h3 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
             {t("footer.legal")}
-          </h4>
+          </h3>
 
           <ul className="space-y-2.5 text-sm">
             <FooterLink to="/contact" label={t("nav.contact")} />
@@ -288,7 +308,9 @@ export function SiteFooter() {
           </ul>
 
           <div className="mt-6">
-            <h5 className="font-display text-lg text-[oklch(0.97_0.02_92)]">Stay updated</h5>
+            <p className="font-display text-lg text-[oklch(0.97_0.02_92)] font-semibold">
+              Stay updated
+            </p>
 
             <form
               onSubmit={(e) => {
@@ -389,9 +411,9 @@ export function SiteFooter() {
 function FooterCol({ title, items }: { title: string; items: { label: string; to: string }[] }) {
   return (
     <div>
-      <h4 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
+      <h3 className="text-xs uppercase tracking-[0.18em] font-sans font-semibold mb-4 text-[oklch(0.97_0.02_92)]/75">
         {title}
-      </h4>
+      </h3>
 
       <ul className="space-y-2.5 text-sm">
         {items.map((i) => (
