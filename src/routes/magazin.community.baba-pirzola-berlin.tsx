@@ -324,7 +324,7 @@ function BabaPirzolaBerlinCommunityArticle() {
                   width={1200}
                   height={900}
                   fetchPriority="high"
-                  decoding="async"
+                  decoding="sync"
                   loading="eager"
                   alt={
                     isDe

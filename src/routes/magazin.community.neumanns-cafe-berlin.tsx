@@ -309,7 +309,7 @@ function NeumannsCafeBerlinArticle() {
                   width={1200}
                   height={900}
                   fetchPriority="high"
-                  decoding="async"
+                  decoding="sync"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-3 left-3 rounded-full bg-black/65 backdrop-blur-md text-white px-3.5 py-1.5 text-xs font-semibold tracking-wide shadow-md">

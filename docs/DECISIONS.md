@@ -87,3 +87,13 @@ This document is the immutable record of approved architecture choices, product 
 - **Liability Boundary:** Speisely assumes zero legal or financial liability for vendor pricing, ingredients, or food delivery. The transaction is strictly a direct contract between customer and vendor, with Stripe Connect settling funds directly to the partner's account.
 - **Agentic Pipeline Rule:** In all current and future integrations with Google Universal Cart, UCP (`/.well-known/ucp`), or AI agents, Speisely serves strictly as an automated data conduit. Structured data schemas MUST always designate the individual caterer or restaurant as the official `seller` / Merchant of Record (`seller: { @type: "FoodEstablishment", name: vendor.name }`).
 - **Status:** **RATIFIED & RECORDED** on 2026-10-22.
+
+## 12. Core Web Vitals, Performance & WCAG AAA Accessibility Architecture
+
+- **Decision:** Speisely enforces strict Core Web Vitals performance budgets (Mobile PageSpeed 90+, Desktop 95+, 100 SEO, 100 Best Practices, 100 Accessibility, 3/3 Agentic Browsing) as an automated compiler gate.
+- **Asynchronous Font Loading:** `<link rel="preload" as="style">` for external Google Fonts is strictly forbidden. Fonts must load asynchronously via non-blocking print stylesheet (`media="print" onload="this.media='all'"`) to guarantee sub-second First Contentful Paint (FCP) on mobile 4G.
+- **LCP Sync Decoding:** Above-the-fold Largest Contentful Paint (LCP) hero images must use `decoding="sync"` and `fetchPriority="high"`. `decoding="async"` is strictly forbidden on LCP images to eliminate the >1,800 ms browser Element Render Delay.
+- **Asset Size Budgets & WebP Standard:** All public images must be encoded as WebP/AVIF. Public hero banners have a hard cap of 350 KB, and cards/thumbnails have a hard cap of 75 KB. Raw uncompressed PNGs (>250 KB) are prohibited on public routes.
+- **WCAG 2 AA/AAA Contrast & Disambiguation:** Interactive elements must meet minimum 4.5:1 (AA) and target 7:1 (AAA) contrast ratios. Repeated generic link text (e.g., "Case Study", "Partner werden") must declare explicit `aria-label` attributes.
+- **Automated Verification:** Enforced through Node 3 static analysis (`scripts/verify_agent_graph.js` Rule 16) on every build. Any violation immediately blocks compilation.
+- **Status:** **RATIFIED & RECORDED** on 2026-10-23.

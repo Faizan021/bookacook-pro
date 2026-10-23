@@ -42,7 +42,7 @@ export const Route = createFileRoute("/case-study/haus-spaas")({
         content:
           "Vom unleserlichen PDF-Menü zum digitalen Vorzeigelokal: Duale Speisekarte, PageSpeed 99 & 1-Klick WhatsApp-Reservierung für Haus Spaas.",
       },
-      { property: "og:image", content: "https://speisely.de/haus_spaas_desktop_hero.png" },
+      { property: "og:image", content: "https://speisely.de/haus_spaas_desktop_hero.webp" },
       { property: "og:url", content: "https://speisely.de/case-study/haus-spaas" },
     ],
     links: [{ rel: "canonical", href: "https://speisely.de/case-study/haus-spaas" }],
@@ -279,7 +279,7 @@ function HausSpaasCaseStudyPage() {
                     <span className="ml-2 truncate">haus-spaas.de</span>
                   </div>
                   <img
-                    src="/haus_spaas_desktop_hero.png"
+                    src="/haus_spaas_desktop_hero.webp"
                     alt="Haus Spaas Desktop Website"
                     className="w-full h-auto object-cover"
                   />

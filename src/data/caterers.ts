@@ -1366,7 +1366,7 @@ export const fallbackCaterers: Caterer[] = [
       "🎉 Jetzt anfragen: Exklusive Live-Rolex-Station & ostafrikanisches Buffet für Sommerfeste, Hochzeiten & Firmenevents in München!",
     gallery: [
       {
-        url: "/caterers/kampala-rolex-muenchen/02_veggie_rolex_signature.jpg",
+        url: "/caterers/kampala-rolex-muenchen/02_veggie_rolex_signature.webp",
         caption: {
           de: "Original Ugandan Veggie Rolex – Frisch gerolltes Chapati mit saftigem Gemüse-Omelett",
           en: "Original Ugandan Veggie Rolex – Freshly rolled chapati with savory vegetable omelette",
@@ -1532,7 +1532,7 @@ export const fallbackCaterers: Caterer[] = [
         unit: "Stück (Live zubereitet)",
         serves: 1,
         is_available: true,
-        image_url: "/caterers/kampala-rolex-muenchen/02_veggie_rolex_signature.jpg",
+        image_url: "/caterers/kampala-rolex-muenchen/02_veggie_rolex_signature.webp",
       },
       {
         id: "item-ugandan-rolex-chicken",

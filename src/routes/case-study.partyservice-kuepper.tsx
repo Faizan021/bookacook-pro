@@ -43,7 +43,7 @@ export const Route = createFileRoute("/case-study/partyservice-kuepper")({
         content:
           "Moderne Catering-Website mit Live-Kalkulator, Google AI Overviews Schema und PageSpeed 99+ für Partyservice Küpper.",
       },
-      { property: "og:image", content: "https://speisely.de/showcase-kuepper.png" },
+      { property: "og:image", content: "https://speisely.de/showcase-kuepper.webp" },
       { property: "og:url", content: "https://speisely.de/case-study/partyservice-kuepper" },
     ],
     links: [{ rel: "canonical", href: "https://speisely.de/case-study/partyservice-kuepper" }],
@@ -252,7 +252,7 @@ function PartyserviceKuepperCaseStudyPage() {
                   <span className="text-[#E6B84A]">Desktop Layout</span>
                 </div>
                 <img
-                  src="/showcase-kuepper.png"
+                  src="/showcase-kuepper.webp"
                   alt="Partyservice Küpper Desktop Website"
                   className="w-full h-auto object-cover max-h-[460px]"
                 />

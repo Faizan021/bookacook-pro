@@ -333,7 +333,7 @@ I will attach my own photos or videos to this email.`;
                     }
                     className="h-full w-full object-cover"
                     fetchPriority="high"
-                    decoding="async"
+                    decoding="sync"
                   />
                   <div className="absolute top-3 left-3 bg-[#173C32]/90 backdrop-blur-md text-[#FAF7F0] text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
                     ✨ The Chicken Krush

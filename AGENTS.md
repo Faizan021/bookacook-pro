@@ -632,3 +632,36 @@ Every UI component generated or modified for Speisely MUST adhere strictly to `d
 - **Typography:** Refined Editorial Serif (Georgia/Playfair) for headlines; Modern Sans (Inter) for UI labels and body.
 - **Card Styling:** `rounded-3xl border-2 border-[#083822]/15 bg-white p-4 sm:p-6 shadow-xl` with passe-partout inner padding.
 - **Zero Food Obstruction:** Badges and pills MUST NEVER float over food photos. Discarded or floating overlay badges are strictly forbidden.
+
+---
+
+## 24. Mandatory Google PageSpeed 90+ & WCAG AAA Accessibility Standard (Zero Performance Regression Policy)
+
+To ensure Speisely permanently retains top-tier Google PageSpeed Insights ratings (100 SEO, 100 Best Practices, 100 Accessibility, 90+ Performance, 3/3 Agentic Browsing) across both Mobile and Desktop:
+
+1. **Zero Render-Blocking Font Preloads:**
+   - **STRICTLY FORBIDDEN:** Never add `<link rel="preload" as="style" ...>` pointing to Google Fonts or external CSS sheets in `__root.tsx` or route heads. External fonts must be loaded purely non-blocking via `media="print" onload="this.media='all'"` with `<noscript>` fallback, or rely on system font fallbacks to preserve sub-second First Contentful Paint (FCP).
+   - Preconnect links are permitted strictly to `https://fonts.googleapis.com` and `https://fonts.gstatic.com` (with `crossOrigin: "anonymous"`).
+
+2. **Mandatory LCP Image Sync Decoding & Preloading:**
+   - Any above-the-fold or hero image declared as the Largest Contentful Paint (LCP) candidate (`fetchPriority="high"` / `fetchpriority="high"`) MUST explicitly declare `decoding="sync"`.
+   - Never use `decoding="async"` on LCP images, as it introduces a >1,800 ms browser Element Render Delay on mobile devices.
+   - Hero images must include a matching `<link rel="preload" as="image" type="image/webp" media="...">` declaration in `Route.head` to trigger early browser fetch before layout parsing.
+   - When a dedicated mobile hero asset exists (e.g. `hero-cinematic-mobile.webp`), never allow the desktop master asset to prefetch on mobile viewports; isolate via media queries (`media="(max-width: 768px)"` vs `media="(min-width: 769px)"`).
+
+3. **High-Density WebP Image Standard & Asset Budgets:**
+   - **STRICTLY FORBIDDEN:** Never commit or reference raw uncompressed PNGs or JPEGs (>250 KB) on public storefront, catering, restaurant, planner, case study, or magazine routes.
+   - All public imagery must be encoded as WebP (or AVIF) with maximum budget of **350 KB** for high-density retina master heroes and **<75 KB** for cards, menu items, and thumbnails.
+   - Always enclose multi-column or mobile card photos in responsive `<picture>` elements to serve compact resolutions to phone viewports.
+
+4. **100% WCAG AAA Contrast & Link Disambiguation:**
+   - All interactive elements (buttons, links, inputs, badges) must meet or exceed WCAG 2 AA minimum contrast (4.5:1) and target WCAG AAA (7:1).
+   - Never use opacity tokens like `text-white/40`, `text-forest/50`, or low-contrast emerald tints on readable body text or interactive labels.
+   - Generic action links (e.g., "Case Study", "Partner werden", "Jetzt anfragen") must ALWAYS declare a descriptive `aria-label` attribute (e.g., `aria-label="Case Study Partyservice Küpper lesen"`) so screen readers and automated accessibility engines never encounter ambiguous link descriptions.
+   - Headings must maintain strict sequential order (`h1` ➔ `h2` ➔ `h3`), never skipping heading levels.
+
+5. **Agentic Browsing (`llms.txt`) Standard:**
+   - All entries in `public/llms.txt`, `public/llms-full.txt`, and `src/routes/llms[.]txt.ts` must adhere to standard Markdown link syntax: `- [Page Title](https://speisely.de/path): Plain text summary`.
+
+6. **Automated Compiler Enforcement (`verify:graph` Rule 16):**
+   - `scripts/verify_agent_graph.js` (Rule 16) automatically audits font preloads, LCP sync decoding, asset size budgets, and link accessibility on every build. Any violation halts `npm run build` immediately before code can be deployed.

@@ -377,7 +377,7 @@ function BbqChickenBerlinStory() {
                 <div>
                   <div className="relative aspect-square rounded-2xl overflow-hidden bg-forest/5 mb-3">
                     <img
-                      src="/magazin/bbq-chicken-berlin/menu_black_pepper_hd.png"
+                      src="/magazin/bbq-chicken-berlin/menu_black_pepper_hd.webp"
                       alt="Black Pepper Fried Chicken"
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                       loading="lazy"
@@ -401,7 +401,7 @@ function BbqChickenBerlinStory() {
                 <div>
                   <div className="relative aspect-square rounded-2xl overflow-hidden bg-forest/5 mb-3">
                     <img
-                      src="/magazin/bbq-chicken-berlin/menu_cheesling_hd.png"
+                      src="/magazin/bbq-chicken-berlin/menu_cheesling_hd.webp"
                       alt="Cheesling Fried Chicken"
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                       loading="lazy"
@@ -425,7 +425,7 @@ function BbqChickenBerlinStory() {
                 <div>
                   <div className="relative aspect-square rounded-2xl overflow-hidden bg-forest/5 mb-3">
                     <img
-                      src="/magazin/bbq-chicken-berlin/menu_lemon_cheesling_hd.png"
+                      src="/magazin/bbq-chicken-berlin/menu_lemon_cheesling_hd.webp"
                       alt="Lemon Cheesling Fried Chicken"
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                       loading="lazy"
@@ -450,7 +450,7 @@ function BbqChickenBerlinStory() {
                 <div>
                   <div className="relative aspect-square rounded-2xl overflow-hidden bg-forest/5 mb-3">
                     <img
-                      src="/magazin/bbq-chicken-berlin/menu_secret_hd.png"
+                      src="/magazin/bbq-chicken-berlin/menu_secret_hd.webp"
                       alt="Secret Sauce Fried Chicken"
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                       loading="lazy"
@@ -475,7 +475,7 @@ function BbqChickenBerlinStory() {
                 <div>
                   <div className="relative aspect-square rounded-2xl overflow-hidden bg-forest/5 mb-3">
                     <img
-                      src="/magazin/bbq-chicken-berlin/menu_galbi_hd.png"
+                      src="/magazin/bbq-chicken-berlin/menu_galbi_hd.webp"
                       alt="Galbi Korean BBQ Sauce"
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                       loading="lazy"
@@ -500,7 +500,7 @@ function BbqChickenBerlinStory() {
                 <div>
                   <div className="relative aspect-square rounded-2xl overflow-hidden bg-forest/5 mb-3">
                     <img
-                      src="/magazin/bbq-chicken-berlin/menu_honey_garlic_hd.png"
+                      src="/magazin/bbq-chicken-berlin/menu_honey_garlic_hd.webp"
                       alt="Honey Garlic Fried Chicken"
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                       loading="lazy"

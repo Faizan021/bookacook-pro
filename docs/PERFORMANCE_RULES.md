@@ -18,10 +18,26 @@ This document defines performance standards, bundle size controls, caching guide
 
 ## 2. Frontend & Asset Optimization
 
-- **Responsive & Next-Gen Images:**
-  - Use WebP image presets and optimized image URLs for banners, cards, and avatars. Avoid serving raw 5MB+ uncompressed PNGs.
+- **Zero Render-Blocking Font Preloads:**
+  - Never use `<link rel="preload" as="style">` for external Google Fonts stylesheets. External font preloads compete with critical CSS on mobile 4G and delay First Contentful Paint (FCP) by 800ms+.
+  - Always load Google Fonts asynchronously via the non-blocking print stylesheet pattern (`media="print" onload="this.media='all'"`) with `<noscript>` fallback.
+  - Allow browsers to immediately render system fallback fonts with zero FOIT (flash of invisible text) and swap fonts smoothly once loaded.
+
+- **Mandatory LCP Image Sync Decoding & Preloading:**
+  - The Largest Contentful Paint (LCP) hero image (`fetchPriority="high"`) MUST use `decoding="sync"`.
+  - `decoding="async"` on LCP images creates a >1,800 ms Element Render Delay in Lighthouse mobile audits because the browser thread delays decoding until layout work finishes.
+  - Preload the LCP image in `Route.head` with explicit `type="image/webp"` and `media` queries.
+  - When a mobile hero exists (e.g. `hero-cinematic-mobile.webp`), isolate desktop master assets using `<picture>` and media queries so phones never download the desktop image.
+
+- **Responsive & Next-Gen Images (<350 KB Budget):**
+  - All public imagery must be encoded as WebP (or AVIF).
+  - Maximum size budget: **350 KB** for high-res retina master hero banners; **<75 KB** for cards, menu items, and thumbnails.
+  - Commit zero uncompressed PNGs or JPEGs (>250 KB) on public storefront, catering, restaurant, planner, case study, or magazine routes.
+  - Wrap card images in responsive `<picture>` tags to serve 480px WebP images to mobile viewports instead of 1200px desktop assets.
+
 - **Layout Shift Prevention (CLS):**
   - Always specify aspect ratios or fixed dimension skeletons for dynamic media, hero banners, and menu item cards.
+
 - **Query & Data Fetching:**
   - Avoid redundant refetches and overfetching. Use TanStack Query stale-time configurations (`staleTime: 5 * 60 * 1000`) for non-volatile public data.
 
@@ -29,9 +45,16 @@ This document defines performance standards, bundle size controls, caching guide
 
 ## 3. Performance Budgets & Production Verification
 
-- Protect Core Web Vitals (LCP < 2.5s, FID/INP < 200ms, CLS < 0.1).
-- Protect client JS bundle sizes.
-- Every production deploy must pass `npm run smoke:test` to verify zero catastrophic render failures.
+- **Target Metrics (Mobile & Desktop):**
+  - Performance: **90+** (LCP < 2.5s, FCP < 1.8s, TBT < 200ms, CLS < 0.05).
+  - Accessibility: **100/100** (WCAG 2 AA/AAA contrast, unique `aria-label`s on generic links, strict sequential headings `h1` ➔ `h2` ➔ `h3`).
+  - Best Practices: **100/100** (HTTPS, modern image formats, clean aspect ratios).
+  - SEO: **100/100** (Canonical tags, SERP-length titles/descriptions, structured schema).
+  - Agentic Browsing: **3/3** (Standard Markdown link format in `/llms.txt`).
+
+- **Automated Compiler Gate (`verify:graph` Rule 16):**
+  - Every build runs `scripts/verify_agent_graph.js` (Rule 16), which validates zero render-blocking font preloads, LCP sync decoding, asset size budgets (<350 KB), and accessible link descriptions.
+  - If any performance violation is detected, `npm run build` halts immediately before deployment.
 
 ---
 
