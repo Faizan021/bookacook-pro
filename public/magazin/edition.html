@@ -225,6 +225,48 @@
     .ticker-track:hover {
       animation-play-state: paused;
     }
+
+    /* Interactive Magazine Hotspots (ISJ / PageSuite Standard) */
+    .mag-hotspot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(14, 28, 20, 0.92);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(230, 184, 74, 0.6);
+      color: #FAF8F5;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.45);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+      z-index: 25;
+      text-decoration: none;
+    }
+    .mag-hotspot:hover {
+      background: #E6B84A;
+      color: #083822;
+      border-color: #E6B84A;
+      transform: translateY(-1px) scale(1.05);
+      box-shadow: 0 14px 30px -4px rgba(230, 184, 74, 0.4);
+    }
+    .mag-hotspot .hotspot-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34D399;
+      animation: hotspotPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes hotspotPing {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    }
   </style>
 </head>
 
@@ -699,9 +741,9 @@
             <span class="lang-en">Start Free</span>
           </span>
         </div>
-        <a href="https://speisely.de/partners" target="_blank" class="inline-flex items-center gap-1 bg-gradient-to-r from-amber-400 to-[#E6B84A] hover:brightness-110 text-[#0B0F14] font-sans font-bold text-[8px] uppercase tracking-wide px-2.5 py-2 rounded transition shadow-lg whitespace-nowrap">
-          <span>SPEISELY.DE/PRO</span>
-          <span class="text-[9px]">↗</span>
+        <a href="https://speisely.de/partners" target="_blank" class="mag-hotspot inline-flex">
+          <span class="hotspot-pulse"></span>
+          <span>SPEISELY PRO FREISCHALTEN ↗</span>
         </a>
       </div>
     </div>
@@ -902,6 +944,11 @@
                   <span class="lang-de">✦ WIESN-KLASSIKER · GOLDENE ROTISSERIE</span>
                   <span class="lang-en">✦ FESTIVAL CLASSIC · GOLDEN ROTISSERIE</span>
                 </div>
+                <!-- Interactive PageSuite Hotspot -->
+                <a href="https://speisely.de/magazin/wiesn-hendl-oktoberfest" target="_blank" class="mag-hotspot absolute top-2 right-2">
+                  <span class="hotspot-pulse"></span>
+                  <span>🍗 WIRTSHAUS-REZEPT ↗</span>
+                </a>
                 <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent px-2.5 py-1.5 text-white flex justify-between items-end">
                   <span class="text-[7.5px] font-sans text-gray-200 italic leading-tight">
                     <span class="lang-de">Goldgelb soufflierte Kruste, frische Petersilienbutter und ofenfrische Riesenbrezen.</span>
@@ -1561,11 +1608,16 @@
 
             <!-- Hero Image: King Burger (most dramatic) -->
             <div class="my-1">
-              <div class="h-[200px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative">
+              <div class="h-[200px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative group">
                 <img src="/magazin/thronburger-berlin/thronburger-king.png" alt="Thronburger King Stacker Halal Beef Berlin" class="w-full h-full object-cover" style="object-position: center 60%; filter: contrast(1.08) saturate(1.15);">
                 <div class="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[7.5px] font-mono font-semibold text-white border border-white/20 shadow-sm">
                   🍔 Signature King Stack · Halal Angus
                 </div>
+                <!-- Interactive PageSuite Hotspot -->
+                <a href="https://speisely.de/magazin/thronburger-berlin" target="_blank" class="mag-hotspot absolute bottom-2.5 right-2.5">
+                  <span class="hotspot-pulse"></span>
+                  <span>🍔 KIEZ-GUIDE ÖFFNEN ↗</span>
+                </a>
               </div>
               <span class="text-[7.5px] font-sans italic text-charcoal-muted mt-0.5 block">
                 <span class="lang-de">Foto: Thronburger (Webseite &amp; Social Media). Der King Stack — doppelter Angus-Patty, Cheddar, Crispy Onion Rings auf Sesam-Brioche.</span>
@@ -1762,11 +1814,16 @@
 
             <!-- Hero Image: skewers on silver platter -->
             <div class="my-1">
-              <div class="h-[200px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative">
+              <div class="h-[200px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative group">
                 <img src="/magazin/alzaeem-berlin/alzaeem-spiesse-hero.jpg" alt="Alzaeem Holzkohle Spieße Sonnenallee Berlin" class="w-full h-full object-cover" style="object-position: center 48%; filter: contrast(1.08) saturate(1.18) brightness(1.03);">
                 <div class="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[7.5px] font-mono font-semibold text-white border border-white/20 shadow-sm">
                   🔥 Mix Grill #44 · Holzkohle-Spieße &amp; Fladenbrot
                 </div>
+                <!-- Interactive PageSuite Hotspot -->
+                <a href="https://speisely.de/magazin/alzaeem-restaurant-berlin" target="_blank" class="mag-hotspot absolute bottom-2.5 right-2.5">
+                  <span class="hotspot-pulse"></span>
+                  <span>🔥 ALZAEEM STORY ↗</span>
+                </a>
               </div>
               <span class="text-[7.5px] font-sans italic text-charcoal-muted mt-0.5 block">
                 <span class="lang-de">Foto: Alzaeem (Webseite &amp; Social Media). Frische Kabob- und Fleischspieße mit geschmortem Gemüse auf Servierplatte.</span>
@@ -1962,11 +2019,16 @@
 
             <!-- Hero Image: Mandi Reisplatte -->
             <div class="my-1">
-              <div class="h-[200px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative">
+              <div class="h-[200px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative group">
                 <img src="/magazin/mandy/mandy-lamm-zwei-topdown.png" alt="Restaurant Mandy Mandi Reisplatte Lamm Berlin Neukölln" class="w-full h-full object-cover" style="object-position: center 38%; filter: contrast(1.08) saturate(1.18) brightness(1.03);">
                 <div class="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[7.5px] font-mono font-semibold text-white border border-white/20 shadow-sm">
                   🍖 Mandi Lamm für Zwei · Hadhramaut Tradition
                 </div>
+                <!-- Interactive PageSuite Hotspot -->
+                <a href="https://speisely.de/magazin/restaurant-mandy-berlin" target="_blank" class="mag-hotspot absolute bottom-2.5 right-2.5">
+                  <span class="hotspot-pulse"></span>
+                  <span>🍖 MANDY REPORTAGE ↗</span>
+                </a>
               </div>
               <span class="text-[7.5px] font-sans italic text-charcoal-muted mt-0.5 block">
                 <span class="lang-de">Foto: Restaurant Mandy (Webseite &amp; Social Media). Die große Mandi-Reisplatte für zwei mit geschmortem Lamm, Cashews und Sahawij-Sauce.</span>
@@ -2162,11 +2224,16 @@
 
             <!-- Hero Image: Buffet & Holographic AI Layer -->
             <div class="my-0.5">
-              <div class="h-[145px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative">
+              <div class="h-[145px] rounded-sm overflow-hidden border border-forest/15 shadow-md relative group">
                 <img src="/magazin/techglanz/speisely_techglanz_magazine_hero.jpg" alt="Küche trifft KI-Suche — Das TechGlanz Prinzip" class="w-full h-full object-cover" style="object-position: center 40%;">
                 <div class="absolute top-2 left-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[7px] font-mono font-semibold text-cyan-300 border border-white/20 shadow-sm">
                   🤖 KI-Suche &amp; Gastronomie · Multi-Model Attribution
                 </div>
+                <!-- Interactive PageSuite Hotspot -->
+                <a href="https://speisely.de/magazin/techglanz-geo-ki-gastronomie" target="_blank" class="mag-hotspot absolute bottom-2.5 right-2.5">
+                  <span class="hotspot-pulse"></span>
+                  <span>🤖 TECHGLANZ REPORT ↗</span>
+                </a>
               </div>
               <span class="text-[7.5px] font-sans italic text-charcoal-muted mt-0.5 block">
                 <span class="lang-de">Foto: TechGlanz. Das Buffet der Zukunft: Während Speisen serviert werden, analysieren generative KI-Suchmaschinen im Hintergrund, welche Caterer empfohlen werden.</span>
@@ -2534,9 +2601,10 @@
           <span class="lang-en">Summer celebrations, summits, exhibitions &amp; galas – direct and commission-free.</span>
         </p>
       </div>
-      <a href="https://speisely.de/catering" target="_blank" class="bg-gold hover:bg-gold-light text-forest-dark font-sans font-bold text-[7.5px] uppercase tracking-wider px-2.5 py-1.5 rounded transition shrink-0 whitespace-nowrap shadow">
-        <span class="lang-de">Caterer finden ↗</span>
-        <span class="lang-en">Find Caterer ↗</span>
+      <a href="https://speisely.de/catering" target="_blank" class="mag-hotspot shrink-0 whitespace-nowrap">
+        <span class="hotspot-pulse"></span>
+        <span class="lang-de">CATERER FINDEN ↗</span>
+        <span class="lang-en">FIND CATERER ↗</span>
       </a>
     </div>
 
@@ -3665,9 +3733,9 @@
         rafResize = requestAnimationFrame(() => {
           const main = document.querySelector('main');
           if (!main) return;
-          const availH = Math.max(260, main.clientHeight - 30);
+          const availH = Math.max(260, main.clientHeight - 8);
           const isMobileWidth = main.clientWidth < 640;
-          const sidePadding = isMobileWidth ? 115 : (main.clientWidth < 1024 ? 40 : 100);
+          const sidePadding = isMobileWidth ? 70 : (main.clientWidth < 1024 ? 30 : 60);
           const availW = Math.max(220, main.clientWidth - sidePadding);
           
           const isPortraitMode = flipbook && typeof flipbook.getOrientation === 'function' 
@@ -3678,7 +3746,8 @@
           const scaleH = availH / 740;
           const scaleW = availW / bookW;
           
-          let targetScale = Math.min(scaleH, scaleW, 1.0);
+          // Maximize canvas fill like ISJ / PageSuite (scale up to 1.35x on high-res monitors)
+          let targetScale = Math.min(scaleH, scaleW, 1.35);
           targetScale = Math.max(0.25, Math.round(targetScale * 100) / 100);
           updateZoom(targetScale);
         });
