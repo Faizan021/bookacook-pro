@@ -75,12 +75,25 @@ function MagazineReaderPage() {
             </div>
           </div>
 
+          {/* Reader Usage Guidance */}
+          <div className="flex items-center justify-between text-[11px] text-white/65 mb-2 px-1">
+            <span>
+              📖{" "}
+              {isDe
+                ? "Tipp: Doppelklick zum Vergrößern · Pfeiltasten ◀ ▶ oder Rand ziehen zum Blättern"
+                : "Tip: Double-click to zoom · Use arrow keys ◀ ▶ or drag corners to flip"}
+            </span>
+            <span className="hidden sm:inline text-[#E6B84A] font-bold">
+              ✦ Interaktives 3D-Doppelseiten-Layout
+            </span>
+          </div>
+
           {/* Embedded Flipbook Frame */}
           <div className="rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-[#0d1217] relative">
             <iframe
               src="/magazin/edition.html"
               title="Speisely Magazin Digital Edition"
-              className="w-full h-[76vh] min-h-[560px] sm:h-[860px] border-0"
+              className="w-full h-[calc(100vh-185px)] min-h-[580px] max-h-[820px] border-0"
               allow="fullscreen"
               loading="lazy"
             />

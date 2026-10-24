@@ -1,6 +1,7 @@
 import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-router";
 import { getGeoPageData } from "@/lib/geo/server.functions";
 import { SiteShell } from "@/components/SiteShell";
+import { CityCrossLinks } from "@/components/geo/CityCrossLinks";
 import {
   MapPin,
   Star,
@@ -518,6 +519,12 @@ function GeoCateringPage() {
           />
         </section>
       )}
+      {/* City Cross-Linking Hub (pSEO equity & cross-vertical discovery) */}
+      <CityCrossLinks
+        cityName={location.name}
+        citySlug={location.slug || location.name.toLowerCase().replace(/\s+/g, "-")}
+        currentVertical="catering"
+      />
     </SiteShell>
   );
 }

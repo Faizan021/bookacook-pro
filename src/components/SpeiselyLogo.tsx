@@ -1,29 +1,25 @@
-function CustomCrossedCutlery({
-  className,
-  strokeWidth = 2,
-}: {
-  className?: string;
-  strokeWidth?: number;
-}) {
+function CustomCrossedCutlery({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 32 32"
+      viewBox="0 0 100 100"
       className={className}
-      stroke="currentColor"
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="none"
+      fill="currentColor"
+      aria-hidden="true"
     >
-      <g transform="translate(4,4)">
-        <g transform="rotate(45, 12, 12) translate(5, 0)">
-          <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
-          <path d="M7 2v20" />
-        </g>
-        <g transform="rotate(-45, 12, 12) translate(-7.5, 0)">
-          <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
-        </g>
+      {/* Spoon rotated 42 deg around center (50, 50) */}
+      <g transform="rotate(42 50 50)">
+        <ellipse cx="50" cy="22" rx="11" ry="16" />
+        <rect x="46" y="34" width="8" height="42" rx="4" />
+      </g>
+
+      {/* Fork rotated -42 deg around center (50, 50) */}
+      <g transform="rotate(-42 50 50)">
+        <rect x="40.5" y="8" width="4.5" height="18" rx="2.25" />
+        <rect x="47.75" y="8" width="4.5" height="18" rx="2.25" />
+        <rect x="55" y="8" width="4.5" height="18" rx="2.25" />
+        <path d="M 39 23 C 39 29, 45 32, 46 34 L 54 34 C 55 32, 61 29, 61 23 Z" />
+        <rect x="46" y="33" width="8" height="43" rx="4" />
       </g>
     </svg>
   );
@@ -36,20 +32,23 @@ export function SpeiselyLogo({
   size?: "sm" | "md" | "lg";
   variant?: "dark" | "light";
 }) {
-  const dims = size === "lg" ? "h-14 w-14" : size === "sm" ? "h-9 w-9" : "h-11 w-11";
-  const text = size === "lg" ? "text-3xl" : size === "sm" ? "text-xl" : "text-2xl";
-  const textColor = variant === "light" ? "text-[oklch(0.97_0.02_92)]" : "text-forest";
-  const iconBg = variant === "light" ? "bg-[oklch(0.97_0.02_92)]/15" : "bg-forest";
-  const iconColor =
-    variant === "light" ? "text-[oklch(0.97_0.02_92)]" : "text-[oklch(0.97_0.02_92)]";
+  const dims = size === "lg" ? "h-12 w-12" : size === "sm" ? "h-8 w-8" : "h-10 w-10";
+  const iconSize = size === "lg" ? "h-7 w-7" : size === "sm" ? "h-5 w-5" : "h-6 w-6";
+  const text = size === "lg" ? "text-3xl" : size === "sm" ? "text-lg" : "text-2xl";
+  const textColor = variant === "light" ? "text-[#F6F4EB]" : "text-forest";
+  const iconBg = variant === "light" ? "bg-white/15" : "bg-forest";
+  const iconColor = variant === "light" ? "text-[#F6F4EB]" : "text-[#F6F4EB]";
+
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2.5 select-none">
       <div
-        className={`${dims} grid place-items-center rounded-full ${iconBg} ${iconColor} shrink-0`}
+        className={`${dims} grid place-items-center rounded-full ${iconBg} ${iconColor} shrink-0 shadow-sm`}
       >
-        <CustomCrossedCutlery className="h-6 w-6" strokeWidth={2} />
+        <CustomCrossedCutlery className={iconSize} />
       </div>
-      <span className={`font-display ${text} font-bold tracking-tight ${textColor}`}>Speisely</span>
+      <span className={`font-sans font-extrabold tracking-tight ${text} ${textColor}`}>
+        Speisely
+      </span>
     </div>
   );
 }

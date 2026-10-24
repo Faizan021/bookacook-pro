@@ -269,16 +269,20 @@
   <main class="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#131f17] via-[#0b120e] to-[#060a08]">
     
     <!-- Prev Arrow -->
-    <button id="arrow-left" class="absolute left-3 sm:left-6 z-40 p-2.5 rounded-full bg-black/60 hover:bg-gold hover:text-forest-dark border border-white/15 text-white backdrop-blur-md shadow-xl transition transform hover:scale-105 active:scale-95">
+    <button id="arrow-left" title="Vorherige Seite (←)" class="absolute left-2 sm:left-4 z-40 p-3 sm:p-3.5 rounded-full bg-black/75 hover:bg-[#E6B84A] hover:text-[#083822] border border-[#E6B84A]/30 text-white backdrop-blur-md shadow-2xl transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer">
       <i data-lucide="chevron-left" class="w-5 h-5"></i>
     </button>
 
     <!-- Next Arrow -->
-    <button id="arrow-right" class="absolute right-3 sm:right-6 z-40 p-2.5 rounded-full bg-black/60 hover:bg-gold hover:text-forest-dark border border-white/15 text-white backdrop-blur-md shadow-xl transition transform hover:scale-105 active:scale-95">
+    <button id="arrow-right" title="Nächste Seite (→)" class="absolute right-2 sm:right-4 z-40 p-3 sm:p-3.5 rounded-full bg-black/75 hover:bg-[#E6B84A] hover:text-[#083822] border border-[#E6B84A]/30 text-white backdrop-blur-md shadow-2xl transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer">
       <i data-lucide="chevron-right" class="w-5 h-5"></i>
     </button>
 
     <!-- Viewport Container -->
+    <div id="flipbook-spinner">
+      <div class="w-8 h-8 border-2 border-[#E6B84A] border-t-transparent rounded-full animate-spin"></div>
+      <span class="tracking-wider uppercase text-xs text-white/80">3D-Magazin wird geladen...</span>
+    </div>
     <div id="magazine-viewport">
       <div id="flipbook" class="shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)]">
 
@@ -2951,6 +2955,7 @@
         setLanguage(savedLang);
       } catch (e) {}
 
+      const viewport = document.getElementById('magazine-viewport');
       const flipContainer = document.getElementById('flipbook');
       if (!flipContainer) return;
 
@@ -2965,7 +2970,7 @@
         maxShadowOpacity: 0.35,
         showCover: true,
         mobileScrollSupport: false,
-        usePortrait: true,
+        usePortrait: false,
         startPage: 0
       });
 
@@ -2986,11 +2991,11 @@
         if (display) {
           const isPortrait = flipbook && typeof flipbook.getOrientation === 'function' && flipbook.getOrientation() === 'portrait';
           if (isPortrait) {
-            display.innerText = (pageIdx + 1) + ' / ' + total;
+            display.innerText = (pageIdx === 0 ? 'Cover · 1 / ' : (pageIdx + 1) + ' / ') + total;
           } else {
             if (pageIdx === 0) {
-              display.innerText = '1 / ' + total;
-            } else if (pageIdx === 17) {
+              display.innerText = 'Cover · 1 / ' + total;
+            } else if (pageIdx >= 17) {
               display.innerText = total + ' / ' + total;
             } else {
               const leftPage = pageIdx + 1;
@@ -3001,10 +3006,20 @@
         }
       });
 
+      // Double click to zoom in/out for reading small text easily
+      viewport.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        const currentScale = parseFloat(zoomSlider ? zoomSlider.value : '0.85');
+        if (currentScale < 1.05) {
+          updateZoom(1.25);
+        } else {
+          fitToScreen();
+        }
+      });
+
       // Zoom & Responsive Fit-to-Screen Controller (INP Optimized via requestAnimationFrame)
       const zoomSlider = document.getElementById('zoom-slider');
       const zoomValue = document.getElementById('zoom-value');
-      const viewport = document.getElementById('magazine-viewport');
       let rafZoom = null;
       let rafResize = null;
 
@@ -3023,8 +3038,8 @@
         rafResize = requestAnimationFrame(() => {
           const main = document.querySelector('main');
           if (!main) return;
-          const availH = main.clientHeight - 24;
-          const availW = main.clientWidth - 20;
+          const availH = Math.max(280, main.clientHeight - 115);
+          const availW = Math.max(300, main.clientWidth - 120);
           
           const isPortrait = (flipbook && typeof flipbook.getOrientation === 'function' && flipbook.getOrientation() === 'portrait') || main.clientWidth < 900;
           const bookW = isPortrait ? 520 : 1040;
@@ -3053,13 +3068,36 @@
       fitToScreen();
       window.addEventListener('resize', fitToScreen, { passive: true });
 
+      // Guaranteed Next/Prev Navigation across all browsers and devices
+      function turnNext() {
+        if (!flipbook) return;
+        try {
+          flipbook.flipNext('bottom');
+        } catch (e) {
+          try {
+            flipbook.turnToNextPage();
+          } catch (err) {}
+        }
+      }
+
+      function turnPrev() {
+        if (!flipbook) return;
+        try {
+          flipbook.flipPrev('bottom');
+        } catch (e) {
+          try {
+            flipbook.turnToPrevPage();
+          } catch (err) {}
+        }
+      }
+
       // Navigation Controls
-      document.getElementById('btn-first')?.addEventListener('click', () => flipbook.flip(0));
-      document.getElementById('btn-prev')?.addEventListener('click', () => flipbook.flipPrev());
-      document.getElementById('btn-next')?.addEventListener('click', () => flipbook.flipNext());
-      document.getElementById('btn-last')?.addEventListener('click', () => flipbook.flip(17));
-      document.getElementById('arrow-left')?.addEventListener('click', () => flipbook.flipPrev());
-      document.getElementById('arrow-right')?.addEventListener('click', () => flipbook.flipNext());
+      document.getElementById('btn-first')?.addEventListener('click', () => flipbook && flipbook.flip(0));
+      document.getElementById('btn-prev')?.addEventListener('click', turnPrev);
+      document.getElementById('btn-next')?.addEventListener('click', turnNext);
+      document.getElementById('btn-last')?.addEventListener('click', () => flipbook && flipbook.flip(17));
+      document.getElementById('arrow-left')?.addEventListener('click', turnPrev);
+      document.getElementById('arrow-right')?.addEventListener('click', turnNext);
 
       // Audio Toggle
       const audioBtn = document.getElementById('btn-audio');
@@ -3099,9 +3137,9 @@
       // Keyboard navigation
       window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === 'PageDown') {
-          if (flipbook) flipbook.flipNext();
+          turnNext();
         } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-          if (flipbook) flipbook.flipPrev();
+          turnPrev();
         } else if (e.key === 'Home') {
           if (flipbook) flipbook.flip(0);
         } else if (e.key === 'End') {
