@@ -61,8 +61,8 @@
     }
 
     body {
-      background-color: #070e0a;
-      color: #1A1E1B;
+      background-color: #EDEAE3;
+      color: #14281D;
       font-family: 'Inter', sans-serif;
       overflow: hidden;
       margin: 0;
@@ -104,7 +104,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-color: #070e0a;
+      background-color: #EDEAE3;
       z-index: 50;
       transition: opacity 0.4s ease, visibility 0.4s ease;
     }
@@ -121,7 +121,7 @@
       overflow: hidden;
       position: relative;
       box-sizing: border-box;
-      box-shadow: 0 0 25px rgba(0,0,0,0.18);
+      box-shadow: 0 0 25px rgba(20, 40, 29, 0.12);
       backface-visibility: hidden;
     }
 
@@ -208,66 +208,66 @@
   </style>
 </head>
 
-<body class="flex flex-col h-screen w-screen select-none bg-[#070e0a]" data-lang="de">
+<body class="flex flex-col h-screen w-screen select-none bg-[#EDEAE3]" data-lang="de">
 
   <!-- ========================================================================= -->
   <!-- 1. PAGESUITE ENTERPRISE TOP TOOLBAR                                       -->
   <!-- ========================================================================= -->
-  <header class="h-12 bg-[#09110d]/95 backdrop-blur-xl border-b border-white/10 px-2 sm:px-4 flex items-center justify-between z-50 text-xs text-gray-300 flex-shrink-0 gap-1.5 sm:gap-3 select-none">
+  <header class="h-12 bg-[#FAF8F5]/95 backdrop-blur-xl border-b border-[#14281D]/10 px-2 sm:px-4 flex items-center justify-between z-50 text-xs text-[#14281D] flex-shrink-0 gap-1.5 sm:gap-3 select-none">
     
     <!-- Left: Back Button & Branding & Drawers -->
     <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-      <a href="/magazin" target="_top" title="Zurück zum Magazin" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-300 transition text-[11px] font-semibold">
+      <a href="/magazin" target="_top" title="Zurück zum Magazin" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-black/[0.04] hover:bg-gold/20 hover:text-[#083822] border border-black/10 text-[#14281D] transition text-[11px] font-semibold">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
         <span class="hidden md:inline">Zurück</span>
       </a>
 
-      <div class="h-4 w-px bg-white/15 hidden sm:block"></div>
+      <div class="h-4 w-px bg-[#14281D]/15 hidden sm:block"></div>
 
       <!-- Publication Branding -->
       <a href="/magazin" target="_top" class="flex items-center gap-2 hover:opacity-90 transition">
         <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-6 h-6 rounded object-cover border border-gold/40 shadow-sm shrink-0">
         <div class="flex flex-col leading-tight">
-          <span class="font-serif text-[11px] sm:text-xs font-bold tracking-wider text-white whitespace-nowrap">SPEISELY JOURNAL</span>
-          <span class="text-[8.5px] text-gold tracking-widest uppercase font-medium hidden sm:inline">Ausgabe 01 · 2026</span>
+          <span class="font-serif text-[11px] sm:text-xs font-bold tracking-wider text-[#14281D] whitespace-nowrap">SPEISELY JOURNAL</span>
+          <span class="text-[8.5px] text-[#8C6D1F] tracking-widest uppercase font-medium hidden sm:inline">Ausgabe 01 · 2026</span>
         </div>
       </a>
 
       <!-- Primary Feature Drawers (Menu / Pages / Articles / Search) -->
       <div class="flex items-center gap-1 ml-1 sm:ml-2">
-        <button id="btn-toc" title="Inhaltsverzeichnis" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
-          <i data-lucide="menu" class="w-3.5 h-3.5 text-gold"></i>
+        <button id="btn-toc" title="Inhaltsverzeichnis" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-black/[0.04] hover:bg-gold/20 hover:text-[#083822] border border-black/10 text-[#14281D] transition font-medium text-[11px]">
+          <i data-lucide="menu" class="w-3.5 h-3.5 text-[#B8860B]"></i>
           <span class="hidden lg:inline">Inhalt</span>
         </button>
 
-        <button id="btn-thumbnails" title="Seitenübersicht" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
-          <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-gold"></i>
+        <button id="btn-thumbnails" title="Seitenübersicht" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-black/[0.04] hover:bg-gold/20 hover:text-[#083822] border border-black/10 text-[#14281D] transition font-medium text-[11px]">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#B8860B]"></i>
           <span class="hidden lg:inline">Seiten</span>
         </button>
 
-        <button id="btn-articles" title="Artikel-Leseansicht (Text Mode)" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
-          <i data-lucide="file-text" class="w-3.5 h-3.5 text-gold"></i>
+        <button id="btn-articles" title="Artikel-Leseansicht (Text Mode)" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-black/[0.04] hover:bg-gold/20 hover:text-[#083822] border border-black/10 text-[#14281D] transition font-medium text-[11px]">
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#B8860B]"></i>
           <span class="hidden xl:inline">Artikel</span>
         </button>
 
-        <button id="btn-search" title="Volltextsuche" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
-          <i data-lucide="search" class="w-3.5 h-3.5 text-gold"></i>
+        <button id="btn-search" title="Volltextsuche" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-black/[0.04] hover:bg-gold/20 hover:text-[#083822] border border-black/10 text-[#14281D] transition font-medium text-[11px]">
+          <i data-lucide="search" class="w-3.5 h-3.5 text-[#B8860B]"></i>
           <span class="hidden xl:inline">Suche</span>
         </button>
       </div>
     </div>
 
     <!-- Center: Page Display & Quick Turn -->
-    <div class="flex items-center bg-[#131f18] rounded-lg border border-white/15 px-1 py-0.5 shrink-0 shadow-inner">
-      <button id="btn-prev" title="Vorherige Seite (←)" class="p-1 hover:bg-white/10 hover:text-white rounded transition">
+    <div class="flex items-center bg-black/[0.04] rounded-lg border border-black/10 px-1 py-0.5 shrink-0 shadow-sm">
+      <button id="btn-prev" title="Vorherige Seite (←)" class="p-1 hover:bg-black/5 hover:text-black rounded transition">
         <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
       </button>
       
-      <div class="px-1.5 py-0.5 font-mono text-[10.5px] sm:text-xs font-semibold text-white tracking-wider min-w-[70px] text-center">
+      <div class="px-1.5 py-0.5 font-mono text-[10.5px] sm:text-xs font-semibold text-[#14281D] tracking-wider min-w-[70px] text-center">
         <span id="page-display">Cover · 1 / 18</span>
       </div>
 
-      <button id="btn-next" title="Nächste Seite (→)" class="p-1 hover:bg-white/10 hover:text-white rounded transition">
+      <button id="btn-next" title="Nächste Seite (→)" class="p-1 hover:bg-black/5 hover:text-black rounded transition">
         <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
       </button>
     </div>
@@ -275,14 +275,14 @@
     <!-- Right: View & Share Utilities -->
     <div class="flex items-center gap-1 sm:gap-2 shrink-0">
       <!-- DE / EN Language Toggle Pill -->
-      <div class="flex items-center bg-[#131f18] rounded-lg border border-white/15 p-0.5 text-[10.5px] font-semibold shrink-0">
+      <div class="flex items-center bg-black/[0.04] rounded-lg border border-black/10 p-0.5 text-[10.5px] font-semibold shrink-0">
         <button id="lang-btn-de" class="px-1.5 py-0.5 rounded bg-gold text-forest-dark font-bold transition shadow-sm" title="Deutsch">DE</button>
-        <button id="lang-btn-en" class="px-1.5 py-0.5 rounded text-gray-400 hover:text-white transition" title="English">EN</button>
+        <button id="lang-btn-en" class="px-1.5 py-0.5 rounded text-gray-500 hover:text-black transition" title="English">EN</button>
       </div>
 
       <!-- Zoom Controls (Desktop) -->
-      <div class="hidden 2xl:flex items-center space-x-1.5 bg-[#131f18] rounded-lg border border-white/10 px-2 py-1">
-        <button id="btn-zoom-out" title="Verkleinern (-)" class="hover:text-white transition p-0.5">
+      <div class="hidden 2xl:flex items-center space-x-1.5 bg-black/[0.04] rounded-lg border border-black/10 px-2 py-1">
+        <button id="btn-zoom-out" title="Verkleinern (-)" class="hover:text-black transition p-0.5">
           <i data-lucide="zoom-out" class="w-3 h-3"></i>
         </button>
         <input 
@@ -292,23 +292,23 @@
           max="1.3" 
           step="0.05" 
           value="0.85" 
-          class="w-14 accent-gold h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          class="w-14 accent-gold h-1 bg-gray-300 rounded-lg appearance-none cursor-pointer"
         >
-        <button id="btn-zoom-in" title="Vergrößern (+)" class="hover:text-white transition p-0.5">
+        <button id="btn-zoom-in" title="Vergrößern (+)" class="hover:text-black transition p-0.5">
           <i data-lucide="zoom-in" class="w-3 h-3"></i>
         </button>
-        <button id="btn-fit-screen" title="Optimal einpassen" class="ml-1 px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/15 text-[9.5px] text-gray-300 font-mono transition">
+        <button id="btn-fit-screen" title="Optimal einpassen" class="ml-1 px-1.5 py-0.5 rounded bg-black/5 hover:bg-black/10 text-[9.5px] text-[#14281D] font-mono transition">
           Fit
         </button>
       </div>
 
       <!-- Audio Toggle -->
-      <button id="btn-audio" title="Blättersound an/aus" class="p-1.5 rounded-lg bg-[#131f18] hover:bg-gold/20 hover:text-gold border border-white/10 text-gold transition">
+      <button id="btn-audio" title="Blättersound an/aus" class="p-1.5 rounded-lg bg-black/[0.04] hover:bg-gold/20 hover:text-[#083822] border border-black/10 text-[#B8860B] transition">
         <i data-lucide="volume-2" class="w-3.5 h-3.5" id="audio-icon"></i>
       </button>
 
       <!-- Share Button -->
-      <button id="btn-share" title="Magazin teilen" class="p-1.5 rounded-lg bg-[#131f18] hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-300 transition">
+      <button id="btn-share" title="Magazin teilen" class="p-1.5 rounded-lg bg-black/[0.04] hover:bg-gold/20 hover:text-[#083822] border border-black/10 text-[#14281D] transition">
         <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
       </button>
 
@@ -318,15 +318,15 @@
       </button>
     </div>
   </header>
-<main class="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#131f17] via-[#0b120e] to-[#060a08]">
+<main class="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#FAF8F5] via-[#EDEAE3] to-[#DFD9CE]">
     
     <!-- Prev Arrow -->
-    <button id="arrow-left" title="Vorherige Seite (←)" class="absolute left-2 sm:left-4 z-40 p-3 sm:p-3.5 rounded-full bg-black/75 hover:bg-[#E6B84A] hover:text-[#083822] border border-[#E6B84A]/30 text-white backdrop-blur-md shadow-2xl transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer">
+    <button id="arrow-left" title="Vorherige Seite (←)" class="absolute left-2 sm:left-4 z-40 p-3 sm:p-3.5 rounded-full bg-white/90 hover:bg-[#E6B84A] hover:text-[#083822] border border-[#14281D]/15 text-[#14281D] backdrop-blur-md shadow-xl transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer">
       <i data-lucide="chevron-left" class="w-5 h-5"></i>
     </button>
 
     <!-- Next Arrow -->
-    <button id="arrow-right" title="Nächste Seite (→)" class="absolute right-2 sm:right-4 z-40 p-3 sm:p-3.5 rounded-full bg-black/75 hover:bg-[#E6B84A] hover:text-[#083822] border border-[#E6B84A]/30 text-white backdrop-blur-md shadow-2xl transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer">
+    <button id="arrow-right" title="Nächste Seite (→)" class="absolute right-2 sm:right-4 z-40 p-3 sm:p-3.5 rounded-full bg-white/90 hover:bg-[#E6B84A] hover:text-[#083822] border border-[#14281D]/15 text-[#14281D] backdrop-blur-md shadow-xl transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer">
       <i data-lucide="chevron-right" class="w-5 h-5"></i>
     </button>
 
@@ -339,13 +339,13 @@
           <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-6 h-6 rounded-md object-cover border border-gold/40">
         </div>
         <div class="flex flex-col items-center gap-1">
-          <span class="font-serif text-sm font-bold text-white tracking-widest uppercase">Speisely Journal</span>
-          <span class="text-[10px] text-gold tracking-widest uppercase font-mono animate-pulse">Ausgabe 01 wird geladen...</span>
+          <span class="font-serif text-sm font-bold text-[#14281D] tracking-widest uppercase">Speisely Journal</span>
+          <span class="text-[10px] text-[#8C6D1F] tracking-widest uppercase font-mono animate-pulse">Ausgabe 01 wird geladen...</span>
         </div>
       </div>
     </div>
     <div id="magazine-viewport">
-      <div id="flipbook" class="shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)]">
+      <div id="flipbook" class="shadow-[0_25px_60px_-15px_rgba(20,40,29,0.22),_0_10px_25px_-5px_rgba(0,0,0,0.08)]">
 
 
         
@@ -2828,20 +2828,20 @@
   <!-- ========================================================================= -->
   <!-- 3. PAGESUITE ENTERPRISE BOTTOM SCRUBBER BAR                               -->
   <!-- ========================================================================= -->
-  <footer class="h-10 bg-[#09110d]/95 backdrop-blur-xl border-t border-white/10 px-2 sm:px-6 flex items-center justify-between z-50 text-[11px] text-gray-300 select-none flex-shrink-0 gap-2 sm:gap-4">
+  <footer class="h-10 bg-[#FAF8F5]/95 backdrop-blur-xl border-t border-[#14281D]/10 px-2 sm:px-6 flex items-center justify-between z-50 text-[11px] text-[#14281D] select-none flex-shrink-0 gap-2 sm:gap-4">
     <!-- First / Prev buttons -->
     <div class="flex items-center gap-1 shrink-0">
-      <button id="scrubber-first" title="Erste Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+      <button id="scrubber-first" title="Erste Seite" class="p-1 rounded hover:bg-black/5 hover:text-black transition">
         <i data-lucide="chevrons-left" class="w-3.5 h-3.5"></i>
       </button>
-      <button id="scrubber-prev" title="Vorherige Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+      <button id="scrubber-prev" title="Vorherige Seite" class="p-1 rounded hover:bg-black/5 hover:text-black transition">
         <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
       </button>
     </div>
 
     <!-- Interactive Progress Track / Page Scrubber Slider -->
     <div class="flex-1 max-w-xl mx-auto flex items-center gap-2 sm:gap-3">
-      <span class="font-mono text-[10px] text-gray-400 shrink-0">01</span>
+      <span class="font-mono text-[10px] text-gray-500 shrink-0">01</span>
       <div class="relative w-full flex items-center">
         <input 
           type="range" 
@@ -2850,29 +2850,29 @@
           max="17" 
           step="1" 
           value="0" 
-          class="w-full accent-gold h-1.5 bg-gray-700/80 rounded-lg appearance-none cursor-pointer hover:bg-gray-600 transition"
+          class="w-full accent-gold h-1.5 bg-gray-300 rounded-lg appearance-none cursor-pointer hover:bg-gray-400 transition"
         >
         <div id="scrubber-tooltip" class="absolute -top-7 left-1/2 -translate-x-1/2 bg-[#14281D] border border-gold/40 text-gold px-2 py-0.5 rounded text-[10px] font-mono pointer-events-none opacity-0 transition-opacity whitespace-nowrap shadow-lg">
           Seite 1
         </div>
       </div>
-      <span class="font-mono text-[10px] text-gray-400 shrink-0">18</span>
+      <span class="font-mono text-[10px] text-gray-500 shrink-0">18</span>
     </div>
 
     <!-- Next / Last buttons -->
     <div class="flex items-center gap-1 shrink-0">
-      <button id="scrubber-next" title="Nächste Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+      <button id="scrubber-next" title="Nächste Seite" class="p-1 rounded hover:bg-black/5 hover:text-black transition">
         <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
       </button>
-      <button id="scrubber-last" title="Letzte Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+      <button id="scrubber-last" title="Letzte Seite" class="p-1 rounded hover:bg-black/5 hover:text-black transition">
         <i data-lucide="chevrons-right" class="w-3.5 h-3.5"></i>
       </button>
     </div>
 
     <!-- Live Current Topic Banner -->
-    <div class="hidden lg:flex items-center gap-2 shrink-0 border-l border-white/10 pl-3">
-      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-      <span id="active-story-title" class="text-[10px] font-mono text-gray-300 max-w-[260px] truncate">
+    <div class="hidden lg:flex items-center gap-2 shrink-0 border-l border-[#14281D]/10 pl-3">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span id="active-story-title" class="text-[10px] font-mono text-[#14281D] max-w-[260px] truncate">
         Cover · Speisely Journal Premiere
       </span>
     </div>
@@ -2882,114 +2882,114 @@
   <!-- ========================================================================= -->
   <!-- 4. TABLE OF CONTENTS DRAWER (#toc-drawer)                                 -->
   <!-- ========================================================================= -->
-  <div id="toc-drawer" class="fixed inset-y-0 left-0 w-80 sm:w-96 bg-[#0a140f]/98 backdrop-blur-2xl border-r border-white/15 z-50 transform -translate-x-full transition-transform duration-300 ease-out flex flex-col shadow-2xl">
+  <div id="toc-drawer" class="fixed inset-y-0 left-0 w-80 sm:w-96 bg-[#FAF8F5]/98 backdrop-blur-2xl border-r border-[#14281D]/15 z-50 transform -translate-x-full transition-transform duration-300 ease-out flex flex-col shadow-2xl">
     <div class="p-4 border-b border-white/10 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <i data-lucide="menu" class="w-4 h-4 text-gold"></i>
-        <h3 class="font-serif font-bold text-white text-sm">Inhaltsverzeichnis</h3>
+        <h3 class="font-serif font-bold text-[#14281D] text-sm">Inhaltsverzeichnis</h3>
       </div>
-      <button id="toc-close" class="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
+      <button id="toc-close" class="p-1.5 rounded-lg hover:bg-black/5 text-gray-500 hover:text-black transition">
         <i data-lucide="x" class="w-4 h-4"></i>
       </button>
     </div>
     <div class="flex-1 overflow-y-auto p-3 space-y-2 text-xs" id="toc-list">
       <!-- 01 Cover -->
-      <div onclick="jumpToPage(0); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(0); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-mono font-bold text-[10px] shrink-0">S. 01</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-gold font-semibold">Titelbild</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Große Tafeln, goldener Herbst</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Das Speisely Journal feiert Festkultur, Handwerk und moderne Esskultur.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">Große Tafeln, goldener Herbst</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Das Speisely Journal feiert Festkultur, Handwerk und moderne Esskultur.</p>
         </div>
       </div>
 
       <!-- 02-03 Editorial -->
-      <div onclick="jumpToPage(1); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(1); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 font-mono font-bold text-[10px] shrink-0">S. 02–03</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-cyan-300 font-semibold">B2B &amp; Editorial</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Die Rückkehr der großen Tafel &amp; Speisely Pro</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Mehr Eventbuchungen, volle Auslastung und null Provisionsdruck für Küchenchefs.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">Die Rückkehr der großen Tafel &amp; Speisely Pro</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Mehr Eventbuchungen, volle Auslastung und null Provisionsdruck für Küchenchefs.</p>
         </div>
       </div>
 
       <!-- 04-05 Festmahl -->
-      <div onclick="jumpToPage(3); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(3); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-mono font-bold text-[10px] shrink-0">S. 04–05</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-gold font-semibold">Reportage</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Krosses Gold &amp; Zarte Glut: Wiesn-Hendl &amp; Kaiserschmarrn</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Soufflierte Knusprigkeit, frische Kräuter und reine Butter: Festmahl-Klassiker neu gedacht.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">Krosses Gold &amp; Zarte Glut: Wiesn-Hendl &amp; Kaiserschmarrn</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Soufflierte Knusprigkeit, frische Kräuter und reine Butter: Festmahl-Klassiker neu gedacht.</p>
         </div>
       </div>
 
       <!-- 06-07 Food Radar -->
-      <div onclick="jumpToPage(5); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(5); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 font-mono font-bold text-[10px] shrink-0">S. 06–07</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-emerald-300 font-semibold">Digital Radar</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">SPEISELY DIGITAL &amp; COMMUNITY</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Ihre schlüsselfertige Flaggschiff-Website und drei Gastro-Meister ohne PR-Blabla.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">SPEISELY DIGITAL &amp; COMMUNITY</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Ihre schlüsselfertige Flaggschiff-Website und drei Gastro-Meister ohne PR-Blabla.</p>
         </div>
       </div>
 
       <!-- 08-09 Thronburger -->
-      <div onclick="jumpToPage(7); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(7); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono font-bold text-[10px] shrink-0">S. 08–09</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-amber-300 font-semibold">Partner Spotlight</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🍔 Thronburger Berlin (Friedrichshain)</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Ein Kiez auf dem Holztablett: Handgewolftes Rindfleisch &amp; Sesam-Brioche.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">🍔 Thronburger Berlin (Friedrichshain)</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Ein Kiez auf dem Holztablett: Handgewolftes Rindfleisch &amp; Sesam-Brioche.</p>
         </div>
       </div>
 
       <!-- 10-11 Alzaeem -->
-      <div onclick="jumpToPage(9); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(9); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-red-400/20 text-red-300 font-mono font-bold text-[10px] shrink-0">S. 10–11</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-red-300 font-semibold">Holzkohle-Kult</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🔥 Alzaeem Berlin (Sonnenallee)</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Rauch, Buchenholz und syrische Festkultur auf dem monumentalen Grill.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">🔥 Alzaeem Berlin (Sonnenallee)</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Rauch, Buchenholz und syrische Festkultur auf dem monumentalen Grill.</p>
         </div>
       </div>
 
       <!-- 12-13 Mandy -->
-      <div onclick="jumpToPage(11); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(11); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-orange-400/20 text-orange-300 font-mono font-bold text-[10px] shrink-0">S. 12–13</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-orange-300 font-semibold">Heritage Küche</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🍖 Restaurant Mandy Berlin (Reuterkiez)</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Das Festmahl aus dem Steinofen: Jemenitische Mandi-Kultur über glühender Kohle.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">🍖 Restaurant Mandy Berlin (Reuterkiez)</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Das Festmahl aus dem Steinofen: Jemenitische Mandi-Kultur über glühender Kohle.</p>
         </div>
       </div>
 
       <!-- 14-15 TechGlanz -->
-      <div onclick="jumpToPage(13); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(13); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-purple-400/20 text-purple-300 font-mono font-bold text-[10px] shrink-0">S. 14–15</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-purple-300 font-semibold">FoodTech 2026</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🤖 TechGlanz GEO &amp; KI-Suche</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Wie Speisely Gastronomen in ChatGPT, Perplexity &amp; Gemini ganz nach oben bringt.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">🤖 TechGlanz GEO &amp; KI-Suche</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Wie Speisely Gastronomen in ChatGPT, Perplexity &amp; Gemini ganz nach oben bringt.</p>
         </div>
       </div>
 
       <!-- 16-17 Catering -->
-      <div onclick="jumpToPage(15); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(15); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-blue-400/20 text-blue-300 font-mono font-bold text-[10px] shrink-0">S. 16–17</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-blue-300 font-semibold">Catering Revolution</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Schluss mit 25% Makleraufschlag</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Catering direkt vom Küchenchef: 100% Qualität, null Zwischenhändler.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">Schluss mit 25% Makleraufschlag</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Catering direkt vom Küchenchef: 100% Qualität, null Zwischenhändler.</p>
         </div>
       </div>
 
       <!-- 18 Finale -->
-      <div onclick="jumpToPage(17); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+      <div onclick="jumpToPage(17); toggleToc();" class="p-3 rounded-xl bg-black/[0.02] hover:bg-gold/10 border border-black/5 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
         <span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-mono font-bold text-[10px] shrink-0">S. 18</span>
         <div>
           <span class="text-[9px] uppercase tracking-wider text-gold font-semibold">Finale</span>
-          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Speisely Gastro-Ökosystem &amp; Impressum</h4>
-          <p class="text-[10px] text-gray-400 mt-0.5">Kontakt, Tech-Stack und Partner-Netzwerk.</p>
+          <h4 class="font-serif font-bold text-[#14281D] text-xs mt-0.5">Speisely Gastro-Ökosystem &amp; Impressum</h4>
+          <p class="text-[10px] text-[#5A6E62] mt-0.5">Kontakt, Tech-Stack und Partner-Netzwerk.</p>
         </div>
       </div>
     </div>
@@ -2999,7 +2999,7 @@
   <!-- ========================================================================= -->
   <!-- 5. THUMBNAILS DRAWER (#thumbnails-drawer)                                 -->
   <!-- ========================================================================= -->
-  <div id="thumbnails-drawer" class="fixed bottom-10 left-0 right-0 h-32 bg-[#09110d]/98 backdrop-blur-xl border-t border-white/15 p-2.5 z-40 transform translate-y-full transition-transform duration-300 ease-out flex items-center gap-3 overflow-x-auto shadow-2xl">
+  <div id="thumbnails-drawer" class="fixed bottom-10 left-0 right-0 h-32 bg-[#FAF8F5]/98 backdrop-blur-xl border-t border-[#14281D]/15 p-2.5 z-40 transform translate-y-full transition-transform duration-300 ease-out flex items-center gap-3 overflow-x-auto shadow-2xl">
     <div class="flex items-center gap-3 px-2">
       <!-- 1 Cover -->
       <div onclick="jumpToPage(0); toggleThumbnails();" class="thumb-item flex-shrink-0 w-16 h-22 bg-[#0C1510] border border-gold/60 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white shadow-md">
@@ -3077,10 +3077,10 @@
   <!-- ========================================================================= -->
   <!-- 6. ARTICLE POP-OUT MODAL (#article-modal) (PageSuite Standard)            -->
   <!-- ========================================================================= -->
-  <div id="article-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-200">
-    <div class="bg-[#0e1712] border border-gold/30 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+  <div id="article-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-[#FAF8F5] border border-[#14281D]/15 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <!-- Article Modal Header with Tabs -->
-      <div class="p-3.5 border-b border-white/10 flex items-center justify-between bg-[#0a120e] shrink-0 gap-2">
+      <div class="p-3.5 border-b border-[#14281D]/10 flex items-center justify-between bg-[#EDEAE3] shrink-0 gap-2">
         <div class="flex items-center gap-1.5 overflow-x-auto py-1 max-w-[70%]" id="article-tabs">
           <!-- Dynamically populated or switchable -->
         </div>
@@ -3101,14 +3101,14 @@
           </span>
           <span class="text-xs text-gray-400 font-mono" id="article-page-badge">S. 08–09</span>
         </div>
-        <h2 id="article-headline" class="font-serif text-2xl sm:text-3xl font-bold text-white leading-tight"></h2>
-        <p id="article-lead" class="text-sm sm:text-base text-gold font-medium leading-relaxed border-l-2 border-gold pl-3"></p>
+        <h2 id="article-headline" class="font-serif text-2xl sm:text-3xl font-bold text-[#14281D] leading-tight"></h2>
+        <p id="article-lead" class="text-sm sm:text-base text-[#8C6D1F] font-medium leading-relaxed border-l-2 border-[#8C6D1F] pl-3"></p>
         <div id="article-tags" class="flex flex-wrap gap-1.5 py-1"></div>
-        <div id="article-text" class="text-sm leading-relaxed space-y-3 font-sans text-gray-300"></div>
+        <div id="article-text" class="text-sm leading-relaxed space-y-3 font-sans text-[#2D3F34]"></div>
       </div>
 
       <!-- Footer Action -->
-      <div class="p-3 bg-[#0a120e] border-t border-white/10 flex items-center justify-between shrink-0">
+      <div class="p-3 bg-[#EDEAE3] border-t border-[#14281D]/10 flex items-center justify-between shrink-0">
         <span class="text-xs text-gray-400">Speisely Journal · Leseansicht</span>
         <button id="article-jump-btn" class="px-3.5 py-1.5 rounded-lg bg-gold text-forest-dark font-bold text-xs hover:bg-gold-light transition shadow flex items-center gap-1.5">
           <span>Im Magazin aufschlagen</span>
@@ -3122,15 +3122,15 @@
   <!-- ========================================================================= -->
   <!-- 7. FULL-TEXT SEARCH MODAL (#search-modal)                                 -->
   <!-- ========================================================================= -->
-  <div id="search-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-start justify-center pt-16 sm:pt-20 p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-    <div class="bg-[#0e1712] border border-gold/30 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col">
-      <div class="p-3.5 border-b border-white/10 flex items-center gap-2.5 bg-[#0a120e]">
+  <div id="search-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex items-start justify-center pt-16 sm:pt-20 p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-[#FAF8F5] border border-[#14281D]/15 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-3.5 border-b border-[#14281D]/10 flex items-center gap-2.5 bg-[#EDEAE3]">
         <i data-lucide="search" class="w-4 h-4 text-gold shrink-0"></i>
         <input 
           type="text" 
           id="search-input" 
           placeholder="Im Magazin suchen (z.B. Burger, Alzaeem, Mandy, Hendl, KI-Suche)..." 
-          class="bg-transparent text-white text-sm w-full outline-none placeholder:text-gray-500 font-sans"
+          class="bg-transparent text-[#14281D] text-sm w-full outline-none placeholder:text-gray-400 font-sans"
           autocomplete="off"
         >
         <button id="search-close" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
@@ -3150,19 +3150,19 @@
   <!-- ========================================================================= -->
   <!-- 8. SHARE MODAL (#share-modal)                                             -->
   <!-- ========================================================================= -->
-  <div id="share-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-    <div class="bg-[#0e1712] border border-gold/30 rounded-2xl w-full max-w-md p-5 shadow-2xl flex flex-col gap-4">
+  <div id="share-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-[#FAF8F5] border border-[#14281D]/15 rounded-2xl w-full max-w-md p-5 shadow-2xl flex flex-col gap-4">
       <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <div class="flex items-center gap-2">
           <i data-lucide="share-2" class="w-4 h-4 text-gold"></i>
-          <h3 class="font-serif font-bold text-white text-sm">Magazin teilen</h3>
+          <h3 class="font-serif font-bold text-[#14281D] text-sm">Magazin teilen</h3>
         </div>
         <button id="share-close" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
-      <p class="text-xs text-gray-300">
+      <p class="text-xs text-[#2D3F34]">
         Teilen Sie die digitale Erstausgabe des Speisely Journals mit Freunden, Partnern und Kollegen:
       </p>
 
@@ -3178,7 +3178,7 @@
       </div>
 
       <div class="flex items-center gap-2 pt-1">
-        <input type="text" id="share-url-input" readonly value="https://speisely.de/magazin/reader" class="bg-black/50 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-gray-300 font-mono w-full outline-none">
+        <input type="text" id="share-url-input" readonly value="https://speisely.de/magazin/reader" class="bg-white border border-[#14281D]/15 rounded-lg px-2.5 py-1.5 text-xs text-[#14281D] font-mono w-full outline-none">
         <button id="share-copy-btn" class="px-3.5 py-1.5 rounded-lg bg-gold text-forest-dark font-bold text-xs hover:bg-gold-light transition shrink-0">
           Kopieren
         </button>
