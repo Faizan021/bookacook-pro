@@ -106,7 +106,7 @@ function MagazinIndexPage() {
     <SiteShell>
       <PageHero
         eyebrow={isDe ? "Einblicke, Feste & Handwerk" : "Insights, Festivals & Craft"}
-        heading="Speisely Magazin"
+        heading={isDe ? "Community Reports & Einblicke" : "Community Reports & Stories"}
         subtext={
           isDe
             ? "Authentische Reportagen, traditionsreiche Stadtfeste und kulinarisches Handwerk aus ganz Deutschland."

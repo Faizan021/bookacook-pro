@@ -176,20 +176,11 @@ export function SiteHeader() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2.5">
                 <Link
-                  to="/magazin/speisely-visits"
-                  className="flex items-center w-full text-forest text-xs font-semibold"
-                >
-                  <Eye className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
-                  <span>{t("nav.magazine.visits")}</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2.5">
-                <Link
                   to="/magazin"
                   className="flex items-center w-full text-forest text-xs font-semibold"
                 >
-                  <Sparkles className="mr-2.5 h-4 w-4 text-[#E6B84A]" aria-hidden="true" />
-                  <span>{t("nav.magazine.special")}</span>
+                  <Sparkles className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
+                  <span>{t("nav.magazine.community_reports")}</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
@@ -447,18 +438,11 @@ export function SiteHeader() {
                   <span className="text-[10px] bg-[#E6B84A]/30 text-forest px-1.5 rounded-full">NEU</span>
                 </Link>
                 <Link
-                  to="/magazin/speisely-visits"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-1.5 text-xs font-semibold text-forest/80 hover:text-forest"
-                >
-                  • {t("nav.magazine.visits")}
-                </Link>
-                <Link
                   to="/magazin"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block py-1.5 text-xs font-semibold text-forest/80 hover:text-forest"
                 >
-                  • {t("nav.magazine.special")}
+                  • {t("nav.magazine.community_reports")}
                 </Link>
                 <Link
                   to="/magazin/mediadaten"
