@@ -13,7 +13,7 @@ function createAppHistory() {
 
   if (tenantPath) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const baseUrl = (window as any).__TSS_SERVER_BASE_URL__ || "https://www.speisely.de";
+    const baseUrl = (window as any).__TSS_SERVER_BASE_URL__ || "https://speisely.de";
 
     // Extract base tenant path (e.g., /restaurant/schnitzel-schmiede)
     const parts = tenantPath.split("/");
@@ -85,8 +85,8 @@ export const getRouter = () => {
       queries: {
         refetchOnWindowFocus: false,
         retry: 1,
-        staleTime: 5 * 60 * 1000,   // 5 minutes — prevents redundant refetches on tab switches & component mounts
-        gcTime: 10 * 60 * 1000,     // 10 minutes — keep inactive cache in memory longer
+        staleTime: 5 * 60 * 1000, // 5 minutes — prevents redundant refetches on tab switches & component mounts
+        gcTime: 10 * 60 * 1000, // 10 minutes — keep inactive cache in memory longer
       },
     },
   });

@@ -48,6 +48,14 @@ export default {
       let currentRequest = request;
       try {
         const url = new URL(request.url);
+
+        // Canonical Apex Domain Redirect (www.speisely.de -> speisely.de)
+        if (url.hostname === "www.speisely.de") {
+          url.protocol = "https:";
+          url.hostname = "speisely.de";
+          return Response.redirect(url.toString(), 301);
+        }
+
         let isSpeiselySubdomain = false;
         let targetSlug: string | null = null;
 

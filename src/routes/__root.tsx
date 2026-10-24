@@ -65,7 +65,7 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
             Try again
           </button>
           <a
-            href="/"
+            href="https://speisely.de/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
@@ -229,7 +229,7 @@ function RootShell({ children }: { children: ReactNode }) {
         {/* TanStack Start Hydration Guard: Prevents $_TSR buffer from being deleted during concurrent hydration */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var _t={buffer:[],initialized:false};Object.defineProperty(window,'$_TSR',{configurable:false,enumerable:true,get:function(){return _t;},set:function(v){if(v){Object.assign(_t,v);}}});}catch(e){}})();`,
+            __html: `(function(){try{if(window.location.hostname==='www.speisely.de'){window.location.replace('https://speisely.de'+window.location.pathname+window.location.search+window.location.hash);return;}var _t={buffer:[],initialized:false};Object.defineProperty(window,'$_TSR',{configurable:true,enumerable:true,get:function(){return _t;},set:function(v){if(v){Object.assign(_t,v);}}});}catch(e){}})();`,
           }}
         />
 
