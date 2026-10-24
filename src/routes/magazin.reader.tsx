@@ -32,7 +32,7 @@ function MagazineReaderPage() {
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-[#070c09] z-50">
       <iframe
-        src="/magazin/edition.html"
+        src="/magazin/edition.html?v=4"
         title="Speisely Magazin Digital Edition"
         className="w-full h-full border-0 block"
         allow="fullscreen; autoplay; clipboard-write"

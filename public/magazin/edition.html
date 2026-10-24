@@ -87,13 +87,15 @@
       align-items: center;
       justify-content: center;
       transform-origin: center center;
-      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), opacity 0.35s ease;
+      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), opacity 0.4s ease;
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
     }
     #magazine-viewport.ready {
-      opacity: 1;
-      visibility: visible;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
     }
     #flipbook-spinner {
       position: absolute;
@@ -103,13 +105,13 @@
       align-items: center;
       justify-content: center;
       background-color: #070e0a;
-      z-index: 45;
-      transition: opacity 0.35s ease, visibility 0.35s ease;
+      z-index: 50;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
     #flipbook-spinner.loaded {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
     }
 
     .page {
@@ -3543,15 +3545,18 @@
 
       fitToScreen();
 
-      requestAnimationFrame(() => {
+      // Graceful stabilization guard: ensure St.PageFlip has completed internal 3D geometry
+      // and settled on Page 0 (Cover) before revealing the canvas, eliminating premature article flash
+      setTimeout(() => {
+        fitToScreen();
         const vp = document.getElementById('magazine-viewport');
         const sp = document.getElementById('flipbook-spinner');
         if (vp) vp.classList.add('ready');
         if (sp) {
           sp.classList.add('loaded');
-          setTimeout(() => { if (sp) sp.style.display = 'none'; }, 400);
+          setTimeout(() => { if (sp) sp.style.display = 'none'; }, 450);
         }
-      });
+      }, 500);
 
       // Update topic title & scrubber on flip
       flipbook.on('flip', (e) => {
