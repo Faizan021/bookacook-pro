@@ -87,7 +87,29 @@
       align-items: center;
       justify-content: center;
       transform-origin: center center;
-      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), opacity 0.35s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+    #magazine-viewport.ready {
+      opacity: 1;
+      visibility: visible;
+    }
+    #flipbook-spinner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #070e0a;
+      z-index: 45;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
+    #flipbook-spinner.loaded {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .page {
@@ -308,8 +330,17 @@
 
     <!-- Viewport Container -->
     <div id="flipbook-spinner">
-      <div class="w-8 h-8 border-2 border-[#E6B84A] border-t-transparent rounded-full animate-spin"></div>
-      <span class="tracking-wider uppercase text-xs text-white/80">3D-Magazin wird geladen...</span>
+      <div class="flex flex-col items-center justify-center gap-3">
+        <div class="relative w-12 h-12 flex items-center justify-center">
+          <div class="absolute inset-0 rounded-full border-2 border-gold/20"></div>
+          <div class="absolute inset-0 rounded-full border-2 border-gold border-t-transparent animate-spin"></div>
+          <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-6 h-6 rounded-md object-cover border border-gold/40">
+        </div>
+        <div class="flex flex-col items-center gap-1">
+          <span class="font-serif text-sm font-bold text-white tracking-widest uppercase">Speisely Journal</span>
+          <span class="text-[10px] text-gold tracking-widest uppercase font-mono animate-pulse">Ausgabe 01 wird geladen...</span>
+        </div>
+      </div>
     </div>
     <div id="magazine-viewport">
       <div id="flipbook" class="shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)]">
@@ -3450,6 +3481,44 @@
       const viewport = document.getElementById('magazine-viewport');
       const flipbookElem = document.getElementById('flipbook');
       const isMobileView = window.innerWidth < 900;
+      const zoomSlider = document.getElementById('zoom-slider');
+
+      // Responsive Fit & Zoom Variables
+      let rafZoom = null;
+      let rafResize = null;
+
+      function updateZoom(val) {
+        if (!viewport) return;
+        if (rafZoom) cancelAnimationFrame(rafZoom);
+        rafZoom = requestAnimationFrame(() => {
+          viewport.style.transform = `scale(${val})`;
+          if (zoomSlider && zoomSlider.value != val) zoomSlider.value = val;
+        });
+      }
+
+      function fitToScreen() {
+        if (rafResize) cancelAnimationFrame(rafResize);
+        rafResize = requestAnimationFrame(() => {
+          const main = document.querySelector('main');
+          if (!main) return;
+          const availH = Math.max(260, main.clientHeight - 30);
+          const isMobileWidth = main.clientWidth < 640;
+          const sidePadding = isMobileWidth ? 115 : (main.clientWidth < 1024 ? 40 : 100);
+          const availW = Math.max(220, main.clientWidth - sidePadding);
+          
+          const isPortraitMode = flipbook && typeof flipbook.getOrientation === 'function' 
+            ? flipbook.getOrientation() === 'portrait' 
+            : main.clientWidth < 900;
+
+          const bookW = isPortraitMode ? 520 : 1040;
+          const scaleH = availH / 740;
+          const scaleW = availW / bookW;
+          
+          let targetScale = Math.min(scaleH, scaleW, 1.0);
+          targetScale = Math.max(0.25, Math.round(targetScale * 100) / 100);
+          updateZoom(targetScale);
+        });
+      }
 
       flipbook = new St.PageFlip(flipbookElem, {
         width: 520,
@@ -3472,8 +3541,17 @@
 
       flipbook.loadFromHTML(document.querySelectorAll('.page'));
 
-      const spinner = document.getElementById('flipbook-spinner');
-      if (spinner) spinner.style.display = 'none';
+      fitToScreen();
+
+      requestAnimationFrame(() => {
+        const vp = document.getElementById('magazine-viewport');
+        const sp = document.getElementById('flipbook-spinner');
+        if (vp) vp.classList.add('ready');
+        if (sp) {
+          sp.classList.add('loaded');
+          setTimeout(() => { if (sp) sp.style.display = 'none'; }, 400);
+        }
+      });
 
       // Update topic title & scrubber on flip
       flipbook.on('flip', (e) => {
@@ -3517,44 +3595,6 @@
       });
 
       flipbook.on('changeOrientation', () => fitToScreen());
-
-      // Responsive Fit to Screen
-      let rafZoom = null;
-      let rafResize = null;
-      const zoomSlider = document.getElementById('zoom-slider');
-
-      function updateZoom(val) {
-        if (!viewport) return;
-        if (rafZoom) cancelAnimationFrame(rafZoom);
-        rafZoom = requestAnimationFrame(() => {
-          viewport.style.transform = `scale(${val})`;
-          if (zoomSlider && zoomSlider.value != val) zoomSlider.value = val;
-        });
-      }
-
-      function fitToScreen() {
-        if (rafResize) cancelAnimationFrame(rafResize);
-        rafResize = requestAnimationFrame(() => {
-          const main = document.querySelector('main');
-          if (!main) return;
-          const availH = Math.max(260, main.clientHeight - 30);
-          const isMobileWidth = main.clientWidth < 640;
-          const sidePadding = isMobileWidth ? 115 : (main.clientWidth < 1024 ? 40 : 100);
-          const availW = Math.max(220, main.clientWidth - sidePadding);
-          
-          const isPortraitMode = flipbook && typeof flipbook.getOrientation === 'function' 
-            ? flipbook.getOrientation() === 'portrait' 
-            : main.clientWidth < 900;
-
-          const bookW = isPortraitMode ? 520 : 1040;
-          const scaleH = availH / 740;
-          const scaleW = availW / bookW;
-          
-          let targetScale = Math.min(scaleH, scaleW, 1.0);
-          targetScale = Math.max(0.25, Math.round(targetScale * 100) / 100);
-          updateZoom(targetScale);
-        });
-      }
 
       zoomSlider?.addEventListener('input', (e) => updateZoom(parseFloat(e.target.value)), { passive: true });
       document.getElementById('btn-zoom-in')?.addEventListener('click', () => {
