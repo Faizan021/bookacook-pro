@@ -49,6 +49,7 @@ import { Route as CateringInstitutionalCateringRouteImport } from './routes/cate
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
 import { Route as MagazinIndexRouteImport } from './routes/magazin.index'
+import { Route as MagazinDigitalRouteImport } from './routes/magazin.digital'
 import { Route as MagazinEditionDothtmlRouteImport } from './routes/magazin.edition[.]html'
 import { Route as MagazinMediadatenRouteImport } from './routes/magazin.mediadaten'
 import { Route as MagazinReaderRouteImport } from './routes/magazin.reader'
@@ -299,6 +300,11 @@ const FestivalSchnitzelSchmiedeRoute =
 const MagazinIndexRoute = MagazinIndexRouteImport.update({
   id: '/magazin/',
   path: '/magazin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MagazinDigitalRoute = MagazinDigitalRouteImport.update({
+  id: '/magazin/digital',
+  path: '/magazin/digital',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MagazinEditionDothtmlRoute = MagazinEditionDothtmlRouteImport.update({
@@ -607,6 +613,7 @@ export interface FileRoutesByFullPath {
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
+  '/magazin/digital': typeof MagazinDigitalRoute
   '/magazin/edition.html': typeof MagazinEditionDothtmlRoute
   '/magazin/mediadaten': typeof MagazinMediadatenRoute
   '/magazin/reader': typeof MagazinReaderRoute
@@ -694,6 +701,7 @@ export interface FileRoutesByTo {
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
+  '/magazin/digital': typeof MagazinDigitalRoute
   '/magazin/edition.html': typeof MagazinEditionDothtmlRoute
   '/magazin/mediadaten': typeof MagazinMediadatenRoute
   '/magazin/reader': typeof MagazinReaderRoute
@@ -784,6 +792,7 @@ export interface FileRoutesById {
   '/catering/events': typeof CateringEventsRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
+  '/magazin/digital': typeof MagazinDigitalRoute
   '/magazin/edition.html': typeof MagazinEditionDothtmlRoute
   '/magazin/mediadaten': typeof MagazinMediadatenRoute
   '/magazin/reader': typeof MagazinReaderRoute
@@ -875,6 +884,7 @@ export interface FileRouteTypes {
     | '/catering/events'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
+    | '/magazin/digital'
     | '/magazin/edition.html'
     | '/magazin/mediadaten'
     | '/magazin/reader'
@@ -962,6 +972,7 @@ export interface FileRouteTypes {
     | '/catering/events'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
+    | '/magazin/digital'
     | '/magazin/edition.html'
     | '/magazin/mediadaten'
     | '/magazin/reader'
@@ -1051,6 +1062,7 @@ export interface FileRouteTypes {
     | '/catering/events'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
+    | '/magazin/digital'
     | '/magazin/edition.html'
     | '/magazin/mediadaten'
     | '/magazin/reader'
@@ -1135,6 +1147,7 @@ export interface RootRouteChildren {
   CaseStudyHausSpaasRoute: typeof CaseStudyHausSpaasRoute
   CaseStudyPartyserviceKuepperRoute: typeof CaseStudyPartyserviceKuepperRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
+  MagazinDigitalRoute: typeof MagazinDigitalRoute
   MagazinEditionDothtmlRoute: typeof MagazinEditionDothtmlRoute
   MagazinMediadatenRoute: typeof MagazinMediadatenRoute
   MagazinReaderRoute: typeof MagazinReaderRoute
@@ -1451,6 +1464,13 @@ declare module '@tanstack/react-router' {
       path: '/magazin'
       fullPath: '/magazin/'
       preLoaderRoute: typeof MagazinIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/digital': {
+      id: '/magazin/digital'
+      path: '/magazin/digital'
+      fullPath: '/magazin/digital'
+      preLoaderRoute: typeof MagazinDigitalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/magazin/edition.html': {
@@ -1980,6 +2000,7 @@ const rootRouteChildren: RootRouteChildren = {
   CaseStudyHausSpaasRoute: CaseStudyHausSpaasRoute,
   CaseStudyPartyserviceKuepperRoute: CaseStudyPartyserviceKuepperRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
+  MagazinDigitalRoute: MagazinDigitalRoute,
   MagazinEditionDothtmlRoute: MagazinEditionDothtmlRoute,
   MagazinMediadatenRoute: MagazinMediadatenRoute,
   MagazinReaderRoute: MagazinReaderRoute,

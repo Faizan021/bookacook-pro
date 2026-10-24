@@ -23,6 +23,7 @@ import {
   Lightbulb,
   TrendingUp,
   Briefcase,
+  Sparkles,
   DollarSign,
   UserPlus,
   Info,
@@ -142,32 +143,40 @@ export function SiteHeader() {
             {t("nav.planner")}
           </Link>
 
-          {/* Dropdown 1: Magazin */}
+          {/* Dropdown 1: Digital Magazine (ISJ 3-Pillar Architecture) */}
           <DropdownMenu>
             <DropdownMenuTrigger
-              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-forest ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                 isMagazinActive
                   ? "bg-forest !text-[oklch(0.97_0.02_92)] font-semibold shadow-sm"
                   : "text-forest/80 hover:text-forest hover:bg-forest/5"
               }`}
             >
               <span>{t("nav.magazine")}</span>
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E6B84A] text-forest tracking-wider uppercase">
+                E-Paper
+              </span>
               <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden="true" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
-              className="w-56 bg-white border border-[#e2e8e4] rounded-2xl shadow-xl p-1.5 z-50"
+              className="w-64 bg-white border border-[#e2e8e4] rounded-2xl shadow-xl p-1.5 z-50"
             >
-              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2">
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-[#DDEEE3]/40 cursor-pointer p-2.5 bg-[#FAF8F5]">
                 <Link
-                  to="/magazin"
-                  className="flex items-center w-full text-forest text-xs font-semibold"
+                  to="/magazin/digital"
+                  className="flex items-center justify-between w-full text-forest text-xs font-bold"
                 >
-                  <BookOpen className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
-                  <span>{t("nav.magazine.all")}</span>
+                  <div className="flex items-center">
+                    <BookOpen className="mr-2.5 h-4 w-4 text-[#083822]" aria-hidden="true" />
+                    <span>{t("nav.magazine.digital")}</span>
+                  </div>
+                  <span className="text-[10px] bg-[#E6B84A]/40 text-forest font-black px-1.5 py-0.5 rounded-full">
+                    NEU
+                  </span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2">
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2.5">
                 <Link
                   to="/magazin/speisely-visits"
                   className="flex items-center w-full text-forest text-xs font-semibold"
@@ -176,35 +185,22 @@ export function SiteHeader() {
                   <span>{t("nav.magazine.visits")}</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem
-                asChild
-                className="rounded-xl hover:bg-[#DDEEE3]/50 cursor-pointer p-2 bg-[#DDEEE3]/20"
-              >
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2.5">
                 <Link
-                  to="/community"
-                  className="flex items-center w-full text-forest text-xs font-bold"
-                >
-                  <Users className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
-                  <span>{t("nav.magazine.community")}</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
-              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2">
-                <Link
-                  to="/blog"
+                  to="/magazin"
                   className="flex items-center w-full text-forest text-xs font-semibold"
                 >
-                  <TrendingUp className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
-                  <span>{t("nav.magazine.tips")}</span>
+                  <Sparkles className="mr-2.5 h-4 w-4 text-[#E6B84A]" aria-hidden="true" />
+                  <span>{t("nav.magazine.special")}</span>
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
               <DropdownMenuItem asChild className="rounded-xl hover:bg-amber-50 cursor-pointer p-2">
                 <Link
                   to="/magazin/mediadaten"
-                  className="flex items-center w-full text-[#A85C36] text-xs font-bold"
+                  className="flex items-center w-full text-[#A85C36] text-[11px] font-bold"
                 >
-                  <Briefcase className="mr-2.5 h-4 w-4 text-[#A85C36]" aria-hidden="true" />
+                  <Briefcase className="mr-2.5 h-3.5 w-3.5 text-[#A85C36]" aria-hidden="true" />
                   <span>{isDe ? "Mediadaten & Werbepartner ↗" : "Media Kit & Advertising ↗"}</span>
                 </Link>
               </DropdownMenuItem>
@@ -422,7 +418,7 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          {/* Expandable Group 1: Magazin */}
+          {/* Expandable Group 1: Digital Magazine (3 Pillars) */}
           <div className="rounded-2xl border border-forest/10 bg-white overflow-hidden">
             <button
               type="button"
@@ -432,7 +428,10 @@ export function SiteHeader() {
             >
               <span className="flex items-center gap-2">
                 <BookOpen className="h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
-                {t("nav.magazine")}
+                <span>{t("nav.magazine")}</span>
+                <span className="text-[10px] bg-[#E6B84A] text-forest font-bold px-1.5 py-0.5 rounded-full">
+                  E-Paper
+                </span>
               </span>
               <ChevronDown
                 className={`h-4 w-4 text-forest/60 transition-transform ${
@@ -444,11 +443,12 @@ export function SiteHeader() {
             {mobileMagazinOpen && (
               <div className="bg-[#FDFBF7] px-4 py-2 border-t border-forest/5 space-y-1.5">
                 <Link
-                  to="/magazin"
+                  to="/magazin/digital"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block py-1.5 text-xs font-semibold text-forest/80 hover:text-forest"
+                  className="block py-1.5 text-xs font-bold text-forest flex items-center justify-between"
                 >
-                  • {t("nav.magazine.all")}
+                  <span>• {t("nav.magazine.digital")}</span>
+                  <span className="text-[10px] bg-[#E6B84A]/30 text-forest px-1.5 rounded-full">NEU</span>
                 </Link>
                 <Link
                   to="/magazin/speisely-visits"
@@ -458,18 +458,18 @@ export function SiteHeader() {
                   • {t("nav.magazine.visits")}
                 </Link>
                 <Link
-                  to="/community"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-1.5 text-xs font-bold text-[#7FA46B]"
-                >
-                  • {t("nav.magazine.community")}
-                </Link>
-                <Link
-                  to="/blog"
+                  to="/magazin"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block py-1.5 text-xs font-semibold text-forest/80 hover:text-forest"
                 >
-                  • {t("nav.magazine.tips")}
+                  • {t("nav.magazine.special")}
+                </Link>
+                <Link
+                  to="/magazin/mediadaten"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block py-1.5 text-xs font-bold text-[#A85C36]"
+                >
+                  • {isDe ? "Mediadaten & Werbepartner ↗" : "Media Kit & Advertising ↗"}
                 </Link>
               </div>
             )}
