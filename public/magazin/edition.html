@@ -205,6 +205,26 @@
       background: rgba(230, 184, 74, 0.3);
       border-radius: 3px;
     }
+
+    /* Live News & Sponsor Ticker Marquee (ISJ / PageSuite Standard) */
+    @keyframes tickerScroll {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .ticker-wrapper {
+      overflow: hidden;
+      display: flex;
+      width: 100%;
+    }
+    .ticker-track {
+      display: inline-flex;
+      white-space: nowrap;
+      animation: tickerScroll 48s linear infinite;
+      will-change: transform;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
   </style>
 </head>
 
@@ -2877,6 +2897,148 @@
       </span>
     </div>
   </footer>
+
+  <!-- ========================================================================= -->
+  <!-- 3.1 LIVE EDITORIAL & SPONSOR NEWS TICKER RIBBON (ISJ / PageSuite Standard) -->
+  <!-- ========================================================================= -->
+  <div id="live-news-ticker" class="h-7 bg-[#09140E] border-t border-white/10 flex items-center overflow-hidden z-40 text-[10.5px] sm:text-[11px] text-[#FAF8F5] select-none flex-shrink-0 shadow-lg relative">
+    
+    <!-- Pinned Left Badge with Live Pulse -->
+    <div class="h-full px-2.5 sm:px-3 bg-[#14281D] border-r border-gold/40 flex items-center gap-1.5 shrink-0 z-10 shadow-md">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-mono text-[9px] font-bold text-gold uppercase tracking-wider whitespace-nowrap">
+        <span class="lang-de">NEWS TICKER</span>
+        <span class="lang-en">NEWS TICKER</span>
+      </span>
+    </div>
+
+    <!-- Infinite Scrolling Marquee Track -->
+    <div class="ticker-wrapper flex-1 overflow-hidden relative flex items-center">
+      <div class="ticker-track flex items-center py-0.5">
+        <!-- GROUP A -->
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(1)">
+          <span class="px-1.5 py-0.2 rounded bg-gold/20 text-gold text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">SPEISELY PRO</span>
+          <span class="lang-de font-medium">0% Provision auf Event-Catering &amp; Direktbuchungen für Küchenchefs</span>
+          <span class="lang-en font-medium">0% commission on event catering &amp; direct chef bookings</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 02</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(3)">
+          <span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">FESTKULTUR</span>
+          <span class="lang-de font-medium">Herbst-Reportage: Die Kunst des soufflierten Wiesn-Hendls &amp; pure Festtafel-Kultur</span>
+          <span class="lang-en font-medium">Autumn Feature: The craft of golden rotisserie chicken &amp; grand feasts</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 04</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(7)">
+          <span class="px-1.5 py-0.2 rounded bg-emerald-400/20 text-emerald-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">PARTNER SPOTLIGHT</span>
+          <span class="lang-de font-medium">🍔 Thronburger Berlin: Handgewolftes Rindfleisch &amp; Smash-Burger-Kult in Friedrichshain</span>
+          <span class="lang-en font-medium">🍔 Thronburger Berlin: Hand-ground beef &amp; cult artisan smash burgers</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 08</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(9)">
+          <span class="px-1.5 py-0.2 rounded bg-red-400/20 text-red-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">HOLZKOHLE-KULT</span>
+          <span class="lang-de font-medium">🔥 Alzaeem Sonnenallee: 18m Holzkohlegrill &amp; rauchiges syrisches Lammfleisch</span>
+          <span class="lang-en font-medium">🔥 Alzaeem Sonnenallee: 18m charcoal grill &amp; authentic Syrian lamb feasts</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 10</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(11)">
+          <span class="px-1.5 py-0.2 rounded bg-orange-400/20 text-orange-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">HERITAGE ESSKULTUR</span>
+          <span class="lang-de font-medium">🍖 Restaurant Mandy: Authentisches jemenitisches Lehmofen-Mandi im Reuterkiez</span>
+          <span class="lang-en font-medium">🍖 Restaurant Mandy: Authentic Yemeni underground clay-oven feast</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 12</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(13)">
+          <span class="px-1.5 py-0.2 rounded bg-cyan-400/20 text-cyan-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">GASTRO-TECH 2026</span>
+          <span class="lang-de font-medium">⚡ TechGlanz KI-Suche: Wie Restaurants die #1 Empfehlung in ChatGPT &amp; Perplexity werden</span>
+          <span class="lang-en font-medium">⚡ TechGlanz AI Search: How restaurants become #1 recommendations in ChatGPT</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 14</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="window.open('mailto:partner@speisely.de?subject=Ticker%20Werbeplatzierung%20Speisely%20Magazin')">
+          <span class="px-1.5 py-0.2 rounded bg-purple-400/20 text-purple-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">WERBEPLATZ / POS</span>
+          <span class="lang-de font-medium">✦ Werbefläche für Kassensysteme (POS), Food-Brands &amp; Gastronomie verfügbar · Jetzt buchen</span>
+          <span class="lang-en font-medium">✦ Ad slot for POS systems, food brands &amp; delivery partners available · Inquire now</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ Kontakt</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <!-- GROUP B (Duplicate for 100% Seamless Continuous Infinite Loop) -->
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(1)">
+          <span class="px-1.5 py-0.2 rounded bg-gold/20 text-gold text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">SPEISELY PRO</span>
+          <span class="lang-de font-medium">0% Provision auf Event-Catering &amp; Direktbuchungen für Küchenchefs</span>
+          <span class="lang-en font-medium">0% commission on event catering &amp; direct chef bookings</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 02</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(3)">
+          <span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">FESTKULTUR</span>
+          <span class="lang-de font-medium">Herbst-Reportage: Die Kunst des soufflierten Wiesn-Hendls &amp; pure Festtafel-Kultur</span>
+          <span class="lang-en font-medium">Autumn Feature: The craft of golden rotisserie chicken &amp; grand feasts</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 04</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(7)">
+          <span class="px-1.5 py-0.2 rounded bg-emerald-400/20 text-emerald-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">PARTNER SPOTLIGHT</span>
+          <span class="lang-de font-medium">🍔 Thronburger Berlin: Handgewolftes Rindfleisch &amp; Smash-Burger-Kult in Friedrichshain</span>
+          <span class="lang-en font-medium">🍔 Thronburger Berlin: Hand-ground beef &amp; cult artisan smash burgers</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 08</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(9)">
+          <span class="px-1.5 py-0.2 rounded bg-red-400/20 text-red-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">HOLZKOHLE-KULT</span>
+          <span class="lang-de font-medium">🔥 Alzaeem Sonnenallee: 18m Holzkohlegrill &amp; rauchiges syrisches Lammfleisch</span>
+          <span class="lang-en font-medium">🔥 Alzaeem Sonnenallee: 18m charcoal grill &amp; authentic Syrian lamb feasts</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 10</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(11)">
+          <span class="px-1.5 py-0.2 rounded bg-orange-400/20 text-orange-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">HERITAGE ESSKULTUR</span>
+          <span class="lang-de font-medium">🍖 Restaurant Mandy: Authentisches jemenitisches Lehmofen-Mandi im Reuterkiez</span>
+          <span class="lang-en font-medium">🍖 Restaurant Mandy: Authentic Yemeni underground clay-oven feast</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 12</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="jumpToPage(13)">
+          <span class="px-1.5 py-0.2 rounded bg-cyan-400/20 text-cyan-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">GASTRO-TECH 2026</span>
+          <span class="lang-de font-medium">⚡ TechGlanz KI-Suche: Wie Restaurants die #1 Empfehlung in ChatGPT &amp; Perplexity werden</span>
+          <span class="lang-en font-medium">⚡ TechGlanz AI Search: How restaurants become #1 recommendations in ChatGPT</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ S. 14</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+
+        <span class="inline-flex items-center gap-2 px-3 sm:px-4 cursor-pointer hover:text-gold transition group" onclick="window.open('mailto:partner@speisely.de?subject=Ticker%20Werbeplatzierung%20Speisely%20Magazin')">
+          <span class="px-1.5 py-0.2 rounded bg-purple-400/20 text-purple-300 text-[8.5px] font-mono font-bold group-hover:bg-gold group-hover:text-forest-dark transition">WERBEPLATZ / POS</span>
+          <span class="lang-de font-medium">✦ Werbefläche für Kassensysteme (POS), Food-Brands &amp; Gastronomie verfügbar · Jetzt buchen</span>
+          <span class="lang-en font-medium">✦ Ad slot for POS systems, food brands &amp; delivery partners available · Inquire now</span>
+          <span class="text-gold text-[9.5px] font-mono group-hover:underline">→ Kontakt</span>
+        </span>
+        <span class="text-gold/40 text-[10px] px-1">•</span>
+      </div>
+    </div>
+
+    <!-- Pinned Right Sponsorship CTA Button -->
+    <a href="mailto:partner@speisely.de?subject=Ticker%20Werbeplatzierung%20Speisely%20Magazin" title="Werbeplatz im Ticker buchen (POS &amp; Gastronomie)" class="hidden md:flex h-full px-2.5 bg-[#14281D] hover:bg-gold/20 border-l border-gold/40 items-center gap-1 text-[9px] font-mono text-gold hover:text-white shrink-0 z-10 transition">
+      <i data-lucide="sparkles" class="w-3 h-3 text-gold"></i>
+      <span class="lang-de">Slot buchen</span>
+      <span class="lang-en">Book ad</span>
+    </a>
+  </div>
+
 
 
   <!-- ========================================================================= -->
