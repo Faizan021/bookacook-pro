@@ -82,6 +82,16 @@
     body[data-lang="en"] .lang-en { display: inline; }
     body[data-lang="en"] .lang-en-block { display: block; }
 
+    /* Embedded Reader Mode inside /magazin/reader iFrame */
+    body.is-embedded header {
+      display: none !important;
+    }
+    body.is-embedded main {
+      height: calc(100vh - 32px) !important;
+      padding-top: 4px !important;
+      padding-bottom: 4px !important;
+    }
+
     #magazine-viewport {
       display: flex;
       align-items: center;
@@ -2959,20 +2969,30 @@
       const flipContainer = document.getElementById('flipbook');
       if (!flipContainer) return;
 
+      // Embedded mode detection (auto-activates inside /magazin/reader iframe)
+      const urlParams = new URLSearchParams(window.location.search);
+      const isEmbedded = urlParams.get('embedded') === 'true' || window.self !== window.top;
+      if (isEmbedded) {
+        document.body.classList.add('is-embedded');
+      }
+
+      // Portrait on mobile/tablet (< 900px), luxury 2-page spread on desktop/laptop (>= 900px)
+      const isMobileView = window.innerWidth < 900;
       flipbook = new St.PageFlip(flipContainer, {
         width: 520,
         height: 740,
         size: 'fixed',
-        minWidth: 320,
+        minWidth: 300,
         maxWidth: 520,
-        minHeight: 460,
+        minHeight: 420,
         maxHeight: 740,
         maxShadowOpacity: 0.35,
-        showCover: true,
-        mobileScrollSupport: false,
-        usePortrait: false,
+        showCover: !isMobileView,
+        mobileScrollSupport: true,
+        usePortrait: isMobileView,
         startPage: 0
       });
+      window.flipbook = flipbook;
 
       const pages = document.querySelectorAll('.page');
       flipbook.loadFromHTML(pages);
@@ -3038,17 +3058,26 @@
         rafResize = requestAnimationFrame(() => {
           const main = document.querySelector('main');
           if (!main) return;
-          const availH = Math.max(280, main.clientHeight - 115);
-          const availW = Math.max(300, main.clientWidth - 120);
+          const isEmbedded = document.body.classList.contains('is-embedded');
+          const topOffset = isEmbedded ? 36 : 105;
+          const availH = Math.max(260, main.clientHeight - topOffset);
           
-          const isPortrait = (flipbook && typeof flipbook.getOrientation === 'function' && flipbook.getOrientation() === 'portrait') || main.clientWidth < 900;
-          const bookW = isPortrait ? 520 : 1040;
+          const isMobileWidth = main.clientWidth < 640;
+          // Allocate generous safe padding for mobile arrows so the book never collides with side navigation
+          const sidePadding = isMobileWidth ? 115 : (main.clientWidth < 1024 ? 40 : 100);
+          const availW = Math.max(220, main.clientWidth - sidePadding);
+          
+          const isPortraitMode = flipbook && typeof flipbook.getOrientation === 'function' 
+            ? flipbook.getOrientation() === 'portrait' 
+            : main.clientWidth < 900;
+
+          const bookW = isPortraitMode ? 520 : 1040;
           
           const scaleH = availH / 740;
           const scaleW = availW / bookW;
           
           let targetScale = Math.min(scaleH, scaleW, 1.0);
-          targetScale = Math.max(0.35, Math.round(targetScale * 100) / 100);
+          targetScale = Math.max(0.25, Math.round(targetScale * 100) / 100);
           updateZoom(targetScale);
         });
       }

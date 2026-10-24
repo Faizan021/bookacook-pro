@@ -37,7 +37,7 @@ function MagazineReaderPage() {
 
   return (
     <SiteShell>
-      <div className="bg-[#0b0f15] min-h-screen text-white pt-16 sm:pt-20 pb-8 sm:pb-12 px-2 sm:px-4 lg:px-6">
+      <div className="bg-[#0b0f15] min-h-screen text-white pt-3 sm:pt-5 pb-6 sm:pb-8 px-2 sm:px-4 lg:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumb & Navigation */}
           <div className="flex items-center justify-between gap-2 sm:gap-4 mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/10">
@@ -91,9 +91,9 @@ function MagazineReaderPage() {
           {/* Embedded Flipbook Frame */}
           <div className="rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-[#0d1217] relative">
             <iframe
-              src="/magazin/edition.html"
+              src="/magazin/edition.html?embedded=true"
               title="Speisely Magazin Digital Edition"
-              className="w-full h-[calc(100vh-185px)] min-h-[580px] max-h-[820px] border-0"
+              className="w-full h-[calc(100vh-140px)] min-h-[540px] max-h-[860px] border-0"
               allow="fullscreen"
               loading="lazy"
             />
