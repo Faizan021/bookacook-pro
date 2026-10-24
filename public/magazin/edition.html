@@ -32,9 +32,9 @@
               pure: '#FFFFFF',
             },
             gold: {
-              DEFAULT: '#C29B38',
-              dark: '#9A7822',
-              light: '#E2BD60',
+              DEFAULT: '#E6B84A',
+              dark: '#C29B38',
+              light: '#F3D478',
               muted: '#D8C38B',
             },
             charcoal: {
@@ -61,7 +61,7 @@
     }
 
     body {
-      background-color: #0b110e;
+      background-color: #070e0a;
       color: #1A1E1B;
       font-family: 'Inter', sans-serif;
       overflow: hidden;
@@ -81,16 +81,6 @@
     body[data-lang="en"] .lang-de-block { display: none !important; }
     body[data-lang="en"] .lang-en { display: inline; }
     body[data-lang="en"] .lang-en-block { display: block; }
-
-    /* Embedded Reader Mode inside /magazin/reader iFrame */
-    body.is-embedded header {
-      display: none !important;
-    }
-    body.is-embedded main {
-      height: calc(100vh - 32px) !important;
-      padding-top: 4px !important;
-      padding-bottom: 4px !important;
-    }
 
     #magazine-viewport {
       display: flex;
@@ -167,70 +157,108 @@
       font-weight: 700;
     }
 
+    /* Custom range slider styling */
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #E6B84A;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(230, 184, 74, 0.6);
+      transition: transform 0.1s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+    }
+
     /* Scrollbar styling */
     ::-webkit-scrollbar {
       width: 5px;
       height: 5px;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.25);
+      background: rgba(230, 184, 74, 0.3);
       border-radius: 3px;
     }
   </style>
 </head>
 
-<body class="flex flex-col h-screen w-screen select-none" data-lang="de">
+<body class="flex flex-col h-screen w-screen select-none bg-[#070e0a]" data-lang="de">
 
   <!-- ========================================================================= -->
-  <!-- 1. VIEWER TOP BAR                                                         -->
+  <!-- 1. PAGESUITE ENTERPRISE TOP TOOLBAR                                       -->
   <!-- ========================================================================= -->
-  <header class="h-12 bg-[#111914] border-b border-white/10 px-2.5 sm:px-5 flex items-center justify-between z-50 text-xs text-gray-300 flex-shrink-0 gap-1.5 sm:gap-4">
+  <header class="h-12 bg-[#09110d]/95 backdrop-blur-xl border-b border-white/10 px-2 sm:px-4 flex items-center justify-between z-50 text-xs text-gray-300 flex-shrink-0 gap-1.5 sm:gap-3 select-none">
     
-    <!-- Branding -->
-    <div class="flex items-center space-x-2 shrink-0">
-      <a href="https://speisely.de" class="flex items-center gap-2 hover:opacity-90 transition">
-        <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-6 h-6 rounded object-cover border border-gold/40 shadow-sm shrink-0">
-        <span class="font-serif text-xs sm:text-sm font-bold tracking-wider text-white whitespace-nowrap hidden min-[380px]:inline">SPEISELY</span>
-        <span class="text-[10px] text-gold tracking-widest uppercase font-medium hidden md:inline">
-          <span class="lang-de">· Herbst 2026 · Ausgabe 01</span>
-          <span class="lang-en">· Autumn 2026 · Issue 01</span>
-        </span>
+    <!-- Left: Back Button & Branding & Drawers -->
+    <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+      <a href="/magazin" target="_top" title="Zurück zum Magazin" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-300 transition text-[11px] font-semibold">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+        <span class="hidden md:inline">Zurück</span>
       </a>
+
+      <div class="h-4 w-px bg-white/15 hidden sm:block"></div>
+
+      <!-- Publication Branding -->
+      <a href="/magazin" target="_top" class="flex items-center gap-2 hover:opacity-90 transition">
+        <img src="/images/speisely-square-logo.jpg" alt="Speisely" class="w-6 h-6 rounded object-cover border border-gold/40 shadow-sm shrink-0">
+        <div class="flex flex-col leading-tight">
+          <span class="font-serif text-[11px] sm:text-xs font-bold tracking-wider text-white whitespace-nowrap">SPEISELY JOURNAL</span>
+          <span class="text-[8.5px] text-gold tracking-widest uppercase font-medium hidden sm:inline">Ausgabe 01 · 2026</span>
+        </div>
+      </a>
+
+      <!-- Primary Feature Drawers (Menu / Pages / Articles / Search) -->
+      <div class="flex items-center gap-1 ml-1 sm:ml-2">
+        <button id="btn-toc" title="Inhaltsverzeichnis" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
+          <i data-lucide="menu" class="w-3.5 h-3.5 text-gold"></i>
+          <span class="hidden lg:inline">Inhalt</span>
+        </button>
+
+        <button id="btn-thumbnails" title="Seitenübersicht" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
+          <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-gold"></i>
+          <span class="hidden lg:inline">Seiten</span>
+        </button>
+
+        <button id="btn-articles" title="Artikel-Leseansicht (Text Mode)" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-gold"></i>
+          <span class="hidden xl:inline">Artikel</span>
+        </button>
+
+        <button id="btn-search" title="Volltextsuche" class="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-200 transition font-medium text-[11px]">
+          <i data-lucide="search" class="w-3.5 h-3.5 text-gold"></i>
+          <span class="hidden xl:inline">Suche</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Navigation, Zoom & Language Switcher -->
-    <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+    <!-- Center: Page Display & Quick Turn -->
+    <div class="flex items-center bg-[#131f18] rounded-lg border border-white/15 px-1 py-0.5 shrink-0 shadow-inner">
+      <button id="btn-prev" title="Vorherige Seite (←)" class="p-1 hover:bg-white/10 hover:text-white rounded transition">
+        <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+      </button>
       
+      <div class="px-1.5 py-0.5 font-mono text-[10.5px] sm:text-xs font-semibold text-white tracking-wider min-w-[70px] text-center">
+        <span id="page-display">Cover · 1 / 18</span>
+      </div>
+
+      <button id="btn-next" title="Nächste Seite (→)" class="p-1 hover:bg-white/10 hover:text-white rounded transition">
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+
+    <!-- Right: View & Share Utilities -->
+    <div class="flex items-center gap-1 sm:gap-2 shrink-0">
       <!-- DE / EN Language Toggle Pill -->
-      <div class="flex items-center bg-[#1a251f] rounded-lg border border-white/15 p-0.5 text-[11px] font-semibold shrink-0">
-        <button id="lang-btn-de" class="px-2 py-0.5 rounded bg-gold text-forest-dark font-bold transition shadow-sm" title="Deutsch">DE</button>
-        <button id="lang-btn-en" class="px-2 py-0.5 rounded text-gray-400 hover:text-white transition" title="English">EN</button>
+      <div class="flex items-center bg-[#131f18] rounded-lg border border-white/15 p-0.5 text-[10.5px] font-semibold shrink-0">
+        <button id="lang-btn-de" class="px-1.5 py-0.5 rounded bg-gold text-forest-dark font-bold transition shadow-sm" title="Deutsch">DE</button>
+        <button id="lang-btn-en" class="px-1.5 py-0.5 rounded text-gray-400 hover:text-white transition" title="English">EN</button>
       </div>
 
-      <!-- Page Flip Controls -->
-      <div class="flex items-center bg-[#1a251f] rounded-lg border border-white/10 px-1 py-0.5 shrink-0">
-        <button id="btn-first" title="Erste Seite / First Page" class="hidden sm:block p-1.5 hover:bg-white/10 hover:text-white rounded transition">
-          <i data-lucide="chevrons-left" class="w-3.5 h-3.5"></i>
-        </button>
-        <button id="btn-prev" title="Vorherige Seite / Previous Page" class="p-1.5 hover:bg-white/10 hover:text-white rounded transition">
-          <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
-        </button>
-        
-        <div class="px-2 py-0.5 font-mono text-[11px] sm:text-xs font-semibold text-white tracking-wider min-w-[55px] sm:min-w-[65px] text-center">
-          <span id="page-display">1 / 18</span>
-        </div>
-
-        <button id="btn-next" title="Nächste Seite / Next Page" class="p-1.5 hover:bg-white/10 hover:text-white rounded transition">
-          <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-        </button>
-        <button id="btn-last" title="Letzte Seite / Last Page" class="hidden sm:block p-1.5 hover:bg-white/10 hover:text-white rounded transition">
-          <i data-lucide="chevrons-right" class="w-3.5 h-3.5"></i>
-        </button>
-      </div>
-
-      <!-- Zoom Slider & Auto-Fit Button -->
-      <div class="hidden md:flex items-center space-x-2 bg-[#1a251f] rounded-lg border border-white/10 px-2.5 py-1">
-        <button id="btn-zoom-out" title="Verkleinern" class="hover:text-white transition">
+      <!-- Zoom Controls (Desktop) -->
+      <div class="hidden 2xl:flex items-center space-x-1.5 bg-[#131f18] rounded-lg border border-white/10 px-2 py-1">
+        <button id="btn-zoom-out" title="Verkleinern (-)" class="hover:text-white transition p-0.5">
           <i data-lucide="zoom-out" class="w-3 h-3"></i>
         </button>
         <input 
@@ -240,43 +268,33 @@
           max="1.3" 
           step="0.05" 
           value="0.85" 
-          class="w-18 accent-gold h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          class="w-14 accent-gold h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer"
         >
-        <button id="btn-zoom-in" title="Vergrößern" class="hover:text-white transition">
+        <button id="btn-zoom-in" title="Vergrößern (+)" class="hover:text-white transition p-0.5">
           <i data-lucide="zoom-in" class="w-3 h-3"></i>
         </button>
-        <span id="zoom-value" class="font-mono text-[10px] text-gold w-8 text-right font-bold">85%</span>
-        
-        <!-- Fit Screen Reset Button -->
-        <button id="btn-fit-screen" title="Passend skalieren / Fit to Screen" class="ml-1 px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/15 text-[10px] text-gray-300 transition">
+        <button id="btn-fit-screen" title="Optimal einpassen" class="ml-1 px-1.5 py-0.5 rounded bg-white/5 hover:bg-white/15 text-[9.5px] text-gray-300 font-mono transition">
           Fit
         </button>
       </div>
 
-    </div>
-
-    <!-- Actions -->
-    <div class="flex items-center space-x-1 sm:space-x-2 shrink-0">
-      <button id="btn-audio" title="Blättersound an/aus" class="p-1.5 rounded-lg bg-[#1a251f] hover:bg-gold/20 hover:text-gold border border-white/10 text-gold transition">
+      <!-- Audio Toggle -->
+      <button id="btn-audio" title="Blättersound an/aus" class="p-1.5 rounded-lg bg-[#131f18] hover:bg-gold/20 hover:text-gold border border-white/10 text-gold transition">
         <i data-lucide="volume-2" class="w-3.5 h-3.5" id="audio-icon"></i>
       </button>
 
-      <button id="btn-thumbnails" title="Seitenübersicht" class="hidden sm:flex p-1.5 rounded-lg bg-[#1a251f] hover:bg-white/10 hover:text-white border border-white/10 transition items-center gap-1">
-        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
-        <span class="hidden md:inline text-[10.5px] font-medium">Seiten</span>
+      <!-- Share Button -->
+      <button id="btn-share" title="Magazin teilen" class="p-1.5 rounded-lg bg-[#131f18] hover:bg-gold/20 hover:text-gold border border-white/10 text-gray-300 transition">
+        <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
       </button>
 
-      <button id="btn-fullscreen" title="Vollbildmodus" class="p-1.5 rounded-lg bg-gold text-forest-dark font-bold hover:bg-gold-light transition shadow-sm">
+      <!-- Fullscreen Toggle -->
+      <button id="btn-fullscreen" title="Vollbildmodus (F)" class="p-1.5 rounded-lg bg-gold text-forest-dark font-bold hover:bg-gold-light transition shadow-sm">
         <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
       </button>
     </div>
   </header>
-
-
-  <!-- ========================================================================= -->
-  <!-- 2. FLIPBOOK STAGE                                                         -->
-  <!-- ========================================================================= -->
-  <main class="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#131f17] via-[#0b120e] to-[#060a08]">
+<main class="flex-1 relative flex items-center justify-center p-2 sm:p-4 overflow-hidden bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#131f17] via-[#0b120e] to-[#060a08]">
     
     <!-- Prev Arrow -->
     <button id="arrow-left" title="Vorherige Seite (←)" class="absolute left-2 sm:left-4 z-40 p-3 sm:p-3.5 rounded-full bg-black/75 hover:bg-[#E6B84A] hover:text-[#083822] border border-[#E6B84A]/30 text-white backdrop-blur-md shadow-2xl transition-all duration-200 transform hover:scale-110 active:scale-95 flex items-center justify-center cursor-pointer">
@@ -2774,115 +2792,373 @@
       </div>
     </div>
   </main>
-
-
   <!-- ========================================================================= -->
-  <!-- 3. VIEWER BOTTOM TICKER                                                   -->
+  <!-- 3. PAGESUITE ENTERPRISE BOTTOM SCRUBBER BAR                               -->
   <!-- ========================================================================= -->
-  <footer class="h-8 bg-[#111914] border-t border-white/10 px-4 sm:px-5 flex items-center justify-between z-50 text-[10.5px] overflow-hidden flex-shrink-0">
-    <button id="drawer-toggle" class="flex items-center gap-1.5 text-gray-400 hover:text-gold transition font-medium mr-4 text-xs">
-      <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-      <span class="hidden sm:inline">
-        <span class="lang-de">Seitenübersicht</span>
-        <span class="lang-en">Page Thumbnails</span>
-      </span>
-    </button>
-
-    <div class="flex-1 overflow-hidden relative">
-      <div class="text-gray-400 font-mono text-[9.5px] truncate">
-        <span class="text-gold font-semibold mr-2">✦ SPEISELY JOURNAL:</span>
-        <span class="lang-de">Wiesn-Hendl &amp; Festkultur · Kaiserschmarrn-Patisserie · Thronburger Gourmet-Burger · Alzaeem Holzkohlegrill · Restaurant Mandy Jemen-Küche · TechGlanz GEO &amp; KI-Suche · Catering-Revolution · Speisely Ökosystem &amp; Pro Suite</span>
-        <span class="lang-en">Wiesn-Hendl &amp; Festival Culture · Kaiserschmarrn Patisserie · Thronburger Gourmet Burgers · Alzaeem Charcoal Grill · Restaurant Mandy Yemeni Kitchen · TechGlanz GEO &amp; AI Search · Catering Revolution · Speisely Ecosystem &amp; Pro Suite</span>
-      </div>
+  <footer class="h-10 bg-[#09110d]/95 backdrop-blur-xl border-t border-white/10 px-2 sm:px-6 flex items-center justify-between z-50 text-[11px] text-gray-300 select-none flex-shrink-0 gap-2 sm:gap-4">
+    <!-- First / Prev buttons -->
+    <div class="flex items-center gap-1 shrink-0">
+      <button id="scrubber-first" title="Erste Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+        <i data-lucide="chevrons-left" class="w-3.5 h-3.5"></i>
+      </button>
+      <button id="scrubber-prev" title="Vorherige Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+        <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+      </button>
     </div>
 
-    <div class="text-gray-400 font-mono text-[9.5px] ml-4 flex items-center gap-1.5">
-      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
-      <span class="hidden md:inline text-gray-300">Digital 3D Edition</span>
+    <!-- Interactive Progress Track / Page Scrubber Slider -->
+    <div class="flex-1 max-w-xl mx-auto flex items-center gap-2 sm:gap-3">
+      <span class="font-mono text-[10px] text-gray-400 shrink-0">01</span>
+      <div class="relative w-full flex items-center">
+        <input 
+          type="range" 
+          id="page-scrubber" 
+          min="0" 
+          max="17" 
+          step="1" 
+          value="0" 
+          class="w-full accent-gold h-1.5 bg-gray-700/80 rounded-lg appearance-none cursor-pointer hover:bg-gray-600 transition"
+        >
+        <div id="scrubber-tooltip" class="absolute -top-7 left-1/2 -translate-x-1/2 bg-[#14281D] border border-gold/40 text-gold px-2 py-0.5 rounded text-[10px] font-mono pointer-events-none opacity-0 transition-opacity whitespace-nowrap shadow-lg">
+          Seite 1
+        </div>
+      </div>
+      <span class="font-mono text-[10px] text-gray-400 shrink-0">18</span>
+    </div>
+
+    <!-- Next / Last buttons -->
+    <div class="flex items-center gap-1 shrink-0">
+      <button id="scrubber-next" title="Nächste Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+      </button>
+      <button id="scrubber-last" title="Letzte Seite" class="p-1 rounded hover:bg-white/10 hover:text-white transition">
+        <i data-lucide="chevrons-right" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+
+    <!-- Live Current Topic Banner -->
+    <div class="hidden lg:flex items-center gap-2 shrink-0 border-l border-white/10 pl-3">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span id="active-story-title" class="text-[10px] font-mono text-gray-300 max-w-[260px] truncate">
+        Cover · Speisely Journal Premiere
+      </span>
     </div>
   </footer>
 
 
   <!-- ========================================================================= -->
-  <!-- 4. THUMBNAILS DRAWER                                                      -->
+  <!-- 4. TABLE OF CONTENTS DRAWER (#toc-drawer)                                 -->
   <!-- ========================================================================= -->
-  <div id="thumbnails-drawer" class="fixed bottom-8 left-0 right-0 h-30 bg-[#111914]/95 backdrop-blur-xl border-t border-white/15 p-2.5 z-40 transform translate-y-full transition-transform duration-300 ease-out flex items-center gap-3 overflow-x-auto shadow-2xl">
-    <div class="flex items-center gap-3 px-2">
-      <!-- 1 -->
-      <div onclick="flipbook.flip(0); toggleThumbnails();" class="thumb-item flex-shrink-0 w-16 h-20 bg-[#0C1510] border border-gold/60 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white">
-        <span class="text-[7.5px] font-bold text-gold font-mono">01</span>
-        <span class="text-[7px] text-gray-300 font-serif text-center">Cover</span>
-        <span class="text-[6px] text-gold/60 text-right font-mono">Titel</span>
+  <div id="toc-drawer" class="fixed inset-y-0 left-0 w-80 sm:w-96 bg-[#0a140f]/98 backdrop-blur-2xl border-r border-white/15 z-50 transform -translate-x-full transition-transform duration-300 ease-out flex flex-col shadow-2xl">
+    <div class="p-4 border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i data-lucide="menu" class="w-4 h-4 text-gold"></i>
+        <h3 class="font-serif font-bold text-white text-sm">Inhaltsverzeichnis</h3>
+      </div>
+      <button id="toc-close" class="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-3 space-y-2 text-xs" id="toc-list">
+      <!-- 01 Cover -->
+      <div onclick="jumpToPage(0); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-mono font-bold text-[10px] shrink-0">S. 01</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-gold font-semibold">Titelbild</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Große Tafeln, goldener Herbst</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Das Speisely Journal feiert Festkultur, Handwerk und moderne Esskultur.</p>
+        </div>
       </div>
 
-      <!-- 2-3 -->
-      <div onclick="flipbook.flip(1); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#0B121A] border border-white/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white">
-        <span class="text-[7.5px] font-bold font-mono text-cyan-300">02-03</span>
-        <span class="text-[7px] text-gray-300 font-serif text-center">Speisely Pro &amp; Editorial</span>
-        <span class="text-[6px] text-gray-400 text-right font-mono">B2B Intro</span>
+      <!-- 02-03 Editorial -->
+      <div onclick="jumpToPage(1); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 font-mono font-bold text-[10px] shrink-0">S. 02–03</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-cyan-300 font-semibold">B2B &amp; Editorial</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Die Rückkehr der großen Tafel &amp; Speisely Pro</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Mehr Eventbuchungen, volle Auslastung und null Provisionsdruck für Küchenchefs.</p>
+        </div>
       </div>
 
-      <!-- 4-5 -->
-      <div onclick="flipbook.flip(3); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest">
-        <span class="text-[7.5px] font-bold font-mono text-forest">04-05</span>
-        <span class="text-[7px] text-forest font-serif text-center">Wiesn-Hendl &amp; Festkultur</span>
-        <span class="text-[6px] text-forest-muted text-right font-mono">Festmahl</span>
+      <!-- 04-05 Festmahl -->
+      <div onclick="jumpToPage(3); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-mono font-bold text-[10px] shrink-0">S. 04–05</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-gold font-semibold">Reportage</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Krosses Gold &amp; Zarte Glut: Wiesn-Hendl &amp; Kaiserschmarrn</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Soufflierte Knusprigkeit, frische Kräuter und reine Butter: Festmahl-Klassiker neu gedacht.</p>
+        </div>
       </div>
 
-      <!-- 6-7 -->
-      <div onclick="flipbook.flip(5); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#0B0F14] border border-white/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white">
-        <span class="text-[7.5px] font-bold font-mono text-emerald-300">06-07</span>
-        <span class="text-[7px] text-gray-300 font-serif text-center">Digital &amp; Food Radar</span>
-        <span class="text-[6px] text-gray-400 text-right font-mono">Gateway</span>
+      <!-- 06-07 Food Radar -->
+      <div onclick="jumpToPage(5); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 font-mono font-bold text-[10px] shrink-0">S. 06–07</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-emerald-300 font-semibold">Digital Radar</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">SPEISELY DIGITAL &amp; COMMUNITY</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Ihre schlüsselfertige Flaggschiff-Website und drei Gastro-Meister ohne PR-Blabla.</p>
+        </div>
       </div>
 
-      <!-- 8-9 Thronburger -->
-      <div onclick="flipbook.flip(7); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest">
-        <span class="text-[7.5px] font-bold font-mono text-forest">08-09</span>
-        <span class="text-[7px] text-forest font-serif text-center">&#x1F354; Thronburger</span>
-        <span class="text-[6px] text-forest-muted text-right font-mono">Friedrichshain</span>
+      <!-- 08-09 Thronburger -->
+      <div onclick="jumpToPage(7); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono font-bold text-[10px] shrink-0">S. 08–09</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-amber-300 font-semibold">Partner Spotlight</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🍔 Thronburger Berlin (Friedrichshain)</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Ein Kiez auf dem Holztablett: Handgewolftes Rindfleisch &amp; Sesam-Brioche.</p>
+        </div>
       </div>
 
       <!-- 10-11 Alzaeem -->
-      <div onclick="flipbook.flip(9); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest">
-        <span class="text-[7.5px] font-bold font-mono text-forest">10-11</span>
-        <span class="text-[7px] text-forest font-serif text-center">&#x1F525; Alzaeem</span>
-        <span class="text-[6px] text-forest-muted text-right font-mono">Sonnenallee</span>
+      <div onclick="jumpToPage(9); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-red-400/20 text-red-300 font-mono font-bold text-[10px] shrink-0">S. 10–11</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-red-300 font-semibold">Holzkohle-Kult</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🔥 Alzaeem Berlin (Sonnenallee)</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Rauch, Buchenholz und syrische Festkultur auf dem monumentalen Grill.</p>
+        </div>
       </div>
 
       <!-- 12-13 Mandy -->
-      <div onclick="flipbook.flip(11); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest">
-        <span class="text-[7.5px] font-bold font-mono text-forest">12-13</span>
-        <span class="text-[7px] text-forest font-serif text-center">&#x1F356; Restaurant Mandy</span>
-        <span class="text-[6px] text-forest-muted text-right font-mono">Neukölln</span>
+      <div onclick="jumpToPage(11); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-orange-400/20 text-orange-300 font-mono font-bold text-[10px] shrink-0">S. 12–13</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-orange-300 font-semibold">Heritage Küche</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🍖 Restaurant Mandy Berlin (Reuterkiez)</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Das Festmahl aus dem Steinofen: Jemenitische Mandi-Kultur über glühender Kohle.</p>
+        </div>
       </div>
 
       <!-- 14-15 TechGlanz -->
-      <div onclick="flipbook.flip(13); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest">
-        <span class="text-[7.5px] font-bold font-mono text-forest">14-15</span>
-        <span class="text-[7px] text-forest font-serif text-center">&#x1F916; TechGlanz GEO</span>
-        <span class="text-[6px] text-forest-muted text-right font-mono">KI-Suche</span>
+      <div onclick="jumpToPage(13); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-purple-400/20 text-purple-300 font-mono font-bold text-[10px] shrink-0">S. 14–15</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-purple-300 font-semibold">FoodTech 2026</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">🤖 TechGlanz GEO &amp; KI-Suche</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Wie Speisely Gastronomen in ChatGPT, Perplexity &amp; Gemini ganz nach oben bringt.</p>
+        </div>
       </div>
 
-      <!-- 16-17 Finale Spread -->
-      <div onclick="flipbook.flip(17); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-20 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest">
-        <span class="text-[7.5px] font-bold font-mono text-forest">16-17</span>
-        <span class="text-[7px] text-forest font-serif text-center">Markt-Report &amp; Netzwerk</span>
-        <span class="text-[6px] text-forest-muted text-right font-mono">Finale Spread</span>
+      <!-- 16-17 Catering -->
+      <div onclick="jumpToPage(15); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-blue-400/20 text-blue-300 font-mono font-bold text-[10px] shrink-0">S. 16–17</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-blue-300 font-semibold">Catering Revolution</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Schluss mit 25% Makleraufschlag</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Catering direkt vom Küchenchef: 100% Qualität, null Zwischenhändler.</p>
+        </div>
       </div>
 
-      <!-- 18 Back Cover -->
-      <div onclick="flipbook.flip(17); toggleThumbnails();" class="thumb-item flex-shrink-0 w-16 h-20 bg-[#0C1510] border border-gold/60 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white">
-        <span class="text-[7.5px] font-bold text-gold font-mono">18</span>
-        <span class="text-[7px] text-gold font-serif text-center">Speisely</span>
-        <span class="text-[6px] text-gold/60 text-right font-mono">Logo</span>
+      <!-- 18 Finale -->
+      <div onclick="jumpToPage(17); toggleToc();" class="p-3 rounded-xl bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-start gap-3">
+        <span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-mono font-bold text-[10px] shrink-0">S. 18</span>
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-gold font-semibold">Finale</span>
+          <h4 class="font-serif font-bold text-white text-xs mt-0.5">Speisely Gastro-Ökosystem &amp; Impressum</h4>
+          <p class="text-[10px] text-gray-400 mt-0.5">Kontakt, Tech-Stack und Partner-Netzwerk.</p>
+        </div>
       </div>
     </div>
   </div>
 
 
   <!-- ========================================================================= -->
-  <!-- 5. ENGINE & RESPONSIVE FIT-TO-SCREEN INITIALIZATION                       -->
+  <!-- 5. THUMBNAILS DRAWER (#thumbnails-drawer)                                 -->
+  <!-- ========================================================================= -->
+  <div id="thumbnails-drawer" class="fixed bottom-10 left-0 right-0 h-32 bg-[#09110d]/98 backdrop-blur-xl border-t border-white/15 p-2.5 z-40 transform translate-y-full transition-transform duration-300 ease-out flex items-center gap-3 overflow-x-auto shadow-2xl">
+    <div class="flex items-center gap-3 px-2">
+      <!-- 1 Cover -->
+      <div onclick="jumpToPage(0); toggleThumbnails();" class="thumb-item flex-shrink-0 w-16 h-22 bg-[#0C1510] border border-gold/60 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white shadow-md">
+        <span class="text-[7.5px] font-bold text-gold font-mono">01</span>
+        <span class="text-[7px] text-gray-300 font-serif text-center">Cover</span>
+        <span class="text-[6px] text-gold/60 text-right font-mono">Titel</span>
+      </div>
+
+      <!-- 2-3 Speisely Pro -->
+      <div onclick="jumpToPage(1); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#0B121A] border border-white/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-cyan-300">02-03</span>
+        <span class="text-[7px] text-gray-300 font-serif text-center">Speisely Pro &amp; Editorial</span>
+        <span class="text-[6px] text-gray-400 text-right font-mono">B2B Intro</span>
+      </div>
+
+      <!-- 4-5 Festmahl -->
+      <div onclick="jumpToPage(3); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-forest">04-05</span>
+        <span class="text-[7px] text-forest font-serif text-center">Wiesn-Hendl &amp; Festkultur</span>
+        <span class="text-[6px] text-forest-muted text-right font-mono">Festmahl</span>
+      </div>
+
+      <!-- 6-7 Food Radar -->
+      <div onclick="jumpToPage(5); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#0B0F14] border border-white/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-emerald-300">06-07</span>
+        <span class="text-[7px] text-gray-300 font-serif text-center">Digital &amp; Food Radar</span>
+        <span class="text-[6px] text-gray-400 text-right font-mono">Gateway</span>
+      </div>
+
+      <!-- 8-9 Thronburger -->
+      <div onclick="jumpToPage(7); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-forest">08-09</span>
+        <span class="text-[7px] text-forest font-serif text-center">🍔 Thronburger</span>
+        <span class="text-[6px] text-forest-muted text-right font-mono">Friedrichshain</span>
+      </div>
+
+      <!-- 10-11 Alzaeem -->
+      <div onclick="jumpToPage(9); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-forest">10-11</span>
+        <span class="text-[7px] text-forest font-serif text-center">🔥 Alzaeem</span>
+        <span class="text-[6px] text-forest-muted text-right font-mono">Sonnenallee</span>
+      </div>
+
+      <!-- 12-13 Mandy -->
+      <div onclick="jumpToPage(11); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-forest">12-13</span>
+        <span class="text-[7px] text-forest font-serif text-center">🍖 Restaurant Mandy</span>
+        <span class="text-[6px] text-forest-muted text-right font-mono">Neukölln</span>
+      </div>
+
+      <!-- 14-15 TechGlanz -->
+      <div onclick="jumpToPage(13); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-forest">14-15</span>
+        <span class="text-[7px] text-forest font-serif text-center">🤖 TechGlanz GEO</span>
+        <span class="text-[6px] text-forest-muted text-right font-mono">KI-Suche</span>
+      </div>
+
+      <!-- 16-17 Finale Spread -->
+      <div onclick="jumpToPage(15); toggleThumbnails();" class="thumb-item flex-shrink-0 w-28 h-22 bg-[#FAF8F5] border border-forest/20 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-forest shadow-md">
+        <span class="text-[7.5px] font-bold font-mono text-forest">16-17</span>
+        <span class="text-[7px] text-forest font-serif text-center">Catering &amp; Netzwerk</span>
+        <span class="text-[6px] text-forest-muted text-right font-mono">Direkt</span>
+      </div>
+
+      <!-- 18 Back Cover -->
+      <div onclick="jumpToPage(17); toggleThumbnails();" class="thumb-item flex-shrink-0 w-16 h-22 bg-[#0C1510] border border-gold/60 rounded cursor-pointer hover:border-gold hover:scale-105 transition flex flex-col justify-between p-1.5 text-white shadow-md">
+        <span class="text-[7.5px] font-bold text-gold font-mono">18</span>
+        <span class="text-[7px] text-gold font-serif text-center">Speisely</span>
+        <span class="text-[6px] text-gold/60 text-right font-mono">Ende</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- 6. ARTICLE POP-OUT MODAL (#article-modal) (PageSuite Standard)            -->
+  <!-- ========================================================================= -->
+  <div id="article-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-[#0e1712] border border-gold/30 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Article Modal Header with Tabs -->
+      <div class="p-3.5 border-b border-white/10 flex items-center justify-between bg-[#0a120e] shrink-0 gap-2">
+        <div class="flex items-center gap-1.5 overflow-x-auto py-1 max-w-[70%]" id="article-tabs">
+          <!-- Dynamically populated or switchable -->
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="art-font-down" class="px-2 py-1 rounded hover:bg-white/10 text-gray-300 text-xs font-mono font-bold" title="Schrift kleiner">A-</button>
+          <button id="art-font-up" class="px-2 py-1 rounded hover:bg-white/10 text-gray-300 text-xs font-mono font-bold" title="Schrift größer">A+</button>
+          <button id="article-close" class="p-1.5 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Article Narrative Body -->
+      <div class="flex-1 overflow-y-auto p-5 sm:p-8 space-y-4 text-gray-200" id="article-body-container">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-gold/15 text-gold border border-gold/30 text-[10px] font-bold uppercase tracking-wider" id="article-category">
+            PARTNER SPOTLIGHT
+          </span>
+          <span class="text-xs text-gray-400 font-mono" id="article-page-badge">S. 08–09</span>
+        </div>
+        <h2 id="article-headline" class="font-serif text-2xl sm:text-3xl font-bold text-white leading-tight"></h2>
+        <p id="article-lead" class="text-sm sm:text-base text-gold font-medium leading-relaxed border-l-2 border-gold pl-3"></p>
+        <div id="article-tags" class="flex flex-wrap gap-1.5 py-1"></div>
+        <div id="article-text" class="text-sm leading-relaxed space-y-3 font-sans text-gray-300"></div>
+      </div>
+
+      <!-- Footer Action -->
+      <div class="p-3 bg-[#0a120e] border-t border-white/10 flex items-center justify-between shrink-0">
+        <span class="text-xs text-gray-400">Speisely Journal · Leseansicht</span>
+        <button id="article-jump-btn" class="px-3.5 py-1.5 rounded-lg bg-gold text-forest-dark font-bold text-xs hover:bg-gold-light transition shadow flex items-center gap-1.5">
+          <span>Im Magazin aufschlagen</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- 7. FULL-TEXT SEARCH MODAL (#search-modal)                                 -->
+  <!-- ========================================================================= -->
+  <div id="search-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-start justify-center pt-16 sm:pt-20 p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-[#0e1712] border border-gold/30 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col">
+      <div class="p-3.5 border-b border-white/10 flex items-center gap-2.5 bg-[#0a120e]">
+        <i data-lucide="search" class="w-4 h-4 text-gold shrink-0"></i>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Im Magazin suchen (z.B. Burger, Alzaeem, Mandy, Hendl, KI-Suche)..." 
+          class="bg-transparent text-white text-sm w-full outline-none placeholder:text-gray-500 font-sans"
+          autocomplete="off"
+        >
+        <button id="search-close" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-3 max-h-80 overflow-y-auto space-y-2" id="search-results">
+        <div class="text-xs text-gray-400 text-center py-6">
+          Tippen Sie einen Suchbegriff ein, um alle 18 Magazinseiten live zu durchsuchen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- 8. SHARE MODAL (#share-modal)                                             -->
+  <!-- ========================================================================= -->
+  <div id="share-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="bg-[#0e1712] border border-gold/30 rounded-2xl w-full max-w-md p-5 shadow-2xl flex flex-col gap-4">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="share-2" class="w-4 h-4 text-gold"></i>
+          <h3 class="font-serif font-bold text-white text-sm">Magazin teilen</h3>
+        </div>
+        <button id="share-close" class="p-1 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-gray-300">
+        Teilen Sie die digitale Erstausgabe des Speisely Journals mit Freunden, Partnern und Kollegen:
+      </p>
+
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <a id="share-whatsapp" href="#" target="_blank" class="p-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 flex items-center justify-center gap-2 font-medium transition">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>WhatsApp</span>
+        </a>
+        <a id="share-linkedin" href="#" target="_blank" class="p-2.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/40 text-blue-300 flex items-center justify-center gap-2 font-medium transition">
+          <i data-lucide="linkedin" class="w-4 h-4"></i>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+
+      <div class="flex items-center gap-2 pt-1">
+        <input type="text" id="share-url-input" readonly value="https://speisely.de/magazin/reader" class="bg-black/50 border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-gray-300 font-mono w-full outline-none">
+        <button id="share-copy-btn" class="px-3.5 py-1.5 rounded-lg bg-gold text-forest-dark font-bold text-xs hover:bg-gold-light transition shrink-0">
+          Kopieren
+        </button>
+      </div>
+      <div id="share-toast" class="text-[11px] text-emerald-400 text-center opacity-0 transition-opacity font-medium">
+        ✓ Link erfolgreich in Zwischenablage kopiert!
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- 9. ENGINE & RESPONSIVE CONTROLLER SCRIPT                                  -->
   <!-- ========================================================================= -->
   <script>
     let flipbook = null;
@@ -2890,21 +3166,127 @@
     let sharedAudioCtx = null;
     let cachedNoiseBuffer = null;
 
+    // Search Index Data
+    const searchIndex = [
+      { page: 0, title: "Cover & Titelbild", desc: "Speisely Magazin Ausgabe 01 Herbst 2026 Große Tafeln goldener Herbst" },
+      { page: 1, title: "Speisely Pro & Editorial", desc: "Mehr Eventbuchungen Volle Küchenauslastung Null Provisionsdruck B2B Gastronomie Die Rückkehr der großen Tafel" },
+      { page: 3, title: "Krosses Gold & Zarte Glut", desc: "Wiesn Hendl Festkultur Geflügel Butterschmalz Kaiserschmarrn Patisserie Festmahl Knusprig Tradition" },
+      { page: 5, title: "Digital Food Radar & Flaggschiff", desc: "Speisely Digital Flaggschiff Website Online-Bestellungen Community Food Radar Drei Kieze Meister" },
+      { page: 7, title: "Thronburger Berlin (Friedrichshain)", desc: "Thronburger Berlin Handgemachte Burger-Kultur Sesam-Brioche Smash Burger Rindfleisch Kiez Friedrichshain Saucen" },
+      { page: 9, title: "Alzaeem Berlin (Sonnenallee)", desc: "Alzaeem Berlin Das Feuer der Sonnenallee Rauch Buchenholz syrische Festkultur Holzkohlegrill Lammspieße Kebab Neukölln Halal" },
+      { page: 11, title: "Restaurant Mandy Berlin (Reuterkiez)", desc: "Restaurant Mandy Berlin Festmahl Steinofen Lehmofen Jemenitische Festkultur Reuterkiez Mandi Reis Lamm Safran Gewürze" },
+      { page: 13, title: "TechGlanz & KI-Suche (FoodTech)", desc: "TechGlanz GEO KI-Suche ChatGPT Perplexity Gemini Suchmaschinen Sichtbarkeit Algorithmen Gastronomie Zukunft" },
+      { page: 15, title: "Catering direkt vom Küchenchef", desc: "Schluss mit 25% Makleraufschlag Catering direkt vom Küchenchef Event Business Lunch Hochzeit Firmenfeier" },
+      { page: 17, title: "Speisely Ökosystem & Impressum", desc: "Ein Ökosystem für moderne Esskultur in Deutschland Impressum Kontakt Speisely Technologies GmbH" }
+    ];
+
+    // Pop-Out Articles Data
+    const articlesData = [
+      {
+        id: "thronburger",
+        page: 7,
+        tabName: "Thronburger",
+        category: "PARTNER SPOTLIGHT · FRIEDRICHSHAIN",
+        pageBadge: "S. 08–09",
+        headline: "Thronburger Berlin: Handgemachte Burger-Kultur im Sesam-Brioche",
+        lead: "Ein Kiez auf dem Holztablett: Warum handgewolftes Rindfleisch und goldene Brioche-Buns die Berliner Burgerlandschaft neu definieren.",
+        tags: ["100% Deutsches Rindfleisch", "Täglich frisch gewolft", "Sesam-Brioche", "Hausgemachte Saucen"],
+        body: [
+          "In der pulsierenden Food-Szene Friedrichshains setzt Thronburger neue Maßstäbe für ehrliches Handwerk. Statt auf industrielle Tiefkühl-Patties setzt das Team auf täglich frisch gewolftes deutsches Rindfleisch, das auf der glühenden Chromplatte scharf gesmasht wird.",
+          "Das Ergebnis: Eine intensive Kruste mit tiefen Röstaromen, während der Kern saftig und zart bleibt.",
+          "Eingebettet in ein butterweiches, leicht angetoastetes Sesam-Brioche-Bun und vollendet mit reduzierten Zwiebelmarmeladen und hausgemachten Saucen entsteht ein Burger-Erlebnis, das frei von Schnickschnack ist – purer, unverkennbarer Geschmack."
+        ]
+      },
+      {
+        id: "alzaeem",
+        page: 9,
+        tabName: "Alzaeem",
+        category: "HOLZKOHLE-KULT · SONNENALLEE",
+        pageBadge: "S. 10–11",
+        headline: "Alzaeem Berlin: Das Feuer der Sonnenallee – Rauch, Buchenholz und Festkultur",
+        lead: "Wenn der Duft von glimmendem Buchenholz über die Sonnenallee zieht, versammelt sich Berlin am offenen Grill von Alzaeem.",
+        tags: ["100% Halal", "Echtes Buchenholz", "Offener Grill", "Neukölln Institution"],
+        body: [
+          "Auf dem monumentalen Holzkohlegrill tanzen die Flammen: Saftige Lammkoteletts, von Hand gewürzte Hackfleischspieße (Kabab Halabi) und zart mariniertes Shish Taouk brutzeln über natürlicher Glut.",
+          "Die Kunst liegt hier im präzisen Spiel mit der Hitze – das Fleisch nimmt den feinen, rauchigen Charakter des Buchenholzes auf, während orientalische Gewürze wie Kardamom, Kumin und Sumach auf der Kruste karamellisieren.",
+          "Serviert auf ofenfrischem Fladenbrot mit gegrillten Tomaten, Petersilien-Zwiebel-Salat und cremigem Knoblauch-Dip zelebriert Alzaeem eine Festkultur, die Generationen verbindet."
+        ]
+      },
+      {
+        id: "mandy",
+        page: 11,
+        tabName: "Restaurant Mandy",
+        category: "TRADITIONELLE HERITAGE-KÜCHE · REUTERKIEZ",
+        pageBadge: "S. 12–13",
+        headline: "Restaurant Mandy Berlin: Das Festmahl aus dem Steinofen",
+        lead: "Vier Stunden im geschlossenen Lehmofen gegart: Wie Restaurant Mandy das legendäre jemenitische Nationalgericht nach Berlin bringt.",
+        tags: ["Lehmofen-Garmethode", "Safran-Mandi", "Familienrezeptur", "Heritage Gastronomy"],
+        body: [
+          "Mandi ist nicht einfach ein Essen – es ist ein jahrhundertealtes Kulturgut. Das zarte Lammfleisch wird über Stunden im traditionellen Lehmofen über glühender Kohle sanft gegart.",
+          "Das herabtropfende Fett aromatisiert den darunter liegenden Basmatireis, der mit edlem Safran, Nelken, schwarzer Limette und Zimt veredelt wird. Wenn der schwere Ofendeckel angehoben wird, zerfällt das Fleisch buchstäblich auf der Zunge.",
+          "Begleitet von der traditionellen Sahawiq-Tomatensalsa und duftendem Maraq-Sud bietet Mandy im Reuterkiez ein seltenes, unverfälschtes Festmahl."
+        ]
+      },
+      {
+        id: "hendl",
+        page: 3,
+        tabName: "Wiesn-Hendl",
+        category: "REPORTAGE · KLASSIKER DES SÜDENS",
+        pageBadge: "S. 04–05",
+        headline: "Krosses Gold & Zarte Glut: Die Kunst des perfekten Wiesn-Hendls",
+        lead: "Soufflierte Knusprigkeit, frische Kräuter und reine Butter: Warum Festmahl-Klassiker eine handwerkliche Renaissance erleben.",
+        tags: ["Buchenholz-Grill", "Reines Butterschmalz", "Traditionsrezept", "Festkultur"],
+        body: [
+          "Das Geheimnis eines vollendeten Fest-Hendls liegt in drei Schritten: Erstens die Herkunft des Geflügels mit artgerechtem Freilauf. Zweitens die Marinade aus feinem Meersalz, Paprika de la Vera und frischem Rosmarin.",
+          "Drittens das langsame Rotieren über glühenden Buchenholz-Spänen mit kontinuierlichem Bestreichen aus reinem Butterschmalz.",
+          "Die Haut plustert sich goldbraun auf wie ein feines Blätterteiggebäck, während das Fleisch saftig und aromatisch bleibt."
+        ]
+      },
+      {
+        id: "techglanz",
+        page: 13,
+        tabName: "TechGlanz GEO",
+        category: "FOODTECH & GEO 2026",
+        pageBadge: "S. 14–15",
+        headline: "Unsichtbar für ChatGPT? Wie moderne Gastronomen in der KI-Suche dominieren",
+        lead: "90% aller Google-Suchen weichen konversationellen Antworten. Wer in Perplexity und Gemini nicht zitiert wird, verliert Gäste.",
+        tags: ["GEO / AEO Search", "llms.txt Standard", "Zero-Commission", "AI Discovery"],
+        body: [
+          "Die Art, wie Menschen Restaurants finden, hat sich radikal verändert. Gäste tippen nicht mehr nur Keywords wie 'Catering Berlin' ein, sondern fragen KI-Assistenten: 'Wo bekomme ich heute Abend das beste authentische Lammfleisch mit offenem Grill für 10 Personen?'.",
+          "Speisely und TechGlanz haben die erste semantische GEO-Architektur für Gastronomen geschaffen. Durch strukturierte JSON-LD Menüs, llms.txt Vektorisierung und verifizierte Story-Zitate stellen wir sicher, dass KI-Modelle unsere Partner als erste Empfehlung ausspielen."
+        ]
+      },
+      {
+        id: "catering",
+        page: 15,
+        tabName: "Direct Catering",
+        category: "CATERING REVOLUTION",
+        pageBadge: "S. 16–17",
+        headline: "Schluss mit 25% Makleraufschlag: Catering direkt vom Küchenchef",
+        lead: "Transparenz statt Mittelsmänner: Wie Speisely Firmen und Eventplaner direkt mit Spitzenköchen verbindet.",
+        tags: ["0% Maklergebühr", "Direkter Kontakt", "Live-Cooking", "Corporate & Wedding"],
+        body: [
+          "Traditionelle Catering-Portale verlangen bis zu 30% Provision von Küchenchefs. Das Resultat: Überhöhte Preise für Kunden oder Einsparungen bei der Qualität der Zutaten.",
+          "Speisely bricht dieses Modell auf: Firmen, Vereine und Brautpaare buchen direkt beim Küchenchef. 100% des Budgets fließen in erstklassige Lebensmittel, faire Entlohnung der Küchenteams und unvergessliche Live-Cooking-Stationen."
+        ]
+      }
+    ];
+
     // Lazy singleton Web Audio initialization (avoids main-thread blocking on flip)
     function getAudioEngine() {
       if (!sharedAudioCtx) {
-        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtxClass) return null;
-        sharedAudioCtx = new AudioCtxClass();
-        const bufferSize = Math.floor(sharedAudioCtx.sampleRate * 0.11);
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return null;
+        sharedAudioCtx = new AudioCtx();
+        const bufferSize = sharedAudioCtx.sampleRate * 0.16;
         cachedNoiseBuffer = sharedAudioCtx.createBuffer(1, bufferSize, sharedAudioCtx.sampleRate);
-        const data = cachedNoiseBuffer.getChannelData(0);
+        const output = cachedNoiseBuffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
-          data[i] = Math.random() * 2 - 1;
+          output[i] = Math.random() * 2 - 1;
         }
       }
       if (sharedAudioCtx.state === 'suspended') {
-        sharedAudioCtx.resume().catch(() => {});
+        sharedAudioCtx.resume();
       }
       return sharedAudioCtx;
     }
@@ -2914,99 +3296,196 @@
       try {
         const ctx = getAudioEngine();
         if (!ctx || !cachedNoiseBuffer) return;
-
-        const noise = ctx.createBufferSource();
-        noise.buffer = cachedNoiseBuffer;
-
+        const now = ctx.currentTime;
+        const whiteNoise = ctx.createBufferSource();
+        whiteNoise.buffer = cachedNoiseBuffer;
         const filter = ctx.createBiquadFilter();
         filter.type = 'bandpass';
-        filter.frequency.value = 1100;
-        filter.Q.value = 2.0;
-
-        const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0.06, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.10);
-
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        noise.start();
-      } catch (e) {}
+        filter.frequency.setValueAtTime(1400, now);
+        filter.frequency.exponentialRampToValueAtTime(320, now + 0.15);
+        filter.Q.setValueAtTime(2.2, now);
+        const gainNode = ctx.createGain();
+        gainNode.gain.setValueAtTime(0.001, now);
+        gainNode.gain.linearRampToValueAtTime(0.35, now + 0.025);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        whiteNoise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        whiteNoise.start(now);
+        whiteNoise.stop(now + 0.16);
+      } catch (err) {}
     }
 
-    // Language Switcher Controller
-    function setLanguage(lang) {
-      document.body.setAttribute('data-lang', lang);
+    // Global Jump To Page function
+    function jumpToPage(idx) {
+      if (!flipbook) return;
       try {
-        localStorage.setItem('speisely_magazin_lang', lang);
-      } catch (e) {}
-
-      const btnDe = document.getElementById('lang-btn-de');
-      const btnEn = document.getElementById('lang-btn-en');
-      if (lang === 'en') {
-        btnEn.className = 'px-2 py-0.5 rounded bg-gold text-forest-dark font-bold transition shadow-sm';
-        btnDe.className = 'px-2 py-0.5 rounded text-gray-400 hover:text-white transition';
-      } else {
-        btnDe.className = 'px-2 py-0.5 rounded bg-gold text-forest-dark font-bold transition shadow-sm';
-        btnEn.className = 'px-2 py-0.5 rounded text-gray-400 hover:text-white transition';
+        flipbook.flip(idx);
+      } catch (e) {
+        try {
+          flipbook.turnToPage(idx);
+        } catch (err) {}
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Drawer Toggles
+    function toggleToc() {
+      const drawer = document.getElementById('toc-drawer');
+      if (drawer) drawer.classList.toggle('-translate-x-full');
+    }
+    function toggleThumbnails() {
+      const drawer = document.getElementById('thumbnails-drawer');
+      if (drawer) drawer.classList.toggle('translate-y-full');
+    }
+
+    // Article Pop-Out Controls
+    let currentArticleFontSize = 14;
+    function openArticleModal(articleId) {
+      const modal = document.getElementById('article-modal');
+      const article = articlesData.find(a => a.id === articleId) || articlesData[0];
+      if (!modal || !article) return;
+
+      document.getElementById('article-category').innerText = article.category;
+      document.getElementById('article-page-badge').innerText = article.pageBadge;
+      document.getElementById('article-headline').innerText = article.headline;
+      document.getElementById('article-lead').innerText = article.lead;
+
+      // Tags
+      const tagsContainer = document.getElementById('article-tags');
+      tagsContainer.innerHTML = article.tags.map(t => 
+        `<span class="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[10px] text-gray-300 font-medium">${t}</span>`
+      ).join('');
+
+      // Body paragraphs
+      const textContainer = document.getElementById('article-text');
+      textContainer.style.fontSize = currentArticleFontSize + 'px';
+      textContainer.innerHTML = article.body.map(p => `<p class="leading-relaxed">${p}</p>`).join('');
+
+      // Jump Button
+      const jumpBtn = document.getElementById('article-jump-btn');
+      jumpBtn.onclick = () => {
+        jumpToPage(article.page);
+        closeArticleModal();
+      };
+
+      // Switch tabs
+      const tabsContainer = document.getElementById('article-tabs');
+      tabsContainer.innerHTML = articlesData.map(a => `
+        <button onclick="openArticleModal('${a.id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition ${a.id === article.id ? 'bg-gold text-forest-dark' : 'bg-white/5 text-gray-400 hover:text-white'}">
+          ${a.tabName}
+        </button>
+      `).join('');
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeArticleModal() {
+      const modal = document.getElementById('article-modal');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    // Search Controls
+    function openSearchModal() {
+      const modal = document.getElementById('search-modal');
+      const input = document.getElementById('search-input');
+      if (modal) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        setTimeout(() => input?.focus(), 100);
+      }
+    }
+    function closeSearchModal() {
+      const modal = document.getElementById('search-modal');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function performSearch(query) {
+      const container = document.getElementById('search-results');
+      if (!container) return;
+      const q = query.trim().toLowerCase();
+      if (!q) {
+        container.innerHTML = '<div class="text-xs text-gray-400 text-center py-6">Tippen Sie einen Suchbegriff ein, um alle 18 Magazinseiten live zu durchsuchen.</div>';
+        return;
+      }
+
+      const matches = searchIndex.filter(item => 
+        item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q)
+      );
+
+      if (matches.length === 0) {
+        container.innerHTML = '<div class="text-xs text-gray-400 text-center py-6">Keine Ergebnisse gefunden für "' + query + '".</div>';
+        return;
+      }
+
+      container.innerHTML = matches.map(m => `
+        <div onclick="jumpToPage(${m.page}); closeSearchModal();" class="p-2.5 rounded-xl bg-white/[0.04] hover:bg-gold/15 border border-white/10 hover:border-gold/40 cursor-pointer transition flex items-center justify-between">
+          <div>
+            <h5 class="font-serif font-bold text-white text-xs">${m.title}</h5>
+            <p class="text-[10.5px] text-gray-400 truncate max-w-sm mt-0.5">${m.desc}</p>
+          </div>
+          <span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-mono font-bold text-[10px] shrink-0">Seite ${m.page === 0 ? '01' : (m.page + 1) + '-' + (m.page + 2)}</span>
+        </div>
+      `).join('');
+    }
+
+    // Share Controls
+    function openShareModal() {
+      const modal = document.getElementById('share-modal');
+      if (!modal) return;
+      const url = window.location.origin + '/magazin/reader';
+      const text = encodeURIComponent('Entdecke das digitale Speisely 3D-Magazin: ' + url);
+      document.getElementById('share-whatsapp').href = 'https://wa.me/?text=' + text;
+      document.getElementById('share-linkedin').href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
+      document.getElementById('share-url-input').value = url;
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+    function closeShareModal() {
+      const modal = document.getElementById('share-modal');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    // Main Engine Lifecycle
+    document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
 
-      // Language buttons setup
-      document.getElementById('lang-btn-de')?.addEventListener('click', () => setLanguage('de'));
-      document.getElementById('lang-btn-en')?.addEventListener('click', () => setLanguage('en'));
-
-      try {
-        const savedLang = localStorage.getItem('speisely_magazin_lang') || 'de';
-        setLanguage(savedLang);
-      } catch (e) {}
-
       const viewport = document.getElementById('magazine-viewport');
-      const flipContainer = document.getElementById('flipbook');
-      if (!flipContainer) return;
-
-      // Embedded mode detection (auto-activates inside /magazin/reader iframe)
-      const urlParams = new URLSearchParams(window.location.search);
-      const isEmbedded = urlParams.get('embedded') === 'true' || window.self !== window.top;
-      if (isEmbedded) {
-        document.body.classList.add('is-embedded');
-      }
-
-      // Portrait on mobile/tablet (< 900px), luxury 2-page spread on desktop/laptop (>= 900px)
+      const flipbookElem = document.getElementById('flipbook');
       const isMobileView = window.innerWidth < 900;
-      flipbook = new St.PageFlip(flipContainer, {
+
+      flipbook = new St.PageFlip(flipbookElem, {
         width: 520,
         height: 740,
         size: 'fixed',
-        minWidth: 300,
+        minWidth: 260,
         maxWidth: 520,
-        minHeight: 420,
+        minHeight: 370,
         maxHeight: 740,
-        maxShadowOpacity: 0.35,
         showCover: !isMobileView,
-        mobileScrollSupport: true,
         usePortrait: isMobileView,
-        startPage: 0
-      });
-      window.flipbook = flipbook;
-
-      const pages = document.querySelectorAll('.page');
-      flipbook.loadFromHTML(pages);
-
-      // Re-fit screen on orientation change
-      flipbook.on('changeOrientation', () => {
-        fitToScreen();
+        startPage: 0,
+        flippingTime: 400,
+        useMouseEvents: true,
+        swipeDistance: 30,
+        showPageCorners: true,
+        maxShadowOpacity: 0.35,
+        mobileScrollSupport: true
       });
 
-      // Page flip event handler
+      flipbook.loadFromHTML(document.querySelectorAll('.page'));
+
+      const spinner = document.getElementById('flipbook-spinner');
+      if (spinner) spinner.style.display = 'none';
+
+      // Update topic title & scrubber on flip
       flipbook.on('flip', (e) => {
         playTurnSound();
         const pageIdx = e.data;
         const total = 18;
+        
+        // Scrubber sync
+        const scrubber = document.getElementById('page-scrubber');
+        if (scrubber) scrubber.value = pageIdx;
+
+        // Top display
         const display = document.getElementById('page-display');
         if (display) {
           const isPortrait = flipbook && typeof flipbook.getOrientation === 'function' && flipbook.getOrientation() === 'portrait';
@@ -3018,37 +3497,37 @@
             } else if (pageIdx >= 17) {
               display.innerText = total + ' / ' + total;
             } else {
-              const leftPage = pageIdx + 1;
-              const rightPage = pageIdx + 2;
-              display.innerText = `${leftPage}-${rightPage} / ${total}`;
+              display.innerText = `${pageIdx + 1}-${pageIdx + 2} / ${total}`;
             }
           }
         }
-      });
 
-      // Double click to zoom in/out for reading small text easily
-      viewport.addEventListener('dblclick', (e) => {
-        e.preventDefault();
-        const currentScale = parseFloat(zoomSlider ? zoomSlider.value : '0.85');
-        if (currentScale < 1.05) {
-          updateZoom(1.25);
-        } else {
-          fitToScreen();
+        // Live Active Topic Title
+        const activeTitle = document.getElementById('active-story-title');
+        if (activeTitle) {
+          const match = searchIndex.find(s => s.page === pageIdx || s.page === pageIdx - 1) || searchIndex[0];
+          activeTitle.innerText = match.title;
         }
+
+        // Arrow auto-hide
+        const arrowLeft = document.getElementById('arrow-left');
+        const arrowRight = document.getElementById('arrow-right');
+        if (arrowLeft) arrowLeft.style.opacity = pageIdx === 0 ? '0.3' : '1';
+        if (arrowRight) arrowRight.style.opacity = pageIdx >= 17 ? '0.3' : '1';
       });
 
-      // Zoom & Responsive Fit-to-Screen Controller (INP Optimized via requestAnimationFrame)
-      const zoomSlider = document.getElementById('zoom-slider');
-      const zoomValue = document.getElementById('zoom-value');
+      flipbook.on('changeOrientation', () => fitToScreen());
+
+      // Responsive Fit to Screen
       let rafZoom = null;
       let rafResize = null;
+      const zoomSlider = document.getElementById('zoom-slider');
 
       function updateZoom(val) {
         if (!viewport) return;
         if (rafZoom) cancelAnimationFrame(rafZoom);
         rafZoom = requestAnimationFrame(() => {
           viewport.style.transform = `scale(${val})`;
-          if (zoomValue) zoomValue.innerText = Math.round(val * 100) + '%';
           if (zoomSlider && zoomSlider.value != val) zoomSlider.value = val;
         });
       }
@@ -3058,12 +3537,8 @@
         rafResize = requestAnimationFrame(() => {
           const main = document.querySelector('main');
           if (!main) return;
-          const isEmbedded = document.body.classList.contains('is-embedded');
-          const topOffset = isEmbedded ? 36 : 105;
-          const availH = Math.max(260, main.clientHeight - topOffset);
-          
+          const availH = Math.max(260, main.clientHeight - 30);
           const isMobileWidth = main.clientWidth < 640;
-          // Allocate generous safe padding for mobile arrows so the book never collides with side navigation
           const sidePadding = isMobileWidth ? 115 : (main.clientWidth < 1024 ? 40 : 100);
           const availW = Math.max(220, main.clientWidth - sidePadding);
           
@@ -3072,7 +3547,6 @@
             : main.clientWidth < 900;
 
           const bookW = isPortraitMode ? 520 : 1040;
-          
           const scaleH = availH / 740;
           const scaleW = availW / bookW;
           
@@ -3084,49 +3558,53 @@
 
       zoomSlider?.addEventListener('input', (e) => updateZoom(parseFloat(e.target.value)), { passive: true });
       document.getElementById('btn-zoom-in')?.addEventListener('click', () => {
-        let v = Math.min(1.3, parseFloat(zoomSlider.value) + 0.08);
+        let v = Math.min(1.3, parseFloat(zoomSlider ? zoomSlider.value : 0.85) + 0.08);
         updateZoom(v);
       });
       document.getElementById('btn-zoom-out')?.addEventListener('click', () => {
-        let v = Math.max(0.5, parseFloat(zoomSlider.value) - 0.08);
+        let v = Math.max(0.4, parseFloat(zoomSlider ? zoomSlider.value : 0.85) - 0.08);
         updateZoom(v);
       });
       document.getElementById('btn-fit-screen')?.addEventListener('click', fitToScreen);
 
-      // Initial Fit and Window Resize Listener with passive debouncing
       fitToScreen();
       window.addEventListener('resize', fitToScreen, { passive: true });
 
-      // Guaranteed Next/Prev Navigation across all browsers and devices
+      // Turn Next / Prev functions
       function turnNext() {
         if (!flipbook) return;
-        try {
-          flipbook.flipNext('bottom');
-        } catch (e) {
-          try {
-            flipbook.turnToNextPage();
-          } catch (err) {}
-        }
+        try { flipbook.flipNext('bottom'); } catch(e) { try { flipbook.turnToNextPage(); } catch(err){} }
       }
-
       function turnPrev() {
         if (!flipbook) return;
-        try {
-          flipbook.flipPrev('bottom');
-        } catch (e) {
-          try {
-            flipbook.turnToPrevPage();
-          } catch (err) {}
-        }
+        try { flipbook.flipPrev('bottom'); } catch(e) { try { flipbook.turnToPrevPage(); } catch(err){} }
       }
 
-      // Navigation Controls
-      document.getElementById('btn-first')?.addEventListener('click', () => flipbook && flipbook.flip(0));
+      // Top bar & arrow navigation
       document.getElementById('btn-prev')?.addEventListener('click', turnPrev);
       document.getElementById('btn-next')?.addEventListener('click', turnNext);
-      document.getElementById('btn-last')?.addEventListener('click', () => flipbook && flipbook.flip(17));
       document.getElementById('arrow-left')?.addEventListener('click', turnPrev);
       document.getElementById('arrow-right')?.addEventListener('click', turnNext);
+
+      // Scrubber Bar controls
+      const scrubber = document.getElementById('page-scrubber');
+      const tooltip = document.getElementById('scrubber-tooltip');
+      scrubber?.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value);
+        if (tooltip) {
+          tooltip.innerText = val === 0 ? 'Cover (Seite 1)' : `Seite ${val + 1}`;
+          tooltip.style.opacity = '1';
+        }
+      });
+      scrubber?.addEventListener('change', (e) => {
+        const val = parseInt(e.target.value);
+        jumpToPage(val);
+        if (tooltip) tooltip.style.opacity = '0';
+      });
+      document.getElementById('scrubber-first')?.addEventListener('click', () => jumpToPage(0));
+      document.getElementById('scrubber-prev')?.addEventListener('click', turnPrev);
+      document.getElementById('scrubber-next')?.addEventListener('click', turnNext);
+      document.getElementById('scrubber-last')?.addEventListener('click', () => jumpToPage(17));
 
       // Audio Toggle
       const audioBtn = document.getElementById('btn-audio');
@@ -3134,18 +3612,18 @@
       audioBtn?.addEventListener('click', () => {
         audioEnabled = !audioEnabled;
         if (audioEnabled) {
-          audioIcon.setAttribute('data-lucide', 'volume-2');
+          audioIcon?.setAttribute('data-lucide', 'volume-2');
           audioBtn.classList.remove('text-gray-500');
           audioBtn.classList.add('text-gold');
         } else {
-          audioIcon.setAttribute('data-lucide', 'volume-x');
+          audioIcon?.setAttribute('data-lucide', 'volume-x');
           audioBtn.classList.remove('text-gold');
           audioBtn.classList.add('text-gray-500');
         }
         lucide.createIcons();
       });
 
-      // Fullscreen
+      // Fullscreen Toggle
       document.getElementById('btn-fullscreen')?.addEventListener('click', () => {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(() => {});
@@ -3154,25 +3632,88 @@
         }
       });
 
-      // Thumbnails Drawer Toggle
-      function toggleThumbnails() {
-        const drawer = document.getElementById('thumbnails-drawer');
-        if (!drawer) return;
-        drawer.classList.toggle('translate-y-full');
-      }
+      // Drawer Triggers
+      document.getElementById('btn-toc')?.addEventListener('click', toggleToc);
+      document.getElementById('toc-close')?.addEventListener('click', toggleToc);
       document.getElementById('btn-thumbnails')?.addEventListener('click', toggleThumbnails);
-      document.getElementById('drawer-toggle')?.addEventListener('click', toggleThumbnails);
+
+      // Article Pop-Out Triggers
+      document.getElementById('btn-articles')?.addEventListener('click', () => openArticleModal('thronburger'));
+      document.getElementById('article-close')?.addEventListener('click', closeArticleModal);
+      document.getElementById('art-font-up')?.addEventListener('click', () => {
+        currentArticleFontSize = Math.min(22, currentArticleFontSize + 2);
+        const el = document.getElementById('article-text');
+        if (el) el.style.fontSize = currentArticleFontSize + 'px';
+      });
+      document.getElementById('art-font-down')?.addEventListener('click', () => {
+        currentArticleFontSize = Math.max(12, currentArticleFontSize - 2);
+        const el = document.getElementById('article-text');
+        if (el) el.style.fontSize = currentArticleFontSize + 'px';
+      });
+
+      // Search Triggers
+      document.getElementById('btn-search')?.addEventListener('click', openSearchModal);
+      document.getElementById('search-close')?.addEventListener('click', closeSearchModal);
+      document.getElementById('search-input')?.addEventListener('input', (e) => performSearch(e.target.value));
+
+      // Share Triggers
+      document.getElementById('btn-share')?.addEventListener('click', openShareModal);
+      document.getElementById('share-close')?.addEventListener('click', closeShareModal);
+      document.getElementById('share-copy-btn')?.addEventListener('click', () => {
+        const input = document.getElementById('share-url-input');
+        if (input) {
+          navigator.clipboard.writeText(input.value).then(() => {
+            const toast = document.getElementById('share-toast');
+            if (toast) {
+              toast.classList.remove('opacity-0');
+              setTimeout(() => toast.classList.add('opacity-0'), 2500);
+            }
+          });
+        }
+      });
+
+      // Language Switcher (DE / EN)
+      const btnDe = document.getElementById('lang-btn-de');
+      const btnEn = document.getElementById('lang-btn-en');
+      btnDe?.addEventListener('click', () => {
+        document.body.setAttribute('data-lang', 'de');
+        btnDe.classList.add('bg-gold', 'text-forest-dark', 'font-bold');
+        btnDe.classList.remove('text-gray-400');
+        btnEn.classList.remove('bg-gold', 'text-forest-dark', 'font-bold');
+        btnEn.classList.add('text-gray-400');
+      });
+      btnEn?.addEventListener('click', () => {
+        document.body.setAttribute('data-lang', 'en');
+        btnEn.classList.add('bg-gold', 'text-forest-dark', 'font-bold');
+        btnEn.classList.remove('text-gray-400');
+        btnDe.classList.remove('bg-gold', 'text-forest-dark', 'font-bold');
+        btnDe.classList.add('text-gray-400');
+      });
 
       // Keyboard navigation
       window.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        if (e.key === 'Escape') {
+          closeArticleModal();
+          closeSearchModal();
+          closeShareModal();
+          const toc = document.getElementById('toc-drawer');
+          if (toc && !toc.classList.contains('-translate-x-full')) toggleToc();
+          const thumb = document.getElementById('thumbnails-drawer');
+          if (thumb && !thumb.classList.contains('translate-y-full')) toggleThumbnails();
+        } else if (e.key === 'ArrowRight' || e.key === 'PageDown') {
           turnNext();
         } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
           turnPrev();
         } else if (e.key === 'Home') {
-          if (flipbook) flipbook.flip(0);
+          jumpToPage(0);
         } else if (e.key === 'End') {
-          if (flipbook) flipbook.flip(15);
+          jumpToPage(17);
+        } else if (e.key === 'f' || e.key === 'F') {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          } else {
+            document.exitFullscreen().catch(() => {});
+          }
         }
       });
     });
