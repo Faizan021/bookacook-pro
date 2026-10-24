@@ -146,17 +146,15 @@ export function SiteHeader() {
           {/* Dropdown 1: Digital Magazine (ISJ 3-Pillar Architecture) */}
           <DropdownMenu>
             <DropdownMenuTrigger
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-forest ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                 isMagazinActive
                   ? "bg-forest !text-[oklch(0.97_0.02_92)] font-semibold shadow-sm"
                   : "text-forest/80 hover:text-forest hover:bg-forest/5"
               }`}
             >
               <span>{t("nav.magazine")}</span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E6B84A] text-forest tracking-wider uppercase">
-                E-Paper
-              </span>
-              <ChevronDown className="h-3.5 w-3.5 opacity-70" aria-hidden="true" />
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E6B84A]" title="E-Paper Digitalausgabe verfügbar" />
+              <ChevronDown className="h-3.5 w-3.5 opacity-70 ml-0.5" aria-hidden="true" />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
@@ -429,9 +427,7 @@ export function SiteHeader() {
               <span className="flex items-center gap-2">
                 <BookOpen className="h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
                 <span>{t("nav.magazine")}</span>
-                <span className="text-[10px] bg-[#E6B84A] text-forest font-bold px-1.5 py-0.5 rounded-full">
-                  E-Paper
-                </span>
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#E6B84A]" />
               </span>
               <ChevronDown
                 className={`h-4 w-4 text-forest/60 transition-transform ${
