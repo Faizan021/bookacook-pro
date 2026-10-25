@@ -757,11 +757,11 @@ function Home() {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-32">
           {/* Top Control Bar: Audience Toggle & Google for Startups Trust Badge */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5 mb-8">
-            <div className="inline-flex items-center p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
+            <div className="w-full sm:w-auto inline-flex items-center p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
               <button
                 type="button"
                 onClick={() => handleAudienceChange("foodie")}
-                className={`flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                   audienceMode === "foodie"
                     ? "bg-[#E6B84A] text-forest shadow-md"
                     : "text-white/80 hover:text-white"
@@ -774,7 +774,7 @@ function Home() {
               <button
                 type="button"
                 onClick={() => handleAudienceChange("partner")}
-                className={`flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                   audienceMode === "partner"
                     ? "bg-[#E6B84A] text-forest shadow-md"
                     : "text-white/80 hover:text-white"
@@ -806,7 +806,7 @@ function Home() {
                 ANTLER
               </span>
 
-              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-black/40 border border-amber-400/30 text-amber-300 font-semibold">
+              <span className="hidden sm:inline-block text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-black/40 border border-amber-400/30 text-amber-300 font-semibold shrink-0">
                 Immersion EMEA
               </span>
 
@@ -841,7 +841,7 @@ function Home() {
               className="lg:col-span-7 max-w-2xl"
             >
               {/* Kicker Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-[#E6B84A]/30 text-xs text-[#E6B84A] font-semibold tracking-wider uppercase mb-4 shadow-sm">
+              <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-[#E6B84A]/30 text-xs text-[#E6B84A] font-semibold tracking-wider uppercase mb-4 shadow-sm">
                 <Sparkles className="h-3.5 w-3.5 text-[#E6B84A]" />
                 <span>
                   {tt("Das kuratierte Gastronomie-Netzwerk", "The Curated Gastronomy Network")}
@@ -891,7 +891,7 @@ function Home() {
                     transition: { duration: shouldReduceMotion ? 0.1 : 0.4, ease: "easeOut" },
                   },
                 }}
-                className="mt-5 text-base sm:text-lg text-white/85 max-w-xl leading-relaxed font-sans"
+                className="mt-4 sm:mt-5 text-sm sm:text-lg text-white/85 max-w-xl leading-relaxed font-sans break-words"
               >
                 {audienceMode === "foodie"
                   ? tt(
@@ -1205,7 +1205,7 @@ function Home() {
                       </p>
 
                       {/* Action Bar */}
-                      <div className="mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between">
+                      <div className="mt-4 pt-3.5 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="flex items-center gap-2 text-xs text-white/80">
                           <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                           <span>
@@ -1215,7 +1215,7 @@ function Home() {
 
                         <Link
                           to="/catering"
-                          className="inline-flex items-center gap-1.5 rounded-full bg-[#E6B84A] hover:bg-[#d4a73b] text-forest font-bold text-xs px-3.5 py-1.5 shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer shrink-0"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-[#E6B84A] hover:bg-[#d4a73b] text-forest font-bold text-xs px-4 py-2.5 sm:py-1.5 shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer shrink-0"
                         >
                           <span>{tt("Catering anfragen", "Request Catering")}</span>
                           <ChevronRight className="w-3.5 h-3.5 text-forest" />
@@ -2592,7 +2592,7 @@ function Home() {
 
             onClick={() => setIsConciergeOpen(true)}
 
-            className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-forest via-[#1a382c] to-[#b28a3c] text-white px-5 py-3 shadow-2xl border border-white/20 hover:border-[#b28a3c] transition-all cursor-pointer group backdrop-blur-md"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-forest via-[#1a382c] to-[#b28a3c] text-white p-3 sm:px-5 sm:py-3 shadow-2xl border border-white/20 hover:border-[#b28a3c] transition-all cursor-pointer group backdrop-blur-md"
 
             title={tt("KI Event-Berater öffnen", "Open AI Event Concierge")}
           >
@@ -2604,7 +2604,7 @@ function Home() {
 
             <Sparkles className="w-4 h-4 text-[#f4d58d] group-hover:rotate-12 transition-transform" />
 
-            <span className="text-xs sm:text-sm font-bold tracking-tight">
+            <span className="hidden sm:inline text-xs sm:text-sm font-bold tracking-tight">
               {tt("✨ KI Event-Berater", "✨ AI Event Concierge")}
             </span>
           </motion.button>
