@@ -78,6 +78,7 @@ import { Route as MagazinCommunityBbqChickenBerlinKreuzbergRouteImport } from '.
 import { Route as MagazinCommunityChickenKrushPragRouteImport } from './routes/magazin.community.chicken-krush-prag'
 import { Route as MagazinCommunityGarconDeCafeBerlinRouteImport } from './routes/magazin.community.garcon-de-cafe-berlin'
 import { Route as MagazinCommunityHarputWiesbadenRouteImport } from './routes/magazin.community.harput-wiesbaden'
+import { Route as MagazinCommunityHausSpaasMoenchengladbachRouteImport } from './routes/magazin.community.haus-spaas-moenchengladbach'
 import { Route as MagazinCommunityKingTutRestaurantBerlinRouteImport } from './routes/magazin.community.king-tut-restaurant-berlin'
 import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazin.community.kokio-berlin'
 import { Route as MagazinCommunityLaGrilladineDuesseldorfRouteImport } from './routes/magazin.community.la-grilladine-duesseldorf'
@@ -462,6 +463,12 @@ const MagazinCommunityHarputWiesbadenRoute =
     path: '/magazin/community/harput-wiesbaden',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityHausSpaasMoenchengladbachRoute =
+  MagazinCommunityHausSpaasMoenchengladbachRouteImport.update({
+    id: '/magazin/community/haus-spaas-moenchengladbach',
+    path: '/magazin/community/haus-spaas-moenchengladbach',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunityKingTutRestaurantBerlinRoute =
   MagazinCommunityKingTutRestaurantBerlinRouteImport.update({
     id: '/magazin/community/king-tut-restaurant-berlin',
@@ -646,6 +653,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/haus-spaas-moenchengladbach': typeof MagazinCommunityHausSpaasMoenchengladbachRoute
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
@@ -733,6 +741,7 @@ export interface FileRoutesByTo {
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/haus-spaas-moenchengladbach': typeof MagazinCommunityHausSpaasMoenchengladbachRoute
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
@@ -825,6 +834,7 @@ export interface FileRoutesById {
   '/magazin/community/chicken-krush-prag': typeof MagazinCommunityChickenKrushPragRoute
   '/magazin/community/garcon-de-cafe-berlin': typeof MagazinCommunityGarconDeCafeBerlinRoute
   '/magazin/community/harput-wiesbaden': typeof MagazinCommunityHarputWiesbadenRoute
+  '/magazin/community/haus-spaas-moenchengladbach': typeof MagazinCommunityHausSpaasMoenchengladbachRoute
   '/magazin/community/king-tut-restaurant-berlin': typeof MagazinCommunityKingTutRestaurantBerlinRoute
   '/magazin/community/kokio-berlin': typeof MagazinCommunityKokioBerlinRoute
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
@@ -917,6 +927,7 @@ export interface FileRouteTypes {
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/haus-spaas-moenchengladbach'
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/la-grilladine-duesseldorf'
@@ -1004,6 +1015,7 @@ export interface FileRouteTypes {
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/haus-spaas-moenchengladbach'
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/la-grilladine-duesseldorf'
@@ -1095,6 +1107,7 @@ export interface FileRouteTypes {
     | '/magazin/community/chicken-krush-prag'
     | '/magazin/community/garcon-de-cafe-berlin'
     | '/magazin/community/harput-wiesbaden'
+    | '/magazin/community/haus-spaas-moenchengladbach'
     | '/magazin/community/king-tut-restaurant-berlin'
     | '/magazin/community/kokio-berlin'
     | '/magazin/community/la-grilladine-duesseldorf'
@@ -1169,6 +1182,7 @@ export interface RootRouteChildren {
   MagazinCommunityChickenKrushPragRoute: typeof MagazinCommunityChickenKrushPragRoute
   MagazinCommunityGarconDeCafeBerlinRoute: typeof MagazinCommunityGarconDeCafeBerlinRoute
   MagazinCommunityHarputWiesbadenRoute: typeof MagazinCommunityHarputWiesbadenRoute
+  MagazinCommunityHausSpaasMoenchengladbachRoute: typeof MagazinCommunityHausSpaasMoenchengladbachRoute
   MagazinCommunityKingTutRestaurantBerlinRoute: typeof MagazinCommunityKingTutRestaurantBerlinRoute
   MagazinCommunityKokioBerlinRoute: typeof MagazinCommunityKokioBerlinRoute
   MagazinCommunityLaGrilladineDuesseldorfRoute: typeof MagazinCommunityLaGrilladineDuesseldorfRoute
@@ -1669,6 +1683,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityHarputWiesbadenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/haus-spaas-moenchengladbach': {
+      id: '/magazin/community/haus-spaas-moenchengladbach'
+      path: '/magazin/community/haus-spaas-moenchengladbach'
+      fullPath: '/magazin/community/haus-spaas-moenchengladbach'
+      preLoaderRoute: typeof MagazinCommunityHausSpaasMoenchengladbachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/king-tut-restaurant-berlin': {
       id: '/magazin/community/king-tut-restaurant-berlin'
       path: '/magazin/community/king-tut-restaurant-berlin'
@@ -2027,6 +2048,8 @@ const rootRouteChildren: RootRouteChildren = {
   MagazinCommunityGarconDeCafeBerlinRoute:
     MagazinCommunityGarconDeCafeBerlinRoute,
   MagazinCommunityHarputWiesbadenRoute: MagazinCommunityHarputWiesbadenRoute,
+  MagazinCommunityHausSpaasMoenchengladbachRoute:
+    MagazinCommunityHausSpaasMoenchengladbachRoute,
   MagazinCommunityKingTutRestaurantBerlinRoute:
     MagazinCommunityKingTutRestaurantBerlinRoute,
   MagazinCommunityKokioBerlinRoute: MagazinCommunityKokioBerlinRoute,

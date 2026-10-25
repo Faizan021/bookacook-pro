@@ -57,6 +57,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/contact", lastmod: today, changefreq: "monthly", priority: "0.5" },
           { path: "/magazin", lastmod: today, changefreq: "weekly", priority: "0.8" },
           { path: "/magazin/digital", lastmod: today, changefreq: "weekly", priority: "0.9" },
+          { path: "/magazin/community/haus-spaas-moenchengladbach", lastmod: today, changefreq: "weekly", priority: "0.8" },
           { path: "/magazin/mediadaten", lastmod: today, changefreq: "weekly", priority: "0.8" },
           {
             path: "/magazin/schnitzel-schmiede",
