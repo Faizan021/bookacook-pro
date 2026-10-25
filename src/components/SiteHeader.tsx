@@ -158,39 +158,67 @@ export function SiteHeader() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="start"
-              className="w-64 bg-white border border-[#e2e8e4] rounded-2xl shadow-xl p-1.5 z-50"
+              className="w-72 bg-white border border-[#e2e8e4] rounded-2xl shadow-2xl p-2 z-50"
             >
-              <DropdownMenuItem asChild className="rounded-xl hover:bg-[#DDEEE3]/40 cursor-pointer p-2.5 bg-[#FAF8F5]">
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-[#FAF8F5] cursor-pointer p-2.5 transition-colors group">
                 <Link
                   to="/magazin/digital"
-                  className="flex items-center justify-between w-full text-forest text-xs font-bold"
+                  className="flex items-start justify-between w-full"
                 >
-                  <div className="flex items-center">
-                    <BookOpen className="mr-2.5 h-4 w-4 text-[#083822]" aria-hidden="true" />
-                    <span>{t("nav.magazine.digital")}</span>
+                  <div className="flex gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-forest/5 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-[#E6B84A]/20 transition-colors">
+                      <BookOpen className="h-4 w-4 text-[#083822]" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-forest text-xs font-bold leading-tight">
+                          {isDe ? "Digitalausgabe & Archiv" : "Digital Edition & Archive"}
+                        </span>
+                        <span className="text-[9px] font-black uppercase tracking-wider bg-[#E6B84A] text-forest px-1.5 py-0.2 rounded-full shadow-xs">
+                          {isDe ? "NEU" : "NEW"}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-forest/65 font-normal mt-0.5 leading-snug">
+                        {isDe ? "Interaktives 3D E-Paper & Ausgaben" : "Interactive 3D E-Paper & Issues"}
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-[10px] bg-[#E6B84A]/40 text-forest font-black px-1.5 py-0.5 rounded-full">
-                    NEU
-                  </span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="rounded-xl hover:bg-forest/5 cursor-pointer p-2.5">
+
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-[#FAF8F5] cursor-pointer p-2.5 transition-colors group">
                 <Link
                   to="/magazin"
-                  className="flex items-center w-full text-forest text-xs font-semibold"
+                  className="flex items-start justify-between w-full"
                 >
-                  <Sparkles className="mr-2.5 h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
-                  <span>{t("nav.magazine.community_reports")}</span>
+                  <div className="flex gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-forest/5 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-[#7FA46B]/20 transition-colors">
+                      <Sparkles className="h-4 w-4 text-[#7FA46B]" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <span className="text-forest text-xs font-bold leading-tight block">
+                        {isDe ? "Community Reports & Visits" : "Community Reports & Visits"}
+                      </span>
+                      <p className="text-[11px] text-forest/65 font-normal mt-0.5 leading-snug">
+                        {isDe ? "Echte Restaurantbesuche & Gastro-Stories" : "Authentic visits & culinary stories"}
+                      </p>
+                    </div>
+                  </div>
                 </Link>
               </DropdownMenuItem>
+
               <DropdownMenuSeparator className="bg-[#e2e8e4]/60 my-1" />
-              <DropdownMenuItem asChild className="rounded-xl hover:bg-amber-50 cursor-pointer p-2">
+
+              <DropdownMenuItem asChild className="rounded-xl hover:bg-amber-50/60 cursor-pointer p-2 transition-colors">
                 <Link
                   to="/magazin/mediadaten"
-                  className="flex items-center w-full text-[#A85C36] text-[11px] font-bold"
+                  className="flex items-center justify-between w-full px-1 text-[#A85C36] text-[11px] font-bold"
                 >
-                  <Briefcase className="mr-2.5 h-3.5 w-3.5 text-[#A85C36]" aria-hidden="true" />
-                  <span>{isDe ? "Mediadaten & Werbepartner ↗" : "Media Kit & Advertising ↗"}</span>
+                  <div className="flex items-center">
+                    <Briefcase className="mr-2 h-3.5 w-3.5 text-[#A85C36]" aria-hidden="true" />
+                    <span>{isDe ? "Mediadaten & B2B-Werbepartner" : "Media Kit & Advertising"}</span>
+                  </div>
+                  <span className="text-xs text-[#A85C36]/80 font-bold">↗</span>
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -434,15 +462,15 @@ export function SiteHeader() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block py-1.5 text-xs font-bold text-forest flex items-center justify-between"
                 >
-                  <span>• {t("nav.magazine.digital")}</span>
-                  <span className="text-[10px] bg-[#E6B84A]/30 text-forest px-1.5 rounded-full">NEU</span>
+                  <span>• {isDe ? "Digitalausgabe & Archiv" : "Digital Edition & Archive"}</span>
+                  <span className="text-[10px] bg-[#E6B84A] text-forest font-bold px-1.5 rounded-full">NEU</span>
                 </Link>
                 <Link
                   to="/magazin"
                   onClick={() => setMobileMenuOpen(false)}
                   className="block py-1.5 text-xs font-semibold text-forest/80 hover:text-forest"
                 >
-                  • {t("nav.magazine.community_reports")}
+                  • {isDe ? "Community Reports & Visits" : "Community Reports & Visits"}
                 </Link>
                 <Link
                   to="/magazin/mediadaten"

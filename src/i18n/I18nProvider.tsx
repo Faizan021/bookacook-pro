@@ -11,6 +11,7 @@ const dict: Dict = {
   "nav.planner": { de: "Event Planner", en: "Event Planner" },
   "nav.magazine": { de: "Digital Magazine", en: "Digital Magazine" },
   "nav.magazine.digital": { de: "Digitalausgabe & Archiv", en: "Digital Edition & Archive" },
+  "nav.magazine.community_reports": { de: "Community Reports", en: "Community Reports" },
   "nav.magazine.special": { de: "Spezial-Reportagen", en: "Special Reports" },
   "nav.magazine.all": { de: "Magazin Übersicht", en: "Magazine Overview" },
   "nav.magazine.visits": { de: "Speisely Visits (Vor-Ort)", en: "Speisely Visits (On-Site)" },
