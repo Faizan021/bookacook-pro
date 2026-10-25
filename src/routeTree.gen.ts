@@ -84,6 +84,7 @@ import { Route as MagazinCommunityKokioBerlinRouteImport } from './routes/magazi
 import { Route as MagazinCommunityLaGrilladineDuesseldorfRouteImport } from './routes/magazin.community.la-grilladine-duesseldorf'
 import { Route as MagazinCommunityLumaraCafeBerlinRouteImport } from './routes/magazin.community.lumara-cafe-berlin'
 import { Route as MagazinCommunityNeumannsCafeBerlinRouteImport } from './routes/magazin.community.neumanns-cafe-berlin'
+import { Route as MagazinCommunityPartyserviceKuepperNrwRouteImport } from './routes/magazin.community.partyservice-kuepper-nrw'
 import { Route as MagazinCommunitySanSebastianBerlinRouteImport } from './routes/magazin.community.san-sebastian-berlin'
 import { Route as MagazinCommunitySeydiogluBaklavaBurgerRouteImport } from './routes/magazin.community.seydioglu-baklava-burger'
 import { Route as MagazinCommunityThronburgerBerlinRouteImport } from './routes/magazin.community.thronburger-berlin'
@@ -499,6 +500,12 @@ const MagazinCommunityNeumannsCafeBerlinRoute =
     path: '/magazin/community/neumanns-cafe-berlin',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MagazinCommunityPartyserviceKuepperNrwRoute =
+  MagazinCommunityPartyserviceKuepperNrwRouteImport.update({
+    id: '/magazin/community/partyservice-kuepper-nrw',
+    path: '/magazin/community/partyservice-kuepper-nrw',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MagazinCommunitySanSebastianBerlinRoute =
   MagazinCommunitySanSebastianBerlinRouteImport.update({
     id: '/magazin/community/san-sebastian-berlin',
@@ -659,6 +666,7 @@ export interface FileRoutesByFullPath {
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
   '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
+  '/magazin/community/partyservice-kuepper-nrw': typeof MagazinCommunityPartyserviceKuepperNrwRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/seydioglu-baklava-burger': typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -747,6 +755,7 @@ export interface FileRoutesByTo {
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
   '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
+  '/magazin/community/partyservice-kuepper-nrw': typeof MagazinCommunityPartyserviceKuepperNrwRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/seydioglu-baklava-burger': typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -840,6 +849,7 @@ export interface FileRoutesById {
   '/magazin/community/la-grilladine-duesseldorf': typeof MagazinCommunityLaGrilladineDuesseldorfRoute
   '/magazin/community/lumara-cafe-berlin': typeof MagazinCommunityLumaraCafeBerlinRoute
   '/magazin/community/neumanns-cafe-berlin': typeof MagazinCommunityNeumannsCafeBerlinRoute
+  '/magazin/community/partyservice-kuepper-nrw': typeof MagazinCommunityPartyserviceKuepperNrwRoute
   '/magazin/community/san-sebastian-berlin': typeof MagazinCommunitySanSebastianBerlinRoute
   '/magazin/community/seydioglu-baklava-burger': typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   '/magazin/community/thronburger-berlin': typeof MagazinCommunityThronburgerBerlinRoute
@@ -933,6 +943,7 @@ export interface FileRouteTypes {
     | '/magazin/community/la-grilladine-duesseldorf'
     | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
+    | '/magazin/community/partyservice-kuepper-nrw'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/seydioglu-baklava-burger'
     | '/magazin/community/thronburger-berlin'
@@ -1021,6 +1032,7 @@ export interface FileRouteTypes {
     | '/magazin/community/la-grilladine-duesseldorf'
     | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
+    | '/magazin/community/partyservice-kuepper-nrw'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/seydioglu-baklava-burger'
     | '/magazin/community/thronburger-berlin'
@@ -1113,6 +1125,7 @@ export interface FileRouteTypes {
     | '/magazin/community/la-grilladine-duesseldorf'
     | '/magazin/community/lumara-cafe-berlin'
     | '/magazin/community/neumanns-cafe-berlin'
+    | '/magazin/community/partyservice-kuepper-nrw'
     | '/magazin/community/san-sebastian-berlin'
     | '/magazin/community/seydioglu-baklava-burger'
     | '/magazin/community/thronburger-berlin'
@@ -1188,6 +1201,7 @@ export interface RootRouteChildren {
   MagazinCommunityLaGrilladineDuesseldorfRoute: typeof MagazinCommunityLaGrilladineDuesseldorfRoute
   MagazinCommunityLumaraCafeBerlinRoute: typeof MagazinCommunityLumaraCafeBerlinRoute
   MagazinCommunityNeumannsCafeBerlinRoute: typeof MagazinCommunityNeumannsCafeBerlinRoute
+  MagazinCommunityPartyserviceKuepperNrwRoute: typeof MagazinCommunityPartyserviceKuepperNrwRoute
   MagazinCommunitySanSebastianBerlinRoute: typeof MagazinCommunitySanSebastianBerlinRoute
   MagazinCommunitySeydiogluBaklavaBurgerRoute: typeof MagazinCommunitySeydiogluBaklavaBurgerRoute
   MagazinCommunityThronburgerBerlinRoute: typeof MagazinCommunityThronburgerBerlinRoute
@@ -1725,6 +1739,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MagazinCommunityNeumannsCafeBerlinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/community/partyservice-kuepper-nrw': {
+      id: '/magazin/community/partyservice-kuepper-nrw'
+      path: '/magazin/community/partyservice-kuepper-nrw'
+      fullPath: '/magazin/community/partyservice-kuepper-nrw'
+      preLoaderRoute: typeof MagazinCommunityPartyserviceKuepperNrwRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/magazin/community/san-sebastian-berlin': {
       id: '/magazin/community/san-sebastian-berlin'
       path: '/magazin/community/san-sebastian-berlin'
@@ -2058,6 +2079,8 @@ const rootRouteChildren: RootRouteChildren = {
   MagazinCommunityLumaraCafeBerlinRoute: MagazinCommunityLumaraCafeBerlinRoute,
   MagazinCommunityNeumannsCafeBerlinRoute:
     MagazinCommunityNeumannsCafeBerlinRoute,
+  MagazinCommunityPartyserviceKuepperNrwRoute:
+    MagazinCommunityPartyserviceKuepperNrwRoute,
   MagazinCommunitySanSebastianBerlinRoute:
     MagazinCommunitySanSebastianBerlinRoute,
   MagazinCommunitySeydiogluBaklavaBurgerRoute:

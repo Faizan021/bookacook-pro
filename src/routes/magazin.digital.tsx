@@ -89,24 +89,26 @@ function DigitalMagazinePage() {
   const filteredEditions = useMemo(() => {
     if (activeFilter === "all") return digitalEditions;
     if (activeFilter === "2026") return digitalEditions.filter((e) => e.year === 2026);
-    if (activeFilter === "herbst") return digitalEditions.filter((e) => e.seasonDe.includes("Herbst"));
+    if (activeFilter === "herbst")
+      return digitalEditions.filter((e) => e.seasonDe.includes("Herbst"));
     return digitalEditions;
   }, [activeFilter]);
 
-  const featuredEdition = digitalEditions.find((e) => e.status === "published") || digitalEditions[0];
+  const featuredEdition =
+    digitalEditions.find((e) => e.status === "published") || digitalEditions[0];
 
   return (
     <SiteShell>
       {/* 1. Page Hero */}
       <PageHero
-        badge={tt("✦ DAS OFFIZIELLE E-PAPER ARCHIV", "✦ OFFICIAL E-PAPER ARCHIVE")}
-        title={tt(
+        eyebrow={tt("✦ DAS OFFIZIELLE E-PAPER ARCHIV", "✦ OFFICIAL E-PAPER ARCHIVE")}
+        heading={tt(
           "Speisely Digital Magazine — Ausgaben & E-Paper",
-          "Speisely Digital Magazine — Issues & E-Paper Archive"
+          "Speisely Digital Magazine — Issues & E-Paper Archive",
         )}
-        subtitle={tt(
+        subtext={tt(
           "Blättere durch das Speisely Journal im responsiven 3D-Magazinleser: Hochauflösende Reportagen, interaktive Food-Hotspots, Hintergrundgespräche und B2B-Insights.",
-          "Browse through Speisely Journal in the responsive 3D reader: High-resolution editorial stories, interactive hotspots, behind-the-scenes features, and B2B insights."
+          "Browse through Speisely Journal in the responsive 3D reader: High-resolution editorial stories, interactive hotspots, behind-the-scenes features, and B2B insights.",
         )}
       />
 
@@ -114,7 +116,7 @@ function DigitalMagazinePage() {
         {/* 2. Top Banner: Current Hero Issue Showcase (ISJ Spotlight Standard) */}
         <div className="relative overflow-hidden rounded-3xl bg-[#083822] text-[#FAF8F5] p-6 sm:p-10 mb-16 shadow-2xl border border-[#E6B84A]/30">
           <div className="absolute top-0 right-0 -mt-16 -mr-16 w-96 h-96 bg-[#E6B84A]/10 rounded-full blur-3xl pointer-events-none" />
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
             {/* Left Cover 3D Mockup Container */}
             <div className="lg:col-span-5 flex justify-center">
@@ -126,7 +128,7 @@ function DigitalMagazinePage() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-                  
+
                   {/* Spine Highlight Effect */}
                   <div className="absolute top-0 bottom-0 left-0 w-3 bg-gradient-to-r from-white/30 via-white/5 to-transparent shadow-inner pointer-events-none" />
 
@@ -142,7 +144,8 @@ function DigitalMagazinePage() {
 
                   <div className="absolute bottom-4 left-4 right-4">
                     <p className="text-[#E6B84A] text-xs font-serif font-black tracking-wider uppercase mb-1">
-                      {isDe ? featuredEdition.seasonDe : featuredEdition.seasonEn} · {tt("Ausgabe", "Issue")} #{featuredEdition.issueNumber}
+                      {isDe ? featuredEdition.seasonDe : featuredEdition.seasonEn} ·{" "}
+                      {tt("Ausgabe", "Issue")} #{featuredEdition.issueNumber}
                     </p>
                     <h3 className="text-white font-serif text-lg font-bold leading-snug drop-shadow-md">
                       {isDe ? featuredEdition.titleDe : featuredEdition.titleEn}
@@ -176,7 +179,9 @@ function DigitalMagazinePage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-[#F6F4EB]/90">
                   {featuredEdition.featuredStories.map((story, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <span className="text-[#E6B84A] font-bold">S. {story.page.toString().padStart(2, "0")}</span>
+                      <span className="text-[#E6B84A] font-bold">
+                        S. {story.page.toString().padStart(2, "0")}
+                      </span>
                       <span className="truncate">{story.title}</span>
                     </div>
                   ))}
@@ -213,7 +218,7 @@ function DigitalMagazinePage() {
             <p className="text-xs sm:text-sm text-forest/70 mt-1">
               {tt(
                 "Wähle einen Jahrgang oder eine Ausgabe zum interaktiven Durchblättern.",
-                "Select a year or edition to read interactively."
+                "Select a year or edition to read interactively.",
               )}
             </p>
           </div>
@@ -263,8 +268,8 @@ function DigitalMagazinePage() {
                         edition.status === "published"
                           ? "bg-[#E6B84A] text-forest"
                           : edition.status === "in_production"
-                          ? "bg-blue-600 text-white"
-                          : "bg-stone-700 text-white"
+                            ? "bg-blue-600 text-white"
+                            : "bg-stone-700 text-white"
                       }`}
                     >
                       {isDe ? edition.statusBadgeDe : edition.statusBadgeEn}
@@ -341,12 +346,15 @@ function DigitalMagazinePage() {
               {tt("Für Gastronomen & B2B-Marken", "For Gastronomers & B2B Brands")}
             </span>
             <h3 className="text-xl sm:text-2xl font-serif font-bold text-forest">
-              {tt("Möchtest du Teil der nächsten Ausgabe sein?", "Want to be featured in the next issue?")}
+              {tt(
+                "Möchtest du Teil der nächsten Ausgabe sein?",
+                "Want to be featured in the next issue?",
+              )}
             </h3>
             <p className="text-xs sm:text-sm text-forest/70 max-w-xl">
               {tt(
                 "Präsentiere dein Restaurant, deine Spezialität oder deine FoodTech-Lösung in der kommenden November-Ausgabe von Speisely.",
-                "Feature your restaurant, craft specialty, or FoodTech solution in Speisely's upcoming November edition."
+                "Feature your restaurant, craft specialty, or FoodTech solution in Speisely's upcoming November edition.",
               )}
             </p>
           </div>

@@ -60,6 +60,8 @@ ${blogUrls}
 
 ## Speisely Visits & Community Partner Spotlights (Verified On-Site Reports)
 
+- [Partyservice Küpper BBQ-Catering NRW](/magazin/community/partyservice-kuepper-nrw): Handwerkliches Grillbuffet & Event-Catering in Mönchengladbach & ganz NRW
+- [Haus Spaas Mönchengladbach](/magazin/community/haus-spaas-moenchengladbach): Traditions-Gasthaus, handgeklopfte Schnitzel & Hannen Alt vom Fass
 - [Seydioğlu Baklava Burger](${BASE}/magazin/community/seydioglu-baklava-burger): Pistazien-Lava und handwerkliches Baklava Rhein-Main
 - [Lumara Café Berlin](${BASE}/magazin/community/lumara-cafe-berlin): Ästhetisches Café-Erlebnis in Berlin-Charlottenburg
 - [La Grilladine Düsseldorf](${BASE}/magazin/community/la-grilladine-duesseldorf): Marokkanisches Grill-Erlebnis in Düsseldorf-Oberbilk

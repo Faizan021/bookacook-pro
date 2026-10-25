@@ -29,6 +29,59 @@ export interface MagazineArticle {
 }
 
 export const magazineArticles: MagazineArticle[] = [
+  // 0. Community: Partyservice Küpper BBQ & Event-Catering NRW
+  {
+    id: "partyservice-kuepper-nrw",
+    slug: "partyservice-kuepper-nrw",
+    titleDe: "Feuer, Rauch & Frische: Wie Partyservice Küpper BBQ-Catering in NRW definiert",
+    titleEn: "Fire, Smoke & Precision: How Partyservice Küpper Defines BBQ Catering in NRW",
+    excerptDe:
+      "Zischende Grillstationen, handwerklich mariniertes Grillfleisch, transparente All-Inclusive Pakete und faire Mengenberechnung für Firmen & Hochzeiten in ganz NRW.",
+    excerptEn:
+      "Sizzling barbecue stations, house-marinated meats, transparent all-inclusive packages, and precise portion planning across North Rhine-Westphalia.",
+    image: "/magazin/partyservice-kuepper/kuepper_bbq_grill_platter.webp?v=1",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Mönchengladbach & NRW",
+    city: "Mönchengladbach",
+    dateDe: "25. Oktober 2026",
+    dateEn: "October 25, 2026",
+    readTime: "5 Min.",
+    categories: ["community", "guides"],
+    to: "/magazin/community/partyservice-kuepper-nrw",
+    isVisit: false,
+    disclosureType: "gesponsert",
+    disclosureDe: "Verifizierter Speisely Partner",
+    disclosureEn: "Verified Speisely Partner",
+    featured: true,
+  },
+
+  // 0.1 Community: Haus Spaas Mönchengladbach
+  {
+    id: "haus-spaas-moenchengladbach",
+    slug: "haus-spaas-moenchengladbach",
+    titleDe: "Das ehrliche Handwerk der heißen Pfanne: Haus Spaas im Porträt",
+    titleEn: "The Honest Craft of the Sizzling Pan: Haus Spaas in Mönchengladbach",
+    excerptDe:
+      "Goldgelb gebratene Schnitzelklassiker, frisch gezapftes Hannen Alt vom Fass und herzliche Gastfreundschaft im traditionsreichen Wirtshaus in Mönchengladbach-Bettrath.",
+    excerptEn:
+      "Golden pan-fried schnitzels, freshly poured Hannen Alt on draft, and warm hospitality in Mönchengladbach-Bettrath.",
+    image: "/slide1_schnitzel_hero.webp",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Mönchengladbach-Bettrath",
+    city: "Mönchengladbach",
+    dateDe: "25. Oktober 2026",
+    dateEn: "October 25, 2026",
+    readTime: "5 Min.",
+    categories: ["community"],
+    to: "/magazin/community/haus-spaas-moenchengladbach",
+    isVisit: false,
+    disclosureType: "selbst-bezahlt",
+    disclosureDe: "Community-Einsendung · Verifizierter Partner",
+    disclosureEn: "Community Submission · Verified Partner",
+    featured: true,
+  },
   // 1. Speisely Visit: Nadir Güllü München
   {
     id: "nadir-gullu-baklava",
