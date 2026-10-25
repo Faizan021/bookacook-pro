@@ -80,7 +80,11 @@ Speisely is not a generic SaaS tool or casual fast-food directory. Speisely is a
 
 ---
 
-## 5. Responsive Viewport Constraints
-* **Mobile (375px - 640px):** Single-column layout. Minimum tap target size: `44 x 44 px`. Zero horizontal scrollbars.
+## 5. Responsive Viewport Constraints & Zero-Clip Ergonomics
+* **Mobile (360px - 640px):** Single-column layout. Minimum tap target size: `44 x 44 px`. Zero horizontal scrollbars.
+  * **Zero Right-Edge Truncation:** Multi-button selectors and toggles must use fluid widths (`w-full sm:w-auto` with `flex-1 sm:flex-initial`) to avoid pushing past the 360px viewport.
+  * **Card Action Bar Stacking:** Card footers pairing copy with a CTA button must stack vertically on mobile (`flex-col sm:flex-row gap-3`), with the button expanding to full width (`w-full sm:w-auto`) to eliminate button label slicing.
+  * **Floating Assistant Safe-Zone:** Docked bottom elements must collapse into a compact circular Floating Action Button (FAB, `44x44px`, `p-3 sm:px-5 sm:py-3`) placed at `bottom-4 right-4` so they never cover card buttons.
+  * **Above-the-Fold Cognitive Flow:** Max 1 pill/badge above the mobile hero headline. Secondary category chips are hidden on mobile (`hidden sm:inline-flex`).
 * **Tablet (641px - 1024px):** 2-column catalog grids with `gap-6`.
 * **Desktop (1025px+):** Max canvas constraint `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`. 3-column catalog grids with generous whitespace.

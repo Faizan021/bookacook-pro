@@ -671,6 +671,53 @@ function rule16_PerformanceAndAccessibilityGuardrails() {
 }
 
 // =============================================================================
+// =============================================================================
+// RULE 17 — Mobile Viewport Ergonomics & Zero-Clip Standard (Anti-Truncation Gate)
+// =============================================================================
+function rule17_MobileErgonomicsAndZeroClip() {
+  let mobileErrors = 0;
+  const routeFiles = collectFiles(ROUTES_DIR).filter((f) => /\.(tsx|jsx)$/.test(f));
+
+  for (const file of routeFiles) {
+    const content = fs.readFileSync(file, 'utf8');
+    const relFile = path.relative('.', file);
+
+    // 1. Audit against un-stacked card action bars (border-t flex items-center justify-between with CTA Link lacking responsive flex-col)
+    const cardActionRegex = /border-t[^"']*flex\s+items-center\s+justify-between[\s\S]{1,350}?<Link\b[^>]*className=["'][^"']*\b(?:inline-flex|flex)\b[^"']*>/gi;
+    let match;
+    while ((match = cardActionRegex.exec(content)) !== null) {
+      const block = match[0];
+      if (block.includes('shrink-0') && !block.includes('flex-col') && !block.includes('sm:flex-row') && !block.includes('w-full')) {
+        fail(
+          '17',
+          relFile,
+          'Card action bar with CTA button must use responsive vertical stacking on mobile (`flex-col sm:flex-row gap-3`) with `w-full sm:w-auto` button to prevent right-edge button text clipping (Rule 26.3).'
+        );
+        mobileErrors++;
+      }
+    }
+
+    // 2. Audit against wide fixed floating buttons lacking mobile FAB collapse
+    const fixedFloatingRegex = /className=["'][^"']*\bfixed\s+bottom-[^"']*\bpx-[45678]\b[^"']*["']/gi;
+    let floatMatch;
+    while ((floatMatch = fixedFloatingRegex.exec(content)) !== null) {
+      const cls = floatMatch[0];
+      if (!cls.includes('p-') || !cls.includes('sm:px-')) {
+        fail(
+          '17',
+          relFile,
+          'Fixed floating bottom button must use compact circular padding on mobile (`p-3 sm:px-5`) to avoid covering card action buttons (Rule 26.4).'
+        );
+        mobileErrors++;
+      }
+    }
+  }
+
+  if (mobileErrors === 0) {
+    pass('17', 'Mobile Viewport Ergonomics & Zero-Clip Gate intact (responsive stacking, zero right-edge clipping, mobile FAB safe-zones)');
+  }
+}
+
 // RUN ALL RULES
 // =============================================================================
 console.log();
@@ -695,6 +742,7 @@ rule13_SupabaseDiskProtection();
 rule14_DatabaseSecuritySafeguards();
 rule15_EditorialAndVisualIntegrity();
 rule16_PerformanceAndAccessibilityGuardrails();
+rule17_MobileErgonomicsAndZeroClip();
 
 console.log();
 console.log('──────────────────────────────────────────────────────');

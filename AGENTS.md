@@ -684,3 +684,32 @@ To maximize Google Search indexing speed, Google Perspectives carousel inclusion
 
 3. **In-Caption Keyword Matching:**
    - Social post captions must include the primary localized transactional keyword targeted by the webpage (e.g. *Catering Berlin*, *Halal Food Berlin*, *Catering München*, *Eventplanung Frankfurt*) within the first 100 characters to maximize Google SERP Perspectives ranking.
+
+
+---
+
+## 26. Mandatory Mobile Viewport Ergonomics & Zero-Clip Standard (Anti-Truncation Standard)
+
+To ensure Speisely NEVER again suffers from mobile horizontal truncation, sliced button text, stacked badge blindness, or floating element collision on touchscreens (360px–390px viewports):
+
+1. **Zero Right-Edge Truncation & Fluid Horizontal Sizing:**
+   - **STRICTLY FORBIDDEN:** Never hardcode fixed pixel widths or rigid horizontal containers (`min-w-[...]`, fixed `gap-x-6`, or non-wrapping flexbars) in public routes.
+   - Any multi-button toggle (e.g. audience selectors, filter bars) MUST use fluid mobile sizing (`w-full sm:w-auto`, `flex-1 sm:flex-initial`, `truncate` or `whitespace-nowrap`) so it adapts to 360px screens without triggering hidden overflow or pushing content past the right viewport boundary.
+   - Long text in cards, headlines, or subheads MUST specify `break-words` and responsive typography (`text-sm sm:text-base`) to prevent words like "corporate" or "middlemen" from being truncated by `overflow-x: hidden` parents.
+
+2. **Above-the-Fold Cognitive Clarity (Max 1 Badge Stack on Mobile):**
+   - On viewports `< 640px` (`sm:`), never stack 3 or more informational pills/badges above the hero headline.
+   - Secondary category chips or decorative kicker badges MUST be hidden on mobile (`hidden sm:inline-flex`) so the core value proposition and primary call-to-action remain visible above the fold without causing "badge blindness."
+
+3. **Card Action Bar Vertical Stacking (`flex-col sm:flex-row`):**
+   - In catalog cards, featured partner showcases, or culinary profile cards, when an action bar pairs descriptive text (e.g. *"Direct contact & fixed pricing"*) with a conversion CTA button (e.g. *"Request Catering"*), it MUST stack vertically on mobile (`flex flex-col sm:flex-row sm:items-center justify-between gap-3`).
+   - The CTA button MUST expand to full width on mobile (`w-full sm:w-auto inline-flex items-center justify-center`) with a minimum 44px tap target (`py-2.5 sm:py-1.5`).
+   - Side-by-side horizontal flex squeezes that guillotine button labels into fragments (e.g. *"Reques"*) are strictly prohibited.
+
+4. **Floating Action Elements Safe Zones (Mobile FAB Standard):**
+   - Sticky or fixed bottom elements (such as the AI Event Concierge or support triggers) must NEVER span wide across the mobile screen (`px-5 py-3 text`) where they cover underlying card buttons or forms.
+   - On mobile (`< sm:`), floating assistant triggers MUST collapse into a compact, non-intrusive circular Floating Action Button (FAB, max 48×48 px) placed in a safe corner (`bottom-4 right-4 sm:bottom-6 sm:right-6`).
+   - The text label MUST remain hidden on mobile (`hidden sm:inline`) so the user's primary interactive canvas remains 100% unobstructed.
+
+5. **Automated Compiler Enforcement (`verify:graph` Rule 17):**
+   - `scripts/verify_agent_graph.js` (Rule 17) automatically audits all public route components and cards for rigid horizontal flexbars, unstacked card action bars, and unbounded floating buttons on every build. Any violation halts the build immediately.
