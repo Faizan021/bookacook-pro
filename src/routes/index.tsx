@@ -754,34 +754,40 @@ function Home() {
 
         {/* Hero text & interactive content */}
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-32">
+        <div className="relative z-10 w-full max-w-full lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-32 overflow-hidden">
           {/* Top Control Bar: Audience Toggle & Google for Startups Trust Badge */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5 mb-8">
-            <div className="w-full sm:w-auto inline-flex items-center p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg">
+            <div className="w-full sm:w-auto flex items-center p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg max-w-full">
               <button
                 type="button"
                 onClick={() => handleAudienceChange("foodie")}
-                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                className={`flex-1 sm:flex-initial min-w-0 flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   audienceMode === "foodie"
                     ? "bg-[#E6B84A] text-forest shadow-md"
                     : "text-white/80 hover:text-white"
                 }`}
               >
-                <UtensilsCrossed className="w-3.5 h-3.5" />
-                <span>{tt("Für Genießer & Events", "For Foodies & Events")}</span>
+                <UtensilsCrossed className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">
+                  <span className="sm:hidden">{tt("Für Genießer", "For Foodies")}</span>
+                  <span className="hidden sm:inline">{tt("Für Genießer & Events", "For Foodies & Events")}</span>
+                </span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleAudienceChange("partner")}
-                className={`flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                className={`flex-1 sm:flex-initial min-w-0 flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   audienceMode === "partner"
                     ? "bg-[#E6B84A] text-forest shadow-md"
                     : "text-white/80 hover:text-white"
                 }`}
               >
-                <Building2 className="w-3.5 h-3.5" />
-                <span>{tt("Für Gastronomen & Caterer", "For Restaurants & Caterers")}</span>
+                <Building2 className="w-3.5 h-3.5 shrink-0" />
+                <span className="truncate">
+                  <span className="sm:hidden">{tt("Für Partner", "For Partners")}</span>
+                  <span className="hidden sm:inline">{tt("Für Gastronomen & Caterer", "For Restaurants & Caterers")}</span>
+                </span>
               </button>
             </div>
 
@@ -820,7 +826,7 @@ function Home() {
             </Link>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          <div className="grid lg:grid-cols-12 gap-8 items-center w-full max-w-full">
             {/* Left Column: Headline, Subheadline & Search Omnibar */}
 
             <motion.div
@@ -838,7 +844,7 @@ function Home() {
 
               initial={false}
               animate="visible"
-              className="lg:col-span-7 max-w-2xl"
+              className="lg:col-span-7 max-w-2xl w-full max-w-full min-w-0 overflow-hidden"
             >
               {/* Kicker Badge */}
               <div className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-[#E6B84A]/30 text-xs text-[#E6B84A] font-semibold tracking-wider uppercase mb-4 shadow-sm">
@@ -914,13 +920,13 @@ function Home() {
                     transition: { duration: shouldReduceMotion ? 0.1 : 0.45, ease: "easeOut" },
                   },
                 }}
-                className="mt-7 rounded-3xl border border-white/20 bg-white/[0.08] backdrop-blur-xl p-4 sm:p-5 shadow-2xl relative overflow-hidden"
+                className="mt-6 sm:mt-7 rounded-3xl border border-white/20 bg-white/[0.08] backdrop-blur-xl p-3.5 sm:p-5 shadow-2xl relative overflow-hidden w-full max-w-full min-w-0"
               >
                 {/* Ambient subtle warm gold corner glow */}
                 <div className="absolute -top-12 -right-12 w-36 h-36 bg-[#E6B84A]/15 rounded-full blur-3xl pointer-events-none" />
 
                 {/* Integrated Category Pill Selector */}
-                <div className="flex items-center gap-1 sm:gap-2 p-1 rounded-full bg-black/30 border border-white/10 mb-4 w-full sm:w-fit overflow-x-auto">
+                <div className="flex items-center gap-1 sm:gap-2 p-1 rounded-full bg-black/30 border border-white/10 mb-4 w-full sm:w-fit overflow-x-auto max-w-full scrollbar-none">
                   <button
                     type="button"
                     onClick={() => handleVerticalChange("catering")}
@@ -990,7 +996,7 @@ function Home() {
                       }
                     }}
                     disabled={searching}
-                    className="w-full rounded-2xl bg-white py-3 pl-10 pr-28 sm:py-3.5 sm:pl-11 sm:pr-36 text-xs sm:text-sm text-forest shadow-inner placeholder:text-forest/45 focus:outline-none focus:ring-2 focus:ring-[#E6B84A] transition-all disabled:opacity-80"
+                    className="w-full max-w-full rounded-2xl bg-white py-3 pl-9 pr-24 sm:py-3.5 sm:pl-11 sm:pr-36 text-xs sm:text-sm text-forest shadow-inner placeholder:text-forest/45 focus:outline-none focus:ring-2 focus:ring-[#E6B84A] transition-all disabled:opacity-80"
                     placeholder={
                       audienceMode === "partner"
                         ? tt(
