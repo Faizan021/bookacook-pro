@@ -45,6 +45,8 @@ import { Route as CateringIndexRouteImport } from './routes/catering.index'
 import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
 import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
 import { Route as CateringEventsRouteImport } from './routes/catering.events'
+import { Route as CateringFingerfoodRouteImport } from './routes/catering.fingerfood'
+import { Route as CateringHalalRouteImport } from './routes/catering.halal'
 import { Route as CateringInstitutionalCateringRouteImport } from './routes/catering.institutional-catering'
 import { Route as CommunityIndexRouteImport } from './routes/community.index'
 import { Route as FestivalSchnitzelSchmiedeRouteImport } from './routes/festival.schnitzel-schmiede'
@@ -281,6 +283,16 @@ const CateringDailyCateringSubscriptionsRoute =
 const CateringEventsRoute = CateringEventsRouteImport.update({
   id: '/events',
   path: '/events',
+  getParentRoute: () => CateringRoute,
+} as any)
+const CateringFingerfoodRoute = CateringFingerfoodRouteImport.update({
+  id: '/fingerfood',
+  path: '/fingerfood',
+  getParentRoute: () => CateringRoute,
+} as any)
+const CateringHalalRoute = CateringHalalRouteImport.update({
+  id: '/halal',
+  path: '/halal',
   getParentRoute: () => CateringRoute,
 } as any)
 const CateringInstitutionalCateringRoute =
@@ -632,6 +644,8 @@ export interface FileRoutesByFullPath {
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
+  '/catering/fingerfood': typeof CateringFingerfoodRoute
+  '/catering/halal': typeof CateringHalalRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/digital': typeof MagazinDigitalRoute
@@ -723,6 +737,8 @@ export interface FileRoutesByTo {
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
+  '/catering/fingerfood': typeof CateringFingerfoodRoute
+  '/catering/halal': typeof CateringHalalRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/digital': typeof MagazinDigitalRoute
@@ -817,6 +833,8 @@ export interface FileRoutesById {
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
+  '/catering/fingerfood': typeof CateringFingerfoodRoute
+  '/catering/halal': typeof CateringHalalRoute
   '/catering/institutional-catering': typeof CateringInstitutionalCateringRoute
   '/festival/schnitzel-schmiede': typeof FestivalSchnitzelSchmiedeRoute
   '/magazin/digital': typeof MagazinDigitalRoute
@@ -912,6 +930,8 @@ export interface FileRouteTypes {
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
+    | '/catering/fingerfood'
+    | '/catering/halal'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/digital'
@@ -1003,6 +1023,8 @@ export interface FileRouteTypes {
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
+    | '/catering/fingerfood'
+    | '/catering/halal'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/digital'
@@ -1096,6 +1118,8 @@ export interface FileRouteTypes {
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
+    | '/catering/fingerfood'
+    | '/catering/halal'
     | '/catering/institutional-catering'
     | '/festival/schnitzel-schmiede'
     | '/magazin/digital'
@@ -1478,6 +1502,20 @@ declare module '@tanstack/react-router' {
       path: '/events'
       fullPath: '/catering/events'
       preLoaderRoute: typeof CateringEventsRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/catering/fingerfood': {
+      id: '/catering/fingerfood'
+      path: '/fingerfood'
+      fullPath: '/catering/fingerfood'
+      preLoaderRoute: typeof CateringFingerfoodRouteImport
+      parentRoute: typeof CateringRoute
+    }
+    '/catering/halal': {
+      id: '/catering/halal'
+      path: '/halal'
+      fullPath: '/catering/halal'
+      preLoaderRoute: typeof CateringHalalRouteImport
       parentRoute: typeof CateringRoute
     }
     '/catering/institutional-catering': {
@@ -1943,6 +1981,8 @@ interface CateringRouteChildren {
   CateringSlugRoute: typeof CateringSlugRoute
   CateringDailyCateringSubscriptionsRoute: typeof CateringDailyCateringSubscriptionsRoute
   CateringEventsRoute: typeof CateringEventsRoute
+  CateringFingerfoodRoute: typeof CateringFingerfoodRoute
+  CateringHalalRoute: typeof CateringHalalRoute
   CateringInstitutionalCateringRoute: typeof CateringInstitutionalCateringRoute
   CateringIndexRoute: typeof CateringIndexRoute
   CateringOrtCityRoute: typeof CateringOrtCityRoute
@@ -1953,6 +1993,8 @@ const CateringRouteChildren: CateringRouteChildren = {
   CateringDailyCateringSubscriptionsRoute:
     CateringDailyCateringSubscriptionsRoute,
   CateringEventsRoute: CateringEventsRoute,
+  CateringFingerfoodRoute: CateringFingerfoodRoute,
+  CateringHalalRoute: CateringHalalRoute,
   CateringInstitutionalCateringRoute: CateringInstitutionalCateringRoute,
   CateringIndexRoute: CateringIndexRoute,
   CateringOrtCityRoute: CateringOrtCityRoute,

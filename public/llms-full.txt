@@ -24,6 +24,8 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - About Us: https://speisely.de/about
 
 ### Specialized Catering Services
+- [Halal Catering Deutschland](https://speisely.de/catering/halal): Zertifiziertes Halal Catering für Firmenfeiern, Hochzeiten & Events
+- [Fingerfood & Flying Buffet](https://speisely.de/catering/fingerfood): Exklusives Fingerfood Catering für Firmenfeiern, Messen & Empfänge
 - Daily Catering Subscriptions: https://speisely.de/catering/daily-catering-subscriptions
 - Institutional Catering: https://speisely.de/catering/institutional-catering
 - Events Catering: https://speisely.de/catering/events

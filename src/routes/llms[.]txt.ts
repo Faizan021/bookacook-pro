@@ -49,6 +49,9 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 
 ## Specialized Catering Services & Featured Partners
 
+- [Halal Catering Deutschland](${BASE}/catering/halal): Zertifiziertes Halal Catering für Firmenfeiern, Hochzeiten & Events
+- [Fingerfood & Flying Buffet](${BASE}/catering/fingerfood): Exklusives Fingerfood Catering für Firmenfeiern, Messen & Empfänge
+
 - [Kampala Rolex Germany](${BASE}/catering/kampala-rolex-germany): Authentisches ugandisches & ostafrikanisches Catering München
 - [Daily Catering Subscriptions](${BASE}/catering/daily-catering-subscriptions): Regelmäßige Mitarbeiterverpflegung und Büro-Catering
 - [Institutional Catering](${BASE}/catering/institutional-catering): Großküchen, Bildungseinrichtungen & Betriebsgastronomie

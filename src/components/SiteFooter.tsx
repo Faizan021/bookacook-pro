@@ -46,6 +46,8 @@ export function SiteFooter() {
     { label: "Event-Catering & Buffets", to: "/catering/events" },
     { label: "Büroverpflegung & Subscriptions", to: "/catering/daily-catering-subscriptions" },
     { label: "Groß- & Kitaverpflegung", to: "/catering/institutional-catering" },
+    { label: "Halal Catering & Buffets", to: "/catering/halal" },
+    { label: "Fingerfood & Flying Buffet", to: "/catering/fingerfood" },
     { label: "Maison Verde Catering", to: "/catering/maison-verde" },
     { label: "Partyservice Küpper", to: "/catering/partyservice-kuepper" },
     { label: "Stadt-Tafel Catering", to: "/catering/stadt-tafel" },
