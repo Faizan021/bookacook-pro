@@ -18,13 +18,13 @@ import { PageHero } from "@/components/PageHero";
 export const Route = createFileRoute("/catering/daily-catering-subscriptions")({
   head: () => ({
     meta: [
-      { title: "Büro-Mittagsverpflegung & Team-Lunch — Speisely" },
+      { title: "Office & Meeting Catering für Firmen bestellen — Speisely" },
       {
         name: "description",
         content:
-          "Tägliches oder wöchentliches Büro-Catering für Teams. Frische Menüs, pünktliche Lieferung & Sammelrechnung.",
+          "Office Lunch Catering für Firmen & Teams: Catering für Meetings und Büros online konfigurieren. Frische Menüs, pünktliche Lieferung & Sammelrechnung.",
       },
-      { property: "og:title", content: "Daily Office Catering Subscriptions — Speisely" },
+      { property: "og:title", content: "Office & Meeting Catering für Firmen — Speisely" },
       {
         property: "og:description",
         content:
@@ -46,13 +46,15 @@ function DailySubscriptions() {
   return (
     <SiteShell>
       <PageHero
-        eyebrow={lang === "de" ? "WIEDERKEHRENDE BÜRO-VERPFLEGUNG" : "RECURRING TEAM CATERING"}
+        eyebrow={
+          lang === "de" ? "OFFICE & LUNCH CATERING FÜR FIRMEN" : "OFFICE & TEAM LUNCH CATERING"
+        }
         heading={
           lang === "de" ? (
             <>
-              Das flexible Food-Abo
+              Catering für Meetings &amp; Büros
               <br />
-              für dein <span className="text-[#f2d896]">Office &amp; Team.</span>
+              für dein <span className="text-[#f2d896]">Unternehmen &amp; Team.</span>
             </>
           ) : (
             <>

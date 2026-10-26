@@ -47,18 +47,18 @@ import { z } from "zod";
 export const Route = createFileRoute("/catering/")({
   head: () => ({
     meta: [
-      { title: "Catering für Meetings & Events bestellen — Speisely" },
+      { title: "Catering Plattform: Meetings & Events buchen — Speisely" },
 
       {
         name: "description",
 
         content:
-          "Die Catering-Plattform für Unternehmen & Events: Office Catering, Meeting-Platten und Fingerfood direkt vergleichen und anfragen. Geprüfte Qualität.",
+          "Die Catering-Plattform für Firmen & Events: Catering für Meetings bestellen, Buffets & Fingerfood online konfigurieren und vergleichen. Geprüft & direkt.",
       },
 
       {
         property: "og:title",
-        content: "Catering für Meetings, Events & Büros — Speisely",
+        content: "Catering Plattform für Meetings, Events & Büros — Speisely",
       },
 
       {
