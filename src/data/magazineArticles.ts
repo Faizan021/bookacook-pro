@@ -39,7 +39,7 @@ export const magazineArticles: MagazineArticle[] = [
       "Zarteste Rindermedaillons mit Rauten-Grillbranding, saftige Hähnchenspieße und fangfrische ganze Dorade in moderner Lounge-Atmosphäre an der Berliner Mühlenstraße.",
     excerptEn:
       "Prime beef medallions, succulent skewers, and whole grilled sea bream in a modern riverside lounge setting on Berlin's Mühlenstraße.",
-    image: "/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=3",
+    image: "/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=4",
     categoryBadgeDe: "Community Story",
     categoryBadgeEn: "Community Story",
     location: "Berlin Friedrichshain",

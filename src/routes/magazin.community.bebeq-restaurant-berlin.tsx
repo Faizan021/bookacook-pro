@@ -68,7 +68,7 @@ export const Route = createFileRoute("/magazin/community/bebeq-restaurant-berlin
       },
       {
         property: "og:image",
-        content: "https://speisely.de/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=3",
+        content: "https://speisely.de/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=4",
       },
       { property: "og:type", content: "article" },
       { property: "og:locale", content: "de_DE" },
@@ -139,7 +139,7 @@ export const Route = createFileRoute("/magazin/community/bebeq-restaurant-berlin
               headline: "BebeQ Restaurant Berlin: Fisch, Fleisch & Feuer an der Spree-Promenade",
               description:
                 "Kulinarische Entdeckung in Friedrichshain: Wie das BebeQ modernes Berliner Lounge-Ambiente mit puristischem Holzkohlegrill-Handwerk verbindet.",
-              image: "https://speisely.de/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=3",
+              image: "https://speisely.de/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=4",
               datePublished: "2026-10-26T18:00:00+02:00",
               dateModified: "2026-10-26T18:30:00+02:00",
               inLanguage: "de-DE",
@@ -356,11 +356,11 @@ function BebeQArticlePage() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                 <picture>
                   <source
-                    srcSet="/magazin/bebeq-berlin/bebeq_interior_neon.webp?v=3"
+                    srcSet="/magazin/bebeq-berlin/bebeq_interior_neon.webp?v=4"
                     type="image/webp"
                   />
                   <img
-                    src="/magazin/bebeq-berlin/bebeq_interior_neon.jpg?v=3"
+                    src="/magazin/bebeq-berlin/bebeq_interior_neon.jpg?v=4"
                     alt="BebeQ Restaurant Berlin stilvolles Interieur mit Neon-Akzenten"
                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                     loading="eager"
@@ -438,11 +438,11 @@ function BebeQArticlePage() {
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                   <picture>
                     <source
-                      srcSet="/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=3"
+                      srcSet="/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=4"
                       type="image/webp"
                     />
                     <img
-                      src="/magazin/bebeq-berlin/bebeq_steak_slate.jpg?v=3"
+                      src="/magazin/bebeq-berlin/bebeq_steak_slate.jpg?v=4"
                       alt="Zarte Rindermedaillons mit Kräuterbutter auf Naturschieferplatte"
                       className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                       loading="lazy"
@@ -468,11 +468,11 @@ function BebeQArticlePage() {
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                   <picture>
                     <source
-                      srcSet="/magazin/bebeq-berlin/bebeq_chicken_skewers.webp?v=3"
+                      srcSet="/magazin/bebeq-berlin/bebeq_chicken_skewers.webp?v=4"
                       type="image/webp"
                     />
                     <img
-                      src="/magazin/bebeq-berlin/bebeq_chicken_skewers.jpg?v=3"
+                      src="/magazin/bebeq-berlin/bebeq_chicken_skewers.jpg?v=4"
                       alt="Würzige Hähnchenspieße mit geröstetem Maiskolben und Grilltomate"
                       className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                       loading="lazy"
@@ -556,11 +556,11 @@ function BebeQArticlePage() {
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                   <picture>
                     <source
-                      srcSet="/magazin/bebeq-berlin/bebeq_grilled_seabass.webp?v=3"
+                      srcSet="/magazin/bebeq-berlin/bebeq_grilled_seabass.webp?v=4"
                       type="image/webp"
                     />
                     <img
-                      src="/magazin/bebeq-berlin/bebeq_grilled_seabass.jpg?v=3"
+                      src="/magazin/bebeq-berlin/bebeq_grilled_seabass.jpg?v=4"
                       alt="Ganze gegrillte Dorade mit Röstkartoffeln und Zitronenschnitz"
                       className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                       loading="lazy"
@@ -586,11 +586,11 @@ function BebeQArticlePage() {
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-stone-100">
                   <picture>
                     <source
-                      srcSet="/magazin/bebeq-berlin/bebeq_salmon_fillet.webp?v=3"
+                      srcSet="/magazin/bebeq-berlin/bebeq_salmon_fillet.webp?v=4"
                       type="image/webp"
                     />
                     <img
-                      src="/magazin/bebeq-berlin/bebeq_salmon_fillet.jpg?v=3"
+                      src="/magazin/bebeq-berlin/bebeq_salmon_fillet.jpg?v=4"
                       alt="Glasiertes Lachsfilet vom Grill mit knackigem Salat und Tomate"
                       className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                       loading="lazy"
