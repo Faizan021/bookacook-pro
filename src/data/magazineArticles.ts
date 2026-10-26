@@ -29,6 +29,32 @@ export interface MagazineArticle {
 }
 
 export const magazineArticles: MagazineArticle[] = [
+  // 0. Community: BebeQ Restaurant Berlin
+  {
+    id: "bebeq-restaurant-berlin",
+    slug: "bebeq-restaurant-berlin",
+    titleDe: "BebeQ Restaurant Berlin: Fisch, Fleisch & Feuer an der Spree-Promenade",
+    titleEn: "BebeQ Restaurant Berlin: Fish, Meat & Charcoal Craft by the Spree",
+    excerptDe:
+      "Zarteste Rindermedaillons mit Rauten-Grillbranding, saftige Hähnchenspieße und fangfrische ganze Dorade in moderner Lounge-Atmosphäre an der Berliner Mühlenstraße.",
+    excerptEn:
+      "Prime beef medallions, succulent skewers, and whole grilled sea bream in a modern riverside lounge setting on Berlin's Mühlenstraße.",
+    image: "/magazin/bebeq-berlin/bebeq_steak_slate.webp?v=3",
+    categoryBadgeDe: "Community Story",
+    categoryBadgeEn: "Community Story",
+    location: "Berlin Friedrichshain",
+    city: "Berlin",
+    dateDe: "26. Oktober 2026",
+    dateEn: "October 26, 2026",
+    readTime: "5 Min.",
+    categories: ["community"],
+    to: "/magazin/community/bebeq-restaurant-berlin",
+    isVisit: false,
+    disclosureType: "selbst-bezahlt",
+    disclosureDe: "Community-Einsendung",
+    disclosureEn: "Community Feature",
+    featured: true,
+  },
   // 0. Community: Partyservice Küpper BBQ & Event-Catering NRW
   {
     id: "partyservice-kuepper-nrw",

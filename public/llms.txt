@@ -39,6 +39,8 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 
 ## Speisely Visits & Community Partner Spotlights (Verified Field Reports)
 
+- [BebeQ Restaurant Berlin](https://speisely.de/magazin/community/bebeq-restaurant-berlin): Feinstes Fleisch & frischer Fisch vom Holzkohlegrill an der Spree in Friedrichshain
+
 - [Partyservice Küpper BBQ-Catering NRW](https://speisely.de/magazin/community/partyservice-kuepper-nrw): Handwerkliches Grillbuffet & Event-Catering in Mönchengladbach & ganz NRW
 - [Haus Spaas Mönchengladbach](https://speisely.de/magazin/community/haus-spaas-moenchengladbach): Traditions-Gasthaus, handgeklopfte Schnitzel & Hannen Alt vom Fass
 - [La Grilladine Düsseldorf](https://speisely.de/magazin/community/la-grilladine-duesseldorf): Marokkanisches Grill-Erlebnis in Düsseldorf-Oberbilk

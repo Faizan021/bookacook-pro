@@ -107,6 +107,24 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.8",
           },
           {
+            path: "/magazin/community/bebeq-restaurant-berlin",
+            lastmod: today,
+            changefreq: "monthly",
+            priority: "0.8",
+          },
+          {
+            path: "/magazin/community/partyservice-kuepper-nrw",
+            lastmod: today,
+            changefreq: "monthly",
+            priority: "0.8",
+          },
+          {
+            path: "/magazin/community/haus-spaas-moenchengladbach",
+            lastmod: today,
+            changefreq: "monthly",
+            priority: "0.8",
+          },
+          {
             path: "/magazin/community/seydioglu-baklava-burger",
             lastmod: today,
             changefreq: "monthly",
