@@ -40,6 +40,11 @@ const ROUTES = [
     expect: { status: 200, bodyContains: "Catering" },
   },
   {
+    path: "/catering/rechner",
+    name: "Catering Calculator",
+    expect: { status: 200 },
+  },
+  {
     path: "/planner",
     name: "Event planner listing",
     expect: { status: 200 },

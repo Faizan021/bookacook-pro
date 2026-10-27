@@ -34,6 +34,7 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 
 - [Halal Catering Deutschland](https://speisely.de/catering/halal): Zertifiziertes Halal Catering für Firmenfeiern, Hochzeiten & Events
 - [Fingerfood & Flying Buffet](https://speisely.de/catering/fingerfood): Exklusives Fingerfood Catering für Firmenfeiern, Messen & Empfänge
+- [Catering Kosten & Mengen Rechner](https://speisely.de/catering/rechner): Interaktiver Event-Rechner für Speisemengen (kg), Getränkebedarf (Liter) und Budgetrahmen pro Person
 
 - [Kampala Rolex Germany](https://speisely.de/catering/kampala-rolex-germany): Authentisches ugandisches & ostafrikanisches Catering München
 - [Daily Catering Subscriptions](https://speisely.de/catering/daily-catering-subscriptions): Regelmäßige Mitarbeiterverpflegung und Büro-Catering

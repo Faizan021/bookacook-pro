@@ -35,6 +35,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - [Homepage](${BASE}): Deutschlandweite Plattform für Restaurants, Catering und Event-Planung
 - [Instant Order](${BASE}/instant-order): Restaurant-Entdeckung und direkte Essensbestellung mit 0% Provision
 - [Catering Marktplatz](${BASE}/catering): Buchen Sie Catering für Firmenfeiern, Hochzeiten und Events
+- [Catering Kosten & Mengen Rechner](${BASE}/catering/rechner): Interaktiver Event-Rechner für Speisemengen (kg), Getränkebedarf (Liter) und Budgetrahmen pro Person
 - [Event-Planer Verzeichnis](${BASE}/planner): Verifizierte Event-Planer für Feiern, Firmenjubiläen und Großveranstaltungen
 - [Partner & Preise](${BASE}/partners): Festpreis-Modell ab 34,99 €/Monat für Gastronomen ohne Provisionsabzug
 - [B2B Website-Erstellung](${BASE}/partner/webseiten): High-End Webseiten für Caterer und Gastronomen mit integriertem Shopsystem

@@ -29,6 +29,7 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - Daily Catering Subscriptions: https://speisely.de/catering/daily-catering-subscriptions
 - Institutional Catering: https://speisely.de/catering/institutional-catering
 - Events Catering: https://speisely.de/catering/events
+- Catering Kosten & Mengen Rechner: https://speisely.de/catering/rechner
 
 ### Blog Articles
 - https://speisely.de/blog/what-is-speisely

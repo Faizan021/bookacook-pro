@@ -42,6 +42,7 @@ export function SiteFooter() {
 
   const catererAndGuideLinks = [
     { label: "Meeting- & Office Catering bestellen", to: "/catering" },
+    { label: "Catering Kosten & Mengen Rechner", to: "/catering/rechner" },
     { label: "Catering Konfigurator & Menü-Filter", to: "/catering" },
     { label: "Event-Catering & Buffets", to: "/catering/events" },
     { label: "Büroverpflegung & Subscriptions", to: "/catering/daily-catering-subscriptions" },
