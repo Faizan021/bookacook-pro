@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "verify:graph": "node scripts/verify_agent_graph.js",
+    "verify:backlinks": "node scripts/verify_partner_backlinks.js",
     "smoke:test": "node scripts/smoke_test.js",
     "smoke:full": "node scripts/smoke-test.mjs",
     "qa:visual": "node scripts/visual_qa_judge.cjs",
