@@ -53,6 +53,43 @@ export const Route = createFileRoute("/catering/rechner")({
 type EventType = "corporate" | "wedding" | "private" | "business_lunch" | "summer_bbq";
 type CateringFormat = "fingerfood" | "buffet" | "bbq" | "menu";
 type DrinkPackage = "none" | "soft" | "standard" | "premium";
+type PriceTier = "budget" | "standard" | "premium";
+
+interface PriceTierOption {
+  id: PriceTier;
+  labelDe: string;
+  labelEn: string;
+  badgeDe: string;
+  badgeEn: string;
+  multiplier: number;
+}
+
+const PRICE_TIERS: PriceTierOption[] = [
+  {
+    id: "budget",
+    labelDe: "Solide & Fair",
+    labelEn: "Value & Budget",
+    badgeDe: "Günstig (~ -15%)",
+    badgeEn: "Budget (~ -15%)",
+    multiplier: 0.85,
+  },
+  {
+    id: "standard",
+    labelDe: "Klassik Handwerk",
+    labelEn: "Standard Craft",
+    badgeDe: "Branchenschnitt (Ø)",
+    badgeEn: "Benchmark (Ø)",
+    multiplier: 1.0,
+  },
+  {
+    id: "premium",
+    labelDe: "Gourmet & Bio",
+    labelEn: "Gourmet & Organic",
+    badgeDe: "Exklusiv (~ +30%)",
+    badgeEn: "Premium (~ +30%)",
+    multiplier: 1.3,
+  },
+];
 
 interface EventTypeOption {
   id: EventType;
@@ -213,6 +250,7 @@ function CateringRechnerPage() {
   const [durationHours, setDurationHours] = useState<number>(5);
   const [veggiePercent, setVeggiePercent] = useState<number>(35);
   const [drinkPackage, setDrinkPackage] = useState<DrinkPackage>("standard");
+  const [priceTier, setPriceTier] = useState<PriceTier>("standard");
   const [needTableware, setNeedTableware] = useState<boolean>(true);
   const [needStaff, setNeedStaff] = useState<boolean>(true);
 
@@ -321,12 +359,18 @@ function CateringRechnerPage() {
     const tablewareCostPerGuest = needTableware ? 5.5 : 0;
     const totalTablewareCost = guests * tablewareCostPerGuest;
 
-    // 4. Budget Totals
-    const foodMin = guests * activeFormat.priceMin;
-    const foodMax = guests * activeFormat.priceMax;
+    // 4. Budget Totals (Factoring individual caterer pricing tiers)
+    const tierMultiplier = PRICE_TIERS.find((t) => t.id === priceTier)?.multiplier ?? 1.0;
 
-    const drinkMin = guests * activeDrink.priceMin;
-    const drinkMax = guests * activeDrink.priceMax;
+    const foodMin = Math.round(guests * activeFormat.priceMin * tierMultiplier);
+    const foodMax = Math.round(guests * activeFormat.priceMax * tierMultiplier);
+
+    const drinkMin = Math.round(
+      guests * activeDrink.priceMin * (drinkPackage === "none" ? 1 : tierMultiplier),
+    );
+    const drinkMax = Math.round(
+      guests * activeDrink.priceMax * (drinkPackage === "none" ? 1 : tierMultiplier),
+    );
 
     const totalMin = Math.round(foodMin + drinkMin + totalTablewareCost + totalStaffCost);
     const totalMax = Math.round(foodMax + drinkMax + totalTablewareCost + totalStaffCost);
@@ -367,6 +411,7 @@ function CateringRechnerPage() {
     durationHours,
     veggiePercent,
     drinkPackage,
+    priceTier,
     needTableware,
     needStaff,
     activeFormat,
@@ -392,6 +437,7 @@ function CateringRechnerPage() {
         `Catering-Kalkulator Anfrage:`,
         `- Anlass: ${eventType}`,
         `- Gäste: ${guests} Personen`,
+        `- Preissegment (Orientierung): ${priceTier}`,
         `- Format: ${activeFormat.titleDe}`,
         `- Dauer: ${durationHours} Stunden`,
         `- Vegetarisch: ${veggiePercent}%`,
@@ -721,6 +767,46 @@ function CateringRechnerPage() {
                   })}
                 </div>
 
+                {/* Preissegment / Caterer-Niveau */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-bold uppercase tracking-wider text-forest/80 flex items-center space-x-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-forest" />
+                      <span>{isDe ? "Preissegment des Caterers" : "Caterer Price Tier"}</span>
+                    </label>
+                    <span className="text-[11px] font-medium text-forest/65">
+                      {isDe
+                        ? "Jeder Caterer kalkuliert individuell"
+                        : "Every caterer prices individually"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {PRICE_TIERS.map((tier) => (
+                      <button
+                        key={tier.id}
+                        type="button"
+                        onClick={() => setPriceTier(tier.id)}
+                        className={`p-2.5 rounded-xl border text-center transition-all min-h-[44px] flex flex-col justify-center ${
+                          priceTier === tier.id
+                            ? "bg-forest text-cream border-forest shadow-sm"
+                            : "bg-white text-forest border-[#eadfce] hover:border-forest/40"
+                        }`}
+                      >
+                        <p className="text-xs font-bold leading-tight">
+                          {isDe ? tier.labelDe : tier.labelEn}
+                        </p>
+                        <p
+                          className={`text-[10px] mt-0.5 ${
+                            priceTier === tier.id ? "text-[#f2d896]" : "text-forest/60"
+                          }`}
+                        >
+                          {isDe ? tier.badgeDe : tier.badgeEn}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Veggie vs Meat Ratio Slider */}
                 <div className="space-y-3 pt-2">
                   <div className="flex justify-between items-center">
@@ -1006,6 +1092,19 @@ function CateringRechnerPage() {
                   </div>
                 )}
 
+                {/* Transparent Disclaimer Badge */}
+                <div className="p-3.5 rounded-2xl bg-white/10 border border-[#f2d896]/30 text-[11px] leading-relaxed text-cream/90 flex items-start space-x-2.5">
+                  <Sparkles className="h-4 w-4 text-[#f2d896] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-[#f2d896] block mb-0.5">
+                      {isDe ? "Individuelle Caterer-Kalkulation" : "Custom Caterer Pricing"}
+                    </span>
+                    {isDe
+                      ? "Dieser Rechner ermittelt verlässliche DEHOGA-Branchendurchschnitte. Jeder Caterer kalkuliert nach eigener Menü-Rezeptur, Mindestbestellmenge und regionaler Anfahrt. Die finale Kalkulation erhalten Sie verbindlich im konkreten Angebot."
+                      : "This calculator provides trusted industry averages. Every caterer prices according to their own recipes, minimums, and local logistics. Final prices are determined in the caterer's custom quote."}
+                  </div>
+                </div>
+
                 {/* CTA Jump to Form */}
                 <a
                   href="#angebot"
@@ -1204,6 +1303,12 @@ function CateringRechnerPage() {
 
             <div className="grid gap-4 max-w-4xl mx-auto">
               {[
+                {
+                  qDe: "Warum hat jeder Caterer andere Preise trotz gleicher Gästezahl?",
+                  qEn: "Why does each caterer have different prices for the same guest count?",
+                  aDe: "Catering ist eine individuelle Handwerksleistung. Die Preise variieren je nach Wareneinsatz (z. B. regionales Bio-Fleisch vs. konventionell), Frischegrad, Menü-Aufwand, Personalschlüssel und Anfahrtsweg. Unser Rechner liefert Ihnen die verlässliche Orientierung – die finale Kalkulation erstellt jeder Caterer maßgeschneidert auf Ihre Wünsche.",
+                  aEn: "Catering is handcrafted hospitality. Prices vary based on ingredient sourcing (e.g. local organic vs. standard), dish complexity, staffing and logistics. Our calculator gives you the market benchmark, while each caterer tailors their exact quote to your needs.",
+                },
                 {
                   qDe: "Wie viel Gramm Essen kalkuliert man pro Person beim Catering?",
                   qEn: "How many grams of food per person should you calculate?",
