@@ -55,7 +55,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - [Fingerfood & Flying Buffet](${BASE}/catering/fingerfood): Exklusives Fingerfood Catering für Firmenfeiern, Messen & Empfänge
 
 - [Kampala Rolex Germany](${BASE}/catering/kampala-rolex-germany): Authentisches ugandisches & ostafrikanisches Catering München
-- [RuStiko Sizilianisches Street Food](${BASE}/catering/rustiko): Authentisches sizilianisches Street Food, Arancinette & Event-Catering NRW
+- [RuStiko Sizilianisches Street Food](${BASE}/catering/rustiko): Authentisches sizilianisches Street Food, Arancinette & Event-Catering Berlin
 - [Daily Catering Subscriptions](${BASE}/catering/daily-catering-subscriptions): Regelmäßige Mitarbeiterverpflegung und Büro-Catering
 - [Institutional Catering](${BASE}/catering/institutional-catering): Großküchen, Bildungseinrichtungen & Betriebsgastronomie
 - [Events Catering](${BASE}/catering/events): Hochzeits- & Firmen-Catering mit Full-Service
