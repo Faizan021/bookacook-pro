@@ -1860,14 +1860,14 @@ function Home() {
             {/* Case 1: Partyservice Küpper */}
             <div className="rounded-2xl sm:rounded-3xl bg-white border-2 border-forest/10 p-4 sm:p-5 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider">
-                    BBQ &amp; Event-Catering NRW · Live Referenz
+                <div className="flex items-center justify-between gap-2 mb-2 min-h-[1.5rem]">
+                  <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider truncate">
+                    BBQ &amp; Catering NRW
                   </span>
                   <Link
                     to="/case-study/partyservice-kuepper"
                     aria-label="Live Case Study: Partyservice Küpper BBQ & Event-Catering NRW"
-                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition"
+                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition shrink-0 whitespace-nowrap"
                   >
                     Live Case Study ⭐
                   </Link>
@@ -1898,22 +1898,22 @@ function Home() {
                   </div>
                 </Link>
 
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-start justify-between gap-2 mb-2 min-h-[3.25rem]">
                   <Link
                     to="/case-study/partyservice-kuepper"
                     aria-label="Partyservice Küpper Case Study"
                     className="group-hover:text-[#A85C36] transition"
                   >
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-forest group-hover:text-[#A85C36] transition">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-forest leading-snug group-hover:text-[#A85C36] transition">
                       Partyservice Küpper
                     </h3>
                   </Link>
-                  <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded-full">
+                  <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded-full whitespace-nowrap">
                     ⚡ 99/100 Core Web Vitals
                   </span>
                 </div>
 
-                <p className="text-xs text-forest/75 leading-relaxed mb-3">
+                <p className="min-h-[4rem] text-xs text-forest/75 leading-relaxed mb-3">
                   Von statischem PDF zum volldigitalen Flaggschiff-Auftritt: All-Inclusive
                   BBQ-Pakete, interaktiver Event-Kalkulator und strukturierte GEO / AEO Schema.org
                   Daten für regionale Google-KI-Sichtbarkeit.
@@ -1972,14 +1972,14 @@ function Home() {
             {/* Case 2: Haus Spaas */}
             <div className="rounded-2xl sm:rounded-3xl bg-white border-2 border-forest/10 p-4 sm:p-5 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider">
-                    Traditions-Gastronomie &amp; Eventlokal · Live Referenz
+                <div className="flex items-center justify-between gap-2 mb-2 min-h-[1.5rem]">
+                  <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider truncate">
+                    Traditions-Lokal MG
                   </span>
                   <Link
                     to="/case-study/haus-spaas"
                     aria-label="Live Case Study: Haus Spaas Traditions-Gastronomie & Eventlokal"
-                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition"
+                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition shrink-0 whitespace-nowrap"
                   >
                     Live Case Study ⭐
                   </Link>
@@ -2010,25 +2010,25 @@ function Home() {
                   </div>
                 </Link>
 
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-start justify-between gap-2 mb-2 min-h-[3.25rem]">
                   <Link
                     to="/case-study/haus-spaas"
                     aria-label="Haus Spaas Case Study"
                     className="group-hover:text-[#A85C36] transition"
                   >
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-forest group-hover:text-[#A85C36] transition">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-forest leading-snug group-hover:text-[#A85C36] transition">
                       Haus Spaas
                     </h3>
                   </Link>
-                  <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded-full">
+                  <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded-full whitespace-nowrap">
                     📈 0 % Provision · 100 % Direkt
                   </span>
                 </div>
 
-                <p className="text-xs text-forest/75 leading-relaxed mb-3">
+                <p className="min-h-[4rem] text-xs text-forest/75 leading-relaxed mb-3">
                   Von der PDF-Speisekarte zur direkten WhatsApp-Reservierung: Duales
-                  Speisekarten-System (Oktoberfest &amp; Klassik), direkte 1-Klick WhatsApp- &amp;
-                  E-Mail-Reservierung und schnelle Google-Ladezeiten ohne Mittelsmann-Provision.
+                  Speisekarten-System (Oktoberfest &amp; Klassik), direkte WhatsApp- &amp;
+                  E-Mail-Buchung ohne Mittelsmann-Provision.
                 </p>
 
                 {/* Structured 2x2 Feature Grid — Utilizes 100% Horizontal Width */}
@@ -2084,14 +2084,14 @@ function Home() {
             {/* Case 3: Schnitzel Schmiede */}
             <div className="rounded-2xl sm:rounded-3xl bg-white border-2 border-forest/10 p-4 sm:p-5 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
-                <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center justify-between gap-2 mb-2 min-h-[1.5rem]">
                   <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider truncate">
-                    Schnitzel-Manufaktur · Live Referenz
+                    Schnitzel-Manufaktur MG
                   </span>
                   <Link
                     to="/case-study/schnitzelschmiede"
                     aria-label="Live Case Study: Schnitzel Schmiede Mönchengladbach"
-                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition shrink-0"
+                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition shrink-0 whitespace-nowrap"
                   >
                     Live Case Study ⭐
                   </Link>
@@ -2107,37 +2107,37 @@ function Home() {
                     <div className="w-2 h-2 rounded-full bg-amber-500/80" />
                     <div className="w-2 h-2 rounded-full bg-emerald-500/80" />
                     <div className="ml-1.5 text-[10px] text-white/85 font-mono tracking-tight truncate">
-                      https://www.schnitzelschmiede-mg.de
+                      https://schnitzelschmiede-mg.de
                     </div>
                   </div>
 
                   <div className="relative w-full aspect-[16/9] overflow-hidden bg-forest/20">
                     <img
-                      src="/slide1_schnitzel_hero.webp"
+                      src="/showcase-schnitzelschmiede.webp"
                       alt="Schnitzel Schmiede Mönchengladbach High-End Website"
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                   </div>
                 </Link>
 
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-start justify-between gap-2 mb-2 min-h-[3.25rem]">
                   <Link
                     to="/case-study/schnitzelschmiede"
                     aria-label="Schnitzel Schmiede Case Study"
                     className="group-hover:text-[#A85C36] transition"
                   >
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-forest group-hover:text-[#A85C36] transition">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-forest leading-snug group-hover:text-[#A85C36] transition">
                       Schnitzel Schmiede
                     </h3>
                   </Link>
-                  <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded-full">
+                  <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded-full whitespace-nowrap">
                     ⚡ 0 % Provision · Direkt
                   </span>
                 </div>
 
-                <p className="text-xs text-forest/75 leading-relaxed mb-3">
+                <p className="min-h-[4rem] text-xs text-forest/75 leading-relaxed mb-3">
                   100% frisch geklopftes Fleisch statt Lieferando-Abhängigkeit: 1-Klick WhatsApp
                   Direktbestellung, Butterschmalz-Garantie, Knusper-Verpackung und Partyservice-Kalkulation.
                 </p>
