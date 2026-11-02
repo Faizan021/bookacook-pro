@@ -51,6 +51,7 @@ export function SiteFooter() {
     { label: "Fingerfood & Flying Buffet", to: "/catering/fingerfood" },
     { label: "Maison Verde Catering", to: "/catering/maison-verde" },
     { label: "Partyservice Küpper", to: "/catering/partyservice-kuepper" },
+    { label: "RuStiko Sizilianisches Street Food", to: "/catering/rustiko" },
     { label: "Stadt-Tafel Catering", to: "/catering/stadt-tafel" },
     { label: "Veedo's Kitchen Köln", to: "/catering/veedos-kitchen" },
     { label: "Olivenhain Catering", to: "/catering/olivenhain" },
