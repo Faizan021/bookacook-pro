@@ -91,6 +91,22 @@ const SHOWCASE_PROJECTS = [
       "Interaktiver Event-Kalkulator",
     ],
   },
+  {
+    title: "Schnitzel Schmiede Mönchengladbach",
+    category: "Schnitzel-Manufaktur & Lieferservice NRW",
+    location: "Mönchengladbach & NRW",
+    url: "https://www.schnitzelschmiede-mg.de/",
+    caseStudyUrl: "/case-study/schnitzelschmiede",
+    badge: "Flagship Case Study ⭐",
+    description:
+      "100% frisch geklopftes Handwerk statt Lieferplattform-Abhängigkeit: 1-Klick WhatsApp Direktbestellung, Butterschmalz-Garantie & Partyservice-Kalkulation.",
+    highlights: [
+      "1-Klick WhatsApp Bestellung",
+      "0% Plattform-Provision",
+      "Partyservice & Event-Pakete",
+      "Google AI Overview & Local SEO",
+    ],
+  },
 ];
 
 function WebsiteCreationPage() {

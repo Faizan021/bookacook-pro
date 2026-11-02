@@ -60,6 +60,12 @@ export const Route = createFileRoute("/sitemap.xml")({
             priority: "0.8",
           },
           {
+            path: "/case-study/schnitzelschmiede",
+            lastmod: today,
+            changefreq: "weekly",
+            priority: "0.8",
+          },
+          {
             path: "/nutzungsbedingungen",
             lastmod: today,
             changefreq: "monthly",

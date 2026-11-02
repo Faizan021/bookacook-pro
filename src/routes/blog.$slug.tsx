@@ -191,7 +191,7 @@ function BlogPostPage() {
                   </span>
                 </div>
                 <ul className="space-y-3.5">
-                  {post.tldr[lang].map((item, idx) => (
+                  {post.tldr[lang].map((item: string, idx: number) => (
                     <li
                       key={idx}
                       className="flex items-start gap-3 text-forest/85 text-[15px] sm:text-base leading-relaxed sm:text-justify hyphens-auto [text-justify:inter-word]"
@@ -224,7 +224,7 @@ function BlogPostPage() {
                 </div>
 
                 <div className="space-y-4">
-                  {post.faq.map((item, index) => {
+                  {post.faq.map((item: { question: string; answer: string }, index: number) => {
                     const isOpen = openFaqIndex === index;
                     return (
                       <div

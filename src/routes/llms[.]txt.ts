@@ -41,6 +41,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - [B2B Website-Erstellung](${BASE}/partner/webseiten): High-End Webseiten für Caterer und Gastronomen mit integriertem Shopsystem
 - [Case Study Haus Spaas](${BASE}/case-study/haus-spaas): Traditions-Gastronomie & Eventlokal Digitalisierung
 - [Case Study Partyservice Küpper](${BASE}/case-study/partyservice-kuepper): BBQ & Event-Catering NRW Live-Referenz
+- [Case Study Schnitzel Schmiede](${BASE}/case-study/schnitzelschmiede): 0% Provision, 1-Klick WhatsApp-Bestellung & Partyservice MG
 - [Nutzungsbedingungen](${BASE}/nutzungsbedingungen): Rechtliche Rahmenbedingungen & Plattform-Konditionen
 - [Enterprise GEO API](${BASE}/api/geo): Strukturierte Geo-Daten und Städte-Mapping
 - [GeoJSON Registry](${BASE}/geo.json): Geografische Koordinaten & Service-Areas

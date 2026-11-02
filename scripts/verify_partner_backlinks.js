@@ -16,6 +16,12 @@ const PARTNERS = [
     expectedBacklink: "speisely.de",
     required: true,
   },
+  {
+    name: "Schnitzel Schmiede Mönchengladbach",
+    url: "https://www.schnitzelschmiede-mg.de",
+    expectedBacklink: "speisely.de",
+    required: true,
+  },
 ];
 
 function fetchHtml(url) {

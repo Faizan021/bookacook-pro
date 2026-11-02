@@ -45,6 +45,11 @@ const ROUTES = [
     expect: { status: 200 },
   },
   {
+    path: "/case-study/schnitzelschmiede",
+    name: "Case Study: Schnitzel Schmiede",
+    expect: { status: 200, bodyContains: "Schnitzel Schmiede" },
+  },
+  {
     path: "/planner",
     name: "Event planner listing",
     expect: { status: 200 },

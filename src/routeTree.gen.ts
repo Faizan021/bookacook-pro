@@ -41,6 +41,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CaseStudyHausSpaasRouteImport } from './routes/case-study.haus-spaas'
 import { Route as CaseStudyPartyserviceKuepperRouteImport } from './routes/case-study.partyservice-kuepper'
+import { Route as CaseStudySchnitzelschmiedeRouteImport } from './routes/case-study.schnitzelschmiede'
 import { Route as CateringIndexRouteImport } from './routes/catering.index'
 import { Route as CateringSlugRouteImport } from './routes/catering.$slug'
 import { Route as CateringDailyCateringSubscriptionsRouteImport } from './routes/catering.daily-catering-subscriptions'
@@ -263,6 +264,12 @@ const CaseStudyPartyserviceKuepperRoute =
   CaseStudyPartyserviceKuepperRouteImport.update({
     id: '/case-study/partyservice-kuepper',
     path: '/case-study/partyservice-kuepper',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CaseStudySchnitzelschmiedeRoute =
+  CaseStudySchnitzelschmiedeRouteImport.update({
+    id: '/case-study/schnitzelschmiede',
+    path: '/case-study/schnitzelschmiede',
     getParentRoute: () => rootRouteImport,
   } as any)
 const CateringIndexRoute = CateringIndexRouteImport.update({
@@ -647,6 +654,7 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
   '/case-study/partyservice-kuepper': typeof CaseStudyPartyserviceKuepperRoute
+  '/case-study/schnitzelschmiede': typeof CaseStudySchnitzelschmiedeRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -741,6 +749,7 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
   '/case-study/partyservice-kuepper': typeof CaseStudyPartyserviceKuepperRoute
+  '/case-study/schnitzelschmiede': typeof CaseStudySchnitzelschmiedeRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -838,6 +847,7 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/case-study/haus-spaas': typeof CaseStudyHausSpaasRoute
   '/case-study/partyservice-kuepper': typeof CaseStudyPartyserviceKuepperRoute
+  '/case-study/schnitzelschmiede': typeof CaseStudySchnitzelschmiedeRoute
   '/catering/$slug': typeof CateringSlugRoute
   '/catering/daily-catering-subscriptions': typeof CateringDailyCateringSubscriptionsRoute
   '/catering/events': typeof CateringEventsRoute
@@ -936,6 +946,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/haus-spaas'
     | '/case-study/partyservice-kuepper'
+    | '/case-study/schnitzelschmiede'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -1030,6 +1041,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/haus-spaas'
     | '/case-study/partyservice-kuepper'
+    | '/case-study/schnitzelschmiede'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -1126,6 +1138,7 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/case-study/haus-spaas'
     | '/case-study/partyservice-kuepper'
+    | '/case-study/schnitzelschmiede'
     | '/catering/$slug'
     | '/catering/daily-catering-subscriptions'
     | '/catering/events'
@@ -1221,6 +1234,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   CaseStudyHausSpaasRoute: typeof CaseStudyHausSpaasRoute
   CaseStudyPartyserviceKuepperRoute: typeof CaseStudyPartyserviceKuepperRoute
+  CaseStudySchnitzelschmiedeRoute: typeof CaseStudySchnitzelschmiedeRoute
   FestivalSchnitzelSchmiedeRoute: typeof FestivalSchnitzelSchmiedeRoute
   MagazinDigitalRoute: typeof MagazinDigitalRoute
   MagazinEditionDothtmlRoute: typeof MagazinEditionDothtmlRoute
@@ -1486,6 +1500,13 @@ declare module '@tanstack/react-router' {
       path: '/case-study/partyservice-kuepper'
       fullPath: '/case-study/partyservice-kuepper'
       preLoaderRoute: typeof CaseStudyPartyserviceKuepperRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/case-study/schnitzelschmiede': {
+      id: '/case-study/schnitzelschmiede'
+      path: '/case-study/schnitzelschmiede'
+      fullPath: '/case-study/schnitzelschmiede'
+      preLoaderRoute: typeof CaseStudySchnitzelschmiedeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering/': {
@@ -2125,6 +2146,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   CaseStudyHausSpaasRoute: CaseStudyHausSpaasRoute,
   CaseStudyPartyserviceKuepperRoute: CaseStudyPartyserviceKuepperRoute,
+  CaseStudySchnitzelschmiedeRoute: CaseStudySchnitzelschmiedeRoute,
   FestivalSchnitzelSchmiedeRoute: FestivalSchnitzelSchmiedeRoute,
   MagazinDigitalRoute: MagazinDigitalRoute,
   MagazinEditionDothtmlRoute: MagazinEditionDothtmlRoute,
@@ -2182,13 +2204,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

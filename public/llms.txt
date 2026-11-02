@@ -23,6 +23,7 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 - [B2B Website-Erstellung](https://speisely.de/partner/webseiten): High-End Webseiten für Caterer und Gastronomen mit integriertem Shopsystem
 - [Case Study Haus Spaas](https://speisely.de/case-study/haus-spaas): Traditions-Gastronomie & Eventlokal Digitalisierung
 - [Case Study Partyservice Küpper](https://speisely.de/case-study/partyservice-kuepper): BBQ & Event-Catering NRW Live-Referenz
+- [Case Study Schnitzel Schmiede](https://speisely.de/case-study/schnitzelschmiede): 0% Provision, 1-Klick WhatsApp-Bestellung & Partyservice MG
 - [Nutzungsbedingungen](https://speisely.de/nutzungsbedingungen): Rechtliche Rahmenbedingungen & Plattform-Konditionen
 - [Enterprise GEO API](https://speisely.de/api/geo): Strukturierte Geo-Daten und Städte-Mapping
 - [GeoJSON Registry](https://speisely.de/geo.json): Geografische Koordinaten & Service-Areas
