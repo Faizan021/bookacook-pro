@@ -1856,7 +1856,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Case 1: Partyservice Küpper */}
             <div className="rounded-2xl sm:rounded-3xl bg-white border-2 border-forest/10 p-4 sm:p-5 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
               <div>
@@ -2073,6 +2073,117 @@ function Home() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Haus Spaas Website live ansehen (öffnet in neuem Tab)"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition"
+                  >
+                    <span>Live ↗</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Case 3: Schnitzel Schmiede */}
+            <div className="rounded-2xl sm:rounded-3xl bg-white border-2 border-forest/10 p-4 sm:p-5 shadow-xl hover:border-[#E6B84A] transition flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="text-[10px] font-black uppercase text-[#A85C36] tracking-wider truncate">
+                    Schnitzel-Manufaktur · Live Referenz
+                  </span>
+                  <Link
+                    to="/case-study/schnitzelschmiede"
+                    aria-label="Live Case Study: Schnitzel Schmiede Mönchengladbach"
+                    className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-2.5 py-0.5 hover:bg-emerald-200 transition shrink-0"
+                  >
+                    Live Case Study ⭐
+                  </Link>
+                </div>
+
+                {/* Luxury Browser Mockup Preview */}
+                <Link
+                  to="/case-study/schnitzelschmiede"
+                  className="block relative rounded-xl overflow-hidden border border-forest/15 bg-black/5 shadow-inner mb-3 group-hover:border-[#E6B84A] transition-all"
+                >
+                  <div className="bg-[#1e2922] px-3 py-1.5 flex items-center gap-1.5 border-b border-white/10">
+                    <div className="w-2 h-2 rounded-full bg-rose-500/80" />
+                    <div className="w-2 h-2 rounded-full bg-amber-500/80" />
+                    <div className="w-2 h-2 rounded-full bg-emerald-500/80" />
+                    <div className="ml-1.5 text-[10px] text-white/85 font-mono tracking-tight truncate">
+                      https://www.schnitzelschmiede-mg.de
+                    </div>
+                  </div>
+
+                  <div className="relative w-full aspect-[16/9] overflow-hidden bg-forest/20">
+                    <img
+                      src="/slide1_schnitzel_hero.webp"
+                      alt="Schnitzel Schmiede Mönchengladbach High-End Website"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  </div>
+                </Link>
+
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <Link
+                    to="/case-study/schnitzelschmiede"
+                    aria-label="Schnitzel Schmiede Case Study"
+                    className="group-hover:text-[#A85C36] transition"
+                  >
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-forest group-hover:text-[#A85C36] transition">
+                      Schnitzel Schmiede
+                    </h3>
+                  </Link>
+                  <span className="shrink-0 text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/70 px-2 py-0.5 rounded-full">
+                    ⚡ 0 % Provision · Direkt
+                  </span>
+                </div>
+
+                <p className="text-xs text-forest/75 leading-relaxed mb-3">
+                  100% frisch geklopftes Fleisch statt Lieferando-Abhängigkeit: 1-Klick WhatsApp
+                  Direktbestellung, Butterschmalz-Garantie, Knusper-Verpackung und Partyservice-Kalkulation.
+                </p>
+
+                {/* Structured 2x2 Feature Grid — Utilizes 100% Horizontal Width */}
+                <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-forest/80 mb-3.5">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF7F0] border border-forest/10 text-amber-800">
+                    <span className="shrink-0">🥩</span>
+                    <span className="truncate">Butterschmalz</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF7F0] border border-forest/10 text-emerald-800">
+                    <span className="shrink-0">💬</span>
+                    <span className="truncate">1-Klick WhatsApp</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF7F0] border border-forest/10 text-purple-800">
+                    <span className="shrink-0">⚡</span>
+                    <span className="truncate">PageSpeed 99+</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#FAF7F0] border border-forest/10 text-forest/80">
+                    <span className="shrink-0">🎉</span>
+                    <span className="truncate">Partyservice 10-40</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2.5 border-t border-forest/10 flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-forest/80 font-mono font-medium truncate pr-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                  schnitzelschmiede-mg.de
+                </span>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <Link
+                    to="/case-study/schnitzelschmiede"
+                    aria-label="Case Study Schnitzel Schmiede lesen"
+                    className="inline-flex items-center gap-1 rounded-full bg-[#E6B84A] text-forest px-3 py-1.5 text-xs font-bold shadow-sm hover:bg-[#d6a538] transition"
+                  >
+                    <span>Case Study</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+
+                  <a
+                    href="https://www.schnitzelschmiede-mg.de/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Schnitzel Schmiede Website live ansehen (öffnet in neuem Tab)"
                     className="inline-flex items-center gap-1 text-xs font-bold text-forest/70 hover:text-forest transition"
                   >
                     <span>Live ↗</span>
