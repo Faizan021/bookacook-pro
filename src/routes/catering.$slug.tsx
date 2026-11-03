@@ -1213,8 +1213,11 @@ function CatererPage() {
                 {t("Mindestbestellung", "Min. Order")}
               </dt>
               <dd className="text-xs sm:text-sm font-semibold text-forest flex items-center gap-1 m-0">
-                <Users className="h-4 w-4 text-forest/40 shrink-0" /> {catererProfile.minGuests}{" "}
-                {t("Personen", "Guests")} / €{catererProfile.minBudget}
+                <Users className="h-4 w-4 text-forest/40 shrink-0" />{" "}
+                {catererProfile.minGuests
+                  ? `${catererProfile.minGuests} ${t("Personen", "Guests")}`
+                  : t("Auf Anfrage", "On Request")}
+                {catererProfile.minBudget > 0 ? ` / €${catererProfile.minBudget}` : ""}
               </dd>
             </div>
 
@@ -2612,7 +2615,7 @@ function CatererPage() {
               ) : (
                 <>
                   <CheckCircle2 className="h-4 w-4" />
-                  {t("Anfrage jetzt verbindlich senden", "Confirm & Send Inquiry")}
+                  {t("Anfrage jetzt unverbindlich senden", "Send Non-Binding Inquiry")}
                 </>
               )}
             </button>
