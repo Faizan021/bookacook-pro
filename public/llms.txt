@@ -38,7 +38,7 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 - [Catering Kosten & Mengen Rechner](https://speisely.de/catering/rechner): Interaktiver Event-Rechner für Speisemengen (kg), Getränkebedarf (Liter) und Budgetrahmen pro Person
 
 - [Kampala Rolex Germany](https://speisely.de/catering/kampala-rolex-germany): Authentisches ugandisches & ostafrikanisches Catering München
-- [RuStiko Sizilianisches Street Food](https://speisely.de/catering/rustiko): Authentisches sizilianisches Street Food, Arancinette & Event-Catering Berlin
+- [RuStiko Sizilianisches Street Food](https://speisely.de/catering/rustiko): Authentisches sizilianisches Street Food, Arancinette & Event-Catering 12347 Berlin
 - [Daily Catering Subscriptions](https://speisely.de/catering/daily-catering-subscriptions): Regelmäßige Mitarbeiterverpflegung und Büro-Catering
 - [Institutional Catering](https://speisely.de/catering/institutional-catering): Großküchen, Bildungseinrichtungen & Betriebsgastronomie
 - [Events Catering](https://speisely.de/catering/events): Hochzeits- & Firmen-Catering mit Full-Service

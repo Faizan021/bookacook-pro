@@ -60,11 +60,11 @@ export const fallbackCaterers: Caterer[] = [
       "Firmenevents Berlin",
     ],
     serviceCategories: ["events", "corporate", "private", "wedding"],
-    img: "/caterers/rustiko/01_pizza_parmigiana_hero.webp",
+    img: "/caterers/rustiko/01_hero_sicilian_buffet_hd.webp",
     logo: "/caterers/rustiko/logo.webp",
     status: "available",
-    area: "Berlin & Umgebung (Brandenburgweit auf Anfrage)",
-    address: "Berlin, Deutschland",
+    area: "12347 Berlin & ganzes Stadtgebiet (Brandenburgweit auf Anfrage)",
+    address: "12347 Berlin, Deutschland",
     phone: "",
     cat: "all",
     verified: true,
@@ -79,17 +79,24 @@ export const fallbackCaterers: Caterer[] = [
       "🇮🇹 Authentisches sizilianisches Street Food & Fingerfood-Buffets für Firmenevents in Berlin: Jetzt anfragen!",
     gallery: [
       {
-        url: "/caterers/rustiko/01_pizza_parmigiana_hero.webp",
-        caption: {
-          de: "Pizza in Teglia alla Parmigiana – Fluffiger Blechteig mit gerösteten Auberginen, Fior di Latte & Basilikum",
-          en: "Pizza in Teglia alla Parmigiana – Fluffy sheet pan pizza with roasted eggplant & fior di latte",
-        },
-      },
-      {
         url: "/caterers/rustiko/02_arancinette_fingerfood_showcase.webp",
         caption: {
           de: "Sizilianische Arancinette & Fingerfood-Spezialitäten frisch ausgebacken",
           en: "Crispy Sicilian Arancinette & Street Food Fingerfood Platter",
+        },
+      },
+      {
+        url: "/caterers/rustiko/01_hero_sicilian_buffet_hd.webp",
+        caption: {
+          de: "Sizilianisches Street Food Buffet – Arancini, Pizza in Teglia & Focaccia",
+          en: "Sicilian Street Food Buffet – Arancini, Sheet Pan Pizza & Focaccia",
+        },
+      },
+      {
+        url: "/caterers/rustiko/01_pizza_parmigiana_hero.webp",
+        caption: {
+          de: "Pizza in Teglia alla Parmigiana – Fluffiger Blechteig mit gerösteten Auberginen, Fior di Latte & Basilikum",
+          en: "Pizza in Teglia alla Parmigiana – Fluffy sheet pan pizza with roasted eggplant & fior di latte",
         },
       },
       {
