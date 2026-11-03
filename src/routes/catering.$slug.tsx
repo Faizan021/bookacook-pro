@@ -1645,9 +1645,11 @@ function CatererPage() {
                             : t("Auf Anfrage", "On Request")}
                         </div>
                         <div className="text-[11px] text-white/90 font-medium drop-shadow-sm">
-                          {pkg.price_type === "per_person"
-                            ? t("pro Gast", "per guest")
-                            : t("Pauschal", "flat rate")}
+                          {pkg.price_amount > 0
+                            ? pkg.price_type === "per_person"
+                              ? t("pro Gast", "per guest")
+                              : t("Pauschal", "flat rate")
+                            : t("Individuelles Angebot", "Custom quote")}
                         </div>
                       </div>
                     </div>
@@ -1670,9 +1672,11 @@ function CatererPage() {
                                 : t("Auf Anfrage", "On Request")}
                             </div>
                             <div className="text-[11px] text-forest/60 font-medium">
-                              {pkg.price_type === "per_person"
-                                ? t("pro Gast", "per guest")
-                                : t("Pauschal", "flat rate")}
+                              {pkg.price_amount > 0
+                                ? pkg.price_type === "per_person"
+                                  ? t("pro Gast", "per guest")
+                                  : t("Pauschal", "flat rate")
+                                : t("Individuelles Angebot", "Custom quote")}
                             </div>
                           </div>
                         </div>
