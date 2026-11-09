@@ -40,7 +40,7 @@ export const Route = createFileRoute("/restaurants")({
       const timeoutPromise = new Promise<{ restaurants: any[]; validGeoLocations: any[] }>((res) =>
         setTimeout(
           () => res({ restaurants: DEFAULT_SHOWCASE_RESTAURANTS, validGeoLocations: [] }),
-          2500,
+          800,
         ),
       );
       const fetchPromise = Promise.all([

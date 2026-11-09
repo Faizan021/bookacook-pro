@@ -237,15 +237,22 @@ export default {
         !reqUrl.pathname.startsWith("/_server");
 
       const contentType = finalResponse.headers.get("content-type") || "";
+      const existingCache = (finalResponse.headers.get("cache-control") || "").toLowerCase();
+      const isExplicitlyNoCache =
+        existingCache.includes("no-store") ||
+        existingCache.includes("private") ||
+        existingCache.includes("no-cache");
+
       if (
         isPublicRoute &&
+        finalResponse.status === 200 &&
         contentType.includes("text/html") &&
-        !finalResponse.headers.has("cache-control")
+        !isExplicitlyNoCache
       ) {
         const newHeaders = new Headers(finalResponse.headers);
         newHeaders.set(
           "Cache-Control",
-          "public, max-age=0, s-maxage=60, stale-while-revalidate=300",
+          "public, max-age=0, s-maxage=300, stale-while-revalidate=86400",
         );
         finalResponse = new Response(finalResponse.body, {
           status: finalResponse.status,

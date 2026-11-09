@@ -2,6 +2,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+const geoPageCache = new Map<string, { data: any; timestamp: number }>();
+const GEO_PAGE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes TTL
+
 export const getGeoPageData = createServerFn({ method: "GET" })
   .validator(
     z.object({
@@ -10,6 +13,13 @@ export const getGeoPageData = createServerFn({ method: "GET" })
     }),
   )
   .handler(async ({ data }) => {
+    const cacheKey = `${data.role}:${data.citySlug.toLowerCase()}`;
+    const cached = geoPageCache.get(cacheKey);
+    const now = Date.now();
+    if (cached && now - cached.timestamp < GEO_PAGE_CACHE_TTL_MS) {
+      return cached.data;
+    }
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // 1. Location Validity Check
@@ -225,7 +235,7 @@ export const getGeoPageData = createServerFn({ method: "GET" })
       };
     }
 
-    return {
+    const result = {
       indexStatus,
       location: locationObj,
       seoData,
@@ -233,6 +243,8 @@ export const getGeoPageData = createServerFn({ method: "GET" })
       aggregateRating,
       stats,
     };
+    geoPageCache.set(cacheKey, { data: result, timestamp: now });
+    return result;
   });
 
 let geoLocationsCache: { data: { path: string; label: string }[]; timestamp: number } | null = null;
