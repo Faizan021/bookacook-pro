@@ -53,6 +53,11 @@
       "permanent": true
     },
     {
+      "source": "/blog/plan-perfect-corporate-event-berlin-munich",
+      "destination": "/blog/plan-perfect-corporate-event-germany",
+      "permanent": true
+    },
+    {
       "source": "/order",
       "destination": "/",
       "permanent": true
