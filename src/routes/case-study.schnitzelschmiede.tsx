@@ -117,9 +117,19 @@ function SchnitzelschmiedeCaseStudyPage() {
               >
                 <span>
                   {isDe
-                    ? "Live-Website ansehen (schnitzelschmiede-mg.de)"
-                    : "View Live Website (schnitzelschmiede-mg.de)"}
+                    ? "Offizielle Website (schnitzelschmiede-mg.de)"
+                    : "Official Website (schnitzelschmiede-mg.de)"}
                 </span>
+                <ExternalLink className="h-4 w-4" />
+              </a>
+
+              <a
+                href="https://www.schnitzelschmiede-mg.de/reservierung"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#E6B84A] text-forest px-5 py-3 text-xs sm:text-sm font-bold shadow-lg hover:bg-forest hover:text-[#FAF7F0] transition"
+              >
+                <span>{isDe ? "Tisch online reservieren" : "Reserve a Table Online"}</span>
                 <ExternalLink className="h-4 w-4" />
               </a>
 
@@ -409,7 +419,15 @@ function SchnitzelschmiedeCaseStudyPage() {
                     <span className="text-[#E6B84A] font-bold">•</span>
                     <span>
                       <strong>Automatischer Backlink & SEO-Schutz:</strong> Vollständige Verlinkung
-                      mit Speiselys regionalem Mönchengladbach Gastro-Hub.
+                      mit{" "}
+                      <Link
+                        to="/catering/ort/$city"
+                        params={{ city: "moenchengladbach" }}
+                        className="underline decoration-[#E6B84A] decoration-2 underline-offset-2 hover:text-[#A85C36] font-bold"
+                      >
+                        Speiselys regionalem Mönchengladbach Gastro-Hub
+                      </Link>
+                      .
                     </span>
                   </li>
                 </ul>

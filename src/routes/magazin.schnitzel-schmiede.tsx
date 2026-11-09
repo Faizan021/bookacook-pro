@@ -1,6 +1,15 @@
 import { AboutSpeiselySection } from "@/components/AboutSpeiselySection";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BookOpen, Sparkles, MapPin, Calendar, Award, Utensils } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Sparkles,
+  MapPin,
+  Calendar,
+  Award,
+  Utensils,
+  ExternalLink,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { LanguageToggle } from "@/components/LanguageToggle";
 
@@ -437,11 +446,32 @@ function SchnitzelSchmiedeStoryPage() {
           </div>
 
           <div className="p-8 rounded-3xl bg-white/5 border border-white/10 max-w-4xl mx-auto text-center story-reveal opacity-0 translate-y-6 transition-all duration-700">
-            <p className="text-base sm:text-lg text-[#FBF7EE]/90 leading-relaxed">
+            <p className="text-base sm:text-lg text-[#FBF7EE]/90 leading-relaxed mb-6">
               Die Schnitzel Schmiede ist Teil des Speisely Partnernetzwerks. Über Speisely entdecken
               Gäste lokale Betriebe, lernen ihre Angebote kennen und finden Restaurant-, Catering-
               oder Eventmöglichkeiten für ihren Anlass.
             </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <a
+                href="https://www.schnitzelschmiede-mg.de"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#E6B84A] text-[#173C32] font-bold text-xs sm:text-sm shadow-md hover:bg-white transition-all"
+              >
+                <span>Offizielle Website besuchen: schnitzelschmiede-mg.de</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <span className="text-white/40 hidden sm:inline">·</span>
+              <a
+                href="https://www.schnitzelschmiede-mg.de/reservierung"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-[#FBF7EE] border border-white/20 font-bold text-xs sm:text-sm transition-all"
+              >
+                <span>Tisch online reservieren</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -522,6 +552,18 @@ function SchnitzelSchmiedeStoryPage() {
                 <span>Planung starten</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </div>
+            </Link>
+          </div>
+
+          {/* REGIONAL CITY HUB CROSS-LINK */}
+          <div className="pt-6 text-center story-reveal opacity-0 translate-y-6 transition-all duration-700">
+            <Link
+              to="/catering/ort/$city"
+              params={{ city: "moenchengladbach" }}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-[#173C32] hover:bg-[#E6B84A] text-[#FBF7EE] hover:text-[#173C32] font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 group"
+            >
+              <span>Entdecke weitere Caterer & Restaurants in Mönchengladbach</span>
+              <ArrowRight className="w-4 h-4 text-[#E6B84A] group-hover:text-[#173C32] group-hover:translate-x-1 transition-all" />
             </Link>
           </div>
         </div>
