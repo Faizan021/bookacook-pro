@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { trackEvent } from "@/utils/posthog";
 import { SiteShell } from "@/components/SiteShell";
@@ -7,8 +7,20 @@ import { blogPosts } from "@/data/blog";
 import { ArrowLeft, CalendarDays, User, Share2, HelpCircle, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 
+const LEGACY_BLOG_REDIRECTS: Record<string, string> = {
+  "plan-perfect-corporate-event-berlin-munich": "plan-perfect-corporate-event-germany",
+  "restaurant-bestellen-ohne-provision-speisely": "restaurant-bestellen-direkt-speisely",
+};
+
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
+    if (LEGACY_BLOG_REDIRECTS[params.slug]) {
+      throw redirect({
+        href: `/blog/${LEGACY_BLOG_REDIRECTS[params.slug]}`,
+        statusCode: 301,
+      });
+    }
+
     const post = blogPosts.find((p) => p.slug === params.slug);
     if (!post) throw notFound();
     return post;
