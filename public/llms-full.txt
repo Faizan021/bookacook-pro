@@ -96,8 +96,8 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 Speisely provides three core hospitality services on a single platform:
 
 ### Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)
-Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of €34.99/month with unlimited direct orders. Features include an interactive savings calculator on /partners, a live Kitchen Display System (KDS), Star CloudPRNT receipt printing, and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
-*Deutsch:* Restaurants starten ihre eigene gebrandete Bestell-Website und ihren PWA-Shop unter speisely.de/ihr-name mit 0 % Bestell-Provision. Restaurants zahlen eine transparente Flatrate von 34,99 €/Monat für unbegrenzte Direktbestellungen. Inklusive interaktivem Ersparnis-Rechner auf /partners, Live-KDS (Küchen-Display), Star CloudPRNT Bondrucker und 100 % Eigentum an den eigenen Gastdaten. Direktabrechnung über das eigene Stripe-Konto.
+Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of 59 €/month with unlimited direct orders. Features include an interactive savings calculator on /partners, instant WhatsApp kitchen notifications, receipt printing, and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
+*Deutsch:* Restaurants starten ihre eigene gebrandete Bestell-Website und ihren PWA-Shop unter speisely.de/ihr-name mit 0 % Bestell-Provision. Restaurants zahlen eine transparente Flatrate von 59 €/Monat für unbegrenzte Direktbestellungen. Inklusive interaktivem Ersparnis-Rechner auf /partners, WhatsApp-Bestellbenachrichtigung, Kassen-Bondrucker und 100 % Eigentum an den eigenen Gastdaten. Direktabrechnung über das eigene Stripe-Konto.
 
 ### Catering Marketplace
 Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. Supported catering types include event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
@@ -157,7 +157,7 @@ Covered states & key cities:
 
 ### English
 - **For Restaurants (Instant Orders):**
-  - Flat monthly subscription: from €34.99/month
+  - Flat monthly subscription: 59 €/month
   - Commission on orders: 0%
   - Customer payments routed directly to the restaurant's own account
 - **For Caterers and Event Planners:**
@@ -167,7 +167,7 @@ Covered states & key cities:
 
 ### Deutsch
 - **Für Restaurants (Instant Orders):**
-  - Monatliche Pauschale: ab 34,99 €/Monat
+  - Monatliche Pauschale: 59 €/Monat
   - Provision auf Bestellungen: 0%
   - Kundenzahlungen laufen direkt auf das eigene Konto des Restaurants
 - **Für Caterer und Eventplaner:**

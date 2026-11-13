@@ -48,8 +48,8 @@ Refine the Speisely Homepage (`src/routes/index.tsx`) to elevate it from a funct
         "Discover hand-picked caterers for corporate galas, weddings, and private events across Germany — transparent, personal, and without middlemen."
       )
     : tt(
-        "Schluss mit 30 % Lieferando-Gebühren. Unbegrenzte Bestellungen, Live-KDS Küchenmonitor und 100 % Gastdaten für faire 34,99 €/Monat.",
-        "Stop giving 30% to delivery portals. Unlimited orders, Live KDS kitchen monitor, and 100% customer data for fair 34.99 €/month."
+        "Schluss mit 30 % Lieferando-Gebühren. Unbegrenzte Bestellungen, Live-KDS Küchenmonitor und 100 % Gastdaten für faire 59 €/Monat.",
+        "Stop giving 30% to delivery portals. Unlimited orders, Live KDS kitchen monitor, and 100% customer data for fair 59 €/month."
       )}
   ```
 

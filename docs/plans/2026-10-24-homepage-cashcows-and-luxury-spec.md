@@ -36,7 +36,7 @@ Add a prestigious 2-column editorial bento section right beneath the hero:
 - **Right Column (Caterer Website Engine):**
   - Visual: Interactive Live Performance score badge (PageSpeed 99, 0.4s load time).
   - Copy: *"Dein Partyservice auf modernstem Tech-Niveau. Nie wieder Kunden an veraltete PDF-Karten verlieren."*
-  - Link: `/partner/webseiten` with 34,99 €/Monat flatrate highlight.
+  - Link: `/partner/webseiten` with 59,00 €/Monat flatrate highlight.
 
 ---
 

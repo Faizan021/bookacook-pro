@@ -21,7 +21,7 @@ export const Route = createFileRoute("/llms.txt")({
 > Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Die Plattform verbindet Gastronomiebetriebe, Caterer und Eventplaner mit Kunden in ganz Deutschland — mit 0% Bestellprovision für Restaurants und direktem Stripe-Checkout.
 
 English: Speisely is a Germany-wide food ordering, catering, and event management marketplace.
-Restaurants pay a flat monthly fee (from €34.99/mo) -- with unlimited direct orders.
+Restaurants pay a flat monthly fee (59 €/mo) -- with unlimited direct orders.
 
 Caterers and Event Planners receive qualified briefs and pay a fair service fee per successful booking.
 
@@ -37,7 +37,7 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 - [Catering Marktplatz](${BASE}/catering): Buchen Sie Catering für Firmenfeiern, Hochzeiten und Events
 - [Catering Kosten & Mengen Rechner](${BASE}/catering/rechner): Interaktiver Event-Rechner für Speisemengen (kg), Getränkebedarf (Liter) und Budgetrahmen pro Person
 - [Event-Planer Verzeichnis](${BASE}/planner): Verifizierte Event-Planer für Feiern, Firmenjubiläen und Großveranstaltungen
-- [Partner & Preise](${BASE}/partners): Festpreis-Modell ab 34,99 €/Monat für Gastronomen ohne Provisionsabzug
+- [Partner & Preise](${BASE}/partners): Festpreis-Modell ab 59 €/Monat für Gastronomen ohne Provisionsabzug
 - [B2B Website-Erstellung](${BASE}/partner/webseiten): High-End Webseiten für Caterer und Gastronomen mit integriertem Shopsystem
 - [Case Study Haus Spaas](${BASE}/case-study/haus-spaas): Traditions-Gastronomie & Eventlokal Digitalisierung
 - [Case Study Partyservice Küpper](${BASE}/case-study/partyservice-kuepper): BBQ & Event-Catering NRW Live-Referenz
@@ -107,7 +107,7 @@ Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankf
 
 Speisely provides three core hospitality services on a single platform:
 
-1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of €34.99/month with unlimited direct orders. Features include an interactive savings calculator on /partners, a live Kitchen Display System (KDS), Star CloudPRNT receipt printing, and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
+1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of 59 €/month with unlimited direct orders. Features include an interactive savings calculator on /partners, instant WhatsApp kitchen order notifications, receipt printing, and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
 
 2. **Catering Marketplace** — Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. When a booking is confirmed, Speisely charges a success-based service fee. Supported catering types include: event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
 
@@ -162,7 +162,7 @@ Speisely operates Germany-wide. Partner restaurants, caterers, and event planner
 ## What Is Speisely's Pricing Model?
 
 **For Restaurants (Instant Orders):**
-- Flat monthly subscription: from €34.99/month (includes unlimited orders)
+- Flat monthly subscription: 59 €/month (includes unlimited orders)
 - Customer payments routed directly to the restaurant's own account
 
 **For Caterers and Event Planners:**

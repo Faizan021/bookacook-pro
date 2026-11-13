@@ -283,7 +283,6 @@ export const Route = createFileRoute("/restaurant/$slug")({
           image: r.img || "https://speisely.de/og-default.jpg",
           description: description,
           url: canonicalUrl,
-          telephone: dbR?.phone || undefined,
           address: {
             "@type": "PostalAddress",
             streetAddress: dbR?.business_address || undefined,
@@ -433,7 +432,7 @@ function RestaurantPage() {
     // Only gate ordering if NO payment method is available at all
     const hasStripe =
       (dbRestaurant?.stripe_connect_status ?? restaurant?.stripeConnectStatus) === "connected";
-    const acceptsCash = (dbRestaurant?.accepts_cash ?? restaurant?.acceptsCash) === true;
+    const acceptsCash = (dbRestaurant?.accepts_cash ?? restaurant?.acceptsCash ?? true) !== false;
     const acceptsPaypal =
       (dbRestaurant?.accepts_paypal ?? restaurant?.acceptsPaypal) === true &&
       !!(dbRestaurant?.paypal_email ?? restaurant?.paypalEmail);
@@ -735,7 +734,9 @@ function RestaurantPage() {
   const [promoError, setPromoError] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
   const validatePromoFn = useServerFn(validatePromoCode);
-  const [selectedPayment, setSelectedPayment] = useState<"cash" | "paypal" | "stripe" | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<"cash" | "paypal" | "stripe" | null>(
+    "cash",
+  );
 
   const visibleMenu = useMemo(() => {
     if (!restaurant?.menu) return [];
@@ -899,8 +900,10 @@ function RestaurantPage() {
   // Derive which payment methods this restaurant supports
   const paymentMethods = useMemo(
     () => ({
-      cash: (dbRestaurant?.accepts_cash ?? restaurant?.acceptsCash) === true,
-      paypal: (dbRestaurant?.accepts_paypal ?? restaurant?.acceptsPaypal) === true,
+      cash: (dbRestaurant?.accepts_cash ?? restaurant?.acceptsCash ?? true) !== false,
+      paypal:
+        (dbRestaurant?.accepts_paypal ?? restaurant?.acceptsPaypal) === true &&
+        !!(dbRestaurant?.paypal_email ?? restaurant?.paypalEmail),
       stripe:
         (dbRestaurant?.stripe_connect_status ?? restaurant?.stripeConnectStatus) === "connected",
     }),

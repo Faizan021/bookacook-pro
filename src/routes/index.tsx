@@ -428,7 +428,7 @@ function Home() {
       },
 
       {
-        label: tt("💶 34,99 € Rechner", "💶 34.99 € Calculator"),
+        label: tt("💶 59 € Rechner", "💶 59 € Calculator"),
 
         to: "/partners#calculator",
       },
@@ -770,7 +770,9 @@ function Home() {
                 <UtensilsCrossed className="w-3.5 h-3.5 shrink-0" />
                 <span className="truncate">
                   <span className="sm:hidden">{tt("Für Genießer", "For Foodies")}</span>
-                  <span className="hidden sm:inline">{tt("Für Genießer & Events", "For Foodies & Events")}</span>
+                  <span className="hidden sm:inline">
+                    {tt("Für Genießer & Events", "For Foodies & Events")}
+                  </span>
                 </span>
               </button>
 
@@ -786,7 +788,9 @@ function Home() {
                 <Building2 className="w-3.5 h-3.5 shrink-0" />
                 <span className="truncate">
                   <span className="sm:hidden">{tt("Für Partner", "For Partners")}</span>
-                  <span className="hidden sm:inline">{tt("Für Gastronomen & Caterer", "For Restaurants & Caterers")}</span>
+                  <span className="hidden sm:inline">
+                    {tt("Für Gastronomen & Caterer", "For Restaurants & Caterers")}
+                  </span>
                 </span>
               </button>
             </div>
@@ -905,8 +909,8 @@ function Home() {
                       "Handcrafted catering and master chefs for corporate galas, weddings, and private events across Germany — transparent, personal, and without middlemen markups.",
                     )
                   : tt(
-                      "Schluss mit 30 % Drittanbieter-Gebühren. Unbegrenzte Bestellungen, Live-KDS Küchenmonitor und 100 % Gastdaten für faire 34,99 €/Monat.",
-                      "Stop giving 30% to delivery portals. Unlimited orders, Live KDS kitchen monitor, and 100% customer data for fair 34.99 €/month.",
+                      "Schluss mit 30 % Drittanbieter-Gebühren. Unbegrenzte Bestellungen, WhatsApp-Küchenbenachrichtigung und 100 % Gastdaten für faire 59 €/Monat.",
+                      "Stop giving 30% to delivery portals. Unlimited orders, WhatsApp kitchen alerts, and 100% customer data for fair 59 €/month.",
                     )}
               </motion.p>
 
@@ -1270,8 +1274,8 @@ function Home() {
                               </div>
                               <div className="text-[11px] text-white/65">
                                 {tt(
-                                  "34,99 € Flatrate · Live-KDS Küchenmonitor · Gastdaten gehören dir",
-                                  "34.99 € flatrate · Live KDS · 100% your customer data",
+                                  "59 € Flatrate · WhatsApp-Benachrichtigung & Bon-Druck · Gastdaten gehören dir",
+                                  "59 € flatrate · WhatsApp alert & receipt print · 100% your customer data",
                                 )}
                               </div>
                             </div>
@@ -1480,7 +1484,7 @@ function Home() {
 
               <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
                 <span className="text-white/60 text-[11px]">
-                  34,99 € Flatrate · Keine Transaktionsgebühren
+                  59 € Flatrate · 0 % Bestellprovision
                 </span>
                 <span className="font-bold text-[#E6B84A] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                   <span>{tt("Webshops entdecken", "Explore Webshops")}</span>
@@ -2139,7 +2143,8 @@ function Home() {
 
                 <p className="min-h-[4rem] text-xs text-forest/75 leading-relaxed mb-3">
                   100% frisch geklopftes Fleisch statt Lieferando-Abhängigkeit: 1-Klick WhatsApp
-                  Direktbestellung, Butterschmalz-Garantie, Knusper-Verpackung und Partyservice-Kalkulation.
+                  Direktbestellung, Butterschmalz-Garantie, Knusper-Verpackung und
+                  Partyservice-Kalkulation.
                 </p>
 
                 {/* Structured 2x2 Feature Grid — Utilizes 100% Horizontal Width */}

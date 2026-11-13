@@ -9,5 +9,5 @@
  * Server-side enforcement is authoritative across all checkout, deposit,
  * subscription, and promo paths.
  */
-export const COMMERCIAL_TRANSACTIONS_ENABLED = false;
+export const COMMERCIAL_TRANSACTIONS_ENABLED = true;
 export const PROMO_CODES_ENABLED = false;

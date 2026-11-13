@@ -46,13 +46,7 @@ export type Database = {
           start_time: string;
           end_time: string;
           status:
-            | "draft"
-            | "scheduled"
-            | "active"
-            | "paused"
-            | "sold_out"
-            | "expired"
-            | "cancelled";
+            "draft" | "scheduled" | "active" | "paused" | "sold_out" | "expired" | "cancelled";
           fulfillment_mode: string;
           created_at: string | null;
           updated_at: string | null;
@@ -69,13 +63,7 @@ export type Database = {
           start_time: string;
           end_time: string;
           status?:
-            | "draft"
-            | "scheduled"
-            | "active"
-            | "paused"
-            | "sold_out"
-            | "expired"
-            | "cancelled";
+            "draft" | "scheduled" | "active" | "paused" | "sold_out" | "expired" | "cancelled";
           fulfillment_mode?: string;
           created_at?: string | null;
           updated_at?: string | null;
@@ -92,13 +80,7 @@ export type Database = {
           start_time?: string;
           end_time?: string;
           status?:
-            | "draft"
-            | "scheduled"
-            | "active"
-            | "paused"
-            | "sold_out"
-            | "expired"
-            | "cancelled";
+            "draft" | "scheduled" | "active" | "paused" | "sold_out" | "expired" | "cancelled";
           fulfillment_mode?: string;
           created_at?: string | null;
           updated_at?: string | null;
@@ -1750,10 +1732,13 @@ export type Database = {
           customer_phone: string | null;
           customer_profile_id: string | null;
           delivery_address: string | null;
+          delivery_fee_cents: number | null;
           id: string;
           items: Json;
           notes: string | null;
+          order_source: string | null;
           order_type: string | null;
+          payment_method: string | null;
           restaurant_id: string;
           status: Database["public"]["Enums"]["order_status"];
           total_cents: number;
@@ -1769,10 +1754,13 @@ export type Database = {
           customer_phone?: string | null;
           customer_profile_id?: string | null;
           delivery_address?: string | null;
+          delivery_fee_cents?: number | null;
           id?: string;
           items?: Json;
           notes?: string | null;
+          order_source?: string | null;
           order_type?: string | null;
+          payment_method?: string | null;
           restaurant_id: string;
           status?: Database["public"]["Enums"]["order_status"];
           total_cents?: number;
@@ -1788,10 +1776,13 @@ export type Database = {
           customer_phone?: string | null;
           customer_profile_id?: string | null;
           delivery_address?: string | null;
+          delivery_fee_cents?: number | null;
           id?: string;
           items?: Json;
           notes?: string | null;
+          order_source?: string | null;
           order_type?: string | null;
+          payment_method?: string | null;
           restaurant_id?: string;
           status?: Database["public"]["Enums"]["order_status"];
           total_cents?: number;
@@ -2581,23 +2572,12 @@ export type Database = {
         | "declined"
         | "cancelled";
       order_status:
-        | "pending"
-        | "confirmed"
-        | "preparing"
-        | "ready"
-        | "picked_up"
-        | "delivered"
-        | "cancelled";
+        "pending" | "confirmed" | "preparing" | "ready" | "picked_up" | "delivered" | "cancelled";
       partner_approval_status: "pending" | "approved" | "rejected" | "suspended";
       review_role: "restaurant" | "caterer" | "planner";
       review_status: "pending_moderation" | "published" | "flagged" | "hidden";
       seo_content_status:
-        | "draft"
-        | "in_review"
-        | "approved"
-        | "published"
-        | "rejected"
-        | "archived";
+        "draft" | "in_review" | "approved" | "published" | "rejected" | "archived";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -2613,12 +2593,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
@@ -2638,13 +2618,12 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
@@ -2663,13 +2642,12 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
-    | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+    keyof DefaultSchema["Tables"] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
@@ -2688,13 +2666,12 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
-    | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    keyof DefaultSchema["Enums"] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
@@ -2705,13 +2682,12 @@ export type Enums<
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    keyof DefaultSchema["CompositeTypes"] | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }

@@ -79,7 +79,6 @@ import { CommunicationPreferences } from "@/components/vendor/CommunicationPrefe
 import { MenuImportWizard } from "@/components/vendor/MenuImportWizard";
 import { SubscriptionTermsModal } from "@/components/vendor/SubscriptionTermsModal";
 
-
 import { KitchenPrinterSettings } from "@/components/vendor/KitchenPrinterSettings";
 import { SurplusOffersSection } from "@/components/vendor/SurplusOffersSection";
 
@@ -114,7 +113,9 @@ export const Route = createFileRoute("/_authenticated/restaurant")({
     // Role enforcement is handled server-side by requireRole("restaurant_owner") on every
     // server function. This lightweight guard just prevents non-partners from
     // seeing the dashboard shell, using cached session data (no network call).
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     const metaRole = session?.user?.user_metadata?.role;
     if (!session?.user || !metaRole || metaRole === "customer") {
       throw redirect({
@@ -1282,8 +1283,8 @@ function OnboardingProgressIndicator({ kpis }: { kpis: any }) {
       id: 2,
       title: tt("Starter-Paket aktivieren", "Activate Starter Plan"),
       description: tt(
-        "Abonnieren Sie das €34.99/Monat Starter-Paket für unbegrenzte Bestellungen.",
-        "Subscribe to the €34.99/month Starter Plan for unlimited direct orders.",
+        "Abonnieren Sie das 59 €/Monat Starter-Paket für unbegrenzte Bestellungen.",
+        "Subscribe to the 59 €/month Starter Plan for unlimited direct orders.",
       ),
       actionLabel: tt("Plan abonnieren", "Subscribe to Plan"),
       actionTab: "settings-billing",
@@ -3163,7 +3164,7 @@ function SettingsPaymentsSection({
   const getConnectUrl = useServerFn(getStripeConnectUrl);
   const disconnect = useServerFn(disconnectStripe);
 
-  const [acceptsCash, setAcceptsCash] = useState(restaurant.accepts_cash ?? false);
+  const [acceptsCash, setAcceptsCash] = useState(restaurant.accepts_cash ?? true);
   const [acceptsPaypal, setAcceptsPaypal] = useState(restaurant.accepts_paypal ?? false);
   const [paypalEmail, setPaypalEmail] = useState(restaurant.paypal_email || "");
   const [saving, setSaving] = useState(false);
@@ -3212,22 +3213,25 @@ function SettingsPaymentsSection({
 
   async function handleSave() {
     if (acceptsPaypal) {
-      const email = paypalEmail.trim();
-      if (!email) {
+      const ppVal = paypalEmail.trim();
+      if (!ppVal) {
         toast.error(
           tt(
-            "Bitte geben Sie Ihre PayPal-E-Mail-Adresse ein.",
-            "Please enter your PayPal email address.",
+            "Bitte geben Sie Ihre PayPal-E-Mail-Adresse oder Ihren PayPal.Me-Link ein.",
+            "Please enter your PayPal email address or PayPal.Me link.",
           ),
         );
         return;
       }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ppVal);
+      const isPaypalMe =
+        /^(https?:\/\/)?(www\.)?paypal\.me\/[a-zA-Z0-9_.-]{1,100}\/?$/i.test(ppVal) ||
+        /^[a-zA-Z0-9_.-]{2,50}$/.test(ppVal);
+      if (!isEmail && !isPaypalMe) {
         toast.error(
           tt(
-            "Bitte geben Sie eine gültige E-Mail-Adresse für PayPal ein.",
-            "Please enter a valid email address for PayPal.",
+            "Bitte geben Sie eine gültige PayPal-Adresse oder einen PayPal.Me-Link ein.",
+            "Please enter a valid PayPal email or PayPal.Me link.",
           ),
         );
         return;
@@ -4757,7 +4761,7 @@ function BillingSection() {
                     </span>
                     <h3 className="mt-3 font-display text-2xl text-forest">
                       {planName === "starter"
-                        ? tt("Starter-Paket (€34.99/Monat)", "Starter Plan (€34.99/month)")
+                        ? tt("Starter-Paket (59 €/Monat)", "Starter Plan (59 €/month)")
                         : planName}
                     </h3>
                   </div>
@@ -4803,8 +4807,8 @@ function BillingSection() {
                   </p>
                   <p className="text-xs text-muted-foreground max-w-sm leading-relaxed">
                     {tt(
-                      "Für nur €34.99/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.",
-                      "For just €34.99/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.",
+                      "Für nur 59 €/Monat erhalten Sie ein unbegrenztes Storefront mit 0% Bestellprovision und Anbindung an Ihre eigenen Storefront-Zahlungsmethoden.",
+                      "For just 59 €/month, unlock your unlimited storefront with 0% order commission and connection to your preferred customer payment methods.",
                     )}
                   </p>
                   <Button

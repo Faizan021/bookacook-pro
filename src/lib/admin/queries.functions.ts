@@ -36,7 +36,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
     const activeSubs =
       subscriptions?.filter((s) => s.status === "active" || s.status === "trialing") || [];
     activeSubs.forEach((s) => {
-      if (s.plan === "starter") currentMRR += 34.99;
+      if (s.plan === "starter") currentMRR += 59.0;
       else if (s.plan === "growth") currentMRR += 59;
       else if (s.plan === "premium") currentMRR += 99;
     });
@@ -57,7 +57,7 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       subscriptions?.forEach((s) => {
         const createdDate = new Date(s.created_at || s.current_period_start || "");
         if (createdDate <= monthEnd && (s.status === "active" || s.status === "trialing")) {
-          if (s.plan === "starter") monthMRR += 34.99;
+          if (s.plan === "starter") monthMRR += 59.0;
           else if (s.plan === "growth") monthMRR += 59;
           else if (s.plan === "premium") monthMRR += 99;
         }

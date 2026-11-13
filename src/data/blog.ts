@@ -387,17 +387,17 @@ export const blogPosts: BlogPost[] = [
       en: "Why Restaurants, Caterers, and Event Planners Should Partner with Speisely",
     },
     description: {
-      de: "Flatrate ab 34.99 EUR/Monat. Eigener Storefront. Entdecke alle Live-Features von Speisely fuer Restaurants, Caterer und Event-Planer.",
-      en: "Flatrate from 34.99 EUR/month. Your own storefront. Discover all live Speisely features for restaurants, caterers and event planners.",
+      de: "Flatrate ab 59 EUR/Monat. Eigener Storefront. Entdecke alle Live-Features von Speisely fuer Restaurants, Caterer und Event-Planer.",
+      en: "Flatrate from 59 EUR/month. Your own storefront. Discover all live Speisely features for restaurants, caterers and event planners.",
     },
     tldr: {
       de: [
-        "Restaurants erhalten einen eigenen Storefront und unbegrenzte Bestellungen für 34.99 EUR/Monat.",
+        "Restaurants erhalten einen eigenen Storefront und unbegrenzte Bestellungen für 59 EUR/Monat.",
         "Caterer und Planer zahlen eine faire Gebühr nur bei erfolgreicher Buchung.",
         "Alle Partner erhalten einen eigenen Storefront und Zugang zu Live-Features wie dem KDS.",
       ],
       en: [
-        "Restaurants get their own storefront and unlimited orders for 34.99 EUR/month.",
+        "Restaurants get their own storefront and unlimited orders for 59 EUR/month.",
         "Caterers and planners pay a fair success-based fee only upon successful booking.",
         "All partners receive their own storefront and access to live features like the KDS.",
       ],
@@ -407,7 +407,7 @@ export const blogPosts: BlogPost[] = [
         <h2>Die faire Plattform fuer Gastronomie und Eventplanung</h2>
         <p>Viele Plattformen verlangen hohe prozentuale Provisionen. <strong>Speisely</strong> bietet eine transparente Alternative.</p>
         <h3>Die genauen Konditionen</h3>
-        <p><strong>Restaurants:</strong> Starter-Plan fuer <strong>34.99 EUR/Monat</strong> - inklusive eigenem Storefront und unbegrenzten Direktbestellungen.</p>
+        <p><strong>Restaurants:</strong> Starter-Plan fuer <strong>59 EUR/Monat</strong> - inklusive eigenem Storefront und unbegrenzten Direktbestellungen.</p>
         <p><strong>Caterer &amp; Event-Planer:</strong> Keine monatliche Grundgebuehr. Nur eine faire Gebuehr pro erfolgreicher Buchung.</p>
         <h3>Alle live Features</h3>
         <ul>
@@ -426,7 +426,7 @@ export const blogPosts: BlogPost[] = [
         <h2>The Fair Platform for Gastronomy and Event Planning</h2>
         <p>Many platforms charge high percentage commissions. <strong>Speisely</strong> offers a transparent alternative.</p>
         <h3>The Exact Pricing</h3>
-        <p><strong>Restaurants:</strong> Starter Plan at <strong>34.99 EUR/month</strong> - including your own storefront and unlimited direct orders.</p>
+        <p><strong>Restaurants:</strong> Starter Plan at <strong>59 EUR/month</strong> - including your own storefront and unlimited direct orders.</p>
         <p><strong>Caterers &amp; Event Planners:</strong> No monthly base fee. Only a fair success-based fee per booking.</p>
         <h3>All Live Features</h3>
         <ul>
@@ -590,7 +590,7 @@ export const blogPosts: BlogPost[] = [
           <li>Kein Papierbonabfall - 100% digital</li>
           <li>Klarer Status-Workflow: Neu - In Bearbeitung - Fertig</li>
           <li>Optimiert fuer Kuechen-Teams jeder Groesse</li>
-          <li>Kostenlos im Speisely Starter-Plan enthalten (34.99 EUR/Monat)</li>
+          <li>Kostenlos im Speisely Starter-Plan enthalten (59 EUR/Monat)</li>
         </ul>
         <p><a href="https://speisely.de/partners">Jetzt Partner werden und KDS nutzen: speisely.de/partners</a></p>
       `,
@@ -607,7 +607,7 @@ export const blogPosts: BlogPost[] = [
           <li>No paper ticket waste - 100% digital</li>
           <li>Clear status workflow: New - In Progress - Done</li>
           <li>Optimized for kitchen teams of any size</li>
-          <li>Included free in the Speisely Starter Plan (34.99 EUR/month)</li>
+          <li>Included free in the Speisely Starter Plan (59 EUR/month)</li>
         </ul>
         <p><a href="https://speisely.de/partners">Become a partner and use the KDS: speisely.de/partners</a></p>
       `,

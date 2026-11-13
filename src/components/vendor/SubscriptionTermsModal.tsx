@@ -51,7 +51,7 @@ export function SubscriptionTermsModal({
           </div>
           <div className="flex justify-between border-b border-stone-200 pb-2">
             <span className="text-muted-foreground">{tt("Preis", "Price")}</span>
-            <span className="font-semibold text-forest">€34.99 / {tt("Monat", "month")}</span>
+            <span className="font-semibold text-forest">€59.00 / {tt("Monat", "month")}</span>
           </div>
           <div className="flex justify-between border-b border-stone-200 pb-2">
             <span className="text-muted-foreground">

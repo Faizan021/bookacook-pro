@@ -19,7 +19,7 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 - [Instant Order](https://speisely.de/instant-order): Restaurant-Entdeckung und direkte Essensbestellung mit 0% Provision
 - [Catering Marktplatz](https://speisely.de/catering): Buchen Sie Catering für Firmenfeiern, Hochzeiten und Events
 - [Event-Planer Verzeichnis](https://speisely.de/planner): Verifizierte Event-Planer für Feiern, Firmenjubiläen und Großveranstaltungen
-- [Partner & Preise](https://speisely.de/partners): Festpreis-Modell ab 34,99 €/Monat für Gastronomen ohne Provisionsabzug
+- [Partner & Preise](https://speisely.de/partners): Festpreis-Modell ab 59 €/Monat für Gastronomen ohne Provisionsabzug
 - [B2B Website-Erstellung](https://speisely.de/partner/webseiten): High-End Webseiten für Caterer und Gastronomen mit integriertem Shopsystem
 - [Case Study Haus Spaas](https://speisely.de/case-study/haus-spaas): Traditions-Gastronomie & Eventlokal Digitalisierung
 - [Case Study Partyservice Küpper](https://speisely.de/case-study/partyservice-kuepper): BBQ & Event-Catering NRW Live-Referenz
@@ -78,7 +78,7 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 
 ## What Services Does Speisely Offer?
 
-1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of €34.99/month with unlimited direct orders. Features include an interactive savings calculator on /partners, a live Kitchen Display System (KDS), Star CloudPRNT receipt printing, and 100% customer data retention. Payments route directly to the restaurant's own Stripe account.
+1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of 59 €/month with unlimited direct orders. Features include an interactive savings calculator on /partners, instant WhatsApp kitchen order notifications, receipt printing, and 100% customer data retention. Payments route directly to the restaurant's own Stripe account.
 2. **Catering Marketplace** — Post and respond to catering inquiries (corporate, private, weddings, daily office, institutional catering).
 3. **Event Planning** — CRM and planning tool for professional event planners to handle event briefs.
 

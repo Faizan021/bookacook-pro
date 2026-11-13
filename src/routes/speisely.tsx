@@ -60,7 +60,7 @@ function SpeiselyFacts() {
           "Direkter digitaler Bestellkanal für lokale Speisen",
           "Direct digital ordering channel for local spots",
         ),
-        t("Pauschalabo ab €34,99/Monat", "Flat-rate subscription starting at €34.99/month"),
+        t("Pauschalabo 59 €/Monat", "Flat-rate subscription 59 €/month"),
 
         t(
           "Direktzahlung auf eigenes Stripe- oder PayPal-Konto",
@@ -276,7 +276,7 @@ function SpeiselyFacts() {
               <ShoppingBag className="h-4 w-4" /> {t("Für Restaurants", "For Restaurants")}
             </div>
             <div className="flex items-end gap-1 mb-2">
-              <span className="text-4xl font-display font-bold text-forest">€34.99</span>
+              <span className="text-4xl font-display font-bold text-forest">€59</span>
 
               <span className="text-forest/60 mb-1">{t("/Monat", "/month")}</span>
             </div>

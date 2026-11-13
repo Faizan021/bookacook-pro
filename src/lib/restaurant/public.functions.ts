@@ -606,7 +606,9 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
     // 1. Fetch restaurant
     const { data: rest, error: restErr } = await supabaseAdmin
       .from("restaurants")
-      .select("id, owner_id, name, delivery_fee, paypal_email, approval_status, accepts_orders")
+      .select(
+        "id, owner_id, name, phone, delivery_fee, paypal_email, approval_status, accepts_orders",
+      )
       .eq("id", data.restaurantId)
       .single();
 
@@ -961,24 +963,32 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         }
       }
 
-      // Notify Restaurant via Email
-      const { data: user } = await supabaseAdmin.auth.admin.getUserById((rest as any).owner_id);
-      if (user?.user?.email) {
-        const totalStr = `€${(finalTotalCents / 100).toFixed(2)}`;
-        await sendPartnerNotificationEmail({
-          data: {
-            to: user.user.email,
-            subject: `Neue Bestellung (${data.paymentMethod}) von ${data.customerName}`,
-            text: `Sie haben eine neue Bestellung (${data.orderType}) von ${data.customerName} über ${totalStr}. Zahlungsmethode: ${data.paymentMethod}.`,
-            html: `<p>Hallo ${(rest as any).name},</p><p>Eine neue Bestellung wurde soeben aufgegeben (Zahlung: ${data.paymentMethod}).</p>
-                   <ul>
-                     <li><strong>Kunde:</strong> ${data.customerName}</li>
-                     <li><strong>Typ:</strong> ${data.orderType}</li>
-                     <li><strong>Betrag:</strong> ${totalStr}</li>
-                   </ul>
-                   <p>Melden Sie sich in Ihrem Dashboard an, um die Bestelldetails zu sehen.</p>`,
+      // Dispatch WhatsApp & Email notifications to restaurant manager
+      try {
+        const { dispatchOrderNotifications } = await import("./notifications.server");
+        const { data: user } = await supabaseAdmin.auth.admin.getUserById((rest as any).owner_id);
+
+        await dispatchOrderNotifications(
+          {
+            orderId: order.id,
+            restaurantId: data.restaurantId,
+            restaurantName: (rest as any).name,
+            restaurantPhone: (rest as any).phone,
+            customerName: data.customerName,
+            customerPhone: data.customerPhone,
+            orderType: data.orderType,
+            deliveryAddress: data.deliveryAddress,
+            paymentMethod: data.paymentMethod,
+            totalCents: finalTotalCents,
+            deliveryFeeCents,
+            items: validatedItems,
+            notes: data.notes,
+            origin: data.origin,
           },
-        });
+          user?.user?.email,
+        );
+      } catch (notifErr: any) {
+        console.error("[Notifications] Failed to dispatch order notifications:", notifErr?.message);
       }
 
       return {
@@ -988,4 +998,43 @@ export const submitStorefrontOrder = createServerFn({ method: "POST" })
         accountClaimable: !authUserId,
       };
     }
+  });
+
+export const getOrderReceiptDetails = createServerFn({ method: "GET" })
+  .validator((input: { orderId: string }) => z.object({ orderId: z.string().uuid() }).parse(input))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: order, error } = await supabaseAdmin
+      .from("restaurant_orders")
+      .select(
+        `
+        id,
+        created_at,
+        customer_name,
+        customer_phone,
+        customer_email,
+        delivery_address,
+        order_type,
+        payment_method,
+        total_cents,
+        delivery_fee_cents,
+        items,
+        notes,
+        status,
+        restaurant:restaurants(
+          name,
+          business_address,
+          city,
+          phone
+        )
+      `,
+      )
+      .eq("id", data.orderId)
+      .maybeSingle();
+
+    if (error || !order) {
+      throw new Error("Order not found or invalid ID");
+    }
+
+    return { order };
   });

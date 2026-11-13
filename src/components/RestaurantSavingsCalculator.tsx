@@ -47,7 +47,7 @@ export function RestaurantSavingsCalculator() {
   // Calculations
   const monthlyGrossRevenue = orders * ticket;
   const portalMonthlyCost = (monthlyGrossRevenue * commissionRate) / 100;
-  const speiselyMonthlyCost = 34.99; // €34.99/mo flat, 0% commission
+  const speiselyMonthlyCost = 59.0; // €59/mo flat, 0% commission
 
   const monthlySavings = Math.max(0, portalMonthlyCost - speiselyMonthlyCost);
   const annualSavings = monthlySavings * 12;
@@ -352,7 +352,7 @@ export function RestaurantSavingsCalculator() {
                 <span>
                   {isDe ? "Speisely Flatrate (0 % Prov.):" : "Speisely Flat Rate (0% comm.):"}
                 </span>
-                <span className="font-semibold text-[#f2d896]">€34,99 / Mo.</span>
+                <span className="font-semibold text-[#f2d896]">€59,00 / Mo.</span>
               </div>
 
               <div className="flex justify-between items-center pt-2 border-t border-white/10 font-bold text-white text-base">

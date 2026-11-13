@@ -63,6 +63,7 @@ import { Route as PartnerWebseitenRouteImport } from './routes/partner.webseiten
 import { Route as PartnersWebseitenRouteImport } from './routes/partners.webseiten'
 import { Route as PlannerIndexRouteImport } from './routes/planner.index'
 import { Route as PlannerSlugRouteImport } from './routes/planner.$slug'
+import { Route as ReceiptOrderIdRouteImport } from './routes/receipt.$orderId'
 import { Route as RestaurantSlugRouteImport } from './routes/restaurant.$slug'
 import { Route as AuthenticatedCatererReviewsRouteImport } from './routes/_authenticated/caterer.reviews'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
@@ -381,6 +382,11 @@ const PlannerSlugRoute = PlannerSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => PlannerRoute,
 } as any)
+const ReceiptOrderIdRoute = ReceiptOrderIdRouteImport.update({
+  id: '/receipt/$orderId',
+  path: '/receipt/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RestaurantSlugRoute = RestaurantSlugRouteImport.update({
   id: '/restaurant/$slug',
   path: '/restaurant/$slug',
@@ -672,6 +678,7 @@ export interface FileRoutesByFullPath {
   '/partner/webseiten': typeof PartnerWebseitenRoute
   '/partners/webseiten': typeof PartnersWebseitenRoute
   '/planner/$slug': typeof PlannerSlugRoute
+  '/receipt/$orderId': typeof ReceiptOrderIdRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -766,6 +773,7 @@ export interface FileRoutesByTo {
   '/partner/webseiten': typeof PartnerWebseitenRoute
   '/partners/webseiten': typeof PartnersWebseitenRoute
   '/planner/$slug': typeof PlannerSlugRoute
+  '/receipt/$orderId': typeof ReceiptOrderIdRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth': typeof AuthIndexRoute
   '/blog': typeof BlogIndexRoute
@@ -865,6 +873,7 @@ export interface FileRoutesById {
   '/partner/webseiten': typeof PartnerWebseitenRoute
   '/partners/webseiten': typeof PartnersWebseitenRoute
   '/planner/$slug': typeof PlannerSlugRoute
+  '/receipt/$orderId': typeof ReceiptOrderIdRoute
   '/restaurant/$slug': typeof RestaurantSlugRouteWithChildren
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -964,6 +973,7 @@ export interface FileRouteTypes {
     | '/partner/webseiten'
     | '/partners/webseiten'
     | '/planner/$slug'
+    | '/receipt/$orderId'
     | '/restaurant/$slug'
     | '/auth/'
     | '/blog/'
@@ -1058,6 +1068,7 @@ export interface FileRouteTypes {
     | '/partner/webseiten'
     | '/partners/webseiten'
     | '/planner/$slug'
+    | '/receipt/$orderId'
     | '/restaurant/$slug'
     | '/auth'
     | '/blog'
@@ -1156,6 +1167,7 @@ export interface FileRouteTypes {
     | '/partner/webseiten'
     | '/partners/webseiten'
     | '/planner/$slug'
+    | '/receipt/$orderId'
     | '/restaurant/$slug'
     | '/auth/'
     | '/blog/'
@@ -1242,6 +1254,7 @@ export interface RootRouteChildren {
   MagazinReaderRoute: typeof MagazinReaderRoute
   MagazinSchnitzelSchmiedeRoute: typeof MagazinSchnitzelSchmiedeRoute
   MagazinSpeiselyVisitsRoute: typeof MagazinSpeiselyVisitsRouteWithChildren
+  ReceiptOrderIdRoute: typeof ReceiptOrderIdRoute
   RestaurantSlugRoute: typeof RestaurantSlugRouteWithChildren
   AuthIndexRoute: typeof AuthIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -1655,6 +1668,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/planner/$slug'
       preLoaderRoute: typeof PlannerSlugRouteImport
       parentRoute: typeof PlannerRoute
+    }
+    '/receipt/$orderId': {
+      id: '/receipt/$orderId'
+      path: '/receipt/$orderId'
+      fullPath: '/receipt/$orderId'
+      preLoaderRoute: typeof ReceiptOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/restaurant/$slug': {
       id: '/restaurant/$slug'
@@ -2154,6 +2174,7 @@ const rootRouteChildren: RootRouteChildren = {
   MagazinReaderRoute: MagazinReaderRoute,
   MagazinSchnitzelSchmiedeRoute: MagazinSchnitzelSchmiedeRoute,
   MagazinSpeiselyVisitsRoute: MagazinSpeiselyVisitsRouteWithChildren,
+  ReceiptOrderIdRoute: ReceiptOrderIdRoute,
   RestaurantSlugRoute: RestaurantSlugRouteWithChildren,
   AuthIndexRoute: AuthIndexRoute,
   BlogIndexRoute: BlogIndexRoute,

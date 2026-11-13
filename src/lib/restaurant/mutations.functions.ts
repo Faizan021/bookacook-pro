@@ -175,7 +175,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
             .optional(),
           accepts_cash: z.boolean().optional(),
           accepts_paypal: z.boolean().optional(),
-          paypal_email: z.string().email().optional().nullable(),
+          paypal_email: z.string().max(255).optional().nullable(),
           accepts_orders: z.boolean().optional(),
           use_generated_branding: z.boolean().optional(),
           show_in_marketplace: z.boolean().optional(),
@@ -265,15 +265,22 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       throw new Error("Der Mindestbestellwert darf nicht negativ sein.");
     }
 
-    // Validate PayPal settings
+    // Validate PayPal settings (supports PayPal email, paypal.me link or handle)
     if (merged.accepts_paypal) {
-      const email = (merged.paypal_email || "").trim();
-      if (!email) {
-        throw new Error("Bitte geben Sie Ihre PayPal-E-Mail-Adresse ein.");
+      const ppVal = (merged.paypal_email || "").trim();
+      if (!ppVal) {
+        throw new Error(
+          "Bitte geben Sie Ihre PayPal-E-Mail-Adresse oder Ihren PayPal.Me-Link ein.",
+        );
       }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        throw new Error("Bitte geben Sie eine gültige E-Mail-Adresse für PayPal ein.");
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ppVal);
+      const isPaypalMe =
+        /^(https?:\/\/)?(www\.)?paypal\.me\/[a-zA-Z0-9_.-]{1,100}\/?$/i.test(ppVal) ||
+        /^[a-zA-Z0-9_.-]{2,50}$/.test(ppVal);
+      if (!isEmail && !isPaypalMe) {
+        throw new Error(
+          "Bitte geben Sie eine gültige PayPal-Adresse oder einen PayPal.Me-Link ein.",
+        );
       }
     }
 
@@ -289,7 +296,7 @@ export const updateMyRestaurantSettings = createServerFn({ method: "POST" })
       if (getRestError) throw new Error(getRestError.message);
 
       // Merge incoming values with stored values (user may be toggling right now)
-      const cashEnabled = data.accepts_cash ?? (rest as any)?.accepts_cash ?? false;
+      const cashEnabled = data.accepts_cash ?? (rest as any)?.accepts_cash ?? true;
       const paypalEnabled = data.accepts_paypal ?? (rest as any)?.accepts_paypal ?? false;
       const stripeConnected = rest?.stripe_connect_status === "connected";
       const hasPaymentMethod = cashEnabled || paypalEnabled || stripeConnected;
@@ -363,7 +370,8 @@ export const disconnectStripe = createServerFn({ method: "POST" })
     }
 
     // 3. Update the restaurant status
-    const hasAlternative = !!((rest as any).accepts_cash || (rest as any).accepts_paypal);
+    const hasAlternative =
+      ((rest as any).accepts_cash ?? true) !== false || !!(rest as any).accepts_paypal;
     const { error: updateError } = await supabase
       .from("restaurants")
       .update({
