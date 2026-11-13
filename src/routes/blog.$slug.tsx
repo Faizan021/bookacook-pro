@@ -76,14 +76,24 @@ export const Route = createFileRoute("/blog/$slug")({
                 children: JSON.stringify({
                   "@context": "https://schema.org",
                   "@type": "FAQPage",
-                  mainEntity: loaderData.faq.map((item) => ({
-                    "@type": "Question",
-                    name: item.question,
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: item.answer,
-                    },
-                  })),
+                  mainEntity: loaderData.faq.map((item) => {
+                    const q =
+                      typeof item.question === "object" && item.question !== null
+                        ? (item.question as { de: string; en: string }).de
+                        : (item.question as string);
+                    const a =
+                      typeof item.answer === "object" && item.answer !== null
+                        ? (item.answer as { de: string; en: string }).de
+                        : (item.answer as string);
+                    return {
+                      "@type": "Question",
+                      name: q,
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: a,
+                      },
+                    };
+                  }),
                 }),
               },
             ]
@@ -231,13 +241,15 @@ function BlogPostPage() {
                 <div className="flex items-center gap-3 mb-8">
                   <HelpCircle className="h-8 w-8 text-forest" />
                   <h2 className="text-3xl font-display font-bold text-forest">
-                    Häufig gestellte Fragen (FAQ)
+                    {tt("Häufig gestellte Fragen (FAQ)", "Frequently Asked Questions (FAQ)")}
                   </h2>
                 </div>
 
                 <div className="space-y-4">
-                  {post.faq.map((item: { question: string; answer: string }, index: number) => {
+                  {post.faq.map((item: any, index: number) => {
                     const isOpen = openFaqIndex === index;
+                    const questionText = typeof item.question === "object" ? item.question[lang] || item.question.de : item.question;
+                    const answerText = typeof item.answer === "object" ? item.answer[lang] || item.answer.de : item.answer;
                     return (
                       <div
                         key={index}
@@ -249,7 +261,7 @@ function BlogPostPage() {
                           aria-expanded={isOpen}
                         >
                           <h3 className="font-bold text-forest text-base sm:text-lg pr-8">
-                            {item.question}
+                            {questionText}
                           </h3>
                           <ChevronDown
                             className={`h-5 w-5 text-forest shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
@@ -260,7 +272,7 @@ function BlogPostPage() {
                           className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[500px] opacity-100 pb-5" : "max-h-0 opacity-0"}`}
                           aria-hidden={!isOpen}
                         >
-                          <p className="text-sm text-forest/80 leading-relaxed">{item.answer}</p>
+                          <p className="text-sm text-forest/80 leading-relaxed">{typeof item.answer === "object" ? item.answer[lang] || item.answer.de : item.answer}</p>
                         </div>
                       </div>
                     );

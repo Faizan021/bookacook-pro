@@ -22,8 +22,8 @@ export type BlogPost = {
     en: string[];
   };
   faq?: Array<{
-    question: string;
-    answer: string;
+    question: string | { de: string; en: string };
+    answer: string | { de: string; en: string };
   }>;
 };
 
@@ -173,29 +173,54 @@ export const blogPosts: BlogPost[] = [
     },
     faq: [
       {
-        question: "Wie viel Fingerfood kalkuliert man pro Person bei einem Business-Meeting?",
-        answer:
-          "Für ein 1- bis 2-stündiges Meeting rechnen erfahrene Caterer mit 4 bis 6 Fingerfood-Häppchen (ca. 200 g) pro Person. Bei ganztägigen Meetings oder Seminaren mit Mittagspause empfiehlt sich eine warme Komponente (Bowl oder Buffet) plus 3 bis 4 Snacks für die Nachmittagspause.",
+        question: {
+          de: "Wie viel Fingerfood kalkuliert man pro Person bei einem Business-Meeting?",
+          en: "How much finger food should you calculate per person for a business meeting?",
+        },
+        answer: {
+          de: "Für ein 1- bis 2-stündiges Meeting rechnen erfahrene Caterer mit 4 bis 6 Fingerfood-Häppchen (ca. 200 g) pro Person. Bei ganztägigen Meetings oder Seminaren mit Mittagspause empfiehlt sich eine warme Komponente (Bowl oder Buffet) plus 3 bis 4 Snacks für die Nachmittagspause.",
+          en: "For a 1- to 2-hour meeting, experienced caterers calculate 4 to 6 finger food bites (approx. 200g) per guest. For full-day meetings or seminars with lunch breaks, plan a warm meal (grain bowl or buffet) plus 3 to 4 snack bites for the afternoon break.",
+        },
       },
       {
-        question: "Wie plant man das Catering für ein mehrtägiges Seminar?",
-        answer:
-          "Entscheidend ist kulinarische Abwechslung: Wechseln Sie täglich den Stil (z. B. Tag 1 Levantinisch, Tag 2 Asian/Nordic Bowls, Tag 3 Mediterran). Achten Sie auf leichte, bekömmliche Zutaten, um Müdigkeit der Teilnehmer in intensiven Arbeitsphasen zu vermeiden.",
+        question: {
+          de: "Wie plant man das Catering für ein mehrtägiges Seminar?",
+          en: "How do you plan catering for a multi-day seminar?",
+        },
+        answer: {
+          de: "Entscheidend ist kulinarische Abwechslung: Wechseln Sie täglich den Stil (z. B. Tag 1 Levantinisch, Tag 2 Asian/Nordic Bowls, Tag 3 Mediterran). Achten Sie auf leichte, bekömmliche Zutaten, um Müdigkeit der Teilnehmer in intensiven Arbeitsphasen zu vermeiden.",
+          en: "Culinary variety is essential: alternate concepts daily (e.g. Day 1 Levantine, Day 2 Asian/Nordic Bowls, Day 3 Mediterranean). Prioritize light, wholesome ingredients to prevent food comas and keep energy levels high throughout intensive workshop sessions.",
+        },
       },
       {
-        question: "Wie kurzfristig kann man Meeting-Catering in Berlin über Speisely bestellen?",
-        answer:
-          "Für kleinere Fingerfood- und Sandwich-Bestellungen bis 25 Personen reicht meist ein Vorlauf von 24 bis 48 Stunden. Für aufwendige Warm-Buffets oder mehrtägige Seminare ab 50 Personen empfehlen wir eine Buchung 5 bis 7 Werktage im Voraus.",
+        question: {
+          de: "Wie kurzfristig kann man Meeting-Catering in Berlin über Speisely bestellen?",
+          en: "How far in advance should you order meeting catering in Berlin via Speisely?",
+        },
+        answer: {
+          de: "Für kleinere Fingerfood- und Sandwich-Bestellungen bis 25 Personen reicht meist ein Vorlauf von 24 bis 48 Stunden. Für aufwendige Warm-Buffets oder mehrtägige Seminare ab 50 Personen empfehlen wir eine Buchung 5 bis 7 Werktage im Voraus.",
+          en: "For smaller finger food and sandwich platters up to 25 people, a 24- to 48-hour notice is typically sufficient. For elaborate hot buffets or multi-day seminars with over 50 attendees, we recommend booking 5 to 7 business days in advance.",
+        },
       },
       {
-        question: "Erfüllt Speisely-Catering Nachhaltigkeits- und CSRD-Standards für Unternehmen?",
-        answer:
-          "Ja. Als Teil des Impact Sprint Lab '26 (UN SDG 12 & 13) arbeitet Speisely nach dem Zero-Waste-Prinzip: Durch exakte Portionierung entfällt die übliche 30-prozentige Buffet-Überproduktion. Firmenkunden können verifizierte Scope-3-Nachhaltigkeitsdaten für ihre Berichterstattung anfragen.",
+        question: {
+          de: "Erfüllt Speisely-Catering Nachhaltigkeits- und CSRD-Standards für Unternehmen?",
+          en: "Does Speisely catering comply with corporate sustainability and CSRD ESG standards?",
+        },
+        answer: {
+          de: "Ja. Als Teil des Impact Sprint Lab '26 (UN SDG 12 & 13) arbeitet Speisely nach dem Zero-Waste-Prinzip: Durch exakte Portionierung entfällt die übliche 30-prozentige Buffet-Überproduktion. Firmenkunden können verifizierte Scope-3-Nachhaltigkeitsdaten für ihre Berichterstattung anfragen.",
+          en: "Yes. Selected for Impact Sprint Lab '26 (UN SDG 12 & 13), Speisely operates on a zero-waste framework: exact batch cooking eliminates the standard 30% buffet overproduction. Enterprise clients can request verified Scope 3 CO2e avoidance data for CSRD corporate sustainability disclosures.",
+        },
       },
       {
-        question: "Wie werden spezielle Ernährungsformen wie Vegan, Halal oder Glutenfrei berücksichtigt?",
-        answer:
-          "Auf Speisely sind alle Speisen und Komponenten transparent nach Allergenen und Ernährungsformen deklariert. Ein ausgewogenes Seminar-Catering deckt in der Regel standardmäßig mindestens 30 bis 50 % vegetarische/vegane Optionen sowie glutenfreie Alternativen ab.",
+        question: {
+          de: "Wie werden spezielle Ernährungsformen wie Vegan, Halal oder Glutenfrei berücksichtigt?",
+          en: "How are dietary requirements like Vegan, Halal, or Gluten-Free handled?",
+        },
+        answer: {
+          de: "Auf Speisely sind alle Speisen und Komponenten transparent nach Allergenen und Ernährungsformen deklariert. Ein ausgewogenes Seminar-Catering deckt in der Regel standardmäßig mindestens 30 bis 50 % vegetarische/vegane Optionen sowie glutenfreie Alternativen ab.",
+          en: "All items on Speisely are clearly labeled with full allergen and dietary tags. A balanced business seminar menu typically includes 30% to 50% vegetarian and vegan selections as well as gluten-free and certified halal options as standard.",
+        },
       },
     ],
   },
