@@ -29,6 +29,178 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: "catering-meetings-seminare-berlin-2026",
+    slug: "catering-meetings-seminare-berlin",
+    date: "2026-11-13",
+    author: "Speisely B2B Editorial and Impact Team",
+    image: "/images/office_catering_hero.webp",
+    category: "Catering",
+    title: {
+      de: "Catering für Meetings & Seminare in Berlin: Der Leitfaden für Office Manager",
+      en: "Corporate Meeting & Seminar Catering in Berlin: The Complete Office Manager Guide",
+    },
+    description: {
+      de: "Leitfaden für Business-Meetings & mehrtägige Seminare in Berlin: Mengenplanung, Brainfood, Zeitpläne und Zero-Waste-Catering (Impact Sprint Lab '26). Jetzt konfigurieren!",
+      en: "Essential guide for business meetings & multi-day seminars in Berlin: quantity planning, brainfood, schedules, and zero-waste catering (Impact Sprint Lab '26).",
+    },
+    tldr: {
+      de: [
+        "Präzise Mengenplanung: 4–6 Fingerfood-Teile für 2-Stunden-Meetings, 10–12 Teile bzw. 450g pro Person für Ganztags-Seminare.",
+        "Vitales Brainfood statt Food Coma: Leichte Proteine, Vollkorn und frisches Gemüse halten Teams nachmittags fokussiert.",
+        "Mehrtägige Seminare erfordern Menü-Dramaturgie: Niemals zwei Tage hintereinander identische Protein- oder Stärke-Schwerpunkte anbieten.",
+        "Nachhaltiges Zero-Waste Catering: Speiselys Aufnahme in das Impact Sprint Lab '26 ermöglicht CSRD-konforme CO2e-Einsparungsdaten für Berliner Unternehmen.",
+      ],
+      en: [
+        "Exact headcount portions: 4–6 finger food bites for 2-hour meetings, 10–12 bites or 450g per guest for full-day seminars.",
+        "Vital brainfood over food comas: Lean proteins, complex carbs, and crisp greens keep teams sharp during afternoon sessions.",
+        "Multi-day seminar variety: Alternate culinary profiles between Day 1 and Day 2 to prevent palate fatigue.",
+        "Audited zero-waste impact: Speisely's selection for Impact Sprint Lab '26 equips enterprise clients with CSRD Scope 3 CO2e avoidance data.",
+      ],
+    },
+    content: {
+      de: `
+        <h2>Erfolgreiches Business-Catering in Berlin: Zwischen Produktivität und Genuss</h2>
+        <p>Wer in Berlin als Office Manager, Executive Assistant oder People-Operations-Lead Firmen-Catering für Vorstandssitzungen, Kunden-Workshops oder <strong>mehrtägige Seminare</strong> organisiert, steht vor einer doppelten Verantwortung: Das Essen muss höchsten kulinarischen Ansprüchen genügen, pünktlich auf die Minute eintreffen — und es darf die Konzentration der Teilnehmer am Nachmittag nicht durch schwere Mahlzeiten lahmlegen.</p>
+        
+        <p>Auf <a href="/catering">Speisely.de</a> beobachten wir täglich, wonach moderne Berliner Tech-Unternehmen, Kanzleien und Agenturen suchen. Die Nachfrage nach professionellem <strong>Meeting-Catering</strong> wächst rasant. Dieser Leitfaden fasst die bewährtesten Standards für Mengenberechnung, Zeitablauf und nachhaltige Kreislaufwirtschaft zusammen.</p>
+
+        <h3>1. Die 3 Phasen der Seminar-Versorgung</h3>
+        <p>Ein erfolgreiches Ganztags- oder Mehrtages-Seminar folgt einer klaren kulinarischen Dramaturgie:</p>
+        <ul>
+          <li><strong>08:30 – 10:00 Uhr | Der Morgen-Fokus:</strong> Frische Sauerteig-Bagels, Mini-Croissants, Chia-Puddings, saisonale Obstspieße sowie exzellenter Specialty Coffee (Hafer- und Bio-Kuhmilch).</li>
+          <li><strong>12:30 – 13:45 Uhr | Der vitale Mittagstisch:</strong> Warme Bowls, mediterrane Buffetstationen oder handwerkliche Fingerfood-Platten. Entscheidend: Hoher Gemüse- und Hülsenfruchtanteil, mageres Geflügel oder mariniertes Tofu, um das berüchtigte "Suppenkoma" zu verhindern.</li>
+          <li><strong>15:30 – 16:00 Uhr | Der Nachmittags-Booster:</strong> Rohe Energy-Balls, Nüsse, handgemachte Mini-Cannelés oder Raw-Cakes kombiniert mit erfrischenden Kräuter-Infused-Water-Karaffen.</li>
+        </ul>
+
+        <h3>2. Mengenberechnung: Wie viel Gramm pro Teilnehmer?</h3>
+        <p>Die größte Sorge bei Seminar-Buchungen ist entweder peinlicher Engpass oder maßlose Überproduktion. Als praxiserprobte Faustformel für Berlin gilt:</p>
+        <table class="w-full text-left my-6 text-sm border-collapse border border-forest/10">
+          <thead>
+            <tr class="bg-cream/50 text-forest">
+              <th class="p-3 border border-forest/10">Veranstaltungsart</th>
+              <th class="p-3 border border-forest/10">Dauer</th>
+              <th class="p-3 border border-forest/10">Empfohlene Menge</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-3 border border-forest/10">Kurzes Business-Meeting</td>
+              <td class="p-3 border border-forest/10">1–2 Stunden</td>
+              <td class="p-3 border border-forest/10">4–6 Fingerfood-Häppchen (ca. 180–220 g)</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-forest/10">Halbtages-Workshop</td>
+              <td class="p-3 border border-forest/10">3–4 Stunden</td>
+              <td class="p-3 border border-forest/10">Lunch-Bowl + 2 Snack-Komponenten (ca. 350 g)</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-forest/10">Ganztages-Seminar</td>
+              <td class="p-3 border border-forest/10">6–8 Stunden</td>
+              <td class="p-3 border border-forest/10">Frühstück + Warmes Lunch + Pause (ca. 500–600 g gesamt)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p><em>Tipp: Für eine tiefergehende Mengenanalyse von Fleisch- und Beilagenkomponenten empfehlen wir auch den <a href="/case-study/partyservice-kuepper">Catering-Mengenratgeber unseres Partners Partyservice Küpper</a>.</em></p>
+
+        <h3>3. Mehrtägige Seminare: Vielfalt statt Routine</h3>
+        <p>Bei 2- bis 4-tägigen Schulungen in Berliner Konferenzhotels oder Coworking-Spaces wie Factory Berlin, Mindspace oder Betahaus ermüden Teams schnell, wenn die Stilistik stagniert:</p>
+        <ul>
+          <li><strong>Tag 1:</strong> Frische Levantinische Küche (Hummus, Falafel, gegrilltes Schawarma-Geflügel, Fattoush-Salat).</li>
+          <li><strong>Tag 2:</strong> Moderne Nordic und Asian Bowls (Lachs / Tempeh, Edamame, Wildreis, Ponzu-Sesam-Dressing).</li>
+          <li><strong>Tag 3:</strong> Mediterranes Sharing-Konzept (Focaccia-Kreationen, Pasta fresca, Burrata und geschmortes Ofengemüse).</li>
+        </ul>
+
+        <h3>4. Zero-Waste und ESG-Berichterstattung: Speiselys Impact Sprint Lab '26</h3>
+        <p>Traditionelle Buffets produzieren im Schnitt <strong>30 % vermeidbaren Lebensmittelabfall</strong>. Vor allem große Unternehmen müssen im Rahmen der europäischen <strong>CSRD-Richtlinie</strong> (Corporate Sustainability Reporting Directive) ihre Scope-3-Emissionen nachweisen und senken.</p>
+        <p>Speisely wurde offiziell für das <strong>Impact Sprint Lab '26 (UN SDG 12 & 13)</strong> ausgewählt. Unser B2B-Modell eliminiert Pufferüberhänge durch exakte Vorbestellungs-Quoten und batch-optimierte Küchenabläufe. Auf Wunsch erhalten Firmenkunden verifizierte Berichte über vermiedene Lebensmittelabfälle und eingespartes CO₂e pro Meeting.</p>
+
+        <div class="editorial-cta-box">
+          <div>
+            <div class="cta-kicker">B2B Meeting & Seminar Catering</div>
+            <div class="cta-title">Meeting-Catering in Berlin konfigurieren</div>
+            <div class="cta-desc">Verifizierte Berliner Spitzen-Caterer für Meetings ab 10 bis 300 Personen mit direkter Angebots-Erstellung.</div>
+          </div>
+          <div class="cta-actions">
+            <a href="/catering" class="btn-gold">
+              Jetzt Catering anfragen →
+            </a>
+            <a href="/planner" class="btn-outline">
+              Event-Planer finden
+            </a>
+          </div>
+        </div>
+      `,
+      en: `
+        <h2>Corporate Catering in Berlin: Fueling Productivity Without Food Waste</h2>
+        <p>For Office Managers, Executive Assistants, and People Operations leaders in Berlin, organizing catering for board meetings, client workshops, or <strong>multi-day seminars</strong> comes with high expectations: food must arrive punctually, accommodate all dietary requirements, and energize participants through long sessions without afternoon slumps.</p>
+        
+        <p>On <a href="/catering">Speisely.de</a>, corporate demand for structured <strong>meeting and seminar catering</strong> in Berlin is growing exponentially. This guide breaks down best practices for quantity calculations, day-to-day variety, and zero-waste sustainability.</p>
+
+        <h3>1. The 3 Phases of High-Performance Seminar Nutrition</h3>
+        <ul>
+          <li><strong>Morning Kick-off (08:30 – 10:00):</strong> Fresh sourdough bagels, overnight oats, chia puddings, and premium specialty coffee with oat and organic dairy options.</li>
+          <li><strong>Vital Midday Lunch (12:30 – 13:45):</strong> Warm grain bowls, Mediterranean sharing stations, or artisan finger food boxes. High-fiber greens, lean proteins, and cold-pressed olive oils prevent heavy food comas.</li>
+          <li><strong>Afternoon Energy Lift (15:30 – 16:00):</strong> Raw energy bites, roasted nuts, fresh seasonal fruit skewers, and cold botanical water carafes.</li>
+        </ul>
+
+        <h3>2. Quantity Guidelines Per Attendee</h3>
+        <ul>
+          <li><strong>1–2 Hour Board Meeting:</strong> 4–6 finger food bites (approx. 180–220g per person).</li>
+          <li><strong>Half-Day Strategy Workshop:</strong> 1 vibrant lunch bowl + 2 snack items (approx. 350g per person).</li>
+          <li><strong>Full-Day Seminar:</strong> Welcome breakfast + warm buffet lunch + afternoon booster (approx. 500–600g total per attendee).</li>
+        </ul>
+
+        <h3>3. Sustainable Corporate Catering: Impact Sprint Lab '26</h3>
+        <p>Traditional conference buffets result in an estimated <strong>30% avoidable food surplus</strong>. With the EU <strong>CSRD directive</strong> mandating transparent Scope 3 carbon accounting, forward-thinking enterprises must rethink corporate food sourcing.</p>
+        <p>Speisely has been selected for <strong>Impact Sprint Lab '26 (UN SDG 12 & 13)</strong>. By matching corporate headcounts directly to verified local kitchen production batches, Speisely eliminates buffet waste while providing enterprise clients with auditable CO₂e reduction metrics.</p>
+
+        <div class="editorial-cta-box">
+          <div>
+            <div class="cta-kicker">B2B Corporate Catering Berlin</div>
+            <div class="cta-title">Configure Your Business Catering</div>
+            <div class="cta-desc">Hand-picked artisan caterers in Berlin for teams from 10 to 300 guests with transparent per-person pricing.</div>
+          </div>
+          <div class="cta-actions">
+            <a href="/catering" class="btn-gold">
+              Explore Caterers →
+            </a>
+            <a href="/planner" class="btn-outline">
+              Find Event Planner
+            </a>
+          </div>
+        </div>
+      `,
+    },
+    faq: [
+      {
+        question: "Wie viel Fingerfood kalkuliert man pro Person bei einem Business-Meeting?",
+        answer:
+          "Für ein 1- bis 2-stündiges Meeting rechnen erfahrene Caterer mit 4 bis 6 Fingerfood-Häppchen (ca. 200 g) pro Person. Bei ganztägigen Meetings oder Seminaren mit Mittagspause empfiehlt sich eine warme Komponente (Bowl oder Buffet) plus 3 bis 4 Snacks für die Nachmittagspause.",
+      },
+      {
+        question: "Wie plant man das Catering für ein mehrtägiges Seminar?",
+        answer:
+          "Entscheidend ist kulinarische Abwechslung: Wechseln Sie täglich den Stil (z. B. Tag 1 Levantinisch, Tag 2 Asian/Nordic Bowls, Tag 3 Mediterran). Achten Sie auf leichte, bekömmliche Zutaten, um Müdigkeit der Teilnehmer in intensiven Arbeitsphasen zu vermeiden.",
+      },
+      {
+        question: "Wie kurzfristig kann man Meeting-Catering in Berlin über Speisely bestellen?",
+        answer:
+          "Für kleinere Fingerfood- und Sandwich-Bestellungen bis 25 Personen reicht meist ein Vorlauf von 24 bis 48 Stunden. Für aufwendige Warm-Buffets oder mehrtägige Seminare ab 50 Personen empfehlen wir eine Buchung 5 bis 7 Werktage im Voraus.",
+      },
+      {
+        question: "Erfüllt Speisely-Catering Nachhaltigkeits- und CSRD-Standards für Unternehmen?",
+        answer:
+          "Ja. Als Teil des Impact Sprint Lab '26 (UN SDG 12 & 13) arbeitet Speisely nach dem Zero-Waste-Prinzip: Durch exakte Portionierung entfällt die übliche 30-prozentige Buffet-Überproduktion. Firmenkunden können verifizierte Scope-3-Nachhaltigkeitsdaten für ihre Berichterstattung anfragen.",
+      },
+      {
+        question: "Wie werden spezielle Ernährungsformen wie Vegan, Halal oder Glutenfrei berücksichtigt?",
+        answer:
+          "Auf Speisely sind alle Speisen und Komponenten transparent nach Allergenen und Ernährungsformen deklariert. Ein ausgewogenes Seminar-Catering deckt in der Regel standardmäßig mindestens 30 bis 50 % vegetarische/vegane Optionen sowie glutenfreie Alternativen ab.",
+      },
+    ],
+  },
+
+  {
     id: "google-for-startups-immersion-2026",
     slug: "speisely-google-for-startups-immersion-emea",
     date: "2026-10-21",

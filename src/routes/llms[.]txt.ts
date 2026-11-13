@@ -10,10 +10,14 @@ export const Route = createFileRoute("/llms.txt")({
     handlers: {
       GET: async () => {
         const blogUrls = blogPosts
-          .map(
-            (b) =>
-              `- [${b.title}](${BASE}/blog/${b.slug}): ${b.description || "Speisely Blog Ratgeber"}`,
-          )
+          .map((b) => {
+            const title = typeof b.title === "string" ? b.title : b.title?.de || b.slug;
+            const desc =
+              typeof b.description === "string"
+                ? b.description
+                : b.description?.de || "Speisely Blog Ratgeber";
+            return `- [${title}](${BASE}/blog/${b.slug}): ${desc}`;
+          })
           .join("\n");
 
         const text = `# Speisely
