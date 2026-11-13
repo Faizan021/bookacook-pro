@@ -13,7 +13,7 @@ This document specifies the core project truths, architectural boundaries, busin
   1. **Admin:** Platform management, system CRUD, manual assignment.
   2. **Customer:** Public marketplace browsing, storefront ordering, inquiry submission, client dashboard.
   3. **Caterer:** B2B/B2C event catering, package management, logistics (zip codes, delivery radii), inquiry management, proposals.
-  4. **Restaurant:** Direct ordering, table reservations, surplus food ("Too Good To Go" style bags), KDS (Kitchen Display System).
+  4. **Restaurant:** Direct ordering, table reservations, surplus food (Chef's Special surplus boxes), KDS (Kitchen Display System), and WhatsApp order routing.
   5. **Event Manager / Planner:** Full event planning services, partner coordination, inquiry handling.
 
 - **Unified Partner Identity:** Caterers, Restaurants, and Event Planners share a unified login/partner identity, but their specific management dashboards, data models, and public storefronts remain strictly separate.
@@ -22,7 +22,7 @@ This document specifies the core project truths, architectural boundaries, busin
 
 ## 2. Business Model & Security Strictness
 
-- **Restaurant Vertical:** €34.99/mo subscription fee + 0% order commission.
+- **Restaurant Vertical:** €59.00/mo flat subscription fee + 0% order commission (peer-to-peer payout: Cash/Card at door, direct PayPal).
 - **Caterer & Planner Verticals:** 10% booking commission + lead protection.
 - **Disintermediation & Lead Protection:**
   - Phone and business address details are optional and kept private on public vendor storefronts.
