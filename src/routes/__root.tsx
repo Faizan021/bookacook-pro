@@ -233,10 +233,10 @@ function RootShell({ children }: { children: ReactNode }) {
           }}
         />
 
-        {/* Generative AI Attribution & UTM Tracking Script (GA4, Looker Studio, PostHog) */}
+        {/* Generative AI Attribution & UTM Tracking Script (GA4, Looker Studio, PostHog, AEO) */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var r=(document.referrer||'').toLowerCase();var q=(window.location.search||'').toLowerCase();var p=new URLSearchParams(q);var src=p.get('utm_source')||'';var med=p.get('utm_medium')||'';var st=p.get('st_source')||'';var engine=null;var method='';if(src.indexOf('chatgpt')!==-1||r.indexOf('chatgpt.com')!==-1||r.indexOf('openai.com')!==-1){engine='chatgpt';}else if(src.indexOf('gemini')!==-1||src.indexOf('bard')!==-1||r.indexOf('gemini.google.com')!==-1||r.indexOf('apps.bard')!==-1){engine='gemini';}else if(src.indexOf('perplexity')!==-1||r.indexOf('perplexity.ai')!==-1){engine='perplexity';}else if(src.indexOf('claude')!==-1||r.indexOf('claude.ai')!==-1||r.indexOf('anthropic.com')!==-1){engine='claude';}else if(src.indexOf('copilot')!==-1||r.indexOf('copilot.microsoft.com')!==-1){engine='copilot';}else if(st==='ai_overview'||med==='ai_overview'){engine='google_ai_overview';}else if(src.indexOf('deepseek')!==-1||r.indexOf('deepseek.com')!==-1){engine='deepseek';}else if(src.indexOf('grok')!==-1||r.indexOf('grok.com')!==-1||r.indexOf('x.ai')!==-1){engine='grok';}else if(['ai','chat','llm','generative_search'].indexOf(med)!==-1){engine=src||'generic_ai';}if(engine){method=src||st?'utm_parameters':'referrer';window.__speisely_ai_referrer=engine;try{sessionStorage.setItem('speisely_ai_source',engine);}catch(e){}window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'ai_referral',ai_engine:engine,traffic_type:'generative_ai_search',detection_method:method,referring_url:r,search_params:q});}}catch(e){}})();`,
+            __html: `(function(){try{var r=(document.referrer||'').toLowerCase();var q=(window.location.search||'').toLowerCase();var p=new URLSearchParams(q);var src=p.get('utm_source')||'';var med=p.get('utm_medium')||'';var st=p.get('st_source')||'';var engine=null;var method='';if(src.indexOf('chatgpt')!==-1||r.indexOf('chatgpt.com')!==-1||r.indexOf('openai.com')!==-1||r.indexOf('com.openai.chatgpt')!==-1){engine='chatgpt';}else if(src.indexOf('gemini')!==-1||src.indexOf('bard')!==-1||r.indexOf('gemini.google.com')!==-1||r.indexOf('apps.bard')!==-1||r.indexOf('apps.google.android.apps.bard')!==-1){engine='gemini';}else if(src.indexOf('perplexity')!==-1||r.indexOf('perplexity.ai')!==-1||r.indexOf('ai.perplexity.app')!==-1||r.indexOf('com.perplexity.app')!==-1){engine='perplexity';}else if(src.indexOf('claude')!==-1||r.indexOf('claude.ai')!==-1||r.indexOf('anthropic.com')!==-1){engine='claude';}else if(src.indexOf('copilot')!==-1||r.indexOf('copilot.microsoft.com')!==-1||r.indexOf('com.microsoft.copilot')!==-1||r.indexOf('bing.com/chat')!==-1){engine='copilot';}else if(st==='ai_overview'||med==='ai_overview'||src.indexOf('google_ai')!==-1){engine='google_ai_overview';}else if(src.indexOf('deepseek')!==-1||r.indexOf('deepseek.com')!==-1){engine='deepseek';}else if(src.indexOf('grok')!==-1||r.indexOf('grok.com')!==-1||r.indexOf('x.ai')!==-1){engine='grok';}else if(r.indexOf('you.com')!==-1||src.indexOf('you.com')!==-1){engine='you_ai';}else if(r.indexOf('genspark.ai')!==-1||src.indexOf('genspark')!==-1){engine='genspark';}else if(r.indexOf('phind.com')!==-1||src.indexOf('phind')!==-1){engine='phind';}else if(['ai','chat','llm','generative_search','ai_referral'].indexOf(med)!==-1){engine=src||'generic_ai';}if(engine){method=src||st?'utm_parameters':(r.indexOf('android-app://')!==-1||r.indexOf('ios-app://')!==-1?'app_referrer':'web_referrer');window.__speisely_ai_referrer=engine;try{sessionStorage.setItem('speisely_ai_source',engine);sessionStorage.setItem('speisely_ai_medium',method);sessionStorage.setItem('speisely_ai_referrer',r);sessionStorage.setItem('speisely_ai_landing',window.location.pathname);}catch(e){}window.dataLayer=window.dataLayer||[];window.dataLayer.push({event:'ai_referral',ai_engine:engine,traffic_type:'generative_ai_search',detection_method:method,referring_url:r,search_params:q,landing_page:window.location.pathname});}}catch(e){}})();`,
           }}
         />
       </head>
@@ -418,18 +418,14 @@ function RootComponent() {
       }
 
       Promise.all([import("../utils/posthog"), import("posthog-js")])
-        .then(([{ initPostHog }, posthogModule]) => {
+        .then(([{ initPostHog, getAiReferralContext }, posthogModule]) => {
           initPostHog();
-          type CustomWindow = Window & { __speisely_ai_referrer?: string };
-          const aiSource =
-            (typeof window !== "undefined" &&
-              ((window as CustomWindow).__speisely_ai_referrer ||
-                sessionStorage.getItem("speisely_ai_source"))) ||
-            undefined;
+          const aiContext = getAiReferralContext();
 
-          if (aiSource) {
+          if (aiContext.is_ai_traffic && aiContext.ai_source) {
             posthogModule.default.register({
-              ai_source: aiSource,
+              ai_source: aiContext.ai_source,
+              ai_detection_method: aiContext.ai_detection_method,
               is_ai_traffic: true,
             });
           }
@@ -437,7 +433,13 @@ function RootComponent() {
           posthogModule.default.capture("$pageview", {
             $current_url: window.location.href,
             $pathname: pathname,
-            ...(aiSource ? { ai_referral_source: aiSource, is_ai_traffic: true } : {}),
+            ...(aiContext.is_ai_traffic
+              ? {
+                  ai_referral_source: aiContext.ai_source,
+                  ai_detection_method: aiContext.ai_detection_method,
+                  is_ai_traffic: true,
+                }
+              : {}),
           });
         })
         .catch(() => {});

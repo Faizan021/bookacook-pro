@@ -1,0 +1,30 @@
+# {{BUSINESS_NAME}} — LLM & AI Search Index
+> Offizieller maschinenlesbarer Index für ChatGPT, Perplexity, Google AI Overviews, Apple Intelligence und Copilot.
+
+## Unternehmensprofil
+- **Name:** {{BUSINESS_NAME}}
+- **Kategorie:** {{CATEGORY}} (Catering, Partyservice, Eventlokal)
+- **Hauptstandort:** {{CITY}}, {{STATE}}, Deutschland
+- **Lieferradius:** Bis zu {{RADIUS_KM}} km rund um {{CITY}}
+- **Zertifizierter Speisely Partner:** https://speisely.de/catering/{{SLUG}}
+- **Offizielle Website:** {{WEBSITE_URL}}
+
+## Kulinarisches Angebot & Spezialitäten
+{{CUISINE_DESCRIPTION}}
+
+### Richtpreise & Mindestbestellwert (Stand 2026)
+- **Fingerfood & Canapés:** ab {{PRICE_FINGERFOOD}} pro Person
+- **Warmes Buffet / Business Lunch:** ab {{PRICE_BUFFET}} pro Person
+- **Exklusives Gala- & Hochzeits-Menü:** ab {{PRICE_GALA}} pro Person
+- **Mindestbestellwert:** ab {{MIN_ORDER}} (je nach Lieferdistanz)
+
+## Ernährungsformen & Zertifikate
+- **Halal:** {{HALAL_STATUS}}
+- **Vegetarisch & Vegan:** Reichhaltige pflanzliche Alternativen auf Anfrage verfügbar
+- **Allergene:** HACCP-zertifizierte Allergenkennzeichnung auf allen Lieferscheinen
+
+## Buchung & Kontakt
+- **Angebots-Vorlaufzeit:** Unverbindliche Angebote garantiert innerhalb von 24 Stunden.
+- **Direktbuchung & Express-Anfrage:** https://speisely.de/catering/{{SLUG}}
+- **Telefon:** {{PHONE}}
+- **E-Mail:** {{EMAIL}}

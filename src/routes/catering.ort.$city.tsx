@@ -2,6 +2,7 @@ import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-rout
 import { getGeoPageData } from "@/lib/geo/server.functions";
 import { SiteShell } from "@/components/SiteShell";
 import { CityCrossLinks } from "@/components/geo/CityCrossLinks";
+import { CityAeoQuickFacts } from "@/components/geo/CityAeoQuickFacts";
 import {
   MapPin,
   Star,
@@ -281,6 +282,9 @@ function GeoCateringPage() {
 
       {/* Vendor Grid */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-12">
+        {/* AEO Fan-Out & Quick Answer Snippet Block */}
+        <CityAeoQuickFacts cityName={location.name} />
+
         {vendors.length === 0 ? (
           <div className="space-y-12">
             {/* Benchmark Price Guide for City */}

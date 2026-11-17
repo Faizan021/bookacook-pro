@@ -1,0 +1,45 @@
+<!-- Speisely AEO Schema.org Tag: In den <head>-Bereich der Website einfügen -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Caterer",
+  "name": "{{BUSINESS_NAME}}",
+  "image": "{{LOGO_OR_HERO_URL}}",
+  "url": "{{WEBSITE_URL}}",
+  "telephone": "{{PHONE}}",
+  "email": "{{EMAIL}}",
+  "priceRange": "{{PRICE_RANGE}}",
+  "servesCuisine": "{{CUISINE_LIST}}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{STREET_ADDRESS}}",
+    "addressLocality": "{{CITY}}",
+    "postalCode": "{{POSTAL_CODE}}",
+    "addressCountry": "DE"
+  },
+  "areaServed": {
+    "@type": "AdministrativeArea",
+    "name": "{{CITY}} und Umland (bis zu {{RADIUS_KM}} km)"
+  },
+  "sameAs": [
+    "https://speisely.de/catering/{{SLUG}}",
+    "{{INSTAGRAM_URL}}"
+  ],
+  "potentialAction": {
+    "@type": "OrderAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://speisely.de/catering/{{SLUG}}",
+      "inLanguage": "de-DE",
+      "actionPlatform": [
+        "http://schema.org/DesktopWebPlatform",
+        "http://schema.org/MobileWebPlatform"
+      ]
+    },
+    "result": {
+      "@type": "FoodEstablishmentReservation",
+      "name": "Catering-Angebot unverbindlich anfragen"
+    }
+  }
+}
+</script>

@@ -390,8 +390,8 @@ ${referralSource ? `Referenz / Herkunft: ${referralNames[referralSource] || refe
                         : "1/4: Checking PageSpeed & Mobile TTFB...")}
                     {auditStep === 2 &&
                       (isDe
-                        ? "2/4: Prüfe Google AI Overview & Schema.org..."
-                        : "2/4: Checking Google AI Overview & Schema.org...")}
+                        ? "2/4: Prüfe AEO, llms.txt & ChatGPT-Auffindbarkeit..."
+                        : "2/4: Checking AEO, llms.txt & AI Search visibility...")}
                     {auditStep === 3 &&
                       (isDe
                         ? "3/4: Scanne Speisekarten & PDF-Hürden..."
@@ -462,21 +462,22 @@ ${referralSource ? `Referenz / Herkunft: ${referralNames[referralSource] || refe
                     </p>
                   </div>
 
-                  {/* Metric 2 */}
+                  {/* Metric 2: AEO & AI Engine Visibility */}
                   <div className="p-5 rounded-2xl bg-[#FAF7F0] border border-forest/10">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-bold text-sm text-forest flex items-center gap-2">
                         <Bot className="h-4 w-4 text-purple-600" />
-                        Google AI &amp; LLM-Suchmaschinen (GEO)
+                        AEO &amp; KI-Sichtbarkeit (ChatGPT, Perplexity &amp; Google)
                       </span>
                       <span className="font-mono font-black text-xs px-2.5 py-1 rounded-md bg-rose-100 text-rose-900">
-                        {auditResult.aiScore}/100 (Fehlend)
+                        {auditResult.aiScore}/100 (Kritisch)
                       </span>
                     </div>
                     <p className="text-xs text-forest/75 leading-relaxed">
-                      ⚠️ Keine strukturierten Schema.org JSON-LD Menü- &amp; Catering-Daten.
-                      ChatGPT, Perplexity und Google AI Overviews können deine Angebote nicht direkt
-                      zitieren.
+                      ⚠️ Keine{" "}
+                      <code className="bg-forest/5 px-1 rounded text-[11px]">llms.txt</code> und
+                      fehlendes Catering-Schema. Wenn Kunden ChatGPT nach Catering in deiner Stadt
+                      fragen, bleibt deine Küche unsichtbar und Konkurrenten werden empfohlen.
                     </p>
                   </div>
 
