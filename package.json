@@ -17,6 +17,7 @@
     "smoke:full": "node scripts/smoke-test.mjs",
     "qa:visual": "node scripts/visual_qa_judge.cjs",
     "audit:seo": "node scripts/master_seo_geo_engine.mjs",
+    "ping:indexnow": "node scripts/ping_indexnow.mjs",
     "verify:deploy": "node scripts/smoke-test.mjs",
     "check": "node scripts/verify_agent_graph.js && tsc --noEmit && vite build && node scripts/smoke_test.js",
     "prepare": "husky"
