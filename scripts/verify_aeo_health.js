@@ -53,6 +53,7 @@ const llmsPath = path.join(process.cwd(), 'public', 'llms.txt');
 const llmsFullPath = path.join(process.cwd(), 'public', 'llms-full.txt');
 
 check('public/llms.txt exists & has content', fs.existsSync(llmsPath) && fs.statSync(llmsPath).size > 1000, 'llms.txt missing or empty');
+check('public/llms.txt includes Editorial Guides', fs.existsSync(llmsPath) && fs.readFileSync(llmsPath, 'utf8').includes('## Editorial Guides & Blog Articles'), 'Missing blog section in llms.txt');
 check('public/llms-full.txt exists & has content', fs.existsSync(llmsFullPath) && fs.statSync(llmsFullPath).size > 5000, 'llms-full.txt missing or empty');
 
 // 3. City Page AEO Quick-Answer Block Verification
