@@ -2,7 +2,32 @@
 
 _This document serves as the active working memory for ongoing tasks, context updates, and immediate implementation states. Permanent decisions are moved to core documentation once finalized._
 
-## Current Status (2026-10-07)
+## Current Status (2026-11-18)
+
+**Active Priority Task: GSC & Indexing Verification (Owned by Agent)**
+- **Trigger Date:** 2026-11-18 (Manual Priority Indexing Requested by User in GSC)
+- **Queued Priority Commercial URLs:**
+  1. `https://speisely.de/catering/rechner` (Top viral calculator tool)
+  2. `https://speisely.de/catering/halal` (Niche high-converting catering)
+  3. `https://speisely.de/catering` (Main catering directory)
+  4. `https://speisely.de/catering/fingerfood` (Fingerfood & Flying Buffet)
+  5. `https://speisely.de/catering/events` (Event & Wedding Catering)
+  6. `https://speisely.de/partner/webseiten` (B2B Website Inquiries)
+  7. `https://speisely.de/catering/ort/berlin` (Berlin City Hub)
+  8. `https://speisely.de/catering/ort/muenchen` (Munich City Hub)
+  9. `https://speisely.de/case-study/partyservice-kuepper` (High-trust Case Study)
+- **Automated Actions Taken:**
+  - IndexNow instant discovery ping executed successfully for 32 canonical URLs (`npm run ping:indexnow` returned `HTTP 200 OK`).
+  - All 18 blog articles and Magazin Mediadaten synchronized to `llms.txt` and `llms-full.txt`.
+- **Scheduled Verification Protocol (Check in 24–48 hours):**
+  - [ ] Audit GSC URL Inspection for `https://speisely.de/catering/rechner` (Expect: "URL is on Google").
+  - [ ] Audit GSC URL Inspection for `https://speisely.de/catering/halal` (Expect: "URL is on Google").
+  - [ ] Check GSC Performance tab for initial Impressions curve and query impressions.
+  - [ ] Re-run `npm run audit:seo` (`node scripts/master_seo_geo_engine.mjs`) to verify live response and backlink health.
+
+---
+
+## Historical Status (2026-10-07)
 
 **Active Focus:**
 
@@ -183,6 +208,50 @@ _This document serves as the active working memory for ongoing tasks, context up
 | `/planner` | https://speisely.de/planner | 200 | ✅ OK |
 | `/partners` | https://speisely.de/partners | 200 | ✅ OK |
 | `/partner/webseiten` | https://speisely.de/partner/webseiten | 307 | ✅ OK |
+| `/magazin` | https://speisely.de/magazin | 200 | ✅ OK |
+| `/magazin/mediadaten` | https://speisely.de/magazin/mediadaten | 200 | ✅ OK |
+| `/magazin/reader` | https://speisely.de/magazin/reader | 200 | ✅ OK |
+| `/llms.txt` | https://speisely.de/llms.txt | 200 | ✅ OK |
+| `/sitemap.xml` | https://speisely.de/sitemap.xml | 200 | ✅ OK |
+
+### 3. AEO & Generative AI Search Readiness (/llms.txt)
+- **Endpoint Status:** HTTP 200
+- **AI Knowledge Graph Readiness Score:** **5 / 6 Checks Passed**
+- Brand & Commission-Free Model Defined: ✅
+- B2B Web Solutions Active: ✅
+- Magazin Mediadaten Hub Active: ❌
+- Case Studies (Haus Spaas & Küpper) Mapped: ✅
+- Official Social Entity Graph Synced: ✅
+
+### 4. Zero-Cost Digital PR & Local Backlink Playbook
+* **Event & Wedding Venues (NRW & Berlin):** Preferred Caterer Directory Addition (Target: High-DR Local Domain Referral · Cost: €0 (Barter / Mutual Recommendation))
+  * *Next Action:* Pitch venue event managers with Speisely verified caterer roster & instant booking calculator.
+* **Digital PR (Source of Sources / Qwoted / HARO):** Expert Quotes on Food Waste, Halal Catering, & Restaurant POS Tech (Target: National DR 70-90 Editorial Backlinks · Cost: €0 (3-Sentence Expert Quote))
+  * *Next Action:* Pitch marketing publications on how Speisely eliminates third-party restaurant commissions.
+* **Municipal & Tourism Portals (Local City SEO):** Local Gastronomy Guide Inclusion (Mönchengladbach, Düsseldorf, Köln, Berlin) (Target: High-Trust .de / Regional City Domain Backlinks · Cost: €0 (Official Business Registry))
+  * *Next Action:* Register Speisely Magazin & partner profiles with local business development offices.
+
+
+## 🚀 Autonomous SEO / GEO / AEO Master Audit Report (2026-11-18)
+
+### 1. Live Partner Backlink Health Shield
+| Partner Domain | Status | Link Found | Anchor Verified | DoFollow | Health Status |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Haus Spaas** | UP (HTTP 200) | Yes | Yes | Yes | ⚠️ NEEDS_ATTENTION |
+| **Partyservice Küpper** | UP (HTTP 200) | Yes | Yes | Yes | ⚠️ NEEDS_ATTENTION |
+| **Kampala Rolex Germany** | DOWN / ERR (404) | No | No | No | ⚠️ CRITICAL |
+| **TechGlanz Case Study** | UP (HTTP 200) | Yes | Yes | Yes | ✅ PERFECT |
+| **Atelier Textiles** | UP (HTTP 200) | No | No | No | ⚠️ NEEDS_ATTENTION |
+
+### 2. Core Routing & Public Sitemap Health
+| Route | URL | HTTP Status | Integrity |
+| :--- | :--- | :--- | :--- |
+| `/` | https://speisely.de/ | 200 | ✅ OK |
+| `/restaurants` | https://speisely.de/restaurants | 200 | ✅ OK |
+| `/catering` | https://speisely.de/catering | 200 | ✅ OK |
+| `/planner` | https://speisely.de/planner | 200 | ✅ OK |
+| `/partners` | https://speisely.de/partners | 200 | ✅ OK |
+| `/partner/webseiten` | https://speisely.de/partner/webseiten | 200 | ✅ OK |
 | `/magazin` | https://speisely.de/magazin | 200 | ✅ OK |
 | `/magazin/mediadaten` | https://speisely.de/magazin/mediadaten | 200 | ✅ OK |
 | `/magazin/reader` | https://speisely.de/magazin/reader | 200 | ✅ OK |
