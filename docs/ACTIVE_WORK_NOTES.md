@@ -2,10 +2,10 @@
 
 _This document serves as the active working memory for ongoing tasks, context updates, and immediate implementation states. Permanent decisions are moved to core documentation once finalized._
 
-## Current Status (2026-11-18)
+## Current Status (2026-11-20)
 
-**Active Priority Task: GSC & Indexing Verification (Owned by Agent)**
-- **Trigger Date:** 2026-11-18 (Manual Priority Indexing Requested by User in GSC)
+**Active Priority Task 1: GSC & Indexing Verification (Owned by Agent)**
+- **Trigger Date:** 2026-11-18 (Manual Priority Indexing Requested by User in GSC, 48h check due)
 - **Queued Priority Commercial URLs:**
   1. `https://speisely.de/catering/rechner` (Top viral calculator tool)
   2. `https://speisely.de/catering/halal` (Niche high-converting catering)
@@ -19,11 +19,20 @@ _This document serves as the active working memory for ongoing tasks, context up
 - **Automated Actions Taken:**
   - IndexNow instant discovery ping executed successfully for 32 canonical URLs (`npm run ping:indexnow` returned `HTTP 200 OK`).
   - All 18 blog articles and Magazin Mediadaten synchronized to `llms.txt` and `llms-full.txt`.
-- **Scheduled Verification Protocol (Check in 24–48 hours):**
-  - [ ] Audit GSC URL Inspection for `https://speisely.de/catering/rechner` (Expect: "URL is on Google").
-  - [ ] Audit GSC URL Inspection for `https://speisely.de/catering/halal` (Expect: "URL is on Google").
+- **Verification Checklist:**
+  - [ ] Audit GSC URL Inspection for `https://speisely.de/catering/rechner` (Target: "URL is on Google").
+  - [ ] Audit GSC URL Inspection for `https://speisely.de/catering/halal` (Target: "URL is on Google").
   - [ ] Check GSC Performance tab for initial Impressions curve and query impressions.
   - [ ] Re-run `npm run audit:seo` (`node scripts/master_seo_geo_engine.mjs`) to verify live response and backlink health.
+
+**Active Priority Task 2: Orderbird B2B Partnership & Magazin Deal (Owned by Agent)**
+- **Contact:** Billy Joe Bredlow (Strategic Partner Manager, orderbird GmbH, Ritterstraße 12, 10969 Berlin)
+- **Status:** Stage 2 — Responded to outreach, requested Speisely background, deck & links.
+- **Pitch Track:**
+  1. *Immediate Revenue:* Speisely Magazin B2B Spotlight & full-page spread in 3D E-Paper (Tier 2: 950 €).
+  2. *Operational Integration:* Direct API / CloudPRNT receipt printer integration for zero-media-break catering orders.
+  3. *Distribution:* Official Orderbird Partner Store listing (DR 65 backlink + inbound restaurant leads).
+- **Next Follow-up:** Monitor Billy's response to the B2B Media Kit & API inquiry.
 
 ---
 
