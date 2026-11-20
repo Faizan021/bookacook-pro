@@ -143,3 +143,27 @@ A Speisely task is only “done” when all of the following are true:
 - The affected route/page renders correctly in desktop & mobile viewports.
 - No major unrelated area was disturbed.
 - Risk and changes are reported clearly.
+
+---
+
+## 11. Autonomous SEO & AEO Maxxing Standard (The 4-Pillar Growth Protocol)
+
+To ensure Speisely achieves compounding organic and AI search dominance without risking content farm penalties:
+
+1. **Adversarial Writer + Critic QA Loop:**
+   - Content generation is strictly dual-agent: Agent A (Writer) drafts; Agent B (Critic) audits against strict human E-E-A-T guidelines.
+   - **Anti-AI Scrubbing:** Zero em-dash overuse, zero introductory filler ("In today's fast-paced world...", "It is a testament to..."), and zero generic fluff. Every article must contain concrete numbers (portions, grams, prices in €), verifiable local Berlin context, and actionable advice.
+   - Any content with detectable AI artifacts is rejected back to Agent A for revision before publication.
+
+2. **Anti-Noise Multi-Sample Rule (3x–5x AEO Check):**
+   - LLMs have non-zero temperature; citations in ChatGPT, Perplexity, and Gemini fluctuate naturally.
+   - Never mark an AI search ranking as "dropped" or "won" based on a single query. Always sample 3 to 5 independent runs before logging a trend or triggering a content rewrite.
+
+3. **7-Day Attribution & Anti-Churn Gate:**
+   - Never rewrite an already-indexed, performing page in short intervals.
+   - Every published route or guide must run for a minimum of **7 days** with telemetry tracking (Search Console & PostHog) before analyzing performance and making iterative adjustments. Prevent SEO churn and index volatility.
+
+4. **Commercial High-Basket B2B Prioritization:**
+   - Optimize exclusively for high-intent, commercially valuable queries (e.g., `catering für meetings berlin`, `seminarcatering bestellen`, `office catering b2b`) with high basket sizes (€500–€3,500+).
+   - Reject vanity keywords, low-intent "free tool" traps, or unmonetizable traffic that inflates impression counts without driving real catering inquiries.
+
