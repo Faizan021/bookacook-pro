@@ -60,6 +60,7 @@ const searchSchema = z.object({
   order_success: z.union([z.string(), z.boolean()]).optional(),
   order_cancel: z.union([z.string(), z.boolean()]).optional(),
   claimable: z.union([z.string(), z.boolean()]).optional(),
+  showcase: z.union([z.string(), z.boolean()]).optional(),
   email: z.string().optional(),
   name: z.string().optional(),
   payment_method: z.string().optional(),
@@ -406,6 +407,7 @@ function RestaurantPage() {
   const { slug } = Route.useParams();
   const {
     order_success,
+    showcase,
     claimable,
     email,
     name: customerName,
@@ -1454,6 +1456,28 @@ function RestaurantPage() {
         }
       }
 
+      // Handle showcase / demo partner profile cleanly without triggering database UUID mismatch
+      if (restaurant?.isShowcase || !dbRestaurant) {
+        try {
+          trackEvent("showcase_order_placed", {
+            restaurant_id: restaurant?.id || slug,
+            restaurant_name: restaurant?.name || slug,
+            payment_method: selectedPayment,
+            order_type: orderType,
+            total: finalTotal,
+          });
+        } catch (_err) {
+          // Ignore analytics tracking error
+        }
+
+        setCart({});
+        if (mobileCartOpen) setMobileCartOpen(false);
+
+        const successQuery = `?order_success=true&showcase=true&email=${encodeURIComponent(checkoutIdentity.email)}&name=${encodeURIComponent(checkoutIdentity.name)}`;
+        window.location.href = window.location.origin + window.location.pathname + successQuery;
+        return;
+      }
+
       const res = await checkoutFn({
         data: {
           restaurantId: dbRestaurant?.id ?? restaurant?.id ?? "",
@@ -1518,7 +1542,18 @@ function RestaurantPage() {
         window.location.href = window.location.origin + window.location.pathname + successQuery;
       }
     } catch (err: any) {
-      alert(t("Fehler: ", "Error: ") + (err.message || err));
+      let displayMsg = err?.message || String(err || "");
+      try {
+        if (typeof displayMsg === "string" && displayMsg.trim().startsWith("[")) {
+          const parsed = JSON.parse(displayMsg);
+          if (Array.isArray(parsed) && parsed[0]?.message) {
+            displayMsg = parsed.map((e: any) => e.message || "Invalid input").join(", ");
+          }
+        }
+      } catch (_parseErr) {
+        // Fall back to original displayMsg
+      }
+      alert(t("Fehler: ", "Error: ") + displayMsg);
     } finally {
       setCheckoutLoading(false);
     }
@@ -2045,13 +2080,20 @@ function RestaurantPage() {
             <div className="text-center space-y-2">
               <span className="text-5xl">🎉</span>
               <h1 className="text-3xl font-display font-bold text-forest mt-2">
-                {t("Bestellung erfolgreich aufgegeben!", "Order placed successfully!")}
+                {showcase === "true" || showcase === true
+                  ? t("Anfrage / Testbestellung erfolgreich!", "Inquiry / Test Order Successful!")
+                  : t("Bestellung erfolgreich aufgegeben!", "Order placed successfully!")}
               </h1>
               <p className="text-sm text-forest/70 max-w-md mx-auto">
-                {t(
-                  `Vielen Dank für Ihre Bestellung bei ${restaurant?.name || "uns"}! Die Küche bereitet Ihre Speisen frisch zu.`,
-                  `Thank you for your order at ${restaurant?.name || "us"}! The kitchen is preparing your fresh dishes.`,
-                )}
+                {showcase === "true" || showcase === true
+                  ? t(
+                      `Vielen Dank für deine Anfrage bei ${restaurant?.name || "uns"}! Dies ist ein kuratiertes Partner-Showcase-Profil auf Speisely. Für direkte Live-Bestellungen und Tischreservierungen erreichst du das Restaurant direkt unter ${restaurant?.phone || "+49 2166 123456"}.`,
+                      `Thank you for your inquiry at ${restaurant?.name || "us"}! This is a curated partner showcase profile on Speisely. For direct live reservations and orders, please contact the restaurant directly at ${restaurant?.phone || "+49 2166 123456"}.`,
+                    )
+                  : t(
+                      `Vielen Dank für Ihre Bestellung bei ${restaurant?.name || "uns"}! Die Küche bereitet Ihre Speisen frisch zu.`,
+                      `Thank you for your order at ${restaurant?.name || "us"}! The kitchen is preparing your fresh dishes.`,
+                    )}
               </p>
             </div>
 
