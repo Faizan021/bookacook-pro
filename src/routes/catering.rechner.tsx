@@ -46,6 +46,116 @@ export const Route = createFileRoute("/catering/rechner")({
       { property: "og:url", content: "https://speisely.de/catering/rechner" },
     ],
     links: [{ rel: "canonical", href: "https://speisely.de/catering/rechner" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://speisely.de",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Catering",
+                  item: "https://speisely.de/catering",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: "Catering Rechner",
+                  item: "https://speisely.de/catering/rechner",
+                },
+              ],
+            },
+            {
+              "@type": "WebApplication",
+              "@id": "https://speisely.de/catering/rechner#app",
+              name: "Speisely Catering Kosten- & Mengen-Rechner",
+              url: "https://speisely.de/catering/rechner",
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "All",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "EUR",
+              },
+              featureList: [
+                "Catering Mengenberechnung pro Person in Gramm",
+                "Kalkulation für Fingerfood, Buffet, BBQ und gesetzte Menüs",
+                "Getränkebedarf und Personalaufwand pro Stunde",
+                "Kostenlose Angebote direkt von verifizierten Caterern",
+              ],
+              publisher: {
+                "@type": "Organization",
+                name: "Speisely",
+                url: "https://speisely.de",
+              },
+            },
+            {
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "Warum hat jeder Caterer andere Preise trotz gleicher Gästezahl?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Catering ist eine individuelle Handwerksleistung. Die Preise variieren je nach Wareneinsatz (z. B. regionales Bio-Fleisch vs. konventionell), Frischegrad, Menü-Aufwand, Personalschlüssel und Anfahrtsweg. Unser Rechner liefert Ihnen die verlässliche Orientierung – die finale Kalkulation erstellt jeder Caterer maßgeschneidert auf Ihre Wünsche.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Wie viel Gramm Essen kalkuliert man pro Person beim Catering?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Bei einem vollständigen Hauptbuffet (warm/kalt) rechnet man im Schnitt mit 600g bis 700g Speisen pro Gast. Davon entfallen etwa 200–250g auf Fleisch/Fisch bzw. vegetarische Hauptkomponenten, 150–200g auf Sättigungsbeilagen, 100–120g auf Gemüse und 100–120g auf Desserts. Bei reinem Fingerfood genügen 350g bis 450g (ca. 8–10 Teile).",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Wie viele Getränke trinken Gäste im Schnitt pro Stunde?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Als verlässliche Faustregel gilt: In der ersten Stunde trinken Gäste ca. 0,5 Liter Flüssigkeit. Für jede weitere Stunde werden 0,25 bis 0,35 Liter pro Person kalkuliert. Bei einer 5-stündigen Abendfeier liegt der Gesamtwert bei rund 1,5 bis 1,8 Litern Flüssigkeit pro Gast.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Was kostet Catering pro Person im Jahr 2026?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Die Preise variieren je nach Format: Einfaches Fingerfood startet bei 22 € bis 34 € p.P. Ein reichhaltiges Buffet liegt zwischen 28 € und 45 € p.P. Exklusives Live-Cooking BBQ oder mehrgängige Hochzeitsmenüs kosten zwischen 38 € und 85 € p.P. Hinzu kommen eventuelle Getränkepauschalen (16 € bis 38 € p.P.) sowie Geschirr und Servicepersonal.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Wie viel Servicepersonal benötigt man bei einem Event?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Bei einem Buffet rechnet man mit 1 Servicekraft pro 25 bis 35 Gäste, um Teller abzuräumen und das Buffet nachzufüllen. Bei einem gesetzten Menü, bei dem Speisen und Wein am Tisch serviert werden, wird 1 Servicekraft pro 15 bis 20 Gäste empfohlen.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Lohnt sich eine Getränkepauschale oder ist Abrechnung nach Verbrauch günstiger?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Bei Events mit einer Dauer von mehr als 4 Stunden (wie Hochzeiten, Sommerfesten oder Weihnachtsfeiern) lohnt sich eine Pauschale fast immer, da sie vor unerwarteten Kostenspitzen schützt. Bei kurzen Business-Meetings unter 2 Stunden ist die Abrechnung nach tatsächlichem Verbrauch meist wirtschaftlicher.",
+                  },
+                },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
   component: CateringRechnerPage,
 });
