@@ -1670,13 +1670,13 @@ function CatererPage() {
                           </span>
                           <div className="text-right">
                             <div className="text-2xl font-bold font-display text-forest">
-                              {pkg.price_amount > 0
-                                ? `€${pkg.price_amount}`
+                              {(pkg.price_amount ?? pkg.price) > 0
+                                ? `€${pkg.price_amount ?? pkg.price}`
                                 : t("Auf Anfrage", "On Request")}
                             </div>
                             <div className="text-[11px] text-forest/60 font-medium">
-                              {pkg.price_amount > 0
-                                ? pkg.price_type === "per_person"
+                              {(pkg.price_amount ?? pkg.price) > 0
+                                ? (pkg.price_type ?? pkg.priceType) === "per_person"
                                   ? t("pro Gast", "per guest")
                                   : t("Pauschal", "flat rate")
                                 : t("Individuelles Angebot", "Custom quote")}
@@ -1691,29 +1691,40 @@ function CatererPage() {
 
                       {pkg.short_summary && (
                         <p className="mt-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50/80 rounded-lg px-2.5 py-1.5 border border-emerald-100">
-                          {pkg.short_summary}
+                          {typeof pkg.short_summary === "object"
+                            ? lang === "de"
+                              ? pkg.short_summary?.de
+                              : pkg.short_summary?.en || pkg.short_summary?.de
+                            : pkg.short_summary}
                         </p>
                       )}
 
                       <p className="mt-3 text-sm text-forest/80 leading-relaxed">
-                        {pkg.description}
+                        {typeof pkg.description === "object"
+                          ? lang === "de"
+                            ? pkg.description?.de
+                            : pkg.description?.en || pkg.description?.de
+                          : pkg.description}
                       </p>
 
-                      {pkg.included_items && pkg.included_items.length > 0 && (
+                      {((pkg.included_items && pkg.included_items.length > 0) ||
+                        (pkg.included && pkg.included.length > 0)) && (
                         <div className="mt-4 pt-4 border-t border-[#eadfce]/60">
                           <div className="text-xs font-bold text-forest/60 uppercase tracking-wider mb-2">
                             {t("Im Paket enthalten:", "Included in package:")}
                           </div>
                           <ul className="space-y-1.5">
-                            {pkg.included_items.map((item: string, idx: number) => (
-                              <li
-                                key={idx}
-                                className="flex items-start gap-2 text-xs text-forest/80"
-                              >
-                                <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0 mt-0.5" />
-                                <span>{item}</span>
-                              </li>
-                            ))}
+                            {(pkg.included_items || pkg.included || []).map(
+                              (item: string, idx: number) => (
+                                <li
+                                  key={idx}
+                                  className="flex items-start gap-2 text-xs text-forest/80"
+                                >
+                                  <CheckCircle2 className="h-4 w-4 text-[#10b981] shrink-0 mt-0.5" />
+                                  <span>{item}</span>
+                                </li>
+                              ),
+                            )}
                           </ul>
                         </div>
                       )}
@@ -1722,11 +1733,15 @@ function CatererPage() {
                     <div className="mt-6 pt-4 border-t border-[#eadfce]/60">
                       <button
                         onClick={() => {
+                          const pkgPrice = pkg.price_amount ?? pkg.price ?? 0;
                           setInquiryForm((prev) => ({
                             ...prev,
                             eventType: pkg.title,
-                            notes: `[INTERESSE AN PAKET: ${pkg.title} (${pkg.price_amount > 0 ? `€${pkg.price_amount}/P` : "Auf Anfrage"})]\n\n`,
-                            guestCount: Math.max(prev.guestCount, pkg.min_guests || 20),
+                            notes: `[INTERESSE AN PAKET: ${pkg.title} (${pkgPrice > 0 ? `€${pkgPrice}/P` : "Auf Anfrage"})]\n\n`,
+                            guestCount: Math.max(
+                              prev.guestCount,
+                              pkg.min_guests || pkg.minGuests || 20,
+                            ),
                           }));
                           setInquiryModalOpen(true);
                         }}

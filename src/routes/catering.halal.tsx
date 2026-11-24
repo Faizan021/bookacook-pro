@@ -17,6 +17,7 @@ import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
 import { PageHero } from "@/components/PageHero";
+import { AiConciergeFloatingButton } from "@/components/search/AiConciergeFloatingButton";
 
 export const Route = createFileRoute("/catering/halal")({
   head: () => ({
@@ -403,6 +404,8 @@ function HalalCateringPage() {
 
       {/* Reusable B2B Dialog */}
       <B2bCateringDialog open={b2bOpen} onOpenChange={setB2bOpen} />
+
+      <AiConciergeFloatingButton initialQuery="Ich suche zertifiziertes Halal Catering in Berlin mit Buffet oder Fingerfood." />
     </SiteShell>
   );
 }

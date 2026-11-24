@@ -17,6 +17,7 @@ import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
 import { PageHero } from "@/components/PageHero";
+import { AiConciergeFloatingButton } from "@/components/search/AiConciergeFloatingButton";
 
 export const Route = createFileRoute("/catering/fingerfood")({
   head: () => ({
@@ -137,7 +138,9 @@ function FingerfoodCateringPage() {
   return (
     <SiteShell>
       <PageHero
-        eyebrow={isDe ? "FINGERFOOD & FLYING BUFFET CATERING" : "FINGER FOOD & FLYING BUFFET CATERING"}
+        eyebrow={
+          isDe ? "FINGERFOOD & FLYING BUFFET CATERING" : "FINGER FOOD & FLYING BUFFET CATERING"
+        }
         heading={
           isDe ? (
             <>
@@ -282,6 +285,8 @@ function FingerfoodCateringPage() {
 
       {/* Reusable B2B Dialog */}
       <B2bCateringDialog open={b2bOpen} onOpenChange={setB2bOpen} />
+
+      <AiConciergeFloatingButton initialQuery="Ich suche Fingerfood und Flying Buffet Catering für ein Event." />
     </SiteShell>
   );
 }

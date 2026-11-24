@@ -14,6 +14,7 @@ import { SiteShell } from "@/components/SiteShell";
 import { useI18n } from "@/i18n/I18nProvider";
 import { B2bCateringDialog } from "@/components/B2bCateringDialog";
 import { PageHero } from "@/components/PageHero";
+import { AiConciergeFloatingButton } from "@/components/search/AiConciergeFloatingButton";
 
 export const Route = createFileRoute("/catering/events")({
   head: () => ({
@@ -283,6 +284,8 @@ function EventsCatering() {
 
       {/* Reusable B2b Dialog */}
       <B2bCateringDialog open={b2bOpen} onOpenChange={setB2bOpen} />
+
+      <AiConciergeFloatingButton initialQuery="Ich plane ein Firmenevent oder eine Feier und benötige passendes Catering." />
     </SiteShell>
   );
 }

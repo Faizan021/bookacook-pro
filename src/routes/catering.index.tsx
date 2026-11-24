@@ -42,6 +42,8 @@ import { TrustSection } from "@/components/TrustSection";
 
 import { LeadCaptureForm } from "@/components/vendor/LeadCaptureForm";
 
+import { AiConciergeFloatingButton } from "@/components/search/AiConciergeFloatingButton";
+
 import { z } from "zod";
 
 export const Route = createFileRoute("/catering/")({
@@ -1466,6 +1468,8 @@ function Catering() {
 
         corporateCaterers={corporateCaterers}
       />
+
+      <AiConciergeFloatingButton initialQuery="Ich suche das passende Catering in Berlin für mein Event." />
     </SiteShell>
   );
 }

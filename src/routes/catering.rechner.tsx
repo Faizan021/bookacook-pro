@@ -27,6 +27,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { Slider } from "@/components/ui/slider";
 import { submitLeadCapture } from "@/lib/api/leads.functions";
 import { trackEvent } from "@/utils/posthog";
+import { AiConciergeFloatingButton } from "@/components/search/AiConciergeFloatingButton";
 
 export const Route = createFileRoute("/catering/rechner")({
   head: () => ({
@@ -527,6 +528,14 @@ function CateringRechnerPage() {
     activeFormat,
     activeDrink,
   ]);
+
+  const [isConciergeOpen, setIsConciergeOpen] = useState(false);
+
+  const aiPromptQuery = useMemo(() => {
+    return isDe
+      ? `Ich plane ein Event für ca. ${guests} Gäste (${format}, ${durationHours} Std.). Kalkuliertes Budget: ca. ${calculations.perPersonMin} € – ${calculations.perPersonMax} € pro Person. Welche Speisely-Caterer passen dazu?`
+      : `I am planning an event for ~${guests} guests (${format}, ${durationHours} hrs). Estimated budget: approx. €${calculations.perPersonMin} – €${calculations.perPersonMax} per person. Which Speisely caterers match this?`;
+  }, [isDe, guests, format, durationHours, calculations]);
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1215,18 +1224,33 @@ function CateringRechnerPage() {
                   </div>
                 </div>
 
-                {/* CTA Jump to Form */}
-                <a
-                  href="#angebot"
-                  className="w-full py-3.5 px-4 rounded-2xl bg-[#f2d896] text-forest font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg hover:bg-[#e4c983] transition-all min-h-[44px]"
-                >
-                  <span>
-                    {isDe
-                      ? "Catering-Angebote für dieses Event anfragen"
-                      : "Request Quotes For This Event"}
-                  </span>
-                  <ChevronRight className="h-4 w-4" />
-                </a>
+                {/* CTA Actions */}
+                <div className="space-y-2.5 pt-1">
+                  <a
+                    href="#angebot"
+                    className="w-full py-3.5 px-4 rounded-2xl bg-[#f2d896] text-forest font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg hover:bg-[#e4c983] transition-all min-h-[44px]"
+                  >
+                    <span>
+                      {isDe
+                        ? "Catering-Angebote für dieses Event anfragen"
+                        : "Request Quotes For This Event"}
+                    </span>
+                    <ChevronRight className="h-4 w-4" />
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsConciergeOpen(true)}
+                    className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-forest via-[#1a382c] to-[#b28a3c] text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-md border border-white/20 hover:border-[#f4d58d] transition-all min-h-[44px] cursor-pointer"
+                  >
+                    <Sparkles className="h-4 w-4 text-[#f4d58d]" />
+                    <span>
+                      {isDe
+                        ? "Menü & Budget live mit KI-Concierge besprechen"
+                        : "Refine Menu & Budget with AI Concierge"}
+                    </span>
+                  </button>
+                </div>
               </div>
 
               {/* Informational Hint */}
@@ -1496,6 +1520,12 @@ function CateringRechnerPage() {
           </section>
         </main>
       </div>
+
+      <AiConciergeFloatingButton
+        isOpen={isConciergeOpen}
+        onOpenChange={setIsConciergeOpen}
+        initialQuery={aiPromptQuery}
+      />
     </SiteShell>
   );
 }
