@@ -1113,6 +1113,12 @@ function RestaurantPage() {
   const [resError, setResError] = useState("");
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
 
+  useEffect(() => {
+    if (restaurant?.acceptsDelivery === false && orderType === "delivery") {
+      setOrderType("pickup");
+    }
+  }, [restaurant?.acceptsDelivery, orderType]);
+
   const t = (de: string, en: string) => (lang === "de" ? de : en);
 
   // If DB record exists and is not published, show friendly Coming Soon page
@@ -1845,17 +1851,23 @@ function RestaurantPage() {
               >
                 {t("Abholung", "Pickup")}
               </button>
-              <button
-                type="button"
-                onClick={() => setOrderType("delivery")}
-                className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-                  orderType === "delivery"
-                    ? "bg-[#10b981] text-white shadow-sm"
-                    : "bg-[#eadfce]/30 text-forest/60 hover:bg-[#eadfce]/50"
-                }`}
-              >
-                {t("Lieferung", "Delivery")}
-              </button>
+              {restaurant?.acceptsDelivery !== false ? (
+                <button
+                  type="button"
+                  onClick={() => setOrderType("delivery")}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
+                    orderType === "delivery"
+                      ? "bg-[#10b981] text-white shadow-sm"
+                      : "bg-[#eadfce]/30 text-forest/60 hover:bg-[#eadfce]/50"
+                  }`}
+                >
+                  {t("Lieferung", "Delivery")}
+                </button>
+              ) : (
+                <div className="flex-1 py-1.5 text-center text-[11px] text-forest/60 bg-[#eadfce]/20 rounded-md font-medium flex items-center justify-center">
+                  {t("Nur Abholung", "Pickup only")}
+                </div>
+              )}
             </div>
             <input
               type="text"

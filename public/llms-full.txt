@@ -27,6 +27,8 @@ Deutsch: Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Caterin
 - About Us: https://speisely.de/about
 
 ### Specialized Catering Services
+- [Khan Baba Berlin](https://speisely.de/catering/khan-baba): Authentisches pakistanisches Catering, Karachi Biryani Degs, Nihari & Halal Buffets Berlin (Amsterdamer Str. 12, Wedding)
+- [Khan Baba Restaurant Storefront](https://speisely.de/restaurant/khan-baba): Original pakistanische Speisekarte, Karachi Biryani, Tandoor & Takeaway Berlin-Wedding
 - [Halal Catering Deutschland](https://speisely.de/catering/halal): Zertifiziertes Halal Catering für Firmenfeiern, Hochzeiten & Events
 - [Fingerfood & Flying Buffet](https://speisely.de/catering/fingerfood): Exklusives Fingerfood Catering für Firmenfeiern, Messen & Empfänge
 - [RuStiko Sizilianisches Street Food](https://speisely.de/catering/rustiko): Authentisches sizilianisches Street Food, Arancinette & Event-Catering 12347 Berlin

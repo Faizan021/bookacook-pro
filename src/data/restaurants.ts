@@ -43,6 +43,8 @@ export type Restaurant = {
   acceptsPaypal?: boolean;
   paypalEmail?: string;
   stripeConnectStatus?: string;
+  acceptsDelivery?: boolean;
+  acceptsPickup?: boolean;
 };
 
 export const fallbackRestaurants: Restaurant[] = [
@@ -188,6 +190,217 @@ export const fallbackRestaurants: Restaurant[] = [
         img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=600&h=450&fit=crop",
         category: "Vorspeisen",
         dietary: ["vegetarian", "gluten-free"],
+      },
+    ],
+  },
+  {
+    id: "khan-baba",
+    slug: "khan-baba",
+    name: "Khan Baba Berlin",
+    tags: [
+      "Authentische pakistanische Küche",
+      "100% Halal",
+      "Karachi Biryani",
+      "Tandoor & BBQ",
+      "Berlin Wedding",
+    ],
+    rating: 4.9,
+    time: "20-35 min",
+    fee: "€0.00",
+    img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+    logo: "/caterers/khan-baba/logo.webp",
+    status: "Open",
+    area: "Berlin-Wedding",
+    address: "Amsterdamer Straße 12, 13347 Berlin",
+    phone: "+49 178 2672163",
+    distanceKm: 1.2,
+    minOrder: 15,
+    acceptsDelivery: false,
+    acceptsPickup: true,
+    about: {
+      de: "Willkommen bei Khan Baba Berlin im Herzen von Wedding! Berühmt für echte Karachi Student Biryani, traditionell geschmorte Rinder-Nihari, saftige Tandoori Seekh Kebabs und frische Karahi-Currys. Hinweis: Reguläre Restaurant-Speisen werden nur zur Selbstabholung (Takeaway) zubereitet. Große Catering-Degs und Buffets liefern wir zuverlässig in ganz Berlin!",
+      en: "Welcome to Khan Baba Berlin in Wedding! Renowned for authentic Karachi Student Biryani, slow-braised beef Nihari, sizzling tandoori Seekh Kebabs, and fresh Karahi curries. Note: Regular restaurant orders are for local takeaway (pickup) only. Catering cauldrons and event buffets are delivered Berlin-wide!",
+    },
+    announcement_active: true,
+    announcement_bg_color: "primary",
+    announcement_text:
+      "🇵🇰 Original pakistanische Spezialitäten! Restaurant: Nur Selbstabholung vor Ort. Catering-Degs liefern wir berlinweit!",
+    menu: [
+      {
+        id: "kb-1",
+        name: "Karachi Student Biryani (Chicken)",
+        desc: {
+          de: "Die beliebteste Biryani Berlins: Würziger Duftreis mit zartem Hähnchenfleisch, traditionell gedämpft mit Safran und Karachi-Gewürzen",
+          en: "Berlin's most popular biryani: Fragrant basmati rice with tender chicken, steamed with saffron and Karachi spices",
+        },
+        price: 13.9,
+        img: "/caterers/khan-baba/02_karachi_biryani_deg.webp",
+        category: "Biryani & Reis",
+      },
+      {
+        id: "kb-2",
+        name: "Mutton Biryani (Lamm)",
+        desc: {
+          de: "Fein geschichteter Basmatireis mit butterzartem Lammfleisch, warmen Gewürzen und Minze",
+          en: "Layered basmati rice with succulent slow-braised lamb, whole aromatic spices and mint",
+        },
+        price: 15.9,
+        img: "/caterers/khan-baba/02_karachi_biryani_deg.webp",
+        category: "Biryani & Reis",
+      },
+      {
+        id: "kb-3",
+        name: "Traditionelle Rinder-Nihari",
+        desc: {
+          de: "Stundenlang langsam geschmorte Rinderbeinscheibe in samtig-würziger Sauce, serviert mit frischem Ingwer, grünem Chili und Zitrone",
+          en: "Slow-simmered beef shank in a rich velvety spiced gravy, garnished with fresh ginger juliennes and lemon",
+        },
+        price: 15.9,
+        img: "/caterers/khan-baba/03_nihari_tandoor_naan.webp",
+        category: "Traditionelle Spezialitäten",
+      },
+      {
+        id: "kb-4",
+        name: "Chicken Haleem",
+        desc: {
+          de: "Cremig gekochtes Hähnchen mit Weizen, Gerste und 7 Linsensorten, garniert mit Röstzwiebeln und Koriander",
+          en: "Slow-cooked shredded chicken stew with cracked wheat and lentils, topped with caramelized golden onions",
+        },
+        price: 14.9,
+        img: "/caterers/khan-baba/03_nihari_tandoor_naan.webp",
+        category: "Traditionelle Spezialitäten",
+      },
+      {
+        id: "kb-5",
+        name: "Paya Spezialität",
+        desc: {
+          de: "Klassisches Lahori Festtagsgericht in kräftig reduzierter Knochenbrühe mit feiner Gewürznote",
+          en: "Traditional rich bone broth stew cooked with slow-simmered spices",
+        },
+        price: 14.9,
+        img: "/caterers/khan-baba/03_nihari_tandoor_naan.webp",
+        category: "Traditionelle Spezialitäten",
+      },
+      {
+        id: "kb-6",
+        name: "Chicken Karahi (Pfannengericht)",
+        desc: {
+          de: "In der traditionellen Eisenpfanne frisch zubereitet mit Tomaten, Knoblauch, Ingwer und grünen Chilis",
+          en: "Cooked fresh in a traditional wok with ripe tomatoes, garlic, ginger, and green chilies",
+        },
+        price: 14.9,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Karahi & Pfannengerichte",
+      },
+      {
+        id: "kb-7",
+        name: "Mutton Karahi",
+        desc: {
+          de: "Zartes Lammfleisch in der Karahi-Pfanne geschmort mit frischen Kräutern und kräftigen Gewürzen",
+          en: "Tender lamb cooked in wok with tomatoes, ginger, and hand-ground spices",
+        },
+        price: 16.9,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Karahi & Pfannengerichte",
+      },
+      {
+        id: "kb-8",
+        name: "Butter Chicken",
+        desc: {
+          de: "Gegrilltes Hähnchenfilet in feiner Tomaten-Cashew-Butter-Sauce",
+          en: "Tender chicken pieces in a silky tomato and butter sauce with fenugreek",
+        },
+        price: 14.5,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Karahi & Pfannengerichte",
+      },
+      {
+        id: "kb-9",
+        name: "Seekh Kebab Platter",
+        desc: {
+          de: "Zwei saftig gegrillte Spieße aus gewürztem Rinderhackfleisch aus dem Holzkohle-Tandoor, serviert mit Salat und Chutney",
+          en: "Two juicy skewers of spiced minced beef grilled over coals in the tandoor, with fresh salad and chutney",
+        },
+        price: 12.9,
+        img: "/caterers/khan-baba/04_seekh_kebab_bbq_grill.webp",
+        category: "Tandoori Grill & BBQ",
+      },
+      {
+        id: "kb-10",
+        name: "Chicken Tikka Boti",
+        desc: {
+          de: "Marinierte Hähnchenbruststücke am Spieß zart im Tandoor gegrillt",
+          en: "Succulent boneless chicken chunks marinated in yogurt and tandoor spices, flame grilled",
+        },
+        price: 12.9,
+        img: "/caterers/khan-baba/04_seekh_kebab_bbq_grill.webp",
+        category: "Tandoori Grill & BBQ",
+      },
+      {
+        id: "kb-11",
+        name: "Samosa Chaat",
+        desc: {
+          de: "Knusprige Kartoffel-Samosas auf Kichererbsen-Curry mit Joghurt, Minze und Tamarindensauce",
+          en: "Crispy vegetable samosas served over chickpea masala with yogurt and tamarind chutney",
+        },
+        price: 8.9,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Vorspeisen & Street Food",
+      },
+      {
+        id: "kb-12",
+        name: "Gol Gappe / Pani Puri (6 Stk.)",
+        desc: {
+          de: "Hohle, krosse Weizenbällchen gefüllt mit Kartoffeln und Kichererbsen, serviert mit pikantem Kräuterwasser",
+          en: "Crisp hollow pooris filled with potatoes and chickpeas, served with tangy spiced mint water",
+        },
+        price: 8.9,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Vorspeisen & Street Food",
+      },
+      {
+        id: "kb-13",
+        name: "Halwa Puri Chana Teller",
+        desc: {
+          de: "Traditionelles Lahori Sonntags-Frühstück: 3 heiße Puris mit Kichererbsen-Chana und süßem Halwa",
+          en: "Traditional weekend breakfast: 3 fresh puris served with spicy chickpea curry and sweet semolina halwa",
+        },
+        price: 14.9,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Vorspeisen & Street Food",
+      },
+      {
+        id: "kb-14",
+        name: "Tandoori Garlic Naan",
+        desc: {
+          de: "Frisch gebackenes Fladenbrot aus dem Lehmofen mit feiner Knoblauchbutter und Koriander",
+          en: "Oven-baked flatbread brushed with aromatic garlic butter and cilantro",
+        },
+        price: 3.5,
+        img: "/caterers/khan-baba/03_nihari_tandoor_naan.webp",
+        category: "Tandoor Brote & Beilagen",
+      },
+      {
+        id: "kb-15",
+        name: "Mango Lassi (0,4l)",
+        desc: {
+          de: "Cremiges Joghurt-Getränk mit fruchtigem Kesar-Mango-Püree",
+          en: "Creamy refreshing yogurt drink with mango pulp",
+        },
+        price: 4.5,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Getränke & Desserts",
+      },
+      {
+        id: "kb-16",
+        name: "Gulab Jamun (2 Stk.)",
+        desc: {
+          de: "Warme goldbraune Teigbällchen eingelegt in feinem Rosen-Kardamomsirup",
+          en: "Warm fried dough balls soaked in fragrant rose and cardamom syrup",
+        },
+        price: 4.5,
+        img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        category: "Getränke & Desserts",
       },
     ],
   },
@@ -508,6 +721,8 @@ function mapRestaurant(r: any): Restaurant {
     acceptsPaypal: r.accepts_paypal || false,
     paypalEmail: r.paypal_email || "",
     stripeConnectStatus: r.stripe_connect_status || "not_connected",
+    acceptsDelivery: r.accepts_delivery ?? true,
+    acceptsPickup: r.accepts_pickup ?? true,
     announcement_active: r.announcement_active || false,
     announcement_text: r.announcement_text || "",
     announcement_bg_color: r.announcement_bg_color || "default",

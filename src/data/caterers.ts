@@ -2029,6 +2029,298 @@ export const fallbackCaterers: Caterer[] = [
       },
     ],
   },
+  {
+    id: "khan-baba",
+    slug: "khan-baba",
+    name: "Khan Baba Berlin",
+    tagline: {
+      de: "Authentisches Pakistanisches Catering, Karachi Biryani Degs & Halal Buffets in Berlin",
+      en: "Authentic Pakistani Catering, Karachi Biryani Cauldrons & Halal Buffets in Berlin",
+    },
+    rating: 4.9,
+    reviewCount: 128,
+    minOrder: 120,
+    minGuests: 15,
+    perPerson: 16.5,
+    time: "24–48 Stunden Vorlauf",
+    tags: [
+      "100% Halal Zertifiziert",
+      "Karachi Biryani Degs",
+      "Traditionelle Nihari & BBQ",
+      "Firmenevents & Hochzeiten Berlin",
+      "Halal Catering Berlin",
+    ],
+    serviceCategories: ["events", "corporate", "private", "wedding", "ramadan"],
+    img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+    logo: "/caterers/khan-baba/logo.webp",
+    status: "available",
+    area: "Amsterdamer Str. 12, 13347 Berlin (Wedding) & ganzes Stadtgebiet (Lieferung in ganz Berlin)",
+    address: "Amsterdamer Straße 12, 13347 Berlin",
+    phone: "+49 178 2672163",
+    cat: "all",
+    verified: true,
+    dietary: ["100% Halal", "Vegetarische Optionen", "Authentische Lahori & Karachi Rezepturen"],
+    about: {
+      de: "Willkommen bei Khan Baba Berlin! Wir bringen die unverfälschte, traditionsreiche Geschmackswelt Pakistans direkt zu deinem Firmenevent, deiner Konferenz oder privaten Familienfeier in ganz Berlin.\n\nUnser Markenzeichen: Authentische Festtagsküche in echter Meisterqualität. Von unserer legendären Karachi Student Biryani (auf Wunsch zubereitet und serviert in der traditionellen Deg für 30 bis 100+ Personen) über stundenlang schonend geschmorte Rinder-Nihari mit aromatischem Ingwer und frischem Koriander bis hin zu saftigem Chicken Karahi und frischen Seekh Kebabs aus dem Tandoor-Grill.\n\nFür Hochzeiten, Botschafts-Empfänge und Firmen-Lunches bieten wir vollständige Warmhalte-Buffets inklusive Chafing Dishes, Tandoori-Brote, Raita und Desserts wie warmen Gulab Jamun und Kheer. Jedes Catering wird pünktlich heiß angeliefert und flexibel auf deine Gästezahl abgestimmt.",
+      en: "Welcome to Khan Baba Berlin! We bring the authentic, rich culinary heritage of Pakistan directly to your corporate event, team lunch, wedding, or private celebration across Berlin.\n\nOur signature: Handcrafted celebration feasts cooked with traditional recipes. From our renowned Karachi Student Biryani (available in traditional cooking Deg cauldrons for 30 to 100+ guests) to slow-braised beef Nihari with ginger juliennes and fresh herbs, sizzling tandoori Seekh Kebabs, and rich Chicken Karahi.\n\nWe provide complete hot buffet setups with chafing dishes, freshly baked naans, cool raita, and artisanal desserts like warm Gulab Jamun.",
+    },
+    announcement_active: true,
+    announcement_bg_color: "primary",
+    announcement_text:
+      "🇵🇰 Authentisches pakistanisches Catering & Biryani-Degs für Events & Firmenfeiern in Berlin: Jetzt anfragen!",
+    gallery: [
+      {
+        url: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+        caption: {
+          de: "Großes pakistanisches Festtags-Buffet mit Biryani, Nihari & Karahi",
+          en: "Grand Pakistani celebration buffet with Biryani, Nihari & Karahi",
+        },
+      },
+      {
+        url: "/caterers/khan-baba/02_karachi_biryani_deg.webp",
+        caption: {
+          de: "Traditionelle Biryani-Deg für 30–50 Personen mit Safranreis & zartem Fleisch",
+          en: "Traditional Biryani Deg for 30–50 guests with saffron rice & tender meat",
+        },
+      },
+      {
+        url: "/caterers/khan-baba/03_nihari_tandoor_naan.webp",
+        caption: {
+          de: "Klassische Rinder-Nihari mit frischem Ingwer, Chili & ofenfrischem Tandoori Naan",
+          en: "Classic beef Nihari with fresh ginger, chili & hot tandoori naan",
+        },
+      },
+      {
+        url: "/caterers/khan-baba/04_seekh_kebab_bbq_grill.webp",
+        caption: {
+          de: "Sizzle Grill-Platte mit Tandoori Seekh Kebabs, Chicken Tikka & Minz-Chutney",
+          en: "Sizzling grill platter with tandoori Seekh Kebabs, Chicken Tikka & mint chutney",
+        },
+      },
+    ],
+    packages: [
+      {
+        id: "karachi-student-biryani-deg",
+        title: "Karachi Biryani Deg-Party (ca. 30–35 Personen)",
+        description: {
+          de: "Die originale Festtags-Deg: Aromatisch gewürzter Basmatireis mit zartem Hähnchen, traditionellen Kartoffeln, garniert mit Röstzwiebeln und Minze. Inklusive 3 Liter cremigem Minz-Raita, frischem Salat und Chutney.",
+          en: "Original celebration cauldron: Fragrant basmati rice layered with marinated chicken, spiced potatoes, fried onions and mint. Includes 3L mint raita, fresh salad, and chutney.",
+        },
+        price: 280,
+        priceType: "fixed",
+        minGuests: 25,
+        included: [
+          "1 große traditionelle Biryani-Deg (ca. 30–35 Portionen)",
+          "Hausgemachtes Minz-Gurken-Raita (3 Liter)",
+          "Frischer Salat mit roten Zwiebeln, Tomaten & Zitrone",
+          "Lieferung in isolierten Warmhalte-Behältern",
+          "Optional: Vorlegebesteck & Einweg-Geschirr auf Anfrage",
+        ],
+      },
+      {
+        id: "shahi-mughlai-festtags-buffet",
+        title: "Shahi Mughlai Festtags-Buffet (ab 20 Personen)",
+        description: {
+          de: "Das ultimative Wohlfühl-Buffet für Hochzeiten, Firmenfeiern und Jubiläen: Karachi Chicken Biryani, stundenlang geschmorte Nihari, Chicken Karahi, ofenfrische Naans und warmes Dessert.",
+          en: "The ultimate Pakistani banquet: Karachi Chicken Biryani, slow-cooked Nihari, Chicken Karahi, fresh Naan, and warm dessert.",
+        },
+        price: 22.5,
+        priceType: "per_person",
+        minGuests: 20,
+        included: [
+          "Karachi Chicken Biryani mit Raita & Salat",
+          "Traditionelle Rinder-Nihari mit Ingwer, Koriander & Limetten",
+          "Würzige Chicken Karahi aus der traditionellen Pfanne",
+          "Frische Tandoori Naans & Garlic Naans",
+          "Dessert: Warme Gulab Jamun in aromatischem Zuckersirup",
+          "Inklusive Chafing Dishes (Warmhaltebehälter) für die Dauer des Events",
+        ],
+      },
+      {
+        id: "lahori-bbq-grill-buffet",
+        title: "Lahori Live-BBQ & Kebab Buffet (ab 20 Personen)",
+        description: {
+          de: "Für BBQ-Liebhaber: Saftige Seekh Kebabs aus Rindfleisch, zart mariniertes Chicken Tikka Boti, Malai Boti, serviert mit Duftreis, Naan, Salat und pikantem Minz-Tamarinden-Chutney.",
+          en: "For BBQ enthusiasts: Juicy beef Seekh Kebabs, tender Chicken Tikka boti, Malai Boti, served with rice, naan, and chutneys.",
+        },
+        price: 24.0,
+        priceType: "per_person",
+        minGuests: 20,
+        included: [
+          "Tandoori Seekh Kebabs (fein gewürztes Rinderhack)",
+          "Chicken Tikka Boti (in Joghurt und Tandoori-Gewürzen mariniert)",
+          "Aromatischer Jeera-Reis (Kreuzkümmel-Basmatireis)",
+          "Frische Tandoori-Brote",
+          "Minz-Koriander-Sauce & süß-saures Tamarinden-Chutney",
+          "Große Salatplatte mit marinierten roten Zwiebeln & Chili",
+        ],
+      },
+      {
+        id: "halwa-puri-chana-brunch",
+        title: "Halwa Puri Chana Frühstücks- & Brunch-Buffet (ab 15 Personen)",
+        description: {
+          de: "Der sonntägliche Klassiker: Goldbraun frittierte Puris, heiß serviert mit würzigem Kichererbsen-Curry (Chana Masala), Aloo Bhujia (Kartoffelcurry) und süßem Sooji Halwa (Grießpudding).",
+          en: "The beloved traditional breakfast: Golden crispy puris served with spiced chickpea chana masala, potato curry, and sweet sooji halwa.",
+        },
+        price: 14.5,
+        priceType: "per_person",
+        minGuests: 15,
+        included: [
+          "Ofenfrische warme Puris (3–4 Stück pro Person)",
+          "Lahori Chana Masala (würzige Kichererbsen)",
+          "Aloo Bhujia (mild gewürztes Kartoffelcurry)",
+          "Traditionelles Sooji Halwa mit Mandeln & Kardamom",
+          "Frische rote Zwiebeln, grüne Chilis & Mixed Pickles (Achar)",
+        ],
+      },
+    ],
+    menu: [
+      {
+        name: "Karachi Student Biryani",
+        desc: {
+          de: "Aromatischer Basmatireis mit mariniertem Hähnchen und Kartoffeln nach Karachi-Rezeptur, serviert mit Minz-Raita.",
+          en: "Fragrant basmati rice layered with marinated chicken and spiced potatoes, served with mint raita.",
+        },
+        price: 13.9,
+        category: "Biryani & Reis",
+      },
+      {
+        name: "Lamm Biryani",
+        desc: {
+          de: "Zartes geschmortes Lammfleisch im aromatischen Safran-Basmatireis mit gerösteten Zwiebeln.",
+          en: "Tender braised lamb layered with aromatic saffron basmati rice.",
+        },
+        price: 15.9,
+        category: "Biryani & Reis",
+      },
+      {
+        name: "Traditionelle Nihari",
+        desc: {
+          de: "Stundenlang langsam geschmortes Kalb-/Rindfleisch in sämiger, tiefwürziger Sauce, garniert mit Ingwerstreifen und frischem Koriander.",
+          en: "Slow-cooked tender beef in rich spiced gravy with ginger juliennes and fresh cilantro.",
+        },
+        price: 15.9,
+        category: "Traditionelle Spezialitäten",
+      },
+      {
+        name: "Chicken Haleem",
+        desc: {
+          de: "Fein zerzupftes Hähnchenfleisch langsam gekocht mit Weizen, Gerste und 7 Linsensorten, getoppt mit Röstzwiebeln und grünem Chili.",
+          en: "Slow-cooked shredded chicken with wheat and lentils, topped with caramelized onions and chili.",
+        },
+        price: 14.9,
+        category: "Traditionelle Spezialitäten",
+      },
+      {
+        name: "Paya Spezialität",
+        desc: {
+          de: "Aromatisches Eintopfgericht nach traditioneller Lahori-Art in kräftiger Knochenbrühe.",
+          en: "Aromatic slow-cooked trotters stew in rich broth.",
+        },
+        price: 14.9,
+        category: "Traditionelle Spezialitäten",
+      },
+      {
+        name: "Chicken Karahi (Frische Pfanne)",
+        desc: {
+          de: "In der traditionellen Wok-Pfanne zubereitet mit Tomaten, Ingwer, Knoblauch und grünen Chilis.",
+          en: "Cooked in a traditional wok with fresh tomatoes, ginger, garlic, and green chilies.",
+        },
+        price: 14.9,
+        category: "Karahi & Currys",
+      },
+      {
+        name: "Mutton Karahi",
+        desc: {
+          de: "Zartes Lammfleisch in der Karahi-Pfanne geschmort mit frischem Koriander und aromatischen Gewürzen.",
+          en: "Tender lamb cooked in wok with tomatoes, ginger, and fresh spices.",
+        },
+        price: 16.9,
+        category: "Karahi & Currys",
+      },
+      {
+        name: "Butter Chicken",
+        desc: {
+          de: "Gegrilltes Hähnchenfilet in samtig-cremiger Tomaten-Butter-Sauce mit feinem Bockshornklee.",
+          en: "Tender chicken tikka in a creamy, velvety tomato butter sauce.",
+        },
+        price: 14.5,
+        category: "Karahi & Currys",
+      },
+      {
+        name: "Seekh Kebab Platter",
+        desc: {
+          de: "Zwei Spieße fein gewürztes Rinderhackfleisch aus dem Tandoor mit Salat und Minz-Sauce.",
+          en: "Two skewers of minced spiced beef grilled in the tandoor with salad and mint sauce.",
+        },
+        price: 12.9,
+        category: "Tandoor & Grill",
+      },
+      {
+        name: "Chicken Tikka Boti",
+        desc: {
+          de: "In Joghurt und feinen Tandoori-Gewürzen marinierte Hähnchenstücke, saftig gegrillt.",
+          en: "Boneless chicken marinated in yogurt and tandoori spices, flame grilled.",
+        },
+        price: 12.9,
+        category: "Tandoor & Grill",
+      },
+      {
+        name: "Samosa Chaat",
+        desc: {
+          de: "Zwei knusprige Samosas serviert mit Kichererbsen-Masala, Joghurt, süßem Tamarinden- und Minz-Chutney.",
+          en: "Two crispy samosas crushed with chickpea masala, yogurt, tamarind and mint chutney.",
+        },
+        price: 8.9,
+        category: "Vorspeisen & Street Food",
+      },
+      {
+        name: "Gol Gappe / Pani Puri (6 Stk.)",
+        desc: {
+          de: "Hohle, knusprige Bällchen gefüllt mit Kartoffeln und Kichererbsen, serviert mit pikantem Minz-Wasser.",
+          en: "Crispy hollow shells filled with spiced potatoes and chickpeas, served with tangy mint water.",
+        },
+        price: 8.9,
+        category: "Vorspeisen & Street Food",
+      },
+      {
+        name: "Halwa Puri Chana Teller",
+        desc: {
+          de: "Drei frittierte Puris mit Kichererbsen-Curry und süßem Sooji Halwa.",
+          en: "Three crispy puris served with spiced chickpea curry and sweet halwa.",
+        },
+        price: 14.9,
+        category: "Frühstück & Klassiker",
+      },
+      {
+        name: "Tandoori Garlic Naan",
+        desc: {
+          de: "Frisch im Tandoor-Ofen gebackenes Fladenbrot mit feiner Knoblauch-Koriander-Butter.",
+          en: "Oven-baked flatbread topped with garlic and fresh cilantro butter.",
+        },
+        price: 3.5,
+        category: "Brote & Beilagen",
+      },
+      {
+        name: "Mango Lassi (0,4l)",
+        desc: {
+          de: "Erfrischendes traditionelles Joghurt-Getränk mit fruchtigem Mango-Püree.",
+          en: "Traditional refreshing yogurt drink with sweet mango pulp.",
+        },
+        price: 4.5,
+        category: "Getränke & Desserts",
+      },
+      {
+        name: "Gulab Jamun (2 Stk.)",
+        desc: {
+          de: "Warme goldbraune Teigbällchen in aromatischem Rosen-Kardamom-Sirup.",
+          en: "Warm golden milk-solid dumplings soaked in rose cardamom syrup.",
+        },
+        price: 4.5,
+        category: "Getränke & Desserts",
+      },
+    ],
+  },
 ];
 
 function mapCaterer(r: any): Caterer {

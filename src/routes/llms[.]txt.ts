@@ -55,6 +55,8 @@ Caterers and Event Planners receive qualified briefs and pay a fair service fee 
 
 ## Specialized Catering Services & Featured Partners
 
+- [Khan Baba Berlin](${BASE}/catering/khan-baba): Authentisches pakistanisches Catering, Karachi Biryani Degs, Nihari & Halal Buffets Berlin (Amsterdamer Str. 12, Wedding)
+- [Khan Baba Restaurant Storefront](${BASE}/restaurant/khan-baba): Original pakistanische Speisekarte, Karachi Biryani, Tandoor & Takeaway Berlin-Wedding
 - [Halal Catering Deutschland](${BASE}/catering/halal): Zertifiziertes Halal Catering für Firmenfeiern, Hochzeiten & Events
 - [Fingerfood & Flying Buffet](${BASE}/catering/fingerfood): Exklusives Fingerfood Catering für Firmenfeiern, Messen & Empfänge
 

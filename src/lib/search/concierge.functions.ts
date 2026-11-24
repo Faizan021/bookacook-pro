@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { classifyWithSystem1 } from "@/lib/decision/system1";
+import { fallbackCaterers } from "@/data/caterers";
 
 export interface ConciergeChatMessage {
   role: "user" | "assistant";
@@ -40,61 +41,20 @@ export interface ConciergeChatResponse {
   engineUsed: "gemini-2.5-flash" | "openai-gpt4o" | "speisely-expert-engine";
 }
 
-// Sample verified premium partners for zero-latency retrieval & fallback recommendations
-const CURATED_SHOWCASE_PARTNERS: RecommendedPartnerCard[] = [
-  {
-    id: "partyservice-kuepper",
-    name: "Partyservice Küpper",
-    slug: "partyservice-kuepper",
-    city: "Leverkusen / Köln",
-    category: "catering",
-    headline: "Traditionelle Handwerks-Catering buffets & Chafing-Dish Heißlieferung",
-    pricePerPersonEstimate: "ab 24,50 € p.P.",
-    specialtyTags: ["Kalt-Warmes Buffet", "Fleischerei-Handwerk", "Office & Privat"],
-    imageUrl: "/showcase-kuepper.png",
-    rating: 4.9,
-    reviewCount: 48,
-  },
-  {
-    id: "haus-spaas",
-    name: "Haus Spaas",
-    slug: "haus-spaas",
-    city: "Rhein-Ruhr / Düsseldorf",
-    category: "catering",
-    headline: "Gehobene Brauhaus- & Festküche für Hochzeiten & Firmenveranstaltungen",
-    pricePerPersonEstimate: "ab 32,00 € p.P.",
-    specialtyTags: ["Exklusives Eventlokal", "Menüs & Flying Food", "Großveranstaltungen"],
-    imageUrl: "/showcase-haus-spaas.png",
-    rating: 5.0,
-    reviewCount: 36,
-  },
-  {
-    id: "alzaeem-catering",
-    name: "Alzaeem Event & Catering",
-    slug: "alzaeem-catering",
-    city: "Berlin",
-    category: "catering",
-    headline: "Feinste nahöstliche Meze-Platten, Halal-Grillspezialitäten & vegane Buffets",
-    pricePerPersonEstimate: "ab 28,00 € p.P.",
-    specialtyTags: ["Halal 100%", "Große vegane Auswahl", "Warmhalte-Lieferung"],
-    imageUrl: "/catering-clean.webp",
-    rating: 4.9,
-    reviewCount: 84,
-  },
-  {
-    id: "feinkost-huber",
-    name: "Feinkost Huber Catering",
-    slug: "feinkost-huber",
-    city: "München",
-    category: "catering",
-    headline: "Bayerisch-mediterranes Fingerfood & exklusive Business-Lunch Boxen",
-    pricePerPersonEstimate: "ab 34,50 € p.P.",
-    specialtyTags: ["Fingerfood", "Bio & Regional", "Meeting-Catering"],
-    imageUrl: "/hero-cinematic.webp",
-    rating: 4.8,
-    reviewCount: 52,
-  },
-];
+// Dynamic RAG Knowledge Base built from live verified Speisely caterers
+const REAL_CATERER_CATALOG: RecommendedPartnerCard[] = fallbackCaterers.map((c) => ({
+  id: c.id,
+  name: c.name,
+  slug: c.slug || c.id,
+  city: c.area || "Berlin & Deutschland",
+  category: "catering" as const,
+  headline: c.tagline?.de || c.about?.de?.slice(0, 90) || "Verifizierter Speisely Premium-Caterer",
+  pricePerPersonEstimate: c.perPerson > 0 ? `ab ${c.perPerson},00 € p.P.` : "ab 14,50 € p.P.",
+  specialtyTags: c.tags || ["Catering", "Event-Buffet"],
+  imageUrl: c.img || "/catering-clean.webp",
+  rating: c.rating || 4.9,
+  reviewCount: c.reviewCount || 24,
+}));
 
 export const chatWithConcierge = createServerFn({ method: "POST" })
   .validator(
@@ -194,15 +154,30 @@ export const chatWithConcierge = createServerFn({ method: "POST" })
         currentBrief.needCutleryOrStaff,
     };
 
-    // 2. Fetch or filter matching partners
-    let matchedPartners = CURATED_SHOWCASE_PARTNERS;
+    // 2. Dynamic RAG: Retrieve and rank real verified partners from catalog
+    let matchedPartners = REAL_CATERER_CATALOG;
     if (updatedBrief.city) {
       const cityLower = updatedBrief.city.toLowerCase();
-      const directCity = CURATED_SHOWCASE_PARTNERS.filter((p) =>
-        p.city.toLowerCase().includes(cityLower),
+      const directCity = REAL_CATERER_CATALOG.filter(
+        (p) =>
+          p.city.toLowerCase().includes(cityLower) || p.headline.toLowerCase().includes(cityLower),
       );
       if (directCity.length > 0) {
         matchedPartners = directCity;
+      }
+    }
+
+    // Filter or prioritize dietary & cuisine matches
+    if (updatedBrief.dietaryRequirements && updatedBrief.dietaryRequirements.length > 0) {
+      const reqs = updatedBrief.dietaryRequirements.map((r) => r.toLowerCase());
+      const dietaryMatches = matchedPartners.filter(
+        (p) =>
+          p.specialtyTags.some((tag) => reqs.some((req) => tag.toLowerCase().includes(req))) ||
+          p.headline.toLowerCase().includes("halal") ||
+          p.headline.toLowerCase().includes("vegan"),
+      );
+      if (dietaryMatches.length > 0) {
+        matchedPartners = dietaryMatches;
       }
     }
 
@@ -214,26 +189,34 @@ export const chatWithConcierge = createServerFn({ method: "POST" })
 
     if (geminiKey) {
       try {
-        const systemPrompt = `Du bist "Speisely Concierge", der führende deutsche KI-Event- und Catering-Berater auf speisely.de (vergleichbar mit dem Google Gemini Berater bei OTTO).
-Deine Aufgabe: Berate den Kunden empathisch, kulinarisch kompetent und präzise.
-Berechne Portionen, gebe Tipps zu Warmhaltung / Diäten und stelle passende Partner vor.
+        const systemPrompt = `You are "Speisely AI Concierge", the official intelligent catering and event consultant on speisely.de (Germany's premier 0% commission gastronomy & catering marketplace).
 
-Aktueller Stand der Planung:
-- Stadt: ${updatedBrief.city || "Noch offen"}
-- Gäste: ${updatedBrief.guests ? `${updatedBrief.guests} Personen` : "Noch offen"}
-- Anlass: ${updatedBrief.occasion || "Event"}
-- Ernährung / Allergien: ${updatedBrief.dietaryRequirements?.length ? updatedBrief.dietaryRequirements.join(", ") : "Standard / Gemischt"}
-- Richtwert Budget: ${updatedBrief.budgetPerPerson ? `ca. ${updatedBrief.budgetPerPerson} € pro Person` : "Offen"}
-${updatedBrief.estimatedTotalBudget ? `- Kalkulierte Gesamtsumme: ca. ${updatedBrief.estimatedTotalBudget} €` : ""}
+CORE MISSION:
+You advise event organizers, office managers, and private hosts with culinary authority, precise portion calculations, and instant tailored quotes.
 
-Verfügbare Partner in der Speisely Datenbank:
-${matchedPartners.map((p) => `• ${p.name} (${p.city}): ${p.headline} [${p.pricePerPersonEstimate}]`).join("\n")}
+EVENT CONTEXT:
+- City / Delivery Hub: ${updatedBrief.city || "Not specified yet"}
+- Guest Count: ${updatedBrief.guests ? `${updatedBrief.guests} people` : "Not specified yet"}
+- Occasion: ${updatedBrief.occasion || "Event"}
+- Dietary Requirements / Allergens: ${updatedBrief.dietaryRequirements?.length ? updatedBrief.dietaryRequirements.join(", ") : "Standard / Mixed"}
+- Benchmark Budget: ${updatedBrief.budgetPerPerson ? `ca. ${updatedBrief.budgetPerPerson} € per person` : "Flexible"}
+${updatedBrief.estimatedTotalBudget ? `- Estimated Total Budget: ca. ${updatedBrief.estimatedTotalBudget} €` : ""}
 
-Regeln:
-1. Antworte auf Deutsch (oder Englisch, falls der Kunde auf Englisch schreibt), warmherzig, professionell und ohne Floskeln.
-2. Halte deine Antwort übersichtlich (Nutze Bullet Points und Fettung).
-3. Wenn Gäste oder Budget genannt wurden, bestätige kurz die Kalkulation.
-4. Schließe immer mit einer klaren, hilfreichen Frage ab (z.B. ob Geschirr/Besteck benötigt wird, oder ob das Briefing direkt an die Partner gesendet werden soll).`;
+VERIFIED CATERERS IN THE SPEISELY CATALOG:
+${matchedPartners
+  .slice(0, 4)
+  .map(
+    (p) =>
+      `• ${p.name} (${p.city}): ${p.headline} [${p.pricePerPersonEstimate}] | Tags: ${p.specialtyTags.join(", ")}`,
+  )
+  .join("\n")}
+
+STRICT MARKETPLACE GUARDRAILS (MANDATORY):
+1. BILINGUAL ADAPTATION: Detect the user's language automatically. If the user writes in English, reply in natural, polished English. If the user writes in German, reply in professional, warm German.
+2. COMMISSION PROTECTION (ZERO LEAKAGE): NEVER provide off-platform contact numbers, personal phone numbers, or external websites. All bookings and deposits must flow through Speisely to guarantee Escrow Buyer Protection and free reschedule terms.
+3. PRICING & PORTION TRANSPARENCY: Provide realistic benchmarks based on real caterer data (e.g. Biryani & BBQ feasts ~14.50 € – 19.50 € p.P., Buffets ~22.00 € – 28.00 € p.P., Fingerfood ~16.00 € – 24.00 € p.P.). If custom dishes are requested (e.g. adding gravy or kebabs), give clear per-person calculations.
+4. FOOD SAFETY & HYGIENE: Acknowledge dietary requirements (Halal, Vegan, Gluten-Free) with explicit assurances of certified preparation and temperature-controlled delivery.
+5. CLEAR NEXT ACTION: End with an actionable next step: whether they want to customize portion sizes, add drinks/service, or directly reserve their date with a deposit via Speisely.`;
 
         const geminiMessages = messages.map((m) => ({
           role: m.role === "assistant" ? "model" : "user",
@@ -288,7 +271,14 @@ Regeln:
             messages: [
               {
                 role: "system",
-                content: `Du bist Speisely Concierge, KI-Catering-Berater auf speisely.de. Berate professionell auf Deutsch. Gäste: ${updatedBrief.guests || "?"}, Stadt: ${updatedBrief.city || "?"}, Budget: ${updatedBrief.budgetPerPerson || 30}€ p.P.`,
+                content: `You are Speisely AI Concierge on speisely.de (0% commission catering marketplace).
+Current Brief: City: ${updatedBrief.city || "TBD"}, Guests: ${updatedBrief.guests || "TBD"}, Budget: ${updatedBrief.budgetPerPerson || 25}€ p.p., Dietary: ${updatedBrief.dietaryRequirements?.join(", ") || "Standard"}.
+Matched Caterers:
+${matchedPartners
+  .slice(0, 3)
+  .map((p) => `• ${p.name} (${p.city}): ${p.headline} [${p.pricePerPersonEstimate}]`)
+  .join("\n")}
+Guardrails: Never provide direct telephone numbers or off-platform contacts. Advise professionally in the customer's language (German or English). Calculate per-person totals accurately.`,
               },
               ...messages,
             ],
@@ -301,7 +291,7 @@ Regeln:
           if (reply) {
             return {
               reply: reply.trim(),
-              quickReplies: generateSmartQuickReplies(updatedBrief),
+              quickReplies: generateSmartQuickReplies(updatedBrief, lastUserMessage),
               recommendedPartners: matchedPartners,
               eventBrief: updatedBrief,
               engineUsed: "openai-gpt4o" as const,
@@ -318,31 +308,49 @@ Regeln:
 
     return {
       reply,
-      quickReplies: generateSmartQuickReplies(updatedBrief),
+      quickReplies: generateSmartQuickReplies(updatedBrief, lastUserMessage),
       recommendedPartners: matchedPartners,
       eventBrief: updatedBrief,
       engineUsed: "speisely-expert-engine" as const,
     };
   });
 
-function generateSmartQuickReplies(brief: ExtractedEventBrief): string[] {
+function generateSmartQuickReplies(brief: ExtractedEventBrief, lastUserMessage = ""): string[] {
+  const isEn = /^(hi|hello|salam|hey|can|if|we|how|what|need|want|please)/i.test(lastUserMessage);
   const suggestions: string[] = [];
 
-  if (!brief.guests) {
-    suggestions.push("Ca. 25-35 Personen");
-    suggestions.push("Ca. 50 Personen");
-    suggestions.push("Über 100 Gäste");
-  } else if (!brief.dietaryRequirements || brief.dietaryRequirements.length === 0) {
-    suggestions.push("🌱 Mit veganen Optionen");
-    suggestions.push("🥩 Halal gewünscht");
-    suggestions.push("🌾 Glutenfreie Gäste dabei");
-  } else if (!brief.needCutleryOrStaff) {
-    suggestions.push("🍴 Brauchen Geschirr & Besteck");
-    suggestions.push("🥂 Inkl. Getränkepauschale");
-    suggestions.push("Nur Essen, Geschirr ist da");
+  if (isEn) {
+    if (!brief.guests) {
+      suggestions.push("Around 35 guests");
+      suggestions.push("Around 50 guests");
+      suggestions.push("100+ attendees");
+    } else if (!brief.dietaryRequirements || brief.dietaryRequirements.length === 0) {
+      suggestions.push("🌱 Vegan & Vegetarian");
+      suggestions.push("🥩 100% Halal certified");
+      suggestions.push("🌾 Gluten-free options");
+    } else {
+      suggestions.push("📋 Request formal quote");
+      suggestions.push("Compare packages in detail");
+      suggestions.push("Reserve date with deposit");
+    }
   } else {
-    suggestions.push("📋 Fertiges Briefing anfragen");
-    suggestions.push("Menüs im Detail vergleichen");
+    if (!brief.guests) {
+      suggestions.push("Ca. 25-35 Personen");
+      suggestions.push("Ca. 50 Personen");
+      suggestions.push("Über 100 Gäste");
+    } else if (!brief.dietaryRequirements || brief.dietaryRequirements.length === 0) {
+      suggestions.push("🌱 Mit veganen Optionen");
+      suggestions.push("🥩 100% Halal gewünscht");
+      suggestions.push("🌾 Glutenfreie Gäste dabei");
+    } else if (!brief.needCutleryOrStaff) {
+      suggestions.push("🍴 Brauchen Geschirr & Besteck");
+      suggestions.push("🥂 Inkl. Getränkepauschale");
+      suggestions.push("Nur Speisenlieferung");
+    } else {
+      suggestions.push("📋 Verbindliches Angebot anfordern");
+      suggestions.push("Menüs im Detail vergleichen");
+      suggestions.push("Termin verbindlich reservieren");
+    }
   }
 
   return suggestions.slice(0, 3);
@@ -353,31 +361,53 @@ function generateExpertAdvisorReply(
   brief: ExtractedEventBrief,
   partners: RecommendedPartnerCard[],
 ): string {
+  const isEn = /^(hi|hello|salam|hey|can|if|we|how|what|need|want|please)/i.test(userQuery);
   const guests = brief.guests;
-  const city = brief.city || "Ihrer Region";
-  const budget = brief.budgetPerPerson || 32;
-  const total = guests ? (guests * budget).toLocaleString("de-DE") : null;
+  const city = brief.city || (isEn ? "your area" : "Ihrer Region");
+  const budget = brief.budgetPerPerson || 25;
+  const total = guests ? (guests * budget).toLocaleString(isEn ? "en-US" : "de-DE") : null;
 
-  let intro = `Herzlich willkommen bei **Speisely**! Ich helfe Ihnen, das perfekte Catering für Ihr Event zusammenzustellen.`;
+  if (isEn) {
+    let intro = `Welcome to **Speisely**! I am your Event Concierge and I will help you coordinate the perfect catering for your event.`;
+    if (guests) {
+      intro = `Excellent! For **${guests} guests** in **${city}**, we benchmark at **${budget}.00 € per person** with an estimated total budget of approx. **${total} €** (plus delivery).`;
+    }
 
-  if (guests) {
-    intro = `Perfekt! Für **${guests} Personen** in **${city}** kalkulieren wir bei einem Richtwert von **${budget} € pro Person** mit einem Gesamtbudget von ca. **${total} €** netto.`;
-  }
+    const rec = `
+For your occasion, we recommend selecting one of our top verified caterers specializing in high-capacity buffet and street food delivery:
 
-  const recommendation = `
-Für Ihren Anlass empfehle ich ein **kalt-warmes Fingerfood- oder Flying Buffet**, da es unkompliziert ist, allen Diäten (inkl. ${brief.dietaryRequirements?.join(", ") || "Vegetarisch / Vegan"}) gerecht wird und keine aufwendige Küchentechnik vor Ort erfordert.
-
-Hier sind passende, verifizierte Partner auf Speisely:
 ${partners
-  .slice(0, 2)
+  .slice(0, 3)
   .map(
     (p) =>
-      `• **[${p.name}](/catering/${p.slug})** (${p.city})\n  _${p.headline}_\n  ✦ Richtpreis: **${p.pricePerPersonEstimate}** · Bewertung: ★ ${p.rating.toFixed(1)}`,
+      `• **[${p.name}](/catering/${p.slug})** (${p.city})\n  _${p.headline}_\n  ✦ Starting at: **${p.pricePerPersonEstimate}** · Rating: ★ ${p.rating.toFixed(1)} (${p.reviewCount} reviews)`,
   )
   .join("\n\n")}
 
-**Nächster Schritt:**
-Benötigen Sie vor Ort Leihgeschirr & Besteck, oder möchten Sie direkt eine unverbindliche Menüauswahl anfordern?`;
+**Next Steps & Booking Protection:**
+All orders through Speisely include 100% Escrow Buyer Protection and verified kitchen delivery. Would you like us to customize the menu portions or prepare a formal booking proposal?`;
+
+    return `${intro}\n\n${rec}`;
+  }
+
+  let intro = `Herzlich willkommen bei **Speisely**! Ich helfe Ihnen, das perfekte Catering für Ihr Event zusammenzustellen.`;
+  if (guests) {
+    intro = `Perfekt! Für **${guests} Personen** in **${city}** kalkulieren wir bei einem Richtwert von **${budget} € pro Person** mit einem Gesamtbudget von ca. **${total} €** netto (zzgl. Lieferung).`;
+  }
+
+  const recommendation = `
+Für Ihren Anlass empfehle ich ein **kalt-warmes Buffet oder thematisches Spezialitäten-Catering**, das allen Gästen (inkl. ${brief.dietaryRequirements?.join(", ") || "Vegetarisch / Halal / Vegan"}) gerecht wird:
+
+${partners
+  .slice(0, 3)
+  .map(
+    (p) =>
+      `• **[${p.name}](/catering/${p.slug})** (${p.city})\n  _${p.headline}_\n  ✦ Richtpreis: **${p.pricePerPersonEstimate}** · Bewertung: ★ ${p.rating.toFixed(1)} (${p.reviewCount} Reviews)`,
+  )
+  .join("\n\n")}
+
+**Speisely Käuferschutz & Buchung:**
+Alle Bestellungen über Speisely sind zu 100 % abgesichert. Möchten Sie ein verbindliches Angebot anfordern oder individuelle Anpassungen (z.B. Gravy, Live-Station oder Besteck) vornehmen?`;
 
   return `${intro}\n\n${recommendation}`;
 }
