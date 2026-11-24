@@ -146,6 +146,27 @@ export const getGeoPageData = createServerFn({ method: "GET" })
           });
         }
 
+        // Ensure Khan Baba Berlin is present for Berlin & surrounding capital region
+        const isBerlin =
+          /berlin/i.test(locationObj!.name) || (data.citySlug && /berlin/i.test(data.citySlug));
+        if (
+          isBerlin &&
+          !vendors.some((v) => (v.slug || v.id || "").toLowerCase() === "khan-baba")
+        ) {
+          vendors.unshift({
+            id: "khan-baba",
+            name: "Khan Baba Berlin",
+            slug: "khan-baba",
+            logo_url: "/caterers/khan-baba/logo.webp",
+            banner_image_url: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
+            min_delivery_cents: 12000,
+            delivery_fee_cents: 0,
+            city: "Berlin",
+            description:
+              "Authentisches pakistanisches Catering, Karachi Biryani Degs & 100% Halal Buffets in ganz Berlin.",
+          });
+        }
+
         if (vendors.length === 0) {
           const { data: allCat } = await supabaseAdmin
             .from("caterers")
@@ -278,9 +299,18 @@ export const getValidGeoLocations = createServerFn({ method: "GET" }).handler(as
         { slug: "frankfurt", label: "Frankfurt" },
       ];
       for (const c of coreCities) {
-        validEntriesMap.set(`/restaurant/ort/${c.slug}`, { path: `/restaurant/ort/${c.slug}`, label: c.label });
-        validEntriesMap.set(`/catering/ort/${c.slug}`, { path: `/catering/ort/${c.slug}`, label: c.label });
-        validEntriesMap.set(`/planner/ort/${c.slug}`, { path: `/planner/ort/${c.slug}`, label: c.label });
+        validEntriesMap.set(`/restaurant/ort/${c.slug}`, {
+          path: `/restaurant/ort/${c.slug}`,
+          label: c.label,
+        });
+        validEntriesMap.set(`/catering/ort/${c.slug}`, {
+          path: `/catering/ort/${c.slug}`,
+          label: c.label,
+        });
+        validEntriesMap.set(`/planner/ort/${c.slug}`, {
+          path: `/planner/ort/${c.slug}`,
+          label: c.label,
+        });
       }
 
       if (seoPages && seoPages.length > 0) {

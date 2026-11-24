@@ -2580,6 +2580,16 @@ export async function getCaterers(): Promise<Caterer[]> {
       }
     }
 
+    const hasKhanBaba = combined.some((c) =>
+      (c.slug || c.id || "").toLowerCase().includes("khan-baba"),
+    );
+    if (!hasKhanBaba) {
+      const khanBabaFallback = fallbackCaterers.find((c) => c.id === "khan-baba");
+      if (khanBabaFallback) {
+        combined.unshift({ ...khanBabaFallback, isShowcase: true });
+      }
+    }
+
     const MIN_DISPLAY_COUNT = 4;
     let result: Caterer[];
     if (combined.length >= MIN_DISPLAY_COUNT) {

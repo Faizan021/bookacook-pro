@@ -257,6 +257,34 @@ function HalalCateringPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <Link
+              to="/catering/$slug"
+              params={{ slug: "khan-baba" }}
+              className="group bg-white rounded-2xl p-4 border-2 border-[#E6B84A]/60 shadow-sm hover:shadow-md transition relative overflow-hidden ring-2 ring-[#E6B84A]/20"
+            >
+              <div className="absolute top-2 right-2 z-10 bg-[#083822] text-[#E6B84A] text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                100% Halal
+              </div>
+              <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3 bg-stone-100">
+                <img
+                  src="/caterers/khan-baba/02_karachi_biryani_deg.webp"
+                  alt="Khan Baba Berlin Halal Biryani Catering"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  loading="lazy"
+                  width={600}
+                  height={450}
+                />
+              </div>
+              <h4 className="font-serif font-bold text-forest group-hover:text-[#E6B84A] transition">
+                Khan Baba Berlin
+              </h4>
+              <p className="text-xs text-forest/70 mt-1">
+                {isDe
+                  ? "Karachi Biryani Degs, geschmorte Nihari & Buffet-Catering für ganz Berlin"
+                  : "Karachi Biryani Degs, braised Nihari & buffet catering across Berlin"}
+              </p>
+            </Link>
+
+            <Link
               to="/magazin/community/bebeq-restaurant-berlin"
               className="group bg-white rounded-2xl p-4 border border-forest/10 shadow-sm hover:shadow-md transition"
             >
