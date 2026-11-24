@@ -2061,8 +2061,8 @@ export const fallbackCaterers: Caterer[] = [
     verified: true,
     dietary: ["100% Halal", "Vegetarische Optionen", "Authentische Lahori & Karachi Rezepturen"],
     about: {
-      de: "Willkommen bei Khan Baba Berlin! Wir bringen die unverfälschte, traditionsreiche Geschmackswelt Pakistans direkt zu deinem Firmenevent, deiner Konferenz oder privaten Familienfeier in ganz Berlin.\n\nUnser Markenzeichen: Authentische Festtagsküche in echter Meisterqualität. Von unserer legendären Karachi Student Biryani (auf Wunsch zubereitet und serviert in der traditionellen Deg für 30 bis 100+ Personen) über stundenlang schonend geschmorte Rinder-Nihari mit aromatischem Ingwer und frischem Koriander bis hin zu saftigem Chicken Karahi und frischen Seekh Kebabs aus dem Tandoor-Grill.\n\nFür Hochzeiten, Botschafts-Empfänge und Firmen-Lunches bieten wir vollständige Warmhalte-Buffets inklusive Chafing Dishes, Tandoori-Brote, Raita und Desserts wie warmen Gulab Jamun und Kheer. Jedes Catering wird pünktlich heiß angeliefert und flexibel auf deine Gästezahl abgestimmt.",
-      en: "Welcome to Khan Baba Berlin! We bring the authentic, rich culinary heritage of Pakistan directly to your corporate event, team lunch, wedding, or private celebration across Berlin.\n\nOur signature: Handcrafted celebration feasts cooked with traditional recipes. From our renowned Karachi Student Biryani (available in traditional cooking Deg cauldrons for 30 to 100+ guests) to slow-braised beef Nihari with ginger juliennes and fresh herbs, sizzling tandoori Seekh Kebabs, and rich Chicken Karahi.\n\nWe provide complete hot buffet setups with chafing dishes, freshly baked naans, cool raita, and artisanal desserts like warm Gulab Jamun.",
+      de: "Willkommen bei Khan Baba Berlin! Wir bringen die unverfälschte, traditionsreiche Geschmackswelt Pakistans direkt zu deinem Firmenevent, deiner Konferenz oder privaten Familienfeier in ganz Berlin.\n\nUnser Markenzeichen: Authentische Festtagsküche in echter Meisterqualität. Von unserer legendären Karachi Student Biryani (auf Wunsch zubereitet und serviert in der traditionellen Deg für 30 bis 100+ Personen) über stundenlang schonend geschmorte Rinder-Nihari mit aromatischem Ingwer und frischem Koriander bis hin zu saftigem Chicken Karahi und frischen Seekh Kebabs aus dem Tandoor-Grill.\n\nFür Hochzeiten, Firmen-Lunches und Familienfeiern liefern wir alles pünktlich, ofenfrisch und heiß direkt zu deinem Veranstaltungsort in ganz Berlin.",
+      en: "Welcome to Khan Baba Berlin! We bring the authentic, rich culinary heritage of Pakistan directly to your corporate event, team lunch, wedding, or private celebration across Berlin.\n\nOur signature: Handcrafted celebration feasts cooked with traditional recipes. From our renowned Karachi Student Biryani (available in traditional cooking Deg cauldrons for 30 to 100+ guests) to slow-braised beef Nihari with ginger juliennes and fresh herbs, sizzling tandoori Seekh Kebabs, and rich Chicken Karahi.\n\nWe deliver your feast freshly prepared, hot and punctual to your event location across Berlin.",
     },
     announcement_active: true,
     announcement_bg_color: "primary",
@@ -2115,7 +2115,7 @@ export const fallbackCaterers: Caterer[] = [
           "1 große traditionelle Biryani-Deg (ca. 30–35 Portionen)",
           "Hausgemachtes Minz-Gurken-Raita (3 Liter)",
           "Frischer Salat mit roten Zwiebeln, Tomaten & Zitrone",
-          "Lieferung in isolierten Warmhalte-Behältern",
+          "Traditionelle Anlieferung heiß in der Deg / Warmhalte-Transportbox",
           "Optional: Vorlegebesteck & Einweg-Geschirr auf Anfrage",
         ],
       },
@@ -2135,7 +2135,7 @@ export const fallbackCaterers: Caterer[] = [
           "Würzige Chicken Karahi aus der traditionellen Pfanne",
           "Frische Tandoori Naans & Garlic Naans",
           "Dessert: Warme Gulab Jamun in aromatischem Zuckersirup",
-          "Inklusive Chafing Dishes (Warmhaltebehälter) für die Dauer des Events",
+          "Pünktliche Heißanlieferung direkt zum Eventort in ganz Berlin",
         ],
       },
       {
