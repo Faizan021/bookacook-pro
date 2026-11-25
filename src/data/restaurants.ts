@@ -851,12 +851,6 @@ export async function getRestaurants(): Promise<Restaurant[]> {
 
 export async function getRestaurant(slugOrId: string): Promise<Restaurant | undefined> {
   const clean = (slugOrId || "").toLowerCase().trim();
-  const fallback = fallbackRestaurants.find(
-    (r) => (r.id && r.id.toLowerCase() === clean) || (r.slug && r.slug.toLowerCase() === clean),
-  );
-  if (fallback) {
-    return { ...fallback, isShowcase: true };
-  }
 
   try {
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slugOrId);

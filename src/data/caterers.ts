@@ -2631,12 +2631,6 @@ export async function getCaterers(): Promise<Caterer[]> {
 
 export async function getCaterer(id: string): Promise<Caterer | undefined> {
   const cleanId = (id || "").toLowerCase().trim();
-  const fallback = fallbackCaterers.find(
-    (c) => (c.id && c.id.toLowerCase() === cleanId) || (c.slug && c.slug.toLowerCase() === cleanId),
-  );
-  if (fallback) {
-    return { ...fallback, isShowcase: true };
-  }
 
   try {
     const fetchPromise = (async () => {

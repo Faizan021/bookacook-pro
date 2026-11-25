@@ -203,19 +203,6 @@ export const Route = createFileRoute("/restaurant/$slug")({
   validateSearch: (search) => searchSchema.parse(search),
   loader: async ({ params }) => {
     const cleanSlug = (params.slug || "").toLowerCase().trim();
-    const fallback = fallbackRestaurants.find(
-      (r) =>
-        (r.slug && r.slug.toLowerCase() === cleanSlug) ||
-        (r.id && r.id.toLowerCase() === cleanSlug),
-    );
-
-    if (fallback) {
-      return {
-        dbRestaurant: null,
-        fullRestaurant: { ...fallback, isShowcase: true },
-        reviewsData: null,
-      };
-    }
 
     let dbRestaurant = null;
     let reviewsData = null;
@@ -236,6 +223,23 @@ export const Route = createFileRoute("/restaurant/$slug")({
     } catch (e) {
       console.error("Error loading restaurant db record", e);
     }
+
+    if (!dbRestaurant) {
+      const fallback = fallbackRestaurants.find(
+        (r) =>
+          (r.slug && r.slug.toLowerCase() === cleanSlug) ||
+          (r.id && r.id.toLowerCase() === cleanSlug),
+      );
+
+      if (fallback) {
+        return {
+          dbRestaurant: null,
+          fullRestaurant: { ...fallback, isShowcase: true },
+          reviewsData: null,
+        };
+      }
+    }
+
     const fullRestaurant = await getRestaurant(params.slug);
     if (!fullRestaurant) {
       throw notFound();
