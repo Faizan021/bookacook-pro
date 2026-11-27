@@ -2052,7 +2052,7 @@ export const fallbackCaterers: Caterer[] = [
     ],
     serviceCategories: ["events", "corporate", "private", "wedding", "ramadan"],
     img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
-    logo: "/caterers/khan-baba/logo.webp",
+    logo: "/caterers/khan-baba/official_logo.webp",
     status: "available",
     area: "Amsterdamer Str. 12, 13347 Berlin (Wedding) & ganzes Stadtgebiet (Lieferung in ganz Berlin)",
     address: "Amsterdamer Straße 12, 13347 Berlin",

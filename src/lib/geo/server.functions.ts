@@ -157,7 +157,7 @@ export const getGeoPageData = createServerFn({ method: "GET" })
             id: "khan-baba",
             name: "Khan Baba Berlin",
             slug: "khan-baba",
-            logo_url: "/caterers/khan-baba/logo.webp",
+            logo_url: "/caterers/khan-baba/official_logo.webp",
             banner_image_url: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
             min_delivery_cents: 12000,
             delivery_fee_cents: 0,

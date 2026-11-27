@@ -208,7 +208,7 @@ export const fallbackRestaurants: Restaurant[] = [
     time: "20-35 min",
     fee: "€0.00",
     img: "/caterers/khan-baba/01_hero_pakistani_buffet.webp",
-    logo: "/caterers/khan-baba/logo.webp",
+    logo: "/caterers/khan-baba/official_logo.webp",
     status: "Open",
     area: "Berlin-Wedding",
     address: "Amsterdamer Straße 12, 13347 Berlin",

@@ -453,7 +453,11 @@ function RestaurantPage() {
         dbRestaurant?.cuisine_type || "Cuisine",
       );
     }
-    return url || restaurant?.logo || generateSvgLogo(restaurant?.name || "Restaurant");
+    const finalUrl = url || restaurant?.logo || generateSvgLogo(restaurant?.name || "Restaurant");
+    if (typeof finalUrl === "string" && finalUrl.includes("/khan-baba/")) {
+      return "/caterers/khan-baba/official_logo.webp?v=20261127";
+    }
+    return finalUrl;
   }, [dbRestaurant, restaurant]);
 
   const displayBanner = useMemo(() => {

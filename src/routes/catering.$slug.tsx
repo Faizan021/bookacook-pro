@@ -439,7 +439,14 @@ function CatererPage() {
         de: dbCaterer.description || "Individuelle Catering-Erlebnisse",
         en: dbCaterer.description || "Custom catering experiences",
       },
-      logo: dbCaterer.logo_url || staticCaterer?.logo || null,
+      logo:
+        (dbCaterer.logo_url && dbCaterer.logo_url.includes("/khan-baba/")
+          ? "/caterers/khan-baba/official_logo.webp?v=20261127"
+          : dbCaterer.logo_url) ||
+        (staticCaterer?.logo && staticCaterer.logo.includes("/khan-baba/")
+          ? "/caterers/khan-baba/official_logo.webp?v=20261127"
+          : staticCaterer?.logo) ||
+        null,
       rating: staticCaterer?.rating || 5.0,
       reviewCount: staticCaterer?.reviewCount || 0,
       minOrder: dbCaterer.min_delivery_cents
