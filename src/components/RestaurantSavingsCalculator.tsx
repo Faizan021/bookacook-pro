@@ -375,6 +375,16 @@ export function RestaurantSavingsCalculator() {
             </div>
           </div>
 
+          {/* Starter Flex Alternative Note */}
+          <div className="mt-4 p-3 rounded-xl bg-white/10 border border-white/15 text-xs text-white/90 text-center">
+            <span className="font-semibold text-[#f2d896]">
+              {isDe ? "Lieber 0 € Fixkosten?" : "Prefer 0 € fixed costs?"}
+            </span>{" "}
+            {isDe
+              ? "Wähle unser Starter-Flex-Modell (0 € Grundgebühr + 5 % Provision) für einen risikofreien Start."
+              : "Choose our Starter Flex model (0 € base fee + 5% commission) for a 100% risk-free start."}
+          </div>
+
           {/* Call to Action Inside Outcome Card */}
           <div className="mt-8 pt-4 border-t border-white/10">
             <Link

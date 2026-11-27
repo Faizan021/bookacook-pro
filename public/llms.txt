@@ -102,7 +102,7 @@ English: Speisely is a Germany-wide marketplace for restaurants, catering, and e
 
 ## What Services Does Speisely Offer?
 
-1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of 59 €/month with unlimited direct orders. Features include an interactive savings calculator on /partners, instant WhatsApp kitchen order notifications, receipt printing, and 100% customer data retention. Payments route directly to the restaurant's own Stripe account.
+1. **Direct Orders & Fair Commission Webshop (Lieferando & Wolt Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name. Restaurants choose between Starter Flex (0 €/mo + 5% commission) or Pro Flatrate (59 €/mo + 0% commission on unlimited orders). Features include an interactive savings calculator on /partners, instant WhatsApp kitchen order notifications, thermal receipt printing, and 100% customer data retention. Payments route directly to the restaurant's own Stripe account.
 2. **Catering Marketplace** — Post and respond to catering inquiries (corporate, private, weddings, daily office, institutional catering).
 3. **Event Planning** — CRM and planning tool for professional event planners to handle event briefs.
 

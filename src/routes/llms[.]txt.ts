@@ -25,7 +25,7 @@ export const Route = createFileRoute("/llms.txt")({
 > Speisely ist ein deutschlandweiter Marktplatz für Restaurants, Catering und Eventplanung. Die Plattform verbindet Gastronomiebetriebe, Caterer und Eventplaner mit Kunden in ganz Deutschland — mit 0% Bestellprovision für Restaurants und direktem Stripe-Checkout.
 
 English: Speisely is a Germany-wide food ordering, catering, and event management marketplace.
-Restaurants pay a flat monthly fee (59 €/mo) -- with unlimited direct orders.
+Restaurants can choose between Starter Flex (0 €/mo + 5% commission) for risk-free start, or Pro Flatrate (59 €/mo flat + 0% commission) for full margin retention on unlimited orders.
 
 Caterers and Event Planners receive qualified briefs and pay a fair service fee per successful booking.
 
@@ -113,7 +113,10 @@ Germany-wide. All major cities covered including Berlin, Munich, Hamburg, Frankf
 
 Speisely provides three core hospitality services on a single platform:
 
-1. **Direct Orders & 0% Commission Webshop (FoodAmigos & Lieferando Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name with 0% order commission. Restaurants pay a flat monthly rate of 59 €/month with unlimited direct orders. Features include an interactive savings calculator on /partners, instant WhatsApp kitchen order notifications, receipt printing, and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
+1. **Direct Orders & Fair Commission Webshop (Lieferando & Wolt Alternative)** — Restaurants launch their own branded online ordering website and PWA shop under speisely.de/ihr-name. Restaurants choose between:
+   - **Starter Flex:** 0 € / month + 5% commission (zero fixed cost, risk-free entry).
+   - **Pro Flatrate:** 59 € / month flat + 0% commission (unlimited direct orders, maximum margins).
+   Features include an interactive savings calculator on /partners, instant WhatsApp kitchen order notifications, 1-click thermal receipt printing (compatible with Orderbird/EPSON), and 100% customer data retention without platform poaching. Payments route directly to the restaurant's own Stripe account.
 
 2. **Catering Marketplace** — Customers and businesses post catering inquiries (corporate events, private parties, weddings, daily office catering, institutional/school catering). Verified caterers on the platform submit proposals. When a booking is confirmed, Speisely charges a success-based service fee. Supported catering types include: event catering, daily lunch catering subscriptions, institutional catering for schools and companies, and private celebrations.
 
