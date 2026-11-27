@@ -21,7 +21,8 @@ When permanent repo docs exist, read them first:
 4. `docs/DECISIONS.md`
 5. `docs/PERFORMANCE_RULES.md`
 6. `docs/ACTIVE_WORK_NOTES.md`
-7. Specialized Antigravity Skills in `.agents/skills/`
+7. `docs/MOBILE_AND_DELIVERY_STANDARD.md` (Mobile Viewport Ergonomics & Task Delivery Standard)
+8. Specialized Antigravity Skills in `.agents/skills/`
 
 ---
 

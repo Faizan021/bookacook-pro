@@ -2295,15 +2295,16 @@ function RestaurantPage() {
             />
           )}
 
-          {/* Top Right Actions */}
-          <div className="absolute top-4 right-4 md:top-6 md:right-6 z-30 flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 sm:gap-3">
-            <span className="rounded-full bg-[#10b981] px-4 py-2.5 text-xs md:text-sm font-bold text-white shadow-md flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4" />
+          {/* Top Right Actions — Clean, sleek badge on mobile, full buttons on desktop */}
+          <div className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 z-30 flex items-center gap-2 sm:gap-3">
+            <span className="rounded-full bg-[#10b981] px-3 py-1.5 sm:px-4 sm:py-2 text-[11px] sm:text-xs md:text-sm font-bold text-white shadow-md flex items-center gap-1.5 backdrop-blur-sm">
+              <ShieldCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               {t("GEPRÜFT", "CHECKED")}
             </span>
+            {/* Desktop-only action buttons inside hero to avoid mobile photo occlusion */}
             <button
               onClick={scrollToMenu}
-              className="group flex items-center gap-1.5 rounded-full bg-[#10b981] hover:bg-[#10b981]/90 px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
+              className="hidden md:inline-flex group items-center gap-1.5 rounded-full bg-[#10b981] hover:bg-[#10b981]/90 px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
             >
               {restaurant.status === "Open"
                 ? t("Zur Speisekarte", "See Menu")
@@ -2317,7 +2318,7 @@ function RestaurantPage() {
                   ?.scrollIntoView({ behavior: "smooth" });
                 trackEvent("reservation_form_started", { restaurantId: restaurant!.id });
               }}
-              className="group flex items-center gap-1.5 rounded-full border border-white bg-white/20 hover:bg-white/30 backdrop-blur-md px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
+              className="hidden md:inline-flex group items-center gap-1.5 rounded-full border border-white bg-white/20 hover:bg-white/30 backdrop-blur-md px-5 py-2.5 text-xs md:text-sm font-bold text-white shadow-md transition-all cursor-pointer"
             >
               {t("Tisch Reservieren", "Book a Table")}
               <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -2368,6 +2369,30 @@ function RestaurantPage() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Mobile-First Dedicated Action Bar (44px Accessible Touch Targets) */}
+        <div className="mt-3 grid grid-cols-2 gap-2.5 md:hidden">
+          <button
+            onClick={scrollToMenu}
+            className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-forest text-white py-3 px-3 text-xs font-bold shadow-sm active:scale-95 transition-all cursor-pointer"
+          >
+            {restaurant.status === "Open"
+              ? t("Zur Speisekarte", "See Menu")
+              : t("Vorbestellen", "Pre-order")}
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <button
+            onClick={() => {
+              document
+                .getElementById("reservations-section")
+                ?.scrollIntoView({ behavior: "smooth" });
+              trackEvent("reservation_form_started", { restaurantId: restaurant!.id });
+            }}
+            className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-white border-2 border-forest/20 text-forest py-3 px-3 text-xs font-bold shadow-sm active:scale-95 transition-all cursor-pointer hover:bg-forest/5"
+          >
+            {t("Tisch reservieren", "Book a Table")}
+          </button>
         </div>
 
         {/* Enhanced Trust & Info Bar */}
@@ -2646,22 +2671,13 @@ function RestaurantPage() {
                       return (
                         <div
                           key={m.name}
-                          className="grid grid-cols-[1fr_auto] gap-4 p-5 bg-white border border-[#eadfce] rounded-2xl shadow-sm hover:shadow-md hover:border-forest/40 hover:-translate-y-0.5 transition-all duration-300 group"
+                          className="flex flex-row justify-between items-start gap-3 sm:gap-4 p-3.5 sm:p-5 bg-white border border-[#eadfce] rounded-2xl shadow-sm hover:shadow-md hover:border-forest/40 hover:-translate-y-0.5 transition-all duration-300 group min-w-0 w-full overflow-hidden"
                         >
-                          <div className="min-w-0 flex flex-col md:flex-row gap-4">
-                            {m.img && (
-                              <div className="shrink-0 overflow-hidden rounded-xl border border-[#eadfce]/50 h-24 w-24 md:h-32 md:w-32">
-                                <img
-                                  src={m.img}
-                                  alt={m.name}
-                                  loading="lazy"
-                                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                />
-                              </div>
-                            )}
+                          {/* Left Content: Title, Tags, Description, Price */}
+                          <div className="min-w-0 flex-1 flex flex-col justify-between self-stretch pr-1">
                             <div>
-                              <div className="flex flex-wrap items-center gap-2">
-                                <h4 className="font-display text-lg font-bold text-forest">
+                              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                                <h4 className="font-display text-base sm:text-lg font-bold text-forest leading-snug break-words">
                                   {m.name}
                                 </h4>
                                 {(m.dietary ?? []).map((d: any) => {
@@ -2685,7 +2701,7 @@ function RestaurantPage() {
                                   return (
                                     <span
                                       key={d}
-                                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${bgClass}`}
+                                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider border ${bgClass}`}
                                       title={d}
                                     >
                                       {label}
@@ -2693,42 +2709,65 @@ function RestaurantPage() {
                                   );
                                 })}
                               </div>
-                              <p className="text-sm text-forest/70 mt-1.5 leading-relaxed max-w-xl">
-                                {m.desc[lang]}
-                              </p>
-                              <p className="mt-3 text-lg font-bold text-forest">
+
+                              {m.desc && m.desc[lang] && (
+                                <p className="text-xs sm:text-sm text-forest/70 mt-1 sm:mt-1.5 leading-relaxed break-words line-clamp-2 sm:line-clamp-3">
+                                  {m.desc[lang]}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="mt-2.5 sm:mt-3 flex items-baseline gap-2">
+                              <span className="text-base sm:text-lg font-bold text-forest">
                                 €{m.price.toFixed(2)}
-                              </p>
+                              </span>
                             </div>
                           </div>
-                          <div className="flex items-center">
-                            {qty === 0 ? (
-                              <button
-                                onClick={() => add(m.name)}
-                                className="h-10 w-10 grid place-items-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 pulse-btn shadow-md"
-                                aria-label={t("Hinzufügen", "Add")}
-                              >
-                                <Plus className="h-5 w-5" />
-                              </button>
-                            ) : (
-                              <div className="inline-flex items-center gap-3 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-1.5 h-10 shadow-md hover:scale-[1.02] active:scale-100 transition-all duration-200">
-                                <button
-                                  onClick={() => remove(m.name)}
-                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10"
-                                  aria-label="-"
-                                >
-                                  <Minus className="h-4 w-4" />
-                                </button>
-                                <span className="min-w-[1ch] text-sm font-semibold">{qty}</span>
-                                <button
-                                  onClick={() => add(m.name)}
-                                  className="h-8 w-8 grid place-items-center rounded-full hover:bg-white/10 pulse-btn"
-                                  aria-label="+"
-                                >
-                                  <Plus className="h-4 w-4" />
-                                </button>
+
+                          {/* Right Content: Thumbnail & Action Button */}
+                          <div className="shrink-0 flex flex-col items-end justify-between self-stretch gap-2">
+                            {m.img && (
+                              <div className="overflow-hidden rounded-xl border border-[#eadfce]/60 w-20 h-20 sm:w-28 sm:h-28 bg-[#fcfbf7]">
+                                <img
+                                  src={m.img}
+                                  alt={m.name}
+                                  loading="lazy"
+                                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
                               </div>
                             )}
+
+                            <div className="mt-auto pt-1">
+                              {qty === 0 ? (
+                                <button
+                                  onClick={() => add(m.name)}
+                                  className="h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-full bg-forest text-[oklch(0.97_0.02_92)] hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-200 shadow-md cursor-pointer"
+                                  aria-label={t("Hinzufügen", "Add")}
+                                >
+                                  <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+                                </button>
+                              ) : (
+                                <div className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-forest text-[oklch(0.97_0.02_92)] px-2 h-9 sm:h-10 shadow-md">
+                                  <button
+                                    onClick={() => remove(m.name)}
+                                    className="h-7 w-7 grid place-items-center rounded-full hover:bg-white/20 transition-colors"
+                                    aria-label={t("Entfernen", "Remove")}
+                                  >
+                                    <Minus className="h-3.5 w-3.5" />
+                                  </button>
+                                  <span className="font-bold text-xs sm:text-sm min-w-[14px] text-center">
+                                    {qty}
+                                  </span>
+                                  <button
+                                    onClick={() => add(m.name)}
+                                    className="h-7 w-7 grid place-items-center rounded-full hover:bg-white/20 transition-colors"
+                                    aria-label={t("Mehr", "More")}
+                                  >
+                                    <Plus className="h-3.5 w-3.5" />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       );
