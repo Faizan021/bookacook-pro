@@ -267,7 +267,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Slow-cooked shredded chicken stew with cracked wheat and lentils, topped with caramelized golden onions",
         },
         price: 14.9,
-        img: "/caterers/khan-baba/nihari_authentic.webp",
+        img: "/caterers/khan-baba/haleem_authentic.webp",
         category: "breakfast \\ Frühstück & Spezialitäten",
       },
       {
@@ -311,7 +311,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Tender lamb in a rich tomato gravy cooked in a karahi wok with fresh ginger and coriander",
         },
         price: 21.9,
-        img: "/caterers/khan-baba/karahi_specialty.webp",
+        img: "/caterers/khan-baba/mutton_karahi.webp",
         category: "UNSERE EMPFEHLUNG",
       },
       {
@@ -410,7 +410,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Spiced roll wrap packed with seekh kebab and crisp salad, rolled in a warm flaky paratha",
         },
         price: 9.9,
-        img: "/caterers/khan-baba/malai_boti_grill.webp",
+        img: "/caterers/khan-baba/seekh_kebab_roll.webp",
         category: "STREET FOOD",
       },
       {
@@ -432,7 +432,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Traditional crispy puffed bread freshly fried Pakistani style",
         },
         price: 1.5,
-        img: "/caterers/khan-baba/halwa_puri_studio.webp",
+        img: "/caterers/khan-baba/puri_bread.webp",
         category: "BROT & BEILAGEN 🍚",
       },
       {

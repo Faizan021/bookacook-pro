@@ -2244,7 +2244,7 @@ export const fallbackCaterers: Caterer[] = [
         unit: "Portion",
         serves: 1,
         is_available: true,
-        image_url: "/caterers/khan-baba/nihari_authentic.webp",
+        image_url: "/caterers/khan-baba/haleem_authentic.webp",
       },
       {
         id: "kb-cat-5",
@@ -2286,7 +2286,7 @@ export const fallbackCaterers: Caterer[] = [
         unit: "Portion",
         serves: 1,
         is_available: true,
-        image_url: "/caterers/khan-baba/karahi_specialty.webp",
+        image_url: "/caterers/khan-baba/mutton_karahi.webp",
       },
       {
         id: "kb-cat-8",
