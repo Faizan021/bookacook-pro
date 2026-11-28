@@ -233,7 +233,7 @@ export const fallbackRestaurants: Restaurant[] = [
           de: "Hähnchen-Keule mit Kartoffeln und Reis nach originaler Karachi-Art zubereitet",
           en: "Tender chicken leg with potatoes and aromatic basmati rice cooked authentic Karachi style",
         },
-        price: 14.9,
+        price: 16.9,
         img: "/caterers/khan-baba/02_karachi_biryani_deg.webp",
         category: "BIRYANI 🍛",
       },
@@ -244,8 +244,8 @@ export const fallbackRestaurants: Restaurant[] = [
           de: "Fein geschichteter Basmatireis mit zartem Lammfleisch, Zwiebeln, Gemüse, Nüssen und Rosinen",
           en: "Layered basmati rice with succulent lamb, onions, vegetables, nuts and raisins",
         },
-        price: 17.9,
-        img: "/caterers/khan-baba/02_karachi_biryani_deg.webp",
+        price: 18.9,
+        img: "/caterers/khan-baba/mutton_biryani.webp",
         category: "BIRYANI 🍛",
       },
       {
@@ -333,7 +333,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Slow-cooked chicken in an authentic clay pot (handi) with yogurt, tomatoes, and aromatic whole spices",
         },
         price: 16.9,
-        img: "/caterers/khan-baba/chicken_tikka_masala.webp",
+        img: "/caterers/khan-baba/chicken_handi.webp",
         category: "HANDI GERICHTE",
       },
       {
@@ -344,7 +344,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Cottage cheese with spiced spinach, ginger and fresh coriander (#1 most popular)",
         },
         price: 13.9,
-        img: "/caterers/khan-baba/halwa_puri_table.webp",
+        img: "/caterers/khan-baba/palak_paneer.webp",
         category: "VEGETARISCH 🌱",
       },
       {
@@ -377,7 +377,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Crispy fried pastry triangles filled with spiced potatoes and peas",
         },
         price: 4.9,
-        img: "/caterers/khan-baba/halwa_puri_studio.webp",
+        img: "/caterers/khan-baba/samosas.webp",
         category: "STREET FOOD",
       },
       {
@@ -388,7 +388,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Crisp hollow pooris filled with potatoes and chickpeas, served with tangy spiced tamarind mint water",
         },
         price: 6.9,
-        img: "/caterers/khan-baba/halwa_puri_studio.webp",
+        img: "/caterers/khan-baba/golgapay.webp",
         category: "STREET FOOD",
       },
       {
@@ -399,7 +399,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Crispy crushed samosas topped with seasoned yogurt, tamarind chutney, and spiced chickpeas",
         },
         price: 6.9,
-        img: "/caterers/khan-baba/halwa_puri_table.webp",
+        img: "/caterers/khan-baba/samosa_chaat.webp",
         category: "STREET FOOD",
       },
       {
@@ -443,7 +443,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Refreshing traditional yogurt drink made with rich mango pulp",
         },
         price: 4.5,
-        img: "/caterers/khan-baba/halwa_puri_table.webp",
+        img: "/caterers/khan-baba/mango_lassi.webp",
         category: "LASSI",
       },
       {
@@ -454,7 +454,7 @@ export const fallbackRestaurants: Restaurant[] = [
           en: "Warm fried golden milk dumplings soaked in fragrant cardamom rose syrup",
         },
         price: 4.9,
-        img: "/caterers/khan-baba/halwa_puri_studio.webp",
+        img: "/caterers/khan-baba/gulab_jamun.webp",
         category: "DESSERT",
       },
     ],
