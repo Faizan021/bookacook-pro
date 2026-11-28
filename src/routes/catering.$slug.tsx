@@ -1614,6 +1614,7 @@ function CatererPage() {
                       <img
                         src={pkg.image_url}
                         alt={pkg.title}
+                        title={t("Serviervorschlag (Symbolfoto)", "Serving suggestion (Illustrative photo)")}
                         className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
@@ -1767,6 +1768,14 @@ function CatererPage() {
               );
             })}
           </div>
+
+          {/* Discreet Legal & Editorial Food Image Disclosure */}
+          <p className="mt-6 text-center text-[10px] sm:text-[11px] text-forest/45 italic tracking-wide">
+            * {t(
+              "Hinweis: Speisenabbildungen dienen als Serviervorschlag (Symbolfotos). Das tatsächliche Aussehen frisch zubereiteter Gerichte kann abweichen.",
+              "Note: Food images are serving suggestions (symbolic photos). Actual presentation may vary.",
+            )}
+          </p>
         </section>
       )}
 
@@ -1943,6 +1952,7 @@ function CatererPage() {
                                 <img
                                   src={m.image_signed_url}
                                   alt=""
+                                  title={t("Serviervorschlag (Symbolfoto)", "Serving suggestion (Illustrative photo)")}
                                   className="h-20 w-20 sm:h-28 sm:w-28 object-cover rounded-lg border border-[#eadfce]/50"
                                 />
                               </div>
@@ -2013,6 +2023,14 @@ function CatererPage() {
               </div>
             ))}
           </div>
+
+          {/* Discreet Legal & Editorial Food Image Disclosure */}
+          <p className="mt-6 text-center text-[10px] sm:text-[11px] text-forest/45 italic tracking-wide">
+            * {t(
+              "Hinweis: Speisenabbildungen dienen als Serviervorschlag (Symbolfotos). Das tatsächliche Aussehen frisch zubereiteter Gerichte kann abweichen.",
+              "Note: Food images are serving suggestions (symbolic photos). Actual presentation may vary.",
+            )}
+          </p>
         </div>
 
         {/* Sidebar Section */}

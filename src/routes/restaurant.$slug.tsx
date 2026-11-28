@@ -2735,6 +2735,7 @@ function RestaurantPage() {
                                 <img
                                   src={m.img}
                                   alt={m.name}
+                                  title={t("Serviervorschlag (Symbolfoto)", "Serving suggestion (Illustrative photo)")}
                                   loading="lazy"
                                   className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
@@ -2781,6 +2782,14 @@ function RestaurantPage() {
               );
             })}
           </div>
+
+          {/* Discreet Legal & Editorial Food Image Disclosure */}
+          <p className="mt-8 text-center text-[10px] sm:text-[11px] text-forest/45 italic tracking-wide">
+            * {t(
+              "Hinweis: Speisenabbildungen dienen als Serviervorschlag (Symbolfotos). Das tatsächliche Aussehen frisch zubereiteter Gerichte kann abweichen.",
+              "Note: Food images are serving suggestions (symbolic photos). Actual presentation may vary.",
+            )}
+          </p>
         </div>
         {/* Sidebar Section */}
         <aside id="sidebar-section" className="hidden lg:block h-fit sticky top-24 w-full">
